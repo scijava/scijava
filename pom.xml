@@ -115,6 +115,12 @@
 			<artifactId>scijava-common</artifactId>
 		</dependency>
 
+		<!-- Third-party dependencies -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>junit</groupId>

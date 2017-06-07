@@ -8,7 +8,7 @@ import java.text.FieldPosition;
 import org.junit.Test;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
-import org.scijava.plugin.Parameter;
+import org.scijava.param.Parameter;
 
 public class TestOps {
 

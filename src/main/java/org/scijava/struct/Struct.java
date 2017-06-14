@@ -2,25 +2,24 @@
 package org.scijava.struct;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.scijava.util.ConversionUtils;
 
 public class Struct<C> {
 
 	private final StructInfo<?> info;
 	private final C object;
-	private final ItemAccessor<C> accessor;
-	private final ItemMutator<C> mutator;
 
 	private Map<String, StructItem<?>> itemMap;
 
-	public Struct(final StructInfo<? extends StructItem<?>> info, final C object,
-		final ItemAccessor<C> accessor, final ItemMutator<C> mutator)
+	public Struct(final StructInfo<? extends StructItem<?>> info,
+		final C object)
 	{
 		this.info = info;
 		this.object = object;
-		this.accessor = accessor;
-		this.mutator = mutator;
 		itemMap = info.items().stream().collect(Collectors.toMap(StructItem::getKey,
 			Function.identity()));
 	}
@@ -33,27 +32,56 @@ public class Struct<C> {
 		return object;
 	}
 
-	public <T> T get(final StructItem<T> item) {
-		return accessor.get(item, object);
-	}
-
-	// TODO: Consider allowing dot-separated key names for concise nesting.
-	public Object get(final String key) {
-		return accessor.get(item(key), object);
-	}
-
-	public StructItem<?> item(String key) {
+	public StructItem<?> item(final String key) {
 		return itemMap.get(key);
 	}
 
-	public <T> void set(final StructItem<T> item, final T value) {
-		mutator.set(item, value, object);
+	public ValueAccessible<?> accessibleItem(final String key) {
+		final StructItem<?> item = item(key);
+		return item instanceof ValueAccessible ? (ValueAccessible<?>) item : null;
 	}
 
-	public <T> void set(final String key, final T value) {
-		// TODO: Check the type for compatibity at runtime.
+	// TODO: Consider allowing dot-separated key names for concise nesting.
+
+	public Object get(final String key) {
+		return accessibleOrDie(key).get(object);
+	}
+
+	public void set(final String key, final Object value) {
+		final StructItem<?> item = itemOrDie(key);
+		setOrDie(item, value);
+	}
+
+	// -- Helper methods --
+
+	private StructItem<?> itemOrDie(final String key) {
+		final StructItem<?> item = item(key);
+		if (item == null) throw new NoSuchElementException("No such item: " + key);
+		return item;
+	}
+
+	private ValueAccessible<?> accessibleOrDie(final String key) {
+		return accessibleOrDie(itemOrDie(key));
+	}
+
+	private <T> ValueAccessible<T> accessibleOrDie(final StructItem<T> item) {
+		if (!(item instanceof ValueAccessible)) {
+			throw new IllegalArgumentException("Inaccessible item: " + item.getKey());
+		}
 		@SuppressWarnings("unchecked")
-		StructItem<T> item = (StructItem<T>) item(key);
-		set(item, value);
+		final ValueAccessible<T> access = (ValueAccessible<T>) item;
+		return access;
+	}
+
+	private <T> void setOrDie(final StructItem<T> item, final Object value) {
+		// check that item type is compatible
+		final Class<?> itemType = item.getRawType();
+		if (!ConversionUtils.canAssign(value, item.getRawType())) {
+			throw new IllegalArgumentException(
+				"Cannot assign value to item of type " + itemType);
+		}
+		@SuppressWarnings("unchecked")
+		final T tValue = (T) value;
+		accessibleOrDie(item).set(tValue, object);
 	}
 }

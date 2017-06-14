@@ -47,4 +47,12 @@ public interface StructItem<T> {
 	default boolean isOutput() {
 		return getIOType() == ItemIO.OUTPUT || getIOType() == ItemIO.BOTH;
 	}
+
+	default boolean isStruct() {
+		return false;
+	}
+
+	default StructInfo<? extends StructItem<?>> childInfo() {
+		return null;
+	}
 }

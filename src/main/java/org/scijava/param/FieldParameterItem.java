@@ -2,13 +2,12 @@
 package org.scijava.param;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
 
-import org.scijava.ItemIO;
-import org.scijava.ItemVisibility;
+import org.scijava.ValidityException;
+import org.scijava.struct.StructInfo;
 import org.scijava.struct.StructItem;
+import org.scijava.struct.ValueAccessible;
+import org.scijava.util.ClassUtils;
 import org.scijava.util.GenericUtils;
 
 /**
@@ -17,88 +16,45 @@ import org.scijava.util.GenericUtils;
  * @author Curtis Rueden
  * @param <T>
  */
-public class FieldParameterItem<T> implements ParameterItem<T> {
+public class FieldParameterItem<T> extends AnnotatedParameterItem<T> implements
+	ValueAccessible<T>
+{
 
 	private final Field field;
+	private final Class<?> structType;
+	private final StructInfo<ParameterItem<?>> info;
 
-	/** Type, or a subtype thereof, which houses the field. */
-	private final Class<?> type;
-
-	public FieldParameterItem(final Field field, final Class<?> type) {
+	public FieldParameterItem(final Field field, final Class<?> structType)
+		throws ValidityException
+	{
+		super(GenericUtils.getFieldType(field, structType), //
+			field.getAnnotation(Parameter.class));
 		this.field = field;
-		this.type = type;
+		this.structType = structType;
+		info = isStruct() ? ParameterStructs.infoOf(getRawType()) : null;
 	}
 
-	// -- ParameterItem methods --
+	// -- FieldParameterItem methods --
 
 	public Field getField() {
 		return field;
 	}
 
-	public Parameter getParameter() {
-		return field.getAnnotation(Parameter.class);
-	}
-
-	// -- FatStructItem methods --
-
-	// 1) Let matcher work on Struct/StructInfo/StructItem
-	//
-	// 2) Think about best layer for implicit vs. explicit items
+	// -- ItemValueAccessible methods --
 
 	@Override
-	public ItemVisibility getVisibility() {
-		return getParameter().visibility();
+	public T get(final Object o) {
+		@SuppressWarnings("unchecked")
+		final T value = (T) ClassUtils.getValue(ParameterStructs.field(this), o);
+		return value;
 	}
 
 	@Override
-	public boolean isAutoFill() {
-		return getParameter().autoFill();
+	public void set(final T value, final Object o) {
+		ClassUtils.setValue(ParameterStructs.field(this), o, value);
 	}
 
-	@Override
-	public boolean isRequired() {
-		return getParameter().required();
-	}
-
-	@Override
-	public boolean isPersisted() {
-		return getParameter().persist();
-	}
-
-	@Override
-	public String getPersistKey() {
-		return getParameter().persistKey();
-	}
-
-	@Override
-	public String getInitializer() {
-		return getParameter().initializer();
-	}
-
-	@Override
-	public String getValidater() {
-		return getParameter().validater();
-	}
-
-	@Override
-	public String getCallback() {
-		return getParameter().callback();
-	}
-
-	@Override
-	public String getWidgetStyle() {
-		return getParameter().style();
-	}
-
-	@Override
-	public Object getMinimumValue() {
-		return getParameter().min();
-	}
-
-	@Override
-	public Object getMaximumValue() {
-		return getParameter().max();
-	}
+	// -- ParameterItem methods --
 
 	@Override
 	public T getDefaultValue() {
@@ -120,7 +76,7 @@ public class FieldParameterItem<T> implements ParameterItem<T> {
 		// nothing we can really do about that. This is only a best effort.
 
 		try {
-			final Object dummy = type.newInstance();
+			final Object dummy = structType.newInstance();
 			@SuppressWarnings("unchecked")
 			final T value = (T) getField().get(dummy);
 			return value;
@@ -130,33 +86,16 @@ public class FieldParameterItem<T> implements ParameterItem<T> {
 		}
 	}
 
-	@Override
-	public Object getStepSize() {
-		return getParameter().stepSize();
-	}
-
-	@Override
-	public List<Object> getChoices() {
-		final String[] choices = getParameter().choices();
-		if (choices.length == 0) return ParameterItem.super.getChoices();
-		return Arrays.asList((Object[]) choices);
-	}
-
-	// -- Item methods --
+	// -- StructItem methods --
 
 	@Override
 	public String getKey() {
-		final String key = getParameter().key();
+		final String key = getAnnotation().key();
 		return key == null || key.isEmpty() ? field.getName() : key;
 	}
 
 	@Override
-	public Type getType() {
-		return GenericUtils.getFieldType(field, type);
-	}
-
-	@Override
-	public ItemIO getIOType() {
-		return getParameter().type();
+	public StructInfo<? extends ParameterItem<?>> childInfo() {
+		return info;
 	}
 }

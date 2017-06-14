@@ -5,7 +5,7 @@ import java.util.List;
 import org.scijava.ItemVisibility;
 
 /**
- * A {@link ParameterItem} whose fields can be set.
+ * A {@link ParameterItem} whose metadata can be changed.
  * 
  * @author Curtis Rueden
  */

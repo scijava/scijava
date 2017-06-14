@@ -4,6 +4,7 @@ package org.scijava.param;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -16,7 +17,6 @@ import org.scijava.ValidityException;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInfo;
 import org.scijava.struct.StructItem;
-import org.scijava.struct.Structs;
 
 /**
  * Tests {@link org.scijava.param} classes.
@@ -38,17 +38,19 @@ public class ParameterTest {
 		assertParam("junk", String.class, ItemIO.INPUT, hlpItems.get(1));
 
 		// check one level down
-		final StructInfo<StructItem<?>> npInfo = Structs.infoOf(npItem);
-		final List<StructItem<?>> npItems = npInfo.items();
+		assertTrue(npItem.isStruct());
+		final StructInfo<? extends StructItem<?>> npInfo = npItem.childInfo();
+		final List<? extends StructItem<?>> npItems = npInfo.items();
 		assertParam("stuff", String.class, ItemIO.INPUT, npItems.get(0));
 		final StructItem<?> vpItem = npItems.get(1);
 		assertParam("vp", VariousParameters.class, ItemIO.INPUT, vpItem);
 		assertParam("things", String.class, ItemIO.OUTPUT, npItems.get(2));
 
 		// check two levels down
-		final StructInfo<StructItem<?>> vpInfo = Structs.infoOf(vpItem);
+		assertTrue(vpItem.isStruct());
+		final StructInfo<? extends StructItem<?>> vpInfo = vpItem.childInfo();
 		assertNotNull(vpInfo);
-		final List<StructItem<?>> vpItems = vpInfo.items();
+		final List<? extends StructItem<?>> vpItems = vpInfo.items();
 		assertParam("a", int.class, ItemIO.INPUT, vpItems.get(0));
 		assertParam("b", Double.class, ItemIO.INPUT, vpItems.get(1));
 		assertParam("c", byte.class, ItemIO.INPUT, vpItems.get(2));
@@ -66,14 +68,16 @@ public class ParameterTest {
 		np.vp.o = 5.4;
 		np.vp.p = "fdsa";
 		final Map<String, Object> nestedItems = new HashMap<>();
-		final Struct<NestedParameters> npStruct = npInfo.structOf(np);
+		final Struct<NestedParameters> npStruct = new Struct<>(npInfo, np);
 		for (final StructItem<?> item : npInfo) {
-			if (!Structs.isStructured(item)) continue;
-			final StructInfo<StructItem<?>> nestedInfo = Structs.infoOf(vpItem);
-			final Struct<?> nested = nestedInfo.structOf(npStruct.get(item));
+			if (!item.isStruct()) continue;
+			final StructInfo<? extends StructItem<?>> nestedInfo = vpItem.childInfo();
+//			final Struct<?> nested = nestedInfo.structOf(npStruct.get(item));
+			final Struct<?> nested = //
+				new Struct<>(nestedInfo, npStruct.get(item.getKey()));
 			for (final StructItem<?> nestedItem : nested.info()) {
 				final String key = item.getKey() + "." + nestedItem.getKey();
-				nestedItems.put(key, nested.get(nestedItem));
+				nestedItems.put(key, nested.get(nestedItem.getKey()));
 			}
 		}
 		assertEquals(6, nestedItems.size());
@@ -89,7 +93,6 @@ public class ParameterTest {
 	public void testBijection() throws ValidityException {
 		final StructInfo<ParameterItem<?>> info = //
 			ParameterStructs.infoOf(VariousParameters.class);
-		final List<ParameterItem<?>> items = info.items();
 
 		final VariousParameters vp = new VariousParameters();
 		vp.a = 5;
@@ -99,8 +102,7 @@ public class ParameterTest {
 		vp.o = 12.3;
 		vp.p = "Goodbye";
 
-		final Struct<VariousParameters> struct = info.structOf(vp);
-		assertEquals(5, struct.get(items.get(0)));
+		final Struct<VariousParameters> struct = new Struct<>(info, vp);
 		assertEquals(5, struct.get("a"));
 		assertEquals(3.3, struct.get("b"));
 		assertEquals((byte) 2, struct.get("c"));

@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.scijava.ItemIO;
 import org.scijava.ItemVisibility;
-import org.scijava.param.Parameter;
 import org.scijava.struct.StructItem;
 import org.scijava.util.GenericUtils;
 

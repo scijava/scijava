@@ -1,10 +1,6 @@
 
 package org.scijava.ops;
 
-import static org.junit.Assert.assertTrue;
-
-import java.text.FieldPosition;
-
 import org.junit.Test;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;

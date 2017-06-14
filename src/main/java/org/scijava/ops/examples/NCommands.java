@@ -1,14 +1,5 @@
 package org.scijava.ops.examples;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-
-import org.scijava.ItemIO;
-import org.scijava.command.Command;
-import org.scijava.param.Parameter;
-import org.scijava.util.DoubleArray;
-
 // FlatMap is the Spark term for 1-to-N maps.
 // E.g., FlatMap<Integer, String> = Map<Integer, Consumer<String>>
 //

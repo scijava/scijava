@@ -17,6 +17,7 @@ import org.scijava.ValidityException;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInfo;
 import org.scijava.struct.StructItem;
+import org.scijava.struct.Structs;
 
 /**
  * Tests {@link org.scijava.param} classes.
@@ -68,13 +69,10 @@ public class ParameterTest {
 		np.vp.o = 5.4;
 		np.vp.p = "fdsa";
 		final Map<String, Object> nestedItems = new HashMap<>();
-		final Struct<NestedParameters> npStruct = new Struct<>(npInfo, np);
+		final Struct<NestedParameters> npStruct = Structs.create(npInfo, np);
 		for (final StructItem<?> item : npInfo) {
 			if (!item.isStruct()) continue;
-			final StructInfo<? extends StructItem<?>> nestedInfo = vpItem.childInfo();
-//			final Struct<?> nested = nestedInfo.structOf(npStruct.get(item));
-			final Struct<?> nested = //
-				new Struct<>(nestedInfo, npStruct.get(item.getKey()));
+			final Struct<?> nested = Structs.create(npStruct, item);
 			for (final StructItem<?> nestedItem : nested.info()) {
 				final String key = item.getKey() + "." + nestedItem.getKey();
 				nestedItems.put(key, nested.get(nestedItem.getKey()));
@@ -102,7 +100,7 @@ public class ParameterTest {
 		vp.o = 12.3;
 		vp.p = "Goodbye";
 
-		final Struct<VariousParameters> struct = new Struct<>(info, vp);
+		final Struct<VariousParameters> struct = Structs.create(info, vp);
 		assertEquals(5, struct.get("a"));
 		assertEquals(3.3, struct.get("b"));
 		assertEquals((byte) 2, struct.get("c"));

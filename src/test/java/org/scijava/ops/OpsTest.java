@@ -14,6 +14,7 @@ import org.scijava.param.ParameterItem;
 import org.scijava.param.ParameterStructs;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInfo;
+import org.scijava.struct.Structs;
 
 public class OpsTest {
 
@@ -40,7 +41,7 @@ public class OpsTest {
 		vp.o = 12.3;
 		vp.p = "Goodbye";
 
-		final Struct<VariousParameters> struct = new Struct<>(info, vp);
+		final Struct<VariousParameters> struct = Structs.create(info, vp);
 		assertEquals(5, struct.get("a"));
 		assertEquals(3.3, struct.get("b"));
 		assertEquals((byte) 2, struct.get("c"));

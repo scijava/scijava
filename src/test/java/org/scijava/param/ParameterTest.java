@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ItemIO;
@@ -28,7 +29,59 @@ import org.scijava.struct.Structs;
 public class ParameterTest {
 
 	@Test
-	public void testNested() throws ValidityException {
+	public void testBasicStructInfo() throws ValidityException {
+		final StructInfo<ParameterItem<?>> p = //
+			ParameterStructs.infoOf(VariousParameters.class);
+		final List<ParameterItem<?>> items = p.items();
+		assertParam("a", int.class, ItemIO.INPUT, items.get(0));
+		assertParam("b", Double.class, ItemIO.INPUT, items.get(1));
+		assertParam("c", byte.class, ItemIO.INPUT, items.get(2));
+		assertParam("d", Object.class, ItemIO.INPUT, items.get(3));
+		assertParam("o", double.class, ItemIO.OUTPUT, items.get(4));
+		assertParam("p", String.class, ItemIO.OUTPUT, items.get(5));
+	}
+
+	@Test
+	public void testFunctionalParameters() throws ValidityException {
+		final StructInfo<ParameterItem<?>> info = //
+				ParameterStructs.infoOf(TruncAndMultiply.class);
+		final List<ParameterItem<?>> items = info.items();
+		assertEquals(3, items.size());
+		assertParam("input", Double.class, ItemIO.INPUT, items.get(0));
+		assertParam("result", Long.class, ItemIO.OUTPUT, items.get(1));
+		assertParam("multiplier", long.class, ItemIO.INPUT, items.get(2));
+	}
+
+	@Test
+	public void testStructAccess() throws ValidityException {
+		final StructInfo<ParameterItem<?>> info = //
+			ParameterStructs.infoOf(VariousParameters.class);
+
+		final VariousParameters vp = new VariousParameters();
+		vp.a = 5;
+		vp.b = 3.3;
+		vp.c = 2;
+		vp.d = "Hello";
+		vp.o = 12.3;
+		vp.p = "Goodbye";
+
+		final Struct<VariousParameters> struct = Structs.create(info, vp);
+		assertEquals(5, struct.get("a"));
+		assertEquals(3.3, struct.get("b"));
+		assertEquals((byte) 2, struct.get("c"));
+		assertEquals("Hello", struct.get("d"));
+		assertEquals(12.3, struct.get("o"));
+		assertEquals("Goodbye", struct.get("p"));
+
+		struct.set("a", 6);
+		assertEquals(6, vp.a);
+
+		struct.set("p", "Yo");
+		assertEquals("Yo", vp.p);
+	}
+
+	@Test
+	public void testNestedStructs() throws ValidityException {
 		final StructInfo<ParameterItem<?>> hlpInfo = //
 			ParameterStructs.infoOf(HighLevelParameters.class);
 
@@ -87,47 +140,6 @@ public class ParameterTest {
 		assertEquals("fdsa", nestedItems.get("vp.p"));
 	}
 
-	@Test
-	public void testBijection() throws ValidityException {
-		final StructInfo<ParameterItem<?>> info = //
-			ParameterStructs.infoOf(VariousParameters.class);
-
-		final VariousParameters vp = new VariousParameters();
-		vp.a = 5;
-		vp.b = 3.3;
-		vp.c = 2;
-		vp.d = "Hello";
-		vp.o = 12.3;
-		vp.p = "Goodbye";
-
-		final Struct<VariousParameters> struct = Structs.create(info, vp);
-		assertEquals(5, struct.get("a"));
-		assertEquals(3.3, struct.get("b"));
-		assertEquals((byte) 2, struct.get("c"));
-		assertEquals("Hello", struct.get("d"));
-		assertEquals(12.3, struct.get("o"));
-		assertEquals("Goodbye", struct.get("p"));
-
-		struct.set("a", 6);
-		assertEquals(6, vp.a);
-
-		struct.set("p", "Yo");
-		assertEquals("Yo", vp.p);
-	}
-
-	@Test
-	public void testInfo() throws ValidityException {
-		final StructInfo<ParameterItem<?>> p = //
-			ParameterStructs.infoOf(VariousParameters.class);
-		final List<ParameterItem<?>> items = p.items();
-		assertParam("a", int.class, ItemIO.INPUT, items.get(0));
-		assertParam("b", Double.class, ItemIO.INPUT, items.get(1));
-		assertParam("c", byte.class, ItemIO.INPUT, items.get(2));
-		assertParam("d", Object.class, ItemIO.INPUT, items.get(3));
-		assertParam("o", double.class, ItemIO.OUTPUT, items.get(4));
-		assertParam("p", String.class, ItemIO.OUTPUT, items.get(5));
-	}
-
 	// -- Helper methods --
 
 	private void assertParam(final String key, final Type type,
@@ -180,6 +192,19 @@ public class ParameterTest {
 		
 		@Parameter
 		private String junk;
+	}
+
+	@Parameter(key = "input")
+	@Parameter(type = ItemIO.OUTPUT, key = "result")
+	public static class TruncAndMultiply implements Function<Double, Long> {
+
+		@Parameter
+		long multiplier;
+
+		@Override
+		public Long apply(final Double t) {
+			return t.intValue() * multiplier;
+		}
 	}
 }
 

@@ -13,15 +13,15 @@ public class Struct<C> {
 	private final StructInfo<?> info;
 	private final C object;
 
-	private Map<String, StructItem<?>> itemMap;
+	private final Map<String, StructItem<?>> itemMap;
 
 	public Struct(final StructInfo<? extends StructItem<?>> info,
 		final C object)
 	{
 		this.info = info;
 		this.object = object;
-		itemMap = info.items().stream().collect(Collectors.toMap(StructItem::getKey,
-			Function.identity()));
+		itemMap = info.items().stream().collect(//
+			Collectors.toMap(StructItem::getKey, Function.identity()));
 	}
 
 	public StructInfo<?> info() {

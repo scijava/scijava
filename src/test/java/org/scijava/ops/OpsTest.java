@@ -3,8 +3,6 @@ package org.scijava.ops;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.scijava.ItemIO;
 import org.scijava.ValidityException;
@@ -20,7 +18,8 @@ public class OpsTest {
 
 	@Test
 	public void testParameterized() throws ValidityException {
-		StructInfo<ParameterItem<?>> info = ParameterStructs.infoOf(TruncAndMultiply.class);
+		final StructInfo<ParameterItem<?>> info = //
+			ParameterStructs.infoOf(TruncAndMultiply.class);
 		assertEquals(3, info.items().size());
 		for (final ParameterItem<?> item : info) {
 			System.out.println(item.getKey());
@@ -31,7 +30,6 @@ public class OpsTest {
 	public void testBijection() throws ValidityException {
 		final StructInfo<ParameterItem<?>> info = //
 			ParameterStructs.infoOf(VariousParameters.class);
-		final List<ParameterItem<?>> items = info.items();
 
 		final VariousParameters vp = new VariousParameters();
 		vp.a = 5;
@@ -61,8 +59,9 @@ public class OpsTest {
 	@Parameter(key = "input")
 	@Parameter(type = ItemIO.OUTPUT, key = "result")
 	public static class TruncAndMultiply implements FunctionOp<Double, Long> {
-		
-		@Parameter long multiplier;
+
+		@Parameter
+		long multiplier;
 
 		@Override
 		public Long apply(final Double t) {
@@ -86,11 +85,11 @@ public class OpsTest {
 		public double o;
 		@Parameter(type = ItemIO.OUTPUT)
 		public String p;
-		
+
 		public void go() {}
 
 		@Override
-		public Double apply(String s) {
+		public Double apply(final String s) {
 			return Double.parseDouble(s);
 		}
 	}

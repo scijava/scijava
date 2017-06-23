@@ -166,8 +166,6 @@ public class ParameterTest {
 		public double o;
 		@Parameter(type = ItemIO.OUTPUT)
 		public String p;
-
-		public void go() {}
 	}
 
 	public static class NestedParameters {

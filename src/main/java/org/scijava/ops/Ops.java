@@ -33,6 +33,21 @@ public final class Ops {
 		};
 	}
 
+	public static <I, O, OP extends ComputerOp<I, O> & OutputAware<I, O>>
+		FunctionOp<I, O> asFunction(final OP op)
+	{
+		return new FunctionOp<I, O>() {
+
+			@Override
+			public O apply(I in) {
+				final O out = op.createOutput(in);
+				op.accept(in, out);
+				return out;
+			}
+
+		};
+	}
+
 	public static <I, O> ComputerOp<I, O> asComputer(final Function<I, O> op,
 		final BiConsumer<O, O> copy)
 	{

@@ -24,13 +24,7 @@ public final class Ops {
 	}
 
 	public static <I, O> FilterOp<I> asFilter(final Function<I, Boolean> op) {
-		return new FilterOp<I>() {
-
-			@Override
-			public boolean test(final I t) {
-				return op.apply(t);
-			}
-		};
+		return op::apply;
 	}
 
 	public static <I, O, OP extends ComputerOp<I, O> & OutputAware<I, O>>

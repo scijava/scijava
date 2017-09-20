@@ -3,9 +3,9 @@ package org.scijava.ops;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,13 +14,7 @@ public final class Ops {
 	private Ops() {}
 
 	public static <I, O> MapOp<I, O> asMap(final Function<I, O> op) {
-		return new MapOp<I, O>() {
-
-			@Override
-			public void accept(final I in, final Consumer<O> out) {
-				out.accept(op.apply(in));
-			}
-		};
+		return (in, out) -> out.accept(op.apply(in));
 	}
 
 	public static <I, O> FilterOp<I> asFilter(final Function<I, Boolean> op) {
@@ -30,29 +24,19 @@ public final class Ops {
 	public static <I, O, OP extends ComputerOp<I, O> & OutputAware<I, O>>
 		FunctionOp<I, O> asFunction(final OP op)
 	{
-		return new FunctionOp<I, O>() {
-
-			@Override
-			public O apply(I in) {
-				final O out = op.createOutput(in);
-				op.accept(in, out);
-				return out;
-			}
-
+		return in -> {
+			final O out = op.createOutput(in);
+			op.accept(in, out);
+			return out;
 		};
 	}
 
 	public static <I, O> ComputerOp<I, O> asComputer(final Function<I, O> op,
 		final BiConsumer<O, O> copy)
 	{
-		return new ComputerOp<I, O>() {
-
-			@Override
-			public void accept(final I in, final O out) {
-				final O temp = op.apply(in);
-				copy.accept(temp, out);
-			}
-
+		return (in, out) -> {
+			final O temp = op.apply(in);
+			copy.accept(temp, out);
 		};
 	}
 	// TODO: add more adapters! Yay!
@@ -60,17 +44,11 @@ public final class Ops {
 	// FIXME: lame.
 	public static <I, O> FunctionOp<I, O> asFunction(final MapOp<I, O> op) {
 		return new FunctionOp<I, O>() {
-			private ArrayList<O> out = new ArrayList<>(1);
+			private List<O> out = new ArrayList<>(1);
 
 			@Override
 			public O apply(final I in) {
-				op.accept(in, new Consumer<O>() {
-
-					@Override
-					public void accept(final O in) {
-						out.set(0, in);
-					}
-				});
+				op.accept(in, in1 -> out.set(0, in1));
 				return out.get(0);
 			}};
 	}
@@ -83,13 +61,7 @@ public final class Ops {
 		// which defines OpInfo info(), allowing this guy to define how it works.
 		// That way, the wrapped op's extra parameters can be propagated into
 		// the wrapped guy here.
-		return new FunctionOp<Collection<I>, Collection<O>>() {
-
-			@Override
-			public Collection<O> apply(final Collection<I> in) {
-				return in.stream().map(op).collect(Collectors.toList());
-			}
-		};
+		return in -> in.stream().map(op).collect(Collectors.toList());
 	}
 
 	// TODO: consider whether (some of?) these should be service methods,
@@ -100,16 +72,12 @@ public final class Ops {
 	public static <I, O> FunctionOp<Collection<I>, O> asFunction(
 		final TreeReduceOp<I, O> op)
 	{
-		return new FunctionOp<Collection<I>, O>() {
-
-			@Override
-			public O apply(final Collection<I> in) {
-				final BiFunction<O, I, O> acc = op.accumulator();
-				final O zero = op.createZero(in.iterator().next());
-				// TODO: use spliterator for multi-threading and use combiner
-				in.stream().forEach(e -> acc.apply(zero, e));
-				return zero;
-			}
+		return in -> {
+			final BiFunction<O, I, O> acc = op.accumulator();
+			final O zero = op.createZero(in.iterator().next());
+			// TODO: use spliterator for multi-threading and use combiner
+			in.stream().forEach(e -> acc.apply(zero, e));
+			return zero;
 		};
 	}
 	// asFunction(TreeReduceOp)

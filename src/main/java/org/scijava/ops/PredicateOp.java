@@ -9,6 +9,11 @@ import java.util.function.Predicate;
  * 
  * @param <I>
  */
-public interface PredicateOp<I> extends FunctionOp<I, Boolean> , Predicate<I>{
+@FunctionalInterface
+public interface PredicateOp<I> extends FunctionOp<I, Boolean>, Predicate<I> {
 
+	@Override
+	default Boolean apply(I t) {
+		return test(t);
+	}
 }

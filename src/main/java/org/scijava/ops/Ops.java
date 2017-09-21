@@ -45,7 +45,7 @@ public final class Ops {
 	public static <I, O> FunctionOp<I, O> asFunction(final MapOp<I, O> op) {
 		return new FunctionOp<I, O>() {
 			private List<O> out = new ArrayList<>(1);
-
+	
 			@Override
 			public O apply(final I in) {
 				op.accept(in, in1 -> out.set(0, in1));
@@ -80,35 +80,24 @@ public final class Ops {
 			return zero;
 		};
 	}
-	// asFunction(TreeReduceOp)
 
-	//
+	public <IO, F extends InplaceOp<IO> & OutputAware<IO, IO>> Function<IO, IO> asFunction(final F op,
+			final BiConsumer<IO, IO> copy) {
+		return in -> {
+			IO o = op.createOutput(in);
+			copy.accept(in, o);
+			op.accept(o);
+			return o;
+		};
+	}
 
-// use function as map
-// accept(I in, Consumer<O> out):
-//    out.accept(f(in))
+	public <IO> ComputerOp<IO, IO> asComputer(final InplaceOp<IO> op, final BiConsumer<IO, IO> copy) {
+		return (in, out) -> {
+			copy.accept(in, out);
+			op.accept(out);
+		};
+	}
 
-// use function as computer  ---------
-// compute(in, out):
-//    o = f(in)
-//    copy(o -> out)
-
-// use computer as function  --------- needs OutputAware
-// out = f(in):
-//    o = create(in)
-//    compute(in, o)
-//    return o
-
-// use inplace as function  ---------
-// out = f(in):
-//    o = create(in)
-//    copy(in -> o)
-//    mutate(o)
-
-// use inplace as computer  ---------
-// compute(in, out):
-//    copy(in -> out)
-//    mutate(out)
 
 ////////////////////
 // Possibly problematic

@@ -11,7 +11,7 @@ public final class Structs {
 	}
 
 	public static <C> Struct<C> create(final StructInfo<?> info, final C object) {
-		return new Struct<>(info, object);
+		return new DefaultStruct<>(info, object);
 	}
 
 	public static Struct<?> create(final Struct<?> parent, final String key) {

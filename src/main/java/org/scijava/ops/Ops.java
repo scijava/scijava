@@ -17,7 +17,7 @@ public final class Ops {
 		return (in, out) -> out.accept(op.apply(in));
 	}
 
-	public static <I, O> FilterOp<I> asFilter(final Function<I, Boolean> op) {
+	public static <I, O> PredicateOp<I> asFilter(final Function<I, Boolean> op) {
 		return op::apply;
 	}
 

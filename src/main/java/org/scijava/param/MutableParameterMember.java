@@ -5,11 +5,11 @@ import java.util.List;
 import org.scijava.ItemVisibility;
 
 /**
- * A {@link ParameterItem} whose metadata can be changed.
+ * A {@link ParameterMember} whose metadata can be changed.
  * 
  * @author Curtis Rueden
  */
-public interface MutableParameterItem<T> extends ParameterItem<T> {
+public interface MutableParameterMember<T> extends ParameterMember<T> {
 
 	void setVisibility(ItemVisibility visibility);
 

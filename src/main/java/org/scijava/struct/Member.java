@@ -6,17 +6,18 @@ import java.lang.reflect.Type;
 import org.scijava.ItemIO;
 
 /**
- * Metadata about an item of a {@link StructInfo} object.
+ * One element (i.e. item/field/member) of a {@link Struct}.
  * 
  * @author Curtis Rueden
+ * @author Christian Dietz
  */
-public interface StructItem<T> {
+public interface Member<T> {
 
-	/** Unique name of the item. */
+	/** Unique name of the member. */
 	String getKey();
 
 	/**
-	 * Gets the type of the item, including Java generic parameters.
+	 * Gets the type of the member, including Java generic parameters.
 	 * 
 	 * @see Field#getGenericType()
 	 */
@@ -24,7 +25,7 @@ public interface StructItem<T> {
 	Type getType();
 	
 	/**
-	 * Gets the {@link Class} of the item's type, or null if {@link #getType()}
+	 * Gets the {@link Class} of the member's type, or null if {@link #getType()}
 	 * does not return a raw class.
 	 */
 	default Class<T> getRawType() {
@@ -35,15 +36,16 @@ public interface StructItem<T> {
 		return rawType;
 	}
 
-	/** Gets the input/output type of the item. */
+	/** Gets the input/output type of the member. */
+	// TODO: fork ItemIO and rename to MemberIO (?)
 	ItemIO getIOType();
 
-	/** Gets whether the item is an input. */
+	/** Gets whether the member is an input. */
 	default boolean isInput() {
 		return getIOType() == ItemIO.INPUT || getIOType() == ItemIO.BOTH;
 	}
 
-	/** Gets whether the item is an output. */
+	/** Gets whether the member is an output. */
 	default boolean isOutput() {
 		return getIOType() == ItemIO.OUTPUT || getIOType() == ItemIO.BOTH;
 	}
@@ -52,7 +54,7 @@ public interface StructItem<T> {
 		return false;
 	}
 
-	default StructInfo<? extends StructItem<?>> childInfo() {
+	default Struct childStruct() {
 		return null;
 	}
 }

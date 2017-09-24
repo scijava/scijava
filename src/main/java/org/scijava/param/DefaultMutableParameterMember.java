@@ -42,11 +42,12 @@ import org.scijava.ItemIO;
 import org.scijava.ItemVisibility;
 
 /**
- * Default {@link MutableParameterItem} implementation.
+ * Default {@link MutableParameterMember} implementation.
  * 
  * @author Curtis Rueden
  */
-public class DefaultMutableParameterItem<T> implements MutableParameterItem<T>
+public class DefaultMutableParameterMember<T> implements
+	MutableParameterMember<T>
 {
 
 	private final String key;
@@ -74,53 +75,53 @@ public class DefaultMutableParameterItem<T> implements MutableParameterItem<T>
 	/** Table of extra key/value pairs. */
 	private final Map<String, String> values = new HashMap<>();
 
-	public DefaultMutableParameterItem(final String key, final Class<T> type, final ItemIO ioType) {
+	public DefaultMutableParameterMember(final String key, final Class<T> type, final ItemIO ioType) {
 		this(key, (Type) type, ioType);
 	}
-	public DefaultMutableParameterItem(final String key, final Type type, final ItemIO ioType) {
+	public DefaultMutableParameterMember(final String key, final Type type, final ItemIO ioType) {
 		this.key = key;
 		this.type = type;
 		this.ioType = ioType;
-		visibility = MutableParameterItem.super.getVisibility();
-		required = MutableParameterItem.super.isRequired();
-		persisted = MutableParameterItem.super.isPersisted();
-		persistKey = MutableParameterItem.super.getPersistKey();
-		initializer = MutableParameterItem.super.getInitializer();
-		callback = MutableParameterItem.super.getCallback();
-		widgetStyle = MutableParameterItem.super.getWidgetStyle();
-		minimumValue = MutableParameterItem.super.getMinimumValue();
-		maximumValue = MutableParameterItem.super.getMaximumValue();
-		stepSize = MutableParameterItem.super.getStepSize();
-		final List<Object> superChoices = MutableParameterItem.super.getChoices();
+		visibility = MutableParameterMember.super.getVisibility();
+		required = MutableParameterMember.super.isRequired();
+		persisted = MutableParameterMember.super.isPersisted();
+		persistKey = MutableParameterMember.super.getPersistKey();
+		initializer = MutableParameterMember.super.getInitializer();
+		callback = MutableParameterMember.super.getCallback();
+		widgetStyle = MutableParameterMember.super.getWidgetStyle();
+		minimumValue = MutableParameterMember.super.getMinimumValue();
+		maximumValue = MutableParameterMember.super.getMaximumValue();
+		stepSize = MutableParameterMember.super.getStepSize();
+		final List<Object> superChoices = MutableParameterMember.super.getChoices();
 		if (superChoices != null) choices.addAll(superChoices);
-		label = MutableParameterItem.super.getLabel();
-		description = MutableParameterItem.super.getDescription();
+		label = MutableParameterMember.super.getLabel();
+		description = MutableParameterMember.super.getDescription();
 	}
 
-	/** Creates a new struct item with the same values as the given item. */
-	public DefaultMutableParameterItem(final ParameterItem<T> item) {
-		key = item.getKey();
-		type = item.getType();
-		ioType = item.getIOType();
-		visibility = item.getVisibility();
-		required = item.isRequired();
-		persisted = item.isPersisted();
-		persistKey = item.getPersistKey();
-		initializer = item.getInitializer();
-		callback = item.getCallback();
-		widgetStyle = item.getWidgetStyle();
-		minimumValue = item.getMinimumValue();
-		maximumValue = item.getMaximumValue();
-		softMinimum = item.getSoftMinimum();
-		softMaximum = item.getSoftMaximum();
-		stepSize = item.getStepSize();
-		final List<Object> itemChoices = item.getChoices();
-		if (itemChoices != null) choices.addAll(itemChoices);
-		label = item.getLabel();
-		description = item.getDescription();
+	/** Creates a new parameter with the same values as the given one. */
+	public DefaultMutableParameterMember(final ParameterMember<T> member) {
+		key = member.getKey();
+		type = member.getType();
+		ioType = member.getIOType();
+		visibility = member.getVisibility();
+		required = member.isRequired();
+		persisted = member.isPersisted();
+		persistKey = member.getPersistKey();
+		initializer = member.getInitializer();
+		callback = member.getCallback();
+		widgetStyle = member.getWidgetStyle();
+		minimumValue = member.getMinimumValue();
+		maximumValue = member.getMaximumValue();
+		softMinimum = member.getSoftMinimum();
+		softMaximum = member.getSoftMaximum();
+		stepSize = member.getStepSize();
+		final List<Object> memberChoices = member.getChoices();
+		if (memberChoices != null) choices.addAll(memberChoices);
+		label = member.getLabel();
+		description = member.getDescription();
 	}
 
-	// -- MutableFatStructItem methods --
+	// -- MutableParameterMember methods --
 
 	@Override
 	public void setVisibility(final ItemVisibility visibility) {
@@ -215,7 +216,7 @@ public class DefaultMutableParameterItem<T> implements MutableParameterItem<T>
 		this.description = description;
 	}
 
-	// -- FatStructItem methods --
+	// -- ParameterMember methods --
 
 	@Override
 	public ItemVisibility getVisibility() {
@@ -304,7 +305,7 @@ public class DefaultMutableParameterItem<T> implements MutableParameterItem<T>
 		return description;
 	}
 
-	// -- StructItem methods --
+	// -- Member methods --
 
 	@Override
 	public String getKey() {

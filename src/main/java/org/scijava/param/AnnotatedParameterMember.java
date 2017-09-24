@@ -8,15 +8,15 @@ import java.util.List;
 
 import org.scijava.ItemIO;
 import org.scijava.ItemVisibility;
-import org.scijava.struct.StructItem;
+import org.scijava.struct.Member;
 
 /**
- * {@link StructItem} backed by a {@link Field} annotated by {@link Parameter}.
+ * {@link Member} backed by a {@link Field} annotated by {@link Parameter}.
  *
  * @author Curtis Rueden
  * @param <T>
  */
-public abstract class AnnotatedParameterItem<T> implements ParameterItem<T> {
+public abstract class AnnotatedParameterMember<T> implements ParameterMember<T> {
 
 	/** Type, or a subtype thereof, which houses the field. */
 	private final Type itemType;
@@ -24,20 +24,20 @@ public abstract class AnnotatedParameterItem<T> implements ParameterItem<T> {
 	/** Annotation describing the item. */
 	private final Parameter annotation;
 
-	public AnnotatedParameterItem(final Type itemType,
+	public AnnotatedParameterMember(final Type itemType,
 		final Parameter annotation)
 	{
 		this.itemType = itemType;
 		this.annotation = annotation;
 	}
 
-	// -- AnnotatedParameterItem methods --
+	// -- AnnotatedParameterMember methods --
 
 	public Parameter getAnnotation() {
 		return annotation;
 	}
 
-	// -- ParameterItem methods --
+	// -- ParameterMember methods --
 
 	@Override
 	public ItemVisibility getVisibility() {
@@ -102,11 +102,11 @@ public abstract class AnnotatedParameterItem<T> implements ParameterItem<T> {
 	@Override
 	public List<Object> getChoices() {
 		final String[] choices = getAnnotation().choices();
-		if (choices.length == 0) return ParameterItem.super.getChoices();
+		if (choices.length == 0) return ParameterMember.super.getChoices();
 		return Arrays.asList((Object[]) choices);
 	}
 
-	// -- StructItem methods --
+	// -- Member methods --
 
 	@Override
 	public String getKey() {

@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.scijava.ItemVisibility;
-import org.scijava.struct.StructItem;
+import org.scijava.struct.Member;
 
 /**
- * A {@link StructItem} with extra commonly useful metadata.
+ * A {@link Member} with extra commonly useful metadata.
  * <p>
  * This metadata is aligned with&mdash;but not explicitly bound to&mdash;the
  * fields of the {@code @Parameter} annotation type. As such, other code such as
@@ -18,19 +18,20 @@ import org.scijava.struct.StructItem;
  * @author Curtis Rueden
  * @see Parameter
  */
-public interface ParameterItem<T> extends StructItem<T> {
+public interface ParameterMember<T> extends Member<T> {
 
-	/** Gets the visibility of the item. */
+	/** Gets the visibility of the parameter. */
+	// TODO: fork ItemVisibility and rename to MemberVisibility
 	default ItemVisibility getVisibility() {
 		return ItemVisibility.NORMAL;
 	}
 
-	/** Gets whether the item value is allowed to be auto-filled. */
+	/** Gets whether the parameter value is allowed to be auto-filled. */
 	default boolean isAutoFill() {
 		return true;
 	}
 
-	/** Gets whether the item value must be specified (i.e., no default). */
+	/** Gets whether the parameter value must be specified (i.e., no default). */
 	default boolean isRequired() {
 		return true;
 	}
@@ -45,22 +46,22 @@ public interface ParameterItem<T> extends StructItem<T> {
 		return null;
 	}
 
-	/** Gets the function that is called to initialize the item's value. */
+	/** Gets the function that is called to initialize the parameter's value. */
 	default String getInitializer() {
 		return null;
 	}
 
-	/** Gets the function that is called to validate the item's value. */
+	/** Gets the function that is called to validate the parameter's value. */
 	default String getValidater() {
 		return null;
 	}
 
 	/**
-	 * Gets the function that is called whenever this item changes.
+	 * Gets the function that is called whenever this parameter changes.
 	 * <p>
-	 * This mechanism enables interdependent items of various types. For example,
-	 * two int parameters "width" and "height" could update each other when
-	 * another boolean "Preserve aspect ratio" flag is set.
+	 * This mechanism enables interdependent parameters of various types. For
+	 * example, two int parameters "width" and "height" could update each other
+	 * when another boolean "Preserve aspect ratio" flag is set.
 	 * </p>
 	 */
 	default String getCallback() {
@@ -68,8 +69,8 @@ public interface ParameterItem<T> extends StructItem<T> {
 	}
 
 	/**
-	 * Gets the preferred widget style to use when rendering the item in a user
-	 * interface.
+	 * Gets the preferred widget style to use when rendering the parameter in a
+	 * user interface.
 	 */
 	default String getWidgetStyle() {
 		return null;
@@ -119,7 +120,7 @@ public interface ParameterItem<T> extends StructItem<T> {
 	}
 
 	/**
-	 * Gets the preferred step size to use when rendering the item in a user
+	 * Gets the preferred step size to use when rendering the parameter in a user
 	 * interface (if applicable).
 	 */
 	default Object getStepSize() {

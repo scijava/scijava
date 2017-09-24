@@ -13,24 +13,6 @@ public final class Ops {
 
 	private Ops() {}
 
-	public static <I, O> MapOp<I, O> asMap(final Function<I, O> op) {
-		return (in, out) -> out.accept(op.apply(in));
-	}
-
-	public static <I, O> PredicateOp<I> asFilter(final Function<I, Boolean> op) {
-		return op::apply;
-	}
-
-	public static <I, O, OP extends ComputerOp<I, O> & OutputAware<I, O>>
-		FunctionOp<I, O> asFunction(final OP op)
-	{
-		return in -> {
-			final O out = op.createOutput(in);
-			op.accept(in, out);
-			return out;
-		};
-	}
-
 	public static <I, O> ComputerOp<I, O> asComputer(final Function<I, O> op,
 		final BiConsumer<O, O> copy)
 	{
@@ -39,7 +21,43 @@ public final class Ops {
 			copy.accept(temp, out);
 		};
 	}
+	public <IO> ComputerOp<IO, IO> asComputer(final InplaceOp<IO> op,
+		final BiConsumer<IO, IO> copy)
+	{
+		return (in, out) -> {
+			copy.accept(in, out);
+			op.accept(out);
+		};
+	}
 	// TODO: add more adapters! Yay!
+	
+	// TODO: consider whether (some of?) these should be service methods,
+	// for extensibility. Or better: plugins of type OpAdapter. Later!
+	// E.g.: expressing tree-reduce as a function may depend on type details.
+	// net.imagej.ops.map ops are a special case for e.g. IterableInterval.
+	
+	public static <I, O> FunctionOp<Collection<I>, O> asFunction(
+		final TreeReduceOp<I, O> op)
+	{
+		return in -> {
+			final BiFunction<O, I, O> acc = op.accumulator();
+			final O zero = op.createZero(in.iterator().next());
+			// TODO: use spliterator for multi-threading and use combiner
+			in.stream().forEach(e -> acc.apply(zero, e));
+			return zero;
+		};
+	}
+
+	public <IO, F extends InplaceOp<IO> & OutputAware<IO, IO>> Function<IO, IO>
+		asFunction(final F op, final BiConsumer<IO, IO> copy)
+	{
+		return in -> {
+			IO o = op.createOutput(in);
+			copy.accept(in, o);
+			op.accept(o);
+			return o;
+		};
+	}
 
 	// FIXME: lame.
 	public static <I, O> FunctionOp<I, O> asFunction(final MapOp<I, O> op) {
@@ -53,6 +71,22 @@ public final class Ops {
 			}};
 	}
 
+	public static <I, O, OP extends ComputerOp<I, O> & OutputAware<I, O>>
+		FunctionOp<I, O> asFunction(final OP op)
+	{
+		return in -> {
+			final O out = op.createOutput(in);
+			op.accept(in, out);
+			return out;
+		};
+	}
+
+	public static <I, O> MapOp<I, O> asMap(final Function<I, O> op) {
+		return (in, out) -> out.accept(op.apply(in));
+	}
+
+	// TODO: add more adapters! Yay!
+
 	public static <I, O> FunctionOp<Collection<I>, Collection<O>> lift(
 		final Function<I, O> op)
 	{
@@ -61,7 +95,7 @@ public final class Ops {
 		// which defines OpInfo info(), allowing this guy to define how it works.
 		// That way, the wrapped op's extra parameters can be propagated into
 		// the wrapped guy here.
-		return in -> in.stream().map(op).collect(Collectors.toList());
+		return in -> in.parallelStream().map(op).collect(Collectors.toList());
 	}
 
 	// TODO: consider whether (some of?) these should be service methods,
@@ -69,34 +103,6 @@ public final class Ops {
 	// E.g.: expressing tree-reduce as a function may depend on type details.
 	// net.imagej.ops.map ops are a special case for e.g. IterableInterval.
 
-	public static <I, O> FunctionOp<Collection<I>, O> asFunction(
-		final TreeReduceOp<I, O> op)
-	{
-		return in -> {
-			final BiFunction<O, I, O> acc = op.accumulator();
-			final O zero = op.createZero(in.iterator().next());
-			// TODO: use spliterator for multi-threading and use combiner
-			in.stream().forEach(e -> acc.apply(zero, e));
-			return zero;
-		};
-	}
-
-	public <IO, F extends InplaceOp<IO> & OutputAware<IO, IO>> Function<IO, IO> asFunction(final F op,
-			final BiConsumer<IO, IO> copy) {
-		return in -> {
-			IO o = op.createOutput(in);
-			copy.accept(in, o);
-			op.accept(o);
-			return o;
-		};
-	}
-
-	public <IO> ComputerOp<IO, IO> asComputer(final InplaceOp<IO> op, final BiConsumer<IO, IO> copy) {
-		return (in, out) -> {
-			copy.accept(in, out);
-			op.accept(out);
-		};
-	}
 
 
 ////////////////////

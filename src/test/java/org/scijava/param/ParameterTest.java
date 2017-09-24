@@ -15,9 +15,10 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.ItemIO;
 import org.scijava.ValidityException;
+import org.scijava.struct.Member;
+import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
-import org.scijava.struct.StructInfo;
-import org.scijava.struct.StructItem;
+import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 
 /**
@@ -29,10 +30,10 @@ import org.scijava.struct.Structs;
 public class ParameterTest {
 
 	@Test
-	public void testBasicStructInfo() throws ValidityException {
-		final StructInfo<ParameterItem<?>> p = //
-			ParameterStructs.infoOf(VariousParameters.class);
-		final List<ParameterItem<?>> items = p.items();
+	public void testBasicStruct() throws ValidityException {
+		final Struct p = //
+			ParameterStructs.structOf(VariousParameters.class);
+		final List<Member<?>> items = p.members();
 		assertParam("a", int.class, ItemIO.INPUT, items.get(0));
 		assertParam("b", Double.class, ItemIO.INPUT, items.get(1));
 		assertParam("c", byte.class, ItemIO.INPUT, items.get(2));
@@ -43,9 +44,9 @@ public class ParameterTest {
 
 	@Test
 	public void testFunctionalParameters() throws ValidityException {
-		final StructInfo<ParameterItem<?>> info = //
-				ParameterStructs.infoOf(TruncAndMultiply.class);
-		final List<ParameterItem<?>> items = info.items();
+		final Struct info = //
+				ParameterStructs.structOf(TruncAndMultiply.class);
+		final List<Member<?>> items = info.members();
 		assertEquals(3, items.size());
 		assertParam("input", Double.class, ItemIO.INPUT, items.get(0));
 		assertParam("result", Long.class, ItemIO.OUTPUT, items.get(1));
@@ -54,8 +55,8 @@ public class ParameterTest {
 
 	@Test
 	public void testStructAccess() throws ValidityException {
-		final StructInfo<ParameterItem<?>> info = //
-			ParameterStructs.infoOf(VariousParameters.class);
+		final Struct info = //
+			ParameterStructs.structOf(VariousParameters.class);
 
 		final VariousParameters vp = new VariousParameters();
 		vp.a = 5;
@@ -65,52 +66,52 @@ public class ParameterTest {
 		vp.o = 12.3;
 		vp.p = "Goodbye";
 
-		final Struct<VariousParameters> struct = Structs.create(info, vp);
-		assertEquals(5, struct.get("a"));
-		assertEquals(3.3, struct.get("b"));
-		assertEquals((byte) 2, struct.get("c"));
-		assertEquals("Hello", struct.get("d"));
-		assertEquals(12.3, struct.get("o"));
-		assertEquals("Goodbye", struct.get("p"));
+		final StructInstance<VariousParameters> struct = Structs.instance(info, vp);
+		assertEquals(5, struct.member("a").get());
+		assertEquals(3.3, struct.member("b").get());
+		assertEquals((byte) 2, struct.member("c").get());
+		assertEquals("Hello", struct.member("d").get());
+		assertEquals(12.3, struct.member("o").get());
+		assertEquals("Goodbye", struct.member("p").get());
 
-		struct.set("a", 6);
+		struct.member("a").set(6);
 		assertEquals(6, vp.a);
 
-		struct.set("p", "Yo");
+		struct.member("p").set("Yo");
 		assertEquals("Yo", vp.p);
 	}
 
 	@Test
 	public void testNestedStructs() throws ValidityException {
-		final StructInfo<ParameterItem<?>> hlpInfo = //
-			ParameterStructs.infoOf(HighLevelParameters.class);
+		final Struct hlpStruct = //
+			ParameterStructs.structOf(HighLevelParameters.class);
 
 		// check toplevel parameters
-		final List<ParameterItem<?>> hlpItems = hlpInfo.items();
-		final ParameterItem<?> npItem = hlpItems.get(0);
-		assertParam("np", NestedParameters.class, ItemIO.INPUT, npItem);
-		assertParam("junk", String.class, ItemIO.INPUT, hlpItems.get(1));
+		final List<Member<?>> hlpMembers = hlpStruct.members();
+		final Member<?> npMember = hlpMembers.get(0);
+		assertParam("np", NestedParameters.class, ItemIO.INPUT, npMember);
+		assertParam("junk", String.class, ItemIO.INPUT, hlpMembers.get(1));
 
 		// check one level down
-		assertTrue(npItem.isStruct());
-		final StructInfo<? extends StructItem<?>> npInfo = npItem.childInfo();
-		final List<? extends StructItem<?>> npItems = npInfo.items();
-		assertParam("stuff", String.class, ItemIO.INPUT, npItems.get(0));
-		final StructItem<?> vpItem = npItems.get(1);
-		assertParam("vp", VariousParameters.class, ItemIO.INPUT, vpItem);
-		assertParam("things", String.class, ItemIO.OUTPUT, npItems.get(2));
+		assertTrue(npMember.isStruct());
+		final Struct npStruct = npMember.childStruct();
+		final List<? extends Member<?>> npMembers = npStruct.members();
+		assertParam("stuff", String.class, ItemIO.INPUT, npMembers.get(0));
+		final Member<?> vpMember = npMembers.get(1);
+		assertParam("vp", VariousParameters.class, ItemIO.INPUT, vpMember);
+		assertParam("things", String.class, ItemIO.OUTPUT, npMembers.get(2));
 
 		// check two levels down
-		assertTrue(vpItem.isStruct());
-		final StructInfo<? extends StructItem<?>> vpInfo = vpItem.childInfo();
-		assertNotNull(vpInfo);
-		final List<? extends StructItem<?>> vpItems = vpInfo.items();
-		assertParam("a", int.class, ItemIO.INPUT, vpItems.get(0));
-		assertParam("b", Double.class, ItemIO.INPUT, vpItems.get(1));
-		assertParam("c", byte.class, ItemIO.INPUT, vpItems.get(2));
-		assertParam("d", Object.class, ItemIO.INPUT, vpItems.get(3));
-		assertParam("o", double.class, ItemIO.OUTPUT, vpItems.get(4));
-		assertParam("p", String.class, ItemIO.OUTPUT, vpItems.get(5));
+		assertTrue(vpMember.isStruct());
+		final Struct vpStruct = vpMember.childStruct();
+		assertNotNull(vpStruct);
+		final List<? extends Member<?>> vpMembers = vpStruct.members();
+		assertParam("a", int.class, ItemIO.INPUT, vpMembers.get(0));
+		assertParam("b", Double.class, ItemIO.INPUT, vpMembers.get(1));
+		assertParam("c", byte.class, ItemIO.INPUT, vpMembers.get(2));
+		assertParam("d", Object.class, ItemIO.INPUT, vpMembers.get(3));
+		assertParam("o", double.class, ItemIO.OUTPUT, vpMembers.get(4));
+		assertParam("p", String.class, ItemIO.OUTPUT, vpMembers.get(5));
 
 		// check nested Structs
 		final NestedParameters np = new NestedParameters();
@@ -121,33 +122,33 @@ public class ParameterTest {
 		np.vp.d = "asdf";
 		np.vp.o = 5.4;
 		np.vp.p = "fdsa";
-		final Map<String, Object> nestedItems = new HashMap<>();
-		final Struct<NestedParameters> npStruct = Structs.create(npInfo, np);
-		for (final StructItem<?> item : npInfo) {
-			if (!item.isStruct()) continue;
-			final Struct<?> nested = Structs.create(npStruct, item);
-			for (final StructItem<?> nestedItem : nested.info()) {
-				final String key = item.getKey() + "." + nestedItem.getKey();
-				nestedItems.put(key, nested.get(nestedItem.getKey()));
+		final Map<String, Object> nestedMembers = new HashMap<>();
+		final StructInstance<NestedParameters> npInstance = Structs.instance(npStruct, np);
+		for (final MemberInstance<?> memberInstance : npInstance) {
+			if (!memberInstance.member().isStruct()) continue;
+			final StructInstance<?> nestedInstance = Structs.expand(memberInstance);
+			for (final Member<?> nestedMember : nestedInstance.struct()) {
+				final String key = memberInstance.member().getKey() + "." + nestedMember.getKey();
+				nestedMembers.put(key, nestedInstance.member(nestedMember.getKey()).get());
 			}
 		}
-		assertEquals(6, nestedItems.size());
-		assertEquals(9, nestedItems.get("vp.a"));
-		assertEquals(8.7, nestedItems.get("vp.b"));
-		assertEquals((byte) 6, nestedItems.get("vp.c"));
-		assertEquals("asdf", nestedItems.get("vp.d"));
-		assertEquals(5.4, nestedItems.get("vp.o"));
-		assertEquals("fdsa", nestedItems.get("vp.p"));
+		assertEquals(6, nestedMembers.size());
+		assertEquals(9, nestedMembers.get("vp.a"));
+		assertEquals(8.7, nestedMembers.get("vp.b"));
+		assertEquals((byte) 6, nestedMembers.get("vp.c"));
+		assertEquals("asdf", nestedMembers.get("vp.d"));
+		assertEquals(5.4, nestedMembers.get("vp.o"));
+		assertEquals("fdsa", nestedMembers.get("vp.p"));
 	}
 
 	// -- Helper methods --
 
 	private void assertParam(final String key, final Type type,
-		final ItemIO ioType, final StructItem<?> pInfo)
+		final ItemIO ioType, final Member<?> pMember)
 	{
-		assertEquals(key, pInfo.getKey());
-		assertEquals(type, pInfo.getType());
-		assertSame(ioType, pInfo.getIOType());
+		assertEquals(key, pMember.getKey());
+		assertEquals(type, pMember.getType());
+		assertSame(ioType, pMember.getIOType());
 	}
 
 	// -- Helper classes --

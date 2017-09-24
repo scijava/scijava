@@ -4,34 +4,34 @@ package org.scijava.param;
 import java.lang.reflect.Field;
 
 import org.scijava.ValidityException;
-import org.scijava.struct.StructInfo;
-import org.scijava.struct.StructItem;
+import org.scijava.struct.Struct;
+import org.scijava.struct.Member;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.GenericUtils;
 
 /**
- * {@link StructItem} backed by a {@link Field} annotated by {@link Parameter}.
+ * {@link Member} backed by a {@link Field} annotated by {@link Parameter}.
  *
  * @author Curtis Rueden
  * @param <T>
  */
-public class FieldParameterItem<T> extends AnnotatedParameterItem<T> implements
+public class FieldParameterMember<T> extends AnnotatedParameterMember<T> implements
 	ValueAccessible<T>
 {
 
 	private final Field field;
 	private final Class<?> structType;
-	private final StructInfo<ParameterItem<?>> info;
+	private final Struct struct;
 
-	public FieldParameterItem(final Field field, final Class<?> structType)
+	public FieldParameterMember(final Field field, final Class<?> structType)
 		throws ValidityException
 	{
 		super(GenericUtils.getFieldType(field, structType), //
 			field.getAnnotation(Parameter.class));
 		this.field = field;
 		this.structType = structType;
-		info = isStruct() ? ParameterStructs.infoOf(getRawType()) : null;
+		struct = isStruct() ? ParameterStructs.structOf(getRawType()) : null;
 	}
 
 	// -- FieldParameterItem methods --
@@ -40,7 +40,7 @@ public class FieldParameterItem<T> extends AnnotatedParameterItem<T> implements
 		return field;
 	}
 
-	// -- ItemValueAccessible methods --
+	// -- ValueAccessible methods --
 
 	@Override
 	public T get(final Object o) {
@@ -95,7 +95,7 @@ public class FieldParameterItem<T> extends AnnotatedParameterItem<T> implements
 	}
 
 	@Override
-	public StructInfo<? extends ParameterItem<?>> childInfo() {
-		return info;
+	public Struct childStruct() {
+		return struct;
 	}
 }

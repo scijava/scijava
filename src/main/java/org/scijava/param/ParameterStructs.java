@@ -16,8 +16,10 @@ import org.scijava.ItemIO;
 import org.scijava.ItemVisibility;
 import org.scijava.ValidityException;
 import org.scijava.ValidityProblem;
-import org.scijava.struct.StructInfo;
-import org.scijava.struct.StructItem;
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
+import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.GenericUtils;
 
@@ -28,25 +30,31 @@ import org.scijava.util.GenericUtils;
  */
 public final class ParameterStructs {
 
-	public static StructInfo<ParameterItem<?>> infoOf(final Class<?> type)
+	public static <C> StructInstance<C> create(final C object)
 		throws ValidityException
 	{
-		final List<ParameterItem<?>> items = parse(type);
-		return new StructInfo<ParameterItem<?>>() {
+		return Structs.instance(structOf(object.getClass()), object);
+	}
+
+	public static Struct structOf(final Class<?> type)
+		throws ValidityException
+	{
+		final List<Member<?>> items = parse(type);
+		return new Struct() {
 
 			@Override
-			public List<ParameterItem<?>> items() {
+			public List<Member<?>> members() {
 				return items;
 			}
 		};
 	}
 
-	public static List<ParameterItem<?>> parse(final Class<?> type)
+	public static List<Member<?>> parse(final Class<?> type)
 		throws ValidityException
 	{
 		if (type == null) return null;
 
-		final ArrayList<ParameterItem<?>> items = new ArrayList<>();
+		final ArrayList<Member<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
 
 		// NB: Reject abstract classes.
@@ -78,8 +86,8 @@ public final class ParameterStructs {
 					// add item to the list
 					// TODO make more DRY
 					try {
-						final ParameterItem<?> item = //
-							new FunctionalParameterItem<>(itemType, p[i]);
+						final ParameterMember<?> item = //
+							new FunctionalParameterMember<>(itemType, p[i]);
 						names.add(key);
 						items.add(item);
 					}
@@ -113,7 +121,7 @@ public final class ParameterStructs {
 
 			// add item to the list
 			try {
-				final ParameterItem<?> item = new FieldParameterItem<>(f, type);
+				final ParameterMember<?> item = new FieldParameterMember<>(f, type);
 				names.add(name);
 				items.add(item);
 			}
@@ -129,9 +137,9 @@ public final class ParameterStructs {
 		return items;
 	}
 
-	public static <T> Field field(final StructItem<T> item) {
-		if (item instanceof FieldParameterItem) {
-			final FieldParameterItem<T> fpItem = (FieldParameterItem<T>) item;
+	public static <T> Field field(final Member<T> item) {
+		if (item instanceof FieldParameterMember) {
+			final FieldParameterMember<T> fpItem = (FieldParameterMember<T>) item;
 			return fpItem.getField();
 		}
 		return null;

@@ -57,4 +57,16 @@ public interface Member<T> {
 	default Struct childStruct() {
 		return null;
 	}
+
+	default MemberInstance<T> createInstance(
+		@SuppressWarnings("unused") Object o)
+	{
+		return new MemberInstance<T>() {
+
+			@Override
+			public Member<T> member() {
+				return Member.this;
+			}
+		};
+	}
 }

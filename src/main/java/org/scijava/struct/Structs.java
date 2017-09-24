@@ -7,12 +7,6 @@ public final class Structs {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	public static <O> StructInstance<O> instance(final Struct struct,
-		final O object)
-	{
-		return new DefaultStructInstance<>(struct, object);
-	}
-
 	public static StructInstance<?> expand(final StructInstance<?> parent,
 		final String key)
 	{
@@ -23,7 +17,7 @@ public final class Structs {
 		final MemberInstance<T> memberInstance)
 	{
 		if (!memberInstance.member().isStruct()) return null;
-		return instance(memberInstance.member().childStruct(), //
+		return memberInstance.member().childStruct().createInstance(//
 			memberInstance.get());
 	}
 }

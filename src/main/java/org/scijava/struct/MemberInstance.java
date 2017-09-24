@@ -6,26 +6,34 @@ public interface MemberInstance<T> extends Supplier<T> {
 
 	Member<T> member();
 
-	boolean isReadable();
-	boolean isWritable();
+	default boolean isReadable() {
+		return false;
+	}
+	default boolean isWritable() {
+		return false;
+	}
 
 	/**
 	 * Get's the value of the member.
 	 * 
 	 * @return The value of the {@link Member} with the given key.
-	 * @throws IllegalArgumentException if the member is not readable (see
+	 * @throws UnsupportedOperationException if the member is not readable (see
 	 *           {@link #isReadable()}).
 	 */
 	@Override
-	T get();
+	default T get() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Sets the value of the member.
 	 * 
 	 * @param value The value to set.
-	 * @throws IllegalArgumentException if the member is not writable (see
+	 * @throws UnsupportedOperationException if the member is not writable (see
 	 *           {@link #isWritable()}).
 	 */
-	void set(Object value);
+	default void set(Object value) {
+		throw new UnsupportedOperationException();
+	}
 
 }

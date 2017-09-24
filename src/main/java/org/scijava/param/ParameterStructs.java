@@ -19,7 +19,6 @@ import org.scijava.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.struct.Structs;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.GenericUtils;
 
@@ -33,7 +32,7 @@ public final class ParameterStructs {
 	public static <C> StructInstance<C> create(final C object)
 		throws ValidityException
 	{
-		return Structs.instance(structOf(object.getClass()), object);
+		return structOf(object.getClass()).createInstance(object);
 	}
 
 	public static Struct structOf(final Class<?> type)

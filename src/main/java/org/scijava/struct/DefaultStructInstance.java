@@ -17,19 +17,10 @@ public class DefaultStructInstance<O> implements StructInstance<O> {
 		this.object = object;
 		memberMap = new TreeMap<>();
 		for (final Member<?> member : struct.members()) {
-			memberMap.put(member.getKey(), createMemberInstance(member));
+			memberMap.put(member.getKey(), member.createInstance(object));
 		}
-		// TODO see about making this for loop into a stream collect whatever
-//		memberMap = struct.members().stream().collect(
-//			Collectors.toMap(Member::getKey, member -> createMemberInstance(member)));
 	}
 	
-	private <T> MemberInstance<T> createMemberInstance(Member<T> member) {
-		// FIXME how to instantiate?
-		// START HERE - this is bad
-		return new ValueAccessibleMemberInstance<>((Member<T> & ValueAccessible<T>) member, object());
-	}
-
 	@Override
 	public List<MemberInstance<?>> members() {
 		return memberMap.values().stream().collect(Collectors.toList());

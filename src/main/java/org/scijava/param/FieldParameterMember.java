@@ -6,7 +6,9 @@ import java.lang.reflect.Field;
 import org.scijava.ValidityException;
 import org.scijava.struct.Struct;
 import org.scijava.struct.Member;
+import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;
+import org.scijava.struct.ValueAccessibleMemberInstance;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.GenericUtils;
 
@@ -16,8 +18,8 @@ import org.scijava.util.GenericUtils;
  * @author Curtis Rueden
  * @param <T>
  */
-public class FieldParameterMember<T> extends AnnotatedParameterMember<T> implements
-	ValueAccessible<T>
+public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
+	implements ValueAccessible<T>
 {
 
 	private final Field field;
@@ -86,7 +88,7 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T> impleme
 		}
 	}
 
-	// -- StructItem methods --
+	// -- Member methods --
 
 	@Override
 	public String getKey() {
@@ -97,5 +99,10 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T> impleme
 	@Override
 	public Struct childStruct() {
 		return struct;
+	}
+
+	@Override
+	public MemberInstance<T> createInstance(final Object o) {
+		return new ValueAccessibleMemberInstance<>(this, o);
 	}
 }

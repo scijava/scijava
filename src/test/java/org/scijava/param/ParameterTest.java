@@ -55,7 +55,7 @@ public class ParameterTest {
 
 	@Test
 	public void testStructAccess() throws ValidityException {
-		final Struct info = //
+		final Struct struct = //
 			ParameterStructs.structOf(VariousParameters.class);
 
 		final VariousParameters vp = new VariousParameters();
@@ -66,18 +66,19 @@ public class ParameterTest {
 		vp.o = 12.3;
 		vp.p = "Goodbye";
 
-		final StructInstance<VariousParameters> struct = Structs.instance(info, vp);
-		assertEquals(5, struct.member("a").get());
-		assertEquals(3.3, struct.member("b").get());
-		assertEquals((byte) 2, struct.member("c").get());
-		assertEquals("Hello", struct.member("d").get());
-		assertEquals(12.3, struct.member("o").get());
-		assertEquals("Goodbye", struct.member("p").get());
+		final StructInstance<VariousParameters> vpInstance = //
+			struct.createInstance(vp);
+		assertEquals(5, vpInstance.member("a").get());
+		assertEquals(3.3, vpInstance.member("b").get());
+		assertEquals((byte) 2, vpInstance.member("c").get());
+		assertEquals("Hello", vpInstance.member("d").get());
+		assertEquals(12.3, vpInstance.member("o").get());
+		assertEquals("Goodbye", vpInstance.member("p").get());
 
-		struct.member("a").set(6);
+		vpInstance.member("a").set(6);
 		assertEquals(6, vp.a);
 
-		struct.member("p").set("Yo");
+		vpInstance.member("p").set("Yo");
 		assertEquals("Yo", vp.p);
 	}
 
@@ -123,7 +124,8 @@ public class ParameterTest {
 		np.vp.o = 5.4;
 		np.vp.p = "fdsa";
 		final Map<String, Object> nestedMembers = new HashMap<>();
-		final StructInstance<NestedParameters> npInstance = Structs.instance(npStruct, np);
+		final StructInstance<NestedParameters> npInstance = //
+			npStruct.createInstance(np);
 		for (final MemberInstance<?> memberInstance : npInstance) {
 			if (!memberInstance.member().isStruct()) continue;
 			final StructInstance<?> nestedInstance = Structs.expand(memberInstance);

@@ -24,8 +24,18 @@ public class NWidgetDemo {
 
 			@Parameter
 			private String name = "Chuckles McGee";
+			@Parameter(min = "0")
+			private int age = 27;
 			@Parameter(min = "0", max = "100", style = NNumberWidget.SCROLL_BAR_STYLE)
-			private Integer age = 27;
+			private int percent = 50;
+			@Parameter(min = "10", max = "25", style = NNumberWidget.SLIDER_STYLE)
+			private int jokes = 20;
+			@Parameter(style = NTextWidget.PASSWORD_STYLE)
+			private String password;
+//			@Parameter(style = NTextWidget.AREA_STYLE)
+//			private String description =
+//				"I am a clown student in my fourth year at Dell'Arte International. " +
+//					"I like juggling, unicycles and banana cream pies.";
 		};
 		final StructInstance<Object> structInstance = //
 			ParameterStructs.create(person);

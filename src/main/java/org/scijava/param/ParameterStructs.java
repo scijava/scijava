@@ -39,13 +39,7 @@ public final class ParameterStructs {
 		throws ValidityException
 	{
 		final List<Member<?>> items = parse(type);
-		return new Struct() {
-
-			@Override
-			public List<Member<?>> members() {
-				return items;
-			}
-		};
+		return () -> items;
 	}
 
 	public static List<Member<?>> parse(final Class<?> type)

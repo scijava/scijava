@@ -35,13 +35,13 @@ package org.scijava.nwidget;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-import org.scijava.param.Parameter;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
-import org.scijava.struct.Member;
+import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
 @Plugin(type = Service.class)
@@ -53,50 +53,52 @@ public class NDefaultWidgetService extends AbstractService implements
 	private PluginService pluginService;
 
 	@Override
-	public <C, W extends NWidget> NWidgetPanel<C>
-		createPanel(final StructInstance<C> struct, final Predicate<Member<?>> included,
-			final Predicate<Member<?>> required,
-			final NWidgetPanelFactory<C, W> factory)
+	public <C, W extends NWidget> NWidgetPanel<C> createPanel(
+		final StructInstance<C> structInstance,
+		final Predicate<MemberInstance<?>> included,
+		final Predicate<MemberInstance<?>> required,
+		final NWidgetPanelFactory<C, W> factory)
 	{
-		final ArrayList<W> widgets = createWidgets(struct, factory.widgetType(),
-			included, required);
+		final ArrayList<W> widgets = createWidgets(structInstance, factory
+			.widgetType(), included, required);
 
-		return factory.create(struct, widgets);
+		return factory.create(structInstance, widgets);
 	}
 
 	// -- Helper methods --
 
-	private <W extends NWidget> ArrayList<W> createWidgets(final StructInstance<?> struct,
-		final Class<W> widgetType, final Predicate<Member<?>> included,
-		final Predicate<Member<?>> required)
+	private <W extends NWidget> ArrayList<W> createWidgets(
+		final StructInstance<?> structInstance, final Class<W> widgetType,
+		final Predicate<MemberInstance<?>> included,
+		final Predicate<MemberInstance<?>> required)
 	{
 		final ArrayList<W> widgets = new ArrayList<>();
 
-		for (final Member<?> item : struct.struct().members()) {
-			if (!included.test(item)) continue;
+		for (final MemberInstance<?> memberInstance : structInstance.members()) {
+			if (!included.test(memberInstance)) continue;
 
-			final W widget = createWidget(struct, item, widgetType);
-			if (widget == null && required.test(item)) {
+			final W widget = createWidget(memberInstance, widgetType);
+			if (widget == null && required.test(memberInstance)) {
 				// fail - FIXME
-				throw new RuntimeException(item + " is required but none exist.");
+				throw new RuntimeException(memberInstance + " is required but none exist.");
 			}
 			if (widget != null) widgets.add(widget);
 		}
 		return widgets;
 	}
 
-	private <T extends NWidget> T createWidget(final StructInstance<?> struct,
-		final Member<?> item, final Class<T> widgetType)
+	private <T extends NWidget> T createWidget(
+		final MemberInstance<?> memberInstance, final Class<T> widgetType)
 	{
 		// FIXME FIX THIS CRAP
 		for (final PluginInfo<NWidgetFactory> info : pluginService.getPluginsOfType(
 			NWidgetFactory.class))
 		{
 			final NWidgetFactory<?> factory = pluginService.createInstance(info);
-			if (widgetType.isAssignableFrom(factory.widgetType())) continue;
-			if (!factory.supports(item)) continue;
+			if (!widgetType.isAssignableFrom(factory.widgetType())) continue;
+			if (!factory.supports(memberInstance)) continue;
 			@SuppressWarnings("unchecked")
-			final T tWidget = (T) factory.create(struct, item.getKey());
+			final T tWidget = (T) factory.create(memberInstance);
 			return tWidget;
 		}
 		return null;

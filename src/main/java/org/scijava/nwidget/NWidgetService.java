@@ -36,8 +36,8 @@ import java.util.function.Predicate;
 
 import org.scijava.param.ParameterMember;
 import org.scijava.service.SciJavaService;
+import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
-import org.scijava.struct.Member;
 
 public interface NWidgetService extends SciJavaService {
 
@@ -48,7 +48,7 @@ public interface NWidgetService extends SciJavaService {
 	}
 
 	default <C, W extends NWidget> NWidgetPanel<C> createPanel(
-		final StructInstance<C> struct, final Predicate<Member<?>> included,
+		final StructInstance<C> struct, final Predicate<MemberInstance<?>> included,
 		final NWidgetPanelFactory<C, W> factory)
 	{
 		return createPanel(struct, included,
@@ -57,7 +57,7 @@ public interface NWidgetService extends SciJavaService {
 	}
 
 	<C, W extends NWidget> NWidgetPanel<C> createPanel(
-		StructInstance<C> struct, Predicate<Member<?>> included,
-		Predicate<Member<?>> required, NWidgetPanelFactory<C, W> factory);
+		StructInstance<C> struct, Predicate<MemberInstance<?>> included,
+		Predicate<MemberInstance<?>> required, NWidgetPanelFactory<C, W> factory);
 
 }

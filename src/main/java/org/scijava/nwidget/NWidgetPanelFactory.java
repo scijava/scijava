@@ -9,7 +9,8 @@ public interface NWidgetPanelFactory<C, W extends NWidget>
 	extends SciJavaPlugin
 {
 
-	NWidgetPanel<C> create(StructInstance<C> struct, List<? extends W> widgets);
-	Class<W> widgetType();
+	NWidgetPanel<C> create(StructInstance<C> structInstance,
+		List<? extends W> widgets);
 
+	Class<W> widgetType();
 }

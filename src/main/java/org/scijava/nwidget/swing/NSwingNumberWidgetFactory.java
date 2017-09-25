@@ -26,9 +26,10 @@ import net.miginfocom.swing.MigLayout;
 
 import org.scijava.convert.ConvertService;
 import org.scijava.nwidget.NAbstractWidget;
+import org.scijava.nwidget.NNumberWidget;
 import org.scijava.nwidget.NWidget;
 import org.scijava.nwidget.NWidgetFactory;
-import org.scijava.nwidget.NNumberWidget;
+import org.scijava.nwidget.NWidgets;
 import org.scijava.param.ParameterMember;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -49,7 +50,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 
 	@Override
 	public boolean supports(final MemberInstance<?> model) {
-		Member<?> member = model.member();
+		final Member<?> member = model.member();
 		return ClassUtils.isNumber(member.getRawType()) &&
 			member instanceof ParameterMember;
 	}
@@ -65,8 +66,6 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 		NNumberWidget, AdjustmentListener, ChangeListener
 	{
 
-		private final ParameterMember<?> pMember;
-
 		private JPanel panel;
 		private JScrollBar scrollBar;
 		private JSlider slider;
@@ -74,21 +73,6 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 
 		public Widget(final MemberInstance<?> model) {
 			super(model);
-			pMember = (ParameterMember<?>) model.member();
-		}
-
-		// TODO - migrate these to some abstract base class w/ ParameterMember?
-		@Override
-		public String getLabel() {
-			final String label = pMember.getLabel();
-			if (label != null && !label.isEmpty()) return label;
-
-			final String name = pMember.getKey();
-			return name.substring(0, 1).toUpperCase() + name.substring(1);
-		}
-		@Override
-		public String getDescription() {
-			return pMember.getDescription();
 		}
 
 		@Override
@@ -100,50 +84,50 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 				"[fill,grow|pref]");
 			panel.setLayout(layout);
 
-			final Number min = number(pMember.getMinimumValue(), null);
-			final Number max = number(pMember.getMaximumValue(), null);
-			final Number softMin = number(pMember.getSoftMinimum(), min);
-			final Number softMax = number(pMember.getSoftMaximum(), max);
-			final Number stepSize = number(pMember.getStepSize(), 1);
+			final Number min = number(NWidgets.minimum(this), null);
+			final Number max = number(NWidgets.maximum(this), null);
+			final Number softMin = number(NWidgets.softMinimum(this), min);
+			final Number softMax = number(NWidgets.softMaximum(this), max);
+			final Number stepSize = number(NWidgets.stepSize(this), 1);
 
 			// add optional widgets, if specified
-			if (isStyle(SCROLL_BAR_STYLE)) {
+			if (NWidgets.isStyle(this, SCROLL_BAR_STYLE)) {
 				int smx = softMax.intValue();
 				if (smx < Integer.MAX_VALUE) smx++;
 				scrollBar =
 					new JScrollBar(Adjustable.HORIZONTAL, softMin.intValue(), 1, softMin
 						.intValue(), smx);
 				scrollBar.setUnitIncrement(stepSize.intValue());
-				setToolTip(scrollBar);
+				NSwingWidgets.setToolTip(this, scrollBar);
 				getComponent().add(scrollBar);
 				scrollBar.addAdjustmentListener(this);
 			}
-			else if (isStyle(SLIDER_STYLE)) {
+			else if (NWidgets.isStyle(this, SLIDER_STYLE)) {
 				slider =
 					new JSlider(softMin.intValue(), softMax.intValue(), softMin.intValue());
 				slider.setMajorTickSpacing((softMax.intValue() - softMin.intValue()) / 4);
 				slider.setMinorTickSpacing(stepSize.intValue());
 				slider.setPaintLabels(true);
 				slider.setPaintTicks(true);
-				setToolTip(slider);
+				NSwingWidgets.setToolTip(this, slider);
 				getComponent().add(slider);
 				slider.addChangeListener(this);
 			}
 
 			// add spinner widget
-			final Class<?> type = pMember.getRawType();
-			final Number v = getValue();
+			final Class<?> type = model().member().getRawType();
+			final Number v = modelValue();
 			final Number value = v == null ? 0 : v;
 			final SpinnerNumberModel spinnerModel =
 				new SpinnerNumberModelFactory().createModel(value, min, max, stepSize);
 			spinner = new JSpinner(spinnerModel);
 			fixSpinner(type);
-			setToolTip(spinner);
+			NSwingWidgets.setToolTip(this, spinner);
 			panel.add(spinner);
 			limitWidth(200);
 			spinner.addChangeListener(this);
 
-			spinner.setValue(getValue());
+			spinner.setValue(modelValue());
 			syncSliders();
 
 			return panel;
@@ -266,7 +250,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 		private void syncSliders() {
 			if (slider != null) {
 				// clamp value within slider bounds
-				int value = getValue().intValue();
+				int value = modelValue().intValue();
 				if (value < slider.getMinimum()) value = slider.getMinimum();
 				else if (value > slider.getMaximum()) value = slider.getMaximum();
 				slider.removeChangeListener(this);
@@ -275,38 +259,22 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 			}
 			if (scrollBar != null) {
 				// clamp value within scroll bar bounds
-				int value = getValue().intValue();
+				int value = modelValue().intValue();
 				if (value < scrollBar.getMinimum()) value = scrollBar.getMinimum();
 				else if (value > scrollBar.getMaximum()) value = scrollBar.getMaximum();
 				scrollBar.removeAdjustmentListener(this);
-				scrollBar.setValue(getValue().intValue());
+				scrollBar.setValue(modelValue().intValue());
 				scrollBar.addAdjustmentListener(this);
 			}
 		}
 
-		private boolean isStyle(final String style) {
-			final String widgetStyle = pMember.getWidgetStyle();
-			if (widgetStyle == null) return style == null;
-			for (final String s : widgetStyle.split(",")) {
-				if (s.equals(style)) return true;
-			}
-			return false;
-		}
-
-		private Number getValue() {
+		private Number modelValue() {
 			final Number value = (Number) model().get();
 
 			// TODO: Decide whether to do this here.
 //			if (isMultipleChoice()) return ensureValidChoice(value);
 //			if (getObjectPool().size() > 0) return ensureValidObject(value);
 			return value == null ? 0 : value;
-		}
-
-		/** Assigns the model's description as the given component's tool tip. */
-		private void setToolTip(final JComponent c) {
-			final String desc = pMember.getDescription();
-			if (desc == null || desc.isEmpty()) return;
-			c.setToolTipText(desc);
 		}
 	}
 }

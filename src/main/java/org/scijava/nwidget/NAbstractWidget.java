@@ -4,14 +4,14 @@ import org.scijava.struct.MemberInstance;
 
 public abstract class NAbstractWidget implements NWidget {
 
-	private final MemberInstance<?> memberInstance;
+	private final MemberInstance<?> model;
 
-	public NAbstractWidget(final MemberInstance<?> memberInstance) {
-		this.memberInstance = memberInstance;
+	public NAbstractWidget(final MemberInstance<?> model) {
+		this.model = model;
 	}
 
 	@Override
-	public MemberInstance<?> member() {
-		return memberInstance;
+	public MemberInstance<?> model() {
+		return model;
 	}
 }

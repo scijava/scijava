@@ -48,15 +48,15 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 	private ThreadService threadService;
 
 	@Override
-	public boolean supports(final MemberInstance<?> member) {
-		Member<?> memberSpec = member.member();
-		return ClassUtils.isNumber(memberSpec.getRawType()) &&
-			memberSpec instanceof ParameterMember;
+	public boolean supports(final MemberInstance<?> model) {
+		Member<?> member = model.member();
+		return ClassUtils.isNumber(member.getRawType()) &&
+			member instanceof ParameterMember;
 	}
 
 	@Override
-	public NWidget create(final MemberInstance<?> memberInstance) {
-		return new Widget(memberInstance);
+	public NWidget create(final MemberInstance<?> model) {
+		return new Widget(model);
 	}
 
 	// -- Helper classes --
@@ -72,9 +72,9 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 		private JSlider slider;
 		private JSpinner spinner;
 
-		public Widget(final MemberInstance<?> memberInstance) {
-			super(memberInstance);
-			pMember = (ParameterMember<?>) memberInstance.member();
+		public Widget(final MemberInstance<?> model) {
+			super(model);
+			pMember = (ParameterMember<?>) model.member();
 		}
 
 		// TODO - migrate these to some abstract base class w/ ParameterMember?
@@ -172,7 +172,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 				// sync slider and/or scroll bar with spinner value
 				syncSliders();
 			}
-			member().set(spinner.getValue());
+			model().set(spinner.getValue());
 		}
 
 		// -- Helper methods --
@@ -294,7 +294,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 		}
 
 		private Number getValue() {
-			final Number value = (Number) member().get();
+			final Number value = (Number) model().get();
 
 			// TODO: Decide whether to do this here.
 //			if (isMultipleChoice()) return ensureValidChoice(value);

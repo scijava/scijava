@@ -73,13 +73,13 @@ public class NDefaultWidgetService extends
 	{
 		final ArrayList<W> widgets = new ArrayList<>();
 
-		for (final MemberInstance<?> memberInstance : structInstance.members()) {
-			if (!included.test(memberInstance)) continue;
+		for (final MemberInstance<?> model : structInstance.members()) {
+			if (!included.test(model)) continue;
 
-			final W widget = createWidget(memberInstance, widgetType);
-			if (widget == null && required.test(memberInstance)) {
+			final W widget = createWidget(model, widgetType);
+			if (widget == null && required.test(model)) {
 				// fail - FIXME
-				throw new RuntimeException(memberInstance + " is required but none exist.");
+				throw new RuntimeException(model + " is required but none exist.");
 			}
 			if (widget != null) widgets.add(widget);
 		}
@@ -87,13 +87,13 @@ public class NDefaultWidgetService extends
 	}
 
 	private <T extends NWidget> T createWidget(
-		final MemberInstance<?> memberInstance, final Class<T> widgetType)
+		final MemberInstance<?> model, final Class<T> widgetType)
 	{
 		for (final NWidgetFactory<?> factory : getInstances()) {
 			if (!widgetType.isAssignableFrom(factory.widgetType())) continue;
-			if (!factory.supports(memberInstance)) continue;
+			if (!factory.supports(model)) continue;
 			@SuppressWarnings("unchecked")
-			final T tWidget = (T) factory.create(memberInstance);
+			final T tWidget = (T) factory.create(model);
 			return tWidget;
 		}
 		return null;

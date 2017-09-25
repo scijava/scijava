@@ -4,9 +4,8 @@ package org.scijava.param;
 import java.lang.reflect.Type;
 
 import org.scijava.ValidityException;
-import org.scijava.struct.Struct;
 import org.scijava.struct.Member;
-import org.scijava.struct.MemberInstance;
+import org.scijava.struct.Struct;
 
 /**
  * {@link Member} backed by a generic parameter of a
@@ -37,16 +36,5 @@ public class FunctionalParameterMember<T> extends AnnotatedParameterMember<T> {
 	@Override
 	public Struct childStruct() {
 		return struct;
-	}
-
-	@Override
-	public MemberInstance<T> createInstance(final Object o) {
-		return new MemberInstance<T>() {
-
-			@Override
-			public Member<T> member() {
-				return FunctionalParameterMember.this;
-			}
-		};
 	}
 }

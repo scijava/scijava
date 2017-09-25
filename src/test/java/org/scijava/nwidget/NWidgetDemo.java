@@ -41,7 +41,9 @@ public class NWidgetDemo {
 		final Component c = ((UIComponent<JPanel>) panel).getComponent();
 		final SwingDialog dialog = new SwingDialog(c, JOptionPane.OK_CANCEL_OPTION,
 			JOptionPane.PLAIN_MESSAGE, true);
+		dialog.setTitle("NWidgetDemo");
 		final int rval = dialog.show();
+		System.out.println("return value = " + rval);
 	}
 
 }

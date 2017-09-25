@@ -30,10 +30,8 @@ import org.scijava.nwidget.NNumberWidget;
 import org.scijava.nwidget.NWidget;
 import org.scijava.nwidget.NWidgetFactory;
 import org.scijava.nwidget.NWidgets;
-import org.scijava.param.ParameterMember;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.thread.ThreadService;
 import org.scijava.ui.swing.widget.SpinnerNumberModelFactory;
@@ -50,9 +48,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 
 	@Override
 	public boolean supports(final MemberInstance<?> model) {
-		final Member<?> member = model.member();
-		return ClassUtils.isNumber(member.getRawType()) &&
-			member instanceof ParameterMember;
+		return ClassUtils.isNumber(model.member().getRawType());
 	}
 
 	@Override

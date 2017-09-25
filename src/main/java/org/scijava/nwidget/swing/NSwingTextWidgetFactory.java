@@ -19,10 +19,8 @@ import org.scijava.nwidget.NTextWidget;
 import org.scijava.nwidget.NWidget;
 import org.scijava.nwidget.NWidgetFactory;
 import org.scijava.nwidget.NWidgets;
-import org.scijava.param.ParameterMember;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.ui.swing.widget.DocumentSizeFilter;
 import org.scijava.util.ClassUtils;
@@ -35,9 +33,7 @@ public class NSwingTextWidgetFactory implements NSwingWidgetFactory {
 
 	@Override
 	public boolean supports(final MemberInstance<?> model) {
-		final Member<?> member = model.member();
-		return ClassUtils.isText(member.getRawType()) && //
-			member instanceof ParameterMember;
+		return ClassUtils.isText(model.member().getRawType());
 	}
 
 	@Override

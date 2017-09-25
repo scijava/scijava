@@ -57,7 +57,7 @@ public class NSwingWidgetPanelFactory<C> implements
 					new MigLayout("fillx,wrap 2", "[right]10[fill,grow]");
 			panel.setLayout(layout);
 
-			widgets.stream().forEach(widget -> {
+			for (final NSwingWidget widget : widgets) {
 				// add widget to panel
 				final String label = NWidgets.label(widget);
 				if (label != null) {
@@ -72,7 +72,7 @@ public class NSwingWidgetPanelFactory<C> implements
 					// widget occupies entire row
 					getComponent().add(widget.getComponent(), "span");
 				}
-			});
+			}
 
 			return panel;
 		}

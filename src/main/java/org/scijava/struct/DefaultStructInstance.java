@@ -1,8 +1,8 @@
 
 package org.scijava.struct;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class DefaultStructInstance<O> implements StructInstance<O> {
@@ -10,12 +10,12 @@ public class DefaultStructInstance<O> implements StructInstance<O> {
 	private final Struct struct;
 	private final O object;
 
-	private final TreeMap<String, MemberInstance<?>> memberMap;
+	private final LinkedHashMap<String, MemberInstance<?>> memberMap;
 
 	public DefaultStructInstance(final Struct struct, final O object) {
 		this.struct = struct;
 		this.object = object;
-		memberMap = new TreeMap<>();
+		memberMap = new LinkedHashMap<>();
 		for (final Member<?> member : struct.members()) {
 			memberMap.put(member.getKey(), member.createInstance(object));
 		}

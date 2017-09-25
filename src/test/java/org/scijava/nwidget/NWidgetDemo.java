@@ -7,9 +7,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.scijava.Context;
-import org.scijava.nwidget.NSwingWidgetPanelFactory;
 import org.scijava.nwidget.NWidgetPanel;
 import org.scijava.nwidget.NWidgetService;
+import org.scijava.nwidget.swing.NSwingWidgetPanelFactory;
 import org.scijava.param.Parameter;
 import org.scijava.param.ParameterStructs;
 import org.scijava.struct.StructInstance;

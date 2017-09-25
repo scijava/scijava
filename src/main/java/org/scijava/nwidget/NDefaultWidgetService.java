@@ -35,18 +35,17 @@ package org.scijava.nwidget;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
+import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
-import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
 @Plugin(type = Service.class)
-public class NDefaultWidgetService extends AbstractService implements
-	NWidgetService
+public class NDefaultWidgetService extends
+	AbstractSingletonService<NWidgetFactory<?>> implements NWidgetService
 {
 
 	@Parameter
@@ -90,11 +89,7 @@ public class NDefaultWidgetService extends AbstractService implements
 	private <T extends NWidget> T createWidget(
 		final MemberInstance<?> memberInstance, final Class<T> widgetType)
 	{
-		// FIXME FIX THIS CRAP
-		for (final PluginInfo<NWidgetFactory> info : pluginService.getPluginsOfType(
-			NWidgetFactory.class))
-		{
-			final NWidgetFactory<?> factory = pluginService.createInstance(info);
+		for (final NWidgetFactory<?> factory : getInstances()) {
 			if (!widgetType.isAssignableFrom(factory.widgetType())) continue;
 			if (!factory.supports(memberInstance)) continue;
 			@SuppressWarnings("unchecked")

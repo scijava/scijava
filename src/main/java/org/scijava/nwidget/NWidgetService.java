@@ -35,11 +35,14 @@ package org.scijava.nwidget;
 import java.util.function.Predicate;
 
 import org.scijava.param.ParameterMember;
+import org.scijava.plugin.SingletonService;
 import org.scijava.service.SciJavaService;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
-public interface NWidgetService extends SciJavaService {
+public interface NWidgetService extends SingletonService<NWidgetFactory<?>>,
+	SciJavaService
+{
 
 	default <C, W extends NWidget> NWidgetPanel<C> createPanel(
 		final StructInstance<C> struct, final NWidgetPanelFactory<C, W> factory)
@@ -60,4 +63,11 @@ public interface NWidgetService extends SciJavaService {
 		StructInstance<C> struct, Predicate<MemberInstance<?>> included,
 		Predicate<MemberInstance<?>> required, NWidgetPanelFactory<C, W> factory);
 
+	// -- PTService methods --
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	default Class<NWidgetFactory<?>> getPluginType() {
+		return (Class) NWidgetFactory.class;
+	}
 }

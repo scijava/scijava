@@ -32,14 +32,12 @@
 
 package org.scijava.nwidget;
 
-import org.scijava.widget.InputWidget;
-
 /**
  * Widget interface for number choosers.
  * 
  * @author Curtis Rueden
  */
-public interface NumberWidget<U> extends InputWidget<Number, U> {
+public interface NNumberWidget extends NWidget {
 
 	/**
 	 * Widget style for slider with spinner.

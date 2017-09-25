@@ -1,10 +1,9 @@
 package org.scijava.nwidget;
 
-import org.scijava.plugin.SciJavaPlugin;
+import org.scijava.plugin.SingletonPlugin;
 import org.scijava.struct.MemberInstance;
 
-// TODO extend SingletonPlugin ?
-public interface NWidgetFactory<W extends NWidget> extends SciJavaPlugin {
+public interface NWidgetFactory<W extends NWidget> extends SingletonPlugin {
 
 	boolean supports(MemberInstance<?> memberInstance);
 	NWidget create(MemberInstance<?> memberInstance);

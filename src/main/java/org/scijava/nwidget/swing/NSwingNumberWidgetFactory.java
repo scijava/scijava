@@ -1,4 +1,4 @@
-package org.scijava.nwidget;
+package org.scijava.nwidget.swing;
 
 import java.awt.Adjustable;
 import java.awt.Component;
@@ -25,6 +25,10 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.convert.ConvertService;
+import org.scijava.nwidget.NAbstractWidget;
+import org.scijava.nwidget.NWidget;
+import org.scijava.nwidget.NWidgetFactory;
+import org.scijava.nwidget.NNumberWidget;
 import org.scijava.param.ParameterMember;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -55,8 +59,10 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 		return new Widget(memberInstance);
 	}
 
+	// -- Helper classes --
+
 	private class Widget extends NAbstractWidget implements NSwingWidget,
-		AdjustmentListener, ChangeListener
+		NNumberWidget, AdjustmentListener, ChangeListener
 	{
 
 		private final ParameterMember<?> pMember;
@@ -101,7 +107,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 			final Number stepSize = number(pMember.getStepSize(), 1);
 
 			// add optional widgets, if specified
-			if (isStyle(NumberWidget.SCROLL_BAR_STYLE)) {
+			if (isStyle(SCROLL_BAR_STYLE)) {
 				int smx = softMax.intValue();
 				if (smx < Integer.MAX_VALUE) smx++;
 				scrollBar =
@@ -112,7 +118,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 				getComponent().add(scrollBar);
 				scrollBar.addAdjustmentListener(this);
 			}
-			else if (isStyle(NumberWidget.SLIDER_STYLE)) {
+			else if (isStyle(SLIDER_STYLE)) {
 				slider =
 					new JSlider(softMin.intValue(), softMax.intValue(), softMin.intValue());
 				slider.setMajorTickSpacing((softMax.intValue() - softMin.intValue()) / 4);

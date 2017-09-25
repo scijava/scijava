@@ -1,5 +1,5 @@
 
-package org.scijava.nwidget;
+package org.scijava.nwidget.swing;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.scijava.nwidget.NAbstractWidgetPanel;
+import org.scijava.nwidget.NWidgetPanelFactory;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.StructInstance;
 import org.scijava.widget.UIComponent;

@@ -1,4 +1,6 @@
-package org.scijava.nwidget;
+package org.scijava.nwidget.swing;
+
+import org.scijava.nwidget.NWidgetFactory;
 
 public interface NSwingWidgetFactory extends NWidgetFactory<NSwingWidget> {
 

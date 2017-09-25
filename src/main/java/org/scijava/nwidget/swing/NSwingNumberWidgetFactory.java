@@ -162,7 +162,15 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 		// -- Helper methods --
 
 		private Number number(final Object value, final Number defaultValue) {
-			final Number converted = convertService.convert(value, Number.class);
+			// FIXME: discuss best way forward
+			// Right now, the widgets do not have the T of their model
+			// Should they? It is nice that they don't, mostly.
+			// But here, would be handy to have a utility method that converts from
+			// the given value to one compatible with this widget's model.
+			// How deep should this conversion logic live.
+			final Class<?> modelType = model().member().getRawType();
+			final Number converted = //
+				(Number) convertService.convert(value, modelType);
 			return converted == null ? defaultValue : converted;
 		}
 

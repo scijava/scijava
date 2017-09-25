@@ -7,8 +7,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.scijava.Context;
-import org.scijava.nwidget.NWidgetPanel;
-import org.scijava.nwidget.NWidgetService;
 import org.scijava.nwidget.swing.NSwingWidgetPanelFactory;
 import org.scijava.param.Parameter;
 import org.scijava.param.ParameterStructs;
@@ -26,8 +24,7 @@ public class NWidgetDemo {
 
 			@Parameter
 			private String name = "Chuckles McGee";
-//			@Parameter(min = "0", max = "100", style = NumberWidget.SCROLL_BAR_STYLE)
-			@Parameter
+			@Parameter(min = "0", max = "100", style = NNumberWidget.SCROLL_BAR_STYLE)
 			private Integer age = 27;
 		};
 		final StructInstance<Object> structInstance = //

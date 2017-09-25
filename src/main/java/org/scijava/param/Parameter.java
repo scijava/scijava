@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
 import org.scijava.ItemIO;
 import org.scijava.ItemVisibility;
 import org.scijava.plugin.Attr;
-import org.scijava.struct.StructInstance;
+import org.scijava.struct.MemberInstance;
 
 /**
  * An annotation for indicating a field is an input or output parameter. This

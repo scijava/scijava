@@ -61,12 +61,6 @@ public interface Member<T> {
 	default MemberInstance<T> createInstance(
 		@SuppressWarnings("unused") Object o)
 	{
-		return new MemberInstance<T>() {
-
-			@Override
-			public Member<T> member() {
-				return Member.this;
-			}
-		};
+		return () -> Member.this;
 	}
 }

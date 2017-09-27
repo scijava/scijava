@@ -58,8 +58,8 @@ public class NDefaultWidgetService extends
 		final Predicate<MemberInstance<?>> required,
 		final NWidgetPanelFactory<C, W> panelFactory)
 	{
-		final ArrayList<W> widgets = createWidgets(structInstance, //
-			panelFactory.widgetType(), included, required);
+		final ArrayList<W> widgets = createWidgets(structInstance, panelFactory,
+			included, required);
 
 		return panelFactory.create(structInstance, widgets);
 	}
@@ -67,7 +67,8 @@ public class NDefaultWidgetService extends
 	// -- Helper methods --
 
 	private <W extends NWidget> ArrayList<W> createWidgets(
-		final StructInstance<?> structInstance, final Class<W> widgetType,
+		final StructInstance<?> structInstance,
+		final NWidgetPanelFactory<?, W> panelFactory,
 		final Predicate<MemberInstance<?>> included,
 		final Predicate<MemberInstance<?>> required)
 	{
@@ -76,7 +77,7 @@ public class NDefaultWidgetService extends
 		for (final MemberInstance<?> model : structInstance.members()) {
 			if (!included.test(model)) continue;
 
-			final W widget = createWidget(model, widgetType);
+			final W widget = createWidget(model, panelFactory);
 			if (widget == null && required.test(model)) {
 				// fail - FIXME
 				throw new RuntimeException(model + " is required but none exist.");
@@ -86,15 +87,16 @@ public class NDefaultWidgetService extends
 		return widgets;
 	}
 
-	private <T extends NWidget> T createWidget(
-		final MemberInstance<?> model, final Class<T> widgetType)
+	private <W extends NWidget> W createWidget(final MemberInstance<?> model,
+		final NWidgetPanelFactory<?, W> panelFactory)
 	{
+		final Class<?> widgetSupertype = panelFactory.widgetType();
 		for (final NWidgetFactory<?> factory : getInstances()) {
-			if (!widgetType.isAssignableFrom(factory.widgetType())) continue;
+			if (!widgetSupertype.isAssignableFrom(factory.widgetType())) continue;
 			if (!factory.supports(model)) continue;
 			@SuppressWarnings("unchecked")
-			final T tWidget = (T) factory.create(model);
-			return tWidget;
+			final NWidgetFactory<W> typedFactory = (NWidgetFactory<W>) factory;
+			return typedFactory.create(model, panelFactory);
 		}
 		return null;
 	}

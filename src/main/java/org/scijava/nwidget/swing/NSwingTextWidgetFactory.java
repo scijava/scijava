@@ -16,8 +16,8 @@ import net.miginfocom.swing.MigLayout;
 import org.scijava.log.Logger;
 import org.scijava.nwidget.NAbstractWidget;
 import org.scijava.nwidget.NTextWidget;
-import org.scijava.nwidget.NWidget;
 import org.scijava.nwidget.NWidgetFactory;
+import org.scijava.nwidget.NWidgetPanelFactory;
 import org.scijava.nwidget.NWidgets;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -37,7 +37,9 @@ public class NSwingTextWidgetFactory implements NSwingWidgetFactory {
 	}
 
 	@Override
-	public NWidget create(final MemberInstance<?> memberInstance) {
+	public NSwingWidget create(final MemberInstance<?> memberInstance,
+		final NWidgetPanelFactory<?, ? extends NSwingWidget> panelFactory)
+	{
 		return new Widget(memberInstance);
 	}
 

@@ -29,6 +29,7 @@ import org.scijava.nwidget.NAbstractWidget;
 import org.scijava.nwidget.NNumberWidget;
 import org.scijava.nwidget.NWidget;
 import org.scijava.nwidget.NWidgetFactory;
+import org.scijava.nwidget.NWidgetPanelFactory;
 import org.scijava.nwidget.NWidgets;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -52,7 +53,9 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 	}
 
 	@Override
-	public NWidget create(final MemberInstance<?> model) {
+	public NSwingWidget create(final MemberInstance<?> model,
+		final NWidgetPanelFactory<?, ? extends NSwingWidget> panelFactory)
+	{
 		return new Widget(model);
 	}
 

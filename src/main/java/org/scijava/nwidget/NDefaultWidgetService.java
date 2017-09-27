@@ -56,12 +56,12 @@ public class NDefaultWidgetService extends
 		final StructInstance<C> structInstance,
 		final Predicate<MemberInstance<?>> included,
 		final Predicate<MemberInstance<?>> required,
-		final NWidgetPanelFactory<C, W> factory)
+		final NWidgetPanelFactory<C, W> panelFactory)
 	{
-		final ArrayList<W> widgets = createWidgets(structInstance, factory
-			.widgetType(), included, required);
+		final ArrayList<W> widgets = createWidgets(structInstance, //
+			panelFactory.widgetType(), included, required);
 
-		return factory.create(structInstance, widgets);
+		return panelFactory.create(structInstance, widgets);
 	}
 
 	// -- Helper methods --

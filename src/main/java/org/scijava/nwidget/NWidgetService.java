@@ -59,9 +59,10 @@ public interface NWidgetService extends SingletonService<NWidgetFactory<?>>,
 				.isRequired(), factory);
 	}
 
-	<C, W extends NWidget> NWidgetPanel<C> createPanel(
-		StructInstance<C> struct, Predicate<MemberInstance<?>> included,
-		Predicate<MemberInstance<?>> required, NWidgetPanelFactory<C, W> factory);
+	<C, W extends NWidget> NWidgetPanel<C> createPanel(StructInstance<C> struct,
+		Predicate<MemberInstance<?>> included,
+		Predicate<MemberInstance<?>> required,
+		NWidgetPanelFactory<C, W> panelFactory);
 
 	// -- PTService methods --
 

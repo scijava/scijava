@@ -7,7 +7,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.scijava.Context;
+import org.scijava.ItemVisibility;
 import org.scijava.nwidget.swing.NSwingWidgetPanelFactory;
+import org.scijava.object.ObjectService;
 import org.scijava.param.Parameter;
 import org.scijava.param.ParameterStructs;
 import org.scijava.struct.StructInstance;
@@ -16,9 +18,33 @@ import org.scijava.widget.UIComponent;
 
 public class NWidgetDemo {
 
+	private interface Joke {}
+
 	public static void main(final String... args) throws Exception {
 		final Context context = new Context();
 		final NWidgetService widgetService = context.service(NWidgetService.class);
+		
+		final ObjectService objectService = context.service(ObjectService.class);
+		objectService.addObject(new Joke() {
+			@Parameter(label = "Setup")
+			private String setup;
+			@Parameter(label = "Punchline")
+			private String punchline;
+			@Override
+			public String toString() {
+				return "Regular joke";
+			}
+		});
+		objectService.addObject(new Joke() {
+			@Parameter(label = "Who's there?")
+			private String whosThere;
+			@Parameter(label = "Punchline")
+			private String punchline;
+			@Override
+			public String toString() {
+				return "Knock-knock joke";
+			}
+		});
 
 		final Object person = new Object() {
 
@@ -36,6 +62,8 @@ public class NWidgetDemo {
 //			private String description =
 //				"I am a clown student in my fourth year at Dell'Arte International. " +
 //					"I like juggling, unicycles and banana cream pies.";
+			@Parameter(label = "Favorite joke")
+			private Joke joke;
 		};
 		final StructInstance<Object> structInstance = //
 			ParameterStructs.create(person);

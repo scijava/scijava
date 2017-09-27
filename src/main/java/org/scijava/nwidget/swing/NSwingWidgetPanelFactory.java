@@ -35,7 +35,7 @@ public class NSwingWidgetPanelFactory implements
 
 	// -- Helper classes --
 
-	private class WidgetPanel<C> extends NAbstractWidgetPanel<C> implements
+	public class WidgetPanel<C> extends NAbstractWidgetPanel<C> implements
 		UIComponent<JPanel>
 	{
 

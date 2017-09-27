@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /** An instance of a {@link Struct}. */
-public interface StructInstance<O> extends Iterable<MemberInstance<?>>
+public interface StructInstance<C> extends Iterable<MemberInstance<?>>
 {
 
 	List<MemberInstance<?>> members();
@@ -17,7 +17,7 @@ public interface StructInstance<O> extends Iterable<MemberInstance<?>>
 	/**
 	 * @return the object backing this instance of the struct
 	 */
-	O object();
+	C object();
 
 	/**
 	 * @param key

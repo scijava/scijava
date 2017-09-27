@@ -18,7 +18,7 @@ public interface Struct extends Iterable<Member<?>> {
 		return members().iterator();
 	}
 
-	default <O> StructInstance<O> createInstance(final O object) {
+	default <C> StructInstance<C> createInstance(final C object) {
 		return new DefaultStructInstance<>(this, object);
 	}
 }

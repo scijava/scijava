@@ -5,14 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DefaultStructInstance<O> implements StructInstance<O> {
+public class DefaultStructInstance<C> implements StructInstance<C> {
 
 	private final Struct struct;
-	private final O object;
+	private final C object;
 
 	private final LinkedHashMap<String, MemberInstance<?>> memberMap;
 
-	public DefaultStructInstance(final Struct struct, final O object) {
+	public DefaultStructInstance(final Struct struct, final C object) {
 		this.struct = struct;
 		this.object = object;
 		memberMap = new LinkedHashMap<>();
@@ -32,7 +32,7 @@ public class DefaultStructInstance<O> implements StructInstance<O> {
 	}
 
 	@Override
-	public O object() {
+	public C object() {
 		return object;
 	}
 

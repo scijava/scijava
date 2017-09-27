@@ -37,10 +37,10 @@ public class NSwingTextWidgetFactory implements NSwingWidgetFactory {
 	}
 
 	@Override
-	public NSwingWidget create(final MemberInstance<?> memberInstance,
-		final NWidgetPanelFactory<?, ? extends NSwingWidget> panelFactory)
+	public NSwingWidget create(final MemberInstance<?> model,
+		final NWidgetPanelFactory<? extends NSwingWidget> panelFactory)
 	{
-		return new Widget(memberInstance);
+		return new Widget(model);
 	}
 
 	// -- Helper classes --

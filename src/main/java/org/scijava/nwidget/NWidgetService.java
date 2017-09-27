@@ -45,14 +45,14 @@ public interface NWidgetService extends SingletonService<NWidgetFactory<?>>,
 {
 
 	default <C, W extends NWidget> NWidgetPanel<C> createPanel(
-		final StructInstance<C> struct, final NWidgetPanelFactory<C, W> factory)
+		final StructInstance<C> struct, final NWidgetPanelFactory<W> factory)
 	{
 		return createPanel(struct, item -> true, factory);
 	}
 
 	default <C, W extends NWidget> NWidgetPanel<C> createPanel(
 		final StructInstance<C> struct, final Predicate<MemberInstance<?>> included,
-		final NWidgetPanelFactory<C, W> factory)
+		final NWidgetPanelFactory<W> factory)
 	{
 		return createPanel(struct, included,
 			item -> item instanceof ParameterMember && ((ParameterMember<?>) item)
@@ -62,7 +62,7 @@ public interface NWidgetService extends SingletonService<NWidgetFactory<?>>,
 	<C, W extends NWidget> NWidgetPanel<C> createPanel(StructInstance<C> struct,
 		Predicate<MemberInstance<?>> included,
 		Predicate<MemberInstance<?>> required,
-		NWidgetPanelFactory<C, W> panelFactory);
+		NWidgetPanelFactory<W> panelFactory);
 
 	// -- PTService methods --
 

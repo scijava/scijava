@@ -68,8 +68,7 @@ public class NWidgetDemo {
 		final StructInstance<Object> structInstance = //
 			ParameterStructs.create(person);
 
-		final NSwingWidgetPanelFactory<Object> factory =
-			new NSwingWidgetPanelFactory<>();
+		final NSwingWidgetPanelFactory factory = new NSwingWidgetPanelFactory();
 
 		// create a panel
 		final NWidgetPanel<Object> panel = //

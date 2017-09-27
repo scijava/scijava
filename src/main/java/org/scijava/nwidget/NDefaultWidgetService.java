@@ -56,7 +56,7 @@ public class NDefaultWidgetService extends
 		final StructInstance<C> structInstance,
 		final Predicate<MemberInstance<?>> included,
 		final Predicate<MemberInstance<?>> required,
-		final NWidgetPanelFactory<C, W> panelFactory)
+		final NWidgetPanelFactory<W> panelFactory)
 	{
 		final ArrayList<W> widgets = createWidgets(structInstance, panelFactory,
 			included, required);
@@ -68,7 +68,7 @@ public class NDefaultWidgetService extends
 
 	private <W extends NWidget> ArrayList<W> createWidgets(
 		final StructInstance<?> structInstance,
-		final NWidgetPanelFactory<?, W> panelFactory,
+		final NWidgetPanelFactory<W> panelFactory,
 		final Predicate<MemberInstance<?>> included,
 		final Predicate<MemberInstance<?>> required)
 	{
@@ -88,7 +88,7 @@ public class NDefaultWidgetService extends
 	}
 
 	private <W extends NWidget> W createWidget(final MemberInstance<?> model,
-		final NWidgetPanelFactory<?, W> panelFactory)
+		final NWidgetPanelFactory<W> panelFactory)
 	{
 		final Class<?> widgetSupertype = panelFactory.widgetType();
 		for (final NWidgetFactory<?> factory : getInstances()) {

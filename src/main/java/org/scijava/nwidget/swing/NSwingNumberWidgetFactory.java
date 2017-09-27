@@ -54,7 +54,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 
 	@Override
 	public NSwingWidget create(final MemberInstance<?> model,
-		final NWidgetPanelFactory<?, ? extends NSwingWidget> panelFactory)
+		final NWidgetPanelFactory<? extends NSwingWidget> panelFactory)
 	{
 		return new Widget(model);
 	}

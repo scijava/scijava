@@ -5,11 +5,11 @@ import java.util.List;
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.struct.StructInstance;
 
-public interface NWidgetPanelFactory<C, W extends NWidget>
+public interface NWidgetPanelFactory<W extends NWidget>
 	extends SciJavaPlugin
 {
 
-	NWidgetPanel<C> create(StructInstance<C> structInstance,
+	<C> NWidgetPanel<C> create(StructInstance<C> structInstance,
 		List<? extends W> widgets);
 
 	Class<W> widgetType();

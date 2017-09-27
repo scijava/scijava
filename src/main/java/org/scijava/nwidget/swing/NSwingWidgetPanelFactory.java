@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.nwidget.NAbstractWidgetPanel;
+import org.scijava.nwidget.NWidgetPanel;
 import org.scijava.nwidget.NWidgets;
 import org.scijava.nwidget.NWidgetPanelFactory;
 import org.scijava.plugin.Plugin;
@@ -16,15 +17,15 @@ import org.scijava.struct.StructInstance;
 import org.scijava.widget.UIComponent;
 
 @Plugin(type = NWidgetPanelFactory.class)
-public class NSwingWidgetPanelFactory<C> implements
-	NWidgetPanelFactory<C, NSwingWidget>
+public class NSwingWidgetPanelFactory implements
+	NWidgetPanelFactory<NSwingWidget>
 {
 
 	@Override
-	public WidgetPanel create(final StructInstance<C> struct,
+	public <C> NWidgetPanel<C> create(final StructInstance<C> struct,
 		final List<? extends NSwingWidget> widgets)
 	{
-		return new WidgetPanel(struct, widgets);
+		return new WidgetPanel<>(struct, widgets);
 	}
 
 	@Override
@@ -34,7 +35,7 @@ public class NSwingWidgetPanelFactory<C> implements
 
 	// -- Helper classes --
 
-	private class WidgetPanel extends NAbstractWidgetPanel<C> implements
+	private class WidgetPanel<C> extends NAbstractWidgetPanel<C> implements
 		UIComponent<JPanel>
 	{
 

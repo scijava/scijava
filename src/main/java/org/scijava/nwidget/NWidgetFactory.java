@@ -8,7 +8,7 @@ public interface NWidgetFactory<W extends NWidget> extends SingletonPlugin {
 	boolean supports(MemberInstance<?> model);
 
 	W create(MemberInstance<?> model,
-		NWidgetPanelFactory<?, ? extends W> panelFactory);
+		NWidgetPanelFactory<? extends W> panelFactory);
 
 	Class<W> widgetType();
 }

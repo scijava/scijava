@@ -1,15 +1,12 @@
 package org.scijava.nwidget.swing;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.scijava.ValidityException;
 import org.scijava.nwidget.NAbstractWidget;
@@ -80,7 +77,7 @@ public class NSwingObjectWidgetFactory implements NSwingWidgetFactory {
 			if (panel != null) return panel;
 
 			panel = new JPanel();
-			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			panel.setLayout(new MigLayout("fillx,wrap 1", "[fill,grow]"));
 			subPanels = new ArrayList<>();
 
 			final List<C> choices = choices(typedModel);

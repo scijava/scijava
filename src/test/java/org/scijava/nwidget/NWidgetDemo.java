@@ -6,10 +6,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.scijava.Context;
-import org.scijava.ItemVisibility;
 import org.scijava.nwidget.swing.NSwingWidgetPanelFactory;
-import org.scijava.object.ObjectService;
 import org.scijava.param.Parameter;
 import org.scijava.param.ParameterStructs;
 import org.scijava.struct.StructInstance;
@@ -30,6 +27,8 @@ public class NWidgetDemo {
 			private String setup;
 			@Parameter(label = "Punchline")
 			private String punchline;
+			@Parameter
+			private int laughs = 0;
 			@Override
 			public String toString() {
 				return "Regular joke";
@@ -50,12 +49,31 @@ public class NWidgetDemo {
 
 			@Parameter
 			private String name = "Chuckles McGee";
+
+			@Parameter
+			@FileStyle(type = DIRECTORIES_ONLY, extensions = {"tif"}, regex = "foo.*bar")
+			private File directory;
 			@Parameter(min = "0")
 			private int age = 27;
-			@Parameter(min = "0", max = "100", style = NNumberWidget.SCROLL_BAR_STYLE)
+
+			@Parameter
+			@ScrollBarStyle(min = "0", max = "100")
 			private int percent = 50;
-			@Parameter(min = "10", max = "25", style = NNumberWidget.SLIDER_STYLE)
+
+			@Parameter(label = "Best Jokes"})
+			@SliderStyle(min = "10", max = "25", softMin = "", stepSize = "1")
 			private int jokes = 20;
+
+			// NB: This gets hooked into the MemberInstance.set(T) method.
+			// So whenever model changes, view changes.
+			// The set method, after calling the callback, needs to trigger a
+			// full recomparison of the entire StructInstance, and then trigger
+			// listener notification for all changed values.
+//			@Callback("jokes")
+			private void jokeChanged() {
+				percent = percentOfLaughs(joke);
+			}
+
 			@Parameter(style = NTextWidget.PASSWORD_STYLE)
 			private String password;
 //			@Parameter(style = NTextWidget.AREA_STYLE)
@@ -68,11 +86,11 @@ public class NWidgetDemo {
 		final StructInstance<Object> structInstance = //
 			ParameterStructs.create(person);
 
-		final NSwingWidgetPanelFactory factory = new NSwingWidgetPanelFactory();
+		final NSwingWidgetPanelFactory panelFactory = new NSwingWidgetPanelFactory();
 
 		// create a panel
 		final NWidgetPanel<Object> panel = //
-			widgetService.createPanel(structInstance, factory);
+			widgetService.createPanel(structInstance, panelFactory);
 
 		// show the panel in a hacky way, for now
 		final Component c = ((UIComponent<JPanel>) panel).getComponent();

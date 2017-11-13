@@ -51,6 +51,7 @@ public interface NWidgetService extends SingletonService<NWidgetFactory<?>>,
 	}
 
 	default <C, W extends NWidget> NWidgetPanel<C> createPanel(
+		// TODO: Consider Structs.filter(struct, Predicate<MemberInstance<?> included).
 		final StructInstance<C> struct, final Predicate<MemberInstance<?>> included,
 		final NWidgetPanelFactory<W> factory)
 	{

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>17.0.0</version>
+		<version>17.1.1</version>
 		<relativePath />
 	</parent>
 
@@ -93,8 +93,8 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>Board of Regents of the University of
 Wisconsin-Madison and University of Konstanz.</license.copyrightOwners>
-		<scijava-common.version>2.66.1-SNAPSHOT</scijava-common.version>
-		<scijava-ui-swing.version>0.9.4-SNAPSHOT</scijava-ui-swing.version>
+        <!-- <scijava-common.version>2.66.1-SNAPSHOT</scijava-common.version> -->
+		<!-- <scijava-ui-swing.version>0.9.4-SNAPSHOT</scijava-ui-swing.version> -->
 	</properties>
 
 	<repositories>

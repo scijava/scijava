@@ -13,7 +13,7 @@ import javax.swing.text.JTextComponent;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.scijava.log.Logger;
+import org.scijava.log.LogService;
 import org.scijava.nwidget.NAbstractWidget;
 import org.scijava.nwidget.NTextWidget;
 import org.scijava.nwidget.NWidgetFactory;
@@ -29,7 +29,7 @@ import org.scijava.util.ClassUtils;
 public class NSwingTextWidgetFactory implements NSwingWidgetFactory {
 
 	@Parameter
-	private Logger log;
+	private LogService log;
 
 	@Override
 	public boolean supports(final MemberInstance<?> model) {

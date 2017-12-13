@@ -30,36 +30,17 @@
  * #L%
  */
 
-package org.scijava.context;
-
-import org.scijava.event.EventHandler;
+package org.scijava.core;
 
 /**
- * Abstract base class for {@link Contextual} objects.
- * <p>
- * Delegates to {@link Context#inject(Object)} to do the actual work of
- * setting the context, injecting service parameters, and registering
- * {@link EventHandler} methods as event subscribers.
- * </p>
+ * Interface for objects which can be initialized.
  * 
  * @author Curtis Rueden
- * @see Context#inject(Object)
  */
-public abstract class AbstractContextual implements Contextual {
+public interface Initializable {
 
-	@Inject
-	private Context context;
-
-	// -- Contextual methods --
-
-	@Override
-	public Context context() {
-		if (context == null) throw new NullContextException();
-		return context;
-	}
-
-	@Override
-	public Context getContext() {
-		return context;
+	/** Initializes the object. */
+	default void initialize() {
+		// NB: Do nothing by default.
 	}
 }

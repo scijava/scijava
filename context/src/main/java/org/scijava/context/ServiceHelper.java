@@ -313,7 +313,7 @@ public class ServiceHelper extends AbstractContextual {
 
 		// populate service parameters
 		final List<Field> fields =
-			ClassUtils.getAnnotatedFields(c, Parameter.class);
+			ClassUtils.getAnnotatedFields(c, Inject.class);
 		for (final Field f : fields) {
 			f.setAccessible(true); // expose private fields
 
@@ -336,7 +336,7 @@ public class ServiceHelper extends AbstractContextual {
 			Service s = context().getService(serviceType);
 			if (s == null) {
 				// recursively obtain needed service
-				final boolean required = f.getAnnotation(Parameter.class).required();
+				final boolean required = f.getAnnotation(Inject.class).required();
 				s = loadService(serviceType, required);
 				// NB: Remember when there is an optional EventService parameter.
 				if (s instanceof EventService) eventServiceRequired = required;

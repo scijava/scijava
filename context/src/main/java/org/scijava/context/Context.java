@@ -352,10 +352,10 @@ public class Context implements Disposable {
 	 * distinct things:
 	 * <ol>
 	 * <li>If the given object has any non-final {@link Context} fields annotated
-	 * with @{@link Parameter}, sets the value of those fields to this context.
+	 * with @{@link Inject}, sets the value of those fields to this context.
 	 * </li>
 	 * <li>If the given object has any non-final {@link Service} fields annotated
-	 * with @{@link Parameter}, sets the value of those fields to the
+	 * with @{@link Inject}, sets the value of those fields to the
 	 * corresponding service available from this context.</li>
 	 * <li>Calls {@link EventService#subscribe(Object)} with the object to
 	 * register any @{@link EventHandler} annotated methods as event subscribers.
@@ -365,14 +365,14 @@ public class Context implements Disposable {
 	 * @param o The object to which the context should be assigned.
 	 * @throws IllegalStateException If the object already has a context.
 	 * @throws IllegalArgumentException If the object has a required
-	 *           {@link Service} parameter (see {@link Parameter#required()})
+	 *           {@link Service} parameter (see {@link Inject#required()})
 	 *           which is not available from this context.
 	 */
 	public void inject(final Object o) {
 		// Ensure parameter fields and event handler methods are cached for this
 		// object.
 		final Query query = new Query();
-		query.put(Parameter.class, Field.class);
+		query.put(Inject.class, Field.class);
 		query.put(EventHandler.class, Method.class);
 		ClassUtils.cacheAnnotatedObjects(o.getClass(), query);
 
@@ -392,12 +392,12 @@ public class Context implements Disposable {
 	 * a consequence of calling {@link #inject(Object)}.
 	 * <p>
 	 * This method is notably useful for downstream code to discern between
-	 * {@link Parameter} fields whose values would be injected, versus those whose
+	 * {@link Inject} fields whose values would be injected, versus those whose
 	 * values would not, without needing to hardcode type comparison checks
 	 * against the {@link Service} and {@link Context} types.
 	 * </p>
 	 * 
-	 * @param type The type of the @{@link Parameter}-annotated field.
+	 * @param type The type of the @{@link Inject}-annotated field.
 	 * @return True iff a member field of the given type would have its value
 	 *         assigned.
 	 */
@@ -440,7 +440,7 @@ public class Context implements Disposable {
 
 	private List<Field> getParameterFields(final Object o) {
 		try {
-			return ClassUtils.getAnnotatedFields(o.getClass(), Parameter.class);
+			return ClassUtils.getAnnotatedFields(o.getClass(), Inject.class);
 		}
 		catch (final Throwable t) {
 			handleSafely(t);
@@ -465,7 +465,7 @@ public class Context implements Disposable {
 				final Class<? extends Service> serviceType =
 					(Class<? extends Service>) type;
 				final Service service = getService(serviceType);
-				if (service == null && f.getAnnotation(Parameter.class).required()) {
+				if (service == null && f.getAnnotation(Inject.class).required()) {
 					throw new IllegalArgumentException(//
 						createMissingServiceMessage(serviceType));
 				}

@@ -3,9 +3,8 @@
  * SciJava Common shared library for SciJava software.
  * %%
  * Copyright (C) 2009 - 2017 Board of Regents of the University of
- * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
- * Institute of Molecular Cell Biology and Genetics, University of
- * Konstanz, and KNIME GmbH.
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, and Max Planck
+ * Institute of Molecular Cell Biology and Genetics.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,34 +31,20 @@
 
 package org.scijava.context;
 
-import org.scijava.event.EventHandler;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Abstract base class for {@link Contextual} objects.
- * <p>
- * Delegates to {@link Context#inject(Object)} to do the actual work of
- * setting the context, injecting service parameters, and registering
- * {@link EventHandler} methods as event subscribers.
- * </p>
+ * An annotation for injecting {@link Context} and {@link Service} instances.
  * 
  * @author Curtis Rueden
- * @see Context#inject(Object)
  */
-public abstract class AbstractContextual implements Contextual {
-
-	@Inject
-	private Context context;
-
-	// -- Contextual methods --
-
-	@Override
-	public Context context() {
-		if (context == null) throw new NullContextException();
-		return context;
-	}
-
-	@Override
-	public Context getContext() {
-		return context;
-	}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Inject {
+	
+	/** Defines whether to fail if an injectable object is not available. */
+	boolean required() default true;
 }

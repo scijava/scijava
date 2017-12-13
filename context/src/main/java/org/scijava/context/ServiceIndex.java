@@ -34,7 +34,7 @@ package org.scijava.context;
 
 import java.util.List;
 
-import org.scijava.object.SortedObjectIndex;
+import org.scijava.collection.SortedObjectIndex;
 
 /**
  * Data structure for tracking registered services.

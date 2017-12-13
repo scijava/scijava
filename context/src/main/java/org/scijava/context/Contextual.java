@@ -32,9 +32,6 @@
 
 package org.scijava.context;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.service.Service;
-
 /**
  * An object that belongs to a SciJava application context.
  * 
@@ -72,7 +69,7 @@ public interface Contextual {
 	 * @see Context#inject(Object)
 	 * @throws IllegalStateException If the object already has a context.
 	 * @throws IllegalArgumentException If the object has a required
-	 *           {@link Service} parameter (see {@link Parameter#required()})
+	 *           {@link Service} parameter (see {@link Inject#required()})
 	 *           which is not available from the context.
 	 */
 	default void setContext(final Context context) {

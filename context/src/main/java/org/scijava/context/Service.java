@@ -32,11 +32,10 @@
 
 package org.scijava.context;
 
-import org.scijava.Disposable;
-import org.scijava.Initializable;
+import org.scijava.core.Disposable;
+import org.scijava.core.Initializable;
 import org.scijava.event.EventService;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.RichPlugin;
 
 /**
  * A SciJava service, for a particular area of functionality.

@@ -32,34 +32,54 @@
 
 package org.scijava.context;
 
-import org.scijava.event.EventHandler;
+import org.scijava.core.Priority;
+import org.scijava.plugin.PluginInfo;
 
 /**
- * Abstract base class for {@link Contextual} objects.
- * <p>
- * Delegates to {@link Context#inject(Object)} to do the actual work of
- * setting the context, injecting service parameters, and registering
- * {@link EventHandler} methods as event subscribers.
- * </p>
+ * Abstract base class for {@link RichPlugin} implementations.
  * 
  * @author Curtis Rueden
- * @see Context#inject(Object)
  */
-public abstract class AbstractContextual implements Contextual {
+public abstract class AbstractRichPlugin extends AbstractContextual implements
+	RichPlugin
+{
 
-	@Inject
-	private Context context;
+	/** The priority of the plugin. */
+	private double priority = Priority.NORMAL;
 
-	// -- Contextual methods --
+	/** The metadata associated with the plugin. */
+	private PluginInfo<?> info;
+
+	// -- Object methods --
 
 	@Override
-	public Context context() {
-		if (context == null) throw new NullContextException();
-		return context;
+	public String toString() {
+		final PluginInfo<?> pi = getInfo();
+		return pi == null ? super.toString() : pi.getTitle();
+	}
+
+	// -- Prioritized methods --
+
+	@Override
+	public double getPriority() {
+		return priority;
 	}
 
 	@Override
-	public Context getContext() {
-		return context;
+	public void setPriority(final double priority) {
+		this.priority = priority;
 	}
+
+	// -- HasPluginInfo methods --
+
+	@Override
+	public PluginInfo<?> getInfo() {
+		return info;
+	}
+
+	@Override
+	public void setInfo(final PluginInfo<?> info) {
+		this.info = info;
+	}
+
 }

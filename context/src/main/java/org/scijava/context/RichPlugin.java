@@ -32,34 +32,38 @@
 
 package org.scijava.context;
 
-import org.scijava.event.EventHandler;
+import org.scijava.core.Identifiable;
+import org.scijava.core.Locatable;
+import org.scijava.core.Prioritized;
+import org.scijava.log.LogService;
+import org.scijava.log.Logged;
+import org.scijava.plugin.HasPluginInfo;
+import org.scijava.plugin.SciJavaPlugin;
+import org.scijava.version.Versioned;
 
 /**
- * Abstract base class for {@link Contextual} objects.
- * <p>
- * Delegates to {@link Context#inject(Object)} to do the actual work of
- * setting the context, injecting service parameters, and registering
- * {@link EventHandler} methods as event subscribers.
- * </p>
+ * Base interface for {@link Contextual}, {@link Prioritized} plugins that
+ * retain access to their associated {@link PluginInfo} metadata via the
+ * {@link HasPluginInfo} interface. This interface is intended as a convenient
+ * extension point for new types of plugins.
  * 
  * @author Curtis Rueden
- * @see Context#inject(Object)
  */
-public abstract class AbstractContextual implements Contextual {
+public interface RichPlugin extends SciJavaPlugin, Contextual, Prioritized,
+	HasPluginInfo, Logged, Identifiable, Locatable, Versioned
+{
 
-	@Inject
-	private Context context;
-
-	// -- Contextual methods --
+	// -- Identifiable methods --
 
 	@Override
-	public Context context() {
-		if (context == null) throw new NullContextException();
-		return context;
+	default String getIdentifier() {
+		return "plugin:" + getClass().getName();
 	}
 
+	// -- Logged methods --
+
 	@Override
-	public Context getContext() {
-		return context;
+	default LogService log() {
+		return context().getService(LogService.class);
 	}
 }

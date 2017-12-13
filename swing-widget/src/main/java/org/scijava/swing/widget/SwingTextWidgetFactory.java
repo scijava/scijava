@@ -13,22 +13,22 @@ import javax.swing.text.JTextComponent;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.scijava.context.Inject;
 import org.scijava.log.LogService;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.MemberInstance;
+import org.scijava.ui.swing.widget.DocumentSizeFilter;
+import org.scijava.util.ClassUtils;
 import org.scijava.widget.AbstractWidget;
 import org.scijava.widget.TextWidget;
 import org.scijava.widget.WidgetFactory;
 import org.scijava.widget.WidgetPanelFactory;
 import org.scijava.widget.Widgets;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.struct.MemberInstance;
-import org.scijava.ui.swing.widget.DocumentSizeFilter;
-import org.scijava.util.ClassUtils;
 
 @Plugin(type = WidgetFactory.class)
 public class SwingTextWidgetFactory implements SwingWidgetFactory {
 
-	@Parameter
+	@Inject
 	private LogService log;
 
 	@Override

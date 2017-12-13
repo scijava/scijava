@@ -6,7 +6,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.scijava.nwidget.swing.NSwingWidgetPanelFactory;
+import org.scijava.widget.swing.SwingWidgetPanelFactory;
 import org.scijava.param.Parameter;
 import org.scijava.param.ParameterStructs;
 import org.scijava.struct.StructInstance;
@@ -19,7 +19,7 @@ public class WidgetDemo {
 
 	public static void main(final String... args) throws Exception {
 		final Context context = new Context();
-		final NWidgetService widgetService = context.service(NWidgetService.class);
+		final WidgetService widgetService = context.service(WidgetService.class);
 		
 		final ObjectService objectService = context.service(ObjectService.class);
 		objectService.addObject(new Joke() {
@@ -74,9 +74,9 @@ public class WidgetDemo {
 				percent = percentOfLaughs(joke);
 			}
 
-			@Parameter(style = NTextWidget.PASSWORD_STYLE)
+			@Parameter(style = TextWidget.PASSWORD_STYLE)
 			private String password;
-//			@Parameter(style = NTextWidget.AREA_STYLE)
+//			@Parameter(style = TextWidget.AREA_STYLE)
 //			private String description =
 //				"I am a clown student in my fourth year at Dell'Arte International. " +
 //					"I like juggling, unicycles and banana cream pies.";
@@ -86,17 +86,17 @@ public class WidgetDemo {
 		final StructInstance<Object> structInstance = //
 			ParameterStructs.create(person);
 
-		final NSwingWidgetPanelFactory panelFactory = new NSwingWidgetPanelFactory();
+		final SwingWidgetPanelFactory panelFactory = new SwingWidgetPanelFactory();
 
 		// create a panel
-		final NWidgetPanel<Object> panel = //
+		final WidgetPanel<Object> panel = //
 			widgetService.createPanel(structInstance, panelFactory);
 
 		// show the panel in a hacky way, for now
 		final Component c = ((UIComponent<JPanel>) panel).getComponent();
 		final SwingDialog dialog = new SwingDialog(c, JOptionPane.OK_CANCEL_OPTION,
 			JOptionPane.PLAIN_MESSAGE, true);
-		dialog.setTitle("NWidgetDemo");
+		dialog.setTitle("WidgetDemo");
 		final int rval = dialog.show();
 		System.out.println("return value = " + rval);
 	}

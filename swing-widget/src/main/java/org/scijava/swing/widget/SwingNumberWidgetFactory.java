@@ -41,10 +41,10 @@ import org.scijava.util.ClassUtils;
 @Plugin(type = WidgetFactory.class)
 public class SwingNumberWidgetFactory implements SwingWidgetFactory {
 
-	@Parameter
+	@Inject
 	private ConvertService convertService;
 
-	@Parameter
+	@Inject
 	private ThreadService threadService;
 
 	@Override

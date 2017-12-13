@@ -36,16 +36,16 @@ import java.util.function.Predicate;
 
 import org.scijava.param.ParameterMember;
 import org.scijava.plugin.SingletonService;
-import org.scijava.service.SciJavaService;
+import org.scijava.context.SciJavaService;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
-public interface WidgetService extends SingletonService<NWidgetFactory<?>>,
+public interface WidgetService extends SingletonService<WidgetFactory<?>>,
 	SciJavaService
 {
 
 	default <C, W extends Widget> WidgetPanel<C> createPanel(
-		final StructInstance<C> struct, final NWidgetPanelFactory<W> factory)
+		final StructInstance<C> struct, final WidgetPanelFactory<W> factory)
 	{
 		return createPanel(struct, item -> true, factory);
 	}
@@ -53,7 +53,7 @@ public interface WidgetService extends SingletonService<NWidgetFactory<?>>,
 	default <C, W extends Widget> WidgetPanel<C> createPanel(
 		// TODO: Consider Structs.filter(struct, Predicate<MemberInstance<?> included).
 		final StructInstance<C> struct, final Predicate<MemberInstance<?>> included,
-		final NWidgetPanelFactory<W> factory)
+		final WidgetPanelFactory<W> factory)
 	{
 		return createPanel(struct, included,
 			item -> item instanceof ParameterMember && ((ParameterMember<?>) item)
@@ -63,13 +63,13 @@ public interface WidgetService extends SingletonService<NWidgetFactory<?>>,
 	<C, W extends Widget> WidgetPanel<C> createPanel(StructInstance<C> struct,
 		Predicate<MemberInstance<?>> included,
 		Predicate<MemberInstance<?>> required,
-		NWidgetPanelFactory<W> panelFactory);
+		WidgetPanelFactory<W> panelFactory);
 
 	// -- PTService methods --
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	default Class<NWidgetFactory<?>> getPluginType() {
-		return (Class) NWidgetFactory.class;
+	default Class<WidgetFactory<?>> getPluginType() {
+		return (Class) WidgetFactory.class;
 	}
 }

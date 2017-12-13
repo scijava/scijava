@@ -9,27 +9,26 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.ValidityException;
+import org.scijava.context.Inject;
+import org.scijava.object.ObjectService;
+import org.scijava.param.ParameterStructs;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.MemberInstance;
+import org.scijava.struct.StructInstance;
 import org.scijava.widget.AbstractWidget;
 import org.scijava.widget.ObjectWidget;
 import org.scijava.widget.WidgetFactory;
 import org.scijava.widget.WidgetPanel;
 import org.scijava.widget.WidgetPanelFactory;
 import org.scijava.widget.WidgetService;
-import org.scijava.widget.swing.SwingWidgetPanelFactory.WidgetPanel;
-import org.scijava.object.ObjectService;
-import org.scijava.param.ParameterStructs;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.struct.MemberInstance;
-import org.scijava.struct.StructInstance;
 
 @Plugin(type = WidgetFactory.class)
 public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
-	@Parameter
+	@Inject
 	private WidgetService widgetService;
 
-	@Parameter
+	@Inject
 	private ObjectService objectService;
 
 	@Override

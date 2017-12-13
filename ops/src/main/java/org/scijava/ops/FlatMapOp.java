@@ -6,4 +6,4 @@ import java.util.function.Consumer;
 
 /** (flat)map -- 1->N */
 @FunctionalInterface
-public interface MapOp<I, O> extends BiConsumer<I, Consumer<O>> {}
+public interface FlatMapOp<I, O> extends BiConsumer<I, Consumer<O>> {}

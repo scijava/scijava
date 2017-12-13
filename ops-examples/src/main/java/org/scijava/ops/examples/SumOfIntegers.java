@@ -4,7 +4,7 @@ package org.scijava.ops.examples;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-import org.scijava.ops.TreeReduceOp;
+import org.scijava.ops.AggregateOp;
 
 /**
  * Takes a list of doubles as inputs; produces the sum of the values.
@@ -13,7 +13,7 @@ import org.scijava.ops.TreeReduceOp;
  * into a tree of operations, which are combined toward the root of the tree.
  * </p>
  */
-public class SumOfIntegers implements TreeReduceOp<Integer, Long> {
+public class SumOfIntegers implements AggregateOp<Integer, Long> {
 
 	@Override
 	public BiFunction<Long, Integer, Long> accumulator() {
@@ -39,7 +39,7 @@ public class SumOfIntegers implements TreeReduceOp<Integer, Long> {
 	}
 
 	@Override
-	public Long createZero(final Integer in) {
+	public Long createMemo(final Integer in) {
 		return 0L;
 	}
 

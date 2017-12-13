@@ -4,9 +4,9 @@ package org.scijava.ops.examples;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-import org.scijava.collection.DoubleArray;
-import org.scijava.collection.IntArray;
-import org.scijava.ops.TreeReduceOp;
+import org.scijava.ops.AggregateOp;
+import org.scijava.util.DoubleArray;
+import org.scijava.util.IntArray;
 
 /**
  * Takes a list of DoubleArray as inputs; produces the sum of the values.
@@ -15,7 +15,7 @@ import org.scijava.ops.TreeReduceOp;
  * into a tree of operations, which are combined toward the root of the tree.
  * </p>
  */
-public class SumOfArrays implements TreeReduceOp<IntArray, DoubleArray> {
+public class SumOfArrays implements AggregateOp<IntArray, DoubleArray> {
 
 	@Override
 	public BiFunction<DoubleArray, IntArray, DoubleArray> accumulator() {
@@ -49,7 +49,7 @@ public class SumOfArrays implements TreeReduceOp<IntArray, DoubleArray> {
 	}
 
 	@Override
-	public DoubleArray createZero(final IntArray in) {
+	public DoubleArray createMemo(final IntArray in) {
 		return new DoubleArray(in.size());
 	}
 

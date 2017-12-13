@@ -1,9 +1,9 @@
 
 package org.scijava.ops.examples;
 
+import org.scijava.collection.DoubleArray;
 import org.scijava.ops.FunctionOp;
 import org.scijava.param.Parameter;
-import org.scijava.util.DoubleArray;
 
 /**
  * Takes a list of doubles as inputs; produces some statistics as output.

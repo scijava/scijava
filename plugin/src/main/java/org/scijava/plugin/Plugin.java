@@ -37,9 +37,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.scijava.Priority;
-import org.scijava.UIDetails;
-import org.scijava.annotations.Indexable;
+import org.scijava.core.Attr;
+import org.scijava.core.Priority;
+import org.scijava.core.UIDetails;
+import org.scijava.indexer.Indexable;
 
 /**
  * Annotation identifying a plugin, which gets loaded by SciJava's dynamic

@@ -94,6 +94,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-struct</artifactId>
 			<version>${project.version}</version>
 		</dependency>

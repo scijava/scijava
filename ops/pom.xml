@@ -90,13 +90,4 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>
-	
-	<dependencies>
-	<!-- NB: probably TEMP -->
-	<dependency>
-	<groupId>org.scijava</groupId>
-	<artifactId>scijava-util</artifactId>
-	<version>${project.version}</version>
-	</dependency>
-	</dependencies>
 </project>

@@ -95,7 +95,9 @@
 	</properties>
 
 	<modules>
+		<module>collection</module>
 		<module>context</module>
+		<module>core</module>
 		<module>indexer</module>
 		<module>ops</module>
 		<module>ops-examples</module>
@@ -104,6 +106,7 @@
 		<module>struct</module>
 		<module>swing-widget</module>
 		<module>util</module>
+		<module>version</module>
 		<module>widget</module>
 	</modules>
 </project>

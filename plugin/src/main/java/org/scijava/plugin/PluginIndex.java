@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.object.SortedObjectIndex;
+import org.scijava.collection.SortedObjectIndex;
 
 /**
  * Data structure for managing registered plugins.

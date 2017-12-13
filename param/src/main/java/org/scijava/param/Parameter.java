@@ -37,6 +37,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.scijava.core.Attr;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.MemberInstance;
 

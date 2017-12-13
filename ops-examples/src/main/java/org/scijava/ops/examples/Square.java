@@ -1,8 +1,8 @@
 package org.scijava.ops.examples;
 
+import org.scijava.collection.DoubleArray;
 import org.scijava.ops.ComputerOp;
 import org.scijava.ops.OutputAware;
-import org.scijava.util.DoubleArray;
 
 /** Unary computer/function hybrid. */
 public class Square implements ComputerOp<DoubleArray, DoubleArray>, OutputAware<DoubleArray, DoubleArray> {

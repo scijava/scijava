@@ -4,9 +4,9 @@ package org.scijava.ops.examples;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
+import org.scijava.collection.DoubleArray;
+import org.scijava.collection.IntArray;
 import org.scijava.ops.TreeReduceOp;
-import org.scijava.util.DoubleArray;
-import org.scijava.util.IntArray;
 
 /**
  * Takes a list of DoubleArray as inputs; produces the sum of the values.

@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
+import org.scijava.collection.DoubleArray;
 import org.scijava.ops.ReduceOp;
-import org.scijava.util.DoubleArray;
 
 /**
  * Takes a list of doubles as inputs; produces some statistics as output.

@@ -1,11 +1,11 @@
 package org.scijava.swing.widget;
 
-import org.scijava.widget.NWidgetFactory;
+import org.scijava.widget.WidgetFactory;
 
-public interface SwingWidgetFactory extends NWidgetFactory<NSwingWidget> {
+public interface SwingWidgetFactory extends WidgetFactory<SwingWidget> {
 
 	@Override
-	default Class<NSwingWidget> widgetType() {
-		return NSwingWidget.class;
+	default Class<SwingWidget> widgetType() {
+		return SwingWidget.class;
 	}
 }

@@ -14,18 +14,18 @@ import javax.swing.text.JTextComponent;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.log.LogService;
-import org.scijava.widget.NAbstractWidget;
-import org.scijava.widget.NTextWidget;
-import org.scijava.widget.NWidgetFactory;
-import org.scijava.widget.NWidgetPanelFactory;
-import org.scijava.widget.NWidgets;
+import org.scijava.widget.AbstractWidget;
+import org.scijava.widget.TextWidget;
+import org.scijava.widget.WidgetFactory;
+import org.scijava.widget.WidgetPanelFactory;
+import org.scijava.widget.Widgets;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.MemberInstance;
 import org.scijava.ui.swing.widget.DocumentSizeFilter;
 import org.scijava.util.ClassUtils;
 
-@Plugin(type = NWidgetFactory.class)
+@Plugin(type = WidgetFactory.class)
 public class SwingTextWidgetFactory implements SwingWidgetFactory {
 
 	@Parameter
@@ -37,16 +37,16 @@ public class SwingTextWidgetFactory implements SwingWidgetFactory {
 	}
 
 	@Override
-	public NSwingWidget create(final MemberInstance<?> model,
-		final NWidgetPanelFactory<? extends NSwingWidget> panelFactory)
+	public SwingWidget create(final MemberInstance<?> model,
+		final WidgetPanelFactory<? extends SwingWidget> panelFactory)
 	{
 		return new Widget(model);
 	}
 
 	// -- Helper classes --
 
-	private class Widget extends NAbstractWidget implements NSwingWidget,
-		NTextWidget, DocumentListener
+	private class Widget extends AbstractWidget implements SwingWidget,
+		TextWidget, DocumentListener
 	{
 
 		private JPanel panel;
@@ -66,14 +66,14 @@ public class SwingTextWidgetFactory implements SwingWidgetFactory {
 			panel.setLayout(layout);
 
 			final int columns = //
-				NWidgets.intProperty(this, COLUMNS_PROPERTY, 6);
+				Widgets.intProperty(this, COLUMNS_PROPERTY, 6);
 
 			// construct text widget of the appropriate style, if specified
-			if (NWidgets.isStyle(this, AREA_STYLE)) {
-				final int rows = NWidgets.intProperty(this, ROWS_PROPERTY, 5);
+			if (Widgets.isStyle(this, AREA_STYLE)) {
+				final int rows = Widgets.intProperty(this, ROWS_PROPERTY, 5);
 				textComponent = new JTextArea("", rows, columns);
 			}
-			else if (NWidgets.isStyle(this, PASSWORD_STYLE)) {
+			else if (Widgets.isStyle(this, PASSWORD_STYLE)) {
 				textComponent = new JPasswordField("", columns);
 			}
 			else {

@@ -1,4 +1,4 @@
-package org.scijava.widget.swing;
+package org.scijava.swing.widget;
 
 import javax.swing.JPanel;
 

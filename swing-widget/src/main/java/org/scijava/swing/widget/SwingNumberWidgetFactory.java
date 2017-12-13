@@ -25,12 +25,12 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.convert.ConvertService;
-import org.scijava.widget.NAbstractWidget;
-import org.scijava.widget.NNumberWidget;
-import org.scijava.widget.NWidget;
-import org.scijava.widget.NWidgetFactory;
-import org.scijava.widget.NWidgetPanelFactory;
-import org.scijava.widget.NWidgets;
+import org.scijava.widget.AbstractWidget;
+import org.scijava.widget.NumberWidget;
+import org.scijava.widget.Widget;
+import org.scijava.widget.WidgetFactory;
+import org.scijava.widget.WidgetPanelFactory;
+import org.scijava.widget.Widgets;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.MemberInstance;
@@ -38,7 +38,7 @@ import org.scijava.thread.ThreadService;
 import org.scijava.ui.swing.widget.SpinnerNumberModelFactory;
 import org.scijava.util.ClassUtils;
 
-@Plugin(type = NWidgetFactory.class)
+@Plugin(type = WidgetFactory.class)
 public class SwingNumberWidgetFactory implements SwingWidgetFactory {
 
 	@Parameter
@@ -53,16 +53,16 @@ public class SwingNumberWidgetFactory implements SwingWidgetFactory {
 	}
 
 	@Override
-	public NSwingWidget create(final MemberInstance<?> model,
-		final NWidgetPanelFactory<? extends NSwingWidget> panelFactory)
+	public SwingWidget create(final MemberInstance<?> model,
+		final WidgetPanelFactory<? extends SwingWidget> panelFactory)
 	{
 		return new Widget(model);
 	}
 
 	// -- Helper classes --
 
-	private class Widget extends NAbstractWidget implements NSwingWidget,
-		NNumberWidget, AdjustmentListener, ChangeListener
+	private class Widget extends AbstractWidget implements SwingWidget,
+		NumberWidget, AdjustmentListener, ChangeListener
 	{
 
 		private JPanel panel;
@@ -83,14 +83,14 @@ public class SwingNumberWidgetFactory implements SwingWidgetFactory {
 				"[fill,grow|pref]");
 			panel.setLayout(layout);
 
-			final Number min = number(NWidgets.minimum(this), null);
-			final Number max = number(NWidgets.maximum(this), null);
-			final Number softMin = number(NWidgets.softMinimum(this), min);
-			final Number softMax = number(NWidgets.softMaximum(this), max);
-			final Number stepSize = number(NWidgets.stepSize(this), 1);
+			final Number min = number(Widgets.minimum(this), null);
+			final Number max = number(Widgets.maximum(this), null);
+			final Number softMin = number(Widgets.softMinimum(this), min);
+			final Number softMax = number(Widgets.softMaximum(this), max);
+			final Number stepSize = number(Widgets.stepSize(this), 1);
 
 			// add optional widgets, if specified
-			if (NWidgets.isStyle(this, SCROLL_BAR_STYLE)) {
+			if (Widgets.isStyle(this, SCROLL_BAR_STYLE)) {
 				int smx = softMax.intValue();
 				if (smx < Integer.MAX_VALUE) smx++;
 				scrollBar =
@@ -101,7 +101,7 @@ public class SwingNumberWidgetFactory implements SwingWidgetFactory {
 				getComponent().add(scrollBar);
 				scrollBar.addAdjustmentListener(this);
 			}
-			else if (NWidgets.isStyle(this, SLIDER_STYLE)) {
+			else if (Widgets.isStyle(this, SLIDER_STYLE)) {
 				slider =
 					new JSlider(softMin.intValue(), softMax.intValue(), softMin.intValue());
 				slider.setMajorTickSpacing((softMax.intValue() - softMin.intValue()) / 4);

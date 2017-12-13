@@ -3,10 +3,10 @@ package org.scijava.swing.widget;
 
 import javax.swing.JComponent;
 
-import org.scijava.widget.NWidget;
-import org.scijava.widget.NWidgets;
+import org.scijava.widget.Widget;
+import org.scijava.widget.Widgets;
 
-/** Utility class for working with {@link NWidget}s and Swing. */
+/** Utility class for working with {@link Widget}s and Swing. */
 public final class SwingWidgets {
 
 	private SwingWidgets() {
@@ -14,8 +14,8 @@ public final class SwingWidgets {
 	}
 
 	/** Assigns the widget's description as the given component's tool tip. */
-	public static void setToolTip(final NWidget widget, final JComponent c) {
-		final String desc = NWidgets.description(widget);
+	public static void setToolTip(final Widget widget, final JComponent c) {
+		final String desc = Widgets.description(widget);
 		if (desc == null || desc.isEmpty()) return;
 		c.setToolTipText(desc);
 	}

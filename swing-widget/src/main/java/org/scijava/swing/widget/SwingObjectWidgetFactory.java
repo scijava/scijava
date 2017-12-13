@@ -9,13 +9,13 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.ValidityException;
-import org.scijava.widget.NAbstractWidget;
-import org.scijava.widget.NObjectWidget;
-import org.scijava.widget.NWidgetFactory;
-import org.scijava.widget.NWidgetPanel;
-import org.scijava.widget.NWidgetPanelFactory;
-import org.scijava.widget.NWidgetService;
-import org.scijava.widget.swing.NSwingWidgetPanelFactory.WidgetPanel;
+import org.scijava.widget.AbstractWidget;
+import org.scijava.widget.ObjectWidget;
+import org.scijava.widget.WidgetFactory;
+import org.scijava.widget.WidgetPanel;
+import org.scijava.widget.WidgetPanelFactory;
+import org.scijava.widget.WidgetService;
+import org.scijava.widget.swing.SwingWidgetPanelFactory.WidgetPanel;
 import org.scijava.object.ObjectService;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Parameter;
@@ -23,11 +23,11 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
-@Plugin(type = NWidgetFactory.class)
+@Plugin(type = WidgetFactory.class)
 public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
 	@Parameter
-	private NWidgetService widgetService;
+	private WidgetService widgetService;
 
 	@Parameter
 	private ObjectService objectService;
@@ -38,8 +38,8 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 	}
 
 	@Override
-	public NSwingWidget create(final MemberInstance<?> memberInstance,
-		final NWidgetPanelFactory<? extends NSwingWidget> panelFactory)
+	public SwingWidget create(final MemberInstance<?> memberInstance,
+		final WidgetPanelFactory<? extends SwingWidget> panelFactory)
 	{
 		return new Widget<>(memberInstance, panelFactory);
 	}
@@ -54,18 +54,18 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
 	// -- Helper classes --
 
-	private class Widget<C> extends NAbstractWidget implements NSwingWidget,
-		NObjectWidget
+	private class Widget<C> extends AbstractWidget implements SwingWidget,
+		ObjectWidget
 	{
 
 		private JPanel panel;
 		private List<JPanel> subPanels;
 		private MemberInstance<C> typedModel;
 
-		private NWidgetPanelFactory<? extends NSwingWidget> panelFactory;
+		private WidgetPanelFactory<? extends SwingWidget> panelFactory;
 
 		public Widget(final MemberInstance<C> model,
-			NWidgetPanelFactory<? extends NSwingWidget> panelFactory)
+			WidgetPanelFactory<? extends SwingWidget> panelFactory)
 		{
 			super(model);
 			this.typedModel = model;
@@ -114,7 +114,7 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 		}
 
 		private <S> JPanel createPanel(final StructInstance<S> structInstance) {
-			final NWidgetPanel<S> widgetPanel = widgetService.createPanel(
+			final WidgetPanel<S> widgetPanel = widgetService.createPanel(
 				structInstance, panelFactory);
 			if (!(widgetPanel instanceof SwingWidgetPanelFactory.WidgetPanel))
 				throw new IllegalStateException("OMGWTF");

@@ -4,17 +4,14 @@
 
 	<parent>
 		<groupId>org.scijava</groupId>
-		<artifactId>pom-scijava</artifactId>
-		<version>17.2.0</version>
-		<relativePath />
+		<artifactId>pom-scijava-core</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>pom-scijava-core</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<artifactId>scijava-ops-imglib2</artifactId>
 
-	<name>SciJava Core Modules</name>
-	<description>SciJava Core Modules</description>
+	<name>SciJava Ops ImgLib2</name>
+	<description>SciJava Ops ImgLib2</description>
 	<url>https://github.com/scijava/scijava-ops</url>
 	<inceptionYear>2014</inceptionYear>
 	<organization>
@@ -94,20 +91,15 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>
 
-	<modules>
-		<module>collection</module>
-		<module>context</module>
-		<module>core</module>
-		<module>indexer</module>
-		<module>ops</module>
-		<module>ops-examples</module>
-		<module>ops-imglib2</module>
-		<module>param</module>
-		<module>plugin</module>
-		<module>struct</module>
-		<module>swing-widget</module>
-		<module>util</module>
-		<module>version</module>
-		<module>widget</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2</artifactId>
+		</dependency>
+	</dependencies>
 </project>

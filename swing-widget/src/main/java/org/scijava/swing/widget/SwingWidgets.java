@@ -1,15 +1,15 @@
 
-package org.scijava.nwidget.swing;
+package org.scijava.swing.widget;
 
 import javax.swing.JComponent;
 
-import org.scijava.nwidget.NWidget;
-import org.scijava.nwidget.NWidgets;
+import org.scijava.widget.NWidget;
+import org.scijava.widget.NWidgets;
 
 /** Utility class for working with {@link NWidget}s and Swing. */
-public final class NSwingWidgets {
+public final class SwingWidgets {
 
-	private NSwingWidgets() {
+	private SwingWidgets() {
 		// NB: Prevent instantiation of utility class.
 	}
 

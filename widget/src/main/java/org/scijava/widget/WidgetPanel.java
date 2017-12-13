@@ -1,7 +1,7 @@
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 import org.scijava.struct.StructInstance;
 
-public interface NWidgetPanel<C> {
+public interface WidgetPanel<C> {
 	StructInstance<C> struct();
 }

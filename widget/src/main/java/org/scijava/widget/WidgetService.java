@@ -9,13 +9,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,13 +30,46 @@
  * #L%
  */
 
-package org.scijava.nwidget;
+package org.scijava.widget;
 
-/**
- * Widget interface for arbitrary objects.
- * 
- * @author Curtis Rueden
- */
-public interface NObjectWidget extends NWidget {
+import java.util.function.Predicate;
 
+import org.scijava.param.ParameterMember;
+import org.scijava.plugin.SingletonService;
+import org.scijava.service.SciJavaService;
+import org.scijava.struct.MemberInstance;
+import org.scijava.struct.StructInstance;
+
+public interface WidgetService extends SingletonService<NWidgetFactory<?>>,
+	SciJavaService
+{
+
+	default <C, W extends Widget> WidgetPanel<C> createPanel(
+		final StructInstance<C> struct, final NWidgetPanelFactory<W> factory)
+	{
+		return createPanel(struct, item -> true, factory);
+	}
+
+	default <C, W extends Widget> WidgetPanel<C> createPanel(
+		// TODO: Consider Structs.filter(struct, Predicate<MemberInstance<?> included).
+		final StructInstance<C> struct, final Predicate<MemberInstance<?>> included,
+		final NWidgetPanelFactory<W> factory)
+	{
+		return createPanel(struct, included,
+			item -> item instanceof ParameterMember && ((ParameterMember<?>) item)
+				.isRequired(), factory);
+	}
+
+	<C, W extends Widget> WidgetPanel<C> createPanel(StructInstance<C> struct,
+		Predicate<MemberInstance<?>> included,
+		Predicate<MemberInstance<?>> required,
+		NWidgetPanelFactory<W> panelFactory);
+
+	// -- PTService methods --
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	default Class<NWidgetFactory<?>> getPluginType() {
+		return (Class) NWidgetFactory.class;
+	}
 }

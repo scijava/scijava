@@ -1,4 +1,4 @@
-package org.scijava.nwidget.swing;
+package org.scijava.swing.widget;
 
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -14,11 +14,11 @@ import javax.swing.text.JTextComponent;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.log.LogService;
-import org.scijava.nwidget.NAbstractWidget;
-import org.scijava.nwidget.NTextWidget;
-import org.scijava.nwidget.NWidgetFactory;
-import org.scijava.nwidget.NWidgetPanelFactory;
-import org.scijava.nwidget.NWidgets;
+import org.scijava.widget.NAbstractWidget;
+import org.scijava.widget.NTextWidget;
+import org.scijava.widget.NWidgetFactory;
+import org.scijava.widget.NWidgetPanelFactory;
+import org.scijava.widget.NWidgets;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.MemberInstance;
@@ -26,7 +26,7 @@ import org.scijava.ui.swing.widget.DocumentSizeFilter;
 import org.scijava.util.ClassUtils;
 
 @Plugin(type = NWidgetFactory.class)
-public class NSwingTextWidgetFactory implements NSwingWidgetFactory {
+public class SwingTextWidgetFactory implements SwingWidgetFactory {
 
 	@Parameter
 	private LogService log;
@@ -79,7 +79,7 @@ public class NSwingTextWidgetFactory implements NSwingWidgetFactory {
 			else {
 				textComponent = new JTextField("", columns);
 			}
-			NSwingWidgets.setToolTip(this, textComponent);
+			SwingWidgets.setToolTip(this, textComponent);
 			getComponent().add(textComponent);
 			limitLength();
 

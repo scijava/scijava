@@ -8,9 +8,9 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>scijava-widget</artifactId>
+	<artifactId>scijava-swing-widget</artifactId>
 
-	<name>SciJava Widget</name>
+	<name>SciJava Swing UI: Widgets</name>
 	<description>SciJava Widget</description>
 	<url>https://github.com/scijava/scijava-ops</url>
 	<inceptionYear>2014</inceptionYear>
@@ -94,8 +94,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-struct</artifactId>
+			<artifactId>scijava-widget</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout</artifactId>
+			<classifier>swing</classifier>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -30,36 +30,13 @@
  * #L%
  */
 
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 /**
- * Widget interface for text fields and areas.
+ * Widget interface for arbitrary objects.
  * 
  * @author Curtis Rueden
  */
-public interface NTextWidget extends NWidget {
+public interface ObjectWidget extends Widget {
 
-	/**
-	 * Widget style for text fields.
-	 * 
-	 * @see org.scijava.plugin.Parameter#style()
-	 */
-	String FIELD_STYLE = "text field";
-
-	/**
-	 * Widget style for text areas.
-	 * 
-	 * @see org.scijava.plugin.Parameter#style()
-	 */
-	String AREA_STYLE = "text area";
-
-	/**
-	 * Widget style for password fields.
-	 * 
-	 * @see org.scijava.plugin.Parameter#style()
-	 */
-	String PASSWORD_STYLE = "password";
-
-	String ROWS_PROPERTY = "rows";
-	String COLUMNS_PROPERTY = "columns";
 }

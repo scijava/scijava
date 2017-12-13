@@ -96,10 +96,13 @@
 
 	<modules>
 		<module>context</module>
+		<module>indexer</module>
 		<module>ops</module>
 		<module>ops-examples</module>
 		<module>param</module>
+		<module>plugin</module>
 		<module>struct</module>
+		<module>swing-widget</module>
 		<module>util</module>
 		<module>widget</module>
 	</modules>

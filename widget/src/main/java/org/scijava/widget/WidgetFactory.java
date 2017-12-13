@@ -1,9 +1,9 @@
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 import org.scijava.plugin.SingletonPlugin;
 import org.scijava.struct.MemberInstance;
 
-public interface NWidgetFactory<W extends NWidget> extends SingletonPlugin {
+public interface WidgetFactory<W extends Widget> extends SingletonPlugin {
 
 	boolean supports(MemberInstance<?> model);
 

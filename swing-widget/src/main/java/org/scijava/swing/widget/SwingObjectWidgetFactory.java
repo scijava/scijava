@@ -1,4 +1,4 @@
-package org.scijava.nwidget.swing;
+package org.scijava.swing.widget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,13 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.ValidityException;
-import org.scijava.nwidget.NAbstractWidget;
-import org.scijava.nwidget.NObjectWidget;
-import org.scijava.nwidget.NWidgetFactory;
-import org.scijava.nwidget.NWidgetPanel;
-import org.scijava.nwidget.NWidgetPanelFactory;
-import org.scijava.nwidget.NWidgetService;
-import org.scijava.nwidget.swing.NSwingWidgetPanelFactory.WidgetPanel;
+import org.scijava.widget.NAbstractWidget;
+import org.scijava.widget.NObjectWidget;
+import org.scijava.widget.NWidgetFactory;
+import org.scijava.widget.NWidgetPanel;
+import org.scijava.widget.NWidgetPanelFactory;
+import org.scijava.widget.NWidgetService;
+import org.scijava.widget.swing.NSwingWidgetPanelFactory.WidgetPanel;
 import org.scijava.object.ObjectService;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Parameter;
@@ -24,7 +24,7 @@ import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
 @Plugin(type = NWidgetFactory.class)
-public class NSwingObjectWidgetFactory implements NSwingWidgetFactory {
+public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
 	@Parameter
 	private NWidgetService widgetService;
@@ -116,10 +116,10 @@ public class NSwingObjectWidgetFactory implements NSwingWidgetFactory {
 		private <S> JPanel createPanel(final StructInstance<S> structInstance) {
 			final NWidgetPanel<S> widgetPanel = widgetService.createPanel(
 				structInstance, panelFactory);
-			if (!(widgetPanel instanceof NSwingWidgetPanelFactory.WidgetPanel))
+			if (!(widgetPanel instanceof SwingWidgetPanelFactory.WidgetPanel))
 				throw new IllegalStateException("OMGWTF");
 			final WidgetPanel<S> swingWidgetPanel =
-				(NSwingWidgetPanelFactory.WidgetPanel<S>) widgetPanel;
+				(SwingWidgetPanelFactory.WidgetPanel<S>) widgetPanel;
 			return swingWidgetPanel.getComponent();
 		}
 	}

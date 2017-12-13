@@ -30,7 +30,7 @@
  * #L%
  */
 
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
@@ -44,15 +44,15 @@ import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 
 @Plugin(type = Service.class)
-public class NDefaultWidgetService extends
-	AbstractSingletonService<NWidgetFactory<?>> implements NWidgetService
+public class DefaultWidgetService extends
+	AbstractSingletonService<NWidgetFactory<?>> implements WidgetService
 {
 
 	@Parameter
 	private PluginService pluginService;
 
 	@Override
-	public <C, W extends NWidget> NWidgetPanel<C> createPanel(
+	public <C, W extends Widget> WidgetPanel<C> createPanel(
 		final StructInstance<C> structInstance,
 		final Predicate<MemberInstance<?>> included,
 		final Predicate<MemberInstance<?>> required,
@@ -66,7 +66,7 @@ public class NDefaultWidgetService extends
 
 	// -- Helper methods --
 
-	private <W extends NWidget> ArrayList<W> createWidgets(
+	private <W extends Widget> ArrayList<W> createWidgets(
 		final StructInstance<?> structInstance,
 		final NWidgetPanelFactory<W> panelFactory,
 		final Predicate<MemberInstance<?>> included,
@@ -87,7 +87,7 @@ public class NDefaultWidgetService extends
 		return widgets;
 	}
 
-	private <W extends NWidget> W createWidget(final MemberInstance<?> model,
+	private <W extends Widget> W createWidget(final MemberInstance<?> model,
 		final NWidgetPanelFactory<W> panelFactory)
 	{
 		final Class<?> widgetSupertype = panelFactory.widgetType();

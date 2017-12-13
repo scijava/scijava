@@ -30,34 +30,26 @@
  * #L%
  */
 
-package org.scijava.nwidget;
+package org.scijava.plugin;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * Widget interface for number choosers.
+ * Interface for mechanisms that define how SciJava plugins are discovered.
  * 
  * @author Curtis Rueden
  */
-public interface NNumberWidget extends NWidget {
+public interface PluginFinder {
 
 	/**
-	 * Widget style for slider with spinner.
+	 * Populates the given list with all available SciJava plugins.
 	 * 
-	 * @see org.scijava.plugin.Parameter#style()
+	 * @return A table of exceptions which occurred during plugin discovery. Keys
+	 *         correspond to plugin name in some fashion (e.g., a class name),
+	 *         while values correspond to the exception which occurred when
+	 *         attempting to create the associated {@link PluginInfo} object.
 	 */
-	String SLIDER_STYLE = "slider";
-
-	/**
-	 * Widget style for spinner only.
-	 * 
-	 * @see org.scijava.plugin.Parameter#style()
-	 */
-	String SPINNER_STYLE = "spinner";
-
-	/**
-	 * Widget style for scroll bar with spinner.
-	 * 
-	 * @see org.scijava.plugin.Parameter#style()
-	 */
-	String SCROLL_BAR_STYLE = "scroll bar";
+	Map<String, Throwable> findPlugins(List<PluginInfo<?>> plugins);
 
 }

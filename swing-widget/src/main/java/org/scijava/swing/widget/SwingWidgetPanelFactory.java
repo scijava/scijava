@@ -1,5 +1,5 @@
 
-package org.scijava.nwidget.swing;
+package org.scijava.swing.widget;
 
 import java.util.List;
 
@@ -8,16 +8,16 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.scijava.nwidget.NAbstractWidgetPanel;
-import org.scijava.nwidget.NWidgetPanel;
-import org.scijava.nwidget.NWidgets;
-import org.scijava.nwidget.NWidgetPanelFactory;
+import org.scijava.widget.NAbstractWidgetPanel;
+import org.scijava.widget.NWidgetPanel;
+import org.scijava.widget.NWidgets;
+import org.scijava.widget.NWidgetPanelFactory;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.StructInstance;
 import org.scijava.widget.UIComponent;
 
 @Plugin(type = NWidgetPanelFactory.class)
-public class NSwingWidgetPanelFactory implements
+public class SwingWidgetPanelFactory implements
 	NWidgetPanelFactory<NSwingWidget>
 {
 

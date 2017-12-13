@@ -1,4 +1,4 @@
-package org.scijava.nwidget.swing;
+package org.scijava.swing.widget;
 
 import java.awt.Adjustable;
 import java.awt.Component;
@@ -25,12 +25,12 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.convert.ConvertService;
-import org.scijava.nwidget.NAbstractWidget;
-import org.scijava.nwidget.NNumberWidget;
-import org.scijava.nwidget.NWidget;
-import org.scijava.nwidget.NWidgetFactory;
-import org.scijava.nwidget.NWidgetPanelFactory;
-import org.scijava.nwidget.NWidgets;
+import org.scijava.widget.NAbstractWidget;
+import org.scijava.widget.NNumberWidget;
+import org.scijava.widget.NWidget;
+import org.scijava.widget.NWidgetFactory;
+import org.scijava.widget.NWidgetPanelFactory;
+import org.scijava.widget.NWidgets;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.MemberInstance;
@@ -39,7 +39,7 @@ import org.scijava.ui.swing.widget.SpinnerNumberModelFactory;
 import org.scijava.util.ClassUtils;
 
 @Plugin(type = NWidgetFactory.class)
-public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
+public class SwingNumberWidgetFactory implements SwingWidgetFactory {
 
 	@Parameter
 	private ConvertService convertService;
@@ -97,7 +97,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 					new JScrollBar(Adjustable.HORIZONTAL, softMin.intValue(), 1, softMin
 						.intValue(), smx);
 				scrollBar.setUnitIncrement(stepSize.intValue());
-				NSwingWidgets.setToolTip(this, scrollBar);
+				SwingWidgets.setToolTip(this, scrollBar);
 				getComponent().add(scrollBar);
 				scrollBar.addAdjustmentListener(this);
 			}
@@ -108,7 +108,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 				slider.setMinorTickSpacing(stepSize.intValue());
 				slider.setPaintLabels(true);
 				slider.setPaintTicks(true);
-				NSwingWidgets.setToolTip(this, slider);
+				SwingWidgets.setToolTip(this, slider);
 				getComponent().add(slider);
 				slider.addChangeListener(this);
 			}
@@ -121,7 +121,7 @@ public class NSwingNumberWidgetFactory implements NSwingWidgetFactory {
 				new SpinnerNumberModelFactory().createModel(value, min, max, stepSize);
 			spinner = new JSpinner(spinnerModel);
 			fixSpinner(type);
-			NSwingWidgets.setToolTip(this, spinner);
+			SwingWidgets.setToolTip(this, spinner);
 			panel.add(spinner);
 			limitWidth(200);
 			spinner.addChangeListener(this);

@@ -1,7 +1,7 @@
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 import org.scijava.struct.MemberInstance;
 
-public interface NWidget {
+public interface Widget {
 	MemberInstance<?> model();
 }

@@ -1,12 +1,12 @@
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 import org.scijava.struct.MemberInstance;
 
-public abstract class NAbstractWidget implements NWidget {
+public abstract class AbstractWidget implements Widget {
 
 	private final MemberInstance<?> model;
 
-	public NAbstractWidget(final MemberInstance<?> model) {
+	public AbstractWidget(final MemberInstance<?> model) {
 		this.model = model;
 	}
 

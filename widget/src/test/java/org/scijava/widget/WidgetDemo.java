@@ -1,5 +1,5 @@
 
-package org.scijava.nwidget;
+package org.scijava.widget;
 
 import java.awt.Component;
 
@@ -13,7 +13,7 @@ import org.scijava.struct.StructInstance;
 import org.scijava.ui.swing.SwingDialog;
 import org.scijava.widget.UIComponent;
 
-public class NWidgetDemo {
+public class WidgetDemo {
 
 	private interface Joke {}
 

@@ -68,8 +68,11 @@ public final class TypeTools {
 	 * illegal to pass a {@code List<Integer>} and {@code List<Double>} because
 	 * {@code T} cannot be both {@code Integer} and {@code Double} simultaneously.
 	 * </p>
+	 * 
+	 * @return -1 if the args satisfy the params, otherwise the index of the arg
+	 *         that does not satisfy its parameter.
 	 */
-	public static boolean satisfies(final Type[] args, final Type[] params) {
+	public static int satisfies(final Type[] args, final Type[] params) {
 		// create a HashMap to monitor the restrictions of the type variables.
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
 
@@ -77,7 +80,7 @@ public final class TypeTools {
 
 	}
 
-	public static boolean satisfies(final Type[] args, final Type[] params,
+	public static int satisfies(final Type[] args, final Type[] params,
 			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		if (args.length != params.length) {
@@ -86,28 +89,28 @@ public final class TypeTools {
 
 		for (int i = 0; i < params.length; i++) {
 			// First, check raw type assignability.
-			if (!satisfiesRawTypes(args[i], params[i])) return false;
+			if (!satisfiesRawTypes(args[i], params[i])) return i;
 
 			if (params[i] instanceof ParameterizedType) {
 				if (!satisfiesParameterizedTypes(args[i], (ParameterizedType) params[i],
-							typeBounds)) return false;
+							typeBounds)) return i;
 			}
 			else if (params[i] instanceof TypeVariable) {
 				if (!satisfiesTypeVariable(args[i], (TypeVariable<?>) params[i],
-							typeBounds)) return false;
+							typeBounds)) return i;
 			}
 			else if (params[i] instanceof WildcardType) {
 				if (!satisfiesWildcardType(args[i], (WildcardType) params[i]))
-					return false;
+					return i;
 			}
 			else if (params[i] instanceof GenericArrayType) {
 				if (!satisfiesGenericArrayType(args[i], (GenericArrayType) params[i],
-							typeBounds)) return false;
+							typeBounds)) return i;
 			}
 			//final Type t = TypeToken.of(params[i]).resolveType(args[i]).getType();
 			//                     System.out.println("src[" + i + "] = " + t);
 		}
-		return true;
+		return -1;
 	}
 
 	// TODO: Expose this functionality in org.scijava.util.Types.
@@ -176,7 +179,7 @@ public final class TypeTools {
 			}
 		}
 		// recursively run satisfies on these arrays
-		return satisfies(srcTypes, destTypes, typeBounds);
+		return satisfies(srcTypes, destTypes, typeBounds) == -1;
 	}
 
 	/**
@@ -238,8 +241,8 @@ public final class TypeTools {
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
 							!satisfiesTypeParameter(argType,
 								(TypeVariable<?>) paramBoundTypes[i], typeBounds)) return false;
-					else if (!satisfies(new Type[] { argType }, new Type[] {
-						paramBoundTypes[i] }, typeBounds)) return false;
+					else if (satisfies(new Type[] { argType }, new Type[] {
+						paramBoundTypes[i] }, typeBounds) != -1) return false;
 				}
 			}
 		}

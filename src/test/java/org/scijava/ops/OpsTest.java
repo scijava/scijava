@@ -30,26 +30,46 @@
 package org.scijava.ops;
 
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.scijava.Context;
+import org.scijava.plugin.Plugin;
+import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.types.Nil;
 
 public class OpsTest {
 
+	private Context context;
+	private OpService ops;
+
+	@Before
+	public void setUp() {
+		context = new Context(OpService.class);
+		ops = context.service(OpService.class);
+	}
+
+	@After
+	public void tearDown() {
+		context.dispose();
+		context = null;
+		ops = null;
+	}
+
 	@Test
 	public void testOps() {
-		final String opName = "math.add";
-
 		final Nil<Double> nilDouble = new Nil<Double>() {};
 		final Type[] inTypes = { nilDouble.getType(), nilDouble.getType() };
 		final Type[] outTypes = { nilDouble.getType() };
 
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		final BinaryFunctionOp<Double, Double, Double> function = find( //
-			opName, //
-			new Nil<BinaryFunctionOp<Double, Double, Double>>()
-			{}, //
+			new Nil<BinaryFunctionOp<Double, Double, Double>>() {}, //
+			Arrays.asList(MathAddOp.class), //
 			inTypes, //
 			outTypes //
 		);
@@ -60,9 +80,8 @@ public class OpsTest {
 		// look up a computer: math.add(BOTH double[] result, double[] v1, double[]
 		// v2)
 		final BinaryComputerOp<double[], double[], double[]> computer = find( //
-			opName, //
-			new Nil<BinaryComputerOp<double[], double[], double[]>>()
-			{}, //
+			new Nil<BinaryComputerOp<double[], double[], double[]>>() {}, //
+			Arrays.asList(MathAddOp.class), //
 			inTypes, //
 			outTypes //
 		);
@@ -73,10 +92,46 @@ public class OpsTest {
 		System.out.println("Computer result = " + Arrays.toString(result));
 	}
 
-	private <T> T find(final String opName, final Nil<T> opType,
+	private <T> T find(final Nil<T> opType, final List<Type> opAdditionalTypes,
 		final Type[] inTypes, final Type[] outTypes)
 	{
-		// TODO
-		return null;
+		// FIXME - createTypes does not support multiple additional types,
+		// or multiple output types. We will need to generalize this.
+		final OpRef ref = OpRef.createTypes(opType.getType(), //
+			opAdditionalTypes.get(0), outTypes[0], (Object[]) inTypes);
+		@SuppressWarnings("unchecked")
+		final T op = (T) ops.op(ref);
+		return op;
+	}
+
+	private interface MathAddOp extends SciJavaPlugin {}
+
+	@Plugin(type = MathAddOp.class)
+	public static class MathAddDoubles implements MathAddOp, BinaryFunctionOp<Double, Double, Double> {
+
+		@Override
+		public Double apply(Double t, Double u) {
+			return t + u;
+		}
+	}
+
+	@Plugin(type = MathAddOp.class)
+	public static class MathAddBigIntegers implements MathAddOp, BinaryFunctionOp<BigInteger, BigInteger, BigInteger> {
+
+		@Override
+		public BigInteger apply(BigInteger t, BigInteger u) {
+			return t.add(u);
+		}
+	}
+
+	@Plugin(type = MathAddOp.class)
+	public static class MathAddDoubleArrays implements MathAddOp, BinaryComputerOp<double[], double[], double[]> {
+
+		@Override
+		public void compute(double[] in1, double[] in2, double[] out) {
+			for (int i = 0; i < out.length; i++) {
+				out[i] = in1[i] + in2[i];
+			}
+		}
 	}
 }

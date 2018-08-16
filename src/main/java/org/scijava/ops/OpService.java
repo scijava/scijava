@@ -36,5 +36,6 @@ import org.scijava.service.SciJavaService;
  * @author Curtis Rueden
  */
 public interface OpService extends SciJavaService {
-	// NB: Marker interface.
+
+	Object op(OpRef ref);
 }

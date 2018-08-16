@@ -106,7 +106,7 @@ public class OpsTest {
 		return op;
 	}
 
-	private interface MathAddOp extends SciJavaPlugin {}
+	private interface MathAddOp extends Op {}
 
 	@Plugin(type = MathAddOp.class)
 	@Parameter(key = "number1")

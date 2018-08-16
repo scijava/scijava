@@ -38,6 +38,7 @@ import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SciJavaPlugin;
+import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.util.ClassUtils;
 
@@ -45,8 +46,6 @@ import org.scijava.util.ClassUtils;
  * Metadata about a particular op implementation.
  * 
  * @author Curtis Rueden
- * @see CommandInfo
- * @see OpEnvironment#ops()
  */
 public class OpInfo {
 
@@ -68,7 +67,7 @@ public class OpInfo {
 	}
 
 	/** Gets the op's input parameters. */
-	public List<ModuleItem<?>> inputs() {
+	public List<Member<?>> inputs() {
 		return OpUtils.inputs(struct());
 	}
 
@@ -180,7 +179,8 @@ public class OpInfo {
 
 	@Override
 	public String toString() {
-		return OpUtils.opString(struct());
+		return "TODO: stringify";
+//		return OpUtils.opString(struct());
 	}
 
 	// -- Helper methods --

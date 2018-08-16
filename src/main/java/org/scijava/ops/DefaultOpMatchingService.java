@@ -440,8 +440,8 @@ public class DefaultOpMatchingService extends AbstractService implements
 			return matches.get(0);
 		}
 
-		final String analysis = OpUtils.matchInfo(candidates, matches);
-		throw new IllegalArgumentException(analysis);
+//		final String analysis = OpUtils.matchInfo(candidates, matches);
+		throw new IllegalArgumentException("TODO dump analysis");
 	}
 
 	/**

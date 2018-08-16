@@ -28,26 +28,57 @@
  */
 package org.scijava.ops;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.scijava.InstantiableException;
+import org.scijava.log.LogService;
+import org.scijava.param.ValidityException;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginInfo;
+import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.SciJavaService;
 import org.scijava.service.Service;
 import org.scijava.struct.StructInstance;
 
 /**
- * Interface for services that manage and execute ops.
+ * Service that manages ops.
  *
  * @author Curtis Rueden
  */
 @Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public class OpService extends AbstractService implements SciJavaService, OpEnvironment {
+
+	@Parameter
+	private PluginService pluginService;
 
 	@Parameter
 	private OpMatchingService matcher;
 
+	@Parameter
+	private LogService log;
+
 	public StructInstance<?> op(OpRef ref) {
 		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
+		return match.getModule();
+	}
+	
+	@Override
+	public Collection<OpInfo> infos() {
+		// TODO: Consider maintaining an efficient OpInfo data structure.
+		final ArrayList<OpInfo> infos = new ArrayList<>();
+		for (final PluginInfo<Op> info : pluginService.getPluginsOfType(Op.class)) {
+			try {
+				final Class<? extends Op> opClass = info.loadClass();
+				infos.add(new OpInfo(opClass));
+			}
+			catch (InstantiableException | ValidityException exc) {
+				// TODO: Stop sucking at exception handling.
+				log.error(exc);
+			}
+		}
+		return infos;
 	}
 }

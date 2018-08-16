@@ -34,6 +34,7 @@ import java.util.List;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleInfo;
 import org.scijava.service.SciJavaService;
+import org.scijava.struct.StructInstance;
 
 /**
  * Interface for services that find ops which match an {@link OpRef}.
@@ -117,6 +118,6 @@ public interface OpMatchingService extends SciJavaService {
 	Object[] padArgs(OpCandidate candidate);
 
 	/** Assigns arguments into the given module's inputs. */
-	Object assignInputs(Object op, Object... args);
+	<C> StructInstance<C> assignInputs(StructInstance<C> op, Object... args);
 
 }

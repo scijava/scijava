@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.param;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * Defines the "visibility" of a parameter.
+ * 
  * @author Curtis Rueden
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public enum ItemVisibility {
 
-	@Parameter
-	private OpMatchingService matcher;
+	/**
+	 * Item is included in the history for purposes of data provenance, and
+	 * included as a parameter when recording scripts.
+	 */
+	NORMAL,
 
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
-	}
+	/**
+	 * Item is excluded from the history for the purposes of data provenance, but
+	 * still included as a parameter when recording scripts.
+	 */
+	TRANSIENT,
+
+	/**
+	 * Item is excluded from the history for the purposes of data provenance, and
+	 * also excluded as a parameter when recording scripts. This option should
+	 * only be used for items with no effect on the final output, such as a
+	 * "verbose" flag.
+	 */
+	INVISIBLE,
+
+	/**
+	 * As {@link #INVISIBLE}, and further indicating that the item's value is
+	 * intended as a message to the user (e.g., in the input harvester panel)
+	 * rather than an actual parameter to the module execution.
+	 */
+	MESSAGE
+
 }

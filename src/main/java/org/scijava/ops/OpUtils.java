@@ -36,12 +36,11 @@ import java.util.stream.Collectors;
 
 import org.scijava.Context;
 import org.scijava.command.CommandInfo;
-import org.scijava.module.Module;
-import org.scijava.module.ModuleInfo;
-import org.scijava.module.ModuleItem;
 import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.service.Service;
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
 
 /**
  * Utility methods for working with ops. In particular, this class contains
@@ -71,16 +70,16 @@ public final class OpUtils {
 	}
 
 	/**
-	 * Gets the given {@link ModuleInfo}'s list of inputs, excluding special ones
+	 * Gets the given {@link Struct}'s list of inputs, excluding special ones
 	 * like {@link Service}s and {@link Context}s.
 	 */
-	public static List<ModuleItem<?>> inputs(final ModuleInfo info) {
-		final List<ModuleItem<?>> inputs = asList(info.inputs());
+	public static List<Member<?>> inputs(final Struct info) {
+		final List<Member<?>> inputs = asList(info.inputs());
 		return filter(inputs, input -> !isInjectable(input.getType()));
 	}
 
-	/** Gets the given {@link ModuleInfo}'s list of outputs. */
-	public static List<ModuleItem<?>> outputs(final ModuleInfo info) {
+	/** Gets the given {@link Struct}'s list of outputs. */
+	public static List<Member<?>> outputs(final Struct info) {
 		return asList(info.outputs());
 	}
 
@@ -126,22 +125,22 @@ public final class OpUtils {
 	/**
 	 * Gets a string describing the given op.
 	 * 
-	 * @param info The {@link ModuleInfo} metadata which describes the op.
+	 * @param info The {@link Struct} metadata which describes the op.
 	 * @return A string describing the op.
 	 */
-	public static String opString(final ModuleInfo info) {
+	public static String opString(final Struct info) {
 		return opString(info, null);
 	}
 
 	/**
 	 * Gets a string describing the given op, highlighting the specific parameter.
 	 * 
-	 * @param info The {@link ModuleInfo} metadata which describes the op.
+	 * @param info The {@link Struct} metadata which describes the op.
 	 * @param special A parameter of particular interest when describing the op.
 	 * @return A string describing the op.
 	 */
-	public static String opString(final ModuleInfo info,
-		final ModuleItem<?> special)
+	public static String opString(final Struct info,
+		final Member<?> special)
 	{
 		final StringBuilder sb = new StringBuilder();
 		final String outputString = paramString(outputs(info), null).trim();
@@ -152,7 +151,7 @@ public final class OpUtils {
 	}
 
 	/**
-	 * Similar to {@link #opString(ModuleInfo)} but prints a cleaner,
+	 * Similar to {@link #opString(Struct)} but prints a cleaner,
 	 * more abstract representation of the Op method call in the format
 	 * {@code return <= baseOp(param1, param2)}. Intended to be presented to users
 	 * as the limited information reduces utility for debugging.
@@ -166,35 +165,6 @@ public final class OpUtils {
 		sb.append(type.getSimpleName());
 		sb.append("(" + paramString(inputs(info), null, ", ") + ")");
 		return sb.toString().replaceAll("\n|\t", "");
-	}
-
-	/**
-	 * Returns a method call for the given {@link Op} using its name and the
-	 * correct count of parameters. Assumes the op will be called via an
-	 * {@link OpService} of the name "ops".
-	 */
-	public static String opCall(final CommandInfo info) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("ops.run(");
-		try {
-			// try using the short name
-			final String shortName = getOpName(info);
-			sb.append("\"");
-			sb.append(shortName);
-			sb.append("\"");
-		} catch (final Exception e) {
-			// Use the class name if any errors pop up
-			sb.append(info.getAnnotation().type().getName());
-		}
-
-		for (final ModuleItem<?> item : inputs(info)) {
-			sb.append(", ");
-			sb.append(item.getType().getSimpleName());
-		}
-		sb.append(")");
-
-		return sb.toString();
 	}
 
 	/**
@@ -226,7 +196,7 @@ public final class OpUtils {
 		}
 		else {
 			// multiple matches
-			final double priority = matches.get(0).cInfo().getPriority();
+			final double priority = matches.get(0).struct().getPriority();
 			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " +
 				priority + ":\n");
 			int count = 0;
@@ -244,25 +214,20 @@ public final class OpUtils {
 		sb.append("Candidates:\n");
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
-			final ModuleInfo info = candidate.opInfo().cInfo();
+			final Struct info = candidate.opInfo().struct();
 			sb.append(++count + ". ");
 			sb.append("\t" + opString(info, candidate.getStatusItem()) + "\n");
 			final String status = candidate.getStatus();
 			if (status != null) sb.append("\t" + status + "\n");
 			if (candidate.getStatusCode() == StatusCode.DOES_NOT_CONFORM) {
 				// show argument values when a contingent op rejects them
-				for (final ModuleItem<?> item : inputs(info)) {
+				for (final Member<?> item : inputs(info)) {
 					final Object value = item.getValue(candidate.getModule());
 					sb.append("\t\t" + item.getName() + " = " + value + "\n");
 				}
 			}
 		}
 		return sb.toString();
-	}
-
-	/** Gets the string name of an op. */
-	public static String getOpName(final CommandInfo info) {
-		return new OpInfo(info).getName();
 	}
 
 	// -- Helper methods --
@@ -286,33 +251,33 @@ public final class OpUtils {
 	}
 
 	/**
-	 * Helper method of {@link #opString(ModuleInfo, ModuleItem)} which parses a set of items
+	 * Helper method of {@link #opString(Struct, Member)} which parses a set of items
 	 * with a default delimiter of ","
 	 */
-	private static String paramString(final Iterable<ModuleItem<?>> items,
-		final ModuleItem<?> special)
+	private static String paramString(final Iterable<Member<?>> items,
+		final Member<?> special)
 	{
 		return paramString(items, special, ",");
 	}
 
 	/**
-	 * As {@link #paramString(Iterable, ModuleItem)} with an optional delimiter.
+	 * As {@link #paramString(Iterable, Member)} with an optional delimiter.
 	 */
-	private static String paramString(final Iterable<ModuleItem<?>> items,
-		final ModuleItem<?> special, final String delim) {
+	private static String paramString(final Iterable<Member<?>> items,
+		final Member<?> special, final String delim) {
 		return paramString(items, special, delim, false);
 	}
 
 	/**
-	 * As {@link #paramString(Iterable, ModuleItem, String)} with a toggle to control
+	 * As {@link #paramString(Iterable, Member, String)} with a toggle to control
 	 * if inputs are types only or include the names.
 	 */
-	private static String paramString(final Iterable<ModuleItem<?>> items,
-		final ModuleItem<?> special, final String delim, final boolean typeOnly)
+	private static String paramString(final Iterable<Member<?>> items,
+		final Member<?> special, final String delim, final boolean typeOnly)
 	{
 		final StringBuilder sb = new StringBuilder();
 		boolean first = true;
-		for (final ModuleItem<?> item : items) {
+		for (final Member<?> item : items) {
 			if (first) first = false;
 			else sb.append(delim);
 			sb.append("\n");

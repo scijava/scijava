@@ -34,41 +34,47 @@ import java.util.List;
 
 import org.scijava.command.CommandInfo;
 import org.scijava.module.ModuleItem;
+import org.scijava.param.ParameterStructs;
+import org.scijava.param.ValidityException;
+import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SciJavaPlugin;
+import org.scijava.struct.Struct;
 import org.scijava.util.ClassUtils;
 
 /**
- * Metadata about a particular {@link Op} implementation.
+ * Metadata about a particular op implementation.
  * 
  * @author Curtis Rueden
  * @see CommandInfo
  * @see OpEnvironment#ops()
  */
-public class OpInfo implements Comparable<OpInfo> {
+public class OpInfo {
 
-	private final CommandInfo cInfo;
+	private final Class<?> opClass;
+	private final Struct struct;
 
-	public OpInfo(final CommandInfo cInfo) {
-		this.cInfo = cInfo;
+	public OpInfo(final Class<?> opClass) throws ValidityException {
+		this.opClass = opClass;
+		struct = ParameterStructs.structOf(opClass);
 	}
 
-	public OpInfo(final Class<? extends Op> opClass) {
-		this(new CommandInfo(opClass));
+	/** Gets the associated {@link Struct} metadata. */
+	public Struct struct() {
+		return struct;
 	}
-
-	/** Gets the associated {@link CommandInfo} metadata. */
-	public CommandInfo cInfo() {
-		return cInfo;
+	
+	public Class<?> opClass() {
+		return opClass;
 	}
 
 	/** Gets the op's input parameters. */
 	public List<ModuleItem<?>> inputs() {
-		return OpUtils.inputs(cInfo());
+		return OpUtils.inputs(struct());
 	}
 
 	/** Gets the op's output parameters. */
 	public List<ModuleItem<?>> outputs() {
-		return OpUtils.outputs(cInfo());
+		return OpUtils.outputs(struct());
 	}
 
 	/** Gets whether the op has a name. */
@@ -79,7 +85,7 @@ public class OpInfo implements Comparable<OpInfo> {
 
 	/** Gets the fully qualified name, with namespace. */
 	public String getName() {
-		final String name = cInfo().getName();
+		final String name = struct().getName();
 		if (name != null && !name.isEmpty()) return name;
 
 		// name not explicitly specified; look for NAME constant
@@ -113,11 +119,11 @@ public class OpInfo implements Comparable<OpInfo> {
 	/** Gets the fully qualified aliases. */
 	public String[] getAliases() {
 		// check for an alias
-		final String alias = cInfo().get("alias");
+		final String alias = struct().get("alias");
 		if (alias != null) return new String[] { alias };
 
 		// no single alias; check for a list of aliases
-		final String aliases = cInfo().get("aliases");
+		final String aliases = struct().get("aliases");
 		if (aliases != null) return aliases.split("\\s*,\\s*");
 
 		// alias not explicitly specified; look for ALIAS constant
@@ -143,21 +149,19 @@ public class OpInfo implements Comparable<OpInfo> {
 		return ns.equals(namespace) || ns.startsWith(namespace + ".");
 	}
 
+	public Plugin getAnnotation() {
+		return opClass.getAnnotation(Plugin.class);
+	}
+
 	/**
 	 * Gets the type of op, as specified via {@code @Plugin(type = <type>)}).
 	 */
-	public Class<? extends Op> getType() {
-		// HACK: The CommandInfo.getPluginType() method returns Command.class.
-		// But we want to get the actual type of the wrapped PluginInfo.
-		// CommandInfo does not have a getPluginInfo() unwrap method, though.
-		// So let's extract the type directly from the @Plugin annotation.
-		final Class<? extends SciJavaPlugin> type = cInfo.getAnnotation().type();
-		if (type == null || !Op.class.isAssignableFrom(type)) {
-			throw new IllegalStateException("Op type " + type + " is not an Op!");
+	public Class<?> getType() {
+		Plugin pluginAnnotation = getAnnotation();
+		if (pluginAnnotation == null) {
+			throw new IllegalStateException("No @Plugin annotation found!");
 		}
-		@SuppressWarnings("unchecked")
-		final Class<? extends Op> opType = (Class<? extends Op>) type;
-		return opType;
+		return pluginAnnotation.type();
 	}
 
 	// -- Object methods --
@@ -166,24 +170,17 @@ public class OpInfo implements Comparable<OpInfo> {
 	public boolean equals(final Object o) {
 		if (!(o instanceof OpInfo)) return false;
 		final OpInfo that = (OpInfo) o;
-		return cInfo().equals(that.cInfo());
+		return struct().equals(that.struct());
 	}
 
 	@Override
 	public int hashCode() {
-		return cInfo().hashCode();
+		return struct().hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return OpUtils.opString(cInfo());
-	}
-
-	// -- Comparable methods --
-
-	@Override
-	public int compareTo(final OpInfo that) {
-		return cInfo().compareTo(that.cInfo());
+		return OpUtils.opString(struct());
 	}
 
 	// -- Helper methods --

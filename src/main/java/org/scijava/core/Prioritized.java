@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.core;
+
+import org.scijava.util.Types;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * An object that can be sorted according to priority.
+ * 
  * @author Curtis Rueden
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public interface Prioritized extends Comparable<Prioritized> {
 
-	@Parameter
-	private OpMatchingService matcher;
+	/**
+	 * Gets the sort priority of the object.
+	 * 
+	 * @see Priority
+	 */
+	double getPriority();
 
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
+	/**
+	 * Sets the sort priority of the object.
+	 * 
+	 * @see Priority
+	 */
+	void setPriority(double priority);
+
+	// -- Comparable methods --
+
+	@Override
+	default int compareTo(final Prioritized that) {
+		if (that == null) return 1;
+
+		// compare priorities
+		final int priorityCompare = Priority.compare(this, that);
+		if (priorityCompare != 0) return priorityCompare;
+
+		// compare classes
+		return Types.compare(getClass(), that.getClass());
 	}
+
 }

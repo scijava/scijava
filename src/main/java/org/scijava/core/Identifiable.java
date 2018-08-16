@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.core;
+
+import java.io.Serializable;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * An object which can express itself by some unique string.
+ * <p>
+ * Two objects that produce the same identifier string can be considered
+ * equivalent by some metric. The main use case for these identifiers is as a
+ * weak form of long-term serialization:
+ * </p>
+ * <ol>
+ * <li>An object's identifier is saved to long-term storage such as disk.</li>
+ * <li>Later, in a new JVM, the identifier is retrieved from disk.</li>
+ * <li>An existing index of objects is queried to find the object (if any) whose
+ * identifier matches the retrieved one.</li>
+ * </ol>
+ * <p>
+ * In this way, objects themselves do not need to be {@link Serializable}, nor
+ * do multiple potentially equivalent objects need to be synthesized and then
+ * compared using {@link Object#equals}.
+ * </p>
+ * 
  * @author Curtis Rueden
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public interface Identifiable {
 
-	@Parameter
-	private OpMatchingService matcher;
+	/** Gets a string intended to function as an identifier for the object. */
+	String getIdentifier();
 
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
-	}
 }

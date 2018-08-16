@@ -234,7 +234,7 @@ public interface OpEnvironment extends Contextual {
 	 *         ready to run.
 	 */
 	default Module module(final Op op, final Object... args) {
-		final Module module = info(op).cInfo().createModule(op);
+		final Module module = info(op).struct().createModule(op);
 		return matcher().assignInputs(module, args);
 	}
 

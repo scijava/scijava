@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.core;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * An interface declaring the ability to create objects.
+ * 
+ * @param <T> The type of objects that can be created.
  * @author Curtis Rueden
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public interface Instantiable<T> {
 
-	@Parameter
-	private OpMatchingService matcher;
+	/**
+	 * Gets the fully qualified name of the {@link Class} of the objects that can
+	 * be created.
+	 */
+	String getClassName();
 
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
-	}
+	/**
+	 * Loads the class corresponding to the objects that are created by
+	 * {@link #createInstance()}.
+	 * <p>
+	 * Note that this class may not be precisely {@code T.class} but instead a
+	 * subclass thereof.
+	 * </p>
+	 * 
+	 * @see org.scijava.plugin.PluginInfo for an example of an
+	 *      {@code Instantiable} type that typically instantiates objects of a
+	 *      subtype of {@code T} rather than {@code T} itself.
+	 */
+	Class<? extends T> loadClass() throws InstantiableException;
+
+	/** Creates an object. */
+	T createInstance() throws InstantiableException;
+
 }

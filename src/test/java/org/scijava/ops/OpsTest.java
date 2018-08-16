@@ -38,8 +38,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.Context;
+import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SciJavaPlugin;
+import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 
 public class OpsTest {
@@ -107,6 +109,9 @@ public class OpsTest {
 	private interface MathAddOp extends SciJavaPlugin {}
 
 	@Plugin(type = MathAddOp.class)
+	@Parameter(key = "number1")
+	@Parameter(key = "number2")
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static class MathAddDoubles implements MathAddOp, BinaryFunctionOp<Double, Double, Double> {
 
 		@Override
@@ -116,6 +121,9 @@ public class OpsTest {
 	}
 
 	@Plugin(type = MathAddOp.class)
+	@Parameter(key = "integer1")
+	@Parameter(key = "integer2")
+	@Parameter(key = "resultInteger", type = ItemIO.OUTPUT)
 	public static class MathAddBigIntegers implements MathAddOp, BinaryFunctionOp<BigInteger, BigInteger, BigInteger> {
 
 		@Override
@@ -125,6 +133,9 @@ public class OpsTest {
 	}
 
 	@Plugin(type = MathAddOp.class)
+	@Parameter(key = "array1")
+	@Parameter(key = "array2")
+	@Parameter(key = "resultArray", type = ItemIO.BOTH)
 	public static class MathAddDoubleArrays implements MathAddOp, BinaryComputerOp<double[], double[], double[]> {
 
 		@Override

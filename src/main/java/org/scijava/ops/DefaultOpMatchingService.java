@@ -36,26 +36,25 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.scijava.Context;
 import org.scijava.Initializable;
-import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
-import org.scijava.module.ModuleInfo;
-import org.scijava.module.ModuleItem;
 import org.scijava.ops.OpCandidate.StatusCode;
+import org.scijava.param.ParameterMember;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
-import org.scijava.util.ClassUtils;
-import org.scijava.util.ConversionUtils;
-import org.scijava.util.GenericUtils;
+import org.scijava.struct.Member;
+import org.scijava.struct.MemberInstance;
+import org.scijava.struct.StructInstance;
 import org.scijava.util.Types;
 
 /**
- * Default service for finding {@link Op}s which match a request.
+ * Default service for finding ops which match a request.
  * 
  * @author Curtis Rueden
  */
@@ -149,21 +148,42 @@ public class DefaultOpMatchingService extends AbstractService implements
 	}
 
 	@Override
-	public Object assignInputs(final Object op, final Object... args) {
+	public <C> StructInstance<C> assignInputs(final StructInstance<C> op,
+		final Object... args)
+	{
 		int i = 0;
-		// TODO: Use StructInstance instead of Object?
-		for (final ModuleItem<?> item : OpUtils.inputs(module.getInfo())) {
-			assign(module, args[i++], item);
+		for (final MemberInstance<?> memberInstance : inputs(op)) {
+			// TODO: Value coercion / conversion?
+			memberInstance.set(args[i++]);
+			// TODO: Resolve input? What happens if we don't?
 		}
-		return module;
+		return op;
+	}
+
+	private List<MemberInstance<?>> inputs(StructInstance<?> op) {
+		return op.members().stream() //
+			.filter(member -> member.member().isInput()) //
+			.collect(Collectors.toList());
+	}
+
+	private List<Member<?>> inputs(OpCandidate candidate) {
+		return candidate.struct().members().stream() //
+			.filter(member -> member.isInput()) //
+			.collect(Collectors.toList());
+	}
+
+	private List<Member<?>> outputs(OpCandidate candidate) {
+		return candidate.struct().members().stream() //
+			.filter(member -> member.isOutput()) //
+			.collect(Collectors.toList());
 	}
 
 	@Override
 	public Object[] padArgs(final OpCandidate candidate) {
 		int inputCount = 0, requiredCount = 0;
-		for (final ModuleItem<?> item : candidate.inputs()) {
+		for (final Member<?> item : candidate.struct().members()) {
 			inputCount++;
-			if (item.isRequired()) requiredCount++;
+			if (isRequired(item)) requiredCount++;
 		}
 		final Object[] args = candidate.getRef().getArgs();
 		if (args.length == inputCount) {
@@ -189,8 +209,8 @@ public class DefaultOpMatchingService extends AbstractService implements
 		final int optionalsToFill = optionalCount - argsToPad;
 		final Object[] paddedArgs = new Object[inputCount];
 		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
-		for (final ModuleItem<?> item : candidate.inputs()) {
-			if (!item.isRequired() && optionalIndex++ >= optionalsToFill) {
+		for (final Member<?> item : candidate.struct().members()) {
+			if (!isRequired(item) && optionalIndex++ >= optionalsToFill) {
 				// skip this optional parameter (pad with null)
 				paddedIndex++;
 				continue;
@@ -202,23 +222,17 @@ public class DefaultOpMatchingService extends AbstractService implements
 
 	// -- Helper methods --
 
+	private boolean isRequired(final Member<?> item) {
+		return item instanceof ParameterMember && //
+			((ParameterMember<?>) item).isRequired();
+	}
+
 	/** Helper method of {@link #findCandidates}. */
 	private boolean isCandidate(final OpInfo info, final OpRef ref) {
 		if (!info.nameMatches(ref.getName())) return false;
 
 		// the name matches; now check the class
-		final Class<?> opClass;
-		try {
-			opClass = info.cInfo().loadClass();
-		}
-		catch (final InstantiableException exc) {
-			final String msg = "Invalid op: " + info.cInfo().getClassName();
-			if (log.isDebug()) log.debug(msg, exc);
-			else log.error(msg);
-			return false;
-		}
-
-		return ref.typesMatch(opClass);
+		return ref.typesMatch(info.opClass());
 	}
 
 	/** Helper method of {@link #findMatch}. */
@@ -277,8 +291,7 @@ public class DefaultOpMatchingService extends AbstractService implements
 		final ArrayList<OpCandidate> matches = new ArrayList<>();
 		double priority = Double.NaN;
 		for (final OpCandidate candidate : candidates) {
-			final ModuleInfo info = candidate.cInfo();
-			final double p = info.getPriority();
+			final double p = getPriority(candidate);
 			if (p != priority && !matches.isEmpty()) {
 				// NB: Lower priority was reached; stop looking for any more matches.
 				break;
@@ -300,9 +313,9 @@ public class DefaultOpMatchingService extends AbstractService implements
 	 */
 	private boolean missArgs(final OpCandidate candidate) {
 		int i = 0;
-		for (final ModuleItem<?> item : candidate.inputs()) {
-			if (candidate.getArgs()[i++] == null && item.isRequired()) {
-				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, item);
+		for (final Member<?> member : inputs(candidate)) {
+			if (candidate.getArgs()[i++] == null && isRequired(member)) {
+				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
 				return true;
 			}
 		}
@@ -319,9 +332,9 @@ public class DefaultOpMatchingService extends AbstractService implements
 	private boolean typesPerfectMatch(final OpCandidate candidate) {
 		int i = 0;
 		final Object[] args = candidate.getArgs();
-		for (final ModuleItem<?> item : candidate.inputs()) {
+		for (final Member<?> member : inputs(candidate)) {
 			if (args[i] != null) {
-				final Class<?> typeClass = OpMatchingUtil.getClass(item.getType());
+				final Class<?> typeClass = member.getRawType();
 				final Class<?> argClass = OpMatchingUtil.getClass(args[i]);
 				if (!typeClass.equals(argClass)) return false;
 			}
@@ -342,9 +355,7 @@ public class DefaultOpMatchingService extends AbstractService implements
 		int minLevels = Integer.MAX_VALUE;
 		double priority = Double.NaN;
 		for (final OpCandidate candidate : candidates) {
-
-			final ModuleInfo info = candidate.cInfo();
-			final double p = info.getPriority();
+			final double p = getPriority(candidate);
 			if (p != priority && !matches.isEmpty()) {
 				// NB: Lower priority was reached; stop looking for any more matches.
 				break;
@@ -365,6 +376,12 @@ public class DefaultOpMatchingService extends AbstractService implements
 		return matches;
 	}
 
+	private double getPriority(final OpCandidate candidate) {
+		// TODO: Think about what to do about non @Plugin-based ops...?
+		// What if there is no annotation? How to discern a priority?
+		return candidate.opInfo().getAnnotation().priority();
+	}
+
 	/**
 	 * Find the total levels of casting needed for the candidate to match with the
 	 * reference.
@@ -375,8 +392,8 @@ public class DefaultOpMatchingService extends AbstractService implements
 	private int findCastLevels(final OpCandidate candidate) {
 		int level = 0, i = 0;
 		final Object[] args = candidate.getArgs();
-		for (final ModuleItem<?> item : candidate.inputs()) {
-			final Class<?> type = item.getType();
+		for (final Member<?> member : inputs(candidate)) {
+			final Class<?> type = member.getRawType();
 			if (args[i] != null) {
 				final int currLevel = OpMatchingUtil.findCastLevels(type, OpMatchingUtil
 					.getClass(args[i]));
@@ -409,15 +426,15 @@ public class DefaultOpMatchingService extends AbstractService implements
 	{
 		if (matches.size() == 1) {
 			// a single match: initialize and return it
-			final Module m = matches.get(0).getModule();
+			final StructInstance<?> m = matches.get(0).getModule();
 			if (log.isDebug()) {
 				log.debug("Selected '" + matches.get(0).getRef().getLabel() + "' op: " +
-					m.getDelegateObject().getClass().getName());
+					m.object().getClass().getName());
 			}
 
 			// initialize the op, if appropriate
-			if (m.getDelegateObject() instanceof Initializable) {
-				((Initializable) m.getDelegateObject()).initialize();
+			if (m.object() instanceof Initializable) {
+				((Initializable) m.object()).initialize();
 			}
 
 			return matches.get(0);
@@ -434,9 +451,10 @@ public class DefaultOpMatchingService extends AbstractService implements
 	 * </p>
 	 */
 	private boolean valid(final OpCandidate candidate) {
-		if (candidate.cInfo().isValid()) return true;
-		candidate.setStatus(StatusCode.INVALID_MODULE);
-		return false;
+		// TODO: candidate validity? Struct no longer has this thing.
+		return true;
+//		candidate.setStatus(StatusCode.INVALID_MODULE);
+//		return false;
 	}
 
 	/**
@@ -449,16 +467,16 @@ public class DefaultOpMatchingService extends AbstractService implements
 		final Collection<Type> outTypes = candidate.getRef().getOutTypes();
 		if (outTypes == null) return true; // no constraints on output types
 
-		final Iterator<ModuleItem<?>> outItems = candidate.outputs().iterator();
+		final Iterator<Member<?>> outItems = outputs(candidate).iterator();
 		for (final Type outType : outTypes) {
 			if (!outItems.hasNext()) {
 				candidate.setStatus(StatusCode.TOO_FEW_OUTPUTS);
 				return false;
 			}
 			// FIXME: Use generic assignability test, once it exists.
-			final Class<?> raw = GenericUtils.getClass(outType);
-			final Class<?> outItemClass = outItems.next().getType();
-			if (!ConversionUtils.canCast(outItemClass, raw)) {
+			final Class<?> raw = Types.raw(outType);
+			final Class<?> outItemClass = outItems.next().getRawType();
+			if (!Types.isAssignable(outItemClass, raw)) {
 				candidate.setStatus(StatusCode.OUTPUT_TYPES_DO_NOT_MATCH, //
 					"request=" + raw.getName() + ", actual=" + outItemClass.getName());
 				return false;
@@ -490,7 +508,7 @@ public class DefaultOpMatchingService extends AbstractService implements
 	 */
 	private int typesMatch(final OpCandidate candidate, final Object[] args) {
 		int i = 0;
-		for (final ModuleItem<?> item : candidate.inputs()) {
+		for (final Member<?> item : inputs(candidate)) {
 			if (!canAssign(candidate, args[i], item)) return i;
 			i++;
 		}
@@ -502,11 +520,11 @@ public class DefaultOpMatchingService extends AbstractService implements
 		final Object[] args, final int index)
 	{
 		int i = 0;
-		for (final ModuleItem<?> item : candidate.inputs()) {
+		for (final Member<?> item : inputs(candidate)) {
 			if (i++ == index) {
 				final Object arg = args[index];
 				final String argType = arg == null ? "null" : arg.getClass().getName();
-				final Type inputType = item.getGenericType();
+				final Type inputType = item.getType();
 				return index + ": cannot coerce " + argType + " -> " + inputType;
 			}
 		}
@@ -517,7 +535,21 @@ public class DefaultOpMatchingService extends AbstractService implements
 	private Object createOp(final OpCandidate candidate,
 		final Object... args)
 	{
-		final Object op = create(candidate);
+		final Class<?> opClass = candidate.opInfo().opClass();
+		final Object object;
+		try {
+			// TODO: Consider whether this is really the best way to
+			// instantiate the op class here. No framework usage?
+			// E.g., what about pluginService.createInstance?
+			object = opClass.newInstance();
+		}
+		catch (final InstantiationException | IllegalAccessException e) {
+			// TODO: Think about whether exception handling here should be different.
+			log.error("Cannot instantiate op: " + opClass.getName(), e);
+			return null;
+		}
+		final StructInstance<Object> op = candidate.struct().createInstance(object);
+		candidate.setModule(op);
 
 		// populate the inputs and return the op
 		return assignInputs(op, args);
@@ -525,31 +557,18 @@ public class DefaultOpMatchingService extends AbstractService implements
 
 	/** Helper method of {@link #match(OpCandidate, Object[])}. */
 	private boolean canAssign(final OpCandidate candidate, final Object arg,
-		final ModuleItem<?> item)
+		final Member<?> item)
 	{
 		if (arg == null) {
-			if (item.isRequired()) {
+			if (isRequired(item)) {
 				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, item);
 				return false;
 			}
 			return true;
 		}
 
-		final Type type = item.getGenericType();
+		final Type type = item.getType();
 		return Types.isAssignable(arg.getClass(), type);
 		// TODO: Type coercion / conversion?
-	}
-
-	/** Helper method of {@link #assignInputs}. */
-	private void assign(final Object op, final Object arg,
-		final ModuleItem<?> item)
-	{
-		if (arg != null) {
-//			final Type type = item.getGenericType();
-			// TODO: Value coercion / conversion?
-			// TODO: Use StructInstance etc. code instead.
-			module.setInput(item.getName(), arg);
-		}
-		module.resolveInput(item.getName());
 	}
 }

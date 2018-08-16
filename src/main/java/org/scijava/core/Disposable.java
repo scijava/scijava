@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.core;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * An object that knows how to clean up after itself.
+ * 
  * @author Curtis Rueden
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public interface Disposable {
 
-	@Parameter
-	private OpMatchingService matcher;
-
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
+	/**
+	 * Performs any needed cleanup of the object's services, in preparation for
+	 * the object being retired (e.g., to make garbage collection possible).
+	 */
+	default void dispose() {
+		// NB: Do nothing by default.
 	}
 }

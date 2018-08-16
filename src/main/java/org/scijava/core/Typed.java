@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.core;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * An object with an associated type (i.e., {@link Class}), which can be queried
+ * at runtime.
+ * 
  * @author Curtis Rueden
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public interface Typed<T> {
 
-	@Parameter
-	private OpMatchingService matcher;
-
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
+	/**
+	 * Gets whether this object is compatible with the given data object.
+	 * <p>
+	 * By default, this method will return {@code true} iff the data is assignable
+	 * to the associated type given by {@link #getType()}. But individual
+	 * implementations may have other requirements beyond class assignability.
+	 * </p>
+	 */
+	default boolean supports(final T data) {
+		// NB: Even though the compiler will often guarantee that only data
+		// of type T is provided here, we still need the runtime check
+		// for cases where the exact type is not known to compiler --
+		// e.g., if the object was manufactured by reflection.
+		return getType().isInstance(data);
 	}
+
+	/** Gets the type associated with the object. */
+	Class<T> getType();
+
 }

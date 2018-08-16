@@ -1,8 +1,11 @@
 /*
  * #%L
- * SciJava Operations: a framework for reusable algorithms.
+ * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2009 - 2017 Board of Regents of the University of
+ * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
+ * Institute of Molecular Cell Biology and Genetics, University of
+ * Konstanz, and KNIME GmbH.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,28 +29,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
 
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
+package org.scijava.util;
 
 /**
- * Interface for services that manage and execute ops.
- *
+ * Useful methods for platform-specific interrogation.
+ * 
  * @author Curtis Rueden
+ * @author Johannes Schindelin
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
+public final class PlatformUtils {
 
-	@Parameter
-	private OpMatchingService matcher;
-
-	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getOpInstance();
+	private PlatformUtils() {
+		// prevent instantiation of utility class
 	}
+
+	/** Whether the operating system is Windows-based. */
+	public static boolean isWindows() {
+		return osName().startsWith("Win");
+	}
+
+	/** Whether the operating system is Mac-based. */
+	public static boolean isMac() {
+		return osName().startsWith("Mac");
+	}
+
+	/** Whether the operating system is Linux-based. */
+	public static boolean isLinux() {
+		return osName().startsWith("Linux");
+	}
+
+	/** Whether the operating system is POSIX compliant. */
+	public static boolean isPOSIX() {
+		return isMac() || isLinux();
+	}
+
+	/** Gets the name of the operating system. */
+	public static String osName() {
+		final String osName = System.getProperty("os.name");
+		return osName == null ? "Unknown" : osName;
+	}
+
 }

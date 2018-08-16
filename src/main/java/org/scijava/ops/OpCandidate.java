@@ -29,12 +29,9 @@
 
 package org.scijava.ops;
 
-import java.util.List;
-
-import org.scijava.ValidityProblem;
-import org.scijava.command.CommandInfo;
-import org.scijava.module.Module;
-import org.scijava.module.ModuleItem;
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
+import org.scijava.struct.StructInstance;
 
 /**
  * Container class for a possible operation match between an {@link OpRef} and
@@ -63,10 +60,10 @@ public class OpCandidate {
 	private final OpRef ref;
 	private final OpInfo info;
 
-	private Module module;
+	private StructInstance<?> module;
 	private StatusCode code;
 	private String message;
-	private ModuleItem<?> item;
+	private Member<?> item;
 	private Object[] args;
 
 	public OpCandidate(final OpEnvironment ops, final OpRef ref,
@@ -93,31 +90,21 @@ public class OpCandidate {
 	}
 
 	/**
-	 * Gets the {@link CommandInfo} metadata describing the op to match against.
+	 * Gets the {@link Struct} metadata describing the op to match against.
 	 * 
-	 * @see OpInfo#cInfo()
+	 * @see OpInfo#struct()
 	 */
-	public CommandInfo cInfo() {
-		return info.cInfo();
-	}
-
-	/** Gets the op's input parameters. */
-	public List<ModuleItem<?>> inputs() {
-		return opInfo().inputs();
-	}
-
-	/** Gets the op's output parameters. */
-	public List<ModuleItem<?>> outputs() {
-		return opInfo().outputs();
+	public Struct struct() {
+		return info.struct();
 	}
 
 	/** Sets the module instance associated with the attempted match. */
-	public void setModule(final Module module) {
+	public void setModule(final StructInstance<?> module) {
 		this.module = module;
 	}
 
 	/** Gets the module instance associated with the attempted match. */
-	public Module getModule() {
+	public StructInstance<?> getModule() {
 		return module;
 	}
 
@@ -133,7 +120,7 @@ public class OpCandidate {
 
 	/** Sets the status of the matching. */
 	public void setStatus(final StatusCode code, final String message,
-		final ModuleItem<?> item)
+		final Member<?> item)
 	{
 		this.code = code;
 		this.message = message;
@@ -154,7 +141,7 @@ public class OpCandidate {
 	 * Gets the status item related to the matching status, if any. Typically, if
 	 * set, this is the parameter for which matching failed.
 	 */
-	public ModuleItem<?> getStatusItem() {
+	public Member<?> getStatusItem() {
 		return item;
 	}
 
@@ -169,17 +156,8 @@ public class OpCandidate {
 				sb.append("MATCH");
 				break;
 			case INVALID_MODULE:
-				sb.append("Invalid op: " + info.cInfo().getDelegateClassName());
-				final List<ValidityProblem> problems = info.cInfo().getProblems();
-				final int problemCount = problems.size();
-				if (problemCount > 0) sb.append(" (");
-				int no = 0;
-				for (final ValidityProblem problem : problems) {
-					if (no++ > 0) sb.append("; ");
-					if (problemCount > 1) sb.append(no + ". ");
-					sb.append(problem.getMessage());
-				}
-				if (problemCount > 0) sb.append(")");
+				sb.append("Invalid op: " + info.struct());
+				// TODO: List validity problems.
 				break;
 			case TOO_FEW_OUTPUTS:
 				sb.append("Too few outputs");

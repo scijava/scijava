@@ -91,6 +91,8 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava Ops developers.</license.copyrightOwners>
+		<scijava-common.version>2.75.0-type-service-SNAPSHOT</scijava-common.version>
+		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<dependencies>

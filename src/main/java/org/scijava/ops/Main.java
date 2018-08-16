@@ -28,8 +28,26 @@
  */
 package org.scijava.ops;
 
-public class Main {
-  public static void main(String... args) {
-    System.out.println("Hello");
-  }
+import java.io.IOException;
+
+import org.scijava.parse.eval.EvaluatorConsole;
+
+/**
+ * Launches a console-based, Ops-driven expression evaluator.
+ *
+ * @author Curtis Rueden
+ * @see EvaluatorConsole
+ */
+public final class Main {
+
+	private Main() {
+		// Prevent instantiation of utility class.
+	}
+
+	// -- Main method --
+
+	public static void main(final String[] args) throws IOException {
+		System.out.println("blah");
+	}
+
 }

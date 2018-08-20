@@ -36,7 +36,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.scijava.util.GenericUtils;
+import org.scijava.util.Types;
 
 /**
  * Data structure which identifies an op by name and/or type(s) and/or argument
@@ -71,7 +71,7 @@ public class OpRef {
 	 * @param name name of the op, or null for any name.
 	 * @param args arguments to the op.
 	 */
-	public static OpRef create(final String name, final Object... args) {
+	public static OpRef from(final String name, final Object... args) {
 		return new OpRef(name, null, null, args);
 	}
 
@@ -81,7 +81,7 @@ public class OpRef {
 	 * @param type type of op, or null for any type.
 	 * @param args arguments to the op.
 	 */
-	public static OpRef create(final Type type, final Object... args) {
+	public static OpRef from(final Type type, final Object... args) {
 		return new OpRef(null, types(type), null, args);
 	}
 
@@ -93,7 +93,7 @@ public class OpRef {
 	 * @param outType the type of the op's primary output, or null for any type.
 	 * @param args arguments to the op.
 	 */
-	public static OpRef createTypes(final Type type1, final Type type2,
+	public static OpRef fromTypes(final Type type1, final Type type2,
 		final Type outType, final Object... args)
 	{
 		return new OpRef(null, types(type1, type2), types(outType), args);
@@ -105,7 +105,7 @@ public class OpRef {
 	 * @param types type constraints of op, or null for any type.
 	 * @param args arguments to the op.
 	 */
-	public static OpRef createTypes(final Collection<? extends Type> types,
+	public static OpRef fromTypes(final Collection<? extends Type> types,
 		final Object... args)
 	{
 		return new OpRef(null, types, null, args);
@@ -173,7 +173,7 @@ public class OpRef {
 		if (types == null) return true;
 		for (final Type t : types) {
 			// FIXME: Use generic assignability test, once it exists.
-			final Class<?> raw = GenericUtils.getClass(t);
+			final Class<?> raw = Types.raw(t);
 			if (!raw.isAssignableFrom(c)) return false;
 		}
 		return true;
@@ -183,23 +183,24 @@ public class OpRef {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getLabel());
-		sb.append("(");
-		boolean first = true;
-		for (Object arg : args) {
-			if (first) first = false;
-			else sb.append(", ");
-			if (arg.getClass() == Class.class) {
-				// special typed null placeholder
-				sb.append(((Class<?>) arg).getSimpleName());
-			}
-			else sb.append(arg.getClass().getSimpleName());
-
-		}
-		sb.append(")");
-
-		return sb.toString();
+		return types.toString();
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(getLabel());
+//		sb.append("(");
+//		boolean first = true;
+//		for (Object arg : args) {
+//			if (first) first = false;
+//			else sb.append(", ");
+//			if (arg.getClass() == Class.class) {
+//				// special typed null placeholder
+//				sb.append(((Class<?>) arg).getSimpleName());
+//			}
+//			else sb.append(arg.getClass().getSimpleName());
+//
+//		}
+//		sb.append(")");
+//
+//		return sb.toString();
 	}
 
 	@Override

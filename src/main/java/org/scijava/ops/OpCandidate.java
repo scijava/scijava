@@ -60,7 +60,7 @@ public class OpCandidate {
 	private final OpRef ref;
 	private final OpInfo info;
 
-	private StructInstance<?> module;
+	private StructInstance<? extends Op> structInstance;
 	private StatusCode code;
 	private String message;
 	private Member<?> item;
@@ -98,14 +98,14 @@ public class OpCandidate {
 		return info.struct();
 	}
 
-	/** Sets the module instance associated with the attempted match. */
-	public void setModule(final StructInstance<?> module) {
-		this.module = module;
+	/** Sets the {@link StructInstance} instance associated with the attempted match. */
+	public void setStructInstance(final StructInstance<? extends Op> instance) {
+		this.structInstance = instance;
 	}
 
-	/** Gets the module instance associated with the attempted match. */
-	public StructInstance<?> getModule() {
-		return module;
+	/** Gets the {@link StructInstance} instance associated with the attempted match. */
+	public StructInstance<?> getStructInstance() {
+		return structInstance;
 	}
 
 	/** Sets the status of the matching attempt. */

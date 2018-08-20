@@ -103,10 +103,10 @@ public interface OpMatchingService extends SciJavaService {
 	 * Attempts to match the given arguments to the op described by the
 	 * specified {@link ModuleInfo}.
 	 * 
-	 * @return A populated op instance for the matching op, or
+	 * @return A populated {@link StructInstance} for the matching op, or
 	 *         null if the arguments do not match the op.
 	 */
-	Object match(OpCandidate candidate);
+	StructInstance<? extends Op> match(OpCandidate candidate);
 
 	/**
 	 * Checks that each parameter is type-compatible with its corresponding
@@ -117,7 +117,7 @@ public interface OpMatchingService extends SciJavaService {
 	/** Checks the number of args, padding optional args with null as needed. */
 	Object[] padArgs(OpCandidate candidate);
 
-	/** Assigns arguments into the given module's inputs. */
+	/** Assigns arguments into the given {@link StructInstance}. */
 	<C> StructInstance<C> assignInputs(StructInstance<C> op, Object... args);
 
 }

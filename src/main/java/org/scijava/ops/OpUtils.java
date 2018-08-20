@@ -29,18 +29,14 @@
 
 package org.scijava.ops;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.scijava.Context;
-import org.scijava.command.CommandInfo;
-import org.scijava.ops.OpCandidate.StatusCode;
-import org.scijava.plugin.SciJavaPlugin;
-import org.scijava.service.Service;
 import org.scijava.struct.Member;
+import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
+import org.scijava.struct.StructInstance;
 
 /**
  * Utility methods for working with ops. In particular, this class contains
@@ -68,59 +64,77 @@ public final class OpUtils {
 		}
 		return result;
 	}
-
-	/**
-	 * Gets the given {@link Struct}'s list of inputs, excluding special ones
-	 * like {@link Service}s and {@link Context}s.
-	 */
-	public static List<Member<?>> inputs(final Struct info) {
-		final List<Member<?>> inputs = asList(info.inputs());
-		return filter(inputs, input -> !isInjectable(input.getType()));
+	
+	public static List<MemberInstance<?>> inputs(StructInstance<?> op) {
+		return op.members().stream() //
+			.filter(memberInstance -> memberInstance.member().isInput()) //
+			.collect(Collectors.toList());
 	}
 
-	/** Gets the given {@link Struct}'s list of outputs. */
-	public static List<Member<?>> outputs(final Struct info) {
-		return asList(info.outputs());
+	public static List<Member<?>> inputs(OpCandidate candidate) {
+		return inputs(candidate.struct());
 	}
 
-	/** Gets the namespace portion of the given op name. */
-	public static String getNamespace(final String opName) {
-		if (opName == null) return null;
-		final int dot = opName.lastIndexOf(".");
-		return dot < 0 ? null : opName.substring(0, dot);
+	public static List<Member<?>> inputs(final Struct struct) {
+		return struct.members().stream() //
+				.filter(member -> member.isInput()) //
+				.collect(Collectors.toList());
+	}
+	
+	public static List<Member<?>> outputs(OpCandidate candidate) {
+		return outputs(candidate.struct());
 	}
 
-	/** Gets the simple portion (without namespace) of the given op name. */
-	public static String stripNamespace(final String opName) {
-		if (opName == null) return null;
-		final int dot = opName.lastIndexOf(".");
-		return dot < 0 ? opName : opName.substring(dot + 1);
+	public static List<Member<?>> outputs(final Struct struct) {
+		return struct.members().stream() //
+				.filter(member -> member.isOutput()) //
+				.collect(Collectors.toList());
+	}
+	
+	public static List<MemberInstance<?>> outputs(StructInstance<?> op) {
+		return op.members().stream() //
+			.filter(memberInstance -> memberInstance.member().isOutput()) //
+			.collect(Collectors.toList());
 	}
 
-	/**
-	 * Gets a string describing the given op request.
-	 * 
-	 * @param name The op's name.
-	 * @param args The op's input arguments.
-	 * @return A string describing the op request.
-	 */
-	public static String opString(final String name, final Object... args) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(name + "(\n\t\t");
-		boolean first = true;
-		for (final Object arg : args) {
-			if (first) first = false;
-			else sb.append(",\n\t\t");
-			if (arg == null) sb.append("null");
-			else if (arg instanceof Class) {
-				// NB: Class instance used to mark argument type.
-				sb.append(((Class<?>) arg).getSimpleName());
-			}
-			else sb.append(arg.getClass().getSimpleName());
-		}
-		sb.append(")");
-		return sb.toString();
-	}
+//	/** Gets the namespace portion of the given op name. */
+//	public static String getNamespace(final String opName) {
+//		if (opName == null) return null;
+//		final int dot = opName.lastIndexOf(".");
+//		return dot < 0 ? null : opName.substring(0, dot);
+//	}
+//
+//	/** Gets the simple portion (without namespace) of the given op name. */
+//	public static String stripNamespace(final String opName) {
+//		if (opName == null) return null;
+//		final int dot = opName.lastIndexOf(".");
+//		return dot < 0 ? opName : opName.substring(dot + 1);
+//	}
+//
+//	/**
+//	 * Gets a string describing the given op request.
+//	 * 
+//	 * @param name The op's name.
+//	 * @param args The op's input arguments.
+//	 * @return A string describing the op request.
+//	 */
+//	public static String opString(final String name, final Object... args) {
+//		final StringBuilder sb = new StringBuilder();
+//		sb.append(name + "(\n\t\t");
+//		boolean first = true;
+//		for (final Object arg : args) {
+//			if (first) first = false;
+//			else sb.append(",\n\t\t");
+//			if (arg == null) sb.append("null");
+//			else if (arg instanceof Class) {
+//				// NB: Class instance used to mark argument type.
+//				sb.append(((Class<?>) arg).getSimpleName());
+//			}
+//			else sb.append(arg.getClass().getSimpleName());
+//		}
+//		sb.append(")");
+//		return sb.toString();
+//	}
 
 	// -- Helper methods --
 
@@ -129,9 +143,9 @@ public final class OpUtils {
 		return list.stream().filter(p).collect(Collectors.toList());
 	}
 
-	// TODO: Move to Context.
-	private static boolean isInjectable(final Class<?> type) {
-		return Service.class.isAssignableFrom(type) || //
-			Context.class.isAssignableFrom(type);
-	}
+//	// TODO: Move to Context.
+//	private static boolean isInjectable(final Class<?> type) {
+//		return Service.class.isAssignableFrom(type) || //
+//			Context.class.isAssignableFrom(type);
+//	}
 }

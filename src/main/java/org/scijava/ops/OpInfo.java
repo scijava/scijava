@@ -29,18 +29,13 @@
 
 package org.scijava.ops;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
-import org.scijava.command.CommandInfo;
-import org.scijava.module.ModuleItem;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
-import org.scijava.util.ClassUtils;
 
 /**
  * Metadata about a particular op implementation.
@@ -49,10 +44,10 @@ import org.scijava.util.ClassUtils;
  */
 public class OpInfo {
 
-	private final Class<?> opClass;
+	private final Class<? extends Op> opClass;
 	private final Struct struct;
 
-	public OpInfo(final Class<?> opClass) throws ValidityException {
+	public OpInfo(final Class<? extends Op> opClass) throws ValidityException {
 		this.opClass = opClass;
 		struct = ParameterStructs.structOf(opClass);
 	}
@@ -61,8 +56,8 @@ public class OpInfo {
 	public Struct struct() {
 		return struct;
 	}
-	
-	public Class<?> opClass() {
+
+	public Class<? extends Op> opClass() {
 		return opClass;
 	}
 
@@ -72,80 +67,8 @@ public class OpInfo {
 	}
 
 	/** Gets the op's output parameters. */
-	public List<ModuleItem<?>> outputs() {
+	public List<Member<?>> outputs() {
 		return OpUtils.outputs(struct());
-	}
-
-	/** Gets whether the op has a name. */
-	public boolean isNamed() {
-		final String name = getName();
-		return name != null && !name.isEmpty();
-	}
-
-	/** Gets the fully qualified name, with namespace. */
-	public String getName() {
-		final String name = struct().getName();
-		if (name != null && !name.isEmpty()) return name;
-
-		// name not explicitly specified; look for NAME constant
-		return getFieldValue(String.class, "NAME");
-	}
-
-	/** Gets the name without namespace prefix. */
-	public String getSimpleName() {
-		return OpUtils.stripNamespace(getName());
-	}
-
-	/** Gets whether the given name matches this op. */
-	public boolean nameMatches(final String name) {
-		if (name == null) return true; // not filtering on name
-
-		// check if name matches exactly
-		final String opName = getName();
-		if (nameMatches(opName, name)) return true;
-
-		// check for aliases
-		final String[] aliases = getAliases();
-		if (aliases != null) {
-			for (final String a : aliases) {
-				if (nameMatches(a, name)) return true;
-			}
-		}
-
-		return false;
-	}
-
-	/** Gets the fully qualified aliases. */
-	public String[] getAliases() {
-		// check for an alias
-		final String alias = struct().get("alias");
-		if (alias != null) return new String[] { alias };
-
-		// no single alias; check for a list of aliases
-		final String aliases = struct().get("aliases");
-		if (aliases != null) return aliases.split("\\s*,\\s*");
-
-		// alias not explicitly specified; look for ALIAS constant
-		final String aliasField = getFieldValue(String.class, "ALIAS");
-		if (aliasField != null) return new String[] {aliasField};
-
-		// no single alias; look for ALIASES constant
-		final String aliasesField = getFieldValue(String.class, "ALIASES");
-		if (aliasesField != null) return aliasesField.split("\\s*,\\s*");
-
-		return null;
-	}
-
-	/** Gets the namespace. */
-	public String getNamespace() {
-		return OpUtils.getNamespace(getName());
-	}
-
-	/** Gets whether the op belongs to the given namespace. */
-	public boolean isNamespace(final String namespace) {
-		final String ns = getNamespace();
-		if (ns == null) return namespace == null;
-		return ns.equals(namespace) || ns.startsWith(namespace + ".");
 	}
 
 	public Plugin getAnnotation() {
@@ -167,7 +90,8 @@ public class OpInfo {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (!(o instanceof OpInfo)) return false;
+		if (!(o instanceof OpInfo))
+			return false;
 		final OpInfo that = (OpInfo) o;
 		return struct().equals(that.struct());
 	}
@@ -179,31 +103,18 @@ public class OpInfo {
 
 	@Override
 	public String toString() {
-		return "TODO: stringify";
-//		return OpUtils.opString(struct());
+		final StringBuilder sb = new StringBuilder();
+		sb.append(opClass.getSimpleName() + "(\n\t\t");
+		boolean first = true;
+		for (final Member<?> arg : struct) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append(",\n\t\t");
+			}
+			sb.append(arg.getType().toString());
+		}
+		sb.append(")\n");
+		return sb.toString();
 	}
-
-	// -- Helper methods --
-
-	/** Helper method of {@link #getName} and {@link #getAliases}. */
-	private <T> T getFieldValue(final Class<T> fieldType, final String fieldName)
-	{
-		final Class<? extends Op> opType = getType();
-		final Field nameField = ClassUtils.getField(opType, fieldName);
-		if (nameField == null) return null;
-		if (!fieldType.isAssignableFrom(nameField.getType())) return null;
-		@SuppressWarnings("unchecked")
-		final T value = (T) ClassUtils.getValue(nameField, null);
-		return value;
-	}
-
-	private static boolean nameMatches(final String opName, final String name) {
-		if (opName == null) return false;
-		if (name.equals(opName)) return true;
-
-		// check if name matches w/o namespace (e.g., 'add' matches 'math.add')
-		final int dot = opName.lastIndexOf(".");
-		return dot >= 0 && name.equals(opName.substring(dot + 1));
-	}
-
 }

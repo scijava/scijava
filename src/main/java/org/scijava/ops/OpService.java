@@ -62,7 +62,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	public StructInstance<?> op(OpRef ref) {
 		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getModule();
+		return match.getStructInstance();
 	}
 	
 	@Override

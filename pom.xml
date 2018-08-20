@@ -96,6 +96,7 @@
 	</properties>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>

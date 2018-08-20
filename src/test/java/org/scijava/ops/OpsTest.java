@@ -32,7 +32,10 @@ package org.scijava.ops;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.DoubleStream;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,12 +43,14 @@ import org.junit.Test;
 import org.scijava.Context;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
+import org.scijava.util.ArrayUtils;
+
+import com.google.common.collect.Streams;
 
 public class OpsTest {
-
+	
 	private Context context;
 	private OpService ops;
 
@@ -65,24 +70,27 @@ public class OpsTest {
 	@Test
 	public void testOps() {
 		final Nil<Double> nilDouble = new Nil<Double>() {};
-		final Type[] inTypes = { nilDouble.getType(), nilDouble.getType() };
-		final Type[] outTypes = { nilDouble.getType() };
+		Type[] inTypes = { nilDouble.getType(), nilDouble.getType() };
+		Type[] outTypes = { nilDouble.getType() };
 
 		// look up a function: Double result = math.add(Double v1, Double v2)
-		final BinaryFunctionOp<Double, Double, Double> function = find( //
-			new Nil<BinaryFunctionOp<Double, Double, Double>>() {}, //
+		final BiFunction<Double, Double, Double> function = find( //
+			new Nil<BiFunction<Double, Double, Double>>() {}, //
 			Arrays.asList(MathAddOp.class), //
 			inTypes, //
 			outTypes //
 		);
 		// execute the function
 		final double answer = function.apply(1.0, 2.0);
-		System.out.println("Function answer = " + answer);
+		assert 3.0 == answer;
 
 		// look up a computer: math.add(BOTH double[] result, double[] v1, double[]
 		// v2)
-		final BinaryComputerOp<double[], double[], double[]> computer = find( //
-			new Nil<BinaryComputerOp<double[], double[], double[]>>() {}, //
+		final Nil<double[]> nilDoubleArray = new Nil<double[]>() {};
+		inTypes = new Type[] { nilDoubleArray.getType(), nilDoubleArray.getType(), nilDoubleArray.getType() };
+		outTypes = new Type[] { nilDoubleArray.getType() };
+		final BiComputer<double[], double[], double[]> computer = find( //
+			new Nil<BiComputer<double[], double[], double[]>>() {}, //
 			Arrays.asList(MathAddOp.class), //
 			inTypes, //
 			outTypes //
@@ -91,7 +99,7 @@ public class OpsTest {
 		final double[] a2 = { 2, 4, 9 };
 		final double[] result = new double[a2.length];
 		computer.compute(a1, a2, result);
-		System.out.println("Computer result = " + Arrays.toString(result));
+		assert Arrays.deepEquals(Arrays.stream(result).boxed().toArray(Double[]::new), new Double[] {5.0, 9.0, 16.0});
 	}
 
 	private <T> T find(final Nil<T> opType, final List<Type> opAdditionalTypes,
@@ -99,10 +107,10 @@ public class OpsTest {
 	{
 		// FIXME - createTypes does not support multiple additional types,
 		// or multiple output types. We will need to generalize this.
-		final OpRef ref = OpRef.createTypes(opType.getType(), //
+		final OpRef ref = OpRef.fromTypes(opType.getType(), //
 			opAdditionalTypes.get(0), outTypes[0], (Object[]) inTypes);
 		@SuppressWarnings("unchecked")
-		final T op = (T) ops.op(ref);
+		final T op = (T) ops.op(ref).object();
 		return op;
 	}
 
@@ -112,7 +120,7 @@ public class OpsTest {
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathAddDoubles implements MathAddOp, BinaryFunctionOp<Double, Double, Double> {
+	public static class MathAddDoubles implements MathAddOp, BiFunction<Double, Double, Double> {
 
 		@Override
 		public Double apply(Double t, Double u) {
@@ -124,7 +132,7 @@ public class OpsTest {
 	@Parameter(key = "integer1")
 	@Parameter(key = "integer2")
 	@Parameter(key = "resultInteger", type = ItemIO.OUTPUT)
-	public static class MathAddBigIntegers implements MathAddOp, BinaryFunctionOp<BigInteger, BigInteger, BigInteger> {
+	public static class MathAddBigIntegers implements MathAddOp, BiFunction<BigInteger, BigInteger, BigInteger> {
 
 		@Override
 		public BigInteger apply(BigInteger t, BigInteger u) {
@@ -136,7 +144,7 @@ public class OpsTest {
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathAddDoubleArrays implements MathAddOp, BinaryComputerOp<double[], double[], double[]> {
+	public static class MathAddDoubleArrays implements MathAddOp, BiComputer<double[], double[], double[]> {
 
 		@Override
 		public void compute(double[] in1, double[] in2, double[] out) {

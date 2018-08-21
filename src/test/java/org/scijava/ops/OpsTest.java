@@ -30,27 +30,22 @@
 package org.scijava.ops;
 
 import java.lang.reflect.Type;
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.DoubleStream;
+import java.util.function.Function;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.Context;
-import org.scijava.param.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
+import org.scijava.ops.base.OpService;
+import org.scijava.ops.impl.math.Add.MathAddDoublesFunction;
+import org.scijava.ops.impl.math.Add.MathAddOp;
+import org.scijava.ops.impl.math.Sqrt.MathSqrtOp;
 import org.scijava.types.Nil;
-import org.scijava.util.ArrayUtils;
-
-import com.google.common.collect.Streams;
 
 public class OpsTest {
-	
+
 	private Context context;
 	private OpService ops;
 
@@ -66,91 +61,75 @@ public class OpsTest {
 		context = null;
 		ops = null;
 	}
-
+	
 	@Test
-	public void testOps() {
-		final Nil<Double> nilDouble = new Nil<Double>() {};
-		Type[] inTypes = { nilDouble.getType(), nilDouble.getType() };
-		Type[] outTypes = { nilDouble.getType() };
-
-		// look up a function: Double result = math.add(Double v1, Double v2)
-		final BiFunction<Double, Double, Double> function = find( //
-			new Nil<BiFunction<Double, Double, Double>>() {}, //
-			Arrays.asList(MathAddOp.class), //
-			inTypes, //
-			outTypes //
+	public void testUnaryOps() {
+		Class<Double> c = Double.class;
+		Function<Double, Double> sqrtFunction = ops.find( //
+				new Nil<Function<Double, Double>>() {
+				}, //
+				Arrays.asList(MathSqrtOp.class), //
+				new Type[] { c }, //
+				new Type[] { c } //
 		);
 		// execute the function
-		final double answer = function.apply(1.0, 2.0);
-		assert 3.0 == answer;
+		double answer = sqrtFunction.apply(16.0);
+		assert 4.0 == answer;
+		
+		Class<double[]> cArray = double[].class;
+		Computer<double[], double[]> sqrtComputer = ops.find( //
+				new Nil<Computer<double[], double[]>>() {
+				}, //
+				Arrays.asList(MathSqrtOp.class), //
+				new Type[] { cArray, cArray }, //
+				new Type[] { cArray } //
+		);
+		// execute the function
+		double[] result = new double[2];
+		sqrtComputer.compute(new double[] {16.0, 81.0}, result);
+		assert Arrays.deepEquals(Arrays.stream(result).boxed().toArray(Double[]::new), new Double[] { 4.0, 9.0 });
+	}
 
-		// look up a computer: math.add(BOTH double[] result, double[] v1, double[]
-		// v2)
-		final Nil<double[]> nilDoubleArray = new Nil<double[]>() {};
-		inTypes = new Type[] { nilDoubleArray.getType(), nilDoubleArray.getType(), nilDoubleArray.getType() };
-		outTypes = new Type[] { nilDoubleArray.getType() };
-		final BiComputer<double[], double[], double[]> computer = find( //
-			new Nil<BiComputer<double[], double[], double[]>>() {}, //
-			Arrays.asList(MathAddOp.class), //
-			inTypes, //
-			outTypes //
+	@Test
+	public void testBinaryOps() {
+		Class<Double> c = Double.class;
+		// look up a function: Double result = math.add(Double v1, Double v2)
+		BiFunction<Double, Double, Double> function = ops.find( //
+				new Nil<BiFunction<Double, Double, Double>>() {
+				}, //
+				Arrays.asList(MathAddOp.class), //
+				new Type[] { c, c }, //
+				new Type[] { c } //
+		);
+		// execute the function
+		double answer = function.apply(1.0, 2.0);
+		assert 3.0 == answer;
+		
+		// look up a specific implementation
+		function = ops.find( //
+				new Nil<BiFunction<Double, Double, Double>>() {
+				}, //
+				Arrays.asList(MathAddDoublesFunction.class), //
+				new Type[] { c, c }, //
+				new Type[] { c } //
+		);
+		answer = function.apply(10.0, 76.0);
+		assert 86.0 == answer;
+
+		// look up a computer: math.add(BOTH double[] result, double[] v1,
+		// double[] v2)
+		Class<double[]> cArray = double[].class;
+		final BiComputer<double[], double[], double[]> computer = ops.find( //
+				new Nil<BiComputer<double[], double[], double[]>>() {
+				}, //
+				Arrays.asList(MathAddOp.class), //
+				new Type[] { cArray, cArray, cArray }, //
+				new Type[] { cArray } //
 		);
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
 		final double[] result = new double[a2.length];
 		computer.compute(a1, a2, result);
-		assert Arrays.deepEquals(Arrays.stream(result).boxed().toArray(Double[]::new), new Double[] {5.0, 9.0, 16.0});
-	}
-
-	private <T> T find(final Nil<T> opType, final List<Type> opAdditionalTypes,
-		final Type[] inTypes, final Type[] outTypes)
-	{
-		// FIXME - createTypes does not support multiple additional types,
-		// or multiple output types. We will need to generalize this.
-		final OpRef ref = OpRef.fromTypes(opType.getType(), //
-			opAdditionalTypes.get(0), outTypes[0], (Object[]) inTypes);
-		@SuppressWarnings("unchecked")
-		final T op = (T) ops.op(ref).object();
-		return op;
-	}
-
-	private interface MathAddOp extends Op {}
-
-	@Plugin(type = MathAddOp.class)
-	@Parameter(key = "number1")
-	@Parameter(key = "number2")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathAddDoubles implements MathAddOp, BiFunction<Double, Double, Double> {
-
-		@Override
-		public Double apply(Double t, Double u) {
-			return t + u;
-		}
-	}
-
-	@Plugin(type = MathAddOp.class)
-	@Parameter(key = "integer1")
-	@Parameter(key = "integer2")
-	@Parameter(key = "resultInteger", type = ItemIO.OUTPUT)
-	public static class MathAddBigIntegers implements MathAddOp, BiFunction<BigInteger, BigInteger, BigInteger> {
-
-		@Override
-		public BigInteger apply(BigInteger t, BigInteger u) {
-			return t.add(u);
-		}
-	}
-
-	@Plugin(type = MathAddOp.class)
-	@Parameter(key = "array1")
-	@Parameter(key = "array2")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathAddDoubleArrays implements MathAddOp, BiComputer<double[], double[], double[]> {
-
-		@Override
-		public void compute(double[] in1, double[] in2, double[] out) {
-			for (int i = 0; i < out.length; i++) {
-				out[i] = in1[i] + in2[i];
-			}
-		}
+		assert Arrays.deepEquals(Arrays.stream(result).boxed().toArray(Double[]::new), new Double[] { 5.0, 9.0, 16.0 });
 	}
 }

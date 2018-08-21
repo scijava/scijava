@@ -27,10 +27,9 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.base;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.scijava.struct.Member;
@@ -138,10 +137,10 @@ public final class OpUtils {
 
 	// -- Helper methods --
 
-	/** Filters a list with the given predicate, concealing boilerplate crap. */
-	private static <T> List<T> filter(final List<T> list, final Predicate<T> p) {
-		return list.stream().filter(p).collect(Collectors.toList());
-	}
+//	/** Filters a list with the given predicate, concealing boilerplate crap. */
+//	private static <T> List<T> filter(final List<T> list, final Predicate<T> p) {
+//		return list.stream().filter(p).collect(Collectors.toList());
+//	}
 
 //	// TODO: Move to Context.
 //	private static boolean isInjectable(final Class<?> type) {

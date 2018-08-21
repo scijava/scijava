@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.base;
 
 import java.util.List;
 
@@ -106,7 +106,7 @@ public interface OpMatchingService extends SciJavaService {
 	 * @return A populated {@link StructInstance} for the matching op, or
 	 *         null if the arguments do not match the op.
 	 */
-	StructInstance<? extends Op> match(OpCandidate candidate);
+	StructInstance<?> match(OpCandidate candidate);
 
 	/**
 	 * Checks that each parameter is type-compatible with its corresponding

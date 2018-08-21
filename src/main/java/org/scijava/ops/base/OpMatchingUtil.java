@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.base;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

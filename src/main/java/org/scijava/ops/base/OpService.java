@@ -26,13 +26,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops;
+package org.scijava.ops.base;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
+import org.scijava.ops.Op;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -42,6 +45,7 @@ import org.scijava.service.AbstractService;
 import org.scijava.service.SciJavaService;
 import org.scijava.service.Service;
 import org.scijava.struct.StructInstance;
+import org.scijava.ops.types.Nil;
 
 /**
  * Service that manages ops.
@@ -80,5 +84,16 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			}
 		}
 		return infos;
+	}
+	
+	public <T> T find(final Nil<T> opType, final List<Type> opAdditionalTypes, final Type[] inTypes,
+			final Type[] outTypes) {
+		// FIXME - createTypes does not support multiple additional types,
+		// or multiple output types. We will need to generalize this.
+		final OpRef ref = OpRef.fromTypes(opType.getType(), //
+				opAdditionalTypes.get(0), outTypes[0], (Object[]) inTypes);
+		@SuppressWarnings("unchecked")
+		final T op = (T) op(ref).object();
+		return op;
 	}
 }

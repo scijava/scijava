@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.base;
 
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -60,7 +60,7 @@ public class OpCandidate {
 	private final OpRef ref;
 	private final OpInfo info;
 
-	private StructInstance<? extends Op> structInstance;
+	private StructInstance<?> structInstance;
 	private StatusCode code;
 	private String message;
 	private Member<?> item;
@@ -99,7 +99,7 @@ public class OpCandidate {
 	}
 
 	/** Sets the {@link StructInstance} instance associated with the attempted match. */
-	public void setStructInstance(final StructInstance<? extends Op> instance) {
+	public void setStructInstance(final StructInstance<?> instance) {
 		this.structInstance = instance;
 	}
 

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.base;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -38,10 +38,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.scijava.Context;
-import org.scijava.Initializable;
 import org.scijava.log.LogService;
-import org.scijava.module.Module;
-import org.scijava.ops.OpCandidate.StatusCode;
+import org.scijava.ops.base.OpCandidate.StatusCode;
 import org.scijava.param.ParameterMember;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -128,7 +126,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	@Override
-	public StructInstance<? extends Op> match(final OpCandidate candidate) {
+	public StructInstance<?> match(final OpCandidate candidate) {
 		if (!valid(candidate))
 			return null;
 		if (!outputsMatch(candidate))
@@ -205,7 +203,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	
 	private void populateCandidates(final List<OpCandidate> candidates) {
 		for(OpCandidate candidate : candidates) {
-			StructInstance<? extends Op> inst =  createOp(candidate, candidate.getArgs());
+			StructInstance<?> inst =  createOp(candidate, candidate.getArgs());
 			candidate.setStructInstance(inst);
 		}
 	}
@@ -473,7 +471,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	/** Helper method of {@link #match(OpCandidate)}. */
-	private StructInstance<? extends Op> match(final OpCandidate candidate, final Object[] args) {
+	private StructInstance<?> match(final OpCandidate candidate, final Object[] args) {
 		// check that each parameter is compatible with its argument
 		final int badIndex = typesMatch(candidate, args);
 		if (badIndex >= 0) {
@@ -515,9 +513,9 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	/** Helper method of {@link #match(OpCandidate, Object[])}. */
-	private StructInstance<? extends Op> createOp(final OpCandidate candidate, final Object... args) {
-		final Class<? extends Op> opClass = candidate.opInfo().opClass();
-		final Op object;
+	private StructInstance<?> createOp(final OpCandidate candidate, final Object... args) {
+		final Class<?> opClass = candidate.opInfo().opClass();
+		final Object object;
 		try {
 			// TODO: Consider whether this is really the best way to
 			// instantiate the op class here. No framework usage?
@@ -529,7 +527,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			log.error("Cannot instantiate op: " + opClass.getName(), e);
 			return null;
 		}
-		final StructInstance<? extends Op> op = candidate.struct().createInstance(object);
+		final StructInstance<?> op = candidate.struct().createInstance(object);
 		// populate the inputs and return the op
 		return assignInputs(op, args);
 	}

@@ -29,6 +29,8 @@
 
 package org.scijava.ops.base;
 
+import org.scijava.log.LogService;
+import org.scijava.plugin.Parameter;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -43,32 +45,19 @@ import org.scijava.struct.StructInstance;
 public class OpCandidate {
 
 	public static enum StatusCode {
-		MATCH,
-		INVALID_MODULE,
-		TOO_FEW_OUTPUTS,
-		OUTPUT_TYPES_DO_NOT_MATCH,
-		TOO_MANY_ARGS,
-		TOO_FEW_ARGS,
-		ARG_TYPES_DO_NOT_MATCH,
-		REQUIRED_ARG_IS_NULL,
-		CANNOT_CONVERT,
-		DOES_NOT_CONFORM,
-		OTHER
+		MATCH, INVALID_MODULE, TOO_FEW_OUTPUTS, OUTPUT_TYPES_DO_NOT_MATCH, TOO_MANY_ARGS, TOO_FEW_ARGS, ARG_TYPES_DO_NOT_MATCH, REQUIRED_ARG_IS_NULL, CANNOT_CONVERT, DOES_NOT_CONFORM, OTHER
 	}
 
 	private final OpEnvironment ops;
 	private final OpRef ref;
 	private final OpInfo info;
 
-	private StructInstance<?> structInstance;
 	private StatusCode code;
 	private String message;
-	private Member<?> item;
+	private Member<?> statusItem;
 	private Object[] args;
 
-	public OpCandidate(final OpEnvironment ops, final OpRef ref,
-		final OpInfo info)
-	{
+	public OpCandidate(final OpEnvironment ops, final OpRef ref, final OpInfo info) {
 		this.ops = ops;
 		this.ref = ref;
 		this.info = info;
@@ -98,16 +87,6 @@ public class OpCandidate {
 		return info.struct();
 	}
 
-	/** Sets the {@link StructInstance} instance associated with the attempted match. */
-	public void setStructInstance(final StructInstance<?> instance) {
-		this.structInstance = instance;
-	}
-
-	/** Gets the {@link StructInstance} instance associated with the attempted match. */
-	public StructInstance<?> getStructInstance() {
-		return structInstance;
-	}
-
 	/** Sets the status of the matching attempt. */
 	public void setStatus(final StatusCode code) {
 		setStatus(code, null, null);
@@ -119,12 +98,10 @@ public class OpCandidate {
 	}
 
 	/** Sets the status of the matching. */
-	public void setStatus(final StatusCode code, final String message,
-		final Member<?> item)
-	{
+	public void setStatus(final StatusCode code, final String message, final Member<?> item) {
 		this.code = code;
 		this.message = message;
-		this.item = item;
+		this.statusItem = item;
 	}
 
 	/** Gets the matching status code. */
@@ -138,64 +115,66 @@ public class OpCandidate {
 	}
 
 	/**
-	 * Gets the status item related to the matching status, if any. Typically, if
-	 * set, this is the parameter for which matching failed.
+	 * Gets the status item related to the matching status, if any. Typically,
+	 * if set, this is the parameter for which matching failed.
 	 */
 	public Member<?> getStatusItem() {
-		return item;
+		return statusItem;
 	}
 
 	/** Gets a descriptive status message in human readable form. */
 	public String getStatus() {
 		final StatusCode statusCode = getStatusCode();
-		if (statusCode == null) return null;
+		if (statusCode == null)
+			return null;
 
 		final StringBuilder sb = new StringBuilder();
 		switch (statusCode) {
-			case MATCH:
-				sb.append("MATCH");
-				break;
-			case INVALID_MODULE:
-				sb.append("Invalid op: " + info.struct());
-				// TODO: List validity problems.
-				break;
-			case TOO_FEW_OUTPUTS:
-				sb.append("Too few outputs");
-				break;
-			case OUTPUT_TYPES_DO_NOT_MATCH:
-				sb.append("Output types do not match");
-				break;
-			case TOO_MANY_ARGS:
-				sb.append("Too many arguments");
-				break;
-			case TOO_FEW_ARGS:
-				sb.append("Not enough arguments");
-				break;
-			case ARG_TYPES_DO_NOT_MATCH:
-				sb.append("Argument types do not match");
-				break;
-			case REQUIRED_ARG_IS_NULL:
-				sb.append("Missing required argument");
-				break;
-			case CANNOT_CONVERT:
-				sb.append("Inconvertible type");
-				break;
-			case DOES_NOT_CONFORM:
-				sb.append("Inputs do not conform to op rules");
-				break;
-			default:
-				return getStatusMessage();
+		case MATCH:
+			sb.append("MATCH");
+			break;
+		case INVALID_MODULE:
+			sb.append("Invalid op: " + info.struct());
+			// TODO: List validity problems.
+			break;
+		case TOO_FEW_OUTPUTS:
+			sb.append("Too few outputs");
+			break;
+		case OUTPUT_TYPES_DO_NOT_MATCH:
+			sb.append("Output types do not match");
+			break;
+		case TOO_MANY_ARGS:
+			sb.append("Too many arguments");
+			break;
+		case TOO_FEW_ARGS:
+			sb.append("Not enough arguments");
+			break;
+		case ARG_TYPES_DO_NOT_MATCH:
+			sb.append("Argument types do not match");
+			break;
+		case REQUIRED_ARG_IS_NULL:
+			sb.append("Missing required argument");
+			break;
+		case CANNOT_CONVERT:
+			sb.append("Inconvertible type");
+			break;
+		case DOES_NOT_CONFORM:
+			sb.append("Inputs do not conform to op rules");
+			break;
+		default:
+			return getStatusMessage();
 		}
 		final String msg = getStatusMessage();
-		if (msg != null) sb.append(": " + msg);
+		if (msg != null)
+			sb.append(": " + msg);
 
 		return sb.toString();
 	}
-	
+
 	public Object[] getArgs() {
 		return args;
 	}
-	
+
 	public void setArgs(final Object[] args) {
 		this.args = args;
 	}
@@ -203,5 +182,29 @@ public class OpCandidate {
 	@Override
 	public String toString() {
 		return info.toString();
+	}
+
+	public StructInstance<?> createOp() {
+		// Nobody seems to set it to MATCH yet
+		// if (!getStatusCode().equals(StatusCode.MATCH)) {
+		// // TODO: Logging
+		// return null;
+		// }
+
+		final Class<?> opClass = opInfo().opClass();
+		final Object object;
+		try {
+			// TODO: Consider whether this is really the best way to
+			// instantiate the op class here. No framework usage?
+			// E.g., what about pluginService.createInstance?
+			object = opClass.newInstance();
+		} catch (final InstantiationException | IllegalAccessException e) {
+			// TODO: Think about whether exception handling here should be
+			// different.
+			// TODO: Logging
+			// log.error("Cannot instantiate op: " + opClass.getName(), e);
+			return null;
+		}
+		return struct().createInstance(object);
 	}
 }

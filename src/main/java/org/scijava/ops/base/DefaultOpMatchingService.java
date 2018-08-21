@@ -78,8 +78,6 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		assertCandidatesFound(candidates, refs.get(0));
 		// narrow down candidates to the exact matches
 		final List<OpCandidate> matches = filterMatches(candidates);
-		// create the ops and populate the stuct instance of the candidates
-		populateCandidates(matches);
 
 		return singleMatch(candidates, matches);
 	}
@@ -144,21 +142,6 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	@Override
-	public <C> StructInstance<C> assignInputs(final StructInstance<C> op, final Object... args) {
-		int i = 0;
-		for (final MemberInstance<?> memberInstance : OpUtils.inputs(op)) {
-			// TODO: Value coercion / conversion?
-			
-			// Nothing to assign for now? We are dealing with functional parameter members and are only looking
-			// for ops which match certao types. This was already checked before. Hence we skip this step for now.
-			// memberInstance.set(args[i++]);
-			
-			// TODO: Resolve input? What happens if we don't?
-		}
-		return op;
-	}
-
-	@Override
 	public Object[] padArgs(final OpCandidate candidate) {
 		int inputCount = 0, requiredCount = 0;
 		for (final Member<?> item : OpUtils.inputs(candidate.struct())) {
@@ -200,13 +183,6 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	// -- Helper methods --
-	
-	private void populateCandidates(final List<OpCandidate> candidates) {
-		for(OpCandidate candidate : candidates) {
-			StructInstance<?> inst =  createOp(candidate, candidate.getArgs());
-			candidate.setStructInstance(inst);
-		}
-	}
 
 	private boolean isRequired(final Member<?> item) {
 		return item instanceof ParameterMember && //
@@ -391,9 +367,9 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	/**
-	 * Extracts and returns the single match from the given list of matches. If there
-	 * is not exactly one match, an {@link IllegalArgumentException} is thrown
-	 * with an analysis of the problem(s).
+	 * Extracts and returns the single match from the given list of matches. If
+	 * there is not exactly one match, an {@link IllegalArgumentException} is
+	 * thrown with an analysis of the problem(s).
 	 * <p>
 	 * Helper method of {@link #findMatch}.
 	 * </p>
@@ -410,16 +386,15 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	private OpCandidate singleMatch(final List<OpCandidate> candidates, final List<OpCandidate> matches) {
 		if (matches.size() == 1) {
 			// a single match: initialize and return it
-			final StructInstance<?> m = matches.get(0).getStructInstance();
+			OpCandidate match = matches.get(0);
 			if (log.isDebug()) {
-				log.debug(
-						"Selected '" + matches.get(0).getRef().getLabel() + "' op: " + m.object().getClass().getName());
+				log.debug("Selected '" + match.getRef().getLabel() + "' op: " + match.opInfo().opClass().getName());
 			}
 
-//			// initialize the op, if appropriate
-//			if (m.object() instanceof Initializable) {
-//				((Initializable) m.object()).initialize();
-//			}
+			// // initialize the op, if appropriate
+			// if (m.object() instanceof Initializable) {
+			// ((Initializable) m.object()).initialize();
+			// }
 
 			return matches.get(0);
 		}
@@ -479,9 +454,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			candidate.setStatus(StatusCode.ARG_TYPES_DO_NOT_MATCH, message);
 			return null;
 		}
-
-		// create struct instance and assign the inputs
-		return createOp(candidate, args);
+		return candidate.createOp();
 	}
 
 	/**
@@ -510,26 +483,6 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			}
 		}
 		throw new IllegalArgumentException("Invalid index: " + index);
-	}
-
-	/** Helper method of {@link #match(OpCandidate, Object[])}. */
-	private StructInstance<?> createOp(final OpCandidate candidate, final Object... args) {
-		final Class<?> opClass = candidate.opInfo().opClass();
-		final Object object;
-		try {
-			// TODO: Consider whether this is really the best way to
-			// instantiate the op class here. No framework usage?
-			// E.g., what about pluginService.createInstance?
-			object = opClass.newInstance();
-		} catch (final InstantiationException | IllegalAccessException e) {
-			// TODO: Think about whether exception handling here should be
-			// different.
-			log.error("Cannot instantiate op: " + opClass.getName(), e);
-			return null;
-		}
-		final StructInstance<?> op = candidate.struct().createInstance(object);
-		// populate the inputs and return the op
-		return assignInputs(op, args);
 	}
 
 	/** Helper method of {@link #match(OpCandidate, Object[])}. */

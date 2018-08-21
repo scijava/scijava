@@ -66,7 +66,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	public StructInstance<?> op(OpRef ref) {
 		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.getStructInstance();
+		return match.createOp();
 	}
 	
 	@Override
@@ -86,14 +86,19 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return infos;
 	}
 	
-	public <T> T find(final Nil<T> opType, final List<Type> opAdditionalTypes, final Type[] inTypes,
+	public <T> StructInstance<T> findStructInstance(final Nil<T> opType, final List<Type> opAdditionalTypes, final Type[] inTypes,
 			final Type[] outTypes) {
 		// FIXME - createTypes does not support multiple additional types,
 		// or multiple output types. We will need to generalize this.
 		final OpRef ref = OpRef.fromTypes(opType.getType(), //
 				opAdditionalTypes.get(0), outTypes[0], (Object[]) inTypes);
 		@SuppressWarnings("unchecked")
-		final T op = (T) op(ref).object();
+		final StructInstance<T> op = (StructInstance<T>) op(ref);
 		return op;
+	}
+	
+	public <T> T findOp(final Nil<T> opType, final List<Type> opAdditionalTypes, final Type[] inTypes,
+			final Type[] outTypes) {
+		return findStructInstance(opType, opAdditionalTypes, inTypes, outTypes).object();
 	}
 }

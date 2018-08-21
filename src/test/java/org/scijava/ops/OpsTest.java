@@ -65,7 +65,7 @@ public class OpsTest {
 	@Test
 	public void testUnaryOps() {
 		Class<Double> c = Double.class;
-		Function<Double, Double> sqrtFunction = ops.find( //
+		Function<Double, Double> sqrtFunction = ops.findOp( //
 				new Nil<Function<Double, Double>>() {
 				}, //
 				Arrays.asList(MathSqrtOp.class), //
@@ -77,7 +77,7 @@ public class OpsTest {
 		assert 4.0 == answer;
 		
 		Class<double[]> cArray = double[].class;
-		Computer<double[], double[]> sqrtComputer = ops.find( //
+		Computer<double[], double[]> sqrtComputer = ops.findOp( //
 				new Nil<Computer<double[], double[]>>() {
 				}, //
 				Arrays.asList(MathSqrtOp.class), //
@@ -94,7 +94,7 @@ public class OpsTest {
 	public void testBinaryOps() {
 		Class<Double> c = Double.class;
 		// look up a function: Double result = math.add(Double v1, Double v2)
-		BiFunction<Double, Double, Double> function = ops.find( //
+		BiFunction<Double, Double, Double> function = ops.findOp( //
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				Arrays.asList(MathAddOp.class), //
@@ -106,7 +106,7 @@ public class OpsTest {
 		assert 3.0 == answer;
 		
 		// look up a specific implementation
-		function = ops.find( //
+		function = ops.findOp( //
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				Arrays.asList(MathAddDoublesFunction.class), //
@@ -119,7 +119,7 @@ public class OpsTest {
 		// look up a computer: math.add(BOTH double[] result, double[] v1,
 		// double[] v2)
 		Class<double[]> cArray = double[].class;
-		final BiComputer<double[], double[], double[]> computer = ops.find( //
+		final BiComputer<double[], double[], double[]> computer = ops.findOp( //
 				new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				Arrays.asList(MathAddOp.class), //

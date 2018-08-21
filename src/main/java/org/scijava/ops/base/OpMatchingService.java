@@ -116,8 +116,4 @@ public interface OpMatchingService extends SciJavaService {
 
 	/** Checks the number of args, padding optional args with null as needed. */
 	Object[] padArgs(OpCandidate candidate);
-
-	/** Assigns arguments into the given {@link StructInstance}. */
-	<C> StructInstance<C> assignInputs(StructInstance<C> op, Object... args);
-
 }

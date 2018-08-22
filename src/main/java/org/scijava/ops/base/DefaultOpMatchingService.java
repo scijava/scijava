@@ -106,7 +106,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 
 		List<OpCandidate> matches;
 
-		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
+		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand, padArgs(cand)));
 		if (!matches.isEmpty())
 			return matches;
 
@@ -129,7 +129,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			return null;
 		if (!outputsMatch(candidate))
 			return null;
-		final Object[] args = padArgs(candidate);
+		final Type[] args = padArgs(candidate);
 		return args == null ? null : match(candidate, args);
 	}
 
@@ -137,19 +137,19 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	public boolean typesMatch(final OpCandidate candidate) {
 		if (!valid(candidate))
 			return false;
-		final Object[] args = padArgs(candidate);
+		final Type[] args = padArgs(candidate);
 		return args == null ? false : typesMatch(candidate, args) < 0;
 	}
 
 	@Override
-	public Object[] padArgs(final OpCandidate candidate) {
+	public Type[] padArgs(final OpCandidate candidate) {
 		int inputCount = 0, requiredCount = 0;
 		for (final Member<?> item : OpUtils.inputs(candidate.struct())) {
 			inputCount++;
 			if (isRequired(item))
 				requiredCount++;
 		}
-		final Object[] args = candidate.getRef().getArgs();
+		final Type[] args = candidate.getRef().getArgs();
 		if (args.length == inputCount) {
 			// correct number of arguments
 			return args;
@@ -169,7 +169,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		final int argsToPad = inputCount - args.length;
 		final int optionalCount = inputCount - requiredCount;
 		final int optionalsToFill = optionalCount - argsToPad;
-		final Object[] paddedArgs = new Object[inputCount];
+		final Type[] paddedArgs = new Type[inputCount];
 		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
 		for (final Member<?> item : candidate.struct().members()) {
 			if (!isRequired(item) && optionalIndex++ >= optionalsToFill) {
@@ -217,11 +217,10 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		for (final OpCandidate candidate : candidates) {
 			if (!valid(candidate) || !outputsMatch(candidate))
 				continue;
-			final Object[] args = padArgs(candidate);
+			final Type[] args = padArgs(candidate);
 			if (args == null)
 				continue;
-			candidate.setArgs(args);
-			if (missArgs(candidate))
+			if (missArgs(candidate, args))
 				continue;
 			validCandidates.add(candidate);
 		}
@@ -269,10 +268,10 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	 * Helper method of {@link #filterMatches(List)}.
 	 * </p>
 	 */
-	private boolean missArgs(final OpCandidate candidate) {
+	private boolean missArgs(final OpCandidate candidate, final Type[] paddedArgs) {
 		int i = 0;
 		for (final Member<?> member : OpUtils.inputs(candidate)) {
-			if (candidate.getArgs()[i++] == null && isRequired(member)) {
+			if (paddedArgs[i++] == null && isRequired(member)) {
 				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
 				return true;
 			}
@@ -287,13 +286,12 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	 * Helper method of {@link #filterMatches(List)}.
 	 * </p>
 	 */
-	private boolean typesPerfectMatch(final OpCandidate candidate) {
+	private boolean typesPerfectMatch(final OpCandidate candidate, final Type[] paddedArgs) {
 		int i = 0;
-		final Object[] args = candidate.getArgs();
 		for (final Member<?> member : OpUtils.inputs(candidate)) {
-			if (args[i] != null) {
+			if (paddedArgs[i] != null) {
 				final Class<?> typeClass = member.getRawType();
-				final Class<?> argClass = OpMatchingUtil.getClass(args[i]);
+				final Class<?> argClass = OpMatchingUtil.getClass(paddedArgs[i]);
 				if (!typeClass.equals(argClass))
 					return false;
 			}
@@ -322,7 +320,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			}
 			priority = p;
 
-			final int nextLevels = findCastLevels(candidate);
+			final int nextLevels = findCastLevels(candidate, padArgs(candidate));
 			if (nextLevels < 0 || nextLevels > minLevels)
 				continue;
 
@@ -350,13 +348,12 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	 * Helper method of {@link #filterMatches(List)}.
 	 * </p>
 	 */
-	private int findCastLevels(final OpCandidate candidate) {
+	private int findCastLevels(final OpCandidate candidate, final Type[] paddedArgs) {
 		int level = 0, i = 0;
-		final Object[] args = candidate.getArgs();
 		for (final Member<?> member : OpUtils.inputs(candidate)) {
 			final Class<?> type = member.getRawType();
-			if (args[i] != null) {
-				final int currLevel = OpMatchingUtil.findCastLevels(type, OpMatchingUtil.getClass(args[i]));
+			if (paddedArgs[i] != null) {
+				final int currLevel = OpMatchingUtil.findCastLevels(type, OpMatchingUtil.getClass(paddedArgs[i]));
 				if (currLevel < 0)
 					return -1;
 				level += currLevel;
@@ -423,7 +420,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	 * </p>
 	 */
 	private boolean outputsMatch(final OpCandidate candidate) {
-		final Collection<Type> outTypes = candidate.getRef().getOutTypes();
+		final Type[] outTypes = candidate.getRef().getOutTypes();
 		if (outTypes == null)
 			return true; // no constraints on output types
 
@@ -446,7 +443,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	/** Helper method of {@link #match(OpCandidate)}. */
-	private StructInstance<?> match(final OpCandidate candidate, final Object[] args) {
+	private StructInstance<?> match(final OpCandidate candidate, final Type[] args) {
 		// check that each parameter is compatible with its argument
 		final int badIndex = typesMatch(candidate, args);
 		if (badIndex >= 0) {
@@ -461,7 +458,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	 * Checks that each parameter is type-compatible with its corresponding
 	 * argument.
 	 */
-	private int typesMatch(final OpCandidate candidate, final Object[] args) {
+	private int typesMatch(final OpCandidate candidate, final Type[] args) {
 		int i = 0;
 		for (final Member<?> item : OpUtils.inputs(candidate)) {
 			if (!canAssign(candidate, args[i], item))
@@ -471,12 +468,12 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		return -1;
 	}
 
-	/** Helper method of {@link #match(OpCandidate, Object[])}. */
-	private String typeClashMessage(final OpCandidate candidate, final Object[] args, final int index) {
+	/** Helper method of {@link #match(OpCandidate, Type[])}. */
+	private String typeClashMessage(final OpCandidate candidate, final Type[] args, final int index) {
 		int i = 0;
 		for (final Member<?> item : OpUtils.inputs(candidate)) {
 			if (i++ == index) {
-				final Object arg = args[index];
+				final Type arg = args[index];
 				final String argType = arg == null ? "null" : arg.getClass().getName();
 				final Type inputType = item.getType();
 				return index + ": cannot coerce " + argType + " -> " + inputType;
@@ -485,7 +482,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		throw new IllegalArgumentException("Invalid index: " + index);
 	}
 
-	/** Helper method of {@link #match(OpCandidate, Object[])}. */
+	/** Helper method of {@link #match(OpCandidate, Type[])}. */
 	private boolean canAssign(final OpCandidate candidate, final Object arg, final Member<?> item) {
 		if (arg == null) {
 			if (isRequired(item)) {

@@ -105,7 +105,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		final List<OpCandidate> validCandidates = validCandidates(candidates);
 
 		List<OpCandidate> matches;
-
+		// TODO: Do not call padArgs redundantly all the time
 		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand, padArgs(cand)));
 		if (!matches.isEmpty())
 			return matches;
@@ -483,7 +483,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	}
 
 	/** Helper method of {@link #match(OpCandidate, Type[])}. */
-	private boolean canAssign(final OpCandidate candidate, final Object arg, final Member<?> item) {
+	private boolean canAssign(final OpCandidate candidate, final Type arg, final Member<?> item) {
 		if (arg == null) {
 			if (isRequired(item)) {
 				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, item);
@@ -491,9 +491,14 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			}
 			return true;
 		}
-
-		final Type type = item.getType();
-		return Types.isAssignable(arg.getClass(), type);
+		
+		return Types.isAssignable(arg, item.getType());
+		
+//		Type itemType = item.getType();
+//		if (arg instanceof Class && itemType instanceof Class) {
+//			return Types.isAssignable(Types.box((Class<?>)arg), Types.box((Class<?>)itemType));			
+//		}
+//		return Types.isAssignable(arg, itemType);
 		// TODO: Type coercion / conversion?
 	}
 }

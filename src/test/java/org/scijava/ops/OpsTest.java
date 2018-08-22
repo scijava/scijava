@@ -68,7 +68,7 @@ public class OpsTest {
 		Function<Double, Double> sqrtFunction = ops.findOp( //
 				new Nil<Function<Double, Double>>() {
 				}, //
-				Arrays.asList(MathSqrtOp.class), //
+				new Type[] { MathSqrtOp.class }, //
 				new Type[] { c }, //
 				new Type[] { c } //
 		);
@@ -80,7 +80,7 @@ public class OpsTest {
 		Computer<double[], double[]> sqrtComputer = ops.findOp( //
 				new Nil<Computer<double[], double[]>>() {
 				}, //
-				Arrays.asList(MathSqrtOp.class), //
+				new Type[] { MathSqrtOp.class }, //
 				new Type[] { cArray, cArray }, //
 				new Type[] { cArray } //
 		);
@@ -97,7 +97,7 @@ public class OpsTest {
 		BiFunction<Double, Double, Double> function = ops.findOp( //
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
-				Arrays.asList(MathAddOp.class), //
+				new Type[] { MathAddOp.class }, //
 				new Type[] { c, c }, //
 				new Type[] { c } //
 		);
@@ -109,7 +109,7 @@ public class OpsTest {
 		function = ops.findOp( //
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
-				Arrays.asList(MathAddDoublesFunction.class), //
+				new Type[] { MathAddDoublesFunction.class }, //
 				new Type[] { c, c }, //
 				new Type[] { c } //
 		);
@@ -122,7 +122,7 @@ public class OpsTest {
 		final BiComputer<double[], double[], double[]> computer = ops.findOp( //
 				new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
-				Arrays.asList(MathAddOp.class), //
+				new Type[] { MathAddOp.class }, //
 				new Type[] { cArray, cArray, cArray }, //
 				new Type[] { cArray } //
 		);

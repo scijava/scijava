@@ -30,10 +30,7 @@
 package org.scijava.ops.base;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import org.scijava.ops.Op;
@@ -56,35 +53,15 @@ public class OpRef {
 	private final String name;
 
 	/** Types which the op must match. */
-	private final Collection<Type> types;
+	private final Type[] types;
 
 	/** The op's output parameter types, or null for no constraints. */
-	private final List<Type> outTypes;
+	private final Type[] outTypes;
 
 	/** Arguments to be passed to the op. */
-	private final Object[] args;
+	private final Type[] args;
 
 	// -- Static construction methods --
-
-	/**
-	 * Creates a new op reference.
-	 * 
-	 * @param name name of the op, or null for any name.
-	 * @param args arguments to the op.
-	 */
-	public static OpRef from(final String name, final Object... args) {
-		return new OpRef(name, null, null, args);
-	}
-
-	/**
-	 * Creates a new op reference.
-	 * 
-	 * @param type type of op, or null for any type.
-	 * @param args arguments to the op.
-	 */
-	public static OpRef from(final Type type, final Object... args) {
-		return new OpRef(null, types(type), null, args);
-	}
 
 	/**
 	 * Creates a new op reference.
@@ -95,21 +72,9 @@ public class OpRef {
 	 * @param args arguments to the op.
 	 */
 	public static OpRef fromTypes(final Type type1, final Type type2,
-		final Type outType, final Object... args)
+		final Type outType, final Type[] args)
 	{
-		return new OpRef(null, types(type1, type2), types(outType), args);
-	}
-
-	/**
-	 * Creates a new op reference.
-	 * 
-	 * @param types type constraints of op, or null for any type.
-	 * @param args arguments to the op.
-	 */
-	public static OpRef fromTypes(final Collection<? extends Type> types,
-		final Object... args)
-	{
-		return new OpRef(null, types, null, args);
+		return new OpRef(null, filterNulls(type1, type2), filterNulls(outType), filterNulls(args));
 	}
 
 	// -- Constructor --
@@ -122,12 +87,12 @@ public class OpRef {
 	 * @param outTypes the op's required output types.
 	 * @param args arguments to the op.
 	 */
-	public OpRef(final String name, final Collection<? extends Type> types,
-		final Collection<? extends Type> outTypes, final Object... args)
+	public OpRef(final String name, final Type[] types,
+		final Type[] outTypes, final Type[] args)
 	{
 		this.name = name;
-		this.types = list(types);
-		this.outTypes = list(outTypes);
+		this.types = types;
+		this.outTypes = outTypes;
 		this.args = args;
 	}
 
@@ -139,7 +104,7 @@ public class OpRef {
 	}
 
 	/** Gets the types which the op must match. */
-	public Collection<Type> getTypes() {
+	public Type[] getTypes() {
 		return types;
 	}
 
@@ -147,12 +112,12 @@ public class OpRef {
 	 * Gets the op's output types (one constraint per output), or null for no
 	 * constraints.
 	 */
-	public List<Type> getOutTypes() {
+	public Type[] getOutTypes() {
 		return outTypes;
 	}
 
 	/** Gets the op's arguments. */
-	public Object[] getArgs() {
+	public Type[] getArgs() {
 		return args;
 	}
 
@@ -213,7 +178,7 @@ public class OpRef {
 		if (!Objects.equals(name, other.name)) return false;
 		if (!Objects.equals(types, other.types)) return false;
 		if (!Objects.equals(outTypes, other.outTypes)) return false;
-		if (!Arrays.equals(args, other.args)) return false;
+		if (!Objects.equals(args, other.args)) return false;
 		return true;
 	}
 
@@ -223,12 +188,11 @@ public class OpRef {
 	}
 
 	// -- Utility methods --
-
-	public static List<Type> types(final Type... types) {
-		final ArrayList<Type> list = new ArrayList<>();
-		for (Type t : types) if (t != null) list.add(t);
-		return list;
+	
+	public static Type[] filterNulls(final Type... types) {
+		return Arrays.stream(types).filter(t -> t != null).toArray(Type[]::new);
 	}
+	
 
 	// -- Helper methods --
 
@@ -237,11 +201,4 @@ public class OpRef {
 		if (sb.length() > 0) sb.append("/");
 		sb.append(s);
 	}
-
-	private List<Type> list(final Collection<? extends Type> c) {
-		final ArrayList<Type> list = new ArrayList<>();
-		if (c != null) list.addAll(c);
-		return list;
-	}
-
 }

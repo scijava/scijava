@@ -29,8 +29,8 @@
 
 package org.scijava.ops.base;
 
-import org.scijava.log.LogService;
-import org.scijava.plugin.Parameter;
+import java.lang.reflect.Type;
+
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -55,7 +55,6 @@ public class OpCandidate {
 	private StatusCode code;
 	private String message;
 	private Member<?> statusItem;
-	private Object[] args;
 
 	public OpCandidate(final OpEnvironment ops, final OpRef ref, final OpInfo info) {
 		this.ops = ops;
@@ -169,14 +168,6 @@ public class OpCandidate {
 			sb.append(": " + msg);
 
 		return sb.toString();
-	}
-
-	public Object[] getArgs() {
-		return args;
-	}
-
-	public void setArgs(final Object[] args) {
-		this.args = args;
 	}
 
 	@Override

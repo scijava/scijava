@@ -149,7 +149,7 @@ public class OpRef {
 
 	@Override
 	public String toString() {
-		return types.toString();
+		return Arrays.deepToString(types);
 //		StringBuilder sb = new StringBuilder();
 //		sb.append(getLabel());
 //		sb.append("(");

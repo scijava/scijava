@@ -114,6 +114,8 @@ public class OpInfo {
 				sb.append(",\n\t\t");
 			}
 			sb.append(arg.getType().toString());
+			sb.append(" ");
+			sb.append(arg.getKey());
 		}
 		sb.append(")\n");
 		return sb.toString();

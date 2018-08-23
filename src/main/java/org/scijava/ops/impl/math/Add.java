@@ -1,13 +1,17 @@
 package org.scijava.ops.impl.math;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 import org.scijava.ops.BiComputer;
 import org.scijava.ops.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
+
+import com.google.common.collect.Streams;
 
 public class Add {
 
@@ -22,6 +26,20 @@ public class Add {
 		@Override
 		public Double apply(Double t, Double u) {
 			return t + u;
+		}
+	}
+
+	@Plugin(type = MathAddOp.class)
+	@Parameter(key = "array1")
+	@Parameter(key = "array2")
+	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
+	public static class MathPointwiseAddDoubleArraysFunction
+			implements MathAddOp, BiFunction<double[], double[], double[]> {
+		@Override
+		public double[] apply(double[] arr1, double[] arr2) {
+			Stream<Double> s1 = Arrays.stream(arr1).boxed();
+			Stream<Double> s2 = Arrays.stream(arr2).boxed();
+			return Streams.zip(s1, s2, (num1, num2) -> num1 + num2).mapToDouble(Double::doubleValue).toArray();
 		}
 	}
 

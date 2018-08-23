@@ -173,7 +173,7 @@ public class OpsTest {
 		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
 	
-	private boolean arrayEquals(double[] arr1, Double... arr2) {
+	static boolean arrayEquals(double[] arr1, Double... arr2) {
 		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new), arr2);
 	}
 }

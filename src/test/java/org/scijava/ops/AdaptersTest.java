@@ -49,7 +49,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				new Type[] { cArray } //
 		);
 
-		BiFunction<double[], double[], double[]> computerAsFunction = Adapters.asBiFunction(computer, (arr1, arr2) -> {
+		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer, (arr1, arr2) -> {
 			return new double[arr1.length];
 		});
 
@@ -71,7 +71,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				new Type[] { c } //
 		);
 
-		BiComputer<double[], double[], double[]> functionAsComputer = Adapters.asBiComputer(function, (from, to) -> {
+		BiComputer<double[], double[], double[]> functionAsComputer = Adapt.Functions.asBiComputer(function, (from, to) -> {
 			for (int i = 0; i < from.length; i++) {
 				to[i] = from[i];
 			}

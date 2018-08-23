@@ -32,31 +32,11 @@ package org.scijava.ops;
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.scijava.Context;
-import org.scijava.ops.base.OpService;
 import org.scijava.ops.impl.math.Add.MathAddOp;
 import org.scijava.ops.types.Nil;
 
-public class AdaptersTest {
-
-	private Context context;
-	private OpService ops;
-
-	@Before
-	public void setUp() {
-		context = new Context(OpService.class);
-		ops = context.service(OpService.class);
-	}
-
-	@After
-	public void tearDown() {
-		context.dispose();
-		context = null;
-		ops = null;
-	}
+public class AdaptersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testComputerAsFunction() {

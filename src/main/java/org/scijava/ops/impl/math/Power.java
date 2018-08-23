@@ -20,7 +20,7 @@ public class Power {
 	public static class MathPowerDoublConstantFunction implements MathPowerOp, Function<Double, Double> {
 
 		@Parameter
-		private Double exponent;
+		private double exponent;
 
 		@Override
 		public Double apply(Double t) {

@@ -491,14 +491,15 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			}
 			return true;
 		}
-		
+
 		return Types.isAssignable(arg, item.getType());
-		
-//		Type itemType = item.getType();
-//		if (arg instanceof Class && itemType instanceof Class) {
-//			return Types.isAssignable(Types.box((Class<?>)arg), Types.box((Class<?>)itemType));			
-//		}
-//		return Types.isAssignable(arg, itemType);
+
+		// Type itemType = item.getType();
+		// if (arg instanceof Class && itemType instanceof Class) {
+		// return Types.isAssignable(Types.box((Class<?>)arg),
+		// Types.box((Class<?>)itemType));
+		// }
+		// return Types.isAssignable(arg, itemType);
 		// TODO: Type coercion / conversion?
 	}
 }

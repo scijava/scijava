@@ -48,12 +48,15 @@ public interface OpMatchingService extends SciJavaService {
 	 * type + arguments. An {@link OpCandidate} containing the matching module
 	 * will be returned.
 	 * 
-	 * @param ops The pool from which candidate ops should be drawn.
-	 * @param ref The op reference describing the op to match.
+	 * @param ops
+	 *            The pool from which candidate ops should be drawn.
+	 * @param ref
+	 *            The op reference describing the op to match.
 	 * @return An {@link OpCandidate} containing the module which wraps the best
 	 *         op, with populated inputs, ready to run.
-	 * @throws IllegalArgumentException if there is no match, or if there is more
-	 *           than one match at the same priority.
+	 * @throws IllegalArgumentException
+	 *             if there is no match, or if there is more than one match at
+	 *             the same priority.
 	 */
 	OpCandidate findMatch(OpEnvironment ops, OpRef ref);
 
@@ -62,20 +65,25 @@ public interface OpMatchingService extends SciJavaService {
 	 * and/or type + arguments. An {@link OpCandidate} containing the matching
 	 * module will be returned.
 	 * 
-	 * @param ops The pool from which candidate ops should be drawn.
-	 * @param refs The op references describing the op to match.
+	 * @param ops
+	 *            The pool from which candidate ops should be drawn.
+	 * @param refs
+	 *            The op references describing the op to match.
 	 * @return An {@link OpCandidate} containing the module which wraps the best
 	 *         op, with populated inputs, ready to run.
-	 * @throws IllegalArgumentException if there is no match, or if there is more
-	 *           than one match at the same priority.
+	 * @throws IllegalArgumentException
+	 *             if there is no match, or if there is more than one match at
+	 *             the same priority.
 	 */
 	OpCandidate findMatch(OpEnvironment ops, List<OpRef> refs);
 
 	/**
 	 * Builds a list of candidate ops which might match the given op reference.
 	 * 
-	 * @param ops The pool from which candidate ops should be drawn.
-	 * @param ref The op reference describing the op to match.
+	 * @param ops
+	 *            The pool from which candidate ops should be drawn.
+	 * @param ref
+	 *            The op reference describing the op to match.
 	 * @return The list of candidate operations.
 	 */
 	List<OpCandidate> findCandidates(OpEnvironment ops, OpRef ref);
@@ -84,8 +92,10 @@ public interface OpMatchingService extends SciJavaService {
 	 * Builds a list of candidate ops which might match one of the given op
 	 * references.
 	 * 
-	 * @param ops The pool from which candidate ops should be drawn.
-	 * @param refs The op references describing the op to match.
+	 * @param ops
+	 *            The pool from which candidate ops should be drawn.
+	 * @param refs
+	 *            The op references describing the op to match.
 	 * @return The list of candidate operations.
 	 */
 	List<OpCandidate> findCandidates(OpEnvironment ops, List<OpRef> refs);
@@ -93,9 +103,10 @@ public interface OpMatchingService extends SciJavaService {
 	/**
 	 * Filters a list of ops to those matching the given arguments.
 	 * 
-	 * @param candidates The list of op candidates to scan for matches.
-	 * @return The list of matching op candidates, with associated {@link Module}
-	 *         instances attached.
+	 * @param candidates
+	 *            The list of op candidates to scan for matches.
+	 * @return The list of matching op candidates, with associated
+	 *         {@link Module} instances attached.
 	 */
 	List<OpCandidate> filterMatches(List<OpCandidate> candidates);
 
@@ -103,8 +114,8 @@ public interface OpMatchingService extends SciJavaService {
 	 * Attempts to match the given arguments to the op described by the
 	 * specified {@link ModuleInfo}.
 	 * 
-	 * @return A populated {@link StructInstance} for the matching op, or
-	 *         null if the arguments do not match the op.
+	 * @return A populated {@link StructInstance} for the matching op, or null
+	 *         if the arguments do not match the op.
 	 */
 	StructInstance<?> match(OpCandidate candidate);
 

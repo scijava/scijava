@@ -68,18 +68,17 @@ public class AdaptersTest {
 				new Type[] { cArray, cArray, cArray }, //
 				new Type[] { cArray } //
 		);
-		
-		BiFunction<double[], double[], double[]> computerAsFunction = Adapters.asBiFunction(computer, 
-				(arr1, arr2) -> {
+
+		BiFunction<double[], double[], double[]> computerAsFunction = Adapters.asBiFunction(computer, (arr1, arr2) -> {
 			return new double[arr1.length];
 		});
-		
+
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
 		double[] result = computerAsFunction.apply(a1, a2);
 		assert OpsTest.arrayEquals(result, 5.0, 9.0, 16.0);
 	}
-	
+
 	@Test
 	public void testFunctionAsComputer() {
 		Class<double[]> c = double[].class;
@@ -91,13 +90,13 @@ public class AdaptersTest {
 				new Type[] { c, c }, //
 				new Type[] { c } //
 		);
-		
+
 		BiComputer<double[], double[], double[]> functionAsComputer = Adapters.asBiComputer(function, (from, to) -> {
 			for (int i = 0; i < from.length; i++) {
 				to[i] = from[i];
 			}
 		});
-		
+
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
 		final double[] result = new double[a2.length];

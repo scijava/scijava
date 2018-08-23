@@ -34,11 +34,7 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.scijava.Context;
-import org.scijava.ops.base.OpService;
 import org.scijava.ops.impl.math.Add.MathAddDoublesFunction;
 import org.scijava.ops.impl.math.Add.MathAddOp;
 import org.scijava.ops.impl.math.Power.MathPowerOp;
@@ -46,23 +42,7 @@ import org.scijava.ops.impl.math.Sqrt.MathSqrtOp;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
 
-public class OpsTest {
-
-	private Context context;
-	private OpService ops;
-
-	@Before
-	public void setUp() {
-		context = new Context(OpService.class);
-		ops = context.service(OpService.class);
-	}
-
-	@After
-	public void tearDown() {
-		context.dispose();
-		context = null;
-		ops = null;
-	}
+public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testSecondaryInputs() {

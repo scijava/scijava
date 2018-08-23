@@ -66,14 +66,16 @@ public class OpRef {
 	/**
 	 * Creates a new op reference.
 	 * 
-	 * @param type1 first type constraint of the op.
-	 * @param type2 second type constraint of the op.
-	 * @param outType the type of the op's primary output, or null for any type.
-	 * @param args arguments to the op.
+	 * @param type1
+	 *            first type constraint of the op.
+	 * @param type2
+	 *            second type constraint of the op.
+	 * @param outType
+	 *            the type of the op's primary output, or null for any type.
+	 * @param args
+	 *            arguments to the op.
 	 */
-	public static OpRef fromTypes(final Type type1, final Type type2,
-		final Type outType, final Type[] args)
-	{
+	public static OpRef fromTypes(final Type type1, final Type type2, final Type outType, final Type[] args) {
 		return new OpRef(null, filterNulls(type1, type2), filterNulls(outType), filterNulls(args));
 	}
 
@@ -82,14 +84,16 @@ public class OpRef {
 	/**
 	 * Creates a new op reference.
 	 * 
-	 * @param name name of the op, or null for any name.
-	 * @param types types which the ops must match.
-	 * @param outTypes the op's required output types.
-	 * @param args arguments to the op.
+	 * @param name
+	 *            name of the op, or null for any name.
+	 * @param types
+	 *            types which the ops must match.
+	 * @param outTypes
+	 *            the op's required output types.
+	 * @param args
+	 *            arguments to the op.
 	 */
-	public OpRef(final String name, final Type[] types,
-		final Type[] outTypes, final Type[] args)
-	{
+	public OpRef(final String name, final Type[] types, final Type[] outTypes, final Type[] args) {
 		this.name = name;
 		this.types = types;
 		this.outTypes = outTypes;
@@ -121,7 +125,9 @@ public class OpRef {
 		return args;
 	}
 
-	/** Gets a label identifying the op's scope (i.e., its name and/or types). */
+	/**
+	 * Gets a label identifying the op's scope (i.e., its name and/or types).
+	 */
 	public String getLabel() {
 		final StringBuilder sb = new StringBuilder();
 		append(sb, name);
@@ -136,11 +142,13 @@ public class OpRef {
 
 	/** Determines whether the op's required types match the given class. */
 	public boolean typesMatch(final Class<?> c) {
-		if (types == null) return true;
+		if (types == null)
+			return true;
 		for (final Type t : types) {
 			// FIXME: Use generic assignability test, once it exists.
 			final Class<?> raw = Types.raw(t);
-			if (!raw.isAssignableFrom(c)) return false;
+			if (!raw.isAssignableFrom(c))
+				return false;
 		}
 		return true;
 	}
@@ -150,35 +158,42 @@ public class OpRef {
 	@Override
 	public String toString() {
 		return Arrays.deepToString(types);
-//		StringBuilder sb = new StringBuilder();
-//		sb.append(getLabel());
-//		sb.append("(");
-//		boolean first = true;
-//		for (Object arg : args) {
-//			if (first) first = false;
-//			else sb.append(", ");
-//			if (arg.getClass() == Class.class) {
-//				// special typed null placeholder
-//				sb.append(((Class<?>) arg).getSimpleName());
-//			}
-//			else sb.append(arg.getClass().getSimpleName());
-//
-//		}
-//		sb.append(")");
-//
-//		return sb.toString();
+		// StringBuilder sb = new StringBuilder();
+		// sb.append(getLabel());
+		// sb.append("(");
+		// boolean first = true;
+		// for (Object arg : args) {
+		// if (first) first = false;
+		// else sb.append(", ");
+		// if (arg.getClass() == Class.class) {
+		// // special typed null placeholder
+		// sb.append(((Class<?>) arg).getSimpleName());
+		// }
+		// else sb.append(arg.getClass().getSimpleName());
+		//
+		// }
+		// sb.append(")");
+		//
+		// return sb.toString();
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 		final OpRef other = (OpRef) obj;
-		if (!Objects.equals(name, other.name)) return false;
-		if (!Objects.equals(types, other.types)) return false;
-		if (!Objects.equals(outTypes, other.outTypes)) return false;
-		if (!Objects.equals(args, other.args)) return false;
+		if (!Objects.equals(name, other.name))
+			return false;
+		if (!Objects.equals(types, other.types))
+			return false;
+		if (!Objects.equals(outTypes, other.outTypes))
+			return false;
+		if (!Objects.equals(args, other.args))
+			return false;
 		return true;
 	}
 
@@ -188,17 +203,18 @@ public class OpRef {
 	}
 
 	// -- Utility methods --
-	
+
 	public static Type[] filterNulls(final Type... types) {
 		return Arrays.stream(types).filter(t -> t != null).toArray(Type[]::new);
 	}
-	
 
 	// -- Helper methods --
 
 	private void append(final StringBuilder sb, final String s) {
-		if (s == null) return;
-		if (sb.length() > 0) sb.append("/");
+		if (s == null)
+			return;
+		if (sb.length() > 0)
+			sb.append("/");
 		sb.append(s);
 	}
 }

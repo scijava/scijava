@@ -18,16 +18,16 @@ public class Power {
 	@Parameter(key = "number")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static class MathPowerDoublConstantFunction implements MathPowerOp, Function<Double, Double> {
-		
+
 		@Parameter
 		private Double exponent;
-		
+
 		@Override
 		public Double apply(Double t) {
 			return Math.pow(t, exponent);
 		}
 	}
-	
+
 	@Plugin(type = MathPowerOp.class)
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
@@ -43,10 +43,10 @@ public class Power {
 	@Parameter(key = "array")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
 	public static class MathPointwisePowerDoubleArrayComputer implements MathPowerOp, Computer<double[], double[]> {
-		
+
 		@Parameter
 		private Double exponent;
-		
+
 		@Override
 		public void compute(double[] in1, double[] out) {
 			for (int i = 0; i < out.length; i++) {

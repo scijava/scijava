@@ -77,7 +77,7 @@ public class OpsTest {
 		powerConstantFunctionStructInstance.member("exponent").set(3.0);
 		Function<Double, Double> power3 = powerConstantFunctionStructInstance.object();
 		assert power3.apply(2.0).equals(8.0);
-		
+
 		BiFunction<Double, Double, Double> powerFunction = ops.findOp( //
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
@@ -86,7 +86,7 @@ public class OpsTest {
 				new Type[] { c } //
 		);
 		assert powerFunction.apply(2.0, 3.0).equals(8.0);
-		
+
 		Class<double[]> cArray = double[].class;
 		StructInstance<Computer<double[], double[]>> powerConstantComputerStructInstance = ops.findStructInstance( //
 				new Nil<Computer<double[], double[]>>() {
@@ -98,7 +98,7 @@ public class OpsTest {
 		powerConstantComputerStructInstance.member("exponent").set(3.0);
 		Computer<double[], double[]> power3Arrays = powerConstantComputerStructInstance.object();
 		double[] result = new double[3];
-		power3Arrays.compute(new double[] {1.0, 2.0, 3.0}, result);
+		power3Arrays.compute(new double[] { 1.0, 2.0, 3.0 }, result);
 		assert arrayEquals(result, 1.0, 8.0, 27.0);
 	}
 
@@ -172,7 +172,7 @@ public class OpsTest {
 		computer.compute(a1, a2, result);
 		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
-	
+
 	static boolean arrayEquals(double[] arr1, Double... arr2) {
 		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new), arr2);
 	}

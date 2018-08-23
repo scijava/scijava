@@ -63,11 +63,11 @@ public final class OpUtils {
 		}
 		return result;
 	}
-	
+
 	public static List<MemberInstance<?>> inputs(StructInstance<?> op) {
 		return op.members().stream() //
-			.filter(memberInstance -> memberInstance.member().isInput()) //
-			.collect(Collectors.toList());
+				.filter(memberInstance -> memberInstance.member().isInput()) //
+				.collect(Collectors.toList());
 	}
 
 	public static List<Member<?>> inputs(OpCandidate candidate) {
@@ -79,7 +79,7 @@ public final class OpUtils {
 				.filter(member -> member.isInput()) //
 				.collect(Collectors.toList());
 	}
-	
+
 	public static List<Member<?>> outputs(OpCandidate candidate) {
 		return outputs(candidate.struct());
 	}
@@ -89,62 +89,64 @@ public final class OpUtils {
 				.filter(member -> member.isOutput()) //
 				.collect(Collectors.toList());
 	}
-	
+
 	public static List<MemberInstance<?>> outputs(StructInstance<?> op) {
 		return op.members().stream() //
-			.filter(memberInstance -> memberInstance.member().isOutput()) //
-			.collect(Collectors.toList());
+				.filter(memberInstance -> memberInstance.member().isOutput()) //
+				.collect(Collectors.toList());
 	}
 
-//	/** Gets the namespace portion of the given op name. */
-//	public static String getNamespace(final String opName) {
-//		if (opName == null) return null;
-//		final int dot = opName.lastIndexOf(".");
-//		return dot < 0 ? null : opName.substring(0, dot);
-//	}
-//
-//	/** Gets the simple portion (without namespace) of the given op name. */
-//	public static String stripNamespace(final String opName) {
-//		if (opName == null) return null;
-//		final int dot = opName.lastIndexOf(".");
-//		return dot < 0 ? opName : opName.substring(dot + 1);
-//	}
-//
-//	/**
-//	 * Gets a string describing the given op request.
-//	 * 
-//	 * @param name The op's name.
-//	 * @param args The op's input arguments.
-//	 * @return A string describing the op request.
-//	 */
-//	public static String opString(final String name, final Object... args) {
-//		final StringBuilder sb = new StringBuilder();
-//		sb.append(name + "(\n\t\t");
-//		boolean first = true;
-//		for (final Object arg : args) {
-//			if (first) first = false;
-//			else sb.append(",\n\t\t");
-//			if (arg == null) sb.append("null");
-//			else if (arg instanceof Class) {
-//				// NB: Class instance used to mark argument type.
-//				sb.append(((Class<?>) arg).getSimpleName());
-//			}
-//			else sb.append(arg.getClass().getSimpleName());
-//		}
-//		sb.append(")");
-//		return sb.toString();
-//	}
+	// /** Gets the namespace portion of the given op name. */
+	// public static String getNamespace(final String opName) {
+	// if (opName == null) return null;
+	// final int dot = opName.lastIndexOf(".");
+	// return dot < 0 ? null : opName.substring(0, dot);
+	// }
+	//
+	// /** Gets the simple portion (without namespace) of the given op name. */
+	// public static String stripNamespace(final String opName) {
+	// if (opName == null) return null;
+	// final int dot = opName.lastIndexOf(".");
+	// return dot < 0 ? opName : opName.substring(dot + 1);
+	// }
+	//
+	// /**
+	// * Gets a string describing the given op request.
+	// *
+	// * @param name The op's name.
+	// * @param args The op's input arguments.
+	// * @return A string describing the op request.
+	// */
+	// public static String opString(final String name, final Object... args) {
+	// final StringBuilder sb = new StringBuilder();
+	// sb.append(name + "(\n\t\t");
+	// boolean first = true;
+	// for (final Object arg : args) {
+	// if (first) first = false;
+	// else sb.append(",\n\t\t");
+	// if (arg == null) sb.append("null");
+	// else if (arg instanceof Class) {
+	// // NB: Class instance used to mark argument type.
+	// sb.append(((Class<?>) arg).getSimpleName());
+	// }
+	// else sb.append(arg.getClass().getSimpleName());
+	// }
+	// sb.append(")");
+	// return sb.toString();
+	// }
 
 	// -- Helper methods --
 
-//	/** Filters a list with the given predicate, concealing boilerplate crap. */
-//	private static <T> List<T> filter(final List<T> list, final Predicate<T> p) {
-//		return list.stream().filter(p).collect(Collectors.toList());
-//	}
+	// /** Filters a list with the given predicate, concealing boilerplate crap.
+	// */
+	// private static <T> List<T> filter(final List<T> list, final Predicate<T>
+	// p) {
+	// return list.stream().filter(p).collect(Collectors.toList());
+	// }
 
-//	// TODO: Move to Context.
-//	private static boolean isInjectable(final Class<?> type) {
-//		return Service.class.isAssignableFrom(type) || //
-//			Context.class.isAssignableFrom(type);
-//	}
+	// // TODO: Move to Context.
+	// private static boolean isInjectable(final Class<?> type) {
+	// return Service.class.isAssignableFrom(type) || //
+	// Context.class.isAssignableFrom(type);
+	// }
 }

@@ -53,9 +53,12 @@ public class OpMatchingUtil {
 	 * depends on the actual type of the object.
 	 */
 	public static Class<?> getClass(final Object obj) {
-		if (obj == null) return null;
-		if (obj instanceof Nil) return getClass(((Nil<?>) obj).getType());
-		if (obj instanceof Class) return (Class<?>) obj;
+		if (obj == null)
+			return null;
+		if (obj instanceof Nil)
+			return getClass(((Nil<?>) obj).getType());
+		if (obj instanceof Class)
+			return (Class<?>) obj;
 		if (obj instanceof ParameterizedType)
 			return (Class<?>) ((ParameterizedType) obj).getRawType();
 		return obj.getClass();
@@ -63,26 +66,28 @@ public class OpMatchingUtil {
 
 	/**
 	 * Finds the levels of casting between <code>origin</code> and
-	 * <code>dest</code>. Returns 0 if dest and origin are the same. Returns -1 if
-	 * dest is not assignable from origin.
+	 * <code>dest</code>. Returns 0 if dest and origin are the same. Returns -1
+	 * if dest is not assignable from origin.
 	 */
 	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {
-		if (dest.equals(origin)) return 0;
+		if (dest.equals(origin))
+			return 0;
 
 		int level = 1;
 		Class<?> currType = origin;
 		// BFS if dest is an interface
 		if (dest.isInterface()) {
 			final HashSet<String> seen = new HashSet<>();
-			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType
-				.getGenericInterfaces()));
+			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType.getGenericInterfaces()));
 			do {
 				final ArrayList<Type> nextIfaces = new ArrayList<>();
 				for (final Type iface : currIfaces) {
-					if (seen.contains(iface.getTypeName())) continue;
+					if (seen.contains(iface.getTypeName()))
+						continue;
 
 					final Class<?> cls = getClass(iface);
-					if (cls.equals(dest)) return level;
+					if (cls.equals(dest))
+						return level;
 					seen.add(iface.getTypeName());
 					nextIfaces.addAll(Arrays.asList(cls.getGenericInterfaces()));
 				}
@@ -93,14 +98,14 @@ public class OpMatchingUtil {
 					currIfaces.addAll(Arrays.asList(currType.getGenericInterfaces()));
 				}
 				level++;
-			}
-			while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
+			} while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
 		}
 		// otherwise dest is a class, so search the list of ancestors
 		else {
 			while (currType.getSuperclass() != null) {
 				currType = currType.getSuperclass();
-				if (currType.equals(dest)) return level;
+				if (currType.equals(dest))
+					return level;
 				level++;
 			}
 		}

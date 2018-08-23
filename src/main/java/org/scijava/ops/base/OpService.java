@@ -68,7 +68,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		final OpCandidate match = matcher.findMatch(this, ref);
 		return match.createOp();
 	}
-	
+
 	@Override
 	public Collection<OpInfo> infos() {
 		// TODO: Consider maintaining an efficient OpInfo data structure.
@@ -77,17 +77,16 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			try {
 				final Class<? extends Op> opClass = info.loadClass();
 				infos.add(new OpInfo(opClass));
-			}
-			catch (InstantiableException | ValidityException exc) {
+			} catch (InstantiableException | ValidityException exc) {
 				// TODO: Stop sucking at exception handling.
 				log.error(exc);
 			}
 		}
 		return infos;
 	}
-	
-	public <T> StructInstance<T> findStructInstance(final Nil<T> opType, final Type[] opAdditionalTypes, final Type[] inTypes,
-			final Type[] outTypes) {
+
+	public <T> StructInstance<T> findStructInstance(final Nil<T> opType, final Type[] opAdditionalTypes,
+			final Type[] inTypes, final Type[] outTypes) {
 		// FIXME - createTypes does not support multiple additional types,
 		// or multiple output types. We will need to generalize this.
 		final OpRef ref = OpRef.fromTypes(opType.getType(), //
@@ -96,7 +95,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		final StructInstance<T> op = (StructInstance<T>) op(ref);
 		return op;
 	}
-	
+
 	public <T> T findOp(final Nil<T> opType, final Type[] opAdditionalTypes, final Type[] inTypes,
 			final Type[] outTypes) {
 		return findStructInstance(opType, opAdditionalTypes, inTypes, outTypes).object();

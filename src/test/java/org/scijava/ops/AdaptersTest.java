@@ -31,14 +31,51 @@ package org.scijava.ops;
 
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.impl.math.Add.MathAddOp;
+import org.scijava.ops.impl.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Adapt;
+import org.scijava.ops.util.Inject;
 
 public class AdaptersTest extends AbstractTestEnvironment {
 
+	@Test
+	public void testFunctionAsCommand() {
+		Class<Double> c = Double.class;
+		Function<Double, Double> sqrtFunction = ops.findOp( //
+				new Nil<Function<Double, Double>>() {
+				}, //
+				new Type[] { MathSqrtOp.class }, //
+				new Type[] { c }, //
+				new Type[] { c } //
+		);
+		
+		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction);
+		Inject.Commands.unsafe(sqrtCommand, 25.0, null);
+		sqrtCommand.run();
+		assert sqrtCommand.get().equals(5.0);
+	}
+	
+	@Test
+	public void testComputerAsCommand() {
+		Class<double[]> cArray = double[].class;
+		Computer<double[], double[]> sqrtComputer = ops.findOp( //
+				new Nil<Computer<double[], double[]>>() {
+				}, //
+				new Type[] { MathSqrtOp.class }, //
+				new Type[] { cArray, cArray }, //
+				new Type[] { cArray } //
+		);
+		
+		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer);
+		Inject.Commands.unsafe(sqrtCommand, new double[] {25, 100, 4}, new double[3]);
+		sqrtCommand.run();
+		assert OpsTest.arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);		
+	}
+	
 	@Test
 	public void testComputerAsFunction() {
 		Class<double[]> cArray = double[].class;

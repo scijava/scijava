@@ -959,6 +959,17 @@ public final class Types {
 	{
 		return TypeUtils.parameterize(raw, typeArgMappings);
 	}
+	
+	/**
+	 * Returns the erasure of the given type as specified by {@link GenericTypeReflector#erase(Type)}.
+	 * 
+	 * @param type the type to erase
+	 * @return the erased type
+	 */
+	public static Class<?> erase(final Type type) 
+	{
+		return GenericTypeReflector.erase(type);
+	}
 
 	// -- Helper methods --
 

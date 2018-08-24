@@ -3434,7 +3434,12 @@ public final class Types {
 				else {
 					result = new Type[superInterfaces.length + 1];
 					resultIndex = 1;
-					result[0] = mapTypeParameters(superClass, type);
+					// Case where type is not parameterized but superClass is
+					if (superClass instanceof ParameterizedType && !(type instanceof ParameterizedType)) {
+						result[0] = superClass;
+					} else {
+						result[0] = mapTypeParameters(superClass, type);
+					}
 				}
 				for (final Type superInterface : superInterfaces) {
 					result[resultIndex++] = mapTypeParameters(superInterface, type);

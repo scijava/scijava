@@ -39,6 +39,7 @@ import org.scijava.ops.impl.math.Add.MathAddDoublesFunction;
 import org.scijava.ops.impl.math.Add.MathAddOp;
 import org.scijava.ops.impl.math.Power.MathPowerOp;
 import org.scijava.ops.impl.math.Sqrt.MathSqrtOp;
+import org.scijava.ops.util.Inject;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
 
@@ -54,7 +55,7 @@ public class OpsTest extends AbstractTestEnvironment {
 				new Type[] { c, c }, //
 				new Type[] { c } //
 		);
-		powerConstantFunctionStructInstance.member("exponent").set(3.0);
+		Inject.Structs.unsafe(powerConstantFunctionStructInstance, 3.0);
 		Function<Double, Double> power3 = powerConstantFunctionStructInstance.object();
 		assert power3.apply(2.0).equals(8.0);
 
@@ -75,7 +76,7 @@ public class OpsTest extends AbstractTestEnvironment {
 				new Type[] { cArray, cArray, c }, //
 				new Type[] { cArray } //
 		);
-		powerConstantComputerStructInstance.member("exponent").set(3.0);
+		Inject.Structs.unsafe(powerConstantComputerStructInstance, 3.0);
 		Computer<double[], double[]> power3Arrays = powerConstantComputerStructInstance.object();
 		double[] result = new double[3];
 		power3Arrays.compute(new double[] { 1.0, 2.0, 3.0 }, result);

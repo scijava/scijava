@@ -35,6 +35,7 @@ import java.util.function.BiFunction;
 import org.junit.Test;
 import org.scijava.ops.impl.math.Add.MathAddOp;
 import org.scijava.ops.types.Nil;
+import org.scijava.ops.util.Adapt;
 
 public class AdaptersTest extends AbstractTestEnvironment {
 

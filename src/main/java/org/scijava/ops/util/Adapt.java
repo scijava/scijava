@@ -1,7 +1,12 @@
-package org.scijava.ops;
+package org.scijava.ops.util;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
+import org.scijava.ops.BiComputer;
+import org.scijava.ops.Computer;
+import org.scijava.ops.Op;
+import org.scijava.ops.Source;
 
 /**
  * Utility providing adaptation between {@link Op} types.

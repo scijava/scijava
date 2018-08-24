@@ -2,6 +2,9 @@ package org.scijava.struct;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+
+import org.scijava.util.Types;
 
 /**
  * One element (i.e. item/field/member) of a {@link Struct}.
@@ -26,11 +29,15 @@ public interface Member<T> {
 	 * Gets the {@link Class} of the member's type, or null if {@link #getType()}
 	 * does not return a raw class.
 	 */
+	@SuppressWarnings("unchecked")
 	default Class<T> getRawType() {
 		final Type type = getType();
-		if (!(type instanceof Class)) return null;
-		@SuppressWarnings("unchecked")
-		final Class<T> rawType = (Class<T>) type;
+		Class<T> rawType = null;
+		if (type instanceof TypeVariable) {
+			rawType = (Class<T>) Types.erase(type);
+		} else if (type instanceof Class) {
+			rawType = (Class<T>) type;
+		} 
 		return rawType;
 	}
 

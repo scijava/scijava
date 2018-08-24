@@ -3,11 +3,18 @@ package org.scijava.ops.util;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.command.Command;
+import org.scijava.ops.BiComputer;
+import org.scijava.ops.Computer;
+import org.scijava.ops.OneToOneCommand;
+import org.scijava.ops.Op;
+import org.scijava.ops.Source;
+
 /**
  * Utility providing adaptation between {@link Op} types.
  */
 public class Adapt {
-
+	
 	private Adapt() {
 		// NB: Prevent instantiation of utility class.
 	}
@@ -33,6 +40,15 @@ public class Adapt {
 				copy.accept(tmp, out);
 			};
 		}
+		
+		public static <I, O> OneToOneCommand<I, O> asCommand(final Function<I, O> function) {
+			return new OneToOneCommand<I, O>() {
+				@Override
+				public void run() {
+					output = function.apply(input);
+				}
+			};
+		}		
 	}
 	
 	/**
@@ -74,6 +90,15 @@ public class Adapt {
 				O out = inputAwareSource.apply(in1, in2);
 				computer.compute(in1, in2, out);
 				return out;
+			};
+		}
+		
+		public static <I, O> OneToOneCommand<I, O> asCommand(final Computer<I, O> computer) {
+			return new OneToOneCommand<I, O>() {
+				@Override
+				public void run() {
+					computer.compute(input, output);
+				}
 			};
 		}
 	}

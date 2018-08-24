@@ -34,7 +34,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.command.Command;
 import org.scijava.ops.impl.math.Add.MathAddOp;
 import org.scijava.ops.impl.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Adapt;
@@ -55,7 +54,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		);
 		
 		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction);
-		Inject.Commands.unsafe(sqrtCommand, 25.0, null);
+		Inject.Commands.inputs(sqrtCommand, 25.0);
 		sqrtCommand.run();
 		assert sqrtCommand.get().equals(5.0);
 	}
@@ -72,7 +71,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		);
 		
 		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer);
-		Inject.Commands.unsafe(sqrtCommand, new double[] {25, 100, 4}, new double[3]);
+		Inject.Commands.all(sqrtCommand, new double[] {25, 100, 4}, new double[3]);
 		sqrtCommand.run();
 		assert OpsTest.arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);		
 	}

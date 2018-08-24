@@ -1,12 +1,14 @@
 package org.scijava.ops.util;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.scijava.command.Command;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
+import org.scijava.struct.ItemIO;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.ValueAccessibleMemberInstance;
 
@@ -20,11 +22,25 @@ public class Inject {
 		private Structs() {
 		}
 
-		public static void unsafe(StructInstance<?> instance, Object... objs) {
-			unsafe(filterAccessible(instance), objs);
+		public static void inputs(StructInstance<?> instance, Object... objs) {
+			unsafe(filterAccessibles(getAccessibles(instance), m -> {
+				ItemIO ioType = m.member().getIOType();
+				return EnumSet.of(ItemIO.BOTH, ItemIO.INPUT).contains(ioType);
+			}), objs);
 		}
 
-		public static void unsafe(List<ValueAccessibleMemberInstance<?>> accessibles, Object... objs) {
+		public static void outputs(StructInstance<?> instance, Object... objs) {
+			unsafe(filterAccessibles(getAccessibles(instance), m -> {
+				ItemIO ioType = m.member().getIOType();
+				return EnumSet.of(ItemIO.BOTH, ItemIO.OUTPUT).contains(ioType);
+			}), objs);
+		}
+
+		public static void all(StructInstance<?> instance, Object... objs) {
+			unsafe(getAccessibles(instance), objs);
+		}
+
+		private static void unsafe(List<ValueAccessibleMemberInstance<?>> accessibles, Object... objs) {
 			if (accessibles.size() != objs.length) {
 				throw new IllegalArgumentException("The number of provided instances to inject: " + accessibles.size()
 						+ " does not match " + "the number of provided objects: " + objs.length);
@@ -41,11 +57,17 @@ public class Inject {
 			}
 		}
 
-		private static List<ValueAccessibleMemberInstance<?>> filterAccessible(StructInstance<?> instance) {
-			return StreamSupport //
-					.stream(instance.spliterator(), false) //
+		private static List<ValueAccessibleMemberInstance<?>> getAccessibles(StructInstance<?> instance) {
+			return instance.members().stream() //
 					.filter(ValueAccessibleMemberInstance.class::isInstance) //
 					.map(ValueAccessibleMemberInstance.class::cast) //
+					.collect(Collectors.toList());
+		}
+
+		private static List<ValueAccessibleMemberInstance<?>> filterAccessibles(
+				List<ValueAccessibleMemberInstance<?>> accessibles,
+				Predicate<? super ValueAccessibleMemberInstance<?>> condition) {
+			return accessibles.stream().filter(condition) //
 					.collect(Collectors.toList());
 		}
 	}
@@ -54,14 +76,24 @@ public class Inject {
 		private Commands() {
 		}
 
-		public static void unsafe(Command command, Object... objs) {
-			StructInstance<Command> instance = null;
+		public static void inputs(Command command, Object... objs) {
+			Structs.inputs(commandToStructOnstance(command), objs);
+		}
+
+		public static void outputs(Command command, Object... objs) {
+			Structs.outputs(commandToStructOnstance(command), objs);
+		}
+
+		public static void all(Command command, Object... objs) {
+			Structs.all(commandToStructOnstance(command), objs);
+		}
+
+		private static StructInstance<Command> commandToStructOnstance(Command command) {
 			try {
-				instance = ParameterStructs.create(command);
+				return ParameterStructs.create(command);
 			} catch (ValidityException e) {
 				throw new IllegalArgumentException("Can't inject command", e);
 			}
-			Structs.unsafe(instance, objs);
 		}
 	}
 }

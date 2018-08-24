@@ -1,4 +1,4 @@
-package org.scijava.ops;
+package org.scijava.ops.util;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

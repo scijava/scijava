@@ -31,7 +31,6 @@ package org.scijava.ops.base;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
@@ -85,19 +84,19 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return infos;
 	}
 
-	public <T> StructInstance<T> findStructInstance(final Nil<T> opType, final Type[] opAdditionalTypes,
-			final Type[] inTypes, final Type[] outTypes) {
+	public <T> StructInstance<T> findOpInstance(final Nil<T> opType, final Type[] opAdditionalTypes,
+			final Type[] inTypes, final Type outType) {
 		// FIXME - createTypes does not support multiple additional types,
 		// or multiple output types. We will need to generalize this.
 		final OpRef ref = OpRef.fromTypes(opType.getType(), //
-				opAdditionalTypes[0], outTypes[0], inTypes);
+				opAdditionalTypes[0], outType, inTypes);
 		@SuppressWarnings("unchecked")
 		final StructInstance<T> op = (StructInstance<T>) op(ref);
 		return op;
 	}
 
 	public <T> T findOp(final Nil<T> opType, final Type[] opAdditionalTypes, final Type[] inTypes,
-			final Type[] outTypes) {
-		return findStructInstance(opType, opAdditionalTypes, inTypes, outTypes).object();
+			final Type outType) {
+		return findOpInstance(opType, opAdditionalTypes, inTypes, outType).object();
 	}
 }

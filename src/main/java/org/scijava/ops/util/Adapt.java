@@ -3,7 +3,6 @@ package org.scijava.ops.util;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.command.Command;
 import org.scijava.ops.BiComputer;
 import org.scijava.ops.Computer;
 import org.scijava.ops.OneToOneCommand;

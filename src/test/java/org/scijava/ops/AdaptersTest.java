@@ -34,8 +34,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.impl.math.Add.MathAddOp;
-import org.scijava.ops.impl.math.Sqrt.MathSqrtOp;
+import org.scijava.ops.math.Add.MathAddOp;
+import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Inject;
 import org.scijava.types.Nil;
@@ -50,7 +50,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				}, //
 				new Type[] { MathSqrtOp.class }, //
 				new Type[] { c }, //
-				new Type[] { c } //
+				c//
 		);
 		
 		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction);
@@ -67,13 +67,14 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				}, //
 				new Type[] { MathSqrtOp.class }, //
 				new Type[] { cArray, cArray }, //
-				new Type[] { cArray } //
+				cArray//
 		);
 		
 		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer);
-		Inject.Commands.all(sqrtCommand, new double[] {25, 100, 4}, new double[3]);
+		Inject.Commands.inputs(sqrtCommand, new double[] {25, 100, 4});
+		Inject.Commands.outputs(sqrtCommand, new double[3]);
 		sqrtCommand.run();
-		assert OpsTest.arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);		
+		assert arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);		
 	}
 	
 	@Test
@@ -84,7 +85,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				}, //
 				new Type[] { MathAddOp.class }, //
 				new Type[] { cArray, cArray, cArray }, //
-				new Type[] { cArray } //
+				cArray//
 		);
 
 		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer, (arr1, arr2) -> {
@@ -94,7 +95,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
 		double[] result = computerAsFunction.apply(a1, a2);
-		assert OpsTest.arrayEquals(result, 5.0, 9.0, 16.0);
+		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
 
 	@Test
@@ -106,7 +107,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				}, //
 				new Type[] { MathAddOp.class }, //
 				new Type[] { c, c }, //
-				new Type[] { c } //
+				c//
 		);
 
 		BiComputer<double[], double[], double[]> functionAsComputer = Adapt.Functions.asBiComputer(function, (from, to) -> {
@@ -119,6 +120,6 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		final double[] a2 = { 2, 4, 9 };
 		final double[] result = new double[a2.length];
 		functionAsComputer.compute(a1, a2, result);
-		assert OpsTest.arrayEquals(result, 5.0, 9.0, 16.0);
+		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
 }

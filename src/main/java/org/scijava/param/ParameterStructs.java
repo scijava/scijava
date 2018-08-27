@@ -58,9 +58,14 @@ public final class ParameterStructs {
 
 		final Class<?> paramsClass = findParametersDeclaration(type);
 		if (paramsClass != null) {
-			final Parameters params = paramsClass.getAnnotation(Parameters.class);
 			final Class<?> functionalType = findFunctionalInterface(paramsClass);
-			final Parameter[] p = params.value();
+			Parameter[] p = null;
+			final Parameters params = paramsClass.getAnnotation(Parameters.class);
+			if (params != null) {
+				p = params.value();
+			} else {
+				p = new Parameter[] {paramsClass.getAnnotation(Parameter.class)};
+			}
 			final int paramCount = functionalType.getTypeParameters().length;
 			// TODO: Consider allowing partial override of class @Parameters.
 			if (p.length == paramCount) {
@@ -153,7 +158,8 @@ public final class ParameterStructs {
 		types.add(type);
 		while (!types.isEmpty()) {
 			final Class<?> candidate = types.pop();
-			if (candidate.getAnnotation(Parameters.class) != null) return candidate;
+			if (candidate.getAnnotation(Parameters.class) != null || 
+					candidate.getAnnotation(Parameter.class) != null) return candidate;
 			final Class<?> superType = candidate.getSuperclass() ;
 			if (superType != null) types.add(superType);
 			types.addAll(Arrays.asList(candidate.getInterfaces()));

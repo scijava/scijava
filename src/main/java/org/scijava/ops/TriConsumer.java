@@ -1,6 +1,7 @@
 package org.scijava.ops;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Represents an operation that accepts two input arguments and returns no

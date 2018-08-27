@@ -31,7 +31,6 @@ package org.scijava.ops.base;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -46,7 +45,6 @@ import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.struct.Member;
-import org.scijava.struct.MemberInstance;
 import org.scijava.struct.StructInstance;
 import org.scijava.util.Types;
 

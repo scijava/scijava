@@ -1,4 +1,4 @@
-package org.scijava.ops.impl.math;
+package org.scijava.ops.math;
 
 import java.util.function.Function;
 

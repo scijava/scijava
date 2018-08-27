@@ -1,4 +1,4 @@
-package org.scijava.ops.impl.math;
+package org.scijava.ops.math;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -16,6 +16,8 @@ import com.google.common.collect.Streams;
 public class Add {
 
 	public interface MathAddOp extends Op {
+		String NAME = "math.add";
+		String ALIASES = "math.sum";
 	}
 
 	@Plugin(type = MathAddOp.class)

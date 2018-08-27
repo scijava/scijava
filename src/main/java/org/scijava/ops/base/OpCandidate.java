@@ -29,8 +29,6 @@
 
 package org.scijava.ops.base;
 
-import java.lang.reflect.Type;
-
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;

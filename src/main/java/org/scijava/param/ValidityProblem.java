@@ -32,6 +32,8 @@
 
 package org.scijava.param;
 
+import org.scijava.Validated;
+
 /**
  * An exception used to record a validity problem with a {@link Validated}
  * object.

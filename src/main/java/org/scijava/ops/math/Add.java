@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.scijava.ops.BiComputer;
+import org.scijava.ops.BiInplace1;
 import org.scijava.ops.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -20,6 +21,8 @@ public class Add {
 		String ALIASES = "math.sum";
 	}
 
+	// --------- Functions ---------
+	
 	@Plugin(type = MathAddOp.class)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
@@ -45,6 +48,8 @@ public class Add {
 		}
 	}
 
+	// --------- Computers ---------
+			
 	@Plugin(type = MathAddOp.class)
 	@Parameter(key = "integer1")
 	@Parameter(key = "integer2")
@@ -65,6 +70,20 @@ public class Add {
 		public void compute(double[] in1, double[] in2, double[] out) {
 			for (int i = 0; i < out.length; i++) {
 				out[i] = in1[i] + in2[i];
+			}
+		}
+	}
+	
+	// --------- Inplaces ---------
+	
+	@Plugin(type = MathAddOp.class)
+	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
+	@Parameter(key = "array1")
+	public static class MathPointwiseAddDoubleArraysInplace1 implements MathAddOp, BiInplace1<double[], double[]> {
+		@Override
+		public void mutate(double[] io, double[] in2) {
+			for (int i = 0; i < io.length; i++ ) {
+				io[i] += in2[i];
 			}
 		}
 	}

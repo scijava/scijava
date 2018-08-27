@@ -123,6 +123,37 @@ public class OpsTest extends AbstractTestEnvironment {
 	}
 	
 	@Test
+	public void unaryInplace() {
+		Class<double[]> cArray = double[].class;
+		final Inplace<double[]> inplaceSqrt = ops().findOp( //
+				new Nil<Inplace<double[]>>() {
+				}, //
+				new Type[] { MathSqrtOp.class }, //
+				new Type[] { cArray }, //
+				cArray//
+		);
+		final double[] a1 = { 4, 100, 36 };
+		inplaceSqrt.mutate(a1);
+		assert arrayEquals(a1, 2.0, 10.0, 6.0);
+	}
+	
+	@Test
+	public void binaryInplace() {
+		Class<double[]> cArray = double[].class;
+		final BiInplace1<double[], double[]> inplaceAdd = ops().findOp( //
+				new Nil<BiInplace1<double[], double[]>>() {
+				}, //
+				new Type[] { MathAddOp.class }, //
+				new Type[] { cArray, cArray }, //
+				cArray//
+		);
+		final double[] a1 = { 3, 5, 7 };
+		final double[] a2 = { 2, 4, 9 };
+		inplaceAdd.mutate(a1, a2);
+		assert arrayEquals(a1, 5.0, 9.0, 16.0);
+	}
+	
+	@Test
 	public void testSecondaryInputs() {
 		Class<Double> c = Double.class;
 		StructInstance<Function<Double, Double>> powerConstantFunctionStructInstance = ops().findOpInstance( //

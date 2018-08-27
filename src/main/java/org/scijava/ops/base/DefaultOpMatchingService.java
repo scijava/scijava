@@ -245,7 +245,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		final ArrayList<OpCandidate> matches = new ArrayList<>();
 		double priority = Double.NaN;
 		for (final OpCandidate candidate : candidates) {
-			final double p = getPriority(candidate);
+			final double p = OpUtils.getPriority(candidate);
 			if (p != priority && !matches.isEmpty()) {
 				// NB: Lower priority was reached; stop looking for any more
 				// matches.
@@ -310,7 +310,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		int minLevels = Integer.MAX_VALUE;
 		double priority = Double.NaN;
 		for (final OpCandidate candidate : candidates) {
-			final double p = getPriority(candidate);
+			final double p = OpUtils.getPriority(candidate);
 			if (p != priority && !matches.isEmpty()) {
 				// NB: Lower priority was reached; stop looking for any more
 				// matches.
@@ -331,12 +331,6 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			matches.add(candidate);
 		}
 		return matches;
-	}
-
-	private double getPriority(final OpCandidate candidate) {
-		// TODO: Think about what to do about non @Plugin-based ops...?
-		// What if there is no annotation? How to discern a priority?
-		return candidate.opInfo().getAnnotation().priority();
 	}
 
 	/**

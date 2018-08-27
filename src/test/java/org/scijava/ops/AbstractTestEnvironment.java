@@ -9,8 +9,8 @@ import org.scijava.ops.base.OpService;
 
 public abstract class AbstractTestEnvironment {
 
-	protected Context context;
-	protected OpService ops;
+	private static Context context;
+	private static OpService ops;
 
 	@Before
 	public void setUp() {
@@ -23,6 +23,10 @@ public abstract class AbstractTestEnvironment {
 		context.dispose();
 		context = null;
 		ops = null;
+	}
+	
+	static OpService ops() {
+		return ops;
 	}
 	
 	static boolean arrayEquals(double[] arr1, Double... arr2) {

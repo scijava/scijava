@@ -38,7 +38,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryComputers() {
-		Computer<double[], double[]> sqrtComputer = Computers.unary(ops, MathSqrtOp.class, double[].class,
+		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), MathSqrtOp.class, double[].class,
 				double[].class);
 
 		double[] result = new double[3];
@@ -48,7 +48,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryComputers() {
-		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops, MathAddOp.class, double[].class,
+		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), MathAddOp.class, double[].class,
 				double[].class, double[].class);
 
 		double[] result = new double[3];

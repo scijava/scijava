@@ -45,7 +45,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testFunctionAsCommand() {
 		Class<Double> c = Double.class;
-		Function<Double, Double> sqrtFunction = ops.findOp( //
+		Function<Double, Double> sqrtFunction = ops().findOp( //
 				new Nil<Function<Double, Double>>() {
 				}, //
 				new Type[] { MathSqrtOp.class }, //
@@ -62,7 +62,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsCommand() {
 		Class<double[]> cArray = double[].class;
-		Computer<double[], double[]> sqrtComputer = ops.findOp( //
+		Computer<double[], double[]> sqrtComputer = ops().findOp( //
 				new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Type[] { MathSqrtOp.class }, //
@@ -80,7 +80,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsFunction() {
 		Class<double[]> cArray = double[].class;
-		final BiComputer<double[], double[], double[]> computer = ops.findOp( //
+		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
 				new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Type[] { MathAddOp.class }, //
@@ -102,7 +102,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	public void testFunctionAsComputer() {
 		Class<double[]> c = double[].class;
 		// look up a function: Double result = math.add(Double v1, Double v2)
-		BiFunction<double[], double[], double[]> function = ops.findOp( //
+		BiFunction<double[], double[], double[]> function = ops().findOp( //
 				new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Type[] { MathAddOp.class }, //

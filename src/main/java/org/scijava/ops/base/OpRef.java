@@ -142,8 +142,7 @@ public class OpRef {
 		append(sb, name);
 		if (types != null) {
 			for (final Type t : types) {
-				// FIXME: Use better Type-to-string approach, once it exists.
-				append(sb, t instanceof Class ? ((Class<?>) t).getName() : t.toString());
+				append(sb, Types.name(t));
 			}
 		}
 		return sb.toString();

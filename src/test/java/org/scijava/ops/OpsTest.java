@@ -49,9 +49,9 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void unaryFunction() {
 		Class<Double> c = Double.class;
 		Function<Double, Double> sqrtFunction = ops().findOp( //
+				MathSqrtOp.class,
 				new Nil<Function<Double, Double>>() {
 				}, //
-				new Type[] { MathSqrtOp.class }, //
 				new Type[] { c }, //
 				c//
 		);
@@ -65,9 +65,9 @@ public class OpsTest extends AbstractTestEnvironment {
 		Class<Double> c = Double.class;
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<Double, Double, Double> function = ops().findOp( //
+				MathAddOp.class,
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
-				new Type[] { MathAddOp.class }, //
 				new Type[] { c, c }, //
 				c//
 		);
@@ -77,9 +77,9 @@ public class OpsTest extends AbstractTestEnvironment {
 
 		// look up a specific implementation
 		function = ops().findOp( //
+				MathAddDoublesFunction.class,
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
-				new Type[] { MathAddDoublesFunction.class }, //
 				new Type[] { c, c }, //
 				c//
 		);
@@ -91,9 +91,9 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void unaryComputer() {
 		Class<double[]> cArray = double[].class;
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
+				MathSqrtOp.class,
 				new Nil<Computer<double[], double[]>>() {
 				}, //
-				new Type[] { MathSqrtOp.class }, //
 				new Type[] { cArray, cArray }, //
 				cArray//
 		);
@@ -109,9 +109,9 @@ public class OpsTest extends AbstractTestEnvironment {
 		// double[] v2)
 		Class<double[]> cArray = double[].class;
 		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
+				MathAddOp.class,
 				new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
-				new Type[] { MathAddOp.class }, //
 				new Type[] { cArray, cArray, cArray }, //
 				cArray//
 		);
@@ -126,9 +126,9 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void unaryInplace() {
 		Class<double[]> cArray = double[].class;
 		final Inplace<double[]> inplaceSqrt = ops().findOp( //
+				MathSqrtOp.class,
 				new Nil<Inplace<double[]>>() {
 				}, //
-				new Type[] { MathSqrtOp.class }, //
 				new Type[] { cArray }, //
 				cArray//
 		);
@@ -141,9 +141,9 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void binaryInplace() {
 		Class<double[]> cArray = double[].class;
 		final BiInplace1<double[], double[]> inplaceAdd = ops().findOp( //
+				MathAddOp.class,
 				new Nil<BiInplace1<double[], double[]>>() {
 				}, //
-				new Type[] { MathAddOp.class }, //
 				new Type[] { cArray, cArray }, //
 				cArray//
 		);
@@ -157,9 +157,9 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void testSecondaryInputs() {
 		Class<Double> c = Double.class;
 		StructInstance<Function<Double, Double>> powerConstantFunctionStructInstance = ops().findOpInstance( //
+				MathPowerOp.class,
 				new Nil<Function<Double, Double>>() {
 				}, //
-				new Type[] { MathPowerOp.class }, //
 				new Type[] { c, c }, //
 				c//
 		);
@@ -168,9 +168,9 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert power3.apply(2.0).equals(8.0);
 
 		BiFunction<Double, Double, Double> powerFunction = ops().findOp( //
+				MathPowerOp.class,
 				new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
-				new Type[] { MathPowerOp.class }, //
 				new Type[] { c, c }, //
 				c//
 		);
@@ -178,9 +178,9 @@ public class OpsTest extends AbstractTestEnvironment {
 
 		Class<double[]> cArray = double[].class;
 		StructInstance<Computer<double[], double[]>> powerConstantComputerStructInstance = ops().findOpInstance( //
+				MathPowerOp.class,
 				new Nil<Computer<double[], double[]>>() {
 				}, //
-				new Type[] { MathPowerOp.class }, //
 				new Type[] { cArray, cArray, c }, //
 				cArray//
 		);

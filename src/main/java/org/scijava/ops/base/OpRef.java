@@ -63,21 +63,30 @@ public class OpRef {
 
 	// -- Static construction methods --
 
-	/**
-	 * Creates a new op reference.
-	 * 
-	 * @param type1
-	 *            first type constraint of the op.
-	 * @param type2
-	 *            second type constraint of the op.
-	 * @param outType
-	 *            the type of the op's primary output, or null for any type.
-	 * @param args
-	 *            arguments to the op.
-	 */
-	public static OpRef fromTypes(final Type type1, final Type type2, final Type outType, final Type[] args) {
+	public static OpRef fromTypes(final Type[] types, final Type outType, final Type... args) {
+		return new OpRef(null, filterNulls(types), filterNulls(outType), filterNulls(args));
+	}
+	
+	public static OpRef fromTypes(final Type type, final Type outType, final Type... args) {
+		return new OpRef(null, filterNulls(type), filterNulls(outType), filterNulls(args));
+	}
+	
+	public static OpRef fromTypes(final Type type1, final Type type2, final Type outType, final Type... args) {
 		return new OpRef(null, filterNulls(type1, type2), filterNulls(outType), filterNulls(args));
 	}
+	
+	public static OpRef fromTypes(final Class<? extends Op> opClass, final Type outType, final Type... args) {
+		return new OpRef(null, filterNulls(opClass), filterNulls(outType), filterNulls(args));
+	}
+	
+	public static OpRef fromType(final Type opType, final Type... args) {
+		return new OpRef(null, filterNulls(opType), null, filterNulls(args));
+	}
+	
+	public static OpRef fromClass(final Class<? extends Op> opClass, final Type... args) {
+		return new OpRef(null, filterNulls(opClass), null, filterNulls(args));
+	}
+	
 
 	// -- Constructor --
 
@@ -205,7 +214,8 @@ public class OpRef {
 	// -- Utility methods --
 
 	public static Type[] filterNulls(final Type... types) {
-		return Arrays.stream(types).filter(t -> t != null).toArray(Type[]::new);
+		Type[] ts = Arrays.stream(types).filter(t -> t != null).toArray(Type[]::new);
+		return ts == null ? null : ts;
 	}
 
 	// -- Helper methods --

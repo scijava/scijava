@@ -84,19 +84,34 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return infos;
 	}
 
-	public <T> StructInstance<T> findOpInstance(final Nil<T> opType, final Type[] opAdditionalTypes,
-			final Type[] inTypes, final Type outType) {
-		// FIXME - createTypes does not support multiple additional types,
-		// or multiple output types. We will need to generalize this.
-		final OpRef ref = OpRef.fromTypes(opType.getType(), //
-				opAdditionalTypes[0], outType, inTypes);
+	public <T> StructInstance<T> findOpInstance(final Class<? extends Op> opClass, final Nil<T> specialType, final Type[] inTypes,
+			final Type outType) {
+		// FIXME - multiple output types? We will need to generalize this.
+		final OpRef ref = OpRef.fromTypes(merge(opClass, specialType == null ? null : specialType.getType()), outType, inTypes);
 		@SuppressWarnings("unchecked")
 		final StructInstance<T> op = (StructInstance<T>) op(ref);
 		return op;
 	}
-
-	public <T> T findOp(final Nil<T> opType, final Type[] opAdditionalTypes, final Type[] inTypes,
+	
+	public <O extends Op> StructInstance<O> findOpInstance(final Class<O> opClass, final Type[] inTypes, final Type outType) {
+		return findOpInstance(opClass, null, inTypes, outType);
+	}
+	
+	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Type[] inTypes,
 			final Type outType) {
-		return findOpInstance(opType, opAdditionalTypes, inTypes, outType).object();
+		return findOpInstance(opClass, specialType, inTypes, outType).object();
+	}
+	
+	public <O extends Op> O findOp(final Class<O> opClass, final Type[] inTypes, final Type outType) {
+		return findOpInstance(opClass, inTypes, outType).object();
+	}
+	
+	private Type[] merge(Type in1, Type... ins) {
+		Type[] merged = new Type[ins.length + 1];
+		merged[0] = in1;
+		for (int i = 0; i < ins.length; i++) {
+			merged[i+1] = ins[i];
+		}
+		return merged;
 	}
 }

@@ -20,9 +20,9 @@ public class Inplaces {
 	public static <IO> Inplace<IO> unary(final OpService ops, final Class<? extends Op> opClass,
 			final Class<IO> inputOutputType) {
 		return ops.findOp( //
+				opClass,
 				new Nil<Inplace<IO>>() {
 				}, //
-				new Type[] { opClass }, //
 				new Type[] { inputOutputType }, //
 				inputOutputType);
 	}
@@ -30,9 +30,9 @@ public class Inplaces {
 	public static <IO, I2> BiInplace1<IO, I2> binary1(final OpService ops, final Class<? extends Op> opClass,
 			final Class<IO> inputOutputType, final Class<I2> input2Type) {
 		return ops.findOp( //
+				opClass,
 				new Nil<BiInplace1<IO, I2>>() {
 				}, //
-				new Type[] { opClass }, //
 				new Type[] { inputOutputType, input2Type}, //
 				inputOutputType);
 	}

@@ -20,9 +20,9 @@ public class Functions {
 	public static <I, O> Function<I, O> unary(final OpService ops, final Class<? extends Op> opClass,
 			final Class<I> inputType, final Class<O> outputType) {
 		return ops.findOp( //
+				opClass, 
 				new Nil<Function<I, O>>() {
 				}, //
-				new Type[] { opClass }, //
 				new Type[] { inputType }, //
 				outputType);
 	}
@@ -30,9 +30,9 @@ public class Functions {
 	public static <I1, I2, O> BiFunction<I1, I2, O> binary(final OpService ops, final Class<? extends Op> opClass,
 			final Class<I1> input1Type, final Class<I2> input2Type, final Class<O> outputType) {
 		return ops.findOp( //
+				opClass,
 				new Nil<BiFunction<I1, I2, O>>() {
 				}, //
-				new Type[] { opClass }, //
 				new Type[] { input1Type, input2Type }, //
 				outputType);
 	}

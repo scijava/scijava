@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import org.scijava.core.Priority;
 import org.scijava.ops.BiComputer;
 import org.scijava.ops.BiInplace1;
 import org.scijava.ops.Op;
@@ -34,7 +35,7 @@ public class Add {
 		}
 	}
 
-	@Plugin(type = MathAddOp.class)
+	@Plugin(type = MathAddOp.class, priority = Priority.HIGH)
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
 	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)

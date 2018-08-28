@@ -36,10 +36,10 @@ import org.scijava.struct.StructInstance;
 
 /**
  * Container class for a possible operation match between an {@link OpRef} and
- * an {@link OpInfo}, as computed by the {@link OpMatchingService}.
+ * an {@link OpInfo}, as computed by the {@link OpTypeMatchingService}.
  * 
  * @author Curtis Rueden
- * @see OpMatchingService
+ * @see OpTypeMatchingService
  */
 public class OpCandidate {
 

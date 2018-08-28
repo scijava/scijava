@@ -38,7 +38,7 @@ import java.util.HashSet;
 import org.scijava.types.Nil;
 
 /**
- * Utility class for {@link OpMatchingService}.
+ * Utility class for {@link OpTypeMatchingService}.
  * 
  * @author Leon Yang
  */

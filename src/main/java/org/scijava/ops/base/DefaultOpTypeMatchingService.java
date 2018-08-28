@@ -53,7 +53,7 @@ import org.scijava.struct.StructInstance;
  * @author Curtis Rueden
  */
 @Plugin(type = Service.class)
-public class DefaultOpMatchingService extends AbstractService implements OpMatchingService {
+public class DefaultOpTypeMatchingService extends AbstractService implements OpTypeMatchingService {
 
 	@Parameter
 	private Context context;
@@ -64,19 +64,17 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	// -- OpMatchingService methods --
 
 	@Override
-	public OpCandidate findMatch(final OpEnvironment ops, final OpRef ref) {
+	public MatchingResult findMatch(final OpEnvironment ops, final OpRef ref) {
 		return findMatch(ops, Collections.singletonList(ref));
 	}
 
 	@Override
-	public OpCandidate findMatch(final OpEnvironment ops, final List<OpRef> refs) {
+	public MatchingResult findMatch(final OpEnvironment ops, final List<OpRef> refs) {
 		// find candidates with matching name & type
 		final List<OpCandidate> candidates = findCandidates(ops, refs);
 		assertCandidatesFound(candidates, refs.get(0));
 		// narrow down candidates to the exact matches
-		final List<OpCandidate> matches = filterMatches(candidates);
-
-		return singleMatch(candidates, matches);
+		return new MatchingResult(candidates, filterMatches(candidates));
 	}
 
 	@Override
@@ -352,44 +350,6 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 			i++;
 		}
 		return level;
-	}
-
-	/**
-	 * Extracts and returns the single match from the given list of matches. If
-	 * there is not exactly one match, an {@link IllegalArgumentException} is
-	 * thrown with an analysis of the problem(s).
-	 * <p>
-	 * Helper method of {@link #findMatch}.
-	 * </p>
-	 * 
-	 * @param candidates
-	 *            The original unfiltered list of candidates, used during the
-	 *            analysis if there was a problem finding exactly one match.
-	 * @param matches
-	 *            The list of matching candidates.
-	 * @return The single matching candidate, with its module initialized.
-	 * @throws IllegalArgumentException
-	 *             If there is not exactly one matching candidate.
-	 */
-	private OpCandidate singleMatch(final List<OpCandidate> candidates, final List<OpCandidate> matches) {
-		if (matches.size() == 1) {
-			// a single match: initialize and return it
-			OpCandidate match = matches.get(0);
-			if (log.isDebug()) {
-				log.debug("Selected '" + match.getRef().getLabel() + "' op: " + match.opInfo().opClass().getName());
-			}
-
-			// // initialize the op, if appropriate
-			// if (m.object() instanceof Initializable) {
-			// ((Initializable) m.object()).initialize();
-			// }
-
-			return matches.get(0);
-		}
-
-		// final String analysis = OpUtils.matchInfo(candidates, matches);
-		// TODO
-		throw new IllegalArgumentException("TODO dump analysis");
 	}
 
 	/**

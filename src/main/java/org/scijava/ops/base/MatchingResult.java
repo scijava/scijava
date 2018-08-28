@@ -43,9 +43,7 @@ public class MatchingResult {
 
 			return matches.get(0);
 		}
-
-		// final String analysis = OpUtils.matchInfo(candidates, matches);
-		// TODO
-		throw new IllegalArgumentException("TODO dump analysis");
+		final String analysis = OpUtils.matchInfo(this);
+		throw new IllegalArgumentException(analysis);
 	}
 }

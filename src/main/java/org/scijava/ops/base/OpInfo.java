@@ -46,11 +46,16 @@ import org.scijava.struct.Struct;
 public class OpInfo {
 
 	private final Class<? extends Op> opClass;
-	private final Struct struct;
+	private Struct struct;
+	private ValidityException validityException;
 
-	public OpInfo(final Class<? extends Op> opClass) throws ValidityException {
+	public OpInfo(final Class<? extends Op> opClass) {
 		this.opClass = opClass;
-		struct = ParameterStructs.structOf(opClass);
+		try {
+			struct = ParameterStructs.structOf(opClass);
+		} catch (ValidityException e) {
+			validityException = e;
+		} 
 	}
 
 	/** Gets the associated {@link Struct} metadata. */
@@ -87,6 +92,14 @@ public class OpInfo {
 		return pluginAnnotation.type();
 	}
 
+	public ValidityException getValidityException() {
+		return validityException;
+	}
+	
+	public boolean isValid() {
+		return validityException == null;
+	}
+	
 	// -- Object methods --
 
 	@Override

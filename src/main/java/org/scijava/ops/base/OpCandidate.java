@@ -29,6 +29,7 @@
 
 package org.scijava.ops.base;
 
+import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -43,7 +44,16 @@ import org.scijava.struct.StructInstance;
 public class OpCandidate {
 
 	public static enum StatusCode {
-		MATCH, INVALID_MODULE, TOO_FEW_OUTPUTS, OUTPUT_TYPES_DO_NOT_MATCH, TOO_MANY_ARGS, TOO_FEW_ARGS, ARG_TYPES_DO_NOT_MATCH, REQUIRED_ARG_IS_NULL, CANNOT_CONVERT, DOES_NOT_CONFORM, OTHER
+		MATCH, //
+		INVALID_STRUCT, //
+		TOO_FEW_OUTPUTS, //
+		OUTPUT_TYPES_DO_NOT_MATCH, //
+		TOO_MANY_ARGS, //
+		TOO_FEW_ARGS, //
+		ARG_TYPES_DO_NOT_MATCH, //
+		REQUIRED_ARG_IS_NULL, //
+		CANNOT_CONVERT, //
+		DOES_NOT_CONFORM, OTHER //
 	}
 
 	private final OpEnvironment ops;
@@ -130,9 +140,12 @@ public class OpCandidate {
 		case MATCH:
 			sb.append("MATCH");
 			break;
-		case INVALID_MODULE:
-			sb.append("Invalid op: " + info.struct());
-			// TODO: List validity problems.
+		case INVALID_STRUCT:
+			sb.append("Invalid struct:");
+			for (ValidityProblem vp : opInfo().getValidityException().problems()) {
+				sb.append("\n\t");
+				sb.append(vp.getMessage());
+			}
 			break;
 		case TOO_FEW_OUTPUTS:
 			sb.append("Too few outputs");

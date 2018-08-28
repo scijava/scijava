@@ -46,7 +46,6 @@ import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
-import org.scijava.util.Types;
 
 /**
  * Default service for finding ops which match a request.
@@ -123,7 +122,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 
 	@Override
 	public StructInstance<?> match(final OpCandidate candidate) {
-		if (!valid(candidate))
+		if (!isValid(candidate))
 			return null;
 		if (!outputsMatch(candidate))
 			return null;
@@ -133,7 +132,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 
 	@Override
 	public boolean typesMatch(final OpCandidate candidate) {
-		if (!valid(candidate))
+		if (!isValid(candidate))
 			return false;
 		final Type[] args = padArgs(candidate);
 		return args == null ? false : typesMatch(candidate, args) < 0;
@@ -213,7 +212,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	private List<OpCandidate> validCandidates(final List<OpCandidate> candidates) {
 		final ArrayList<OpCandidate> validCandidates = new ArrayList<>();
 		for (final OpCandidate candidate : candidates) {
-			if (!valid(candidate) || !outputsMatch(candidate))
+			if (!isValid(candidate) || !outputsMatch(candidate))
 				continue;
 			final Type[] args = padArgs(candidate);
 			if (args == null)
@@ -389,6 +388,7 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 		}
 
 		// final String analysis = OpUtils.matchInfo(candidates, matches);
+		// TODO
 		throw new IllegalArgumentException("TODO dump analysis");
 	}
 
@@ -398,11 +398,12 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 	 * Helper method of {@link #match(OpCandidate)}.
 	 * </p>
 	 */
-	private boolean valid(final OpCandidate candidate) {
-		// TODO: candidate validity? Struct no longer has this thing.
-		return true;
-		// candidate.setStatus(StatusCode.INVALID_MODULE);
-		// return false;
+	private boolean isValid(final OpCandidate candidate) {
+		if (candidate.opInfo().isValid()) {
+			return true;
+		}
+		candidate.setStatus(StatusCode.INVALID_STRUCT);
+		return false;
 	}
 
 	/**
@@ -422,12 +423,11 @@ public class DefaultOpMatchingService extends AbstractService implements OpMatch
 				candidate.setStatus(StatusCode.TOO_FEW_OUTPUTS);
 				return false;
 			}
-			// FIXME: Use generic assignability test, once it exists.
-			final Class<?> raw = Types.raw(outType);
-			final Class<?> outItemClass = outItems.next().getRawType();
-			if (!Types.isAssignable(outItemClass, raw)) {
+			final Type to = outType;
+			final Type from = outItems.next().getType();
+			if (!TypeUtils.isAssignable(from, to)) {
 				candidate.setStatus(StatusCode.OUTPUT_TYPES_DO_NOT_MATCH, //
-						"request=" + raw.getName() + ", actual=" + outItemClass.getName());
+						"request=" + to.getTypeName() + ", actual=" + from.getTypeName());
 				return false;
 			}
 		}

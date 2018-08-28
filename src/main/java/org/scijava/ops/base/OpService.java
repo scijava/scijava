@@ -35,7 +35,6 @@ import java.util.Collection;
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.Op;
-import org.scijava.param.ValidityException;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
@@ -76,9 +75,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			try {
 				final Class<? extends Op> opClass = info.loadClass();
 				infos.add(new OpInfo(opClass));
-			} catch (InstantiableException | ValidityException exc) {
-				// TODO: Stop sucking at exception handling.
-				log.error(exc);
+			} catch (InstantiableException exc) {
+				log.error("Can't load class from plugin info: " + info.toString(), exc);
 			}
 		}
 		return infos;

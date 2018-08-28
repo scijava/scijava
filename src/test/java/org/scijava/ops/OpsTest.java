@@ -43,122 +43,159 @@ import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
 
 public class OpsTest extends AbstractTestEnvironment {
-	
-	
+
 	@Test
+	@SuppressWarnings("unchecked")
 	public void unaryFunction() {
+		// Look up a function type safe
 		Class<Double> c = Double.class;
 		Function<Double, Double> sqrtFunction = ops().findOp( //
-				MathSqrtOp.class,
-				new Nil<Function<Double, Double>>() {
+				MathSqrtOp.class, new Nil<Function<Double, Double>>() {
 				}, //
 				new Type[] { c }, //
 				c//
 		);
-		// execute the function
 		double answer = sqrtFunction.apply(16.0);
 		assert 4.0 == answer;
+
+		// Look up a function unsafe
+		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, new Type[] { c }, c);
+		sqrtFunction = (Function<Double, Double>) sqrtOp;
+		assert 4.0 == sqrtFunction.apply(16.0);
 	}
-	
+
 	@Test
+	@SuppressWarnings("unchecked")
 	public void binaryFunction() {
 		Class<Double> c = Double.class;
 		// look up a function: Double result = math.add(Double v1, Double v2)
-		BiFunction<Double, Double, Double> function = ops().findOp( //
-				MathAddOp.class,
-				new Nil<BiFunction<Double, Double, Double>>() {
+		BiFunction<Double, Double, Double> addFunction = ops().findOp( //
+				MathAddOp.class, new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Type[] { c, c }, //
 				c//
 		);
-		// execute the function
-		double answer = function.apply(1.0, 2.0);
-		assert 3.0 == answer;
+		assert 3.0 == addFunction.apply(1.0, 2.0);
+
+		// Look up a function unsafe
+		MathAddOp addOp = ops().findOp(MathAddOp.class, new Type[] { c, c }, c);
+		addFunction = (BiFunction<Double, Double, Double>) addOp;
+		assert 86.0 == addFunction.apply(10.0, 76.0);
 
 		// look up a specific implementation
-		function = ops().findOp( //
-				MathAddDoublesFunction.class,
-				new Nil<BiFunction<Double, Double, Double>>() {
+		addFunction = ops().findOp( //
+				MathAddDoublesFunction.class, new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Type[] { c, c }, //
 				c//
 		);
-		answer = function.apply(10.0, 76.0);
-		assert 86.0 == answer;
+		assert 86.0 == addFunction.apply(10.0, 76.0);
+
+		// Look up a function unsafe
+		MathAddDoublesFunction addDoublesOp = ops().findOp(MathAddDoublesFunction.class, new Type[] { c, c }, c);
+		addFunction = (BiFunction<Double, Double, Double>) addDoublesOp;
+		assert 86.0 == addFunction.apply(10.0, 76.0);
 	}
-	
+
 	@Test
+	@SuppressWarnings("unchecked")
 	public void unaryComputer() {
 		Class<double[]> cArray = double[].class;
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
-				MathSqrtOp.class,
-				new Nil<Computer<double[], double[]>>() {
+				MathSqrtOp.class, new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray }, //
 				cArray//
 		);
-		// execute the computer
 		double[] result = new double[2];
 		sqrtComputer.compute(new double[] { 16.0, 81.0 }, result);
 		assert arrayEquals(result, 4.0, 9.0);
+
+		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, new Type[] { cArray, cArray }, cArray);
+		sqrtComputer = (Computer<double[], double[]>) sqrtOp;
+		result = new double[2];
+		sqrtComputer.compute(new double[] { 16.0, 81.0 }, result);
+		assert arrayEquals(result, 4.0, 9.0);
 	}
-	
+
 	@Test
+	@SuppressWarnings("unchecked")
 	public void binaryComputer() {
-		// look up a computer: math.add(BOTH double[] result, double[] v1,
-		// double[] v2)
 		Class<double[]> cArray = double[].class;
-		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
-				MathAddOp.class,
-				new Nil<BiComputer<double[], double[], double[]>>() {
+		BiComputer<double[], double[], double[]> computer = ops().findOp( //
+				MathAddOp.class, new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray, cArray }, //
 				cArray//
 		);
-		final double[] a1 = { 3, 5, 7 };
-		final double[] a2 = { 2, 4, 9 };
-		final double[] result = new double[a2.length];
+		double[] a1 = { 3, 5, 7 };
+		double[] a2 = { 2, 4, 9 };
+		double[] result = new double[a2.length];
+		computer.compute(a1, a2, result);
+		assert arrayEquals(result, 5.0, 9.0, 16.0);
+
+		MathAddOp addOp = ops().findOp(MathAddOp.class, new Type[] { cArray, cArray, cArray }, //
+				cArray);
+		computer = (BiComputer<double[], double[], double[]>) addOp;
+		a1 = new double[] { 3, 5, 7 };
+		a2 = new double[] { 2, 4, 9 };
+		result = new double[a2.length];
 		computer.compute(a1, a2, result);
 		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
-	
+
 	@Test
+	@SuppressWarnings("unchecked")
 	public void unaryInplace() {
 		Class<double[]> cArray = double[].class;
-		final Inplace<double[]> inplaceSqrt = ops().findOp( //
-				MathSqrtOp.class,
-				new Nil<Inplace<double[]>>() {
+		Inplace<double[]> inplaceSqrt = ops().findOp( //
+				MathSqrtOp.class, new Nil<Inplace<double[]>>() {
 				}, //
 				new Type[] { cArray }, //
 				cArray//
 		);
-		final double[] a1 = { 4, 100, 36 };
+		double[] a1 = { 4, 100, 36 };
+		inplaceSqrt.mutate(a1);
+		assert arrayEquals(a1, 2.0, 10.0, 6.0);
+
+		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, new Type[] { cArray }, //
+				cArray);
+		inplaceSqrt = (Inplace<double[]>) sqrtOp;
+		a1 = new double[] { 4, 100, 36 };
 		inplaceSqrt.mutate(a1);
 		assert arrayEquals(a1, 2.0, 10.0, 6.0);
 	}
-	
+
 	@Test
+	@SuppressWarnings("unchecked")
 	public void binaryInplace() {
 		Class<double[]> cArray = double[].class;
-		final BiInplace1<double[], double[]> inplaceAdd = ops().findOp( //
-				MathAddOp.class,
-				new Nil<BiInplace1<double[], double[]>>() {
+		BiInplace1<double[], double[]> inplaceAdd = ops().findOp( //
+				MathAddOp.class, new Nil<BiInplace1<double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray }, //
 				cArray//
 		);
-		final double[] a1 = { 3, 5, 7 };
-		final double[] a2 = { 2, 4, 9 };
+		double[] a1 = { 3, 5, 7 };
+		double[] a2 = { 2, 4, 9 };
 		inplaceAdd.mutate(a1, a2);
 		assert arrayEquals(a1, 5.0, 9.0, 16.0);
+		
+		MathAddOp addOp = ops().findOp(MathAddOp.class, new Type[] { cArray, cArray }, //
+				cArray);
+		try {
+			// will fail as 'addOp' will be matched to a function
+			inplaceAdd = (BiInplace1<double[], double[]>) addOp;
+		} catch (ClassCastException e) {
+			// expected as the add double arrays function has a higher priority than the inplace
+		}
 	}
-	
+
 	@Test
 	public void testSecondaryInputs() {
 		Class<Double> c = Double.class;
 		StructInstance<Function<Double, Double>> powerConstantFunctionStructInstance = ops().findOpInstance( //
-				MathPowerOp.class,
-				new Nil<Function<Double, Double>>() {
+				MathPowerOp.class, new Nil<Function<Double, Double>>() {
 				}, //
 				new Type[] { c, c }, //
 				c//
@@ -168,8 +205,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert power3.apply(2.0).equals(8.0);
 
 		BiFunction<Double, Double, Double> powerFunction = ops().findOp( //
-				MathPowerOp.class,
-				new Nil<BiFunction<Double, Double, Double>>() {
+				MathPowerOp.class, new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Type[] { c, c }, //
 				c//
@@ -178,8 +214,7 @@ public class OpsTest extends AbstractTestEnvironment {
 
 		Class<double[]> cArray = double[].class;
 		StructInstance<Computer<double[], double[]>> powerConstantComputerStructInstance = ops().findOpInstance( //
-				MathPowerOp.class,
-				new Nil<Computer<double[], double[]>>() {
+				MathPowerOp.class, new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray, c }, //
 				cArray//

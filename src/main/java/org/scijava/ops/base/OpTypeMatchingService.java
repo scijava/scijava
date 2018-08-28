@@ -41,7 +41,7 @@ import org.scijava.struct.StructInstance;
  * 
  * @author Curtis Rueden
  */
-public interface OpMatchingService extends SciJavaService {
+public interface OpTypeMatchingService extends SciJavaService {
 
 	/**
 	 * Finds and initializes the best module matching the given op name and/or
@@ -58,7 +58,7 @@ public interface OpMatchingService extends SciJavaService {
 	 *             if there is no match, or if there is more than one match at
 	 *             the same priority.
 	 */
-	OpCandidate findMatch(OpEnvironment ops, OpRef ref);
+	MatchingResult findMatch(OpEnvironment ops, OpRef ref);
 
 	/**
 	 * Finds and initializes the best module matching any of the given op name
@@ -75,7 +75,7 @@ public interface OpMatchingService extends SciJavaService {
 	 *             if there is no match, or if there is more than one match at
 	 *             the same priority.
 	 */
-	OpCandidate findMatch(OpEnvironment ops, List<OpRef> refs);
+	MatchingResult findMatch(OpEnvironment ops, List<OpRef> refs);
 
 	/**
 	 * Builds a list of candidate ops which might match the given op reference.

@@ -31,6 +31,7 @@ package org.scijava.ops.base;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
@@ -57,16 +58,16 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private PluginService pluginService;
 
 	@Parameter
-	private OpMatchingService matcher;
+	private OpTypeMatchingService matcher;
 
 	@Parameter
 	private LogService log;
 
 	public StructInstance<?> op(OpRef ref) {
-		final OpCandidate match = matcher.findMatch(this, ref);
-		return match.createOp();
+		final MatchingResult match = matcher.findMatch(this, ref);
+		return match.singleMatch().createOp();
 	}
-
+	
 	@Override
 	public Collection<OpInfo> infos() {
 		// TODO: Consider maintaining an efficient OpInfo data structure.

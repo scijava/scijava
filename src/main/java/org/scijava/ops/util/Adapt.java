@@ -40,13 +40,16 @@ public class Adapt {
 			};
 		}
 		
-		public static <I, O> OneToOneCommand<I, O> asCommand(final Function<I, O> function) {
-			return new OneToOneCommand<I, O>() {
+		public static <I, O> OneToOneCommand<I, O> asCommand(final Function<I, O> function, I input) {
+			OneToOneCommand<I, O> command = new OneToOneCommand<I, O>() {
 				@Override
 				public void run() {
 					output = function.apply(input);
 				}
 			};
+			// Populate the input member of the function command
+			Inject.Commands.inputs(command, input);
+			return command;
 		}		
 	}
 	
@@ -92,13 +95,16 @@ public class Adapt {
 			};
 		}
 		
-		public static <I, O> OneToOneCommand<I, O> asCommand(final Computer<I, O> computer) {
-			return new OneToOneCommand<I, O>() {
+		public static <I, O> OneToOneCommand<I, O> asCommand(final Computer<I, O> computer, I input, O output) {
+			OneToOneCommand<I, O> command = new OneToOneCommand<I, O>() {
 				@Override
 				public void run() {
 					computer.compute(input, output);
 				}
 			};
+			// Populate the input and output member of the computer command
+			Inject.Commands.all(command, input, output);
+			return command;
 		}
 	}
 }

@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Adapt;
-import org.scijava.ops.util.Inject;
 import org.scijava.types.Nil;
 
 public class AdaptersTest extends AbstractTestEnvironment {
@@ -46,51 +45,47 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	public void testFunctionAsCommand() {
 		Class<Double> c = Double.class;
 		Function<Double, Double> sqrtFunction = ops().findOp( //
-				MathSqrtOp.class,
-				new Nil<Function<Double, Double>>() {
+				MathSqrtOp.class, new Nil<Function<Double, Double>>() {
 				}, //
 				new Type[] { c }, //
 				c//
 		);
-		
-		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction);
-		Inject.Commands.inputs(sqrtCommand, 25.0);
+
+		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction, 25.0);
 		sqrtCommand.run();
 		assert sqrtCommand.get().equals(5.0);
 	}
-	
+
 	@Test
 	public void testComputerAsCommand() {
 		Class<double[]> cArray = double[].class;
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
-				MathSqrtOp.class,
-				new Nil<Computer<double[], double[]>>() {
+				MathSqrtOp.class, new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray }, //
 				cArray//
 		);
-		
-		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer);
-		Inject.Commands.inputs(sqrtCommand, new double[] {25, 100, 4});
-		Inject.Commands.outputs(sqrtCommand, new double[3]);
+
+		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer,
+				new double[] { 25, 100, 4 }, new double[3]);
 		sqrtCommand.run();
-		assert arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);		
+		assert arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);
 	}
-	
+
 	@Test
 	public void testComputerAsFunction() {
 		Class<double[]> cArray = double[].class;
 		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
-				MathAddOp.class,
-				new Nil<BiComputer<double[], double[], double[]>>() {
+				MathAddOp.class, new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray, cArray }, //
 				cArray//
 		);
 
-		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer, (arr1, arr2) -> {
-			return new double[arr1.length];
-		});
+		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer,
+				(arr1, arr2) -> {
+					return new double[arr1.length];
+				});
 
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
@@ -103,18 +98,18 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		Class<double[]> c = double[].class;
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<double[], double[], double[]> function = ops().findOp( //
-				MathAddOp.class,
-				new Nil<BiFunction<double[], double[], double[]>>() {
+				MathAddOp.class, new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Type[] { c, c }, //
 				c//
 		);
 
-		BiComputer<double[], double[], double[]> functionAsComputer = Adapt.Functions.asBiComputer(function, (from, to) -> {
-			for (int i = 0; i < from.length; i++) {
-				to[i] = from[i];
-			}
-		});
+		BiComputer<double[], double[], double[]> functionAsComputer = Adapt.Functions.asBiComputer(function,
+				(from, to) -> {
+					for (int i = 0; i < from.length; i++) {
+						to[i] = from[i];
+					}
+				});
 
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };

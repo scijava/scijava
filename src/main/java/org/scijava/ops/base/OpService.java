@@ -31,11 +31,12 @@ package org.scijava.ops.base;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.Op;
+import org.scijava.ops.util.Inject;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
@@ -63,11 +64,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	@Parameter
 	private LogService log;
 
-	public StructInstance<?> op(OpRef ref) {
-		final MatchingResult match = matcher.findMatch(this, ref);
-		return match.singleMatch().createOp();
-	}
-	
 	@Override
 	public Collection<OpInfo> infos() {
 		// TODO: Consider maintaining an efficient OpInfo data structure.
@@ -83,33 +79,49 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return infos;
 	}
 
-	public <T> StructInstance<T> findOpInstance(final Class<? extends Op> opClass, final Nil<T> specialType, final Type[] inTypes,
-			final Type outType) {
+	public <T> StructInstance<T> findOpInstance(final Class<? extends Op> opClass, final Nil<T> specialType,
+			final Type[] inTypes, final Type outType, final Object... secondaryArgs) {
 		// FIXME - multiple output types? We will need to generalize this.
-		final OpRef ref = OpRef.fromTypes(merge(opClass, specialType == null ? null : specialType.getType()), outType, inTypes);
+		final OpRef ref = OpRef.fromTypes(merge(opClass, specialType == null ? null : specialType.getType()), outType,
+				inTypes);
+
+		// Find single match which matches the specified types
 		@SuppressWarnings("unchecked")
-		final StructInstance<T> op = (StructInstance<T>) op(ref);
+		final StructInstance<T> op = (StructInstance<T>) findTypeMatch(ref).createOp();
+
+		// Inject the secondary args if there are any
+		if (Inject.Structs.isInjectable(op)) {
+			if (secondaryArgs.length != 0) {
+				Inject.Structs.inputs(op, secondaryArgs);
+			} else {
+				log.warn(
+						"Specified Op has secondary args however no secondary args are given. Op execution may lead to errors.");
+			}
+		} else if (secondaryArgs.length > 0) {
+			log.warn(
+					"Specified Op has no secondary args however secondary args are given. The specified args will not be injected.");
+		}
 		return op;
 	}
-	
-	public <O extends Op> StructInstance<O> findOpInstance(final Class<O> opClass, final Type[] inTypes, final Type outType) {
-		return findOpInstance(opClass, null, inTypes, outType);
-	}
-	
+
 	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Type[] inTypes,
-			final Type outType) {
-		return findOpInstance(opClass, specialType, inTypes, outType).object();
+			final Type outType, final Object... secondaryArgs) {
+		return findOpInstance(opClass, specialType, inTypes, outType, secondaryArgs).object();
 	}
-	
-	public <O extends Op> O findOp(final Class<O> opClass, final Type[] inTypes, final Type outType) {
-		return findOpInstance(opClass, inTypes, outType).object();
+
+	public MatchingResult findTypeMatches(final OpRef ref) {
+		return matcher.findMatch(this, ref);
 	}
-	
+
+	public OpCandidate findTypeMatch(final OpRef ref) {
+		return findTypeMatches(ref).singleMatch();
+	}
+
 	private Type[] merge(Type in1, Type... ins) {
 		Type[] merged = new Type[ins.length + 1];
 		merged[0] = in1;
 		for (int i = 0; i < ins.length; i++) {
-			merged[i+1] = ins[i];
+			merged[i + 1] = ins[i];
 		}
 		return merged;
 	}

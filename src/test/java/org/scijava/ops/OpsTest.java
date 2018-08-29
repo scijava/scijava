@@ -38,7 +38,6 @@ import org.scijava.ops.math.Add.MathAddDoublesFunction;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Power.MathPowerOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
-import org.scijava.ops.util.Inject;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
 
@@ -59,7 +58,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert 4.0 == answer;
 
 		// Look up a function unsafe
-		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, new Type[] { c }, c);
+		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, null, new Type[] { c }, c);
 		sqrtFunction = (Function<Double, Double>) sqrtOp;
 		assert 4.0 == sqrtFunction.apply(16.0);
 	}
@@ -78,7 +77,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert 3.0 == addFunction.apply(1.0, 2.0);
 
 		// Look up a function unsafe
-		MathAddOp addOp = ops().findOp(MathAddOp.class, new Type[] { c, c }, c);
+		MathAddOp addOp = ops().findOp(MathAddOp.class, null, new Type[] { c, c }, c);
 		addFunction = (BiFunction<Double, Double, Double>) addOp;
 		assert 86.0 == addFunction.apply(10.0, 76.0);
 
@@ -92,7 +91,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert 86.0 == addFunction.apply(10.0, 76.0);
 
 		// Look up a function unsafe
-		MathAddDoublesFunction addDoublesOp = ops().findOp(MathAddDoublesFunction.class, new Type[] { c, c }, c);
+		MathAddDoublesFunction addDoublesOp = ops().findOp(MathAddDoublesFunction.class, null, new Type[] { c, c }, c);
 		addFunction = (BiFunction<Double, Double, Double>) addDoublesOp;
 		assert 86.0 == addFunction.apply(10.0, 76.0);
 	}
@@ -111,7 +110,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		sqrtComputer.compute(new double[] { 16.0, 81.0 }, result);
 		assert arrayEquals(result, 4.0, 9.0);
 
-		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, new Type[] { cArray, cArray }, cArray);
+		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, null, new Type[] { cArray, cArray }, cArray);
 		sqrtComputer = (Computer<double[], double[]>) sqrtOp;
 		result = new double[2];
 		sqrtComputer.compute(new double[] { 16.0, 81.0 }, result);
@@ -134,7 +133,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		computer.compute(a1, a2, result);
 		assert arrayEquals(result, 5.0, 9.0, 16.0);
 
-		MathAddOp addOp = ops().findOp(MathAddOp.class, new Type[] { cArray, cArray, cArray }, //
+		MathAddOp addOp = ops().findOp(MathAddOp.class, null, new Type[] { cArray, cArray, cArray }, //
 				cArray);
 		computer = (BiComputer<double[], double[], double[]>) addOp;
 		a1 = new double[] { 3, 5, 7 };
@@ -158,7 +157,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		inplaceSqrt.mutate(a1);
 		assert arrayEquals(a1, 2.0, 10.0, 6.0);
 
-		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, new Type[] { cArray }, //
+		MathSqrtOp sqrtOp = ops().findOp(MathSqrtOp.class, null, new Type[] { cArray }, //
 				cArray);
 		inplaceSqrt = (Inplace<double[]>) sqrtOp;
 		a1 = new double[] { 4, 100, 36 };
@@ -181,7 +180,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		inplaceAdd.mutate(a1, a2);
 		assert arrayEquals(a1, 5.0, 9.0, 16.0);
 		
-		MathAddOp addOp = ops().findOp(MathAddOp.class, new Type[] { cArray, cArray }, //
+		MathAddOp addOp = ops().findOp(MathAddOp.class, null, new Type[] { cArray, cArray }, //
 				cArray);
 		try {
 			// will fail as 'addOp' will be matched to a function
@@ -198,9 +197,9 @@ public class OpsTest extends AbstractTestEnvironment {
 				MathPowerOp.class, new Nil<Function<Double, Double>>() {
 				}, //
 				new Type[] { c, c }, //
-				c//
+				c, //
+				3.0//
 		);
-		Inject.Structs.all(powerConstantFunctionStructInstance, 3.0);
 		Function<Double, Double> power3 = powerConstantFunctionStructInstance.object();
 		assert power3.apply(2.0).equals(8.0);
 
@@ -217,9 +216,9 @@ public class OpsTest extends AbstractTestEnvironment {
 				MathPowerOp.class, new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Type[] { cArray, cArray, c }, //
-				cArray//
+				cArray, //
+				3.0//
 		);
-		Inject.Structs.all(powerConstantComputerStructInstance, 3.0);
 		Computer<double[], double[]> power3Arrays = powerConstantComputerStructInstance.object();
 		double[] result = new double[3];
 		power3Arrays.compute(new double[] { 1.0, 2.0, 3.0 }, result);

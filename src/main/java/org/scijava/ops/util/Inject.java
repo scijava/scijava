@@ -21,7 +21,11 @@ public class Inject {
 	public static class Structs {
 		private Structs() {
 		}
-
+		
+		public static boolean isInjectable(final StructInstance<?> instance) {
+			return !getAccessibles(instance).isEmpty();
+		}
+		
 		public static void inputs(StructInstance<?> instance, Object... objs) {
 			unsafe(filterAccessibles(getAccessibles(instance), m -> {
 				ItemIO ioType = m.member().getIOType();
@@ -88,7 +92,7 @@ public class Inject {
 			Structs.all(commandToStructInstance(command), objs);
 		}
 
-		private static StructInstance<Command> commandToStructInstance(Command command) {
+		public static StructInstance<Command> commandToStructInstance(Command command) {
 			try {
 				return ParameterStructs.create(command);
 			} catch (ValidityException e) {

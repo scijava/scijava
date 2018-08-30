@@ -46,6 +46,7 @@ import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
+import org.scijava.util.Types;
 
 /**
  * Default service for finding ops which match a request.
@@ -285,9 +286,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		int i = 0;
 		for (final Member<?> member : OpUtils.inputs(candidate)) {
 			if (paddedArgs[i] != null) {
-				final Class<?> typeClass = member.getRawType();
-				final Class<?> argClass = OpMatchingUtil.getClass(paddedArgs[i]);
-				if (!typeClass.equals(argClass))
+				if (!member.getType().equals(paddedArgs[i]))
 					return false;
 			}
 			i++;

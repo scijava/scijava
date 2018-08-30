@@ -37,6 +37,7 @@ import org.scijava.ops.math.Add.MathAddDoublesFunction;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Power.MathPowerOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
+import org.scijava.ops.math.Zero.MathZeroOp;
 import org.scijava.ops.types.Nil;
 
 public class OpsTest extends AbstractTestEnvironment {
@@ -99,6 +100,19 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert 86.0 == addFunction.apply(10.0, 76.0);
 	}
 
+	@Test
+	public void nullaryComputer() {
+		NullaryComputer<double[]> sqrtComputer = ops().findOp( //
+				MathZeroOp.class, new Nil<NullaryComputer<double[]>>() {
+				}, //
+				new Nil[] { nilDoubleArray }, //
+				nilDoubleArray//
+		);
+		double[] result = new double[] { 1.2323, 13231.1232, 37373773};
+		sqrtComputer.compute(result);
+		assert arrayEquals(result, 0.0, 0.0, 0.0);
+	}
+	
 	@Test
 	@SuppressWarnings("unchecked")
 	public void unaryComputer() {

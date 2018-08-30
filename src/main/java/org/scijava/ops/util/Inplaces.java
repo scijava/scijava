@@ -1,7 +1,5 @@
 package org.scijava.ops.util;
 
-import java.lang.reflect.Type;
-
 import org.scijava.ops.BiInplace1;
 import org.scijava.ops.Inplace;
 import org.scijava.ops.Op;
@@ -18,24 +16,24 @@ public class Inplaces {
 	}
 
 	public static <IO> Inplace<IO> unary(final OpService ops, final Class<? extends Op> opClass,
-			final Class<IO> inputOutputType, final Object... secondaryArgs) {
+			final Nil<IO> inputOutputType, final Object... secondaryArgs) {
 		return ops.findOp( //
 				opClass, //
 				new Nil<Inplace<IO>>() {
 				}, //
-				new Type[] { inputOutputType }, //
-				inputOutputType, //
+				new Nil[] { inputOutputType }, //
+				new Nil[] { inputOutputType }, //
 				secondaryArgs);
 	}
 
 	public static <IO, I2> BiInplace1<IO, I2> binary1(final OpService ops, final Class<? extends Op> opClass,
-			final Class<IO> inputOutputType, final Class<I2> input2Type, final Object... secondaryArgs) {
+			final Nil<IO> inputOutputType, final Nil<I2> input2Type, final Object... secondaryArgs) {
 		return ops.findOp( //
 				opClass, //
 				new Nil<BiInplace1<IO, I2>>() {
 				}, //
-				new Type[] { inputOutputType, input2Type }, //
-				inputOutputType, //
+				new Nil[] { inputOutputType, input2Type }, //
+				new Nil[] { inputOutputType }, //
 				secondaryArgs);
 	}
 

@@ -30,8 +30,8 @@ package org.scijava.ops.base;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
@@ -80,10 +80,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	}
 
 	public <T> StructInstance<T> findOpInstance(final Class<? extends Op> opClass, final Nil<T> specialType,
-			final Type[] inTypes, final Type outType, final Object... secondaryArgs) {
+			final Nil<?>[] inTypes, final Nil<?>[] outTypes, final Object... secondaryArgs) {
 		// FIXME - multiple output types? We will need to generalize this.
-		final OpRef ref = OpRef.fromTypes(merge(opClass, specialType == null ? null : specialType.getType()), outType,
-				inTypes);
+		final OpRef ref = OpRef.fromTypes(merge(opClass, toTypes(specialType)), toTypes(outTypes), toTypes(inTypes));
 
 		// Find single match which matches the specified types
 		@SuppressWarnings("unchecked")
@@ -104,9 +103,14 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return op;
 	}
 
-	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Type[] inTypes,
-			final Type outType, final Object... secondaryArgs) {
-		return findOpInstance(opClass, specialType, inTypes, outType, secondaryArgs).object();
+	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Nil<?>[] inTypes,
+			final Nil<?>[] outTypes, final Object... secondaryArgs) {
+		return findOpInstance(opClass, specialType, inTypes, outTypes, secondaryArgs).object();
+	}
+
+	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Nil<?>[] inTypes,
+			final Nil<?> outType, final Object... secondaryArgs) {
+		return findOpInstance(opClass, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
 
 	public MatchingResult findTypeMatches(final OpRef ref) {
@@ -124,5 +128,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			merged[i + 1] = ins[i];
 		}
 		return merged;
+	}
+
+	private Type[] toTypes(Nil<?>... nils) {
+		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
 	}
 }

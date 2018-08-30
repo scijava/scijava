@@ -31,14 +31,7 @@ public interface Member<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	default Class<T> getRawType() {
-		final Type type = getType();
-		Class<T> rawType = null;
-		if (type instanceof TypeVariable) {
-			rawType = (Class<T>) Types.erase(type);
-		} else if (type instanceof Class) {
-			rawType = (Class<T>) type;
-		} 
-		return rawType;
+		return (Class<T>) Types.raw(getType());
 	}
 
 	/** Gets the input/output type of the member. */

@@ -64,7 +64,7 @@ public class Inject {
 		private static List<ValueAccessibleMemberInstance<?>> getAccessibles(StructInstance<?> instance) {
 			return instance.members().stream() //
 					.filter(ValueAccessibleMemberInstance.class::isInstance) //
-					.map(ValueAccessibleMemberInstance.class::cast) //
+					.map(m -> (ValueAccessibleMemberInstance<?>)m) //
 					.collect(Collectors.toList());
 		}
 

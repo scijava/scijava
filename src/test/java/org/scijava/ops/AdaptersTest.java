@@ -29,7 +29,6 @@
 
 package org.scijava.ops;
 
-import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -41,14 +40,20 @@ import org.scijava.types.Nil;
 
 public class AdaptersTest extends AbstractTestEnvironment {
 
+	private static Nil<Double> nilDouble = new Nil<Double>() {
+	};
+	
+	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	};
+	
+	
 	@Test
 	public void testFunctionAsCommand() {
-		Class<Double> c = Double.class;
 		Function<Double, Double> sqrtFunction = ops().findOp( //
 				MathSqrtOp.class, new Nil<Function<Double, Double>>() {
 				}, //
-				new Type[] { c }, //
-				c//
+				new Nil[] { nilDouble }, //
+				nilDouble//
 		);
 
 		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction, 25.0);
@@ -58,12 +63,11 @@ public class AdaptersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testComputerAsCommand() {
-		Class<double[]> cArray = double[].class;
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
 				MathSqrtOp.class, new Nil<Computer<double[], double[]>>() {
 				}, //
-				new Type[] { cArray, cArray }, //
-				cArray//
+				new Nil[] { nilDoubleArray, nilDoubleArray }, //
+				nilDoubleArray//
 		);
 
 		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer,
@@ -74,12 +78,11 @@ public class AdaptersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testComputerAsFunction() {
-		Class<double[]> cArray = double[].class;
 		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
 				MathAddOp.class, new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
-				new Type[] { cArray, cArray, cArray }, //
-				cArray//
+				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
+				nilDoubleArray//
 		);
 
 		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer,
@@ -95,13 +98,12 @@ public class AdaptersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testFunctionAsComputer() {
-		Class<double[]> c = double[].class;
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<double[], double[], double[]> function = ops().findOp( //
 				MathAddOp.class, new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
-				new Type[] { c, c }, //
-				c//
+				new Nil[] { nilDoubleArray, nilDoubleArray }, //
+				nilDoubleArray//
 		);
 
 		BiComputer<double[], double[], double[]> functionAsComputer = Adapt.Functions.asBiComputer(function,

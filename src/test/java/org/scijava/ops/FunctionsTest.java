@@ -37,25 +37,29 @@ import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Power.MathPowerOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Functions;
+import org.scijava.types.Nil;
 
 public class FunctionsTest extends AbstractTestEnvironment {
 
+	private static Nil<Double> nilDouble = new Nil<Double>() {
+	};
+
 	@Test
 	public void testUnaryFunctions() {
-		Function<Double, Double> sqrtFunction = Functions.unary(ops(), MathSqrtOp.class, Double.class, Double.class);
+		Function<Double, Double> sqrtFunction = Functions.unary(ops(), MathSqrtOp.class, nilDouble, nilDouble);
 		double answer = sqrtFunction.apply(16.0);
 		assert 4.0 == answer;
 	}
 
 	@Test
 	public void testBinaryFunctions() {
-		BiFunction<Double, Double, Double> addFunction = Functions.binary(ops(), MathAddOp.class, Double.class,
-				Double.class, Double.class);
+		BiFunction<Double, Double, Double> addFunction = Functions.binary(ops(), MathAddOp.class, nilDouble, nilDouble,
+				nilDouble);
 		double answer = addFunction.apply(16.0, 14.0);
 		assert 30.0 == answer;
-		
-		BiFunction<Double, Double, Double> powerFunction = Functions.binary(ops(), MathPowerOp.class, Double.class,
-				Double.class, Double.class);
+
+		BiFunction<Double, Double, Double> powerFunction = Functions.binary(ops(), MathPowerOp.class, nilDouble,
+				nilDouble, nilDouble);
 		answer = powerFunction.apply(2.0, 10.0);
 		assert 1024.0 == answer;
 	}

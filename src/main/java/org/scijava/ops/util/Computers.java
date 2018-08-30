@@ -1,7 +1,5 @@
 package org.scijava.ops.util;
 
-import java.lang.reflect.Type;
-
 import org.scijava.ops.BiComputer;
 import org.scijava.ops.Computer;
 import org.scijava.ops.Op;
@@ -18,24 +16,26 @@ public class Computers {
 	}
 
 	public static <I, O> Computer<I, O> unary(final OpService ops, final Class<? extends Op> opClass,
-			final Class<I> inputType, final Class<O> outputType, final Object... secondaryArgs) {
+			final Nil<I> inputType, final Nil<O> outputType, final Object... secondaryArgs) {
 		return ops.findOp( //
 				opClass, //
 				new Nil<Computer<I, O>>() {
 				}, //
-				new Type[] { inputType, outputType }, //
-				outputType, secondaryArgs);
+				new Nil[] { inputType, outputType }, //
+				new Nil[] { outputType }, // 
+				secondaryArgs);
 	}
 
 	public static <I1, I2, O> BiComputer<I1, I2, O> binary(final OpService ops, final Class<? extends Op> opClass,
-			final Class<I1> input1Type, final Class<I2> input2Type, final Class<O> outputType,
+			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<O> outputType,
 			final Object... secondaryArgs) {
 		return ops.findOp( //
 				opClass, //
 				new Nil<BiComputer<I1, I2, O>>() {
 				}, //
-				new Type[] { input1Type, input2Type, outputType }, //
-				outputType, secondaryArgs);
+				new Nil[] { input1Type, input2Type, outputType }, //
+				new Nil[] { outputType }, //
+				secondaryArgs);
 	}
 
 }

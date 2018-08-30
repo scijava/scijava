@@ -63,30 +63,9 @@ public class OpRef {
 
 	// -- Static construction methods --
 
-	public static OpRef fromTypes(final Type[] types, final Type outType, final Type... args) {
-		return new OpRef(null, filterNulls(types), filterNulls(outType), filterNulls(args));
+	public static OpRef fromTypes(final Type[] types, final Type[] outTypes, final Type... args) {
+		return new OpRef(null, filterNulls(types), filterNulls(outTypes), filterNulls(args));
 	}
-	
-	public static OpRef fromTypes(final Type type, final Type outType, final Type... args) {
-		return new OpRef(null, filterNulls(type), filterNulls(outType), filterNulls(args));
-	}
-	
-	public static OpRef fromTypes(final Type type1, final Type type2, final Type outType, final Type... args) {
-		return new OpRef(null, filterNulls(type1, type2), filterNulls(outType), filterNulls(args));
-	}
-	
-	public static OpRef fromTypes(final Class<? extends Op> opClass, final Type outType, final Type... args) {
-		return new OpRef(null, filterNulls(opClass), filterNulls(outType), filterNulls(args));
-	}
-	
-	public static OpRef fromType(final Type opType, final Type... args) {
-		return new OpRef(null, filterNulls(opType), null, filterNulls(args));
-	}
-	
-	public static OpRef fromClass(final Class<? extends Op> opClass, final Type... args) {
-		return new OpRef(null, filterNulls(opClass), null, filterNulls(args));
-	}
-	
 
 	// -- Constructor --
 

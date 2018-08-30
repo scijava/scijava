@@ -33,13 +33,17 @@ import org.junit.Test;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Computers;
+import org.scijava.types.Nil;
 
 public class ComputersTest extends AbstractTestEnvironment {
 
+	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	};
+
 	@Test
 	public void testUnaryComputers() {
-		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), MathSqrtOp.class, double[].class,
-				double[].class);
+		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), MathSqrtOp.class, nilDoubleArray,
+				nilDoubleArray);
 
 		double[] result = new double[3];
 		sqrtComputer.compute(new double[] { 4.0, 100.0, 25.0 }, result);
@@ -48,8 +52,8 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryComputers() {
-		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), MathAddOp.class, double[].class,
-				double[].class, double[].class);
+		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), MathAddOp.class, nilDoubleArray,
+				nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];
 		addComputer.compute(new double[] { 4.0, 100.0, 25.0 }, new double[] { 4d, 10d, 1.5 }, result);

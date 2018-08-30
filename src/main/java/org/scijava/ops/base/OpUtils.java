@@ -29,6 +29,7 @@
 
 package org.scijava.ops.base;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,7 +143,7 @@ public final class OpUtils {
 		// fail, with information about the request and candidates
 		sb.append("\n");
 		sb.append("Request:\n");
-		sb.append("-\t" + opString(ref.getLabel(), (Object[]) ref.getArgs()) + "\n");
+		sb.append("-\t" + opString(ref.getLabel(), ref.getArgs()) + "\n");
 		sb.append("\n");
 		sb.append("Candidates:\n");
 		int count = 0;
@@ -173,22 +174,22 @@ public final class OpUtils {
 	 *            The op's input arguments.
 	 * @return A string describing the op request.
 	 */
-	public static String opString(final String name, final Object... args) {
+	public static String opString(final String name, final Type... args) {
+		// TODO: add description of outputs
 		final StringBuilder sb = new StringBuilder();
 		sb.append(name + "(\n\t\t");
 		boolean first = true;
-		for (final Object arg : args) {
+		for (final Type arg : args) {
 			if (first)
 				first = false;
 			else
 				sb.append(",\n\t\t");
 			if (arg == null)
 				sb.append("null");
-			else if (arg instanceof Class) {
+			else {
 				// NB: Class instance used to mark argument type.
-				sb.append(((Class<?>) arg).getSimpleName());
-			} else
-				sb.append(arg.getClass().getSimpleName());
+				sb.append(arg.getTypeName());
+			} 
 		}
 		sb.append(")");
 		return sb.toString();

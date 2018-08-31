@@ -1307,6 +1307,29 @@ public final class Types {
 
 			return true;
 		}
+		
+		@Override
+		public String toString() {
+			StringBuilder s = new StringBuilder();
+			s.append(this.getClass().getSimpleName());
+			s.append(": ");
+			s.append(var.getName());
+			s.append("\n\t\t");
+			s.append("of Types:\n\t\t\t");
+			for(Type t : types) {
+				s.append(t.getTypeName());
+				s.append("\n\t\t\t");
+			}
+			s.delete(s.length() - 1, s.length());
+			s.append("with upper Bounds:\n\t\t\t");
+			for(Type t : upperBounds) {
+				s.append(t.getTypeName());
+				s.append("\n\t\t\t");
+			}
+			s.delete(s.length() - 3, s.length());
+			s.append("\n");
+			return s.toString();
+		}
 	}
 
 	// -- BEGIN FORK OF APACHE COMMONS LANG 3.4 CODE --

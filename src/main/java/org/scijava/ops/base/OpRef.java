@@ -127,17 +127,16 @@ public class OpRef {
 		return sb.toString();
 	}
 
-	/** Determines whether the op's required types match the given class. */
-	public boolean typesMatch(final Class<?> c) {
+	/**
+	 * Determines whether the specified type satisfies the op's required types
+	 * using {@link Types#satisfies(Type[], Type[])}.
+	 */
+	public boolean typeSatisfies(final Type type) {
 		if (types == null)
 			return true;
-		for (final Type t : types) {
-			// FIXME: Use generic assignability test, once it exists.
-			final Class<?> raw = Types.raw(t);
-			if (!raw.isAssignableFrom(c))
-				return false;
-		}
-		return true;
+		Type[] repeat = new Type[types.length];
+		Arrays.fill(repeat, type);
+		return Types.satisfies(repeat, types) == -1;
 	}
 
 	// -- Object methods --

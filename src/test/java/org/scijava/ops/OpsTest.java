@@ -29,6 +29,7 @@
 
 package org.scijava.ops;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -39,6 +40,8 @@ import org.scijava.ops.math.Power.MathPowerOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.math.Zero.MathZeroOp;
 import org.scijava.ops.types.Nil;
+
+import com.google.common.collect.Streams;
 
 public class OpsTest extends AbstractTestEnvironment {
 
@@ -235,5 +238,34 @@ public class OpsTest extends AbstractTestEnvironment {
 		double[] result = new double[3];
 		power3Arrays.compute(new double[] { 1.0, 2.0, 3.0 }, result);
 		assert arrayEquals(result, 1.0, 8.0, 27.0);
+	}
+
+	@Test
+	public void genericFunction() {
+		Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {
+		};
+
+		BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
+				MathAddOp.class, //
+				new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
+				}, //
+				new Nil[] { nilIterableDouble, nilIterableDouble }, //
+				nilIterableDouble//
+		);
+
+		try {
+			@SuppressWarnings("unused")
+			BiFunction<Iterable<Integer>, Iterable<Double>, Iterable<Double>> addMixedIters = ops().findOp( //
+					MathAddOp.class, //
+					new Nil<BiFunction<Iterable<Integer>, Iterable<Double>, Iterable<Double>>>() {
+					}, //
+					new Nil[] { new Nil<Iterable<Integer>>() {} , nilIterableDouble }, //
+					nilIterableDouble//
+					);
+		} catch (IllegalArgumentException e) {
+			// expected, all good
+		}
+		Iterable<Double> res = addDoubleIters.apply(Arrays.asList(1d, 2d, 3d, 4d), Arrays.asList(1.5, 1.6, 2.3, 2.0));
+		arrayEquals(Streams.stream(res).mapToDouble(d -> d).toArray(), 2.5, 3.6, 5.3, 6.0);
 	}
 }

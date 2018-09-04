@@ -944,7 +944,12 @@ public final class Types {
 				final ParameterizedType paramBoundType = (ParameterizedType) paramBound;
 				final Type[] paramBoundTypes = paramBoundType.getActualTypeArguments();
 				for (int i = 0; i < paramBoundTypes.length; i++) {
-					final Type argType = Types.param(arg, Types.raw(param), i);
+					// Get the type parameter of arg from the bound type which we know
+					// is parameterized.
+					final Type argType = Types.param(arg, Types.raw(paramBoundType), i);
+					if (argType == null) {
+						return false;
+					}
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
 						!satisfiesTypeParameter(argType,
 							(TypeVariable<?>) paramBoundTypes[i], typeBounds)) return false;

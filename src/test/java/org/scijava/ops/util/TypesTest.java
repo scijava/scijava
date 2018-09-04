@@ -63,6 +63,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
@@ -828,6 +830,68 @@ public class TypesTest {
 		assertNotEquals(Types.satisfies(argsMiss, params), -1);
 
 	}
+	
+	/**
+	 * Tests {@link Types#satisfies(Type[], Type[])} when the given type is indirectly parameterized by
+	 * implementing an parameterized interface.
+	 */
+	@Test
+	public <I1, I2> void testSatisfiesIndirectTypeVariables() {
+
+		class NestedThingImplOK1 implements NestedThing<Double, Double> {
+			@Override
+			public Double apply(Double t) {
+				// NB: No implementation needed.
+				return null;
+			}
+		}
+		
+		final Type[] param = new Type[]{new Nil<Function<I1, I2>>() {}.getType()};
+		Type[] argOK = new Type[]{NestedThingImplOK1.class};
+		assertEquals(-1, Types.satisfies(argOK, param));
+	}
+	
+	/**
+	 * Tests {@link Types#satisfies(Type[], Type[])} when unbounded type variables are expected 
+	 * but the given ones are nested and bounded.
+	 */
+	@Test
+	public <I1, I2> void testSatisfiesUnboundedTypeVariables() {
+
+		class NestedThingImplOK1 implements Function<Iterable<Double>, Consumer<Double>> {
+			@Override
+			public Consumer<Double> apply(Iterable<Double> t) {
+				// NB: No implementation needed.
+				return null;
+			}
+		}
+		
+		class NestedThingImplOK2 implements Function<Iterable<Double>, Consumer<Integer>> {
+			@Override
+			public Consumer<Integer> apply(Iterable<Double> t) {
+				// NB: No implementation needed.
+				return null;
+			}
+		}
+		
+		class NestedThingImplOK3 implements Function<Double, Consumer<Integer>> {
+			@Override
+			public Consumer<Integer> apply(Double t) {
+				// NB: No implementation needed.
+				return null;
+			}
+		}
+		
+		final Type[] param = new Type[]{new Nil<Function<I1, I2>>() {}.getType()};
+		Type[] argOK = new Type[]{NestedThingImplOK1.class};
+		assertEquals(-1, Types.satisfies(argOK, param));
+
+		argOK = new Type[]{NestedThingImplOK2.class};
+		assertEquals(-1, Types.satisfies(argOK, param));
+		
+		final Type[] argNotOK = new Type[]{NestedThingImplOK3.class};
+		assertEquals(-1, Types.satisfies(argNotOK, param));
+	}
 
 	/** Tests {@link Types#cast(Object, Class)}. */
 	@Test
@@ -948,6 +1012,11 @@ public class TypesTest {
 
 	private static class LoopingThing extends RecursiveThing<LoopingThing>
 		implements Loop
+	{
+		// NB: No implementation needed.
+	}
+	
+	interface NestedThing<I1, I2> extends Function<I1, I2>
 	{
 		// NB: No implementation needed.
 	}

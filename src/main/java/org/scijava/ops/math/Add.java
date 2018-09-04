@@ -49,6 +49,21 @@ public class Add {
 		}
 	}
 
+	@Plugin(type = MathAddOp.class, priority = Priority.HIGH)
+	@Parameter(key = "iter1")
+	@Parameter(key = "iter2")
+	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
+	public static class MathPointwiseAddIterableDoublesFunction
+			implements MathAddOp, BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> {
+
+		@Override
+		public Iterable<Double> apply(Iterable<Double> i1, Iterable<Double> i2) {
+			Stream<Double> s1 = Streams.stream(i1);
+			Stream<Double> s2 = Streams.stream(i2);
+			return () -> Streams.zip(s1, s2, (e1, e2) -> e1 + e2).iterator();
+		}
+
+	}
 	// --------- Computers ---------
 			
 	@Plugin(type = MathAddOp.class)

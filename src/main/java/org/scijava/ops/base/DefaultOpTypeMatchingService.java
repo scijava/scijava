@@ -190,7 +190,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	/** Helper method of {@link #findCandidates}. */
 	private boolean isCandidate(final OpInfo info, final OpRef ref) {
 		// check if the class matches
-		return ref.typesMatch(info.opClass());
+		return ref.typeSatisfies(info.opClass());
 	}
 
 	/**

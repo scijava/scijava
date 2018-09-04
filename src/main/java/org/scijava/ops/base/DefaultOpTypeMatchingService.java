@@ -73,9 +73,11 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	public MatchingResult findMatch(final OpEnvironment ops, final List<OpRef> refs) {
 		// find candidates with matching name & type
 		final List<OpCandidate> candidates = findCandidates(ops, refs);
-		assertCandidatesFound(candidates, refs.get(0));
+		if (candidates.isEmpty()) {
+			return MatchingResult.empty(refs);
+		}
 		// narrow down candidates to the exact matches
-		return new MatchingResult(candidates, filterMatches(candidates));
+		return new MatchingResult(candidates, filterMatches(candidates), refs);
 	}
 
 	@Override
@@ -189,13 +191,6 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	private boolean isCandidate(final OpInfo info, final OpRef ref) {
 		// check if the class matches
 		return ref.typesMatch(info.opClass());
-	}
-
-	/** Helper method of {@link #findMatch}. */
-	private void assertCandidatesFound(final List<OpCandidate> candidates, final OpRef ref) {
-		if (candidates.isEmpty()) {
-			throw new IllegalArgumentException("No candidate '" + ref.getLabel() + "' ops");
-		}
 	}
 
 	/**

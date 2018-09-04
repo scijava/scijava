@@ -1,5 +1,6 @@
 package org.scijava.ops.base;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,10 +15,16 @@ public class MatchingResult {
 
 	private final List<OpCandidate> candidates;
 	private final List<OpCandidate> matches;
+	private final List<OpRef> originalQueries;
 
-	public MatchingResult(final List<OpCandidate> candidates, final List<OpCandidate> matches) {
+	public static MatchingResult empty(final List<OpRef> originalQueries) {
+		return new MatchingResult(new ArrayList<OpCandidate>(), new ArrayList<OpCandidate>(), originalQueries);
+	}
+	
+	public MatchingResult(final List<OpCandidate> candidates, final List<OpCandidate> matches, final List<OpRef> originalQueries) {
 		this.candidates = candidates;
 		this.matches = matches;
+		this.originalQueries = originalQueries;
 	}
 
 	public List<OpCandidate> getCandidates() {
@@ -42,8 +49,11 @@ public class MatchingResult {
 			// }
 
 			return matches.get(0);
+		} else if (matches.size() > 1) {
+			final String analysis = OpUtils.matchInfo(this);
+			throw new IllegalArgumentException(analysis);
+		} else {
+			throw new IllegalArgumentException("No candidate op for: '" + originalQueries.get(0).getLabel() + "'");
 		}
-		final String analysis = OpUtils.matchInfo(this);
-		throw new IllegalArgumentException(analysis);
 	}
 }

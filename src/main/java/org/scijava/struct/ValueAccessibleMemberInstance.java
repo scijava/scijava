@@ -1,6 +1,5 @@
 package org.scijava.struct;
 
-import org.scijava.ops.base.TypeUtils;
 import org.scijava.util.Types;
 
 public class ValueAccessibleMemberInstance<T> implements MemberInstance<T> {
@@ -40,7 +39,7 @@ public class ValueAccessibleMemberInstance<T> implements MemberInstance<T> {
 	@Override
 	public void set(Object value) {
 		final Class<?> type = member().getRawType();
-		if (!TypeUtils.isAssignable(value != null ? value.getClass() : null, type)) {
+		if (!Types.isAssignable(value != null ? value.getClass() : null, type)) {
 			throw new IllegalArgumentException("value of type " + //
 				Types.name(value.getClass()) + " is not assignable to " + //
 				Types.name(type));

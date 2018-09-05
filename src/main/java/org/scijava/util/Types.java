@@ -751,6 +751,12 @@ public final class Types {
 	 * @see Class#isAssignableFrom(Class)
 	 */
 	public static boolean isAssignable(final Type source, final Type target) {
+		// Workaround for possible bug in TypeUtils.isAssignable, which returns
+		// false if one wants to assign primitives to their wrappers and the other
+		// way around
+		if (source instanceof Class && target instanceof Class) {
+			return TypeUtils.isAssignable(Types.box((Class<?>) source), Types.box((Class<?>) target));
+		}		
 		return TypeUtils.isAssignable(source, target);
 	}
 

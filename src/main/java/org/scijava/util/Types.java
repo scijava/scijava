@@ -844,7 +844,7 @@ public final class Types {
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {
 			final Optional<Class<?>> first = srcClasses.stream().filter(
-				srcClass -> destClass.isAssignableFrom(srcClass)).findFirst();
+				srcClass -> Types.isAssignable(srcClass, destClass)).findFirst();
 			if (!first.isPresent()) {
 				// TODO can we remove this?
 //				throw new IllegalArgumentException("Argument #" + i + //
@@ -979,12 +979,12 @@ public final class Types {
 		for (final Type upperBound : upperBounds) {
 			// check that the argument can satisfy the parameter
 			final Class<?> upperType = Types.raw(upperBound);
-			if (!upperType.isAssignableFrom(argType)) return false;
+			if(!Types.isAssignable(argType, upperType)) return false;
 		}
 		for (final Type lowerBound : lowerBounds) {
 			final Class<?> lowerType = Types.raw(lowerBound);
 			// check that the argument can satisfy the parameter
-			if (!argType.isAssignableFrom(lowerType)) return false;
+			if(!Types.isAssignable(lowerType, argType)) return false;
 		}
 
 		return true;
@@ -1020,8 +1020,7 @@ public final class Types {
 		// something other than a ParameterizedType or a TypeVariable.
 		final Class<?> argClass = Types.raw(argComponent);
 		final Class<?> paramClass = Types.raw(paramComponent);
-		if (!paramClass.isAssignableFrom(argClass)) return false;
-		return true;
+		return Types.isAssignable(argClass, paramClass);
 	}
 
 	/**

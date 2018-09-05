@@ -503,9 +503,8 @@ public class TypesTest {
 		assertFalse(Types.isAssignable(double.class, float.class));
 		assertFalse(Types.isAssignable(float.class, double.class));
 
-		// boxing is not reported to work
-		// TODO: Consider changing this behavior.
-		assertFalse(Types.isAssignable(int.class, Number.class));
+		// boxing
+		assertTrue(Types.isAssignable(int.class, Number.class));
 
 		// casting from null always works
 		assertTrue(Types.isAssignable(null, Object.class));

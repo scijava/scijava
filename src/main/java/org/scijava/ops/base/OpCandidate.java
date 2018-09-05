@@ -29,6 +29,8 @@
 
 package org.scijava.ops.base;
 
+import java.lang.reflect.Type;
+
 import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -47,6 +49,7 @@ public class OpCandidate {
 		MATCH, //
 		INVALID_STRUCT, //
 		TOO_FEW_OUTPUTS, //
+		TOO_MANY_OUTPUTS,
 		OUTPUT_TYPES_DO_NOT_MATCH, //
 		TOO_MANY_ARGS, //
 		TOO_FEW_ARGS, //
@@ -63,11 +66,17 @@ public class OpCandidate {
 	private StatusCode code;
 	private String message;
 	private Member<?> statusItem;
+	
+	/** (Null-)Padded arguments of the op if the op has not required parameters. 
+	 * If the op does not, this will be the same as {@link #ref}.getArgs(). */
+	private final Type[] paddedArgs;
 
 	public OpCandidate(final OpEnvironment ops, final OpRef ref, final OpInfo info) {
 		this.ops = ops;
 		this.ref = ref;
 		this.info = info;
+		
+		this.paddedArgs = OpUtils.padArgs(this);
 	}
 
 	/** Gets the op execution environment of the desired match. */
@@ -83,6 +92,10 @@ public class OpCandidate {
 	/** Gets the {@link OpInfo} metadata describing the op to match against. */
 	public OpInfo opInfo() {
 		return info;
+	}
+	
+	public Type[] paddedArgs() {
+		return paddedArgs;
 	}
 
 	/**

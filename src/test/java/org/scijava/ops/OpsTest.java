@@ -244,15 +244,25 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void genericFunction() {
 		Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {
 		};
+		
+		Nil<Iterable<Integer>> nilIterableInteger = new Nil<Iterable<Integer>>() {
+		};
 
-		BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
-				MathAddOp.class, //
-				new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
-				}, //
-				new Nil[] { nilIterableDouble, nilIterableDouble }, //
-				nilIterableDouble//
-		);
+		// Generic typed BiFunction matches, however the given input types do not
+		try {
+			@SuppressWarnings("unused")
+			BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
+					MathAddOp.class, //
+					new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
+					}, //
+					new Nil[] { nilIterableInteger, nilIterableDouble }, //
+					nilIterableDouble//
+					);
+		} catch (Exception e) {
+			// expected, all good
+		}
 
+		// Generics of BiFunction does not match
 		try {
 			@SuppressWarnings("unused")
 			BiFunction<Iterable<Integer>, Iterable<Double>, Iterable<Double>> addMixedIters = ops().findOp( //
@@ -265,6 +275,15 @@ public class OpsTest extends AbstractTestEnvironment {
 		} catch (IllegalArgumentException e) {
 			// expected, all good
 		}
+		
+		BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
+				MathAddOp.class, //
+				new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
+				}, //
+				new Nil[] { nilIterableDouble, nilIterableDouble }, //
+				nilIterableDouble//
+				);
+		
 		Iterable<Double> res = addDoubleIters.apply(Arrays.asList(1d, 2d, 3d, 4d), Arrays.asList(1.5, 1.6, 2.3, 2.0));
 		arrayEquals(Streams.stream(res).mapToDouble(d -> d).toArray(), 2.5, 3.6, 5.3, 6.0);
 	}

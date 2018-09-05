@@ -124,7 +124,4 @@ public interface OpTypeMatchingService extends SciJavaService {
 	 * argument.
 	 */
 	boolean typesMatch(OpCandidate candidate);
-
-	/** Checks the number of args, padding optional args with null as needed. */
-	Object[] padArgs(OpCandidate candidate);
 }

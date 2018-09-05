@@ -82,9 +82,17 @@ public final class OpUtils {
 				.filter(member -> member.isInput()) //
 				.collect(Collectors.toList());
 	}
+	
+	public static Type[] inputTypes(OpCandidate candidate) {
+		return inputs(candidate.struct()).stream().map(m -> m.getType()).toArray(Type[]::new);
+	}
 
 	public static List<Member<?>> outputs(OpCandidate candidate) {
 		return outputs(candidate.struct());
+	}
+	
+	public static Type[] outputTypes(OpCandidate candidate) {
+		return outputs(candidate.struct()).stream().map(m -> m.getType()).toArray(Type[]::new);
 	}
 
 	public static List<Member<?>> outputs(final Struct struct) {
@@ -103,6 +111,51 @@ public final class OpUtils {
 		// TODO: Think about what to do about non @Plugin-based ops...?
 		// What if there is no annotation? How to discern a priority?
 		return candidate.opInfo().getAnnotation().priority();
+	}
+	
+	public static Type[] padArgs(final OpCandidate candidate) {
+		int inputCount = 0, requiredCount = 0;
+		for (final Member<?> item : OpUtils.inputs(candidate.struct())) {
+			inputCount++;
+			if (isRequired(item))
+				requiredCount++;
+		}
+		final Type[] args = candidate.getRef().getArgs();
+		if (args.length == inputCount) {
+			// correct number of arguments
+			return args;
+		}
+		if (args.length > inputCount) {
+			// too many arguments
+			candidate.setStatus(StatusCode.TOO_MANY_ARGS, args.length + " > " + inputCount);
+			return null;
+		}
+		if (args.length < requiredCount) {
+			// too few arguments
+			candidate.setStatus(StatusCode.TOO_FEW_ARGS, args.length + " < " + requiredCount);
+			return null;
+		}
+
+		// pad optional parameters with null (from right to left)
+		final int argsToPad = inputCount - args.length;
+		final int optionalCount = inputCount - requiredCount;
+		final int optionalsToFill = optionalCount - argsToPad;
+		final Type[] paddedArgs = new Type[inputCount];
+		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
+		for (final Member<?> item : candidate.struct().members()) {
+			if (!isRequired(item) && optionalIndex++ >= optionalsToFill) {
+				// skip this optional parameter (pad with null)
+				paddedIndex++;
+				continue;
+			}
+			paddedArgs[paddedIndex++] = args[argIndex++];
+		}
+		return paddedArgs;
+	}
+	
+	public static boolean isRequired(final Member<?> item) {
+		return item instanceof ParameterMember && //
+				((ParameterMember<?>) item).isRequired();
 	}
 
 	/**

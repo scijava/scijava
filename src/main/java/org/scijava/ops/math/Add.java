@@ -64,6 +64,26 @@ public class Add {
 		}
 
 	}
+
+	// Do we want to have generic types ops?
+	// Would be cool if someone is looking for an op that expects double and we give him the generic op which works on all numbers.
+	// Currently, the op calss itself can't have type arguments (possible bug in Types.satisfies) however it works with wildcards 
+	// when there is only an upper bound needed. See below.
+	
+//	@Plugin(type = MathAddOp.class, priority = Priority.HIGH)
+//	@Parameter(key = "iter1")
+//	@Parameter(key = "iter2")
+//	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
+//	public static class MathPointwiseAddIterablesFunction
+//			implements MathAddOp, BiFunction<Iterable<? extends Number>, Iterable<? extends Number>, Iterable<Double>> {
+//		@Override
+//		public Iterable<Double> apply(Iterable<? extends Number> i1, Iterable<? extends Number> i2) {
+//			Stream<? extends Number> s1 = Streams.stream(i1);
+//			Stream<? extends Number> s2 = Streams.stream(i2);
+//			return () -> Streams.zip(s1, s2, (e1, e2) -> e1.doubleValue() + e2.doubleValue()).iterator();
+//		}
+//	}
+
 	// --------- Computers ---------
 			
 	@Plugin(type = MathAddOp.class)

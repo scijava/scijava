@@ -379,7 +379,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			}
 			final Type to = outType;
 			final Type from = outItems.next().getType();
-			if (!TypeUtils.isAssignable(from, to)) {
+			if (!Types.isAssignable(from, to)) {
 				candidate.setStatus(StatusCode.OUTPUT_TYPES_DO_NOT_MATCH, //
 						"request=" + to.getTypeName() + ", actual=" + from.getTypeName());
 				return false;
@@ -438,7 +438,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return true;
 		}
 
-		return TypeUtils.isAssignable(arg, item.getType());
+		return Types.isAssignable(arg, item.getType());
 		// TODO: Type coercion / conversion?
 	}
 }

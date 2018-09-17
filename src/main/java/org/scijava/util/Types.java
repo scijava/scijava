@@ -3099,7 +3099,7 @@ public final class Types {
 					other)) && equals(getImplicitUpperBounds(w), getImplicitUpperBounds(
 						other));
 			}
-			return true;
+			return false;
 		}
 
 		/**

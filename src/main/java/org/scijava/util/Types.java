@@ -1230,6 +1230,20 @@ public final class Types {
 		return GenericTypeReflector.erase(type);
 	}
 
+	/**
+	 * See {@link TypeUtils#unrollVariables(Map, Type, boolean)}
+	 * 
+	 * @param typeArguments
+	 * @param type
+	 * @param followTypeVars
+	 * @return
+	 */
+	public static Type unrollVariables(Map<TypeVariable<?>, Type> typeArguments,
+			final Type type, boolean followTypeVars)
+	{
+		return TypeUtils.unrollVariables(typeArguments, type, followTypeVars);
+	}
+	
 	// -- Helper methods --
 
 	private static IllegalArgumentException iae(final String... s) {
@@ -2805,12 +2819,35 @@ public final class Types {
 		public static Type unrollVariables(Map<TypeVariable<?>, Type> typeArguments,
 			final Type type)
 		{
+			return unrollVariables(typeArguments, type, true);
+		}
+		
+		/**
+		 * Get a type representing {@code type} with variable assignments
+		 * "unrolled."
+		 *
+		 * @param typeArguments as from
+		 *          {@link TypeUtils#getTypeArguments(Type, Class)}
+		 * @param type the type to unroll variable assignments for
+		 * @param followTypeVars whether a {@link TypeVariable} should be recursively followed
+		 * 			if it maps to another {@link TypeVariable}, or if it should be just replaced
+		 * 			by the mapping
+		 * @return Type
+		 * @since 3.2
+		 */
+		public static Type unrollVariables(Map<TypeVariable<?>, Type> typeArguments,
+			final Type type, boolean followTypeVars)
+		{
 			if (typeArguments == null) {
 				typeArguments = Collections.<TypeVariable<?>, Type> emptyMap();
 			}
 			if (containsTypeVariables(type)) {
 				if (type instanceof TypeVariable) {
-					return unrollVariables(typeArguments, typeArguments.get(type));
+					if (followTypeVars) {
+						return unrollVariables(typeArguments, typeArguments.get(type));
+					} else {
+						return typeArguments.get(type);
+					}
 				}
 				if (type instanceof ParameterizedType) {
 					final ParameterizedType p = (ParameterizedType) type;

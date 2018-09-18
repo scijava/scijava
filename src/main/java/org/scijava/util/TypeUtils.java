@@ -221,28 +221,27 @@ public final class TypeUtils {
 						throw new TypeInferenceException();
 					}
 				}
-				
-				// Bounds could also contain type vars, hence go into recursion
+
+				// Bounds could also contain type vars, hence possibly go into recursion
 				for (Type bound : varType.getBounds()) {
-					// If the bound of the current var to infer is also a var:
-					// If we already encountered the var bound, we check if the current type to infer from is 
-					// assignable to the already inferred bound. In this case we do not require equality as
-					// one var is bounded by another and not the same.
-					// E.g. we want to infer thy types of vars: 
-					//		A extends Number, B extends A
-					// From types:
-					//		Number, Double
-					// First A is bound to Number, next B to Double. Then we check the bounds for B. We encounter A,
-					// for which we already inferred Number. Hence, it suffices to check whether Double can be assigned
-					// to Number, it does not have to be equal as it is just a transitive bound for B.
-					// Else go into recursion as we encountered a ned var.
-					if (bound instanceof TypeVariable && typeAssigns.get((TypeVariable<?>)bound) != null) {
-						Type typeAssignForBound = typeAssigns.get((TypeVariable<?>)bound);
-						if(!Types.isAssignable(from, typeAssignForBound)) {
+					if (bound instanceof TypeVariable && typeAssigns.get((TypeVariable<?>) bound) != null) {
+						// If the bound of the current var (let's call it A) to infer is also a var (let's call it B):
+						// If we already encountered B, we check if the current type to infer from is assignable to 
+						// the already inferred type for B. In this case we do not require equality as  one var is 
+						// bounded by another and it is not the same. E.g.  assume we want to infer the types of vars:
+						// 		A extends Number, B extends A
+						// From types:
+						// 		Number, Double
+						// First A is bound to Number, next B to Double. Then we check the bounds for B. We encounter A,
+						// for which we already inferred Number. Hence, it suffices to check whether Double can be assigned
+						// to Number, it does not have to be equal as it is just a transitive bound for B.
+						Type typeAssignForBound = typeAssigns.get((TypeVariable<?>) bound);
+						if (!Types.isAssignable(from, typeAssignForBound)) {
 							throw new TypeInferenceException();
 						}
 					} else {
-						inferTypeVariables(new Type[]{bound}, new Type[]{from}, typeAssigns);
+						// Else go into recursion as we encountered a new var.
+						inferTypeVariables(new Type[] { bound }, new Type[] { from }, typeAssigns);
 					}
 				}
 			} else if (types[i] instanceof ParameterizedType) {

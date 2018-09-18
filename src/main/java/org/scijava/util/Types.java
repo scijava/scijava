@@ -1229,6 +1229,19 @@ public final class Types {
 	}
 
 	/**
+	 * See {@link GenericTypeReflector#getExactSuperType(Type, Class)}
+	 * 
+	 * @param type
+	 * @param searchClass
+	 * @return
+	 */
+	public static Type getExactSuperType(final Type type,
+			final Class<?> searchClass)
+	{
+		return GenericTypeReflector.getExactSuperType(type, searchClass);
+	}
+	
+	/**
 	 * See {@link TypeUtils#unrollVariables(Map, Type, boolean)}
 	 * 
 	 * @param typeArguments
@@ -1240,6 +1253,23 @@ public final class Types {
 			final Type type, boolean followTypeVars)
 	{
 		return TypeUtils.unrollVariables(typeArguments, type, followTypeVars);
+	}
+	
+	/**
+	 * Tries to parameterize the given raw type with its type parameters. If
+	 * type is not raw, it will be returned. Otherwise, a parameterized type
+	 * containing the type variables of the specified is returned.
+	 * 
+	 * @param rawType
+	 *            the raw type to parameterize
+	 * @return either the input of not raw, or a parameterized type
+	 */
+	public static Type parameterizeRaw(Class<?> rawType) {
+		TypeVariable<?>[] typeParams = rawType.getTypeParameters();
+		if (typeParams.length == 0) {
+			return rawType;
+		}
+		return Types.parameterize(rawType, typeParams);
 	}
 	
 	// -- Helper methods --

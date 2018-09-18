@@ -89,7 +89,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
 		for (final OpInfo info : ops.infos()) {
 			for (final OpRef ref : refs) {
-				if (satisfiesRefTypes(info, ref)) {
+				if (ref.typesMatch(info.opClass())) {
 					candidates.add(new OpCandidate(ops, ref, info));
 				}
 			}
@@ -148,7 +148,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return false;
 		}
 
-		int conflictingIndex = Types.satisfies(candidateArgTypes, refArgTypes);
+		int conflictingIndex = Types.satisfies(refArgTypes, candidateArgTypes);
 		if (conflictingIndex != -1) {
 			final Type to = refArgTypes[conflictingIndex];
 			final Type from = candidateArgTypes[conflictingIndex];
@@ -161,17 +161,6 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	}
 
 	// -- Helper methods --
-
-	/**
-	 * Checks whether the op class satisfies the types of the specified {@link OpRef}. 
-	 * 
-	 * @param info the info to get the op class from
-	 * @param ref the ref to get the types from
-	 * @return
-	 */
-	private boolean satisfiesRefTypes(final OpInfo info, final OpRef ref) {
-		return ref.typeSatisfies(info.opClass());
-	}
 
 	/**
 	 * Performs several checks, whether the specified candidate:</br></br>

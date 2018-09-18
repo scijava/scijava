@@ -30,6 +30,7 @@
 package org.scijava.ops;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -242,40 +243,58 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void genericFunction() {
-		Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {
-		};
-		
-		Nil<Iterable<Integer>> nilIterableInteger = new Nil<Iterable<Integer>>() {
-		};
+		Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {};
 
 		// Generic typed BiFunction matches, however the given input types do not
+		Exception error = null;
 		try {
 			@SuppressWarnings("unused")
 			BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
 					MathAddOp.class, //
 					new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
 					}, //
-					new Nil[] { nilIterableInteger, nilIterableDouble }, //
+					new Nil[] { new Nil<Double>() {}, nilIterableDouble }, //
 					nilIterableDouble//
 					);
 		} catch (Exception e) {
-			// expected, all good
+			error = e;
 		}
-
-		// Generics of BiFunction does not match
+		assert error != null;
+		error = null;
+		
+		// Generic typed BiFunction does not matches
 		try {
 			@SuppressWarnings("unused")
-			BiFunction<Iterable<Integer>, Iterable<Double>, Iterable<Double>> addMixedIters = ops().findOp( //
+			BiFunction<Double, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
 					MathAddOp.class, //
-					new Nil<BiFunction<Iterable<Integer>, Iterable<Double>, Iterable<Double>>>() {
+					new Nil<BiFunction<Double, Iterable<Double>, Iterable<Double>>>() {
 					}, //
-					new Nil[] { new Nil<Iterable<Integer>>() {} , nilIterableDouble }, //
+					new Nil[] { nilIterableDouble, nilIterableDouble }, //
 					nilIterableDouble//
 					);
-		} catch (IllegalArgumentException e) {
-			// expected, all good
+		} catch (Exception e) {
+			error = e;
 		}
+		assert error != null;
+		error = null;
 		
+		// Output does not match
+		try {
+			@SuppressWarnings("unused")
+			BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
+					MathAddOp.class, //
+					new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
+					}, //
+					new Nil[] { nilIterableDouble, nilIterableDouble }, //
+					new Nil<Double>() {}//
+					);
+		} catch (Exception e) {
+			error = e;
+		}
+		assert error != null;
+		error = null;
+
+		// We have a generic function which adds two iterables of numbers and gives an iterable of double
 		BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
 				MathAddOp.class, //
 				new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {

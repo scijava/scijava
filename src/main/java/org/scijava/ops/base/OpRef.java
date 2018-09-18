@@ -29,11 +29,13 @@
 
 package org.scijava.ops.base;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Objects;
 
 import org.scijava.ops.Op;
+import org.scijava.util.TypeUtils;
 import org.scijava.util.Types;
 
 /**
@@ -131,12 +133,21 @@ public class OpRef {
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#satisfies(Type[], Type[])}.
 	 */
-	public boolean typeSatisfies(final Type type) {
+	public boolean typesMatch(final Class<?> opClass) {
 		if (types == null)
 			return true;
-		Type[] repeat = new Type[types.length];
-		Arrays.fill(repeat, type);
-		return Types.satisfies(repeat, types) == -1;
+		for (Type t : types) {
+			if(t instanceof ParameterizedType) {
+				if (!TypeUtils.checkGenericAssignability(opClass, (ParameterizedType) t)) {
+					return false;
+				}
+			} else {
+				if (!Types.isAssignable(opClass, t)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	// -- Object methods --
@@ -144,23 +155,6 @@ public class OpRef {
 	@Override
 	public String toString() {
 		return Arrays.deepToString(types);
-		// StringBuilder sb = new StringBuilder();
-		// sb.append(getLabel());
-		// sb.append("(");
-		// boolean first = true;
-		// for (Object arg : args) {
-		// if (first) first = false;
-		// else sb.append(", ");
-		// if (arg.getClass() == Class.class) {
-		// // special typed null placeholder
-		// sb.append(((Class<?>) arg).getSimpleName());
-		// }
-		// else sb.append(arg.getClass().getSimpleName());
-		//
-		// }
-		// sb.append(")");
-		//
-		// return sb.toString();
 	}
 
 	@Override

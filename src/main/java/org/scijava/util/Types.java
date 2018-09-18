@@ -862,16 +862,13 @@ public final class Types {
 		final Type[] destTypes = param.getActualTypeArguments();
 
 		// get an array of the source argument types
-		// TODO: Verify that this is correct. getExactSuperType should always return a ParameterizedType here because
-		// param is parameterized and we know (check done earlier) that arg is assignable to param. Hence, arg must have
-		// type parameters for param?
+		Type argType = arg;
+		if (arg instanceof Class) {
+			argType = parameterizeRaw((Class<?>) arg);
+		}
 		ParameterizedType parameterizedSuperType = (ParameterizedType) GenericTypeReflector
-				.getExactSuperType(arg, Types.raw(param));
+				.getExactSuperType(argType, Types.raw(param));
 		final Type[] srcTypes = parameterizedSuperType.getActualTypeArguments();
-//		final Type[] srcTypes = new Type[destTypes.length];
-//		for (int i = 0; i < srcTypes.length; i++) {
-//			srcTypes[i] = Types.param(arg, Types.raw(arg), i);
-//		}
 		
 		// check to see if any of the Types of this ParameterizedType are
 		// TypeVariables, if so restrict them to the type parameter of the argument.

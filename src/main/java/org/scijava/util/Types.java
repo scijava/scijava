@@ -1300,12 +1300,12 @@ public final class Types {
 
 		private final TypeVariable<?> var;
 		private final Type[] upperBounds;
-		private List<Type> types;
+		private Set<Type> types;
 
 		public TypeVarInfo(final TypeVariable<?> var) {
 			this.var = var;
 			this.upperBounds = var.getBounds();
-			this.types = new ArrayList<>();
+			this.types = new HashSet<>();
 		}
 
 		/**
@@ -1349,13 +1349,12 @@ public final class Types {
 
 			// make sure that all of the types that already fit in this variable
 			// before the variable was fixed still are allowed by the type variable.
-			final List<Type> temp = types;
+			final Set<Type> temp = types;
 			temp.add(bound);
-			types = new ArrayList<>();
+			types = new HashSet<>();
 			for (final Type type : temp) {
 				if (!allowType(type)) return false;
 			}
-
 			return true;
 		}
 		

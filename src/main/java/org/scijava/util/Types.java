@@ -68,6 +68,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import com.google.common.reflect.TypeToken;
 
@@ -844,10 +845,6 @@ public final class Types {
 			final Optional<Class<?>> first = srcClasses.stream().filter(
 				srcClass -> Types.isAssignable(srcClass, destClass)).findFirst();
 			if (!first.isPresent()) {
-				// TODO can we remove this?
-//				throw new IllegalArgumentException("Argument #" + i + //
-//					" (" + Types.name(src[i]) + ") is not assignable to " + //
-//					"destination type (" + Types.name(dest[i]) + ")");
 				return false;
 			}
 		}
@@ -859,7 +856,7 @@ public final class Types {
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		// get an array of the destination parameter types
-		final Type[] destTypes = param.getActualTypeArguments();
+		Type[] destTypes = param.getActualTypeArguments();
 
 		// get an array of the source argument types
 		Type argType = arg;
@@ -868,8 +865,15 @@ public final class Types {
 		}
 		ParameterizedType parameterizedSuperType = (ParameterizedType) GenericTypeReflector
 				.getExactSuperType(argType, Types.raw(param));
-		final Type[] srcTypes = parameterizedSuperType.getActualTypeArguments();
+		Type[] srcTypes = parameterizedSuperType.getActualTypeArguments();
 		
+		// List to collect the indices of destination parameters that are type vars
+		// If a type vars is contain within a parameterized type if must not be checked
+		// recursively in the last call of this method. If done, one loses the information
+		// that the type var was contained in a parameterized type. Hence, it will be handled
+		// like a normal type var which allow more assignability regarding wildcards compared
+		// to type vars contained in parameterized types
+		List<Integer> ignoredIndices = new ArrayList<Integer>();
 		// check to see if any of the Types of this ParameterizedType are
 		// TypeVariables, if so restrict them to the type parameter of the argument.
 		for (int i = 0; i < destTypes.length; i++) {
@@ -879,13 +883,15 @@ public final class Types {
 				final TypeVariable<?> destTypeVar = (TypeVariable<?>) destType;
 				if (!satisfiesTypeParameter(srcType, destTypeVar, typeBounds))
 					return false;
+				ignoredIndices.add(i);
 			}
 		}
+		srcTypes = filterIndices(srcTypes, ignoredIndices);
+		destTypes = filterIndices(destTypes, ignoredIndices);
 		// recursively run satisfies on these arrays
 		return satisfies(srcTypes, destTypes, typeBounds) == -1;
-
 	}
-
+	
 	/**
 	 * Determines whether or not the {@link Type} {@code arg} can satisfy the
 	 * {@link TypeVariable} {@code param} given the preexisting limitations of
@@ -908,23 +914,22 @@ public final class Types {
 		// add the type variable to the HashMap if it does not yet exist.
 		if (!typeBounds.containsKey(param)) {
 			final TypeVariable<?> newTypeVar = param;
-			typeBounds.put(newTypeVar, new TypeVarInfo(newTypeVar));
+			typeBounds.put(newTypeVar, new TypeVarFromParameterizedTypeInfo(newTypeVar));
 		}
 		// attempt to restrict the bounds of the type variable to the argument.
-		if (!typeBounds.get(param).fixBounds(arg)) return false;
-
-		// TODO do we need type parameter recursion here as we do in
-		// satisfiesTypeVariable?
-
+		// We call the fixBounds method the refuseWildcards flag to be true,
+		// as the type variable was contained in a parameterized type. Hence, 
+		// the var is not applicable for any wildcards if it already allows
+		// any type.
+		if (!typeBounds.get(param).fixBounds(arg, true)) return false;
+		
+		// if the type variable refers to some parameterized type (e.g. T extends
+		// List<?>), call satisfiesTypeParameters on the bounds of param that
+		// are ParameterizedTypes.
+		if(!satisfiesTypeVariableBounds(arg, param, typeBounds)) return false;
 		return true;
 	}
 
-	/**
-	 * @param arg
-	 * @param param
-	 * @param typeBounds
-	 * @return
-	 */
 	private static boolean satisfiesTypeVariable(final Type arg,
 		final TypeVariable<?> param,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
@@ -934,11 +939,35 @@ public final class Types {
 			param));
 		// check to make sure that arg is a viable replacement for the type
 		// variable.
-		if (!typeBounds.get(param).allowType(arg)) return false;
+		// We call the fixBounds method the refuseWildcards flag to be false,
+		// as the type variable was not contained in a parameterized type. Hence, 
+		// the var may be applicable to wildcards
+		if (!typeBounds.get(param).allowType(arg, false)) return false;
 
 		// if the type variable refers to some parameterized type (e.g. T extends
 		// List<?>), call satisfiesTypeParameters on the bounds of param that
 		// are ParameterizedTypes.
+		if(!satisfiesTypeVariableBounds(arg, param, typeBounds)) return false;
+		return true;
+	}
+	
+	/**
+	 * Determines whether or not the {@link Type} {@code arg} can satisfy the
+	 * bounds of {@link TypeVariable} {@code param} given the preexisting 
+	 * limitations of {@code param}.
+	 * 
+	 * @param arg - a Type Parameter for a given {@link ParameterizedType}
+	 * @param param - a {@link TypeVariable} that could potentially be replaced
+	 *          with {@code arg}
+	 * @param typeBounds - a {@link HashMap} containing the current restrictions
+	 *          of the {@link TypeVariable}s
+	 * @return {@code boolean} - true if {@code arg} can satisfy the bounds of
+	 *         {@code param}.
+	 */
+	private static boolean satisfiesTypeVariableBounds(final Type arg,
+			final TypeVariable<?> param,
+			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
+	{
 		final Type[] paramBounds = typeBounds.get(param).upperBounds;
 		for (final Type paramBound : paramBounds) {
 			// only have to check the bounds of the
@@ -961,7 +990,6 @@ public final class Types {
 				}
 			}
 		}
-
 		return true;
 	}
 
@@ -1270,6 +1298,14 @@ public final class Types {
 	}
 	
 	// -- Helper methods --
+	
+	private static Type[] filterIndices(Type[] types, List<Integer> indices) {
+		return IntStream
+				.range(0, types.length)
+				.filter(i -> !indices.contains(i))
+				.mapToObj(i -> types[i])
+				.toArray(Type[]::new);
+	}
 
 	private static IllegalArgumentException iae(final String... s) {
 		return iae(null, s);
@@ -1307,21 +1343,46 @@ public final class Types {
 			this.upperBounds = var.getBounds();
 			this.types = new HashSet<>();
 		}
+		
+		public boolean typesContainWildcard() {
+			return types.stream().anyMatch(t -> t instanceof WildcardType);
+		}
+		
+		public boolean wildcardAllowedInParameterizedType(Type type) {
+			if (typesContainWildcard()) {
+				return false;
+			}
+			if (!types.isEmpty() && type instanceof WildcardType) {
+				return false;
+			}
+			
+			return true;
+		}
 
 		/**
-		 * Sets the type of this {@link TypeVarInfo} to the type parameter, if it is
+		 * Adds the type of this {@link TypeVarInfo} to the type parameter, if it is
 		 * allowed. If the type parameter is not contained within the bounds of the
 		 * {@link TypeVariable}, then we return false, and the type of the
 		 * {@code TypeVariable} is not changed. N.B. if this {@code TypeVariable} is
 		 * being used in an {@link ParameterizedType} then
 		 * {@link TypeVarInfo#fixBounds} should be used instead.
+		 * Furthermore, it can be specified if wildcards should be refused, which
+		 * means that the method will return false if:
+		 * <li>a wilcard is already allowed for this type var</li>
+		 * <li>{@code bound} is a wildcard and other types are already allowed</li>
+		 * This is useful if the type variable was contained in a parameterized
+		 * type, hence it only allows wildcards if it was not bound to a type yet.
 		 *
 		 * @param type - the {@link Type} we are trying to assign to this
 		 *          {@link TypeVarInfo}.
 		 * @return {@code boolean} - false if the {@code Type} is not assignable to
 		 *         this {@code TypeVarInfo}
 		 */
-		public boolean allowType(final Type type) {
+		public boolean allowType(final Type type, boolean refuseWildcards) {
+			if (refuseWildcards && !wildcardAllowedInParameterizedType(type)) {
+				return false;
+			}
+			
 			final Class<?> typeClass = Types.raw(type);
 			// make sure that type extends all of the bounds of the type variable
 			for (final Type upperBound : upperBounds) {
@@ -1336,11 +1397,22 @@ public final class Types {
 		 * If a {@link TypeVariable} is used in a {@link ParameterizedType}, the
 		 * bounds have to be fixed such that the upperBound is the {@link Type}
 		 * parameterizing that {@link ParameterizedType}.
-		 *
+		 * Furthermore, it can be specified if wildcards should be refused, which
+		 * means that the method will return false if:
+		 * <li>a wilcard is already allowed for this type var</li>
+		 * <li>{@code bound} is a wildcard and other types are already allowed</li>
+		 * This is useful if the type variable was contained in a parameterized
+		 * type, hence it only allows wildcards if it was not bound to a type yet.
+		 * 
 		 * @param bound
+		 * @param refuseWildcards
 		 * @return
 		 */
-		public boolean fixBounds(final Type bound) {
+		public boolean fixBounds(final Type bound, boolean refuseWildcards) {
+			if (refuseWildcards && !wildcardAllowedInParameterizedType(bound)) {
+				return false;
+			}
+			
 			for (int i = 0; i < upperBounds.length; i++) {
 				if (Types.raw(upperBounds[i]).isAssignableFrom(Types.raw(bound)))
 					upperBounds[i] = bound;
@@ -1353,7 +1425,7 @@ public final class Types {
 			temp.add(bound);
 			types = new HashSet<>();
 			for (final Type type : temp) {
-				if (!allowType(type)) return false;
+				if (!allowType(type, false)) return false;
 			}
 			return true;
 		}
@@ -1379,6 +1451,26 @@ public final class Types {
 			s.delete(s.length() - 3, s.length());
 			s.append("\n");
 			return s.toString();
+		}
+	}
+	
+	/**
+	 * Class for {@link TypeVariable} which were contained in {@link ParameterizedType}s.
+	 * The only difference to {@link TypeVarInfo} is that {@link TypeVarInfo#allowType(Type, boolean)}
+	 * will be always called with refuseWildcards flag to be true.
+	 */
+	private static class TypeVarFromParameterizedTypeInfo extends TypeVarInfo {
+
+		public TypeVarFromParameterizedTypeInfo(TypeVariable<?> var) {
+			super(var);
+		}
+
+		/**
+		 * @param refuseWildcards hardcoded to true
+		 */
+		@Override
+		public boolean allowType(Type type, boolean refuseWildcards) {
+			return super.allowType(type, true);
 		}
 	}
 

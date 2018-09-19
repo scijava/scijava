@@ -827,7 +827,64 @@ public class TypesTest {
 			{}.getType() //
 		};
 		assertNotEquals(Types.satisfies(argsMiss, params), -1);
-
+	}
+	
+	@Test
+	public <N, C> void testSatisfiesWildcards() {
+		Nil<List<N>> n = new Nil<List<N>>() {};
+		Nil<List<C>> c = new Nil<List<C>>() {};
+		Nil<List<? extends Number>> nWildcard = new Nil<List<? extends Number>>() {};
+		
+		Type[] params = new Type[]{n.getType()};
+		Type[] argsOk = new Type[]{nWildcard.getType()};
+		assertEquals(-1, Types.satisfies(argsOk, params));
+		
+		params = new Type[]{n.getType(), c.getType()};
+		argsOk = new Type[]{nWildcard.getType(), nWildcard.getType()};
+		assertEquals(-1, Types.satisfies(argsOk, params));
+		
+		params = new Type[]{n.getType(), n.getType()};
+		Type[] argsNotOk = new Type[]{nWildcard.getType(), nWildcard.getType()};
+		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+	}
+	
+	@Test
+	public <N> void testSatisfiesWildcardsInParameterizedType() {
+		Nil<N> n = new Nil<N>() {};
+		Nil<List<N>> ln = new Nil<List<N>>() {};
+		Nil<List<? extends Number>> lw = new Nil<List<? extends Number>>() {};
+		
+		Type[] params = new Type[]{n.getType(), ln.getType()};
+		Type[] argsNotOk = new Type[]{Integer.class, lw.getType()};
+		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		
+		params = new Type[]{ln.getType(), n.getType()};
+		argsNotOk = new Type[]{lw.getType(), Integer.class};
+		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+	}
+	
+	@Test
+	public <N extends Number, C extends List<String>> void testSatisfiesBoundedWildcards() {
+		Nil<List<N>> n = new Nil<List<N>>() {};
+		Nil<List<C>> c = new Nil<List<C>>() {};
+		Nil<List<? extends Number>> nNumberWildcard = new Nil<List<? extends Number>>() {};
+		Nil<List<? extends List<String>>> nListildcard = new Nil<List<? extends List<String>>>() {};
+		
+		Type[] params = new Type[]{n.getType()};
+		Type[] argsOk = new Type[]{nNumberWildcard.getType()};
+		assertEquals(-1, Types.satisfies(argsOk, params));
+		
+		params = new Type[]{n.getType(), c.getType()};
+		argsOk = new Type[]{nNumberWildcard.getType(), nListildcard.getType()};
+		assertEquals(-1, Types.satisfies(argsOk, params));
+		
+		params = new Type[]{n.getType(), c.getType()};
+		Type[] argsNotOk = new Type[]{nNumberWildcard.getType(), nNumberWildcard.getType()};
+		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		
+		params = new Type[]{n.getType(), n.getType()};
+		argsNotOk = new Type[]{nNumberWildcard.getType(), nNumberWildcard.getType()};
+		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
 	}
 	
 	/**

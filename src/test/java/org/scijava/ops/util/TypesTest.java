@@ -837,12 +837,7 @@ public class TypesTest {
 	@Test
 	public <I1, I2> void testSatisfiesIndirectTypeVariables() {
 
-		class NestedThingImplOK1 implements NestedThing<Double, Double> {
-			@Override
-			public Double apply(Double t) {
-				// NB: No implementation needed.
-				return null;
-			}
+		abstract class NestedThingImplOK1 implements NestedThing<Double, Double> {
 		}
 		
 		final Type[] param = new Type[]{new Nil<Function<I1, I2>>() {}.getType()};
@@ -857,28 +852,13 @@ public class TypesTest {
 	@Test
 	public <I1, I2> void testSatisfiesUnboundedTypeVariables() {
 
-		class NestedThingImplOK1 implements Function<Iterable<Double>, Consumer<Double>> {
-			@Override
-			public Consumer<Double> apply(Iterable<Double> t) {
-				// NB: No implementation needed.
-				return null;
-			}
+		abstract class NestedThingImplOK1 implements Function<Iterable<Double>, Consumer<Double>> {
 		}
 		
-		class NestedThingImplOK2 implements Function<Iterable<Double>, Consumer<Integer>> {
-			@Override
-			public Consumer<Integer> apply(Iterable<Double> t) {
-				// NB: No implementation needed.
-				return null;
-			}
+		abstract class NestedThingImplOK2 implements Function<Iterable<Double>, Consumer<Integer>> {
 		}
 		
-		class NestedThingImplOK3 implements Function<Double, Consumer<Integer>> {
-			@Override
-			public Consumer<Integer> apply(Double t) {
-				// NB: No implementation needed.
-				return null;
-			}
+		abstract class NestedThingImplOK3 implements Function<Double, Consumer<Integer>> {
 		}
 		
 		final Type[] param = new Type[]{new Nil<Function<I1, I2>>() {}.getType()};
@@ -888,8 +868,8 @@ public class TypesTest {
 		argOK = new Type[]{NestedThingImplOK2.class};
 		assertEquals(-1, Types.satisfies(argOK, param));
 		
-		final Type[] argNotOK = new Type[]{NestedThingImplOK3.class};
-		assertEquals(-1, Types.satisfies(argNotOK, param));
+		argOK = new Type[]{NestedThingImplOK3.class};
+		assertEquals(-1, Types.satisfies(argOK, param));
 	}
 
 	/** Tests {@link Types#cast(Object, Class)}. */

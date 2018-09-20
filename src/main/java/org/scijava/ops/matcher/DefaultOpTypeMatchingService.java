@@ -30,8 +30,10 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -47,6 +49,7 @@ import org.scijava.service.Service;
 import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
 import org.scijava.util.Types;
+import org.scijava.util.Types.TypeVarInfo;
 
 /**
  * Default service for finding ops which match a request.
@@ -134,28 +137,11 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 */
 	@Override
 	public boolean typesMatch(final OpCandidate candidate) {
-		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
-			return false;
-		final Type[] refArgTypes = candidate.paddedArgs();
-		final Type[] candidateArgTypes = OpUtils.inputTypes(candidate);
-
-		if (refArgTypes == null)
-			return true; // no constraints on output types
-
-		if (candidateArgTypes.length < refArgTypes.length) {
-			candidate.setStatus(StatusCode.TOO_FEW_ARGS);
-			return false;
-		} else if (candidateArgTypes.length > refArgTypes.length) {
-			candidate.setStatus(StatusCode.TOO_MANY_ARGS);
+		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
+		if(!inputsMatch(candidate, typeBounds)) {
 			return false;
 		}
-
-		int conflictingIndex = Types.isApplicable(refArgTypes, candidateArgTypes);
-		if (conflictingIndex != -1) {
-			final Type to = refArgTypes[conflictingIndex];
-			final Type from = candidateArgTypes[conflictingIndex];
-			candidate.setStatus(StatusCode.ARG_TYPES_DO_NOT_MATCH, //
-					"request=" + to.getTypeName() + ", actual=" + from.getTypeName());
+		if(!outputsMatch(candidate, typeBounds)) {
 			return false;
 		}
 		candidate.setStatus(StatusCode.MATCH);
@@ -178,7 +164,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	private List<OpCandidate> checkCandidates(final List<OpCandidate> candidates) {
 		final ArrayList<OpCandidate> validCandidates = new ArrayList<>();
 		for (final OpCandidate candidate : candidates) {
-			if (!isValid(candidate) || !outputsMatch(candidate))
+			if (!isValid(candidate))
 				continue;
 			final Type[] args = candidate.paddedArgs();
 			if (args == null)
@@ -323,6 +309,34 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		return false;
 	}
 
+	private boolean inputsMatch(final OpCandidate candidate, HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
+		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
+			return false;
+		final Type[] refArgTypes = candidate.paddedArgs();
+		final Type[] candidateArgTypes = OpUtils.inputTypes(candidate);
+
+		if (refArgTypes == null)
+			return true; // no constraints on output types
+
+		if (candidateArgTypes.length < refArgTypes.length) {
+			candidate.setStatus(StatusCode.TOO_FEW_ARGS);
+			return false;
+		} else if (candidateArgTypes.length > refArgTypes.length) {
+			candidate.setStatus(StatusCode.TOO_MANY_ARGS);
+			return false;
+		}
+		
+		int conflictingIndex = Types.isApplicable(refArgTypes, candidateArgTypes, typeBounds);
+		if (conflictingIndex != -1) {
+			final Type to = refArgTypes[conflictingIndex];
+			final Type from = candidateArgTypes[conflictingIndex];
+			candidate.setStatus(StatusCode.ARG_TYPES_DO_NOT_MATCH, //
+					"request=" + to.getTypeName() + ", actual=" + from.getTypeName());
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Checks whether the output types of the candidate satisfy the output types of the {@link OpRef}.
 	 * Sets candidate status code if there are too many, to few, or not matching types.
@@ -330,7 +344,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * @param candidate the candidate to check outputs for
 	 * @return whether the output types are satisfied
 	 */
-	private boolean outputsMatch(final OpCandidate candidate) {
+	private boolean outputsMatch(final OpCandidate candidate, HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
 		final Type[] refOutTypes = candidate.getRef().getOutTypes();
 		if (refOutTypes == null)
 			return true; // no constraints on output types
@@ -344,7 +358,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return false;
 		}
 
-		int conflictingIndex = Types.isApplicable(candidateOutTypes, refOutTypes);
+		int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(candidateOutTypes, refOutTypes, typeBounds);
 		if (conflictingIndex != -1) {
 			final Type to = refOutTypes[conflictingIndex];
 			final Type from = candidateOutTypes[conflictingIndex];

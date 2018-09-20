@@ -58,12 +58,19 @@ public final class MatchingUtils {
 	 * source, represented as a raw type, to the specified
 	 * {@link ParameterizedType} destination (which could possibly be a
 	 * supertype of the source type). Thereby, possible {@link TypeVariable}s
-	 * contained in the parameters of the source are tried to be inferred.
+	 * contained in the parameters of the source are tried to be inferred in the
+	 * sense of empty angle brackets when a new object is created:
+	 * 
+	 * <pre>
+	 * List&lt;Integer&gt; listOfInts = new ArrayList&lt;&gt;();
+	 * </pre>
+	 * 
+	 * Hence, the types to put between the brackets are tried to be determined.
 	 * Inference will be done by simple matching of an encountered
 	 * {@link TypeVariable} in the source to the corresponding type in the
 	 * parameters of the destination. If an {@link TypeVariable} is encountered
 	 * more than once, the corresponding type in the destination needs to
-	 * perfectly match. Else, false will be rturned.</br>
+	 * perfectly match. Else, false will be returned.</br>
 	 * </br>
 	 * Examples:
 	 * <ul>
@@ -104,7 +111,7 @@ public final class MatchingUtils {
 	 * Nil&lt;Supplier&lt;String&gt;&gt;() {}.getType())</li>
 	 * </ul>
 	 * <ul>
-	 * {@code <M extends Number>} can't be inferred as type {@code String} is
+	 * {@code <M extends Number>} can't be inferred, as type {@code String} is
 	 * not within the bounds of {@code M}.
 	 * </ul>
 	 * <ul>
@@ -117,8 +124,8 @@ public final class MatchingUtils {
 	 * Nil&lt;Function&lt;Double, Integer&gt;&gt;() {}.getType())</li>
 	 * </ul>
 	 * <ul>
-	 * {@code <M extends Number>} can't be inferred as types
-	 * {@code Double, Integer} are ambiguous for the double usage of {@code M}.
+	 * {@code <M extends Number>} can't be inferred, as types {@code Double} and
+	 * {@code Integer} are ambiguous for {@code M}.
 	 * </ul>
 	 * 
 	 * @param src
@@ -239,9 +246,9 @@ public final class MatchingUtils {
 						// not require equality as one var is
 						// bounded by another and it is not the same. E.g.
 						// assume we want to infer the types of vars:
-						// A extends Number, B extends A
+						// - - - A extends Number, B extends A
 						// From types:
-						// Number, Double
+						// - - - Number, Double
 						// First A is bound to Number, next B to Double. Then we
 						// check the bounds for B. We encounter A,
 						// for which we already inferred Number. Hence, it

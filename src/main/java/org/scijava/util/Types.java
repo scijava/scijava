@@ -1332,7 +1332,7 @@ public final class Types {
 	/**
 	 * maintains info about an {@link TypeVariable}.
 	 */
-	private static class TypeVarInfo {
+	public static class TypeVarInfo {
 
 		private final TypeVariable<?> var;
 		private final Type[] upperBounds;

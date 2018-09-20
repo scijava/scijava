@@ -44,6 +44,7 @@ import java.util.Map;
 
 import org.scijava.types.Nil;
 import org.scijava.util.Types;
+import org.scijava.util.Types.TypeVarInfo;
 
 import com.google.common.base.Objects;
 
@@ -51,6 +52,64 @@ public final class MatchingUtils {
 
 	private MatchingUtils() {
 		// prevent instantiation of utility class
+	}
+
+	/**
+	 * Checks for raw assignability. TODO This method is not yet fully
+	 * implemented. The correct behavior should be as follows. Suppose we have a
+	 * generic typed method like:
+	 * 
+	 * <pre>
+	 *public static &lt;N&gt; List&lt;N&gt; foo(N in) {
+	 *	...
+	 *}
+	 * </pre>
+	 * 
+	 * This method should discern if the following assignments would be legal,
+	 * possibly using predetermined {@link TypeVariable} assignments:
+	 * 
+	 * <pre>
+	 *List&lt;Integer&gt; listOfInts = foo(new Integer(0)) //legal
+	 *List&lt;Number&gt; listOfNumbers = foo(new Integer(0)) //legal
+	 *List&lt;? extends Number&gt; listOfBoundedWildcards = foo(new Integer(0)) //legal
+	 * </pre>
+	 * 
+	 * The corresponding calls to this method would be:
+	 * 
+	 * <pre>
+	 * Nil&lt;List&lt;N&gt;&gt; nilN = new Nil&lt;List&lt;N&gt;&gt;(){}
+	 * Nil&lt;List&lt;Integer&gt;&gt; nilInteger = new Nil&lt;List&lt;Integer&gt;&gt;(){}
+	 * Nil&lt;List&lt;Number&gt;&gt; nilNumber = new Nil&lt;List&lt;Number&gt;&gt;(){}
+	 * Nil&lt;List&lt;? extends Number&gt;&gt; nilWildcardNumber = new Nil&lt;List&lt;? extends Number&gt;&gt;(){}
+	 * 
+	 * checkGenericOutputsAssignability(nilN.getType(), nilInteger.getType, ...)
+	 * checkGenericOutputsAssignability(nilN.getType(), nilNumber.getType, ...)
+	 * checkGenericOutputsAssignability(nilN.getType(), nilWildcardNumber.getType, ...)
+	 * </pre>
+	 * 
+	 * Using a map where N was already bound to Integer (N -> Integer.class).
+	 * This method is useful for the following scenario: During ops matching, we
+	 * first check if the arguments (inputs) of the requested op are applicable
+	 * to the arguments of an op candidate. During this process, possible type
+	 * variables may be inferred. The can then be used with this method to find
+	 * out if the outputs of the op candidate would be assignable to the output
+	 * of the requested op.
+	 * 
+	 * @param froms
+	 * @param tos
+	 * @param typeBounds
+	 * @return
+	 */
+	public static int checkGenericOutputsAssignability(Type[] froms, Type[] tos,
+			HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
+		for (int i = 0; i < froms.length; i++) {
+			Type from = froms[i];
+			Type to = tos[i];
+
+			if (!Types.isAssignable(Types.raw(from), Types.raw(to)))
+				return i;
+		}
+		return -1;
 	}
 
 	/**
@@ -309,7 +368,7 @@ public final class MatchingUtils {
 		}
 		return new Type[0];
 	}
-	
+
 	/**
 	 * Gets the "useful" class information carries on the given object, which
 	 * depends on the actual type of the object.

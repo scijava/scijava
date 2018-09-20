@@ -33,6 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -65,13 +66,14 @@ public class MatchingUtilsTest {
 	public void genericAssignabilitySingleVar() {
 		abstract class Single<I> implements Supplier<I> {
 		}
-
 		Nil<Supplier<Double>> y1 = new Nil<Supplier<Double>>() {
+		};
+		Nil<Supplier<Number>> y2 = new Nil<Supplier<Number>>() {
 		};
 		Nil<Double> n1 = new Nil<Double>() {
 		};
 
-		assertAll(Single.class, true, y1);
+		assertAll(Single.class, true, y1, y2);
 		assertAll(Single.class, false, n1);
 	}
 
@@ -250,6 +252,12 @@ public class MatchingUtilsTest {
 
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class, true, y5);
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class, false, n5);
+		
+		abstract class SingleVarMultipleOccurenceUsedNested<I> implements Function<I, List<I>> {}
+		
+		Nil<Function<Integer, List<Number>>> n6 = new Nil<Function<Integer,List<Number>>>() {
+		};
+		assertAll(SingleVarMultipleOccurenceUsedNested.class, false, n6);
 	}
 
 	@Test
@@ -415,5 +423,36 @@ public class MatchingUtilsTest {
 
 		assertAll(List.class, true, listT, listNumber, listInteger);
 		assertAll(List.class, false, listExtendsNumber, t);
+	}
+	
+	/**
+	 * {@link MatchingUtils#checkGenericOutputsAssignability(Type[], Type[], HashMap)} not yet fully
+	 * implemented. If this is done, all the tests below should not fail.
+	 */
+	@Test
+	public <N> void testOutputAssignability() {
+//		Nil<N> n = new Nil<N>() {};
+//		Nil<List<N>> ln = new Nil<List<N>>() {};
+//		Nil<List<? extends Number>> lWildNum = new Nil<List<? extends Number>>() {};
+//		Nil<List<Number>> lNum = new Nil<List<Number>>() {};
+//		Nil<List<?>> lwild = new Nil<List<?>>() {};
+//		
+//		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
+//		assertTrue(-1 == Types.isApplicable(new Type[]{Integer.class}, new Type[]{n.getType()}, typeBounds));
+//		Type[] toOuts = new Type[]{lWildNum.getType()};
+//		Type[] fromOuts = new Type[]{ln.getType()};
+//		assertTrue(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
+//		
+//		toOuts = new Type[]{lNum.getType()};
+//		assertTrue(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
+//		
+//		toOuts = new Type[]{lwild.getType()};
+//		assertTrue(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
+//		
+//		typeBounds = new HashMap<>();
+//		assertTrue(-1 == Types.isApplicable(new Type[]{String.class}, new Type[]{n.getType()}, typeBounds));
+//		toOuts = new Type[]{lWildNum.getType()};
+//		fromOuts = new Type[]{ln.getType()};
+//		assertFalse(-1 == MatchingUtils.checkGenericOutputsAssignability(fromOuts, toOuts, typeBounds));
 	}
 }

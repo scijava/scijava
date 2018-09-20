@@ -30,6 +30,8 @@
 package org.scijava.ops;
 
 import org.junit.Test;
+import org.scijava.ops.core.BiComputer;
+import org.scijava.ops.core.Computer;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Computers;

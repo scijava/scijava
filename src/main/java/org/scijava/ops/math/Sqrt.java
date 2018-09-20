@@ -3,10 +3,10 @@ package org.scijava.ops.math;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-import org.scijava.ops.BiInplace1;
-import org.scijava.ops.Computer;
-import org.scijava.ops.Inplace;
-import org.scijava.ops.Op;
+import org.scijava.ops.core.BiInplace1;
+import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.Inplace;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;

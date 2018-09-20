@@ -6,9 +6,9 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import org.scijava.core.Priority;
-import org.scijava.ops.BiComputer;
-import org.scijava.ops.BiInplace1;
-import org.scijava.ops.Op;
+import org.scijava.ops.core.BiComputer;
+import org.scijava.ops.core.BiInplace1;
+import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

@@ -27,10 +27,12 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
 
+import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpUtils;
 import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;

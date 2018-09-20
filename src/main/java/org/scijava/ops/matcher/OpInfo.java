@@ -27,11 +27,12 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.util.List;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.OpUtils;
+import org.scijava.ops.core.Op;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;

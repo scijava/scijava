@@ -1,4 +1,4 @@
-package org.scijava.ops;
+package org.scijava.ops.core;
 
 @FunctionalInterface
 public interface BiComputer<I1, I2, O> extends TriConsumer<I1, I2, O> {

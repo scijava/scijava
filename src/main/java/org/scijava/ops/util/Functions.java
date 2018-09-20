@@ -5,8 +5,8 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.Op;
-import org.scijava.ops.base.OpService;
+import org.scijava.ops.OpService;
+import org.scijava.ops.core.Op;
 import org.scijava.types.Nil;
 import org.scijava.util.Types;
 

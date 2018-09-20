@@ -1,7 +1,9 @@
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.scijava.ops.OpUtils;
 
 /**
  * Class representing the result from type matching done by the

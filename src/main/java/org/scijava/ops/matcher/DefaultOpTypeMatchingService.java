@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -37,7 +37,9 @@ import java.util.function.Predicate;
 
 import org.scijava.Context;
 import org.scijava.log.LogService;
-import org.scijava.ops.base.OpCandidate.StatusCode;
+import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpUtils;
+import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;

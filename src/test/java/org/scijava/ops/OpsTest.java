@@ -35,6 +35,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.scijava.ops.core.BiComputer;
+import org.scijava.ops.core.BiInplace1;
+import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.Inplace;
+import org.scijava.ops.core.NullaryComputer;
 import org.scijava.ops.math.Add.MathAddDoublesFunction;
 import org.scijava.ops.math.Add.MathAddOp;
 import org.scijava.ops.math.Power.MathPowerOp;

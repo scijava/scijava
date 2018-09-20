@@ -27,9 +27,12 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops;
 
 import java.util.Collection;
+
+import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpRef;
 
 /**
  * An op environment is the top-level entry point into op execution. It provides

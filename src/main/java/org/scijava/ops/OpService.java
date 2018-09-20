@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package org.scijava.ops.base;
+package org.scijava.ops;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,7 +35,12 @@ import java.util.Collection;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
-import org.scijava.ops.Op;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.matcher.MatchingResult;
+import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.matcher.OpTypeMatchingService;
 import org.scijava.ops.util.Inject;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

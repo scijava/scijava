@@ -148,7 +148,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return false;
 		}
 
-		int conflictingIndex = Types.satisfies(refArgTypes, candidateArgTypes);
+		int conflictingIndex = Types.isApplicable(refArgTypes, candidateArgTypes);
 		if (conflictingIndex != -1) {
 			final Type to = refArgTypes[conflictingIndex];
 			final Type from = candidateArgTypes[conflictingIndex];
@@ -342,7 +342,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return false;
 		}
 
-		int conflictingIndex = Types.satisfies(candidateOutTypes, refOutTypes);
+		int conflictingIndex = Types.isApplicable(candidateOutTypes, refOutTypes);
 		if (conflictingIndex != -1) {
 			final Type to = refOutTypes[conflictingIndex];
 			final Type from = candidateOutTypes[conflictingIndex];

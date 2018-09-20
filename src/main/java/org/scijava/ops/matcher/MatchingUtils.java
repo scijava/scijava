@@ -30,21 +30,26 @@
  * #L%
  */
 
-package org.scijava.util;
+package org.scijava.ops.matcher;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+
+import org.scijava.types.Nil;
+import org.scijava.util.Types;
 
 import com.google.common.base.Objects;
 
-public final class TypeUtils {
+public final class MatchingUtils {
 
-	private TypeUtils() {
+	private MatchingUtils() {
 		// prevent instantiation of utility class
 	}
 
@@ -296,5 +301,69 @@ public final class TypeUtils {
 			return ((ParameterizedType) superType).getActualTypeArguments();
 		}
 		return new Type[0];
+	}
+	
+	/**
+	 * Gets the "useful" class information carries on the given object, which
+	 * depends on the actual type of the object.
+	 */
+	public static Class<?> getClass(final Object obj) {
+		if (obj == null)
+			return null;
+		if (obj instanceof Nil)
+			return getClass(((Nil<?>) obj).getType());
+		if (obj instanceof Class)
+			return (Class<?>) obj;
+		if (obj instanceof ParameterizedType)
+			return (Class<?>) ((ParameterizedType) obj).getRawType();
+		return obj.getClass();
+	}
+
+	/**
+	 * Finds the levels of casting between <code>origin</code> and
+	 * <code>dest</code>. Returns 0 if dest and origin are the same. Returns -1
+	 * if dest is not assignable from origin.
+	 */
+	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {
+		if (dest.equals(origin))
+			return 0;
+
+		int level = 1;
+		Class<?> currType = origin;
+		// BFS if dest is an interface
+		if (dest.isInterface()) {
+			final HashSet<String> seen = new HashSet<>();
+			final ArrayList<Type> currIfaces = new ArrayList<>(Arrays.asList(currType.getGenericInterfaces()));
+			do {
+				final ArrayList<Type> nextIfaces = new ArrayList<>();
+				for (final Type iface : currIfaces) {
+					if (seen.contains(iface.getTypeName()))
+						continue;
+
+					final Class<?> cls = getClass(iface);
+					if (cls.equals(dest))
+						return level;
+					seen.add(iface.getTypeName());
+					nextIfaces.addAll(Arrays.asList(cls.getGenericInterfaces()));
+				}
+				currIfaces.clear();
+				currIfaces.addAll(nextIfaces);
+				if (currType.getSuperclass() != null) {
+					currType = currType.getSuperclass();
+					currIfaces.addAll(Arrays.asList(currType.getGenericInterfaces()));
+				}
+				level++;
+			} while (!currIfaces.isEmpty() || currType.getSuperclass() != null);
+		}
+		// otherwise dest is a class, so search the list of ancestors
+		else {
+			while (currType.getSuperclass() != null) {
+				currType = currType.getSuperclass();
+				if (currType.equals(dest))
+					return level;
+				level++;
+			}
+		}
+		return -1;
 	}
 }

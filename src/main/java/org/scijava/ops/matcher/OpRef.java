@@ -35,7 +35,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.scijava.ops.core.Op;
-import org.scijava.util.TypeUtils;
 import org.scijava.util.Types;
 
 /**
@@ -138,7 +137,7 @@ public class OpRef {
 			return true;
 		for (Type t : types) {
 			if(t instanceof ParameterizedType) {
-				if (!TypeUtils.checkGenericAssignability(opClass, (ParameterizedType) t)) {
+				if (!MatchingUtils.checkGenericAssignability(opClass, (ParameterizedType) t)) {
 					return false;
 				}
 			} else {

@@ -299,7 +299,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		for (final Member<?> member : OpUtils.inputs(candidate)) {
 			final Class<?> type = member.getRawType();
 			if (paddedArgs[i] != null) {
-				final int currLevel = OpMatchingUtil.findCastLevels(type, OpMatchingUtil.getClass(paddedArgs[i]));
+				final int currLevel = MatchingUtils.findCastLevels(type, MatchingUtils.getClass(paddedArgs[i]));
 				if (currLevel < 0)
 					return -1;
 				level += currLevel;

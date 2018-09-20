@@ -39,11 +39,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.junit.Test;
+import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.types.Nil;
-import org.scijava.util.TypeUtils;
 import org.scijava.util.Types;
 
-public class TypeUtilsTest {
+public class MatchingUtilsTest {
 
 	private void assertAll(Class<?> from, boolean condition, Nil<?>... tos) {
 		for (Nil<?> to : tos) {
@@ -54,7 +54,7 @@ public class TypeUtilsTest {
 	private void assertAll(Class<?> from, boolean condition, Type... tos) {
 		for (Type to : tos) {
 			if (to instanceof ParameterizedType) {
-				assertTrue(TypeUtils.checkGenericAssignability(from, (ParameterizedType) to) == condition);
+				assertTrue(MatchingUtils.checkGenericAssignability(from, (ParameterizedType) to) == condition);
 			} else {
 				assertTrue(Types.isAssignable(from, to) == condition);
 			}
@@ -392,12 +392,12 @@ public class TypeUtilsTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableNullToNull() {
-		TypeUtils.checkGenericAssignability(null, null);
+		MatchingUtils.checkGenericAssignability(null, null);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableClassToNull() {
-		TypeUtils.checkGenericAssignability(Object.class, null);
+		MatchingUtils.checkGenericAssignability(Object.class, null);
 	}
 
 	@Test

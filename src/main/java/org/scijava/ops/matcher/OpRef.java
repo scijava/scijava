@@ -27,14 +27,14 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.core.Op;
 import org.scijava.util.TypeUtils;
 import org.scijava.util.Types;
 

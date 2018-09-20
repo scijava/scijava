@@ -27,13 +27,17 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.base.OpCandidate.StatusCode;
+import org.scijava.ops.matcher.MatchingResult;
+import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.param.ParameterMember;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;

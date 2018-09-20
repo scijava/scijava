@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.scijava.Context;
-import org.scijava.ops.base.OpService;
 
 public abstract class AbstractTestEnvironment {
 

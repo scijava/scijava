@@ -3,10 +3,10 @@ package org.scijava.ops.util;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
-import org.scijava.ops.BiComputer;
-import org.scijava.ops.Computer;
-import org.scijava.ops.Op;
-import org.scijava.ops.base.OpService;
+import org.scijava.ops.OpService;
+import org.scijava.ops.core.BiComputer;
+import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
 

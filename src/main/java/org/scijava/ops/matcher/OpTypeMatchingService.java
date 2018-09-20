@@ -27,12 +27,13 @@
  * #L%
  */
 
-package org.scijava.ops.base;
+package org.scijava.ops.matcher;
 
 import java.util.List;
 
 import org.scijava.module.Module;
 import org.scijava.module.ModuleInfo;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.service.SciJavaService;
 import org.scijava.struct.StructInstance;
 

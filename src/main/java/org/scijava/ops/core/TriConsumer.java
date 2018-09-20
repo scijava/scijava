@@ -1,4 +1,4 @@
-package org.scijava.ops;
+package org.scijava.ops.core;
 
 import java.util.Objects;
 import java.util.function.Consumer;

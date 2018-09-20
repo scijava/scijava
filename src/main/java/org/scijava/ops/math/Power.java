@@ -3,8 +3,8 @@ package org.scijava.ops.math;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.Computer;
-import org.scijava.ops.Op;
+import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

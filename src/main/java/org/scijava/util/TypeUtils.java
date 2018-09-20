@@ -117,8 +117,8 @@ public final class TypeUtils {
 	 * </ul>
 	 * 
 	 * @param src
-	 *            raw type representing parameterized of which assignment should
-	 *            be checked
+	 *            raw type representing the parameterized type of which
+	 *            assignment should be checked
 	 * @param dest
 	 *            the parameterized type for which assignment should be checked
 	 *            to
@@ -222,19 +222,27 @@ public final class TypeUtils {
 					}
 				}
 
-				// Bounds could also contain type vars, hence possibly go into recursion
+				// Bounds could also contain type vars, hence possibly go into
+				// recursion
 				for (Type bound : varType.getBounds()) {
 					if (bound instanceof TypeVariable && typeAssigns.get((TypeVariable<?>) bound) != null) {
-						// If the bound of the current var (let's call it A) to infer is also a var (let's call it B):
-						// If we already encountered B, we check if the current type to infer from is assignable to 
-						// the already inferred type for B. In this case we do not require equality as  one var is 
-						// bounded by another and it is not the same. E.g.  assume we want to infer the types of vars:
-						// 		A extends Number, B extends A
+						// If the bound of the current var (let's call it A) to
+						// infer is also a var (let's call it B):
+						// If we already encountered B, we check if the current
+						// type to infer from is assignable to
+						// the already inferred type for B. In this case we do
+						// not require equality as one var is
+						// bounded by another and it is not the same. E.g.
+						// assume we want to infer the types of vars:
+						// A extends Number, B extends A
 						// From types:
-						// 		Number, Double
-						// First A is bound to Number, next B to Double. Then we check the bounds for B. We encounter A,
-						// for which we already inferred Number. Hence, it suffices to check whether Double can be assigned
-						// to Number, it does not have to be equal as it is just a transitive bound for B.
+						// Number, Double
+						// First A is bound to Number, next B to Double. Then we
+						// check the bounds for B. We encounter A,
+						// for which we already inferred Number. Hence, it
+						// suffices to check whether Double can be assigned
+						// to Number, it does not have to be equal as it is just
+						// a transitive bound for B.
 						Type typeAssignForBound = typeAssigns.get((TypeVariable<?>) bound);
 						if (!Types.isAssignable(from, typeAssignForBound)) {
 							throw new TypeInferenceException();
@@ -260,7 +268,7 @@ public final class TypeUtils {
 			}
 		}
 		// Check if the inferred types satisfy their bounds
-		if (!Types.satisfies(typeAssigns)) {
+		if (!Types.typesSatisfyVariables(typeAssigns)) {
 			throw new TypeInferenceException();
 		}
 	}

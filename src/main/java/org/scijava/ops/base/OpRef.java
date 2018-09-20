@@ -131,7 +131,7 @@ public class OpRef {
 
 	/**
 	 * Determines whether the specified type satisfies the op's required types
-	 * using {@link Types#satisfies(Type[], Type[])}.
+	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
 	public boolean typesMatch(final Class<?> opClass) {
 		if (types == null)

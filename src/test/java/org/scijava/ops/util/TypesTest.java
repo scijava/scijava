@@ -562,7 +562,7 @@ public class TypesTest {
 		assertFalse(Types.isInstance(new Object(), null));
 	}
 
-	/** Tests {@link Types#satisfies(Type[], Type[])} for raw classes. */
+	/** Tests {@link Types#isApplicable(Type[], Type[])} for raw classes. */
 	@Test
 	public void testSatisfiesRaw() {
 		// f(Number, Integer)
@@ -571,16 +571,16 @@ public class TypesTest {
 		// f(Double, Integer)
 		// [OK] Double -> Number
 		final Type[] srcOK = { Double.class, Integer.class };
-		assertEquals(Types.satisfies(srcOK, dest), -1);
+		assertEquals(Types.isApplicable(srcOK, dest), -1);
 
 		// f(String, Integer)
 		// [MISS] String is not assignable to Number
 		final Type[] srcMiss = { String.class, Integer.class };
-		assertNotEquals(Types.satisfies(srcMiss, dest), -1);
+		assertNotEquals(Types.isApplicable(srcMiss, dest), -1);
 
 	}
 
-	/** Tests {@link Types#satisfies(Type[], Type[])} for single arguments. */
+	/** Tests {@link Types#isApplicable(Type[], Type[])} for single arguments. */
 	@Test
 	public <T extends Number, U extends BigInteger> void testSatisfiesSingle() {
 		// <T extends Number> f(T)
@@ -588,12 +588,12 @@ public class TypesTest {
 		final Type u = new Nil<U>() {}.getType();
 		final Type[] tDest = { t };
 
-		assertEquals(Types.satisfies(new Type[] { Double.class }, tDest), -1);
-		assertEquals(Types.satisfies(new Type[] { Number.class }, tDest), -1);
-		assertEquals(Types.satisfies(new Type[] { t }, tDest), -1);
-		assertEquals(Types.satisfies(new Type[] { u }, tDest), -1);
+		assertEquals(Types.isApplicable(new Type[] { Double.class }, tDest), -1);
+		assertEquals(Types.isApplicable(new Type[] { Number.class }, tDest), -1);
+		assertEquals(Types.isApplicable(new Type[] { t }, tDest), -1);
+		assertEquals(Types.isApplicable(new Type[] { u }, tDest), -1);
 		// String does not extend Number
-		assertNotEquals(Types.satisfies(new Type[] { String.class }, tDest), -1);
+		assertNotEquals(Types.isApplicable(new Type[] { String.class }, tDest), -1);
 
 		// -SINGLY RECURSIVE CALLS-
 
@@ -614,18 +614,18 @@ public class TypesTest {
 			.getType();
 		final Type[] listExtendsNumberDest = { listExtendsNumber };
 
-		assertEquals(Types.satisfies(new Type[] { listT }, listTDest), -1);
-		assertEquals(Types.satisfies(listUDest, listTDest), -1);
+		assertEquals(Types.isApplicable(new Type[] { listT }, listTDest), -1);
+		assertEquals(Types.isApplicable(listUDest, listTDest), -1);
 		// not all Numbers are BigIntegers.
-		assertNotEquals(Types.satisfies(listTDest, listUDest), -1);
-		assertEquals(Types.satisfies(listTDest, listExtendsNumberDest), -1);
-		assertEquals(Types.satisfies(listUDest, listExtendsNumberDest), -1);
-		assertEquals(Types.satisfies(listTDest, listSuperNumberDest), -1);
+		assertNotEquals(Types.isApplicable(listTDest, listUDest), -1);
+		assertEquals(Types.isApplicable(listTDest, listExtendsNumberDest), -1);
+		assertEquals(Types.isApplicable(listUDest, listExtendsNumberDest), -1);
+		assertEquals(Types.isApplicable(listTDest, listSuperNumberDest), -1);
 		// BigInteger extends Number, not the other way around.
-		assertNotEquals(Types.satisfies(listUDest, listSuperNumberDest), -1);
-		assertEquals(Types.satisfies(listDoubleDest, listExtendsNumberDest), -1);
+		assertNotEquals(Types.isApplicable(listUDest, listSuperNumberDest), -1);
+		assertEquals(Types.isApplicable(listDoubleDest, listExtendsNumberDest), -1);
 		// Double extends Number, not the other way around.
-		assertNotEquals(Types.satisfies(listDoubleDest, listSuperNumberDest), -1);
+		assertNotEquals(Types.isApplicable(listDoubleDest, listSuperNumberDest), -1);
 
 		// -MULTIPLY RECURSIVE CALLS-
 
@@ -643,31 +643,31 @@ public class TypesTest {
 			.getType();
 
 		// T might not always extend BigInteger(U)
-		assertNotEquals(Types.satisfies(new Type[] { MapListTT }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { MapListTT }, new Type[] {
 			MapListTU }), -1);
 		// T might not always be the same as U
-		assertNotEquals(Types.satisfies(new Type[] { MapListTU }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { MapListTU }, new Type[] {
 			MapListTT }), -1);
-		assertEquals(Types.satisfies(new Type[] { MapListUU }, new Type[] {
+		assertEquals(Types.isApplicable(new Type[] { MapListUU }, new Type[] {
 			MapListTT }), -1);
 		// T might not always extend BigInteger(U)
-		assertNotEquals(Types.satisfies(new Type[] { MapListTT }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { MapListTT }, new Type[] {
 			MapListUU }), -1);
 		// T might not always be Double
-		assertNotEquals(Types.satisfies(new Type[] { MapListTDouble }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { MapListTDouble }, new Type[] {
 			MapListTT }), -1);
 		// T does not extend String.
-		assertNotEquals(Types.satisfies(new Type[] { MapListDoubleString },
+		assertNotEquals(Types.isApplicable(new Type[] { MapListDoubleString },
 			new Type[] { MapListTT }), -1);
-		assertEquals(Types.satisfies(new Type[] { MapListDoubleDouble },
+		assertEquals(Types.isApplicable(new Type[] { MapListDoubleDouble },
 			new Type[] { MapListTT }), -1);
 		// T is already fixed to Double (in a parameterized Map), cannot accomodate
 		// Nubmer.
-		assertNotEquals(Types.satisfies(new Type[] { MapListNumberDouble },
+		assertNotEquals(Types.isApplicable(new Type[] { MapListNumberDouble },
 			new Type[] { MapListTT }), -1);
 		// T is already fixed to Double (in a parameterized List) , cannot
 		// accomodate Number
-		assertNotEquals(Types.satisfies(new Type[] { MapListDoubleNumber },
+		assertNotEquals(Types.isApplicable(new Type[] { MapListDoubleNumber },
 			new Type[] { MapListTT }), -1);
 	}
 
@@ -681,17 +681,17 @@ public class TypesTest {
 		final Type arrayV = new Nil<V[]>() {}.getType();
 		final Type arrayDouble = new Nil<Double[]>() {}.getType();
 
-		assertEquals(Types.satisfies(new Type[] { arrayDouble }, new Type[] {
+		assertEquals(Types.isApplicable(new Type[] { arrayDouble }, new Type[] {
 			arrayT }), -1);
 		// Double does not extend String
-		assertNotEquals(Types.satisfies(new Type[] { arrayDouble }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { arrayDouble }, new Type[] {
 			arrayU }), -1);
-		assertEquals(Types.satisfies(new Type[] { arrayT }, new Type[] { arrayT }),
+		assertEquals(Types.isApplicable(new Type[] { arrayT }, new Type[] { arrayT }),
 			-1);
-		assertEquals(Types.satisfies(new Type[] { arrayV }, new Type[] { arrayT }),
+		assertEquals(Types.isApplicable(new Type[] { arrayV }, new Type[] { arrayT }),
 			-1);
 		// Number does not extend BigInteger
-		assertNotEquals(Types.satisfies(new Type[] { arrayT }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { arrayT }, new Type[] {
 			arrayV }), -1);
 
 		// generic multi-dimensional arrays
@@ -699,15 +699,15 @@ public class TypesTest {
 		final Type arrayV2D = new Nil<V[][]>() {}.getType();
 		final Type arrayDouble2D = new Nil<Double[][]>() {}.getType();
 
-		assertEquals(Types.satisfies(new Type[] { arrayDouble2D }, new Type[] {
+		assertEquals(Types.isApplicable(new Type[] { arrayDouble2D }, new Type[] {
 			arrayT2D }), -1);
-		assertEquals(Types.satisfies(new Type[] { arrayV2D }, new Type[] {
+		assertEquals(Types.isApplicable(new Type[] { arrayV2D }, new Type[] {
 			arrayT2D }), -1);
 		// A 2D array does not satisfy a 1D array
-		assertNotEquals(Types.satisfies(new Type[] { arrayT2D }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { arrayT2D }, new Type[] {
 			arrayT }), -1);
 		// A 1D array does not satisfy a 2D array
-		assertNotEquals(Types.satisfies(new Type[] { arrayT }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { arrayT }, new Type[] {
 			arrayT2D }), -1);
 
 		// generic parameterized type arrays
@@ -715,13 +715,13 @@ public class TypesTest {
 		final Type arrayListDouble = new Nil<List<Double>[]>() {}.getType();
 		final Type arrayListString = new Nil<List<String>[]>() {}.getType();
 
-		assertEquals(Types.satisfies(new Type[] { arrayListDouble }, new Type[] {
+		assertEquals(Types.isApplicable(new Type[] { arrayListDouble }, new Type[] {
 			arrayListT }), -1);
 		// String does not extend Number
-		assertNotEquals(Types.satisfies(new Type[] { arrayListString }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { arrayListString }, new Type[] {
 			arrayListT }), -1);
 		// Number does not extend BigInteger
-		assertNotEquals(Types.satisfies(new Type[] { arrayListT }, new Type[] {
+		assertNotEquals(Types.isApplicable(new Type[] { arrayListT }, new Type[] {
 			arrayU }), -1);
 
 	}
@@ -741,19 +741,19 @@ public class TypesTest {
 			.getType();
 		final Type integerThing = new Nil<IntegerThing>() {}.getType();
 
-		assertEquals(Types.satisfies(new Type[] { thingInt, thingInt,
+		assertEquals(Types.isApplicable(new Type[] { thingInt, thingInt,
 			numberThingInt, integerThing }, new Type[] { t, t, t, t }), -1);
-		assertEquals(Types.satisfies(new Type[] { thingInt, numberThingInt,
+		assertEquals(Types.isApplicable(new Type[] { thingInt, numberThingInt,
 			strangerThingString }, new Type[] { t, t, t }), -1);
-		assertEquals(Types.satisfies(new Type[] { thingInt, numberThingInt,
+		assertEquals(Types.isApplicable(new Type[] { thingInt, numberThingInt,
 			integerThing }, new Type[] { t, t, t }), -1);
-		assertEquals(Types.satisfies(new Type[] { numberThingInt,
+		assertEquals(Types.isApplicable(new Type[] { numberThingInt,
 			strangeThingDouble }, new Type[] { t, t }), -1);
 		// S cannot accommodate a Double since S is already locked to Integer from
 		// the first argument.
-		assertNotEquals(Types.satisfies(new Type[] { thingInt, numberThingInt,
+		assertNotEquals(Types.isApplicable(new Type[] { thingInt, numberThingInt,
 			numberThingDouble }, new Type[] { t, t, t }), -1);
-		assertEquals(Types.satisfies(new Type[] { u }, new Type[] { t }), -1);
+		assertEquals(Types.isApplicable(new Type[] { u }, new Type[] { t }), -1);
 
 		// recursive Type Variables
 		final Type circularThing = new Nil<CircularThing>() {}.getType();
@@ -765,38 +765,38 @@ public class TypesTest {
 		final Type w = new Nil<W>() {}.getType();
 		final Type x = new Nil<X>() {}.getType();
 
-		assertEquals(Types.satisfies(new Type[] { circularThing, circularThing,
+		assertEquals(Types.isApplicable(new Type[] { circularThing, circularThing,
 			loopingThing }, new Type[] { t, t, t }), -1);
 		// V cannot accommodate LoopingThing since V is already locked to
 		// CircularThing
-		assertNotEquals(Types.satisfies(new Type[] { circularThing, circularThing,
+		assertNotEquals(Types.isApplicable(new Type[] { circularThing, circularThing,
 			loopingThing }, new Type[] { v, v, v }), -1);
 		// V cannot accommodate RecursiveThing since V is already locked to
 		// CircularThing (V has to extend RecursiveThing<itself>, not
 		// RecursiveThing<not itself>).
-		assertNotEquals(Types.satisfies(new Type[] { circularThing, circularThing,
+		assertNotEquals(Types.isApplicable(new Type[] { circularThing, circularThing,
 			recursiveThingCircular }, new Type[] { v, v, v }), -1);
 		// V cannot accommodate RecursiveThing<CircularThing> since V must extend
 		// RecursiveThing<V> (it cannot extend RecursiveThing<not V>)
-		assertNotEquals(Types.satisfies(new Type[] { recursiveThingCircular,
+		assertNotEquals(Types.isApplicable(new Type[] { recursiveThingCircular,
 			recursiveThingCircular, recursiveThingCircular }, new Type[] { v, v, v }),
 			-1);
-		assertEquals(Types.satisfies(new Type[] { recursiveThingCircular,
+		assertEquals(Types.isApplicable(new Type[] { recursiveThingCircular,
 			recursiveThingCircular, recursiveThingCircular }, new Type[] { t, t, t }),
 			-1);
-		assertEquals(Types.satisfies(new Type[] { circularThing, circularThing,
+		assertEquals(Types.isApplicable(new Type[] { circularThing, circularThing,
 			circularThing }, new Type[] { w, w, w }), -1);
 		// W cannot accommodate LoopingThing since W is already
 		// fixed to CircularThing
-		assertNotEquals(Types.satisfies(new Type[] { circularThing, loopingThing,
+		assertNotEquals(Types.isApplicable(new Type[] { circularThing, loopingThing,
 			circularThing }, new Type[] { w, w, w }), -1);
-		assertEquals(Types.satisfies(new Type[] { circularThing, loopingThing,
+		assertEquals(Types.isApplicable(new Type[] { circularThing, loopingThing,
 			circularThing }, new Type[] { x, x, x }), -1);
 
 	}
 
 	/**
-	 * Tests {@link Types#satisfies(Type[], Type[])} when the same type parameter
+	 * Tests {@link Types#isApplicable(Type[], Type[])} when the same type parameter
 	 * appears across multiple destination types.
 	 */
 	@Test
@@ -816,7 +816,7 @@ public class TypesTest {
 			{}.getType(), //
 			new Nil<List<Integer>>()
 			{}.getType() };
-		assertEquals(Types.satisfies(argsOK, params), -1);
+		assertEquals(Types.isApplicable(argsOK, params), -1);
 
 		// f(List<String>, List<Number>)
 		// [MISS] T cannot be both String and Number
@@ -826,7 +826,7 @@ public class TypesTest {
 			new Nil<List<Number>>()
 			{}.getType() //
 		};
-		assertNotEquals(Types.satisfies(argsMiss, params), -1);
+		assertNotEquals(Types.isApplicable(argsMiss, params), -1);
 	}
 	
 	@Test
@@ -837,15 +837,15 @@ public class TypesTest {
 		
 		Type[] params = new Type[]{n.getType()};
 		Type[] argsOk = new Type[]{nWildcard.getType()};
-		assertEquals(-1, Types.satisfies(argsOk, params));
+		assertEquals(-1, Types.isApplicable(argsOk, params));
 		
 		params = new Type[]{n.getType(), c.getType()};
 		argsOk = new Type[]{nWildcard.getType(), nWildcard.getType()};
-		assertEquals(-1, Types.satisfies(argsOk, params));
+		assertEquals(-1, Types.isApplicable(argsOk, params));
 		
 		params = new Type[]{n.getType(), n.getType()};
 		Type[] argsNotOk = new Type[]{nWildcard.getType(), nWildcard.getType()};
-		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 	
 	@Test
@@ -856,11 +856,11 @@ public class TypesTest {
 		
 		Type[] params = new Type[]{n.getType(), ln.getType()};
 		Type[] argsNotOk = new Type[]{Integer.class, lw.getType()};
-		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 		
 		params = new Type[]{ln.getType(), n.getType()};
 		argsNotOk = new Type[]{lw.getType(), Integer.class};
-		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 	
 	@Test
@@ -872,23 +872,23 @@ public class TypesTest {
 		
 		Type[] params = new Type[]{n.getType()};
 		Type[] argsOk = new Type[]{nNumberWildcard.getType()};
-		assertEquals(-1, Types.satisfies(argsOk, params));
+		assertEquals(-1, Types.isApplicable(argsOk, params));
 		
 		params = new Type[]{n.getType(), c.getType()};
 		argsOk = new Type[]{nNumberWildcard.getType(), nListildcard.getType()};
-		assertEquals(-1, Types.satisfies(argsOk, params));
+		assertEquals(-1, Types.isApplicable(argsOk, params));
 		
 		params = new Type[]{n.getType(), c.getType()};
 		Type[] argsNotOk = new Type[]{nNumberWildcard.getType(), nNumberWildcard.getType()};
-		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 		
 		params = new Type[]{n.getType(), n.getType()};
 		argsNotOk = new Type[]{nNumberWildcard.getType(), nNumberWildcard.getType()};
-		assertNotEquals(-1, Types.satisfies(argsNotOk, params));
+		assertNotEquals(-1, Types.isApplicable(argsNotOk, params));
 	}
 	
 	/**
-	 * Tests {@link Types#satisfies(Type[], Type[])} when the given type is indirectly parameterized by
+	 * Tests {@link Types#isApplicable(Type[], Type[])} when the given type is indirectly parameterized by
 	 * implementing an parameterized interface.
 	 */
 	@Test
@@ -899,11 +899,11 @@ public class TypesTest {
 		
 		final Type[] param = new Type[]{new Nil<Function<I1, I2>>() {}.getType()};
 		Type[] argOK = new Type[]{NestedThingImplOK1.class};
-		assertEquals(-1, Types.satisfies(argOK, param));
+		assertEquals(-1, Types.isApplicable(argOK, param));
 	}
 	
 	/**
-	 * Tests {@link Types#satisfies(Type[], Type[])} when unbounded type variables are expected 
+	 * Tests {@link Types#isApplicable(Type[], Type[])} when unbounded type variables are expected 
 	 * but the given ones are nested and bounded.
 	 */
 	@Test
@@ -920,13 +920,13 @@ public class TypesTest {
 		
 		final Type[] param = new Type[]{new Nil<Function<I1, I2>>() {}.getType()};
 		Type[] argOK = new Type[]{NestedThingImplOK1.class};
-		assertEquals(-1, Types.satisfies(argOK, param));
+		assertEquals(-1, Types.isApplicable(argOK, param));
 
 		argOK = new Type[]{NestedThingImplOK2.class};
-		assertEquals(-1, Types.satisfies(argOK, param));
+		assertEquals(-1, Types.isApplicable(argOK, param));
 		
 		argOK = new Type[]{NestedThingImplOK3.class};
-		assertEquals(-1, Types.satisfies(argOK, param));
+		assertEquals(-1, Types.isApplicable(argOK, param));
 	}
 
 	/** Tests {@link Types#cast(Object, Class)}. */

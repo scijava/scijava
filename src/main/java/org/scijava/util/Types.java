@@ -791,14 +791,14 @@ public final class Types {
 	 * @return -1 if the args satisfy the params, otherwise the index of the arg
 	 *         that does not satisfy its parameter.
 	 */
-	public static int satisfies(final Type[] args, final Type[] params) {
+	public static int isApplicable(final Type[] args, final Type[] params) {
 		// create a HashMap to monitor the restrictions of the type variables.
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
 
-		return satisfies(args, params, typeBounds);
+		return isApplicable(args, params, typeBounds);
 	}
 
-	public static int satisfies(final Type[] args, final Type[] params,
+	public static int isApplicable(final Type[] args, final Type[] params,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
 		if (args.length != params.length) {
@@ -809,21 +809,21 @@ public final class Types {
 			Type arg = args[i];
 			Type param = params[i];
 			// First, check raw type assignability.
-			if (!satisfiesRawTypes(arg, param)) return i;
+			if (!isApplicableToRawTypes(arg, param)) return i;
 
 			if (param instanceof ParameterizedType) {
-				if (!satisfiesParameterizedTypes(arg, (ParameterizedType) param,
+				if (!isApplicableToParameterizedTypes(arg, (ParameterizedType) param,
 					typeBounds)) return i;
 			}
 			else if (param instanceof TypeVariable) {
-				if (!satisfiesTypeVariable(arg, (TypeVariable<?>) param,
+				if (!isApplicableToTypeVariable(arg, (TypeVariable<?>) param,
 					typeBounds)) return i;
 			}
 			else if (param instanceof WildcardType) {
-				if (!satisfiesWildcardType(arg, (WildcardType) param)) return i;
+				if (!isApplicableToWildcardType(arg, (WildcardType) param)) return i;
 			}
 			else if (param instanceof GenericArrayType) {
-				if (!satisfiesGenericArrayType(arg, (GenericArrayType) param,
+				if (!isApplicableToGenericArrayType(arg, (GenericArrayType) param,
 					typeBounds)) return i;
 			}
 			final Type t = TypeToken.of(param).resolveType(arg).getType();
@@ -832,13 +832,13 @@ public final class Types {
 		return -1;
 	}
 
-	public static boolean satisfies(
+	public static boolean typesSatisfyVariables(
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		return TypeUtils.typesSatisfyVariables(typeVarAssigns);
 	}
 
-	private static boolean satisfiesRawTypes(final Type arg, final Type param) {
+	private static boolean isApplicableToRawTypes(final Type arg, final Type param) {
 		final List<Class<?>> srcClasses = Types.raws(arg);
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {
@@ -851,7 +851,7 @@ public final class Types {
 		return true;
 	}
 
-	private static boolean satisfiesParameterizedTypes(final Type arg,
+	private static boolean isApplicableToParameterizedTypes(final Type arg,
 		final ParameterizedType param,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
@@ -881,7 +881,7 @@ public final class Types {
 			if (destType instanceof TypeVariable<?>) {
 				final Type srcType = srcTypes[i];
 				final TypeVariable<?> destTypeVar = (TypeVariable<?>) destType;
-				if (!satisfiesTypeParameter(srcType, destTypeVar, typeBounds))
+				if (!isApplicableToTypeParameter(srcType, destTypeVar, typeBounds))
 					return false;
 				ignoredIndices.add(i);
 			}
@@ -889,7 +889,7 @@ public final class Types {
 		srcTypes = filterIndices(srcTypes, ignoredIndices);
 		destTypes = filterIndices(destTypes, ignoredIndices);
 		// recursively run satisfies on these arrays
-		return satisfies(srcTypes, destTypes, typeBounds) == -1;
+		return isApplicable(srcTypes, destTypes, typeBounds) == -1;
 	}
 	
 	/**
@@ -907,7 +907,7 @@ public final class Types {
 	 * @return {@code boolean} - true if the replacement of {@code param} with
 	 *         {@code arg} is allowed.
 	 */
-	private static boolean satisfiesTypeParameter(final Type arg,
+	private static boolean isApplicableToTypeParameter(final Type arg,
 		final TypeVariable<?> param,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
@@ -926,11 +926,11 @@ public final class Types {
 		// if the type variable refers to some parameterized type (e.g. T extends
 		// List<?>), call satisfiesTypeParameters on the bounds of param that
 		// are ParameterizedTypes.
-		if(!satisfiesTypeVariableBounds(arg, param, typeBounds)) return false;
+		if(!isApplicableToTypeVariableBounds(arg, param, typeBounds)) return false;
 		return true;
 	}
 
-	private static boolean satisfiesTypeVariable(final Type arg,
+	private static boolean isApplicableToTypeVariable(final Type arg,
 		final TypeVariable<?> param,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
@@ -947,7 +947,7 @@ public final class Types {
 		// if the type variable refers to some parameterized type (e.g. T extends
 		// List<?>), call satisfiesTypeParameters on the bounds of param that
 		// are ParameterizedTypes.
-		if(!satisfiesTypeVariableBounds(arg, param, typeBounds)) return false;
+		if(!isApplicableToTypeVariableBounds(arg, param, typeBounds)) return false;
 		return true;
 	}
 	
@@ -964,7 +964,7 @@ public final class Types {
 	 * @return {@code boolean} - true if {@code arg} can satisfy the bounds of
 	 *         {@code param}.
 	 */
-	private static boolean satisfiesTypeVariableBounds(final Type arg,
+	private static boolean isApplicableToTypeVariableBounds(final Type arg,
 			final TypeVariable<?> param,
 			final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
@@ -983,9 +983,9 @@ public final class Types {
 						return false;
 					}
 					if (paramBoundTypes[i] instanceof TypeVariable<?> &&
-						!satisfiesTypeParameter(argType,
+						!isApplicableToTypeParameter(argType,
 							(TypeVariable<?>) paramBoundTypes[i], typeBounds)) return false;
-					else if (satisfies(new Type[] { argType }, new Type[] {
+					else if (isApplicable(new Type[] { argType }, new Type[] {
 						paramBoundTypes[i] }, typeBounds) != -1) return false;
 				}
 			}
@@ -993,7 +993,7 @@ public final class Types {
 		return true;
 	}
 
-	private static boolean satisfiesWildcardType(final Type arg,
+	private static boolean isApplicableToWildcardType(final Type arg,
 		final WildcardType param)
 	{
 		final Type[] upperBounds = param.getUpperBounds();
@@ -1013,7 +1013,7 @@ public final class Types {
 		return true;
 	}
 
-	private static boolean satisfiesGenericArrayType(final Type arg,
+	private static boolean isApplicableToGenericArrayType(final Type arg,
 		final GenericArrayType param,
 		final HashMap<TypeVariable<?>, TypeVarInfo> typeBounds)
 	{
@@ -1026,7 +1026,7 @@ public final class Types {
 			final ParameterizedType argType = (ParameterizedType) argComponent;
 			final ParameterizedType paramType = (ParameterizedType) paramComponent;
 
-			if (!satisfiesParameterizedTypes(argType, paramType, typeBounds))
+			if (!isApplicableToParameterizedTypes(argType, paramType, typeBounds))
 				return false;
 		}
 
@@ -1034,7 +1034,7 @@ public final class Types {
 			// TODO are these casts safe?
 			final TypeVariable<?> paramType = (TypeVariable<?>) paramComponent;
 
-			if (!satisfiesTypeVariable(argComponent, paramType, typeBounds))
+			if (!isApplicableToTypeVariable(argComponent, paramType, typeBounds))
 				return false;
 		}
 

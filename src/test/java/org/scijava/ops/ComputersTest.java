@@ -32,8 +32,6 @@ package org.scijava.ops;
 import org.junit.Test;
 import org.scijava.ops.core.BiComputer;
 import org.scijava.ops.core.Computer;
-import org.scijava.ops.math.Add.MathAddOp;
-import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Computers;
 import org.scijava.ops.types.Nil;
 
@@ -44,7 +42,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryComputers() {
-		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), MathSqrtOp.class, nilDoubleArray,
+		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), Ops.Math.SQRT, nilDoubleArray,
 				nilDoubleArray);
 
 		double[] result = new double[3];
@@ -54,7 +52,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryComputers() {
-		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), MathAddOp.class, nilDoubleArray,
+		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), Ops.Math.ADD, nilDoubleArray,
 				nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];

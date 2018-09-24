@@ -67,6 +67,10 @@ public class OpRef {
 	public static OpRef fromTypes(final Type[] types, final Type[] outTypes, final Type... args) {
 		return new OpRef(null, filterNulls(types), filterNulls(outTypes), filterNulls(args));
 	}
+	
+	public static OpRef fromTypes(final String name, final Type[] types, final Type[] outTypes, final Type... args) {
+		return new OpRef(name, filterNulls(types), filterNulls(outTypes), filterNulls(args));
+	}
 
 	// -- Constructor --
 
@@ -153,7 +157,8 @@ public class OpRef {
 
 	@Override
 	public String toString() {
-		return Arrays.deepToString(types);
+		String n = name == null ? "" : "Name: \"" + name + "\" ";
+		return n + Arrays.deepToString(types);
 	}
 
 	@Override

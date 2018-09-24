@@ -10,14 +10,13 @@ import org.scijava.struct.ItemIO;
 
 public class Zero {
 
-	public interface MathZeroOp extends Op {
-	}
+	public static final String NAMES = "math.zero";
 	
 	// --------- Computers ---------
 
-	@Plugin(type = MathZeroOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathParallelPointwiseZeroDoubleArrayComputer implements MathZeroOp, NullaryComputer<double[]> {
+	public static class MathParallelPointwiseZeroDoubleArrayComputer implements NullaryComputer<double[]> {
 		@Override
 		public void compute(double[] out) {
 			IntStream.range(0, out.length).parallel().forEach(i -> {

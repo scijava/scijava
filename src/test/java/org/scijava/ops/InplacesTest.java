@@ -32,8 +32,6 @@ package org.scijava.ops;
 import org.junit.Test;
 import org.scijava.ops.core.BiInplace1;
 import org.scijava.ops.core.Inplace;
-import org.scijava.ops.math.Add.MathAddOp;
-import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Inplaces;
 import org.scijava.ops.types.Nil;
 
@@ -44,7 +42,7 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryInplaces() {
-		Inplace<double[]> inplaceSqrt = Inplaces.unary(ops(), MathSqrtOp.class, nilDoubleArray);
+		Inplace<double[]> inplaceSqrt = Inplaces.unary(ops(), Ops.Math.SQRT, nilDoubleArray);
 		final double[] a1 = { 4, 100, 36 };
 		inplaceSqrt.mutate(a1);
 		assert arrayEquals(a1, 2.0, 10.0, 6.0);
@@ -52,7 +50,7 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryInplaces() {
-		final BiInplace1<double[], double[]> inplaceAdd = Inplaces.binary1(ops(), MathAddOp.class, nilDoubleArray,
+		final BiInplace1<double[], double[]> inplaceAdd = Inplaces.binary1(ops(), Ops.Math.ADD, nilDoubleArray,
 				nilDoubleArray);
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };

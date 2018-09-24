@@ -3,8 +3,8 @@ package org.scijava.ops.util;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.OpService;
+import org.scijava.ops.Ops.OpIdentifier;
 import org.scijava.ops.core.BiInplace1;
-import org.scijava.ops.core.Computer;
 import org.scijava.ops.core.Inplace;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.types.Nil;
@@ -19,7 +19,7 @@ public class Inplaces {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	public static <IO> Inplace<IO> unary(final OpService ops, final Class<? extends Op> opClass,
+	public static <IO> Inplace<IO> unary(final OpService ops, final OpIdentifier op,
 			final Nil<IO> inputOutputType, final Object... secondaryArgs) {
 
 		Nil<Inplace<IO>> inplaceNil = new Nil<Inplace<IO>>() {
@@ -30,14 +30,14 @@ public class Inplaces {
 		};
 
 		return ops.findOp( //
-				opClass, //
+				op, //
 				inplaceNil, //
 				new Nil[] { inputOutputType }, //
 				new Nil[] { inputOutputType }, //
 				secondaryArgs);
 	}
 
-	public static <IO, I2> BiInplace1<IO, I2> binary1(final OpService ops, final Class<? extends Op> opClass,
+	public static <IO, I2> BiInplace1<IO, I2> binary1(final OpService ops, final OpIdentifier op,
 			final Nil<IO> inputOutputType, final Nil<I2> input2Type, final Object... secondaryArgs) {
 
 		Nil<BiInplace1<IO, I2>> inplaceNil = new Nil<BiInplace1<IO, I2>>() {
@@ -49,7 +49,7 @@ public class Inplaces {
 		};
 
 		return ops.findOp( //
-				opClass, //
+				op, //
 				inplaceNil, //
 				new Nil[] { inputOutputType, input2Type }, //
 				new Nil[] { inputOutputType }, //

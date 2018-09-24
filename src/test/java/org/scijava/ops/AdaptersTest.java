@@ -36,8 +36,6 @@ import org.junit.Test;
 import org.scijava.ops.core.BiComputer;
 import org.scijava.ops.core.Computer;
 import org.scijava.ops.core.OneToOneCommand;
-import org.scijava.ops.math.Add.MathAddOp;
-import org.scijava.ops.math.Sqrt.MathSqrtOp;
 import org.scijava.ops.util.Adapt;
 import org.scijava.types.Nil;
 
@@ -45,15 +43,14 @@ public class AdaptersTest extends AbstractTestEnvironment {
 
 	private static Nil<Double> nilDouble = new Nil<Double>() {
 	};
-	
+
 	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
 	};
-	
-	
+
 	@Test
 	public void testFunctionAsCommand() {
 		Function<Double, Double> sqrtFunction = ops().findOp( //
-				MathSqrtOp.class, new Nil<Function<Double, Double>>() {
+				Ops.Math.SQRT, new Nil<Function<Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble }, //
 				nilDouble//
@@ -67,7 +64,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsCommand() {
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
-				MathSqrtOp.class, new Nil<Computer<double[], double[]>>() {
+				Ops.Math.SQRT, new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -82,7 +79,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsFunction() {
 		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
-				MathAddOp.class, new Nil<BiComputer<double[], double[], double[]>>() {
+				Ops.Math.ADD, new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -103,7 +100,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	public void testFunctionAsComputer() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<double[], double[], double[]> function = ops().findOp( //
-				MathAddOp.class, new Nil<BiFunction<double[], double[], double[]>>() {
+				Ops.Math.ADD, new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//

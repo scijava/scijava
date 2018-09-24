@@ -65,5 +65,7 @@ import org.scijava.ops.matcher.OpRef;
 public interface OpEnvironment {
 
 	/** The available ops for this environment. */
-	Collection<OpInfo> infos();
+	Iterable<OpInfo> infos();
+	
+	Iterable<OpInfo> infos(String name);
 }

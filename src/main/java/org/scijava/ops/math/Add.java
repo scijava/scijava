@@ -16,31 +16,28 @@ import org.scijava.struct.ItemIO;
 import com.google.common.collect.Streams;
 
 public class Add {
-
-	public interface MathAddOp extends Op {
-		String NAME = "math.add";
-		String ALIASES = "math.sum";
-	}
-
+	
+	public static final String NAMES = "math.add, math.sum";
+	
 	// --------- Functions ---------
 	
-	@Plugin(type = MathAddOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathAddDoublesFunction implements MathAddOp, BiFunction<Double, Double, Double> {
+	public static class MathAddDoublesFunction implements BiFunction<Double, Double, Double> {
 		@Override
 		public Double apply(Double t, Double u) {
 			return t + u;
 		}
 	}
 
-	@Plugin(type = MathAddOp.class, priority = Priority.HIGH)
+	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
 	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
 	public static class MathPointwiseAddDoubleArraysFunction
-			implements MathAddOp, BiFunction<double[], double[], double[]> {
+			implements BiFunction<double[], double[], double[]> {
 		@Override
 		public double[] apply(double[] arr1, double[] arr2) {
 			Stream<Double> s1 = Arrays.stream(arr1).boxed();
@@ -49,12 +46,12 @@ public class Add {
 		}
 	}
 	
-	@Plugin(type = MathAddOp.class, priority = Priority.HIGH)
+	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
 	@Parameter(key = "iter1")
 	@Parameter(key = "iter2")
 	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
 	public static class MathPointwiseAddIterablesFunction<M extends Number, I extends Iterable<M>>
-			implements MathAddOp, BiFunction<I, I, Iterable<Double>> {
+			implements BiFunction<I, I, Iterable<Double>> {
 		@Override
 		public Iterable<Double> apply(I i1, I i2) {
 			Stream<? extends Number> s1 = Streams.stream((Iterable<? extends Number>) i1);
@@ -65,22 +62,22 @@ public class Add {
 
 	// --------- Computers ---------
 			
-	@Plugin(type = MathAddOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "integer1")
 	@Parameter(key = "integer2")
 	@Parameter(key = "resultInteger", type = ItemIO.OUTPUT)
-	public static class MathAddBigIntegersComputer implements MathAddOp, BiFunction<BigInteger, BigInteger, BigInteger> {
+	public static class MathAddBigIntegersComputer implements BiFunction<BigInteger, BigInteger, BigInteger> {
 		@Override
 		public BigInteger apply(BigInteger t, BigInteger u) {
 			return t.add(u);
 		}
 	}
 
-	@Plugin(type = MathAddOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwiseAddDoubleArraysComputer implements MathAddOp, BiComputer<double[], double[], double[]> {
+	public static class MathPointwiseAddDoubleArraysComputer implements BiComputer<double[], double[], double[]> {
 		@Override
 		public void compute(double[] in1, double[] in2, double[] out) {
 			for (int i = 0; i < out.length; i++) {
@@ -91,10 +88,10 @@ public class Add {
 	
 	// --------- Inplaces ---------
 	
-	@Plugin(type = MathAddOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
 	@Parameter(key = "array1")
-	public static class MathPointwiseAddDoubleArraysInplace1 implements MathAddOp, BiInplace1<double[], double[]> {
+	public static class MathPointwiseAddDoubleArraysInplace1 implements BiInplace1<double[], double[]> {
 		@Override
 		public void mutate(double[] io, double[] in2) {
 			for (int i = 0; i < io.length; i++ ) {

@@ -31,10 +31,15 @@ package org.scijava.ops;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
+import org.scijava.ops.Ops.OpIdentifier;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
@@ -69,34 +74,66 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	@Parameter
 	private LogService log;
 
-	@Override
-	public Collection<OpInfo> infos() {
-		// TODO: Consider maintaining an efficient OpInfo data structure.
-		final ArrayList<OpInfo> infos = new ArrayList<>();
+	private PrefixTree<OpInfo> opCache;
+
+	/**
+	 * Map to collect all aliases for a specific op. All aliases will map to one
+	 * canonical name of the op which is defined as the first one.
+	 */
+	private Map<String, String> opAliases = new HashMap<>();
+
+	public void initOpCache() {
+		opCache = new PrefixTree<OpInfo>();
 		for (final PluginInfo<Op> info : pluginService.getPluginsOfType(Op.class)) {
 			try {
 				final Class<? extends Op> opClass = info.loadClass();
-				infos.add(new OpInfo(opClass));
+				OpInfo opInfo = new OpInfo(opClass);
+				String[] opNames = OpUtils.parseOpNames(info.getName());
+
+				addAliases(opNames);
+
+				opCache.add(new PrefixQuery(opNames[0]), opInfo);
 			} catch (InstantiableException exc) {
 				log.error("Can't load class from plugin info: " + info.toString(), exc);
 			}
 		}
-		return infos;
 	}
 
-	public <T> StructInstance<T> findOpInstance(final Class<? extends Op> opClass, final Nil<T> specialType,
-			final Nil<?>[] inTypes, final Nil<?>[] outTypes, final Object... secondaryArgs) {
-		// FIXME - multiple output types? We will need to generalize this.
-		final OpRef ref = OpRef.fromTypes(merge(opClass, toTypes(specialType)), toTypes(outTypes), toTypes(inTypes));
+	@Override
+	public Iterable<OpInfo> infos() {
+		if (opCache == null) {
+			initOpCache();
+		}
+		return opCache.getAndBelow(PrefixQuery.all());
+	}
+
+	@Override
+	public Iterable<OpInfo> infos(String name) {
+		if (opCache == null) {
+			initOpCache();
+		}
+		if (name == null || name.isEmpty()) {
+			return infos();
+		}
+		String opName = opAliases.get(name);
+		if (opName == null) {
+			throw new IllegalArgumentException("No op infos with name: " + name + " available.");
+		}
+		return opCache.getAndBelow(new PrefixQuery(opName));
+	}
+
+	public <T> StructInstance<T> findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
+			final Nil<?>[] outTypes, final Object... secondaryArgs) {
+		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), toTypes(outTypes), toTypes(inTypes));
 
 		// Find single match which matches the specified types
 		@SuppressWarnings("unchecked")
-		final StructInstance<T> op = (StructInstance<T>) findTypeMatch(ref).createOp();
+		final StructInstance<T> opInst = (StructInstance<T>) findTypeMatch(ref).createOp();
 
 		// Inject the secondary args if there are any
-		if (Inject.Structs.isInjectable(op)) {
+		if (Inject.Structs.isInjectable(opInst)) {
 			if (secondaryArgs.length != 0) {
-				Inject.Structs.inputs(op, secondaryArgs);
+				Inject.Structs.inputs(opInst, secondaryArgs);
 			} else {
 				log.warn(
 						"Specified Op has secondary args however no secondary args are given. Op execution may lead to errors.");
@@ -105,17 +142,27 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			log.warn(
 					"Specified Op has no secondary args however secondary args are given. The specified args will not be injected.");
 		}
-		return op;
+		return opInst;
 	}
-
-	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Nil<?>[] inTypes,
+	
+	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?>[] outTypes, final Object... secondaryArgs) {
-		return findOpInstance(opClass, specialType, inTypes, outTypes, secondaryArgs).object();
+		return findOpInstance(null, specialType, inTypes, outTypes, secondaryArgs).object();
+	}
+	
+	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes,
+			final Nil<?> outType, final Object... secondaryArgs) {
+		return findOpInstance(null, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
 
-	public <T> T findOp(final Class<? extends Op> opClass, final Nil<T> specialType, final Nil<?>[] inTypes,
+	public <T> T findOp(final OpIdentifier op, final Nil<T> specialType, final Nil<?>[] inTypes,
+			final Nil<?>[] outTypes, final Object... secondaryArgs) {
+		return findOpInstance(op.getName(), specialType, inTypes, outTypes, secondaryArgs).object();
+	}
+
+	public <T, E extends OpIdentifier> T findOp(final OpIdentifier op, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType, final Object... secondaryArgs) {
-		return findOpInstance(opClass, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
+		return findOpInstance(op.getName(), specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
 
 	public MatchingResult findTypeMatches(final OpRef ref) {
@@ -137,5 +184,330 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
+	}
+
+	/**
+	 * Updates alias map using the specified String list. The first String in
+	 * the list is assumed to be the canonical name of the op. After this method
+	 * returns, all String in the specified list will map to the canonical name.
+	 * 
+	 * @param opNames
+	 */
+	private void addAliases(String[] opNames) {
+		String opName = opNames[0];
+		for (String name : opNames) {
+			if (name == null || name.isEmpty()) {
+				continue;
+			}
+			if (opAliases.containsKey(name)) {
+				continue;
+			}
+			opAliases.put(name, opName);
+		}
+	}
+
+	private static String getIndent(int num) {
+		String str = "";
+		for (int i = 0; i < num; i++) {
+			str += "\t";
+		}
+		return str;
+	}
+
+	/**
+	 * Class to represent a query for a {@link PrefixTree}. Prefixes must be
+	 * separated by dots ('.'). E.g. 'math.add'.
+	 * 
+	 * @author David Kolb
+	 */
+	private static class PrefixQuery {
+		String cachedToString;
+
+		LinkedList<String> list = new LinkedList<String>();
+
+		public static PrefixQuery all() {
+			return new PrefixQuery("");
+		}
+
+		/**
+		 * Construct a new query from the specified string. Prefixes must be
+		 * separated by dots.
+		 * 
+		 * @param query
+		 *            the string to use as query
+		 */
+		public PrefixQuery(String query) {
+			if (query == null || query.isEmpty()) {
+				return;
+			}
+			for (String s : query.split("\\.")) {
+				list.add(s);
+			}
+			cachedToString = string();
+		}
+
+		/**
+		 * Remove and return the first prefix.
+		 * 
+		 * @return
+		 */
+		public String pop() {
+			return list.removeFirst();
+		}
+
+		/**
+		 * Whether there are more prefixes.
+		 * 
+		 * @return
+		 */
+		public boolean hasNext() {
+			return !list.isEmpty();
+		}
+
+		private String string() {
+			int i = 1;
+			String toString = "root \u00AC \n";
+			for (String s : list) {
+				toString += getIndent(i);
+				toString += s + " \u00AC \n";
+				i++;
+			}
+			return toString.substring(0, toString.length() - 3);
+		}
+
+		@Override
+		public String toString() {
+			return cachedToString;
+		}
+	}
+
+	/**
+	 * Data structure to group elements which share common prefixes. E.g. adding
+	 * the following elements:
+	 * 
+	 * <pre>
+	 *	Prefix:		Elem:
+	 *	math.add	obj1
+	 *	math.add	obj2
+	 *	math.sqrt	obj3
+	 *	math		obj4
+	 *				obj5
+	 * </pre>
+	 * 
+	 * Will result in the following tree:
+	 * 
+	 * <pre>
+	 *               root [obj5]
+	 *                     |
+	 *                math [obj4]
+	 *               /           \
+	 *      add [obj1, obj2]   sqrt [obj3]
+	 * </pre>
+	 * 
+	 * @author David Kolb
+	 *
+	 * @param <T>
+	 */
+	private static class PrefixTree<T> {
+		private PrefixNode<T> root;
+
+		public PrefixTree() {
+			root = new PrefixNode<T>();
+		}
+
+		/**
+		 * Adds the specified element on the level represented by the specified
+		 * query. This method is in O(#number of prefixes in query)
+		 * 
+		 * @param query
+		 * @param node
+		 * @param data
+		 */
+		public void add(PrefixQuery query, T data) {
+			add(query, root, data);
+		}
+
+		private void add(PrefixQuery query, PrefixNode<T> node, T data) {
+			if (query.hasNext()) {
+				String level = query.pop();
+				PrefixNode<T> child = node.getChildOrCreate(level);
+				add(query, child, data);
+			} else {
+				node.data.add(data);
+			}
+		}
+
+		/**
+		 * Collects all elements of the level specified by the query and below.
+		 * E.g. using the query 'math' on the example tree from the javadoc of
+		 * this class would return all elements contained in the tree except for
+		 * 'obj5'. 'math.add' would only return 'obj1' and 'obj2'. This method
+		 * returns an iterable over these elements in O(# number of all nodes
+		 * below query).
+		 * 
+		 * @param query
+		 * @return
+		 */
+		public Iterable<T> getAndBelow(PrefixQuery query) {
+			PrefixNode<T> queryNode = findNode(query);
+			LinkedLinkedLists list = new LinkedLinkedLists();
+			collectAll(queryNode, list);
+			return () -> list.iterator();
+		}
+
+		private PrefixNode<T> findNode(PrefixQuery query) {
+			return findNode(query, root);
+		}
+
+		private PrefixNode<T> findNode(PrefixQuery query, PrefixNode<T> node) {
+			if (query.hasNext()) {
+				String level = query.pop();
+				PrefixNode<T> child = node.getChild(level);
+				if (child != null) {
+					return findNode(query, child);
+				}
+			}
+			return node;
+		}
+
+		private void collectAll(PrefixNode<T> node, LinkedLinkedLists list) {
+			if (node.hasData()) {
+				list.append(node.data);
+			}
+			for (PrefixNode<T> v : node.children.values()) {
+				collectAll(v, list);
+			}
+		}
+
+		/**
+		 * Wrapper for {@link ArrayList}s providing O(1) concatenation of lists
+		 * if only an iterator over theses lists is required. The order of lists
+		 * will be retained. Added lists will be simply saved in a super
+		 * LinkedList. If the iterator reaches the end of one list, it will
+		 * switch to the next if available.
+		 * 
+		 * @author David Kolb
+		 */
+		private class LinkedLinkedLists implements Iterable<T> {
+
+			LinkedList<LinkedList<T>> lists = new LinkedList<>();
+			
+			long size = 0;
+
+			private void append(LinkedList<T> list) {
+				lists.add(list);
+				size += list.size();
+			}
+
+			@Override
+			public Iterator<T> iterator() {
+				return new LinkedIterator();
+			}
+
+			private class LinkedIterator implements Iterator<T> {
+
+				private Iterator<LinkedList<T>> listsIter = lists.iterator();
+				private Iterator<T> currentIter;
+
+				public LinkedIterator() {
+					if (!lists.isEmpty()) {
+						currentIter = listsIter.next().iterator();
+					}
+				}
+
+				@Override
+				public boolean hasNext() {
+					if (currentIter == null) {
+						return false;
+					}
+					// if there are still lists available, possibly switch
+					// to the next one
+					if (listsIter.hasNext()) {
+						// if the current iterator still has elements we are
+						// fine, if not
+						// switch to the next one
+						if (!currentIter.hasNext()) {
+							currentIter = listsIter.next().iterator();
+						}
+					}
+					return currentIter.hasNext();
+				}
+
+				@Override
+				public T next() {
+					return currentIter.next();
+				}
+			}
+
+			@Override
+			public String toString() {
+				StringBuilder sb = new StringBuilder();
+				int i = 0;
+				for (LinkedList<T> l : lists) {
+					sb.append(i + ".) ");
+					sb.append(l.toString() + "\n");
+					i++;
+				}
+				return sb.toString();
+			}
+		}
+
+		private static class PrefixNode<T> {
+			private LinkedList<T> data = new LinkedList<>();
+			private Map<String, PrefixNode<T>> children = new HashMap<>();
+
+			public PrefixNode<T> getChildOrCreate(String id) {
+				if (children.containsKey(id)) {
+					return children.get(id);
+				} else {
+					PrefixNode<T> n = new PrefixNode<>();
+					children.put(id, n);
+					return n;
+				}
+			}
+
+			public PrefixNode<T> getChild(String id) {
+				return children.get(id);
+			}
+
+			public boolean hasData() {
+				return !data.isEmpty();
+			}
+		}
+
+		private String nodeToString(PrefixNode<T> node, String nodeName, StringBuilder sb, int level) {
+			if (node.children.isEmpty() && node.data.isEmpty()) {
+				return "";
+			}
+			sb.append(getIndent(level) + "Node -> Name: [");
+			sb.append(nodeName + "]\n");
+			sb.append(getIndent(level) + "Data:\n");
+			for (T t : node.data) {
+				sb.append(getIndent(level) + "\t" + t.getClass().getSimpleName() + "\n");
+			}
+			if (!node.data.isEmpty()) {
+			} else {
+				sb.delete(sb.length() - 1, sb.length());
+				sb.append(" <empty>\n");
+			}
+
+			sb.append(getIndent(level) + "Children:\n");
+
+			for (Entry<String, PrefixNode<T>> e : node.children.entrySet()) {
+				String sub = nodeToString(e.getValue(), e.getKey(), new StringBuilder(), level + 1);
+				sb.append(sub + "\n");
+			}
+			if (!node.children.isEmpty()) {
+			} else {
+				sb.delete(sb.length() - 1, sb.length());
+				sb.append(" <empty>\n");
+			}
+			return sb.toString();
+		}
+
+		@Override
+		public String toString() {
+			return nodeToString(root, "root", new StringBuilder(), 0);
+		}
 	}
 }

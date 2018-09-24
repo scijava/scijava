@@ -30,6 +30,7 @@
 package org.scijava.ops;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,10 @@ public final class OpUtils {
 	}
 
 	// -- Utility methods --
+	
+	public static String[] parseOpNames(String names) {
+		return Arrays.stream(names.split(",")).map(s -> s.trim()).toArray(String[]::new);
+	}
 
 	public static Object[] args(final Object[] latter, final Object... former) {
 		final Object[] result = new Object[former.length + latter.length];

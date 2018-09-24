@@ -1,11 +1,11 @@
 package org.scijava.ops.util;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.OpService;
+import org.scijava.ops.Ops.OpIdentifier;
 import org.scijava.ops.core.Op;
 import org.scijava.types.Nil;
 import org.scijava.util.Types;
@@ -19,7 +19,7 @@ public class Functions {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	public static <I, O> Function<I, O> unary(final OpService ops, final Class<? extends Op> opClass,
+	public static <I, O> Function<I, O> unary(final OpService ops, final OpIdentifier op,
 			final Nil<I> inputType, final Nil<O> outputType, final Object... secondaryArgs) {
 
 		Nil<Function<I, O>> functionNil = new Nil<Function<I, O>>() {
@@ -30,14 +30,14 @@ public class Functions {
 		};
 
 		return ops.findOp( //
-				opClass, //
+				op, //
 				functionNil, //
 				new Nil[] { inputType }, //
 				new Nil[] { outputType }, //
 				secondaryArgs);
 	}
 
-	public static <I1, I2, O> BiFunction<I1, I2, O> binary(final OpService ops, final Class<? extends Op> opClass,
+	public static <I1, I2, O> BiFunction<I1, I2, O> binary(final OpService ops, final OpIdentifier op,
 			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<O> outputType,
 			final Object... secondaryArgs) {
 
@@ -50,7 +50,7 @@ public class Functions {
 		};
 
 		return ops.findOp( //
-				opClass, //
+				op, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type }, //
 				new Nil[] { outputType }, //

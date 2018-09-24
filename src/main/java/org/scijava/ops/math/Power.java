@@ -11,13 +11,12 @@ import org.scijava.struct.ItemIO;
 
 public class Power {
 
-	public interface MathPowerOp extends Op {
-	}
+	public static final String NAMES = "math.pow";
 
-	@Plugin(type = MathPowerOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoublConstantFunction implements MathPowerOp, Function<Double, Double> {
+	public static class MathPowerDoublConstantFunction implements Function<Double, Double> {
 
 		@Parameter
 		private double exponent;
@@ -28,21 +27,21 @@ public class Power {
 		}
 	}
 
-	@Plugin(type = MathPowerOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoublFunction implements MathPowerOp, BiFunction<Double, Double, Double> {
+	public static class MathPowerDoublFunction implements BiFunction<Double, Double, Double> {
 		@Override
 		public Double apply(Double t, Double exp) {
 			return Math.pow(t, exp);
 		}
 	}
 
-	@Plugin(type = MathPowerOp.class)
+	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "array")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwisePowerDoubleArrayComputer implements MathPowerOp, Computer<double[], double[]> {
+	public static class MathPointwisePowerDoubleArrayComputer implements Computer<double[], double[]> {
 
 		@Parameter
 		private Double exponent;

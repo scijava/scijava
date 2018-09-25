@@ -61,6 +61,26 @@ public class MatchingUtilsTest {
 			}
 		}
 	}
+	
+	@Test
+	public <E, N extends Number> void genericAssignabilityVarToVar() {
+		abstract class Single<I> implements Supplier<I> {
+		}
+		abstract class SingleBounded<I extends Number> implements Supplier<I> {
+		}
+		Nil<Supplier<E>> y1 = new Nil<Supplier<E>>() {
+		};
+		Nil<Supplier<N>> y2 = new Nil<Supplier<N>>() {
+		};
+		Nil<Double> n1 = new Nil<Double>() {
+		};
+
+		assertAll(Single.class, true, y1, y2);
+		assertAll(Single.class, false, n1);
+		
+		assertAll(SingleBounded.class, true, y2);
+		assertAll(SingleBounded.class, false, y1, n1);
+	}
 
 	@Test
 	public void genericAssignabilitySingleVar() {

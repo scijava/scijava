@@ -51,7 +51,7 @@ import org.scijava.struct.MemberInstance;
  * @author Curtis Rueden
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.TYPE })
+@Target({ ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE })
 @Repeatable(Parameters.class)
 public @interface Parameter {
 

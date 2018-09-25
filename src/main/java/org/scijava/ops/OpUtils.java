@@ -29,11 +29,13 @@
 
 package org.scijava.ops;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.matcher.DefaultOpTypeMatchingService;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpInfo;
@@ -80,15 +82,15 @@ public final class OpUtils {
 	}
 	
 	public static Type[] inputTypes(OpCandidate candidate) {
-		return inputs(candidate.struct()).stream().map(m -> m.getType()).toArray(Type[]::new);
+		return getTypes(inputs(candidate.struct()));
 	}
 
 	public static List<Member<?>> outputs(OpCandidate candidate) {
 		return outputs(candidate.struct());
 	}
-	
+
 	public static Type[] outputTypes(OpCandidate candidate) {
-		return outputs(candidate.struct()).stream().map(m -> m.getType()).toArray(Type[]::new);
+		return getTypes(outputs(candidate.struct()));
 	}
 
 	public static List<Member<?>> outputs(final Struct struct) {
@@ -102,13 +104,17 @@ public final class OpUtils {
 				.filter(memberInstance -> memberInstance.member().isOutput()) //
 				.collect(Collectors.toList());
 	}
+	
+	public static Type[] types(OpCandidate candidate) {
+		return getTypes(candidate.struct().members());
+	}
 
 	public static double getPriority(final OpCandidate candidate) {
 		// TODO: Think about what to do about non @Plugin-based ops...?
 		// What if there is no annotation? How to discern a priority?
 		return candidate.opInfo().getAnnotation().priority();
 	}
-	
+
 	public static Type[] padArgs(final OpCandidate candidate) {
 		int inputCount = 0, requiredCount = 0;
 		for (final Member<?> item : OpUtils.inputs(candidate.struct())) {
@@ -155,6 +161,33 @@ public final class OpUtils {
 	}
 
 	/**
+	 * Checks if incomplete type matching could have occurred. If we have
+	 * several matches that do not have equal output types, output types may not
+	 * completely match the request as only raw type assignability will be checked
+	 * at the moment.
+	 * @see DefaultOpTypeMatchingService#typesMatch(OpCandidate)
+	 * @param matches
+	 * @return
+	 */
+	private static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
+		Type[] outputTypes = null;
+		for (OpCandidate match : matches) {
+			Type[] ts = getTypes(outputs(match));
+			if (outputTypes == null || Arrays.deepEquals(outputTypes, ts)) {
+				outputTypes = ts;
+				continue;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static Type[] getTypes(List<Member<?>> members) {
+		return members.stream().map(m -> m.getType()).toArray(Type[]::new);
+	}
+
+	/**
 	 * Gets a string with an analysis of a particular match request failure.
 	 * <p>
 	 * This method is used to generate informative exception messages when no
@@ -174,7 +207,7 @@ public final class OpUtils {
 		List<OpCandidate> candidates = res.getCandidates();
 		List<OpCandidate> matches = res.getMatches();
 
-		final OpRef ref = candidates.get(0).getRef();
+		final OpRef ref = res.getOriginalQueries().get(0);
 		if (matches.isEmpty()) {
 			// no matches
 			sb.append("No matching '" + ref.getLabel() + "' op\n");
@@ -182,6 +215,9 @@ public final class OpUtils {
 			// multiple matches
 			final double priority = getPriority(matches.get(0));
 			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " + priority + ":\n");
+			if (typeCheckingIncomplete(matches)) {
+				sb.append("Incomplete output type checking may have occured!\n");
+			}
 			int count = 0;
 			for (final OpCandidate match : matches) {
 				sb.append(++count + ". ");

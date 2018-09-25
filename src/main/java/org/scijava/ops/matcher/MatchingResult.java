@@ -29,6 +29,10 @@ public class MatchingResult {
 		this.originalQueries = originalQueries;
 	}
 
+	public List<OpRef> getOriginalQueries() {
+		return originalQueries;
+	}
+
 	public List<OpCandidate> getCandidates() {
 		return candidates;
 	}
@@ -51,11 +55,9 @@ public class MatchingResult {
 			// }
 
 			return matches.get(0);
-		} else if (matches.size() > 1) {
+		} else {
 			final String analysis = OpUtils.matchInfo(this);
 			throw new IllegalArgumentException(analysis);
-		} else {
-			throw new IllegalArgumentException("No candidate op for: '" + originalQueries.get(0).getLabel() + "'");
 		}
 	}
 }

@@ -119,17 +119,21 @@ public class OpInfo {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(opClass.getSimpleName() + "(\n\t\t");
-		boolean first = true;
-		for (final Member<?> arg : struct) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(",\n\t\t");
-			}
-			sb.append(arg.getType().toString());
+		sb.append(opClass.getSimpleName() + "(\n\t\t\t\t Inputs:\n");
+		for (final Member<?> arg : OpUtils.inputs(struct)) {
+			sb.append("\t\t\t\t");
+			sb.append(arg.getType().getTypeName());
 			sb.append(" ");
 			sb.append(arg.getKey());
+			sb.append("\n");
+		}
+		sb.append("\t\t\t\t Outputs:\n");
+		for (final Member<?> arg : OpUtils.outputs(struct)) {
+			sb.append("\t\t\t\t");
+			sb.append(arg.getType().getTypeName());
+			sb.append(" ");
+			sb.append(arg.getKey());
+			sb.append("\n");
 		}
 		sb.append(")\n");
 		return sb.toString();

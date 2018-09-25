@@ -54,7 +54,7 @@ import org.scijava.util.Types.TypeVarInfo;
 /**
  * Default service for finding ops which match a request.
  * 
- * @author Curtis Rueden
+ * @author David Kolb
  */
 @Plugin(type = Service.class)
 public class DefaultOpTypeMatchingService extends AbstractService implements OpTypeMatchingService {
@@ -64,8 +64,6 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 
 	@Parameter
 	private LogService log;
-
-	// -- OpMatchingService methods --
 
 	@Override
 	public MatchingResult findMatch(final OpEnvironment ops, final OpRef ref) {
@@ -92,11 +90,11 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	@Override
 	public List<OpCandidate> findCandidates(final OpEnvironment ops, final List<OpRef> refs) {
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
-			for (final OpRef ref : refs) {
-				for (final OpInfo info : ops.infos(ref.getName())) {
-					if (ref.typesMatch(info.opClass())) {
-						candidates.add(new OpCandidate(ops, ref, info));
-					}
+		for (final OpRef ref : refs) {
+			for (final OpInfo info : ops.infos(ref.getName())) {
+				if (ref.typesMatch(info.opClass())) {
+					candidates.add(new OpCandidate(ops, ref, info));
+				}
 			}
 		}
 		return candidates;
@@ -111,11 +109,6 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		if (!matches.isEmpty())
 			return matches;
 
-		// Do we need this anymore?
-		// matches = castMatches(validCandidates);
-		// if (!matches.isEmpty())
-		// return matches;
-
 		matches = filterMatches(validCandidates, (cand) -> typesMatch(cand));
 		return matches;
 	}
@@ -127,21 +120,22 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		return candidate.createOp();
 	}
 
-
 	/**
-	 * Checks whether the arg types of the candidate satisfy the padded arg types of the candidate.
-	 * Sets candidate status code if there are too many, to few,not matching arg types or if a match was found.
+	 * Checks whether the arg types of the candidate satisfy the padded arg
+	 * types of the candidate. Sets candidate status code if there are too many,
+	 * to few,not matching arg types or if a match was found.
 	 * 
-	 * @param candidate the candidate to check args for
+	 * @param candidate
+	 *            the candidate to check args for
 	 * @return whether the arg types are satisfied
 	 */
 	@Override
 	public boolean typesMatch(final OpCandidate candidate) {
 		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
-		if(!inputsMatch(candidate, typeBounds)) {
+		if (!inputsMatch(candidate, typeBounds)) {
 			return false;
 		}
-		if(!outputsMatch(candidate, typeBounds)) {
+		if (!outputsMatch(candidate, typeBounds)) {
 			return false;
 		}
 		candidate.setStatus(StatusCode.MATCH);
@@ -151,14 +145,17 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	// -- Helper methods --
 
 	/**
-	 * Performs several checks, whether the specified candidate:</br></br>
+	 * Performs several checks, whether the specified candidate:</br>
+	 * </br>
 	 * * {@link #isValid(OpCandidate)}</br>
 	 * * {@link #outputsMatch(OpCandidate)}</br>
 	 * * has a matching number of args</br>
-	 * * {@link #missArgs(OpCandidate, Type[])}</br></br>
+	 * * {@link #missArgs(OpCandidate, Type[])}</br>
+	 * </br>
 	 * then returns the candidates which fulfill this criteria.
 	 * 
-	 * @param candidates the candidates to check
+	 * @param candidates
+	 *            the candidates to check
 	 * @return candidates passing checks
 	 */
 	private List<OpCandidate> checkCandidates(final List<OpCandidate> candidates) {
@@ -177,11 +174,13 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	}
 
 	/**
-	 * Filters specified list of candidates using specified predicate.
-	 * This method stops filtering when the priority decreases.
+	 * Filters specified list of candidates using specified predicate. This
+	 * method stops filtering when the priority decreases.
 	 * 
-	 * @param candidates the candidates to filter
-	 * @param filter the condition
+	 * @param candidates
+	 *            the candidates to filter
+	 * @param filter
+	 *            the condition
 	 * @return candidates passing test of condition and having highest priority
 	 */
 	private List<OpCandidate> filterMatches(final List<OpCandidate> candidates, final Predicate<OpCandidate> filter) {
@@ -221,11 +220,8 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	}
 
 	/**
-	 * Determine if the arguments of the candidate perfectly match with the
-	 * reference.
-	 * <p>
-	 * Helper method of {@link #filterMatches(List)}.
-	 * </p>
+	 * Determine if the arguments and the output types of the candidate
+	 * perfectly match with the reference.
 	 */
 	private boolean typesPerfectMatch(final OpCandidate candidate) {
 		int i = 0;
@@ -241,64 +237,11 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	}
 
 	/**
-	 * Extracts a list of candidates that requires casting to match with the
-	 * reference.
-	 * <p>
-	 * Helper method of {@link #filterMatches(List)}.
-	 * </p>
-	 */
-	private List<OpCandidate> castMatches(final List<OpCandidate> candidates) {
-		final ArrayList<OpCandidate> matches = new ArrayList<>();
-		int minLevels = Integer.MAX_VALUE;
-		double priority = Double.NaN;
-		for (final OpCandidate candidate : candidates) {
-			final double p = OpUtils.getPriority(candidate);
-			if (p != priority && !matches.isEmpty()) {
-				// NB: Lower priority was reached; stop looking for any more
-				// matches.
-				break;
-			}
-			priority = p;
-
-			final int nextLevels = findCastLevels(candidate);
-			if (nextLevels < 0 || nextLevels > minLevels)
-				continue;
-			if (nextLevels < minLevels) {
-				matches.clear();
-				minLevels = nextLevels;
-			}
-			matches.add(candidate);
-		}
-		return matches;
-	}
-
-	/**
-	 * Find the total levels of casting needed for the candidate to match with
-	 * the reference.
-	 * <p>
-	 * Helper method of {@link #filterMatches(List)}.
-	 * </p>
-	 */
-	private int findCastLevels(final OpCandidate candidate) {
-		final Type[] paddedArgs = candidate.paddedArgs();
-		int level = 0, i = 0;
-		for (final Member<?> member : OpUtils.inputs(candidate)) {
-			final Class<?> type = member.getRawType();
-			if (paddedArgs[i] != null) {
-				final int currLevel = MatchingUtils.findCastLevels(type, MatchingUtils.getClass(paddedArgs[i]));
-				if (currLevel < 0)
-					return -1;
-				level += currLevel;
-			}
-			i++;
-		}
-		return level;
-	}
-
-	/**
-	 * Determines if the specified candidate is valid and sets status code if not.
+	 * Determines if the specified candidate is valid and sets status code if
+	 * not.
 	 * 
-	 * @param candidate the candidate to check
+	 * @param candidate
+	 *            the candidate to check
 	 * @return whether the candidate is valid
 	 */
 	private boolean isValid(final OpCandidate candidate) {
@@ -309,6 +252,17 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		return false;
 	}
 
+	/**
+	 * Checks whether the output types of the candidate are applicable to the
+	 * input types of the {@link OpRef}. Sets candidate status code if there are
+	 * too many, to few, or not matching types.
+	 * 
+	 * @param candidate
+	 *            the candidate to check inputs for
+	 * @param typeBounds
+	 *            possibly predetermined type bounds for type variables
+	 * @return whether the input types match
+	 */
 	private boolean inputsMatch(final OpCandidate candidate, HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
 			return false;
@@ -336,13 +290,17 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Checks whether the output types of the candidate satisfy the output types of the {@link OpRef}.
-	 * Sets candidate status code if there are too many, to few, or not matching types.
+	 * Checks whether the output types of the candidate match the output types
+	 * of the {@link OpRef}. Sets candidate status code if there are too many,
+	 * to few, or not matching types.
 	 * 
-	 * @param candidate the candidate to check outputs for
-	 * @return whether the output types are satisfied
+	 * @param candidate
+	 *            the candidate to check outputs for
+	 * @param typeBounds
+	 *            possibly predetermined type bounds for type variables
+	 * @return whether the output types match
 	 */
 	private boolean outputsMatch(final OpCandidate candidate, HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
 		final Type[] refOutTypes = candidate.getRef().getOutTypes();
@@ -358,7 +316,8 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return false;
 		}
 
-		int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(candidateOutTypes, refOutTypes, typeBounds);
+		int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(candidateOutTypes, refOutTypes,
+				typeBounds);
 		if (conflictingIndex != -1) {
 			final Type to = refOutTypes[conflictingIndex];
 			final Type from = candidateOutTypes[conflictingIndex];
@@ -367,18 +326,5 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			return false;
 		}
 		return true;
-	}
-
-	private String typeClashMessage(final OpCandidate candidate, final Type[] args, final int index) {
-		int i = 0;
-		for (final Member<?> item : OpUtils.inputs(candidate)) {
-			if (i++ == index) {
-				final Type arg = args[index];
-				final String argType = arg == null ? "null" : arg.getClass().getName();
-				final Type inputType = item.getType();
-				return index + ": cannot coerce " + argType + " -> " + inputType;
-			}
-		}
-		throw new IllegalArgumentException("Invalid index: " + index);
 	}
 }

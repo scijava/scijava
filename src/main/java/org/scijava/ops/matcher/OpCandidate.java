@@ -202,12 +202,10 @@ public class OpCandidate {
 	}
 
 	public StructInstance<?> createOp() {
-		// Nobody seems to set it to MATCH yet
-		// if (!getStatusCode().equals(StatusCode.MATCH)) {
-		// // TODO: Logging
-		// return null;
-		// }
-
+		if (!getStatusCode().equals(StatusCode.MATCH)) {
+			throw new IllegalArgumentException(
+					"Status of candidate to create op " + "from indicates a problem: " + getStatus());
+		}
 		final Class<?> opClass = opInfo().opClass();
 		final Object object;
 		try {
@@ -218,9 +216,8 @@ public class OpCandidate {
 		} catch (final InstantiationException | IllegalAccessException e) {
 			// TODO: Think about whether exception handling here should be
 			// different.
-			// TODO: Logging
-			// log.error("Cannot instantiate op: " + opClass.getName(), e);
-			return null;
+			throw new IllegalStateException("Unable to instantiate op: '" + opClass.getName()
+					+ "' Each op must have a no-args constructor.", e);
 		}
 		return struct().createInstance(object);
 	}

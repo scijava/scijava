@@ -46,11 +46,10 @@ import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 
 /**
- * Utility methods for working with ops. In particular, this class contains
- * handy methods for generating human-readable strings describing ops and match
- * requests against them.
+ * Utility methods for working with ops.
  * 
  * @author Curtis Rueden
+ * @author David Kolb
  */
 public final class OpUtils {
 
@@ -59,21 +58,9 @@ public final class OpUtils {
 	}
 
 	// -- Utility methods --
-	
+
 	public static String[] parseOpNames(String names) {
 		return Arrays.stream(names.split(",")).map(s -> s.trim()).toArray(String[]::new);
-	}
-
-	public static Object[] args(final Object[] latter, final Object... former) {
-		final Object[] result = new Object[former.length + latter.length];
-		int i = 0;
-		for (final Object o : former) {
-			result[i++] = o;
-		}
-		for (final Object o : latter) {
-			result[i++] = o;
-		}
-		return result;
 	}
 
 	public static List<MemberInstance<?>> inputs(StructInstance<?> op) {
@@ -278,15 +265,16 @@ public final class OpUtils {
 	}
 
 	/**
-	 * Helper method of {@link #opString(OpInfo, Member)} which parses a
-	 * set of items with a default delimiter of ","
+	 * Helper method of {@link #opString(OpInfo, Member)} which parses a set of
+	 * items with a default delimiter of ","
 	 */
 	private static String paramString(final Iterable<Member<?>> items, final Member<?> special) {
 		return paramString(items, special, ",");
 	}
 
 	/**
-	 * As {@link #paramString(Iterable, Member, String)} with an optional delimiter.
+	 * As {@link #paramString(Iterable, Member, String)} with an optional
+	 * delimiter.
 	 */
 	private static String paramString(final Iterable<Member<?>> items, final Member<?> special, final String delim) {
 		return paramString(items, special, delim, false);

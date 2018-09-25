@@ -31,7 +31,7 @@ public class Power {
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoublFunction implements BiFunction<Double, Double, Double> {
+	public static class MathPowerDoubleFunction implements BiFunction<Double, Double, Double> {
 		@Override
 		public Double apply(Double t, Double exp) {
 			return Math.pow(t, exp);

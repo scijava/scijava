@@ -58,9 +58,10 @@ import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
 
 /**
- * Service that manages ops.
+ * Service to provide a list of available ops structured in a prefix tree and to
+ * search for ops matching specified types.
  *
- * @author Curtis Rueden
+ * @author David Kolb
  */
 @Plugin(type = Service.class)
 public class OpService extends AbstractService implements SciJavaService, OpEnvironment {
@@ -74,6 +75,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	@Parameter
 	private LogService log;
 
+	/**
+	 * Prefix tree to cache and quickly find {@link OpInfo}s.
+	 */
 	private PrefixTree<OpInfo> opCache;
 
 	/**
@@ -144,14 +148,14 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 		return opInst;
 	}
-	
-	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?>[] outTypes, final Object... secondaryArgs) {
+
+	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
+			final Object... secondaryArgs) {
 		return findOpInstance(null, specialType, inTypes, outTypes, secondaryArgs).object();
 	}
-	
-	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?> outType, final Object... secondaryArgs) {
+
+	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType,
+			final Object... secondaryArgs) {
 		return findOpInstance(null, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
 
@@ -171,15 +175,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	public OpCandidate findTypeMatch(final OpRef ref) {
 		return findTypeMatches(ref).singleMatch();
-	}
-
-	private Type[] merge(Type in1, Type... ins) {
-		Type[] merged = new Type[ins.length + 1];
-		merged[0] = in1;
-		for (int i = 0; i < ins.length; i++) {
-			merged[i + 1] = ins[i];
-		}
-		return merged;
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -206,9 +201,15 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 	}
 
-	private static String getIndent(int num) {
+	/**
+	 * Constructs a string with the specified number of tabs '\t'.
+	 * 
+	 * @param numOfTabs
+	 * @return
+	 */
+	private static String getIndent(int numOfTabs) {
 		String str = "";
-		for (int i = 0; i < num; i++) {
+		for (int i = 0; i < numOfTabs; i++) {
 			str += "\t";
 		}
 		return str;
@@ -216,9 +217,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	/**
 	 * Class to represent a query for a {@link PrefixTree}. Prefixes must be
-	 * separated by dots ('.'). E.g. 'math.add'.
-	 * 
-	 * @author David Kolb
+	 * separated by dots ('.'). E.g. 'math.add'. These queries are used in
+	 * order to specify the level where elements should be inserted into or
+	 * retrieved from the tree.
 	 */
 	private static class PrefixQuery {
 		String cachedToString;
@@ -287,11 +288,11 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * 
 	 * <pre>
 	 *	Prefix:		Elem:
-	 *	math.add	obj1
-	 *	math.add	obj2
-	 *	math.sqrt	obj3
-	 *	math		obj4
-	 *				obj5
+	 *	"math.add"	obj1
+	 *	"math.add"	obj2
+	 *	"math.sqrt"	obj3
+	 *	"math"		obj4
+	 *	""		obj5
 	 * </pre>
 	 * 
 	 * Will result in the following tree:
@@ -299,8 +300,10 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * <pre>
 	 *               root [obj5]
 	 *                     |
+	 *                     |
 	 *                math [obj4]
 	 *               /           \
+	 *              /             \
 	 *      add [obj1, obj2]   sqrt [obj3]
 	 * </pre>
 	 * 
@@ -343,7 +346,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		 * this class would return all elements contained in the tree except for
 		 * 'obj5'. 'math.add' would only return 'obj1' and 'obj2'. This method
 		 * returns an iterable over these elements in O(# number of all nodes
-		 * below query).
+		 * below query). The number of nodes is the number of distinct prefixes
+		 * below the specified query.
 		 * 
 		 * @param query
 		 * @return

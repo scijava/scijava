@@ -169,6 +169,16 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return findOpInstance(op.getName(), specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
 
+	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
+			final Object... secondaryArgs) {
+		return findOpInstance(opName, specialType, inTypes, outTypes, secondaryArgs).object();
+	}
+
+	public <T, E extends OpIdentifier> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
+			final Nil<?> outType, final Object... secondaryArgs) {
+		return findOpInstance(opName, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
+	}
+
 	public MatchingResult findTypeMatches(final OpRef ref) {
 		return matcher.findMatch(this, ref);
 	}

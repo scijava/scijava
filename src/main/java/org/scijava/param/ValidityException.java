@@ -23,4 +23,20 @@ public final class ValidityException extends Exception {
 	public List<ValidityProblem> problems() {
 		return problems;
 	}
+	
+	@Override
+	public String getMessage() {
+		String message = super.getMessage();
+		if (message == null) {
+			message = "";
+		} else {
+			message += "\n";
+		}
+		for (ValidityProblem p : problems) {
+			message += "* ";
+			message += p.getMessage();
+			message += "\n";
+		}
+		return message;
+	}
 }

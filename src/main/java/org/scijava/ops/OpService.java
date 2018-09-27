@@ -28,12 +28,14 @@
  */
 package org.scijava.ops;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -41,9 +43,11 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.Ops.OpIdentifier;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
+import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
@@ -57,6 +61,7 @@ import org.scijava.service.SciJavaService;
 import org.scijava.service.Service;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
+import org.scijava.util.ClassUtils;
 
 /**
  * Service to provide a list of available ops structured in a prefix tree and to
@@ -97,6 +102,19 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				OpInfo opInfo = new OpClassInfo(opClass);
 				addToCache(opInfo, pluginInfo.getName());
 				
+			} catch (InstantiableException exc) {
+				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
+			}
+		}
+		// Add Ops contained in an OpCollection
+		for (final PluginInfo<OpCollection> pluginInfo : pluginService.getPluginsOfType(OpCollection.class)) {
+			try {
+				final List<Field> fields = ClassUtils.getAnnotatedFields(pluginInfo.loadClass(),
+						OpField.class);
+				for (Field field : fields) {
+					OpInfo opInfo = new OpFieldInfo(field);
+					addToCache(opInfo, field.getAnnotation(OpField.class).names());
+				}
 			} catch (InstantiableException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
 			}

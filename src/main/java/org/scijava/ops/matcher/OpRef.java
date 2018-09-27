@@ -136,16 +136,16 @@ public class OpRef {
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
-	public boolean typesMatch(final Class<?> opClass) {
+	public boolean typesMatch(final Type opType) {
 		if (types == null)
 			return true;
 		for (Type t : types) {
 			if(t instanceof ParameterizedType) {
-				if (!MatchingUtils.checkGenericAssignability(opClass, (ParameterizedType) t)) {
+				if (!MatchingUtils.checkGenericAssignability(Types.raw(opType), (ParameterizedType) t)) {
 					return false;
 				}
 			} else {
-				if (!Types.isAssignable(opClass, t)) {
+				if (!Types.isAssignable(opType, t)) {
 					return false;
 				}
 			}

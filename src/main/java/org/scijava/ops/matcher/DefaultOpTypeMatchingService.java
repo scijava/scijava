@@ -92,7 +92,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
 		for (final OpRef ref : refs) {
 			for (final OpInfo info : ops.infos(ref.getName())) {
-				if (ref.typesMatch(info.opClass())) {
+				if (ref.typesMatch(info.opType())) {
 					candidates.add(new OpCandidate(ops, ref, info));
 				}
 			}

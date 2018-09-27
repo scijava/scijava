@@ -110,9 +110,7 @@ public final class OpUtils {
 	}
 
 	public static double getPriority(final OpCandidate candidate) {
-		// TODO: Think about what to do about non @Plugin-based ops...?
-		// What if there is no annotation? How to discern a priority?
-		return candidate.opInfo().getAnnotation().priority();
+		return candidate.opInfo().priority();
 	}
 
 	public static Type[] padArgs(final OpCandidate candidate) {
@@ -295,7 +293,7 @@ public final class OpUtils {
 		final String outputString = paramString(outputs(info.struct()), null).trim();
 		if (!outputString.isEmpty())
 			sb.append("(" + outputString + ") =\n\t");
-		sb.append(info.opClass().getName());
+		sb.append(info.implementationName());
 		sb.append("(" + paramString(inputs(info.struct()), special) + ")");
 		return sb.toString();
 	}
@@ -341,6 +339,28 @@ public final class OpUtils {
 					sb.append("?");
 			}
 		}
+		return sb.toString();
+	}
+
+	public static String opString(final OpInfo info) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(info.implementationName() + "(\n\t Inputs:\n");
+		for (final Member<?> arg : info.inputs()) {
+			sb.append("\t\t");
+			sb.append(arg.getType().getTypeName());
+			sb.append(" ");
+			sb.append(arg.getKey());
+			sb.append("\n");
+		}
+		sb.append("\t Outputs:\n");
+		for (final Member<?> arg : info.outputs()) {
+			sb.append("\t\t");
+			sb.append(arg.getType().getTypeName());
+			sb.append(" ");
+			sb.append(arg.getKey());
+			sb.append("\n");
+		}
+		sb.append(")\n");
 		return sb.toString();
 	}
 }

@@ -206,19 +206,7 @@ public class OpCandidate {
 			throw new IllegalArgumentException(
 					"Status of candidate to create op " + "from indicates a problem: " + getStatus());
 		}
-		final Class<?> opClass = opInfo().opClass();
-		final Object object;
-		try {
-			// TODO: Consider whether this is really the best way to
-			// instantiate the op class here. No framework usage?
-			// E.g., what about pluginService.createInstance?
-			object = opClass.newInstance();
-		} catch (final InstantiationException | IllegalAccessException e) {
-			// TODO: Think about whether exception handling here should be
-			// different.
-			throw new IllegalStateException("Unable to instantiate op: '" + opClass.getName()
-					+ "' Each op must have a no-args constructor.", e);
-		}
-		return struct().createInstance(object);
+
+		return opInfo().createOp();
 	}
 }

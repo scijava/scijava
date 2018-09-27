@@ -1,6 +1,7 @@
 
 package org.scijava.param;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -38,7 +39,15 @@ public final class ParameterStructs {
 		final List<Member<?>> items = parse(type);
 		return () -> items;
 	}
+	
+	public static Struct structOf(final Class<?> c, final Field f)
+			throws ValidityException
+	{
+		final List<Member<?>> items = parse(c, f);
+		return () -> items;
+	}
 
+	// TODO parse methods need to be way more dry
 	public static List<Member<?>> parse(final Class<?> type)
 		throws ValidityException
 	{
@@ -46,87 +55,43 @@ public final class ParameterStructs {
 
 		final ArrayList<Member<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
-
-		// NB: Reject abstract classes.
-		if (Modifier.isAbstract(type.getModifiers())) {
-			problems.add(new ValidityProblem("Struct class is abstract"));
-		}
-
 		final Set<String> names = new HashSet<>();
 
-		// Parse class level (i.e., generic) @Parameter annotations.
+		// NB: Reject abstract classes.
+		checkModifiers(type.getName() + ": ", problems, type.getModifiers(), true, Modifier.ABSTRACT);
 
+		// Parse class level (i.e., generic) @Parameter annotations.
 		final Class<?> paramsClass = findParametersDeclaration(type);
 		if (paramsClass != null) {
-			final Class<?> functionalType = findFunctionalInterface(paramsClass);
-			Parameter[] p = null;
-			final Parameters params = paramsClass.getAnnotation(Parameters.class);
-			if (params != null) {
-				p = params.value();
-			} else {
-				p = new Parameter[] {paramsClass.getAnnotation(Parameter.class)};
-			}
-			final int paramCount = functionalType.getTypeParameters().length;
-			// TODO: Consider allowing partial override of class @Parameters.
-			if (p.length == paramCount) {
-				for (int i=0; i<p.length; i++) {
-					String key = p[i].key();
-					final Type itemType = Types.param(Types.parameterizeRaw(type), functionalType, i);
-					final Class<?> rawItemType = Types.raw(itemType);
-					final boolean valid = checkValidity(p[i], key, rawItemType, false,
-						names, problems);
-					if (!valid) continue; // NB: Skip invalid parameters.
-
-					// add item to the list
-					// TODO make more DRY
-					try {
-						final ParameterMember<?> item = //
-							new FunctionalParameterMember<>(itemType, p[i]);
-						names.add(key);
-						items.add(item);
-					}
-					catch (final ValidityException exc) {
-						problems.addAll(exc.problems());
-					}
-				}
-			}
-			else {
-				problems.add(new ValidityProblem("Need " + paramCount +
-					" parameters for " + functionalType.getName() + " but got " +
-					p.length));
-			}
+			parseFunctionalParameters(items, names, problems, findParametersDeclaration(type), type);
 		}
 
 		// Parse field level @Parameter annotations.
-
-		final List<Field> fields = ClassUtils.getAnnotatedFields(type,
-			Parameter.class);
-
-		for (final Field f : fields) {
-			f.setAccessible(true); // expose private fields
-
-			final Parameter param = f.getAnnotation(Parameter.class);
-
-			final String name = f.getName();
-			final boolean isFinal = Modifier.isFinal(f.getModifiers());
-			final boolean valid = checkValidity(param, name, f.getType(),
-				isFinal, names, problems);
-			if (!valid) continue; // NB: Skip invalid parameters.
-
-			// add item to the list
-			try {
-				final ParameterMember<?> item = new FieldParameterMember<>(f, type);
-				names.add(name);
-				items.add(item);
-			}
-			catch (final ValidityException exc) {
-				problems.addAll(exc.problems());
-			}
-		}
+		parseFieldParameters(items, names, problems, type);
 
 		// Fail if there were any problems.
-
 		if (!problems.isEmpty()) throw new ValidityException(problems);
+
+		return items;
+	}
+	
+	public static List<Member<?>> parse(final Class<?> c, final Field field) throws ValidityException {
+		if (c == null || field == null) return null;
+
+		field.setAccessible(true);
+		
+		final ArrayList<Member<?>> items = new ArrayList<>();
+		final ArrayList<ValidityProblem> problems = new ArrayList<>();
+		final Set<String> names = new HashSet<>();
+		final Type fieldType = Types.fieldType(field, c);
+
+		checkModifiers(field.toString() + ": ", problems, field.getModifiers(), false, Modifier.STATIC, Modifier.FINAL);
+		parseFunctionalParameters(items, names, problems, field, fieldType);
+
+		// Fail if there were any problems.
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
+		}
 
 		return items;
 	}
@@ -140,12 +105,104 @@ public final class ParameterStructs {
 	}
 
 	// -- Helper methods --
+	
+	/**
+	 * Helper to check for several modifiers at once.
+	 * 
+	 * @param message
+	 * @param problems
+	 * @param actualModifiers
+	 * @param requiredModifiers
+	 */
+	private static void checkModifiers(String message, final ArrayList<ValidityProblem> problems,
+			final int actualModifiers, final boolean negate, final int... requiredModifiers) {
+		for (int mod : requiredModifiers) {
+			if (negate) {
+				if ((actualModifiers & mod) != 0) {
+					problems.add(
+							new ValidityProblem(message + "Illegal modifier. Must not be " + Modifier.toString(mod)));
+				}
+			} else {
+				if ((actualModifiers & mod) == 0) {
+					problems.add(new ValidityProblem(message + "Illegal modifier. Must be " + Modifier.toString(mod)));
+				}
+			}
+		}
+	}
+	
+	private static void parseFieldParameters (final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
+			Class<?> annotatedClass) {
+		final List<Field> fields = ClassUtils.getAnnotatedFields(annotatedClass,
+				Parameter.class);
+
+			for (final Field f : fields) {
+				f.setAccessible(true); // expose private fields
+
+				final Parameter param = f.getAnnotation(Parameter.class);
+
+				final String name = f.getName();
+				final boolean isFinal = Modifier.isFinal(f.getModifiers());
+				final boolean valid = checkValidity(param, name, f.getType(),
+					isFinal, names, problems);
+				if (!valid) continue; // NB: Skip invalid parameters.
+
+				// add item to the list
+				try {
+					final ParameterMember<?> item = new FieldParameterMember<>(f, annotatedClass);
+					names.add(name);
+					items.add(item);
+				}
+				catch (final ValidityException exc) {
+					problems.addAll(exc.problems());
+				}
+			}
+	}
+	
+	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
+			AnnotatedElement annotationBearer, Type type) {		
+		Parameter[] annotations = parameters(annotationBearer);
+		
+		
+		final Class<?> functionalType = findFunctionalInterface(Types.raw(type), annotations.length);
+		if (functionalType == null) {
+			problems.add(new ValidityProblem("Could not find functional interface of " + type.getTypeName() + " with the the required number of "
+					+ "parameters: " + annotations.length));
+		}
+		
+		// TODO: Consider allowing partial override of class @Parameters.
+		for (int i=0; i<annotations.length; i++) {
+			String key = annotations[i].key();
+			
+			Type paramType = type;
+			if (type instanceof Class) {
+				paramType = Types.parameterizeRaw((Class<?>) type);
+			}
+			
+			final Type itemType = Types.param(paramType, functionalType, i);
+			final Class<?> rawItemType = Types.raw(itemType);
+			final boolean valid = checkValidity(annotations[i], key, rawItemType, false,
+				names, problems);
+			if (!valid) continue; // NB: Skip invalid parameters.
+
+			// add item to the list
+			try {
+				final ParameterMember<?> item = //
+					new FunctionalParameterMember<>(itemType, annotations[i]);
+				names.add(key);
+				items.add(item);
+			}
+			catch (final ValidityException exc) {
+				problems.addAll(exc.problems());
+			}
+		}
+		
+	}
 
 	private static boolean isImmutable(final Class<?> type) {
 		// NB: All eight primitive types, as well as the boxed primitive
 		// wrapper classes, as well as strings, are immutable objects.
-		return ClassUtils.isNumber(type) || ClassUtils.isText(type) || //
-			ClassUtils.isBoolean(type);
+		return Types.isNumber(type) || Types.isText(type) || //
+				Types.isBoolean(type);
 	}
 
 	/**
@@ -167,7 +224,15 @@ public final class ParameterStructs {
 		return null;
 	}
 
-	private static Class<?> findFunctionalInterface(Class<?> type) {
+	/**
+	 * Searches for a {@code @FunctionalInterface} annotated interface in the 
+	 * class hierarchy of the specified type. The first one that is found will
+	 * be returned. If no such interface can be found, null will be returned.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static Class<?> findFunctionalInterface(Class<?> type) {
 		if (type == null) return null;
 		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
 		for (Class<?> iface : type.getInterfaces()) {
@@ -176,8 +241,34 @@ public final class ParameterStructs {
 		}
 		return findFunctionalInterface(type.getSuperclass());
 	}
+	
+	/**
+	 * Searches for a {@code @FunctionalInterface} annotated interface in the 
+	 * class hierarchy of the specified type with the specified number of
+	 * type parameters. After the first interface is found, its super interfaces
+	 * will be checked. If no such interface can be found, null will be returned.
+	 * 
+	 * @param type
+	 * @param numberOfParams
+	 * @return
+	 */
+	public static Class<?> findFunctionalInterface(Class<?> type, int numberOfParams) {
+		Class<?> i = findFunctionalInterface(type);
+		if (i == null) {
+			return null;
+		}
+		if (i != null && i.getTypeParameters().length == numberOfParams) {
+			return i;
+		} else {
+			for (Class<?> iface : i.getInterfaces()) {
+				final Class<?> result = findFunctionalInterface(iface, numberOfParams);
+				if (result != null) return result;
+			}
+		}
+		return null;
+	}
 
-	private static boolean checkValidity(Parameter param, String name,
+	public static boolean checkValidity(Parameter param, String name,
 		Class<?> type, boolean isFinal, Set<String> names,
 		ArrayList<ValidityProblem> problems)
 	{
@@ -208,5 +299,16 @@ public final class ParameterStructs {
 		}
 
 		return valid;
+	}
+	
+	
+	
+	public static Parameter[] parameters(final AnnotatedElement element) {
+		final Parameters params = element.getAnnotation(Parameters.class);
+		if (params != null) {
+			return params.value();
+		}
+		final Parameter p = element.getAnnotation(Parameter.class);
+		return p == null ? new Parameter[0] : new Parameter[] { p };
 	}
 }

@@ -43,6 +43,7 @@ import org.scijava.ops.Ops.OpIdentifier;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
@@ -87,20 +88,30 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private Map<String, String> opAliases = new HashMap<>();
 
 	public void initOpCache() {
-		opCache = new PrefixTree<OpInfo>();
-		for (final PluginInfo<Op> info : pluginService.getPluginsOfType(Op.class)) {
+		opCache = new PrefixTree<>();
+		
+		// Add regular Ops
+		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
 			try {
-				final Class<? extends Op> opClass = info.loadClass();
-				OpInfo opInfo = new OpInfo(opClass);
-				String[] opNames = OpUtils.parseOpNames(info.getName());
-
-				addAliases(opNames);
-
-				opCache.add(new PrefixQuery(opNames[0]), opInfo);
+				final Class<? extends Op> opClass = pluginInfo.loadClass();
+				OpInfo opInfo = new OpClassInfo(opClass);
+				addToCache(opInfo, pluginInfo.getName());
+				
 			} catch (InstantiableException exc) {
-				log.error("Can't load class from plugin info: " + info.toString(), exc);
+				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
 			}
 		}
+	}
+	
+	private void addToCache(OpInfo opInfo, String opNames) {
+		if (!opInfo.isValid()) {
+			log.error("Skipping invalid Op " + opInfo.implementationName() + ":\n"
+					+ opInfo.getValidityException().getMessage());
+			return;
+		}
+		String[] parsedNames = OpUtils.parseOpNames(opNames);
+		addAliases(parsedNames);
+		opCache.add(new PrefixQuery(parsedNames[0]), opInfo);
 	}
 
 	@Override

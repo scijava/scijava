@@ -113,10 +113,9 @@ public final class MatchingUtils {
 	}
 
 	/**
-	 * Checks whether it would be legal to assign the {@link ParameterizedType}
-	 * source, represented as a raw type, to the specified
-	 * {@link ParameterizedType} destination (which could possibly be a
-	 * supertype of the source type). Thereby, possible {@link TypeVariable}s
+	 * Checks whether it would be legal to assign the {@link Type} source to the
+	 * specified {@link ParameterizedType} destination (which could possibly be
+	 * a supertype of the source type). Thereby, possible {@link TypeVariable}s
 	 * contained in the parameters of the source are tried to be inferred in the
 	 * sense of empty angle brackets when a new object is created:
 	 * 
@@ -188,27 +187,39 @@ public final class MatchingUtils {
 	 * </ul>
 	 * 
 	 * @param src
-	 *            raw type representing the parameterized type of which
-	 *            assignment should be checked
+	 *            the type for which assignment should be checked from
 	 * @param dest
 	 *            the parameterized type for which assignment should be checked
 	 *            to
 	 * @return whether and assignment of source to destination would be a legal
 	 *         java statement
 	 */
-	public static boolean checkGenericAssignability(Class<?> src, ParameterizedType dest) {
+	public static boolean checkGenericAssignability(Type src, ParameterizedType dest) {
 		// check raw assignability
-		if (!Types.isAssignable(src, Types.raw(dest)))
+		if (!Types.isAssignable(Types.raw(src), Types.raw(dest)))
 			return false;
 
-		Type[] destTypes = dest.getActualTypeArguments();
-		// get type arguments of raw src for common (possible supertype) dest
-		Type[] srcTypes = getParams(src, Types.raw(dest));
+		Type[] destTypes;
+		Type[] srcTypes;
 
+		if (src instanceof Class) {
+			destTypes = dest.getActualTypeArguments();
+			// get type arguments of raw src for common (possible supertype)
+			// dest
+			srcTypes = getParams((Class<?>) src, Types.raw(dest));
+		} else if (src instanceof ParameterizedType) {
+			destTypes = dest.getActualTypeArguments();
+			srcTypes = ((ParameterizedType) src).getActualTypeArguments();
+		} else {
+			return Types.isAssignable(src, dest);
+		}
+
+		return checkGenericAssignability(srcTypes, destTypes, dest);
+	}
+
+	private static boolean checkGenericAssignability(Type[] srcTypes, Type[] destTypes, Type dest) {
 		// if the number of type arguments does not match, the types can't be
 		// assignable
-		// TODO: Find out if this could ever happen with the way how we retrieve
-		// the arguments above
 		if (srcTypes.length != destTypes.length) {
 			return false;
 		}
@@ -229,7 +240,7 @@ public final class MatchingUtils {
 		// Build a new parameterized type from inferred types and check
 		// assignability
 		Class<?> matchingRawType = Types.raw(dest);
-		Type inferredSrcType = containsNull(mappedSrcTypes) ? src : Types.parameterize(matchingRawType, mappedSrcTypes);
+		Type inferredSrcType = Types.parameterize(matchingRawType, mappedSrcTypes);
 		if (!Types.isAssignable(inferredSrcType, dest)) {
 			return false;
 		}

@@ -17,7 +17,7 @@ import com.google.common.collect.Streams;
 
 public class Add {
 	
-	public static final String NAMES = "math.add, math.sum";
+	public static final String NAMES = MathOps.ADD;
 	
 	// --------- Functions ---------
 	

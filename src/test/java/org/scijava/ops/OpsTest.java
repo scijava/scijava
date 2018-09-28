@@ -56,7 +56,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void unaryFunction() {
 		// Look up a function type safe
 		Function<Double, Double> sqrtFunction = ops().findOp( //
-				Ops.Math.SQRT, new Nil<Function<Double, Double>>() {
+				"math.sqrt", new Nil<Function<Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble }, //
 				nilDouble//
@@ -69,7 +69,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	public void binaryFunction() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<Double, Double, Double> addFunction = ops().findOp( //
-				Ops.Math.ADD, new Nil<BiFunction<Double, Double, Double>>() {
+				"math.add", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
 				nilDouble//
@@ -88,7 +88,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void nullaryComputer() {
 		NullaryComputer<double[]> sqrtComputer = ops().findOp( //
-				Ops.Math.ZERO, new Nil<NullaryComputer<double[]>>() {
+				"math.zero", new Nil<NullaryComputer<double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray }, //
 				nilDoubleArray//
@@ -101,7 +101,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void unaryComputer() {
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
-				Ops.Math.SQRT, new Nil<Computer<double[], double[]>>() {
+				"math.sqrt", new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -114,7 +114,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void binaryComputer() {
 		BiComputer<double[], double[], double[]> computer = ops().findOp( //
-				Ops.Math.ADD, new Nil<BiComputer<double[], double[], double[]>>() {
+				"math.add", new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -129,7 +129,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void unaryInplace() {
 		Inplace<double[]> inplaceSqrt = ops().findOp( //
-				Ops.Math.SQRT, new Nil<Inplace<double[]>>() {
+				"math.sqrt", new Nil<Inplace<double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray }, //
 				nilDoubleArray//
@@ -142,7 +142,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void binaryInplace() {
 		BiInplace1<double[], double[]> inplaceAdd = ops().findOp( //
-				Ops.Math.ADD, new Nil<BiInplace1<double[], double[]>>() {
+				"math.add", new Nil<BiInplace1<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -156,7 +156,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void testSecondaryInputs() {
 		Function<Double, Double> power3 = ops().findOp( //
-				Ops.Math.POW, new Nil<Function<Double, Double>>() {
+				"math.pow", new Nil<Function<Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
 				nilDouble, //
@@ -165,7 +165,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert power3.apply(2.0).equals(8.0);
 
 		BiFunction<Double, Double, Double> powerFunction = ops().findOp( //
-				Ops.Math.POW, new Nil<BiFunction<Double, Double, Double>>() {
+				"math.pow", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
 				nilDouble//
@@ -173,7 +173,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert powerFunction.apply(2.0, 3.0).equals(8.0);
 
 		Computer<double[], double[]> power3Arrays = ops().findOp( //
-				Ops.Math.POW, new Nil<Computer<double[], double[]>>() {
+				"math.pow", new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDouble }, //
 				nilDoubleArray, //
@@ -193,7 +193,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		try {
 			@SuppressWarnings("unused")
 			BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
-					Ops.Math.ADD, //
+					"math.add", //
 					new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
 					}, //
 					new Nil[] { new Nil<Double>() {}, nilIterableDouble }, //
@@ -209,7 +209,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		try {
 			@SuppressWarnings("unused")
 			BiFunction<Double, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
-					Ops.Math.ADD, //
+					"math.add", //
 					new Nil<BiFunction<Double, Iterable<Double>, Iterable<Double>>>() {
 					}, //
 					new Nil[] { nilIterableDouble, nilIterableDouble }, //
@@ -225,7 +225,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		try {
 			@SuppressWarnings("unused")
 			BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
-					Ops.Math.ADD, //
+					"math.add", //
 					new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
 					}, //
 					new Nil[] { nilIterableDouble, nilIterableDouble }, //
@@ -239,7 +239,7 @@ public class OpsTest extends AbstractTestEnvironment {
 
 		// We have a generic function which adds two iterables of numbers and gives an iterable of double
 		BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>> addDoubleIters = ops().findOp( //
-				Ops.Math.ADD, //
+				"math.add", //
 				new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
 				}, //
 				new Nil[] { nilIterableDouble, nilIterableDouble }, //

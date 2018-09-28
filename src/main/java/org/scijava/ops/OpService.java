@@ -41,7 +41,6 @@ import java.util.Map.Entry;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
-import org.scijava.ops.Ops.OpIdentifier;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.MatchingResult;
@@ -188,22 +187,12 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return findOpInstance(null, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
 
-	public <T> T findOp(final OpIdentifier op, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?>[] outTypes, final Object... secondaryArgs) {
-		return findOpInstance(op.getName(), specialType, inTypes, outTypes, secondaryArgs).object();
-	}
-
-	public <T, E extends OpIdentifier> T findOp(final OpIdentifier op, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?> outType, final Object... secondaryArgs) {
-		return findOpInstance(op.getName(), specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
-	}
-
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
 			final Object... secondaryArgs) {
 		return findOpInstance(opName, specialType, inTypes, outTypes, secondaryArgs).object();
 	}
 
-	public <T, E extends OpIdentifier> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
+	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType, final Object... secondaryArgs) {
 		return findOpInstance(opName, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
 	}
@@ -261,9 +250,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	/**
 	 * Class to represent a query for a {@link PrefixTree}. Prefixes must be
-	 * separated by dots ('.'). E.g. 'math.add'. These queries are used in
-	 * order to specify the level where elements should be inserted into or
-	 * retrieved from the tree.
+	 * separated by dots ('.'). E.g. 'math.add'. These queries are used in order
+	 * to specify the level where elements should be inserted into or retrieved
+	 * from the tree.
 	 */
 	private static class PrefixQuery {
 		String cachedToString;

@@ -10,7 +10,7 @@ import org.scijava.struct.ItemIO;
 
 public class Zero {
 
-	public static final String NAMES = "math.zero";
+	public static final String NAMES = MathOps.ZERO;
 	
 	// --------- Computers ---------
 

@@ -50,7 +50,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testFunctionAsCommand() {
 		Function<Double, Double> sqrtFunction = ops().findOp( //
-				Ops.Math.SQRT, new Nil<Function<Double, Double>>() {
+				"math.sqrt", new Nil<Function<Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble }, //
 				nilDouble//
@@ -64,7 +64,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsCommand() {
 		Computer<double[], double[]> sqrtComputer = ops().findOp( //
-				Ops.Math.SQRT, new Nil<Computer<double[], double[]>>() {
+				"math.sqrt", new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -79,7 +79,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsFunction() {
 		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
-				Ops.Math.ADD, new Nil<BiComputer<double[], double[], double[]>>() {
+				"math.add", new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -100,7 +100,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	public void testFunctionAsComputer() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<double[], double[], double[]> function = ops().findOp( //
-				Ops.Math.ADD, new Nil<BiFunction<double[], double[], double[]>>() {
+				"math.add", new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//

@@ -11,7 +11,7 @@ import org.scijava.struct.ItemIO;
 
 public class Power {
 
-	public static final String NAMES = "math.pow";
+	public static final String NAMES = MathOps.POW;
 
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number")

@@ -42,7 +42,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryComputers() {
-		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), Ops.Math.SQRT, nilDoubleArray,
+		Computer<double[], double[]> sqrtComputer = Computers.unary(ops(), "math.sqrt", nilDoubleArray,
 				nilDoubleArray);
 
 		double[] result = new double[3];
@@ -52,7 +52,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryComputers() {
-		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), Ops.Math.ADD, nilDoubleArray,
+		BiComputer<double[], double[], double[]> addComputer = Computers.binary(ops(), "math.add", nilDoubleArray,
 				nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];

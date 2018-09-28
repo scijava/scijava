@@ -12,7 +12,7 @@ import org.scijava.struct.ItemIO;
 
 public class Sqrt {
 
-	public static final String NAMES = "math.sqrt";
+	public static final String NAMES = MathOps.SQRT;
 	
 	// --------- Functions ---------
 

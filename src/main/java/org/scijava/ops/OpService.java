@@ -159,20 +159,24 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), toTypes(outTypes), toTypes(inTypes));
 
 		// Find single match which matches the specified types
+		OpCandidate match = findTypeMatch(ref);
+
 		@SuppressWarnings("unchecked")
-		final StructInstance<T> opInst = (StructInstance<T>) findTypeMatch(ref).createOp();
+		final StructInstance<T> opInst = (StructInstance<T>) match.createOp();
 
 		// Inject the secondary args if there are any
 		if (Inject.Structs.isInjectable(opInst)) {
-			if (secondaryArgs.length != 0) {
-				Inject.Structs.inputs(opInst, secondaryArgs);
-			} else {
-				log.warn(
-						"Specified Op has secondary args however no secondary args are given. Op execution may lead to errors.");
+			// Get padded secondary args
+			Object[] paddedArgs = OpUtils.padArgs(match, true, secondaryArgs);
+			if (paddedArgs == null) {
+				throw new IllegalStateException(match.opInfo().implementationName() + " | " + match.getStatus());
 			}
+			Inject.Structs.inputs(opInst, paddedArgs);
+		// Secondary args are given, however there are no to inject
 		} else if (secondaryArgs.length > 0) {
 			log.warn(
-					"Specified Op has no secondary args however secondary args are given. The specified args will not be injected.");
+					"Specified Op has no secondary args, however secondary args are given. "
+					+ "The specified args will not be injected.");
 		}
 		return opInst;
 	}

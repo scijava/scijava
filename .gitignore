@@ -15,3 +15,6 @@
 
 # VIM editor #
 .*.swp
+
+# Windows #
+*.bat

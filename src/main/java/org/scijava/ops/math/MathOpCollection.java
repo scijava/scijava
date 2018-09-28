@@ -24,6 +24,7 @@ public class MathOpCollection {
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> addDoublesFunction = (x, y) -> x + y;
 
+	// Set this priority to extremely high for now to test that the op with the highest priority is actually retrieved
 	@OpField(names = MathOps.ADD, priority = Priority.EXTREMELY_HIGH)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")

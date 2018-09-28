@@ -18,31 +18,31 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class MathOpCollection {
 
-	@OpField(names = "math.add", priority = Priority.LOW)
+	@OpField(names = MathOps.ADD, priority = Priority.LOW)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> addDoublesFunction = (x, y) -> x + y;
 
-	@OpField(names = "math.add", priority = Priority.HIGH)
+	@OpField(names = MathOps.ADD, priority = Priority.HIGH)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static final BinaryOperator<Double> addDoublesOperator = (x, y) -> x + y;
 
-	@OpField(names = "math.sub")
+	@OpField(names = MathOps.SUB)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> subDoublesFunction = (t, u) -> t - u;
 
-	@OpField(names = "math.mul")
+	@OpField(names = MathOps.MUL)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> mulDoublesFunction = (t, u) -> t * u;
 
-	@OpField(names = "math.div")
+	@OpField(names = MathOps.DIV)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)

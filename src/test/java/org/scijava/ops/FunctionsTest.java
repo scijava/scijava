@@ -43,19 +43,19 @@ public class FunctionsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryFunctions() {
-		Function<Double, Double> sqrtFunction = Functions.unary(ops(), Ops.Math.SQRT, nilDouble, nilDouble);
+		Function<Double, Double> sqrtFunction = Functions.unary(ops(), "math.sqrt", nilDouble, nilDouble);
 		double answer = sqrtFunction.apply(16.0);
 		assert 4.0 == answer;
 	}
 
 	@Test
 	public void testBinaryFunctions() {
-		BiFunction<Double, Double, Double> addFunction = Functions.binary(ops(), Ops.Math.ADD, nilDouble, nilDouble,
+		BiFunction<Double, Double, Double> addFunction = Functions.binary(ops(), "math.add", nilDouble, nilDouble,
 				nilDouble);
 		double answer = addFunction.apply(16.0, 14.0);
 		assert 30.0 == answer;
 
-		BiFunction<Double, Double, Double> powerFunction = Functions.binary(ops(), Ops.Math.POW, nilDouble,
+		BiFunction<Double, Double, Double> powerFunction = Functions.binary(ops(), "math.pow", nilDouble,
 				nilDouble, nilDouble);
 		answer = powerFunction.apply(2.0, 10.0);
 		assert 1024.0 == answer;

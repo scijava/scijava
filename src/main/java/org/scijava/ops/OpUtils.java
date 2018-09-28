@@ -29,7 +29,6 @@
 
 package org.scijava.ops;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -38,9 +37,9 @@ import java.util.stream.Collectors;
 import org.scijava.ops.matcher.DefaultOpTypeMatchingService;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.param.ParameterMember;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
@@ -61,8 +60,55 @@ public final class OpUtils {
 
 	// -- Utility methods --
 
+	/**
+	 * The canonical op name is defined as the first name in the list of op
+	 * names used for each op. This method will call
+	 * {@link #parseOpNames(String)} and return the first one.
+	 * 
+	 * @param names
+	 * @return
+	 */
+	public static String getCanonicalOpName(String names) {
+		return parseOpNames(names)[0];
+	}
+
+	/**
+	 * Parses op names contained in specified String according to the following
+	 * format:
+	 * 
+	 * <pre>
+	 *  'prefix1'.'prefix2' , 'prefix1'.'prefix3'
+	 * </pre>
+	 * 
+	 * E.g. "math.add, math.pow". </br>
+	 * The name delimiter is a comma (,). Furthermore, names without prefixes
+	 * are added. The above example will result in the following output:
+	 * 
+	 * <pre>
+	 *  [math.add, add, math.pow, pow]
+	 * </pre>
+	 * 
+	 * @param names
+	 *            the string containing the names to parse
+	 * @return
+	 */
 	public static String[] parseOpNames(String names) {
-		return Arrays.stream(names.split(",")).map(s -> s.trim()).toArray(String[]::new);
+		return Arrays.stream(names.split(",")).map(s -> s.trim()).flatMap(s -> Arrays.stream(parseOpName(s)))
+				.toArray(String[]::new);
+	}
+
+	/**
+	 * Returns an array containing the specified name and the name without
+	 * prefixes. Prefixes are assumed to be separated by a comma (,). E.g.
+	 * "math.add" will result in [math.add, add].
+	 * 
+	 * @param name
+	 *            the string containing the name to parse
+	 * @return
+	 */
+	public static String[] parseOpName(String name) {
+		String[] split = name.split("\\.");
+		return new String[] { name, split[split.length - 1] };
 	}
 
 	public static List<MemberInstance<?>> inputs(StructInstance<?> op) {

@@ -148,7 +148,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		if (name == null || name.isEmpty()) {
 			return infos();
 		}
-		String opName = opAliases.get(name);
+		String opName = opAliases.get(OpUtils.getCanonicalOpName(name));
 		if (opName == null) {
 			throw new IllegalArgumentException("No op infos with name: " + name + " available.");
 		}

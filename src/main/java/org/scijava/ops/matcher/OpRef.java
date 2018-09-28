@@ -157,8 +157,21 @@ public class OpRef {
 
 	@Override
 	public String toString() {
-		String n = name == null ? "" : "Name: \"" + name + "\" ";
-		return n + Arrays.deepToString(types);
+		String n = name == null ? "" : "Name: \"" + name + "\", Types: ";
+		n += Arrays.deepToString(types) + "\n";
+		n += "Input Types: \n";
+		for (Type arg : args) {
+			n += "\t\t* ";
+			n += arg.getTypeName();
+			n += "\n";
+		}
+		n += "Output Types: \n";
+		for (Type out : outTypes) {
+			n += "\t\t* ";
+			n += out.getTypeName();
+			n += "\n";
+		}
+		return n.substring(0, n.length() - 1);
 	}
 
 	@Override

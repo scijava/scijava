@@ -272,9 +272,12 @@ public final class OpUtils {
 		// fail, with information about the request and candidates
 		sb.append("\n");
 		sb.append("Request:\n");
-		sb.append("-\t" + opString(ref.getLabel(), ref.getArgs()) + "\n");
+		sb.append("-\t" + ref.toString() + "\n");
 		sb.append("\n");
 		sb.append("Candidates:\n");
+		if (candidates.isEmpty()) {
+			sb.append("-\t No candidates found!");
+		}
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
 			sb.append(++count + ". ");
@@ -291,36 +294,6 @@ public final class OpUtils {
 				// }
 			}
 		}
-		return sb.toString();
-	}
-
-	/**
-	 * Gets a string describing the given op request.
-	 * 
-	 * @param name
-	 *            The op's name.
-	 * @param args
-	 *            The op's input arguments.
-	 * @return A string describing the op request.
-	 */
-	public static String opString(final String name, final Type... args) {
-		// TODO: add description of outputs
-		final StringBuilder sb = new StringBuilder();
-		sb.append(name + "(\n\t\t");
-		boolean first = true;
-		for (final Type arg : args) {
-			if (first)
-				first = false;
-			else
-				sb.append(",\n\t\t");
-			if (arg == null)
-				sb.append("null");
-			else {
-				// NB: Class instance used to mark argument type.
-				sb.append(arg.getTypeName());
-			} 
-		}
-		sb.append(")");
 		return sb.toString();
 	}
 

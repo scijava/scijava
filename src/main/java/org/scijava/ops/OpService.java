@@ -128,7 +128,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			return;
 		}
 		String[] parsedNames = OpUtils.parseOpNames(opNames);
-		addAliases(parsedNames);
+		addAliases(parsedNames, opInfo.implementationName());
 		opCache.add(new PrefixQuery(parsedNames[0]), opInfo);
 	}
 
@@ -227,16 +227,21 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * 
 	 * @param opNames
 	 */
-	private void addAliases(String[] opNames) {
+	private void addAliases(String[] opNames, String opImpl) {
 		String opName = opNames[0];
-		for (String name : opNames) {
-			if (name == null || name.isEmpty()) {
+		for (String alias : opNames) {
+			if (alias == null || alias.isEmpty()) {
 				continue;
 			}
-			if (opAliases.containsKey(name)) {
+			if (opAliases.containsKey(alias)) {
+				if (!opAliases.get(alias).equals(opName)) {
+					log.warn("Possible naming clash for op '" + opImpl + "' detected. Attempting to add alias '"
+							+ alias + "' for op name '" + opName + "'. However the alias '" + alias + "' is already "
+									+ "associated with op name '" + opAliases.get(alias) + "'.");
+				}
 				continue;
 			}
-			opAliases.put(name, opName);
+			opAliases.put(alias, opName);
 		}
 	}
 

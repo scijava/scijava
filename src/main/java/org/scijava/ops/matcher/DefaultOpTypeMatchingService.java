@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
@@ -50,6 +51,8 @@ import org.scijava.struct.Member;
 import org.scijava.struct.StructInstance;
 import org.scijava.util.Types;
 import org.scijava.util.Types.TypeVarInfo;
+
+import com.google.common.collect.Lists;
 
 /**
  * Default service for finding ops which match a request.
@@ -103,7 +106,12 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	@Override
 	public List<OpCandidate> filterMatches(final List<OpCandidate> candidates) {
 		final List<OpCandidate> validCandidates = checkCandidates(candidates);
-
+		
+		// List of valid candidates needs to be sorted according to priority.
+		// This is used as an optimization in order to not look at ops with
+		// lower priority than the already found one.
+		validCandidates.sort((c1, c2) -> Double.compare(c1.opInfo().priority(), c2.opInfo().priority()));
+		
 		List<OpCandidate> matches;
 		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
 		if (!matches.isEmpty())
@@ -175,7 +183,8 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 
 	/**
 	 * Filters specified list of candidates using specified predicate. This
-	 * method stops filtering when the priority decreases.
+	 * method stops filtering when the priority decreases. Expects list of candidates
+	 * to be sorted in non-ascending order.
 	 * 
 	 * @param candidates
 	 *            the candidates to filter

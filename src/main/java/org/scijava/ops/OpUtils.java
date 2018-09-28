@@ -45,6 +45,7 @@ import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.ValueAccessible;
 
 /**
  * Utility methods for working with ops.
@@ -159,26 +160,43 @@ public final class OpUtils {
 		return candidate.opInfo().priority();
 	}
 
-	public static Type[] padArgs(final OpCandidate candidate) {
+	public static Type[] padTypes(final OpCandidate candidate, Type[] types) {
+		return (Type[]) padArgs(candidate, false, (Object[])types);
+	}
+	
+	public static Object[] padArgs(final OpCandidate candidate, final boolean secondary, Object... args) {
+		List<Member<?>> members;
+		String argName;
+		if (secondary) {
+			members = OpUtils.injectableMembers(candidate.struct());
+			argName = "secondary args";
+		} else {
+			members = OpUtils.inputs(candidate.struct());
+			argName = "args";
+		}
+		
 		int inputCount = 0, requiredCount = 0;
-		for (final Member<?> item : OpUtils.inputs(candidate.struct())) {
+		for (final Member<?> item : members) {
 			inputCount++;
 			if (isRequired(item))
 				requiredCount++;
 		}
-		final Type[] args = candidate.getRef().getArgs();
 		if (args.length == inputCount) {
 			// correct number of arguments
 			return args;
 		}
 		if (args.length > inputCount) {
 			// too many arguments
-			candidate.setStatus(StatusCode.TOO_MANY_ARGS, args.length + " > " + inputCount);
+			candidate.setStatus(StatusCode.TOO_MANY_ARGS,
+					"\nNumber of " + argName + " given: " + args.length + " > " + 
+					"Number of " + argName + " of op: " + inputCount);
 			return null;
 		}
 		if (args.length < requiredCount) {
 			// too few arguments
-			candidate.setStatus(StatusCode.TOO_FEW_ARGS, args.length + " < " + requiredCount);
+			candidate.setStatus(StatusCode.TOO_FEW_ARGS,
+					"\nNumber of " + argName + " given: " + args.length + " <" + 
+					"Number of required " + argName + " of op: " + requiredCount);
 			return null;
 		}
 
@@ -186,9 +204,9 @@ public final class OpUtils {
 		final int argsToPad = inputCount - args.length;
 		final int optionalCount = inputCount - requiredCount;
 		final int optionalsToFill = optionalCount - argsToPad;
-		final Type[] paddedArgs = new Type[inputCount];
+		final Object[] paddedArgs = new Object[inputCount];
 		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
-		for (final Member<?> item : candidate.struct().members()) {
+		for (final Member<?> item : members) {
 			if (!isRequired(item) && optionalIndex++ >= optionalsToFill) {
 				// skip this optional parameter (pad with null)
 				paddedIndex++;
@@ -202,6 +220,13 @@ public final class OpUtils {
 	public static boolean isRequired(final Member<?> item) {
 		return item instanceof ParameterMember && //
 				((ParameterMember<?>) item).isRequired();
+	}
+	
+	public static List<Member<?>> injectableMembers(Struct struct) {
+		return struct.members()
+				.stream()
+				.filter(m -> m instanceof ValueAccessible)
+				.collect(Collectors.toList());
 	}
 
 	/**

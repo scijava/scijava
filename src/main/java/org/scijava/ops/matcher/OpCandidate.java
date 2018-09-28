@@ -78,7 +78,7 @@ public class OpCandidate {
 		this.ref = ref;
 		this.info = info;
 		
-		this.paddedArgs = OpUtils.padArgs(this);
+		this.paddedArgs = OpUtils.padTypes(this, getRef().getArgs());
 	}
 
 	/** Gets the op execution environment of the desired match. */
@@ -129,11 +129,6 @@ public class OpCandidate {
 	/** Gets the matching status code. */
 	public StatusCode getStatusCode() {
 		return code;
-	}
-
-	/** Gets a message elaborating on the matching status, if any. */
-	public String getStatusMessage() {
-		return message;
 	}
 
 	/**
@@ -187,9 +182,9 @@ public class OpCandidate {
 			sb.append("Inputs do not conform to op rules");
 			break;
 		default:
-			return getStatusMessage();
+			return message;
 		}
-		final String msg = getStatusMessage();
+		final String msg = message;
 		if (msg != null)
 			sb.append(": " + msg);
 

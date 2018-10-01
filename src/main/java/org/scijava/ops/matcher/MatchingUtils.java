@@ -202,14 +202,11 @@ public final class MatchingUtils {
 		Type[] destTypes;
 		Type[] srcTypes;
 
-		if (src instanceof Class) {
+		if (src instanceof Class || src instanceof ParameterizedType) {
 			destTypes = dest.getActualTypeArguments();
 			// get type arguments of raw src for common (possible supertype)
 			// dest
-			srcTypes = getParams((Class<?>) src, Types.raw(dest));
-		} else if (src instanceof ParameterizedType) {
-			destTypes = dest.getActualTypeArguments();
-			srcTypes = ((ParameterizedType) src).getActualTypeArguments();
+			srcTypes = getParams(Types.raw(src), Types.raw(dest));
 		} else {
 			return Types.isAssignable(src, dest);
 		}

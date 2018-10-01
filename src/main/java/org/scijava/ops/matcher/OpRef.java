@@ -141,7 +141,7 @@ public class OpRef {
 			return true;
 		for (Type t : types) {
 			if(t instanceof ParameterizedType) {
-				if (!MatchingUtils.checkGenericAssignability(Types.raw(opType), (ParameterizedType) t)) {
+				if (!MatchingUtils.checkGenericAssignability(opType, (ParameterizedType) t)) {
 					return false;
 				}
 			} else {

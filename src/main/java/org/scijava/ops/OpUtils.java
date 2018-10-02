@@ -188,14 +188,14 @@ public final class OpUtils {
 		if (args.length > inputCount) {
 			// too many arguments
 			candidate.setStatus(StatusCode.TOO_MANY_ARGS,
-					"\nNumber of " + argName + " given: " + args.length + " > " + 
+					"\nNumber of " + argName + " given: " + args.length + "  >  " + 
 					"Number of " + argName + " of op: " + inputCount);
 			return null;
 		}
 		if (args.length < requiredCount) {
 			// too few arguments
 			candidate.setStatus(StatusCode.TOO_FEW_ARGS,
-					"\nNumber of " + argName + " given: " + args.length + " <" + 
+					"\nNumber of " + argName + " given: " + args.length + "  <  " + 
 					"Number of required " + argName + " of op: " + requiredCount);
 			return null;
 		}

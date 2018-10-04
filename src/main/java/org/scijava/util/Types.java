@@ -703,7 +703,8 @@ public final class Types {
 	 */
 	public static Type fieldType(final Field field, final Class<?> type) {
 		final Type wildType = GenericTypeReflector.addWildcardParameters(type);
-		return GenericTypeReflector.getExactFieldType(field, wildType);
+		final Type pType = parameterizeRaw(type);
+		return GenericTypeReflector.getExactFieldType(field, pType);
 	}
 
 	/**

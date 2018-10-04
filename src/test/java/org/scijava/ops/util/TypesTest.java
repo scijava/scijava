@@ -465,11 +465,11 @@ public class TypesTest {
 
 		// T
 		final Type tType = Types.fieldType(field, Thing.class);
-		assertEquals("capture of ?", tType.toString());
+		assertEquals("T", tType.toString());
 
 		// N extends Number
 		final Type nType = Types.fieldType(field, NumberThing.class);
-		assertEquals("capture of ?", nType.toString());
+		assertEquals("N", nType.toString());
 
 		// Integer
 		final Type iType = Types.fieldType(field, IntegerThing.class);

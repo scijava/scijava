@@ -125,7 +125,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	public StructInstance<?> match(final OpCandidate candidate) {
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty() || !typesMatch(candidate))
 			return null;
-		return candidate.createOp();
+		return candidate.createOpInstance();
 	}
 
 	/**

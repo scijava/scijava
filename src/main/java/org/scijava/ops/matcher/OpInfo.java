@@ -41,7 +41,7 @@ public interface OpInfo {
 	String implementationName();
 
 	/** Create a StructInstance using the Struct metadata backed by an object of the op itself.  */
-	StructInstance<?> createOp();
+	StructInstance<?> createOpInstance();
 
 	// TODO Consider if we really want to keep the following methods.
 	boolean isValid();

@@ -109,7 +109,7 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public StructInstance<?> createOp() {
+	public StructInstance<?> createOpInstance() {
 		// 1. Can we create another instance of the same function by calling
 		// clone()?
 		// 2. _SHOULD_ we do that? Or can we simply reuse the same function

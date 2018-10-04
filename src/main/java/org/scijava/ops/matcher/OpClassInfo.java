@@ -100,7 +100,7 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public StructInstance<?> createOp() {
+	public StructInstance<?> createOpInstance() {
 		final Object object;
 		try {
 			// TODO: Consider whether this is really the best way to

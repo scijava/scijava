@@ -162,7 +162,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		OpCandidate match = findTypeMatch(ref);
 
 		@SuppressWarnings("unchecked")
-		final StructInstance<T> opInst = (StructInstance<T>) match.createOp();
+		final StructInstance<T> opInst = (StructInstance<T>) match.createOpInstance();
 
 		// Inject the secondary args if there are any
 		if (Inject.Structs.isInjectable(opInst)) {

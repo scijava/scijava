@@ -196,12 +196,12 @@ public class OpCandidate {
 		return info.toString();
 	}
 
-	public StructInstance<?> createOp() {
+	public StructInstance<?> createOpInstance() {
 		if (!getStatusCode().equals(StatusCode.MATCH)) {
 			throw new IllegalArgumentException(
 					"Status of candidate to create op " + "from indicates a problem: " + getStatus());
 		}
 
-		return opInfo().createOp();
+		return opInfo().createOpInstance();
 	}
 }

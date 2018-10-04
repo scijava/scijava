@@ -29,8 +29,6 @@
 
 package org.scijava.ops;
 
-import java.util.Collection;
-
 import org.scijava.log.LogService;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;

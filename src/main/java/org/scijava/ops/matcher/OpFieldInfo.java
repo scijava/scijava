@@ -54,6 +54,7 @@ public class OpFieldInfo implements OpInfo {
 	private final Field field;
 	private Struct struct;
 	private ValidityException validityException;
+	private Object instance;
 
 	public OpFieldInfo(final Field field) {
 
@@ -68,12 +69,19 @@ public class OpFieldInfo implements OpInfo {
 		this.field = field;
 		try {
 			struct = ParameterStructs.structOf(field.getDeclaringClass(), field);
+			if (!Modifier.isStatic(field.getModifiers())) {
+				instance = field.getDeclaringClass().newInstance();
+			}
+			// NB: Contextual parameters not supported for now.
 		} catch (ValidityException e) {
 			problems.addAll(e.problems());
+		} catch (InstantiationException | IllegalAccessException e) {
+			problems.add(new ValidityProblem("Could not instantiate field's class", e));
 		}
 		if (!problems.isEmpty()) {
 			validityException = new ValidityException(problems);
 		}
+		
 	}
 
 	// -- OpInfo methods --
@@ -107,7 +115,7 @@ public class OpFieldInfo implements OpInfo {
 		// 2. _SHOULD_ we do that? Or can we simply reuse the same function
 		// instance every time?
 		try {
-			final Object object = field.get(null); // NB: value of static field!
+			final Object object = field.get(instance); // NB: value of static field!
 			return struct().createInstance(object);
 		} catch (final IllegalAccessException exc) {
 			// FIXME

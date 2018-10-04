@@ -85,7 +85,7 @@ public final class ParameterStructs {
 		final Set<String> names = new HashSet<>();
 		final Type fieldType = Types.fieldType(field, c);
 
-		checkModifiers(field.toString() + ": ", problems, field.getModifiers(), false, Modifier.STATIC, Modifier.FINAL);
+		checkModifiers(field.toString() + ": ", problems, field.getModifiers(), false, Modifier.FINAL);
 		parseFunctionalParameters(items, names, problems, field, fieldType);
 
 		// Fail if there were any problems.

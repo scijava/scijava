@@ -63,7 +63,7 @@ public final class ParameterStructs {
 		// Parse class level (i.e., generic) @Parameter annotations.
 		final Class<?> paramsClass = findParametersDeclaration(type);
 		if (paramsClass != null) {
-			parseFunctionalParameters(items, names, problems, findParametersDeclaration(type), type);
+			parseFunctionalParameters(items, names, problems, paramsClass, type);
 		}
 
 		// Parse field level @Parameter annotations.
@@ -162,40 +162,38 @@ public final class ParameterStructs {
 			AnnotatedElement annotationBearer, Type type) {		
 		Parameter[] annotations = parameters(annotationBearer);
 		
-		
 		final Class<?> functionalType = findFunctionalInterface(Types.raw(type), annotations.length);
 		if (functionalType == null) {
-			problems.add(new ValidityProblem("Could not find functional interface of " + type.getTypeName() + " with the the required number of "
-					+ "parameters: " + annotations.length));
+			problems.add(new ValidityProblem("Could not find functional interface of " + type.getTypeName() + " with the required number of "
+					+ "type parameters: " + annotations.length));
+		} else {
+			// TODO: Consider allowing partial override of class @Parameters.
+			for (int i=0; i<annotations.length; i++) {
+				String key = annotations[i].key();
+				
+				Type paramType = type;
+				if (type instanceof Class) {
+					paramType = Types.parameterizeRaw((Class<?>) type);
+				}
+				
+				final Type itemType = Types.param(paramType, functionalType, i);
+				final Class<?> rawItemType = Types.raw(itemType);
+				final boolean valid = checkValidity(annotations[i], key, rawItemType, false,
+						names, problems);
+				if (!valid) continue; // NB: Skip invalid parameters.
+				
+				// add item to the list
+				try {
+					final ParameterMember<?> item = //
+							new FunctionalParameterMember<>(itemType, annotations[i]);
+					names.add(key);
+					items.add(item);
+				}
+				catch (final ValidityException exc) {
+					problems.addAll(exc.problems());
+				}
+			}
 		}
-		
-		// TODO: Consider allowing partial override of class @Parameters.
-		for (int i=0; i<annotations.length; i++) {
-			String key = annotations[i].key();
-			
-			Type paramType = type;
-			if (type instanceof Class) {
-				paramType = Types.parameterizeRaw((Class<?>) type);
-			}
-			
-			final Type itemType = Types.param(paramType, functionalType, i);
-			final Class<?> rawItemType = Types.raw(itemType);
-			final boolean valid = checkValidity(annotations[i], key, rawItemType, false,
-				names, problems);
-			if (!valid) continue; // NB: Skip invalid parameters.
-
-			// add item to the list
-			try {
-				final ParameterMember<?> item = //
-					new FunctionalParameterMember<>(itemType, annotations[i]);
-				names.add(key);
-				items.add(item);
-			}
-			catch (final ValidityException exc) {
-				problems.addAll(exc.problems());
-			}
-		}
-		
 	}
 
 	private static boolean isImmutable(final Class<?> type) {

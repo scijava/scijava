@@ -3306,6 +3306,9 @@ public final class Types {
 			if (type instanceof GenericArrayType) {
 				return genericArrayTypeToString((GenericArrayType) type);
 			}
+			if (type instanceof CaptureType) {
+				return type.toString();
+			}
 			throw new IllegalArgumentException("Unknown generic type: " + //
 				type.getClass().getName());
 		}

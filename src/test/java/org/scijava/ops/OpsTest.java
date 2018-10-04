@@ -29,6 +29,8 @@
 
 package org.scijava.ops;
 
+import com.google.common.collect.Streams;
+
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -41,8 +43,6 @@ import org.scijava.ops.core.Inplace;
 import org.scijava.ops.core.NullaryComputer;
 import org.scijava.ops.math.Add.MathAddDoublesFunction;
 import org.scijava.types.Nil;
-
-import com.google.common.collect.Streams;
 
 public class OpsTest extends AbstractTestEnvironment {
 

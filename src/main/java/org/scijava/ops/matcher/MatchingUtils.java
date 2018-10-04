@@ -32,6 +32,8 @@
 
 package org.scijava.ops.matcher;
 
+import com.google.common.base.Objects;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -45,8 +47,6 @@ import java.util.Map;
 import org.scijava.types.Nil;
 import org.scijava.util.Types;
 import org.scijava.util.Types.TypeVarInfo;
-
-import com.google.common.base.Objects;
 
 public final class MatchingUtils {
 

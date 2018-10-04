@@ -31,6 +31,8 @@
 
 package org.scijava.util;
 
+import com.google.common.reflect.TypeToken;
+
 // Portions of this class were adapted from the
 // org.apache.commons.lang3.reflect.TypeUtils and
 // org.apache.commons.lang3.Validate classes of
@@ -69,8 +71,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
-
-import com.google.common.reflect.TypeToken;
 
 /**
  * Utility class for working with generic types, fields and methods.

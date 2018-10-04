@@ -1,5 +1,7 @@
 package org.scijava.ops.math;
 
+import com.google.common.collect.Streams;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.function.BiFunction;
@@ -12,8 +14,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
-
-import com.google.common.collect.Streams;
 
 public class Add {
 	

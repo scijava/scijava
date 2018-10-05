@@ -112,15 +112,6 @@ public interface OpTypeMatchingService extends SciJavaService {
 	List<OpCandidate> filterMatches(List<OpCandidate> candidates);
 
 	/**
-	 * Attempts to match the given arguments to the op described by the
-	 * specified {@link ModuleInfo}.
-	 * 
-	 * @return A populated {@link StructInstance} for the matching op, or null
-	 *         if the arguments do not match the op.
-	 */
-	StructInstance<?> match(OpCandidate candidate);
-
-	/**
 	 * Checks that each parameter is type-compatible with its corresponding
 	 * argument.
 	 */

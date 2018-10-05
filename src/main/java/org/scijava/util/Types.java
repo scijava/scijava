@@ -829,8 +829,6 @@ public final class Types {
 				if (!isApplicableToGenericArrayType(arg, (GenericArrayType) param,
 					typeBounds)) return i;
 			}
-			final Type t = TypeToken.of(param).resolveType(arg).getType();
-//			System.out.println("src[" + i + "] = " + t);
 		}
 		return -1;
 	}

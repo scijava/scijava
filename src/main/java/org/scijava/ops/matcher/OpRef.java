@@ -102,7 +102,7 @@ public class OpRef {
 
 	/** Gets the types which the op must match. */
 	public Type[] getTypes() {
-		return types;
+		return types.clone();
 	}
 
 	/**
@@ -110,12 +110,12 @@ public class OpRef {
 	 * constraints.
 	 */
 	public Type[] getOutTypes() {
-		return outTypes;
+		return outTypes.clone();
 	}
 
 	/** Gets the op's arguments. */
 	public Type[] getArgs() {
-		return args;
+		return args.clone();
 	}
 
 	/**

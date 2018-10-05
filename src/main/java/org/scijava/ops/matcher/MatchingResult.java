@@ -41,7 +41,7 @@ public class MatchingResult {
 		return matches;
 	}
 
-	public OpCandidate singleMatch() {
+	public OpCandidate singleMatch() throws OpMatchingException {
 		if (matches.size() == 1) {
 			// if (log.isDebug()) {
 			// log.debug("Selected '" + match.getRef().getLabel() + "' op: " +
@@ -57,7 +57,7 @@ public class MatchingResult {
 			return matches.get(0);
 		} else {
 			final String analysis = OpUtils.matchInfo(this);
-			throw new IllegalArgumentException(analysis);
+			throw new OpMatchingException(analysis);
 		}
 	}
 }

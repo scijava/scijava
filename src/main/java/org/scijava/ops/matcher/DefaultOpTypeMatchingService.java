@@ -33,7 +33,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
@@ -48,11 +47,8 @@ import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.struct.Member;
-import org.scijava.struct.StructInstance;
 import org.scijava.util.Types;
 import org.scijava.util.Types.TypeVarInfo;
-
-import com.google.common.collect.Lists;
 
 /**
  * Default service for finding ops which match a request.
@@ -119,13 +115,6 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 
 		matches = filterMatches(validCandidates, (cand) -> typesMatch(cand));
 		return matches;
-	}
-
-	@Override
-	public StructInstance<?> match(final OpCandidate candidate) {
-		if (checkCandidates(Collections.singletonList(candidate)).isEmpty() || !typesMatch(candidate))
-			return null;
-		return candidate.createOpInstance();
 	}
 
 	/**

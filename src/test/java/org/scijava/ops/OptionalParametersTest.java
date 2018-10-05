@@ -79,7 +79,7 @@ public class OptionalParametersTest extends AbstractTestEnvironment {
 		assertTrue(Math.abs(0.5 - Arrays.stream(res).min().getAsDouble()) < 0.000001);
 	}
 	
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = RuntimeException.class)
 	public void testRequiredMissing() throws ValidityException {
 		// One required, but none are given
 		ops().findOp( //
@@ -90,7 +90,7 @@ public class OptionalParametersTest extends AbstractTestEnvironment {
 		);
 	}
 	
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = RuntimeException.class)
 	public void testTooMannyArgs() throws ValidityException {
 		// One required, one optional, but three given
 		ops().findOp( //

@@ -48,6 +48,7 @@ import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
 import org.scijava.ops.util.Inject;
@@ -58,7 +59,6 @@ import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.SciJavaService;
 import org.scijava.service.Service;
-import org.scijava.struct.StructInstance;
 import org.scijava.types.Nil;
 import org.scijava.util.ClassUtils;
 
@@ -154,58 +154,43 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return opCache.getAndBelow(new PrefixQuery(opName));
 	}
 
-	public <T> StructInstance<T> findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
+	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?>[] outTypes, final Object... secondaryArgs) {
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), toTypes(outTypes), toTypes(inTypes));
 
-		// Find single match which matches the specified types
-		OpCandidate match = findTypeMatch(ref);
-
-		@SuppressWarnings("unchecked")
-		final StructInstance<T> opInst = (StructInstance<T>) match.createOpInstance();
-
-		// Inject the secondary args if there are any
-		if (Inject.Structs.isInjectable(opInst)) {
-			// Get padded secondary args
-			Object[] paddedArgs = OpUtils.padArgs(match, true, secondaryArgs);
-			if (paddedArgs == null) {
-				throw new IllegalStateException(match.opInfo().implementationName() + " | " + match.getStatus());
-			}
-			Inject.Structs.inputs(opInst, paddedArgs);
-		// Secondary args are given, however there are no to inject
-		} else if (secondaryArgs.length > 0) {
-			log.warn(
-					"Specified Op has no secondary args, however secondary args are given. "
-					+ "The specified args will not be injected.");
+		try {
+			// Find single match which matches the specified types
+			OpCandidate match = findTypeMatch(ref);
+			return (T) match.createOp(secondaryArgs);
+		} catch (OpMatchingException e) {
+			throw new RuntimeException(e);
 		}
-		return opInst;
 	}
-
 	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
 			final Object... secondaryArgs) {
-		return findOpInstance(null, specialType, inTypes, outTypes, secondaryArgs).object();
+		return findOpInstance(null, specialType, inTypes, outTypes, secondaryArgs);
 	}
 
 	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType,
 			final Object... secondaryArgs) {
-		return findOpInstance(null, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
+		return findOpInstance(null, specialType, inTypes, new Nil[] { outType }, secondaryArgs);
 	}
 
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
 			final Object... secondaryArgs) {
-		return findOpInstance(opName, specialType, inTypes, outTypes, secondaryArgs).object();
+		return findOpInstance(opName, specialType, inTypes, outTypes, secondaryArgs);
 	}
 
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType, final Object... secondaryArgs) {
-		return findOpInstance(opName, specialType, inTypes, new Nil[] { outType }, secondaryArgs).object();
+		return findOpInstance(opName, specialType, inTypes, new Nil[] { outType }, secondaryArgs);
 	}
 
 	public MatchingResult findTypeMatches(final OpRef ref) {
 		return matcher.findMatch(this, ref);
 	}
 
-	public OpCandidate findTypeMatch(final OpRef ref) {
+	public OpCandidate findTypeMatch(final OpRef ref) throws OpMatchingException {
 		return findTypeMatches(ref).singleMatch();
 	}
 

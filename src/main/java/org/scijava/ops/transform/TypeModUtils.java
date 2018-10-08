@@ -32,6 +32,7 @@ package org.scijava.ops.transform;
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -217,6 +218,37 @@ public final class TypeModUtils {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Insert the specified type at the specified index into the specified array.
+	 * Has the same behavior as {@link List#add(int, Object)}.
+	 * 
+	 * @param types
+	 * @param type
+	 * @param index
+	 * @return
+	 */
+	public static Type[] insert(Type[] types, Type type, int index) {
+		List<Type> out = new ArrayList<>();
+		out.addAll(Arrays.asList(types));
+		out.add(index, type);
+		return out.toArray(new Type[out.size()]);
+	}
+	
+	/**
+	 * Remove the specified index from the specified array.
+	 * Has the same behavior as {@link List#remove(int)}.
+	 * 
+	 * @param types
+	 * @param index
+	 * @return
+	 */
+	public static Type[] remove(Type[] types, int index) {
+		List<Type> out = new ArrayList<>();
+		out.addAll(Arrays.asList(types));
+		out.remove(index);
+		return out.toArray(new Type[out.size()]);
 	}
 	
 	private static boolean mutateTypes(Type[] types, Function<Type, Type> typeFunc, Integer... indices) {

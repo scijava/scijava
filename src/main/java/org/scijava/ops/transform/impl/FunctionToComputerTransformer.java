@@ -36,7 +36,10 @@ public class FunctionToComputerTransformer implements OpTransformer {
 		Type[] refTypes = toRef.getTypes();
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, Computer.class, Function.class);
 		if (hit) {
-			return OpRef.fromTypes(toRef.getName(), refTypes, toRef.getOutTypes(), toRef.getArgs());
+			// The computer has a ItemIO.BOTH as second functional parameter of type output.
+			// This is not the case for a Function, hence we remove it.
+			Type[] functionArgs = TypeModUtils.remove(toRef.getArgs(), 1);
+			return OpRef.fromTypes(toRef.getName(), refTypes, toRef.getOutTypes(), functionArgs);
 		}
 		return null;
 	}

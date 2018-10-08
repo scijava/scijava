@@ -35,26 +35,76 @@ package org.scijava.ops.transform;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.scijava.ops.OpService;
+import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.Service;
 
+/**
+ * Default service to find Op transformations. This default service will chain two transformations
+ * at maximum.
+ * 
+ * @author David Kolb
+ */
 @Plugin(type = Service.class)
 public final class DefaultOpTransformerService extends AbstractSingletonService<OpTransformer>
 		implements OpTransformerService {
 
+	//TODO why does this not work?
+//	@Parameter
+	private OpService opService;
+	
 	@Override
-	public List<OpTransformationInfo> getTansformationsTo(OpRef toRef) {
-		List<OpTransformationInfo> transforms = new ArrayList<>();
+	public List<OpTransformation> getTansformationsTo(OpRef toRef) {
+		init();
+		List<OpTransformation> transforms = new ArrayList<>();
 		
 		for (OpTransformer ot: getInstances()) {
-			OpRef fromRef = ot.getFromTransformTo(toRef);
+			OpRef fromRef = ot.getRefTransformingTo(toRef);
 			if (fromRef != null) {
-				transforms.add(new OpTransformationInfo(fromRef, toRef, ot));
+				transforms.add(new OpTransformation(fromRef, toRef, ot));
 			}
 		}
 		return transforms;
 	}
-
+	
+	@Override
+	public OpTransformationCandidate findTransfromation(OpRef ref) {
+		init();
+		List<OpTransformation> ts = getTansformationsTo(ref);
+		for (OpTransformation t : ts) {
+			OpTransformationCandidate match = findTransfromation(opService, t, 0);
+			if (match != null) {
+				return match;
+			}
+		}
+		return null;
+	}
+	
+	private OpTransformationCandidate findTransfromation(OpService opService, OpTransformation candidate, int depth) {
+		if (candidate == null || depth > 1) {
+			return null;
+		} else {
+			OpRef fromRef = candidate.getSource();
+			try {
+				OpCandidate match = opService.findTypeMatch(fromRef);
+				return new OpTransformationCandidate(match, candidate);
+			} catch (OpMatchingException e) {
+				List<OpTransformation> ts = getTansformationsTo(fromRef);
+				for (OpTransformation t : ts) {
+					return findTransfromation(opService, t.chain(candidate), depth + 1);
+				}
+			}
+		}
+		return null;
+	}
+	
+	private void init() {
+		if (opService == null) {
+			opService = context().getService(OpService.class);
+		}
+	}
 }

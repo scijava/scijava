@@ -119,15 +119,17 @@ public final class TypeModUtils {
 	
 	/**
 	 * Attempts to perform "unlifting" of the specified types. See {@link #unliftType(Type, Class)}.
-	 * The passed arry of types will be mutated inplace. Returns a boolean indicating if the list changed. 
+	 * The passed arry of types will be mutated inplace. Returns a boolean indicating if the list changed.
+	 * The list of integers specifies which types in the passed array should be considered. If non are given,
+	 * all types will be processed.
 	 * 
 	 * @param types
 	 * @param unliftRawType
 	 * @param argIndices
 	 * @return
 	 */
-	public static boolean unliftTypes(Type[] types, Class<?> unliftRawType, Integer... argIndices) {
-		return mutateTypes(types, t -> unliftType(t, unliftRawType), argIndices);
+	public static boolean unliftTypes(Type[] types, Class<?> unliftRawType, Integer... indices) {
+		return mutateTypes(types, t -> unliftType(t, unliftRawType), indices);
 	}
 	
 	/**

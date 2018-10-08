@@ -32,16 +32,39 @@
 
 package org.scijava.ops.transform;
 
-import java.lang.reflect.Type;
-
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.plugin.SingletonPlugin;
 
+/**
+ * Interface describing an OpTransformer that is able to transform between Ops 
+ * (the actual Op object and a matching ref).
+ * 
+ * @author David Kolb
+ */
 public interface OpTransformer extends SingletonPlugin {
 	
+	/**
+	 * Transforms the specified Op object.
+	 * If the transformation depends on other Ops, the given {@link OpService}
+	 * will be used to retrieve them. The specified {@link OpRef} will be the ref
+	 * matching the target Op of this transformation.
+	 * 
+	 * @param opService
+	 * @param ref
+	 * @param src
+	 * @return
+	 */
 	Object transform(OpService opService, OpRef ref, Object src);
 	
-	OpRef getFromTransformTo(OpRef srcRef);
+	/**
+	 * Create and return an {@link OpRef} that matches an Op which can be transformed 
+	 * into an Op matching the specified ref by this transformer. This is used to inquire
+	 * about Ops that can be transformed into the specified target using this transformation.
+	 *  
+	 * @param targetRef
+	 * @return
+	 */
+	OpRef getRefTransformingTo(OpRef targetRef);
 	
 }

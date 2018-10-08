@@ -1,12 +1,11 @@
 package org.scijava.ops.transform.impl;
 
-import java.lang.reflect.Type;
 import java.util.function.Function;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.transform.OpRefTransformUtils;
 import org.scijava.ops.transform.OpTransformer;
-import org.scijava.ops.transform.TypeModUtils;
 import org.scijava.ops.util.Maps;
 import org.scijava.plugin.Plugin;
 
@@ -26,25 +25,8 @@ public class LiftFunctionToIterableTransformer implements OpTransformer {
 	}
 
 	@Override
-	public OpRef getFromTransformTo(OpRef toRef) {
-		Type[] refTypes = toRef.getTypes();
-		boolean typesChanged = TypeModUtils.unliftParameterizedTypes(refTypes, Function.class, Iterable.class);
-		// TODO We assume here that the functional input is the first Type in
-		// this list and all others are secondary args if there are any (we do
-		// not want to touch them as they are not part of op transformations).
-		// Should always be the case as during structification of the ops,
-		// the functional args are always checked first. Hence, they always
-		// need to be requested first and are thus at the beginning of the list.
-		// From the functional type we know how many there must be.
-		Type[] args = toRef.getArgs();
-		boolean argsChanged = TypeModUtils.unliftTypes(args, Iterable.class);
-		Type[] outs = toRef.getOutTypes();
-		boolean outsChanged = TypeModUtils.unliftTypes(outs, Iterable.class);
-		
-		if (typesChanged && argsChanged && outsChanged) {
-			return OpRef.fromTypes(toRef.getName(), refTypes, outs, args);
-		}
-		return null;
+	public OpRef getRefTransformingTo(OpRef toRef) {
+		return OpRefTransformUtils.unliftTransform(toRef, Function.class, Iterable.class);
 	}
 
 }

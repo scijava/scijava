@@ -1,7 +1,9 @@
 package org.scijava.ops.util;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.scijava.ops.core.Computer;
 
@@ -19,6 +21,10 @@ public class Maps {
 		
 		public static class Functions {
 			private Functions() {
+			}
+			
+			public static <I, O> Function<List<I>, List<O>> list(final Function<I, O> function) {
+				return iter -> iter.stream().map(function).collect(Collectors.toList());
 			}
 			
 			public static <I, O> Function<Iterable<I>, Iterable<O>> iterable(final Function<I, O> function) {

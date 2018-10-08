@@ -28,9 +28,8 @@
  */
 
 package org.scijava.ops;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Test;
@@ -55,6 +54,35 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		);
 		
 		Iterable<Double> res = sqrtFunction.apply(Arrays.asList(0.0, 4.0, 16.0));
-		assertTrue(Arrays.deepEquals(Streams.stream(res).toArray(Double[]::new), new Double[]{0.0, 2.0, 4.0}));
+		arrayEquals(Streams.stream(res).mapToDouble(d -> d).toArray(), 0.0, 2.0, 4.0);
+	}
+	
+	@Test
+	public void autoFunctionToComputer() {
+		Function<double[], double[]> sqrtArrayFunction = ops().findOp( //
+				"math.sqrt", new Nil<Function<double[], double[]>>() {
+				}, //
+				new Nil[] { Nil.of(double[].class) }, //
+				Nil.of(double[].class)//
+		);
+		double[] res = sqrtArrayFunction.apply(new double[]{4.0, 16.0});
+		arrayEquals(res, 2.0, 4.0);
+	}
+	
+	@Test
+	public void autoCompToFuncAndLift() {
+		Nil<List<double[]>> n = new Nil<List<double[]>>() {
+		};
+		
+		Function<List<double[]>, List<double[]>> sqrtListFunction = ops().findOp( //
+				"math.sqrt", new Nil<Function<List<double[]>, List<double[]>>>() {
+				}, //
+				new Nil[] { n }, //
+				n//
+		);
+		
+		List<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[]{4.0}, new double[]{4.0, 25.0}));
+		double[] resArray = res.stream().flatMapToDouble(ds -> Arrays.stream(ds)).toArray();
+		arrayEquals(resArray, 2.0, 2.0, 5.0);
 	}
 }

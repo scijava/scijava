@@ -33,7 +33,7 @@ public class ComputerToFunctionTransformer implements OpTransformer {
 	}
 
 	@Override
-	public OpRef getFromTransformTo(OpRef toRef) {
+	public OpRef getRefTransformingTo(OpRef toRef) {
 		Type[] refTypes = toRef.getTypes();
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, Function.class, Computer.class);
 		if (hit) {

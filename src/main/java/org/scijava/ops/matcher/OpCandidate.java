@@ -200,7 +200,7 @@ public class OpCandidate {
 	public StructInstance<?> createOpInstance(Object... secondaryArgs) throws OpMatchingException {
 		if (!getStatusCode().equals(StatusCode.MATCH)) {
 			throw new OpMatchingException(
-					"Status of candidate to create op " + "from indicates a problem: " + getStatus());
+					"Status of candidate to create op from indicates a problem: " + getStatus());
 		}
 
 		StructInstance<?> inst = opInfo().createOpInstance();

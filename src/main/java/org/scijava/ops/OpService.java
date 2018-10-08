@@ -51,8 +51,7 @@ import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
-import org.scijava.ops.transform.OpTransformation;
-import org.scijava.ops.transform.OpTransformationInfo;
+import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformerService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -169,42 +168,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			return (T) match.createOp(secondaryArgs);
 		} catch (OpMatchingException e) {
 			// If we can't find an op matching the original request, we try to find a transformation
-			OpTransformation transfrom = findTransfromation(ref);
+			OpTransformationCandidate transformation = transformer.findTransfromation(ref);
 			// If we found one, try to do transformation and return transformed op
-			if (transfrom != null) {
-				return (T) transfrom.exceute(this, secondaryArgs);
+			if (transformation != null) {
+				return (T) transformation.exceute(this, secondaryArgs);
 			}
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
-	}
-	
-	private OpTransformation findTransfromation(OpRef ref) {
-		List<OpTransformationInfo> ts = transformer.getTansformationsTo(ref);
-		for (OpTransformationInfo t : ts) {
-			OpTransformation match = findTransfromation(t, 0);
-			if (match != null) {
-				return match;
-			}
-		}
-		return null;
-	}
-	
-	private OpTransformation findTransfromation(OpTransformationInfo candidate, int depth) {
-		if (candidate == null || depth > 1) {
-			return null;
-		} else {
-			OpRef fromRef = candidate.getFrom();
-			try {
-				OpCandidate match = findTypeMatch(fromRef);
-				return new OpTransformation(match, candidate);
-			} catch (OpMatchingException e) {
-				List<OpTransformationInfo> ts = transformer.getTansformationsTo(fromRef);
-				for (OpTransformationInfo t : ts) {
-					return findTransfromation(candidate.chain(t), depth + 1);
-				}
-			}
-		}
-		return null;
 	}
 	
 	public <T> T findOp(final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,

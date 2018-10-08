@@ -37,9 +37,9 @@ public class LiftFunctionToIterableTransformer implements OpTransformer {
 		// need to be requested first and are thus at the beginning of the list.
 		// From the functional type we know how many there must be.
 		Type[] args = toRef.getArgs();
-		boolean argsChanged = TypeModUtils.unliftTypes(args, Iterable.class, 0);
+		boolean argsChanged = TypeModUtils.unliftTypes(args, Iterable.class);
 		Type[] outs = toRef.getOutTypes();
-		boolean outsChanged = TypeModUtils.unliftTypes(outs, Iterable.class, 0);
+		boolean outsChanged = TypeModUtils.unliftTypes(outs, Iterable.class);
 		
 		if (typesChanged && argsChanged && outsChanged) {
 			return OpRef.fromTypes(toRef.getName(), refTypes, outs, args);

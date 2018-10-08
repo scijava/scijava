@@ -65,6 +65,7 @@ public class OpTransformationInfo {
 			s.append("\n\tWith:\t");
 			s.append(transformIter.next().getClass().getName());
 			s.append("\n\n");
+			i++;
 		}
 		return s.toString();
 	}

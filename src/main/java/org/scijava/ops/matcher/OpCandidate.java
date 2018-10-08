@@ -212,13 +212,13 @@ public class OpCandidate {
 		return createOpInstance(secondaryArgs).object();
 	}
 	
-	private void inject(StructInstance<?> opInst, Object... secondaryArgs) throws OpMatchingException {
+	private void inject(StructInstance<?> opInst, Object... secondaryArgs) {
 		// Inject the secondary args if there are any
 		if (Inject.Structs.isInjectable(opInst)) {
 			// Get padded secondary args
 			Object[] paddedArgs = OpUtils.padArgs(this, true, secondaryArgs);
 			if (paddedArgs == null) {
-				throw new OpMatchingException(opInfo().implementationName() + " | " + getStatus());
+				throw new IllegalArgumentException(opInfo().implementationName() + " | " + getStatus());
 			}
 			Inject.Structs.inputs(opInst, paddedArgs);
 		// Secondary args are given, however there are no to inject

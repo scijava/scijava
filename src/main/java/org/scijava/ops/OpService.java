@@ -52,6 +52,7 @@ import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
 import org.scijava.ops.transform.OpTransformationCandidate;
+import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformerService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -169,15 +170,22 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
+			
 			// If we can't find an op matching the original request, we try to find a transformation
 			OpTransformationCandidate transformation = transformer.findTransfromation(ref);
-			// If we found one, try to do transformation and return transformed op
-			if (transformation != null) {
-				log.debug("Matching Op transformation found:\n" + transformation + "\n");
-				return (T) transformation.exceute(this, secondaryArgs);
+			if (transformation == null) {
+				log.debug("No matching Op transformation found");
+				throw new IllegalArgumentException(e);
 			}
-			log.debug("No matching Op transformation found");
-			throw new IllegalArgumentException(e);
+			
+			// If we found one, try to do transformation and return transformed op
+			log.debug("Matching Op transformation found:\n" + transformation + "\n");
+			try {
+				return (T) transformation.exceute(this, secondaryArgs);
+			} catch (OpMatchingException | OpTransformationException e1) {
+				log.debug(e1);
+				throw new IllegalArgumentException(e);
+			}
 		}
 	}
 	

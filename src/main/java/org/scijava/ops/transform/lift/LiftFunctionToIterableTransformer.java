@@ -14,7 +14,7 @@ public class LiftFunctionToIterableTransformer implements OpTransformer {
 
 	@Override
 	public Object transform(OpService opService, OpRef fromRef, Object src) {
-		return Maps.Lift.Functions.iterable((Function) src);
+		return Maps.Functions.Iterables.liftBoth((Function) src);
 	}
 
 	@Override

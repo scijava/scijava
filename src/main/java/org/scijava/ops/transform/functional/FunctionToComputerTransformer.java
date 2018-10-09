@@ -1,4 +1,4 @@
-package org.scijava.ops.transform.impl;
+package org.scijava.ops.transform.functional;
 
 import java.lang.reflect.Type;
 import java.util.function.Function;

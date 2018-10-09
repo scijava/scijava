@@ -98,7 +98,7 @@ public class OpTransformation {
 		int i = 0;
 		OpTransformation c = this;
 		do {
-			s.append(i + ")\n");
+			s.append(i + ")");
 			s.append("\tFrom:\t");
 			s.append(Arrays.deepToString(c.getSource().getTypes()));
 			s.append("\n\tTo:\t\t");

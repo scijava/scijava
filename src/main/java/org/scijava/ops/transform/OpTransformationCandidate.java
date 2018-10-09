@@ -27,4 +27,12 @@ public class OpTransformationCandidate {
 			return null;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append("Source Op:\n\n" + srcOp + "\n");
+		s.append("With transformation: \n" + transformation);
+		return s.toString();
+	}
 }

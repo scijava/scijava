@@ -15,7 +15,7 @@ public class LiftFunctionToListTransformer implements OpTransformer {
 
 	@Override
 	public Object transform(OpService opService, OpRef fromRef, Object src) {
-		return Maps.Lift.Functions.list((Function) src);
+		return Maps.Functions.Lists.liftBoth((Function) src);
 	}
 
 	@Override

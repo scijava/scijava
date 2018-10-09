@@ -57,7 +57,7 @@ public class LiftTest extends AbstractTestEnvironment {
 				nilDouble, 2.0//
 		);
 
-		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.Lift.Functions.iterable(powFunction);
+		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.Functions.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
 
 		arrayEquals(toArray(res2), 1.0, 4.0, 9.0, 16.0);
@@ -77,7 +77,7 @@ public class LiftTest extends AbstractTestEnvironment {
 				nilDoubleArray, 2.0//
 		);
 
-		Computer<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.Lift.Computers.iterable(powComputer);
+		Computer<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.Computers.Iterables.liftBoth(powComputer);
 		Iterable<double[]> res = wrap(new double[4]);
 		liftedToIterable.compute(wrap(new double[]{1.0, 2.0, 3.0, 4.0}), res);
 		

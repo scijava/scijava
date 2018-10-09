@@ -1,4 +1,4 @@
-package org.scijava.ops.transform.impl;
+package org.scijava.ops.transform.lift;
 
 import java.util.function.Function;
 

@@ -20,9 +20,10 @@ public class LiftFunctionToListTransformer implements OpTransformer {
 
 	@Override
 	public OpRef getRefTransformingTo(OpRef toRef) {
-		return OpRefTransformUtils.unliftTransform(toRef, Function.class, List.class);
+		return OpRefTransformUtils.unliftTransform(toRef, Function.class, List.class, new Integer[] {},
+				new Integer[] { 0 }, new Integer[] { 0 });
 	}
-	
+
 	@Override
 	public Class<?> srcClass() {
 		return Function.class;

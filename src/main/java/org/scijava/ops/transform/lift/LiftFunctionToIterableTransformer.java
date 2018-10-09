@@ -19,7 +19,8 @@ public class LiftFunctionToIterableTransformer implements OpTransformer {
 
 	@Override
 	public OpRef getRefTransformingTo(OpRef toRef) {
-		return OpRefTransformUtils.unliftTransform(toRef, Function.class, Iterable.class);
+		return OpRefTransformUtils.unliftTransform(toRef, Function.class, 
+				Iterable.class, new Integer[]{}, new Integer[]{0}, new Integer[]{ 0 });
 	}
 
 	@Override

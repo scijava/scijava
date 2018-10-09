@@ -48,17 +48,29 @@ public final class OpRefTransformUtils {
 
 	/**
 	 * Attempts to perform "unlift" transformation of the specified
-	 * {@link OpRef} if it matches the specified classes. Otherwise, null is
-	 * returned, indicating that transformation is not possible.
+	 * {@link OpRef} if it matches the specified classes. Otherwise null is
+	 * returned, indicating that transformation is not possible. If no indices
+	 * are given, all types will be unlifted.
 	 * 
-	 * @param toRef the ref to transform
-	 * @param rawSearchClass the functional raw type to look for
-	 * @param unliftRawClass the raw type of types to unlift
+	 * @param toRef
+	 *            the ref to transform
+	 * @param rawSearchClass
+	 *            the functional raw type to look for
+	 * @param unliftRawClass
+	 *            the raw type of types to unlift
+	 * @param typeArgumentIndices
+	 *            the indices of type arguments of the functional refTypes to unlift
+	 * @param argIndices
+	 *            the indices of arg types of the ref to unlift
+	 * @param outputIndices
+	 *            the indices of output types of the ref to unlift
 	 * @return
 	 */
-	public static OpRef unliftTransform(OpRef toRef, Class<?> rawSearchClass, Class<?> unliftRawClass) {
+	public static OpRef unliftTransform(OpRef toRef, Class<?> rawSearchClass, Class<?> unliftRawClass,
+			Integer[] typeArgumentIndices, Integer[] argIndices, Integer[] outputIndices) {
 		Type[] refTypes = toRef.getTypes();
-		boolean typesChanged = TypeModUtils.unliftParameterizedTypes(refTypes, rawSearchClass, unliftRawClass);
+		boolean typesChanged = TypeModUtils.unliftParameterizedTypes(refTypes, rawSearchClass, unliftRawClass,
+				typeArgumentIndices);
 		// TODO We assume here that the functional input is the first Type in
 		// this list and all others are secondary args if there are any (we do
 		// not want to touch them as they are not part of op transformations).
@@ -67,9 +79,9 @@ public final class OpRefTransformUtils {
 		// need to be requested first and are thus at the beginning of the list.
 		// From the functional type we know how many there must be.
 		Type[] args = toRef.getArgs();
-		boolean argsChanged = TypeModUtils.unliftTypes(args, unliftRawClass);
+		boolean argsChanged = TypeModUtils.unliftTypes(args, unliftRawClass, argIndices);
 		Type[] outs = toRef.getOutTypes();
-		boolean outsChanged = TypeModUtils.unliftTypes(outs, unliftRawClass);
+		boolean outsChanged = TypeModUtils.unliftTypes(outs, unliftRawClass, outputIndices);
 
 		if (typesChanged && argsChanged && outsChanged) {
 			return OpRef.fromTypes(toRef.getName(), refTypes, outs, args);

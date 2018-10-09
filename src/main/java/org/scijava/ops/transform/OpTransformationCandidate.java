@@ -5,7 +5,8 @@ import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpMatchingException;
 
 /**
- * Wrapper class to match a {@link OpTransformation} with a matching {@link OpCandidate}.
+ * Wrapper class to match a {@link OpTransformation} with a matching
+ * {@link OpCandidate}.
  * 
  * @author David Kolb
  */
@@ -18,16 +19,13 @@ public class OpTransformationCandidate {
 		this.srcOp = scrOp;
 		this.transformation = transformation;
 	}
-	
-	public Object exceute(OpService opService, Object... secondaryArgs) {
-		try {
-			Object op = srcOp.createOp(secondaryArgs);
-			return transformation.execute(op, opService);
-		} catch (OpMatchingException e) {
-			return null;
-		}
+
+	public Object exceute(OpService opService, Object... secondaryArgs)
+			throws OpMatchingException, OpTransformationException {
+		Object op = srcOp.createOp(secondaryArgs);
+		return transformation.execute(op, opService);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();

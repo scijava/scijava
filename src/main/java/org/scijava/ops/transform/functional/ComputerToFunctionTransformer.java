@@ -14,35 +14,33 @@ import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 @Plugin(type = OpTransformer.class)
-public class ComputerToFunctionTransformer implements OpTransformer {
-
+public class ComputerToFunctionTransformer implements FunctionalTypeTransformer {
+	
 	@Override
-	public Object transform(OpService opService, OpRef ref, Object src) {
-		if (src instanceof Computer) {
-			// TODO what happens if we actually have several?
-			Type[] outTypes = ref.getOutTypes();
-			Type[] argTypes = ref.getArgs();
-			try {
-				Function srcOp = Functions.unary(opService, "create", Nil.of(argTypes[0]), Nil.of(outTypes[0]));
-				return Adapt.Computers.asFunction((Computer) src, srcOp);
-			} catch (Exception e) {
-				//TODO
-			}
-		}
-		return null;
+	public Object transform(OpService opService, OpRef ref, Object src) throws Exception {
+		Type[] outTypes = ref.getOutTypes();
+		Type[] argTypes = ref.getArgs();
+		Function srcOp = Functions.unary(opService, "create", Nil.of(argTypes[0]), Nil.of(outTypes[0]));
+		return Adapt.Computers.asFunction((Computer) src, srcOp);
 	}
 
 	@Override
-	public OpRef getRefTransformingTo(OpRef toRef) {
-		Type[] refTypes = toRef.getTypes();
-		boolean hit = TypeModUtils.replaceRawTypes(refTypes, Function.class, Computer.class);
-		if (hit) {
-			// The computer has a ItemIO.BOTH as second functional parameter of type functional output.
-			// Hence, we need to add it after the first functional input.
-			Type[] computerArgs = TypeModUtils.insert(toRef.getArgs(), toRef.getOutTypes()[0], 1);
-			return OpRef.fromTypes(toRef.getName(), refTypes, toRef.getOutTypes(), computerArgs);
-		}
-		return null;
+	public Class<?> srcClass() {
+		return Computer.class;
 	}
 
+	@Override
+	public Class<?> targetClass() {
+		return Function.class;
+	}
+
+	@Override
+	public Type[] getTransformedArgTypes(OpRef toRef) {
+		return TypeModUtils.insert(toRef.getArgs(), toRef.getOutTypes()[0], 1);
+	}
+
+	@Override
+	public Type[] getTransformedOutputTypes(OpRef toRef) {
+		return toRef.getOutTypes();
+	}
 }

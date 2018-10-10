@@ -32,19 +32,20 @@ public class Add {
 		}
 	}
 
-	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
-	@Parameter(key = "array1")
-	@Parameter(key = "array2")
-	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
-	public static class MathPointwiseAddDoubleArraysFunction
-			implements BiFunction<double[], double[], double[]> {
-		@Override
-		public double[] apply(double[] arr1, double[] arr2) {
-			Stream<Double> s1 = Arrays.stream(arr1).boxed();
-			Stream<Double> s2 = Arrays.stream(arr2).boxed();
-			return Streams.zip(s1, s2, (num1, num2) -> num1 + num2).mapToDouble(Double::doubleValue).toArray();
-		}
-	}
+	// This Op is not needed anymore, can be handled via auto op transformation
+//	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
+//	@Parameter(key = "array1")
+//	@Parameter(key = "array2")
+//	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
+//	public static class MathPointwiseAddDoubleArraysFunction
+//			implements BiFunction<double[], double[], double[]> {
+//		@Override
+//		public double[] apply(double[] arr1, double[] arr2) {
+//			Stream<Double> s1 = Arrays.stream(arr1).boxed();
+//			Stream<Double> s2 = Arrays.stream(arr2).boxed();
+//			return Streams.zip(s1, s2, (num1, num2) -> num1 + num2).mapToDouble(Double::doubleValue).toArray();
+//		}
+//	}
 	
 	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
 	@Parameter(key = "iter1")

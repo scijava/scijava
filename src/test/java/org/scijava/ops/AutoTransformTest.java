@@ -34,6 +34,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.scijava.ops.core.Computer;
 import org.scijava.types.Nil;
 
 import com.google.common.collect.Streams;
@@ -96,6 +97,22 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0, 8.0, 27.0);
 	}
 	
+	@Test
+	public void autoTransformWithSecondaryArgs() {
+		Computer<Double[], Double[]> power3Arrays = ops().findOp( //
+				"math.pow", new Nil<Computer<Double[], Double[]>>() {
+				}, //
+				new Nil[] { Nil.of(Double[].class), Nil.of(Double[].class), Nil.of(double.class) }, //
+				Nil.of(Double[].class), //
+				3.0//
+		);
+		
+		Double[] result = new Double[3];
+		power3Arrays.compute(new Double[] { 1.0, 2.0, 3.0 }, result);
+		assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0, 8.0, 27.0);
+	}
+	
+	@Test
 	public void autoCompToFuncAndLift() {
 		Nil<List<double[]>> n = new Nil<List<double[]>>() {
 		};

@@ -37,7 +37,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
+
+import com.google.common.primitives.Primitives;
 
 /**
  * Utility class to do modification on {@link Type}s.
@@ -108,8 +111,11 @@ public final class TypeModUtils {
 			if (Types.raw(type).equals(searchRawType)) {
 				Type[] typeArgs = casted.getActualTypeArguments();
 				boolean hit = unliftTypes(typeArgs, unliftRawArgType, argIndices);
-				
-				if(hit) {
+				// Types can't be parameterized with primitives in java.
+				// Hence, if the unlifting of type args would result in
+				// primitives, we would create an invalid type
+				boolean containsPrimitive = containsPrimitive(typeArgs);
+				if(hit && !containsPrimitive) {
 					return Types.parameterize(searchRawType, typeArgs);
 				}
 			}
@@ -269,5 +275,9 @@ public final class TypeModUtils {
 			}
 		}
 		return hit;
+	}
+	
+	private static boolean containsPrimitive(Type[] types) {
+		return Arrays.stream(types).anyMatch(t -> Types.raw(t).isPrimitive());
 	}
 }

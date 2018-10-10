@@ -159,6 +159,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return opCache.getAndBelow(new PrefixQuery(opName));
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?>[] outTypes, final Object... secondaryArgs) {
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), toTypes(outTypes), toTypes(inTypes));
@@ -183,6 +184,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			try {
 				return (T) transformation.exceute(this, secondaryArgs);
 			} catch (OpMatchingException | OpTransformationException e1) {
+				log.debug("Execution of Op transformatioon failed:\n");
 				log.debug(e1);
 				throw new IllegalArgumentException(e);
 			}

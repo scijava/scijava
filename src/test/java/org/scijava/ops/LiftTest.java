@@ -59,8 +59,11 @@ public class LiftTest extends AbstractTestEnvironment {
 
 		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.Functions.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
-
 		arrayEquals(toArray(res2), 1.0, 4.0, 9.0, 16.0);
+		
+		Function<Double[], Double[]> liftedToArray = Maps.Functions.Arrays.liftBoth(powFunction, Double.class);
+		Double[] res3 = liftedToArray.apply(new Double[]{1.0, 2.0, 3.0, 4.0});
+		arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 1.0, 4.0, 9.0, 16.0);
 	}
 
 	private static double[] toArray(Iterable<Double> iter) {

@@ -125,14 +125,19 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	}
 	
 	private void addToCache(OpInfo opInfo, String opNames) {
+		String[] parsedOpNames = OpUtils.parseOpNames(opNames);
+		if (parsedOpNames == null || parsedOpNames.length == 0) {
+			log.error("Skipping Op " + opInfo.implementationName() + ":\n"
+					+ "Op implementation must provide name.");
+			return;
+		}
 		if (!opInfo.isValid()) {
 			log.error("Skipping invalid Op " + opInfo.implementationName() + ":\n"
 					+ opInfo.getValidityException().getMessage());
 			return;
 		}
-		String[] parsedNames = OpUtils.parseOpNames(opNames);
-		addAliases(parsedNames, opInfo.implementationName());
-		opCache.add(new PrefixQuery(parsedNames[0]), opInfo);
+		addAliases(parsedOpNames, opInfo.implementationName());
+		opCache.add(new PrefixQuery(parsedOpNames[0]), opInfo);
 	}
 
 	@Override

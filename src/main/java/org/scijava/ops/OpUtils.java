@@ -108,8 +108,15 @@ public final class OpUtils {
 	 * @return
 	 */
 	public static String[] parseOpName(String name) {
-		String[] split = name.split("\\.");
-		return new String[] { name, split[split.length - 1] };
+		if (name == null || name.isEmpty()) {
+			return new String[]{};
+		}
+		if (name.contains(".")) {
+			String[] split = name.split("\\.");
+			return new String[] { name, split[split.length - 1] };
+		} else {
+			return new String[]{name};
+		}
 	}
 
 	public static List<MemberInstance<?>> inputs(StructInstance<?> op) {

@@ -13,11 +13,19 @@ public class CopyOpCollection {
 
 	@OpField(names = "cp, copy", priority = Priority.LOW)
 	@Parameter(key = "array")
-	@Parameter(key = "arrayCopy", type = ItemIO.OUTPUT)
-	public static final Computer<double[], double[]> copyDoubleArray = (from, to) -> {
+	@Parameter(key = "arrayCopy", type = ItemIO.BOTH)
+	public static final Computer<double[], double[]> copyPrimitiveDoubleArray = (from, to) -> {
 		for (int i = 0; i < to.length; i++) {
 			to[i] = from[i];
 		}
 	};
-
+	
+	@OpField(names = "cp, copy", priority = Priority.LOW)
+	@Parameter(key = "array")
+	@Parameter(key = "arrayCopy", type = ItemIO.BOTH)
+	public static final Computer<Double[], Double[]> copyDoubleArray = (from, to) -> {
+		for (int i = 0; i < to.length; i++) {
+			to[i] = from[i];
+		}
+	};
 }

@@ -30,6 +30,7 @@
 package org.scijava.ops;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
@@ -70,6 +71,17 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 	}
 	
 	@Test
+	public void autoBiFunctionToBiComputer() {
+		BiFunction<double[], double[], double[]> addArrayFunction = ops().findOp( //
+				"add", new Nil<BiFunction<double[], double[], double[]>>() {
+				}, //
+				new Nil[] { Nil.of(double[].class), Nil.of(double[].class) }, //
+				Nil.of(double[].class)//
+		);
+		double[] res = addArrayFunction.apply(new double[]{4.0, 16.0}, new double[]{4.0, 16.0});
+		arrayEquals(res, 8.0, 32.0);
+	}
+	
 	@Test
 	public void autoLiftFuncToArray() {
 		Function<Double[], Double[]> power3ArraysFunc = ops().findOp( //

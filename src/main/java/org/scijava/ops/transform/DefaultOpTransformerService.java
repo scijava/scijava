@@ -95,7 +95,10 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 			} catch (OpMatchingException e) {
 				List<OpTransformation> ts = getTansformationsTo(fromRef);
 				for (OpTransformation t : ts) {
-					return findTransfromation(opService, t.chain(candidate), depth + 1);
+					OpTransformationCandidate cand = findTransfromation(opService, t.chain(candidate), depth + 1);
+					if (cand != null) {
+						return cand;
+					}
 				}
 			}
 		}

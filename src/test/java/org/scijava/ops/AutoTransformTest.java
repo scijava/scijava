@@ -70,6 +70,19 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 	}
 	
 	@Test
+	public void autoLiftFuncToArray() {
+		Function<Double[], Double[]> power3ArraysFunc = ops().findOp( //
+				"math.pow", new Nil<Function<Double[], Double[]>>() {
+				}, //
+				new Nil[] { Nil.of(Double[].class), Nil.of(double.class) }, //
+				Nil.of(Double[].class), //
+				3.0//
+		);
+		
+		Double[] result = power3ArraysFunc.apply(new Double[] { 1.0, 2.0, 3.0 });
+		assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0, 8.0, 27.0);
+	}
+	
 	public void autoCompToFuncAndLift() {
 		Nil<List<double[]>> n = new Nil<List<double[]>>() {
 		};

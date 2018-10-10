@@ -157,6 +157,11 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 		return opCache.getAndBelow(new PrefixQuery(opName));
 	}
+	
+	@Override
+	public LogService logger() {
+		return log;
+	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,

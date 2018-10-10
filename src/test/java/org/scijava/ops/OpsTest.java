@@ -75,14 +75,6 @@ public class OpsTest extends AbstractTestEnvironment {
 				nilDouble//
 		);
 		assert 3.0 == addFunction.apply(1.0, 2.0);
-
-		// look up a specific implementation
-		MathAddDoublesFunction add = ops().findOp( //
-				new Nil<MathAddDoublesFunction>(){},
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-		assert 86.0 == add.apply(10.0, 76.0);
 	}
 
 	@Test

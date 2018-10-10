@@ -1,5 +1,6 @@
 package org.scijava.ops.util;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -25,6 +26,13 @@ public class Maps {
 
 			public static <I, O> Function<Iterable<I>, Iterable<O>> bothFlat(final Function<I, Iterable<O>> function) {
 				return iter -> () -> Streams.stream(iter).flatMap(i -> Streams.stream(function.apply(i))).iterator();
+			}
+		}
+		
+		public interface Arrays {
+			@SuppressWarnings("unchecked")
+			public static <I, O> Function<I[], O[]> liftBoth(final Function<I, O> function, Class<O> cls) {
+				return is -> java.util.Arrays.stream(is).map(function).toArray(size -> (O[])Array.newInstance(cls, size));
 			}
 		}
 		

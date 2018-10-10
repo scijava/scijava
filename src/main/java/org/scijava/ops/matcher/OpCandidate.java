@@ -223,10 +223,8 @@ public class OpCandidate {
 			Inject.Structs.inputs(opInst, paddedArgs);
 		// Secondary args are given, however there are no to inject
 		} else if (secondaryArgs.length > 0) {
-			//TODO where get the logger from?
-//			log.warn(
-//				"Specified Op has no secondary args, however secondary args are given. "
-//				+ "The specified args will not be injected.");
+			ops().logger().warn("Specified Op has no secondary args, however secondary args are given. "
+					+ "The specified args will not be injected.");
 		}
 	}
 }

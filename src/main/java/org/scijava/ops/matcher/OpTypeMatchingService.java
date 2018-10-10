@@ -42,6 +42,8 @@ import org.scijava.service.SciJavaService;
 //TODO javadoc
 public interface OpTypeMatchingService extends SciJavaService {
 
+	OpCandidate findSingleMatch(final OpEnvironment ops, final OpRef ref) throws OpMatchingException;
+	
 	MatchingResult findMatch(OpEnvironment ops, OpRef ref);
 
 	MatchingResult findMatch(OpEnvironment ops, List<OpRef> refs);

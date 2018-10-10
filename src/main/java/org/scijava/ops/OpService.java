@@ -43,7 +43,6 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
@@ -166,14 +165,14 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 		try {
 			// Find single match which matches the specified types
-			OpCandidate match = findTypeMatch(ref);
+			OpCandidate match = matcher.findSingleMatch(this, ref);
 			return (T) match.createOp(secondaryArgs);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
 			
 			// If we can't find an op matching the original request, we try to find a transformation
-			OpTransformationCandidate transformation = transformer.findTransfromation(ref);
+			OpTransformationCandidate transformation = transformer.findTransfromation(this, ref);
 			if (transformation == null) {
 				log.debug("No matching Op transformation found");
 				throw new IllegalArgumentException(e);
@@ -209,14 +208,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType, final Object... secondaryArgs) {
 		return findOpInstance(opName, specialType, inTypes, new Nil[] { outType }, secondaryArgs);
-	}
-
-	public MatchingResult findTypeMatches(final OpRef ref) {
-		return matcher.findMatch(this, ref);
-	}
-
-	public OpCandidate findTypeMatch(final OpRef ref) throws OpMatchingException {
-		return findTypeMatches(ref).singleMatch();
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {

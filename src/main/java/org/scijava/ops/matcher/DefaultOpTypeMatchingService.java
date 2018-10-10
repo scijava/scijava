@@ -63,6 +63,11 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 
 	@Parameter
 	private LogService log;
+	
+	@Override
+	public OpCandidate findSingleMatch(final OpEnvironment ops, final OpRef ref) throws OpMatchingException {
+		return findMatch(ops, ref).singleMatch();
+	}
 
 	@Override
 	public MatchingResult findMatch(final OpEnvironment ops, final OpRef ref) {

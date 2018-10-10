@@ -35,11 +35,13 @@ package org.scijava.ops.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ops.OpService;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.matcher.OpTypeMatchingService;
 import org.scijava.plugin.AbstractSingletonService;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.Service;
 
@@ -53,13 +55,11 @@ import org.scijava.service.Service;
 public final class DefaultOpTransformerService extends AbstractSingletonService<OpTransformer>
 		implements OpTransformerService {
 
-	//TODO why does this not work?
-//	@Parameter
-	private OpService opService;
+	@Parameter
+	private OpTypeMatchingService matcher;
 	
 	@Override
 	public List<OpTransformation> getTansformationsTo(OpRef toRef) {
-		init();
 		List<OpTransformation> transforms = new ArrayList<>();
 		
 		for (OpTransformer ot: getInstances()) {
@@ -72,11 +72,10 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 	}
 	
 	@Override
-	public OpTransformationCandidate findTransfromation(OpRef ref) {
-		init();
+	public OpTransformationCandidate findTransfromation(OpEnvironment opEnv, OpRef ref) {
 		List<OpTransformation> ts = getTansformationsTo(ref);
 		for (OpTransformation t : ts) {
-			OpTransformationCandidate match = findTransfromation(opService, t, 0);
+			OpTransformationCandidate match = findTransfromation(opEnv, t, 0);
 			if (match != null) {
 				return match;
 			}
@@ -84,18 +83,18 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 		return null;
 	}
 	
-	private OpTransformationCandidate findTransfromation(OpService opService, OpTransformation candidate, int depth) {
+	private OpTransformationCandidate findTransfromation(OpEnvironment opEnv, OpTransformation candidate, int depth) {
 		if (candidate == null || depth > 1) {
 			return null;
 		} else {
 			OpRef fromRef = candidate.getSource();
 			try {
-				OpCandidate match = opService.findTypeMatch(fromRef);
+				OpCandidate match = matcher.findSingleMatch(opEnv, fromRef);
 				return new OpTransformationCandidate(match, candidate);
 			} catch (OpMatchingException e) {
 				List<OpTransformation> ts = getTansformationsTo(fromRef);
 				for (OpTransformation t : ts) {
-					OpTransformationCandidate cand = findTransfromation(opService, t.chain(candidate), depth + 1);
+					OpTransformationCandidate cand = findTransfromation(opEnv, t.chain(candidate), depth + 1);
 					if (cand != null) {
 						return cand;
 					}
@@ -103,11 +102,5 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 			}
 		}
 		return null;
-	}
-	
-	private void init() {
-		if (opService == null) {
-			opService = context().getService(OpService.class);
-		}
 	}
 }

@@ -2,6 +2,7 @@ package org.scijava.ops.transform;
 
 import java.util.List;
 
+import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.plugin.SingletonService;
@@ -40,8 +41,9 @@ public interface OpTransformerService extends SciJavaService, SingletonService<O
 	 * Computer and return it. 
 	 * 
 	 * @param opService
+	 * @param opEnv the env to supply ops
 	 * @param ref the ref which should be the target of the transformation to look for
 	 * @return
 	 */
-	OpTransformationCandidate findTransfromation(OpRef ref);
+	OpTransformationCandidate findTransfromation(OpEnvironment opEnv, OpRef ref);
 }

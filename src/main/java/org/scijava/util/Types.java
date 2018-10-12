@@ -1295,6 +1295,29 @@ public final class Types {
 		return Types.parameterize(rawType, typeParams);
 	}
 	
+	/**
+	 * See {@link GenericTypeReflector#getExactParameterTypes(Method, Type)}
+	 * 
+	 * @param m
+	 * @param type
+	 * @return
+	 */
+	public static Type[] getExactParameterTypes(final Method m,
+			final Type type){
+		return GenericTypeReflector.getExactParameterTypes(m, type);
+	}
+	
+	/**
+	 * See {@link GenericTypeReflector#getExactReturnType(Method, Type)}
+	 * 
+	 * @param m
+	 * @param type
+	 * @return
+	 */
+	public static Type getExactReturnType(final Method m, final Type type) {
+		return GenericTypeReflector.getExactReturnType(m, type);
+	}
+	
 	// -- Helper methods --
 	
 	private static Type[] filterIndices(Type[] types, List<Integer> indices) {

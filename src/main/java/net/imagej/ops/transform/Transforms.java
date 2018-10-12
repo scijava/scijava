@@ -44,7 +44,7 @@ import org.scijava.struct.ItemIO;
  * {@link OpCollection} containing all of the transform {@link Op}s.
  *
  * TODO move these type variables into each Op?
- * 
+ *
  * @author Gabe Selzer
  *
  *
@@ -95,7 +95,6 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 
 	@OpField(names = "transform.collapseRealView")
 	@Parameter(key = "input")
-	@Parameter(key = "numChannels")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<RandomAccessibleInterval<R>, CompositeIntervalView<R, ? extends RealComposite<R>>> collapseRealViewRAI = Views::collapseReal;
 
@@ -107,7 +106,6 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 
 	@OpField(names = "transform.collapseNumericView")
 	@Parameter(key = "input")
-	@Parameter(key = "numChannels")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<RandomAccessibleInterval<N>, CompositeIntervalView<N, ? extends NumericComposite<N>>> collapseNumericViewRAI = Views::collapseNumeric;
 
@@ -137,7 +135,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final TriFunction<Integer, StackAccessMode, List<RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> concatenateStackList = Views::concatenate;
 
-	@OpField(names = "transform.dropSingletonDimensions")
+	@OpField(names = "transform.dropSingletonDimensionsView")
 	@Parameter(key = "input")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> dropSingletonDimensions = Views::dropSingletonDimensions;
@@ -217,14 +215,14 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final BiFunction<E, InterpolatorFactory<T, E>, RealRandomAccessible<T>> interpolateView = Views::interpolate;
 
-	@OpField(names = "transform.interpolateView")
+	@OpField(names = "transform.intervalView")
 	@Parameter(key = "input")
 	@Parameter(key = "min")
 	@Parameter(key = "max")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final TriFunction<RandomAccessible<T>, long[], long[], IntervalView<T>> intervalMinMax = Views::interval;
 
-	@OpField(names = "transform.interpolateView")
+	@OpField(names = "transform.intervalView")
 	@Parameter(key = "input")
 	@Parameter(key = "interval")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
@@ -253,6 +251,19 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "offset")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final BiFunction<RandomAccessibleInterval<T>, long[], IntervalView<T>> offsetRAI = Views::offset;
+
+	@OpField(names = "transform.offsetView")
+	@Parameter(key = "input")
+	@Parameter(key = "intervalMin")
+	@Parameter(key = "intervalMax")
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	public final TriFunction<RandomAccessible<T>, long[], long[], IntervalView<T>> offsetIntervalMinMax = Views::offsetInterval;
+
+	@OpField(names = "transform.offsetView")
+	@Parameter(key = "input")
+	@Parameter(key = "interval")
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	public final BiFunction<RandomAccessible<T>, Interval, IntervalView<T>> offsetInterval = Views::offsetInterval;
 
 	@OpField(names = "transform.permuteView", priority = Priority.LOW)
 	@Parameter(key = "input")
@@ -296,7 +307,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 
 	@OpField(names = "transform.rasterView")
 	@Parameter(key = "input")
-	@Parameter(key = "result")
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<RealRandomAccessible<T>, RandomAccessibleOnRealRandomAccessible<T>> rasterize = Views::raster;
 
 	@OpField(names = "transform.rotateView", priority = Priority.LOW)
@@ -328,23 +339,23 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final QuadFunction<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> shearInterval = Views::shear;
 
-	@OpField(names = "transform.shearView")
+	@OpField(names = "transform.stackView")
 	@Parameter(key = "inputs")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<List<? extends RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> stackList = Views::stack;
 
-	@OpField(names = "transform.shearView")
+	@OpField(names = "transform.stackView")
 	@Parameter(key = "inputs")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> stackArray = Views::stack;
 
-	@OpField(names = "transform.shearView")
+	@OpField(names = "transform.stackView")
 	@Parameter(key = "stackAccessMode")
 	@Parameter(key = "inputs")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final BiFunction<StackAccessMode, List<? extends RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> stackAccessList = Views::stack;
 
-	@OpField(names = "transform.shearView")
+	@OpField(names = "transform.stackView")
 	@Parameter(key = "stackAccessMode")
 	@Parameter(key = "inputs")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
@@ -401,7 +412,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final QuadFunction<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> unshearRAI = Views::unshear;
 
-	@OpField(names = "transform.zeroMin")
+	@OpField(names = "transform.zeroMinView")
 	@Parameter(key = "input")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
 	public final Function<RandomAccessibleInterval<T>, IntervalView<T>> zeroMinView = Views::zeroMin;

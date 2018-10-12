@@ -47,5 +47,5 @@ package org.scijava.struct;
  * @author Curtis Rueden
  */
 public enum ItemIO {
-	INPUT, OUTPUT, BOTH
+	INPUT, OUTPUT, BOTH, AUTO
 }

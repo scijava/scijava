@@ -702,7 +702,6 @@ public final class Types {
 	 * </pre>
 	 */
 	public static Type fieldType(final Field field, final Class<?> type) {
-		final Type wildType = GenericTypeReflector.addWildcardParameters(type);
 		final Type pType = parameterizeRaw(type);
 		return GenericTypeReflector.getExactFieldType(field, pType);
 	}
@@ -714,8 +713,8 @@ public final class Types {
 	public static Type methodReturnType(final Method method,
 		final Class<?> type)
 	{
-		final Type wildType = GenericTypeReflector.addWildcardParameters(type);
-		return GenericTypeReflector.getExactReturnType(method, wildType);
+		final Type pType = parameterizeRaw(type);
+		return GenericTypeReflector.getExactReturnType(method, pType);
 	}
 
 	/**
@@ -725,8 +724,8 @@ public final class Types {
 	public static Type[] methodParamTypes(final Method method,
 		final Class<?> type)
 	{
-		final Type wildType = GenericTypeReflector.addWildcardParameters(type);
-		return GenericTypeReflector.getExactParameterTypes(method, wildType);
+		final Type pType = parameterizeRaw(type);
+		return GenericTypeReflector.getExactParameterTypes(method, pType);
 	}
 
 	/**

@@ -51,6 +51,17 @@
 				<role>reviewer</role>
 			</roles>
 		</developer>
+		<developer>
+			<id>gselzer</id>
+			<name>Gabriel Selzer</name>
+			<roles>
+				<role>founder</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+			</roles>
+		</developer>
 	</developers>
 	<contributors>
 		<contributor>

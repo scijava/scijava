@@ -32,6 +32,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -53,6 +54,8 @@ import org.scijava.ops.matcher.OpTypeMatchingService;
 import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformerService;
+import org.scijava.param.FunctionalMethodType;
+import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
@@ -60,8 +63,10 @@ import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.SciJavaService;
 import org.scijava.service.Service;
+import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.util.ClassUtils;
+import org.scijava.util.Types;
 
 /**
  * Service to provide a list of available ops structured in a prefix tree and to
@@ -167,16 +172,71 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	public LogService logger() {
 		return log;
 	}
+	
+	/**
+	 * Attempts to inject {@link OpDependency} annotated fields of the specified object by
+	 * looking for Ops matching the field type and the name specified in the 
+	 * annotation. The field type is assumed to be functional.
+	 * 
+	 * @param obj
+	 * @throws OpMatchingException
+	 *      if the type of the specified object is not functional,
+	 *      if the Op matching the functional type and the name could not be found,
+	 *      if an exception occurs during injection
+	 */
+	public void resolveOpDependencies(Object obj) throws OpMatchingException {
+		final Class<?> c = obj.getClass();
+		final List<Field> opFields = ClassUtils.getAnnotatedFields(c, OpDependency.class);
+		
+		for (final Field opField : opFields) {
+			final String opName = opField.getAnnotation(OpDependency.class).name();
+			final Type fieldType = Types.fieldType(opField, c);
+			
+			OpRef inferredRef = inferOpRef(fieldType, opName);
+			if (inferredRef == null) {
+				throw new OpMatchingException("Could not infer functional "
+						+ "method inputs and outputs of Op dependency field: "
+						+ opField);
+			}
+			
+			Object matchedOp = null;
+			try {
+				matchedOp = findOpInstance(opName, inferredRef);
+			} catch (Exception e) {
+				throw new OpMatchingException(
+						"Could not find Op that matches requested Op dependency field:" 
+						+ "\nOp class: " + c.getName()
+						+ "\nDependency field: " + opField.getName()
+						+ "\n\n Attempted request:\n"
+						+ inferredRef, e);
+			}
 
+			try {
+				opField.setAccessible(true);
+				opField.set(obj, matchedOp);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new OpMatchingException(
+						"Exception trying to inject Op dependency field.\n"
+						+ "\tOp dependency field to resolve: " + opField + "\n"
+						+ "\tFound Op to inject: " + matchedOp.getClass().getName() + "\n"
+						+ "\tWith inferred OpRef: " + inferredRef, e);
+			}
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?>[] outTypes, final Object... secondaryArgs) {
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), toTypes(outTypes), toTypes(inTypes));
+		return (T) findOpInstance(opName, ref, secondaryArgs);
+	}
 
+	public Object findOpInstance(final String opName, final OpRef ref, final Object... secondaryArgs) {
+		Object op = null;
 		try {
 			// Find single match which matches the specified types
 			OpCandidate match = matcher.findSingleMatch(this, ref);
-			return (T) match.createOp(secondaryArgs);
+			op = match.createOp(secondaryArgs);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
@@ -191,13 +251,20 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			// If we found one, try to do transformation and return transformed op
 			log.debug("Matching Op transformation found:\n" + transformation + "\n");
 			try {
-				return (T) transformation.exceute(this, secondaryArgs);
+				op = transformation.exceute(this, secondaryArgs);
 			} catch (OpMatchingException | OpTransformationException e1) {
 				log.debug("Execution of Op transformatioon failed:\n");
 				log.debug(e1);
-				throw new IllegalArgumentException(e);
+				
 			}
 		}
+		try {
+			// Try to resolve annotated OpDependency fields
+			resolveOpDependencies(op);
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+		return op;
 	}
 	
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
@@ -212,6 +279,39 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
+	}
+	
+	/**
+	 * Tries to infer a {@link OpRef} from a functional Op type. E.g. the type:
+	 * <pre>Computer&lt;Double[], Double[]&gt</pre>
+	 * Will result in the following {@link OpRef}:
+	 * <pre>
+	 * Name: 'specified name'
+	 * Types:       [Computer&lt;Double, Double&gt]
+	 * InputTypes:  [Double[], Double[]]
+	 * OutputTypes: [Double[]]
+	 * </pre>
+	 * Input and output types will be inferred by looking at the signature of the functional
+	 * method of the specified type. Also see {@link ParameterStructs#getFunctionalMethodTypes(Type)}.
+	 * 
+	 * @param type
+	 * @param name
+	 * @return null if
+	 *          the specified type has no functional method
+	 */
+	private OpRef inferOpRef(Type type, String name) {
+		List<FunctionalMethodType> fmts = ParameterStructs.getFunctionalMethodTypes(type);
+		if (fmts == null) return null;
+		
+		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.BOTH, ItemIO.INPUT);
+		EnumSet<ItemIO> outIos = EnumSet.of(ItemIO.BOTH, ItemIO.OUTPUT);
+		
+		Type[] inputs = fmts.stream().filter(fmt -> inIos.contains(fmt.itemIO()))
+				.map(fmt -> fmt.type()).toArray(Type[]::new);
+		Type[] outputs = fmts.stream().filter(fmt -> outIos.contains(fmt.itemIO()))
+				.map(fmt -> fmt.type()).toArray(Type[]::new);
+		
+		return new OpRef(name, new Type[]{type}, outputs, inputs);
 	}
 
 	/**

@@ -1,8 +1,11 @@
 
 package org.scijava.param;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayDeque;
@@ -12,6 +15,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -299,8 +303,6 @@ public final class ParameterStructs {
 		return valid;
 	}
 	
-	
-	
 	public static Parameter[] parameters(final AnnotatedElement element) {
 		final Parameters params = element.getAnnotation(Parameters.class);
 		if (params != null) {
@@ -308,5 +310,84 @@ public final class ParameterStructs {
 		}
 		final Parameter p = element.getAnnotation(Parameter.class);
 		return p == null ? new Parameter[0] : new Parameter[] { p };
+	}
+	
+	/**
+	 * Returns a list of {@link FunctionalMethodType}s describing the input and output
+	 * types of the functional method of the specified functional type. In doing so,
+	 * the return type of the method will me marked as {@link ItemIO#OUTPUT} and the
+	 * all method parameters as {@link ItemIO#OUTPUT}, except for parameters annotated
+	 * with {@link Mutable} which will be marked as {@link ItemIO#BOTH}. If the specified
+	 * type does not have a functional method in its hierarchy, null will be
+	 * returned.
+	 * 
+	 * @param functionalType
+	 * @return
+	 */
+	public static List<FunctionalMethodType> getFunctionalMethodTypes(Type functionalType) {
+		Method functionalMethod = findFunctionalMethod(Types.raw(functionalType));
+		if (functionalMethod == null) return null;
+		List<FunctionalMethodType> out = new ArrayList<>();
+		int i = 0;
+		for (Type t : Types.getExactParameterTypes(functionalMethod, functionalType)) {
+			boolean isMutable = getMethodParameterAnnotation(functionalMethod, i, Mutable.class) != null;
+			out.add(new FunctionalMethodType(t, isMutable ? ItemIO.BOTH : ItemIO.INPUT));
+			i++;
+		}
+		
+		Type returnType = Types.getExactReturnType(functionalMethod, functionalType);
+		if (!returnType.equals(void.class)) {
+			out.add(new FunctionalMethodType(returnType, ItemIO.OUTPUT));
+		}
+		
+		return out;
+	}
+	
+	/**
+	 * Attempt to retrieve the specified annotation from the i'th parameter
+	 * of the specified method. This method will only find annotations with:
+	 * <pre>@Target(ElementType.TYPE_USE)</pre>
+	 * If the ElementType is different or no annotation with specified type
+	 * is present, null is returned. 
+	 * 
+	 * @param method
+	 * @param i
+	 * @param annotationClass
+	 * @return
+	 */
+	public static <A extends Annotation> A getMethodParameterAnnotation(Method method, int i, Class<A> annotationClass) {
+		AnnotatedType[] params = method.getAnnotatedParameterTypes();
+		if (i >= params.length) {
+			return null;
+		}
+		return params[i].getAnnotation(annotationClass);
+	}
+	
+	/**
+	 * Attempts to find the single functional method of the specified
+	 * class, by scanning the for functional interfaces. If there
+	 * is no functional interface, null will be returned.
+	 * 
+	 * @param cls
+	 * @return
+	 */
+	public static Method findFunctionalMethod(Class<?> cls) {
+		Class<?> iFace = findFunctionalInterface(cls);
+		if (iFace == null) {
+			return null;
+		}
+		
+		List<Method> nonDefaults = Arrays.stream(iFace.getMethods())
+				.filter(m -> !m.isDefault()).collect(Collectors.toList());
+		
+		// The single non default method must be the functional one
+		if (nonDefaults.size() != 1) {
+			for (Class<?> i : iFace.getInterfaces()) {
+				final Method result = findFunctionalMethod(i);
+				if (result != null) return result;
+			}
+		}
+		
+		return nonDefaults.get(0);
 	}
 }

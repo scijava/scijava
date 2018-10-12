@@ -12,4 +12,8 @@ public class OpMatchingException extends Exception {
 	public OpMatchingException(String message) {
 		super(message);
 	}
+	
+	public OpMatchingException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

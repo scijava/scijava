@@ -29,6 +29,8 @@
 
 package org.scijava.ops.matcher;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -106,12 +108,14 @@ public class OpClassInfo implements OpInfo {
 			// TODO: Consider whether this is really the best way to
 			// instantiate the op class here. No framework usage?
 			// E.g., what about pluginService.createInstance?
-			object = opClass.newInstance();
-		} catch (final InstantiationException | IllegalAccessException e) {
+			Constructor<? extends Op> ctor = opClass.getDeclaredConstructor();
+			ctor.setAccessible(true);
+			object = ctor.newInstance();
+		} catch (final InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO: Think about whether exception handling here should be
 			// different.
 			throw new IllegalStateException("Unable to instantiate op: '" + opClass.getName()
-					+ "' Each op must have a no-args constructor.", e);
+					+ "' Ensure that the Op has a no-args constructor.", e);
 		}
 		return struct().createInstance(object);
 	}

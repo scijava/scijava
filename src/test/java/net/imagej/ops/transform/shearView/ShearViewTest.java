@@ -44,8 +44,8 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.QuadFunction;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.util.Functions;
 import org.scijava.types.Nil;
 
@@ -65,7 +65,7 @@ public class ShearViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultShearTest() {
 
-		TriFunction<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> shearFunc = Functions
+		Function3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> shearFunc = Functions
 				.ternary(ops(), "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -96,7 +96,7 @@ public class ShearViewTest extends AbstractTestEnvironment {
 	@Test
 	public void ShearIntervalTest() {
 
-		QuadFunction<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> shearFunc = Functions
+		Function4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> shearFunc = Functions
 				.quaternary(ops(), "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<Integer>() {

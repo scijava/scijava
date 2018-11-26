@@ -44,7 +44,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.util.Functions;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
@@ -93,7 +93,7 @@ public class IntervalViewTest extends AbstractTestEnvironment {
 	@Test
 	public void intervalMinMaxTest() {
 
-		TriFunction<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = Functions
+		Function3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = Functions
 				.ternary(ops(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {

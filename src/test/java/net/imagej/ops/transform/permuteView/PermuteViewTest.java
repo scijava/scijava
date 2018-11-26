@@ -48,7 +48,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.util.Functions;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
@@ -75,7 +75,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultPermuteTest() {
 
-		TriFunction<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> permuteFunc = Functions
+		Function3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> permuteFunc = Functions
 				.ternary(ops(), "transform.permuteView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -124,7 +124,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 	@Test
 	public void permuteCoordinatesOfDimensionTest() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
 				.ternary(ops(), "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<Integer>() {
@@ -179,7 +179,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 	@Test
 	public void permuteCoordinatesInverseOfDimensionTest() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
 				.ternary(ops(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
@@ -210,7 +210,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalPermute() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> permuteFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> permuteFunc = Functions
 				.ternary(ops(), "transform.permuteView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
@@ -269,7 +269,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalPermuteDimensionCoordinates() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
 				.ternary(ops(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
@@ -334,7 +334,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalPermuteInverseDimensionCoordinates() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
 				.ternary(ops(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {

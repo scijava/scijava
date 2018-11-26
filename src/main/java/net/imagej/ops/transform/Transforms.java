@@ -34,8 +34,8 @@ import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.QuadFunction;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -75,7 +75,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "min")
 	@Parameter(key = "max")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<T>, Long, Long, IntervalView<T>> addDimensionViewMinMax = Views::addDimension;
+	public final Function3<RandomAccessibleInterval<T>, Long, Long, IntervalView<T>> addDimensionViewMinMax = Views::addDimension;
 
 	@OpField(names = "transform.collapseView", priority = Priority.LOW)
 	@Parameter(key = "input")
@@ -126,14 +126,14 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "stackAccess")
 	@Parameter(key = "inputs")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<Integer, StackAccessMode, RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> concatenateStackArray = Views::concatenate;
+	public final Function3<Integer, StackAccessMode, RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> concatenateStackArray = Views::concatenate;
 
 	@OpField(names = "transform.concatenateView")
 	@Parameter(key = "concatenationAxis")
 	@Parameter(key = "stackAccess")
 	@Parameter(key = "inputs")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<Integer, StackAccessMode, List<RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> concatenateStackList = Views::concatenate;
+	public final Function3<Integer, StackAccessMode, List<RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> concatenateStackList = Views::concatenate;
 
 	@OpField(names = "transform.dropSingletonDimensionsView")
 	@Parameter(key = "input")
@@ -171,7 +171,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "min")
 	@Parameter(key = "max")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<R>, Double, Double, ExtendedRandomAccessibleInterval<R, RandomAccessibleInterval<R>>> extendRandomView = Views::extendRandom;
+	public final Function3<RandomAccessibleInterval<R>, Double, Double, ExtendedRandomAccessibleInterval<R, RandomAccessibleInterval<R>>> extendRandomView = Views::extendRandom;
 
 	@OpField(names = "transform.extendValueView")
 	@Parameter(key = "input")
@@ -194,14 +194,14 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "dimension")
 	@Parameter(key = "position")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, Integer, Long, MixedTransformView<T>> hyperSliceRA = Views::hyperSlice;
+	public final Function3<RandomAccessible<T>, Integer, Long, MixedTransformView<T>> hyperSliceRA = Views::hyperSlice;
 
 	@OpField(names = "transform.hyperSliceView")
 	@Parameter(key = "input")
 	@Parameter(key = "dimension")
 	@Parameter(key = "position")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<T>, Integer, Long, IntervalView<T>> hyperSliceRAI = Views::hyperSlice;
+	public final Function3<RandomAccessibleInterval<T>, Integer, Long, IntervalView<T>> hyperSliceRAI = Views::hyperSlice;
 
 	@OpField(names = "transform.hyperSlicesView")
 	@Parameter(key = "input")
@@ -220,7 +220,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "min")
 	@Parameter(key = "max")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, long[], long[], IntervalView<T>> intervalMinMax = Views::interval;
+	public final Function3<RandomAccessible<T>, long[], long[], IntervalView<T>> intervalMinMax = Views::interval;
 
 	@OpField(names = "transform.intervalView")
 	@Parameter(key = "input")
@@ -257,7 +257,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "intervalMin")
 	@Parameter(key = "intervalMax")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, long[], long[], IntervalView<T>> offsetIntervalMinMax = Views::offsetInterval;
+	public final Function3<RandomAccessible<T>, long[], long[], IntervalView<T>> offsetIntervalMinMax = Views::offsetInterval;
 
 	@OpField(names = "transform.offsetView")
 	@Parameter(key = "input")
@@ -270,14 +270,14 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "fromAxis")
 	@Parameter(key = "toAxis")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, Integer, Integer, MixedTransformView<T>> permuteRA = Views::permute;
+	public final Function3<RandomAccessible<T>, Integer, Integer, MixedTransformView<T>> permuteRA = Views::permute;
 
 	@OpField(names = "transform.permuteView")
 	@Parameter(key = "input")
 	@Parameter(key = "fromAxis")
 	@Parameter(key = "toAxis")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<T>, Integer, Integer, IntervalView<T>> permuteRAI = Views::permute;;
+	public final Function3<RandomAccessibleInterval<T>, Integer, Integer, IntervalView<T>> permuteRAI = Views::permute;;
 
 	@OpField(names = "transform.permuteCoordinatesInverseView")
 	@Parameter(key = "input")
@@ -290,7 +290,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "permutation")
 	@Parameter(key = "dimension")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<T>, int[], Integer, IntervalView<T>> permuteCoordinatesInverseSingleDim = Views::permuteCoordinatesInverse;
+	public final Function3<RandomAccessibleInterval<T>, int[], Integer, IntervalView<T>> permuteCoordinatesInverseSingleDim = Views::permuteCoordinatesInverse;
 
 	@OpField(names = "transform.permuteCoordinatesView")
 	@Parameter(key = "input")
@@ -303,7 +303,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "permutation")
 	@Parameter(key = "dimension")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<T>, int[], Integer, IntervalView<T>> permuteCoordinatesSingleDim = Views::permuteCoordinates;
+	public final Function3<RandomAccessibleInterval<T>, int[], Integer, IntervalView<T>> permuteCoordinatesSingleDim = Views::permuteCoordinates;
 
 	@OpField(names = "transform.rasterView")
 	@Parameter(key = "input")
@@ -315,21 +315,21 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "fromAxis")
 	@Parameter(key = "toAxis")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, Integer, Integer, MixedTransformView<T>> rotateRA = Views::rotate;
+	public final Function3<RandomAccessible<T>, Integer, Integer, MixedTransformView<T>> rotateRA = Views::rotate;
 
 	@OpField(names = "transform.rotateView")
 	@Parameter(key = "input")
 	@Parameter(key = "fromAxis")
 	@Parameter(key = "toAxis")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessibleInterval<T>, Integer, Integer, IntervalView<T>> rotateRAI = Views::rotate;
+	public final Function3<RandomAccessibleInterval<T>, Integer, Integer, IntervalView<T>> rotateRAI = Views::rotate;
 
 	@OpField(names = "transform.shearView")
 	@Parameter(key = "input")
 	@Parameter(key = "shearDimension")
 	@Parameter(key = "refDimension")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, Integer, Integer, TransformView<T>> shear = Views::shear;
+	public final Function3<RandomAccessible<T>, Integer, Integer, TransformView<T>> shear = Views::shear;
 
 	@OpField(names = "transform.shearView")
 	@Parameter(key = "input")
@@ -337,7 +337,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "shearDimension")
 	@Parameter(key = "refDimension")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final QuadFunction<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> shearInterval = Views::shear;
+	public final Function4<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> shearInterval = Views::shear;
 
 	@OpField(names = "transform.stackView")
 	@Parameter(key = "inputs")
@@ -402,7 +402,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "shearDimension")
 	@Parameter(key = "refDimension")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final TriFunction<RandomAccessible<T>, Integer, Integer, TransformView<T>> unshearRA = Views::unshear;
+	public final Function3<RandomAccessible<T>, Integer, Integer, TransformView<T>> unshearRA = Views::unshear;
 
 	@OpField(names = "transform.unshearView")
 	@Parameter(key = "input")
@@ -410,7 +410,7 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	@Parameter(key = "shearDimension")
 	@Parameter(key = "refDimension")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public final QuadFunction<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> unshearRAI = Views::unshear;
+	public final Function4<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> unshearRAI = Views::unshear;
 
 	@OpField(names = "transform.zeroMinView")
 	@Parameter(key = "input")

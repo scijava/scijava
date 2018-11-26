@@ -42,7 +42,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.util.Functions;
 import org.scijava.types.Nil;
 
@@ -66,7 +66,7 @@ public class RotateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testDefaultRotate() {
 
-		TriFunction<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = Functions
+		Function3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = Functions
 				.ternary(ops(), "transform.rotateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -89,7 +89,7 @@ public class RotateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalRotate() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
 				.ternary(ops(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -116,7 +116,7 @@ public class RotateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalRotateInterval() {
 
-		TriFunction<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
 				.ternary(ops(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {

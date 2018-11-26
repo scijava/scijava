@@ -40,7 +40,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.util.Functions;
 import org.scijava.types.Nil;
 
@@ -63,7 +63,7 @@ public class ExtendRandomViewTest extends AbstractTestEnvironment {
 
 	@Test
 	public void extendRandomTest() {
-		TriFunction<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc = Functions
+		Function3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc = Functions
 				.ternary(ops(), "transform.extendRandomView", raiNil, doubleNil, doubleNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});

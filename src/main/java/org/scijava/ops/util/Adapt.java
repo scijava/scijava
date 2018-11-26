@@ -3,11 +3,11 @@ package org.scijava.ops.util;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.core.BiComputer;
-import org.scijava.ops.core.Computer;
 import org.scijava.ops.core.OneToOneCommand;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.Source;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer;
 
 /**
  * Utility providing adaptation between {@link Op} types.

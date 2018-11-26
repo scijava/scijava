@@ -48,7 +48,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.TriFunction;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.util.Functions;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
@@ -123,7 +123,7 @@ public class ConcatenateViewTest extends AbstractTestEnvironment {
 
 	@Test
 	public void concatenateWithAccessModeTest() {
-		TriFunction<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = Functions
+		Function3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = Functions
 				.ternary(ops(), "transform.concatenateView", new Nil<Integer>() {
 				}, new Nil<StackAccessMode>() {
 				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {

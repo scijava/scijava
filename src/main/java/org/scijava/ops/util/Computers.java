@@ -3,9 +3,9 @@ package org.scijava.ops.util;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.BiComputer;
-import org.scijava.ops.core.Computer;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.types.Nil;
 import org.scijava.util.Types;
 

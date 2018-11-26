@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,6 +30,8 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Map;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpUtils;
@@ -42,7 +44,7 @@ import org.scijava.struct.StructInstance;
 /**
  * Container class for a possible operation match between an {@link OpRef} and
  * an {@link OpInfo}, as computed by the {@link OpTypeMatchingService}.
- * 
+ *
  * @author Curtis Rueden
  * @see OpTypeMatchingService
  */
@@ -66,19 +68,22 @@ public class OpCandidate {
 	private final OpRef ref;
 	private final OpInfo info;
 
+	private final Map<TypeVariable<?>, Type> typeVarAssigns;
+
 	private StatusCode code;
 	private String message;
 	private Member<?> statusItem;
-	
-	/** (Null-)Padded arguments of the op if the op has not required parameters. 
+
+	/** (Null-)Padded arguments of the op if the op has not required parameters.
 	 * If the op does not, this will be the same as {@link #ref}.getArgs(). */
 	private final Type[] paddedArgs;
 
-	public OpCandidate(final OpEnvironment ops, final OpRef ref, final OpInfo info) {
+	public OpCandidate(final OpEnvironment ops, final OpRef ref, final OpInfo info, final Map<TypeVariable<?>, Type> typeVarAssigns) {
 		this.ops = ops;
 		this.ref = ref;
 		this.info = info;
-		
+		this.typeVarAssigns = typeVarAssigns;
+
 		this.paddedArgs = OpUtils.padTypes(this, getRef().getArgs());
 	}
 
@@ -96,14 +101,19 @@ public class OpCandidate {
 	public OpInfo opInfo() {
 		return info;
 	}
-	
+
+	/** Gets the mapping between {@link TypeVariable}s and {@link Type}s that makes the {@link OpCandidate} pair legal. */
+	public Map<TypeVariable<?>, Type> typeVarAssigns() {
+		return typeVarAssigns;
+	}
+
 	public Type[] paddedArgs() {
 		return paddedArgs;
 	}
 
 	/**
 	 * Gets the {@link Struct} metadata describing the op to match against.
-	 * 
+	 *
 	 * @see OpInfo#struct()
 	 */
 	public Struct struct() {
@@ -207,11 +217,11 @@ public class OpCandidate {
 		inject(inst, secondaryArgs);
 		return inst;
 	}
-	
+
 	public Object createOp(Object... secondaryArgs) throws OpMatchingException {
 		return createOpInstance(secondaryArgs).object();
 	}
-	
+
 	private void inject(StructInstance<?> opInst, Object... secondaryArgs) {
 		// Inject the secondary args if there are any
 		if (Inject.Structs.isInjectable(opInst)) {
@@ -221,7 +231,7 @@ public class OpCandidate {
 				throw new IllegalArgumentException(opInfo().implementationName() + " | " + getStatus());
 			}
 			Inject.Structs.inputs(opInst, paddedArgs);
-		// Secondary args are given, however there are no to inject
+			// Secondary args are given, however there are no to inject
 		} else if (secondaryArgs.length > 0) {
 			ops().logger().warn("Specified Op has no secondary args, however secondary args are given. "
 					+ "The specified args will not be injected.");

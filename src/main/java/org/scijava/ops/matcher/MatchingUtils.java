@@ -9,13 +9,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -46,6 +46,7 @@ import java.util.Map;
 
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
+import org.scijava.util.Types.TypeVarFromParameterizedTypeInfo;
 import org.scijava.util.Types.TypeVarInfo;
 
 public final class MatchingUtils {
@@ -58,35 +59,35 @@ public final class MatchingUtils {
 	 * Checks for raw assignability. TODO This method is not yet fully
 	 * implemented. The correct behavior should be as follows. Suppose we have a
 	 * generic typed method like:
-	 * 
+	 *
 	 * <pre>
 	 *public static &lt;N&gt; List&lt;N&gt; foo(N in) {
 	 *	...
 	 *}
 	 * </pre>
-	 * 
+	 *
 	 * This method should discern if the following assignments would be legal,
 	 * possibly using predetermined {@link TypeVariable} assignments:
-	 * 
+	 *
 	 * <pre>
 	 *List&lt;Integer&gt; listOfInts = foo(new Integer(0)) //legal
 	 *List&lt;Number&gt; listOfNumbers = foo(new Integer(0)) //legal
 	 *List&lt;? extends Number&gt; listOfBoundedWildcards = foo(new Integer(0)) //legal
 	 * </pre>
-	 * 
+	 *
 	 * The corresponding calls to this method would be:
-	 * 
+	 *
 	 * <pre>
 	 * Nil&lt;List&lt;N&gt;&gt; nilN = new Nil&lt;List&lt;N&gt;&gt;(){}
 	 * Nil&lt;List&lt;Integer&gt;&gt; nilInteger = new Nil&lt;List&lt;Integer&gt;&gt;(){}
 	 * Nil&lt;List&lt;Number&gt;&gt; nilNumber = new Nil&lt;List&lt;Number&gt;&gt;(){}
 	 * Nil&lt;List&lt;? extends Number&gt;&gt; nilWildcardNumber = new Nil&lt;List&lt;? extends Number&gt;&gt;(){}
-	 * 
+	 *
 	 * checkGenericOutputsAssignability(nilN.getType(), nilInteger.getType, ...)
 	 * checkGenericOutputsAssignability(nilN.getType(), nilNumber.getType, ...)
 	 * checkGenericOutputsAssignability(nilN.getType(), nilWildcardNumber.getType, ...)
 	 * </pre>
-	 * 
+	 *
 	 * Using a map where N was already bound to Integer (N -> Integer.class).
 	 * This method is useful for the following scenario: During ops matching, we
 	 * first check if the arguments (inputs) of the requested op are applicable
@@ -94,7 +95,7 @@ public final class MatchingUtils {
 	 * variables may be inferred. The can then be used with this method to find
 	 * out if the outputs of the op candidate would be assignable to the output
 	 * of the requested op.
-	 * 
+	 *
 	 * @param froms
 	 * @param tos
 	 * @param typeBounds
@@ -105,6 +106,19 @@ public final class MatchingUtils {
 		for (int i = 0; i < froms.length; i++) {
 			Type from = froms[i];
 			Type to = tos[i];
+			
+			//HACK: we CAN assign, for example, a Function<Iterable<N>, O> to a Function<Iterable<Integer>, Double>,
+			//because in this situation O is not bounded to any other types. However isAssignable will fail, 
+			//since we cannot just cast Double to O without that required knowledge that O can be fixed to Double. 
+			//We get around this by recording in typeBounds that our previously unbounded TypeVariable (from) \
+			//is now fixed to (to), then simply assigning (from) to (to), since from only has one bound, being to.
+			if(from instanceof TypeVariable && typeBounds.get(from) == null) {
+			    TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
+			    TypeVarFromParameterizedTypeInfo fromInfo = new TypeVarFromParameterizedTypeInfo(fromTypeVar);
+			    fromInfo.fixBounds(to, true);
+			    typeBounds.put(fromTypeVar, fromInfo);
+			    from = to;
+			}
 
 			if (!Types.isAssignable(Types.raw(from), Types.raw(to)))
 				return i;
@@ -118,11 +132,11 @@ public final class MatchingUtils {
 	 * a supertype of the source type). Thereby, possible {@link TypeVariable}s
 	 * contained in the parameters of the source are tried to be inferred in the
 	 * sense of empty angle brackets when a new object is created:
-	 * 
+	 *
 	 * <pre>
 	 * List&lt;Integer&gt; listOfInts = new ArrayList&lt;&gt;();
 	 * </pre>
-	 * 
+	 *
 	 * Hence, the types to put between the brackets are tried to be determined.
 	 * Inference will be done by simple matching of an encountered
 	 * {@link TypeVariable} in the source to the corresponding type in the
@@ -134,7 +148,7 @@ public final class MatchingUtils {
 	 * <ul>
 	 * If we have a class:
 	 * <li>
-	 * 
+	 *
 	 * <pre>
 	 * class NumberSupplier&lt;M extends Number&gt; implements Supplier&lt;M&gt;
 	 * </li>
@@ -142,7 +156,7 @@ public final class MatchingUtils {
 	 * <ul>
 	 * The following check will return true:
 	 * <li>
-	 * 
+	 *
 	 * <pre>
 	 * checkGenericAssignability(NumberSupplier.class, new
 	 * Nil&lt;Supplier&lt;Double&gt;&gt;() {}.getType())</li>
@@ -151,7 +165,7 @@ public final class MatchingUtils {
 	 * <ul>
 	 * Which will check if the following assignment would be legal:
 	 * <li>
-	 * 
+	 *
 	 * <pre>
 	 * Supplier&lt;Double&gt; list = new NumberSupplier&lt;&gt;()</li>
 	 * </ul>
@@ -163,7 +177,7 @@ public final class MatchingUtils {
 	 * <ul>
 	 * Consequently the following will return false:
 	 * <li>
-	 * 
+	 *
 	 * <pre>
 	 * checkGenericAssignability(NumberSupplier.class, new
 	 * Nil&lt;Supplier&lt;String&gt;&gt;() {}.getType())</li>
@@ -176,7 +190,7 @@ public final class MatchingUtils {
 	 * Furthermore, the following will return false for:
 	 * {@code class NumberFunc<M extends Number> implements Function<M, M>}:
 	 * <li>
-	 * 
+	 *
 	 * <pre>
 	 * checkGenericAssignability(NumberSupplier.class, new
 	 * Nil&lt;Function&lt;Double, Integer&gt;&gt;() {}.getType())</li>
@@ -185,7 +199,7 @@ public final class MatchingUtils {
 	 * {@code <M extends Number>} can't be inferred, as types {@code Double} and
 	 * {@code Integer} are ambiguous for {@code M}.
 	 * </ul>
-	 * 
+	 *
 	 * @param src
 	 *            the type for which assignment should be checked from
 	 * @param dest
@@ -194,7 +208,7 @@ public final class MatchingUtils {
 	 * @return whether and assignment of source to destination would be a legal
 	 *         java statement
 	 */
-	public static boolean checkGenericAssignability(Type src, ParameterizedType dest) {
+	public static boolean checkGenericAssignability(Type src, ParameterizedType dest, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		// check raw assignability
 		if (!Types.isAssignable(Types.raw(src), Types.raw(dest)))
 			return false;
@@ -211,10 +225,18 @@ public final class MatchingUtils {
 			return Types.isAssignable(src, dest);
 		}
 
-		return checkGenericAssignability(srcTypes, destTypes, dest);
+		return checkGenericAssignability(srcTypes, destTypes, dest, typeVarAssigns);
+	}
+
+	public static boolean checkGenericAssignability(Type src, ParameterizedType dest) {
+		return checkGenericAssignability(src, dest, new HashMap<TypeVariable<?>, Type>());
 	}
 
 	private static boolean checkGenericAssignability(Type[] srcTypes, Type[] destTypes, Type dest) {
+		return checkGenericAssignability(srcTypes, destTypes, dest, new HashMap<TypeVariable<?>, Type>());
+	}
+
+	private static boolean checkGenericAssignability(Type[] srcTypes, Type[] destTypes, Type dest, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		// if the number of type arguments does not match, the types can't be
 		// assignable
 		if (srcTypes.length != destTypes.length) {
@@ -223,12 +245,11 @@ public final class MatchingUtils {
 
 		Type[] mappedSrcTypes = null;
 		try {
-			Map<TypeVariable<?>, Type> typeAssigns = new HashMap<TypeVariable<?>, Type>();
 			// Try to infer type variables contained in the type arguments of
 			// sry
-			inferTypeVariables(srcTypes, destTypes, typeAssigns);
+			inferTypeVariables(srcTypes, destTypes, typeVarAssigns);
 			// Map the vars to the inferred types
-			mappedSrcTypes = mapVarToTypes(srcTypes, typeAssigns);
+			mappedSrcTypes = mapVarToTypes(srcTypes, typeVarAssigns);
 		} catch (TypeInferenceException e) {
 			// types can't be inferred
 			return false;
@@ -249,7 +270,7 @@ public final class MatchingUtils {
 	 */
 	private static class TypeInferenceException extends Exception {
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 7147530827546663700L;
 	}
@@ -258,7 +279,7 @@ public final class MatchingUtils {
 	 * Map type vars in specified type list to types using the specified map. In
 	 * doing so, type vars mapping to other type vars will not be followed but
 	 * just repalced.
-	 * 
+	 *
 	 * @param typesToMap
 	 * @param typeAssigns
 	 * @return
@@ -275,7 +296,7 @@ public final class MatchingUtils {
 	/**
 	 * Tries to infer type vars contained in types from corresponding types from
 	 * inferFrom, putting them into the specified map.
-	 * 
+	 *
 	 * @param types
 	 * @param inferFrom
 	 * @param typeAssigns
@@ -304,7 +325,7 @@ public final class MatchingUtils {
 				// Bounds could also contain type vars, hence possibly go into
 				// recursion
 				for (Type bound : varType.getBounds()) {
-					if (bound instanceof TypeVariable && typeAssigns.get((TypeVariable<?>) bound) != null) {
+					if (bound instanceof TypeVariable && typeAssigns.get(bound) != null) {
 						// If the bound of the current var (let's call it A) to
 						// infer is also a var (let's call it B):
 						// If we already encountered B, we check if the current
@@ -322,7 +343,7 @@ public final class MatchingUtils {
 						// suffices to check whether Double can be assigned
 						// to Number, it does not have to be equal as it is just
 						// a transitive bound for B.
-						Type typeAssignForBound = typeAssigns.get((TypeVariable<?>) bound);
+						Type typeAssignForBound = typeAssigns.get(bound);
 						if (!Types.isAssignable(from, typeAssignForBound)) {
 							throw new TypeInferenceException();
 						}
@@ -358,7 +379,7 @@ public final class MatchingUtils {
 	 * will return the type parameters of superErasure possibly narrowed down by
 	 * subType. If superErasure is not raw or not a super type of subType, an
 	 * empty array will be returned.
-	 * 
+	 *
 	 * @param subType
 	 *            the type to narrow down type parameters
 	 * @param superErasure

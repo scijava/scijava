@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,6 +30,7 @@ package org.scijava.ops;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -85,7 +86,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	@Parameter
 	private LogService log;
-	
+
 	@Parameter
 	private OpTransformerService transformer;
 
@@ -102,14 +103,14 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	public void initOpCache() {
 		opCache = new PrefixTree<>();
-		
+
 		// Add regular Ops
 		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
 			try {
 				final Class<? extends Op> opClass = pluginInfo.loadClass();
 				OpInfo opInfo = new OpClassInfo(opClass);
 				addToCache(opInfo, pluginInfo.getName());
-				
+
 			} catch (InstantiableException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
 			}
@@ -128,7 +129,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			}
 		}
 	}
-	
+
 	private void addToCache(OpInfo opInfo, String opNames) {
 		String[] parsedOpNames = OpUtils.parseOpNames(opNames);
 		if (parsedOpNames == null || parsedOpNames.length == 0) {
@@ -167,48 +168,49 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 		return opCache.getAndBelow(new PrefixQuery(opName));
 	}
-	
+
 	@Override
 	public LogService logger() {
 		return log;
 	}
-	
+
 	/**
 	 * Attempts to inject {@link OpDependency} annotated fields of the specified object by
-	 * looking for Ops matching the field type and the name specified in the 
+	 * looking for Ops matching the field type and the name specified in the
 	 * annotation. The field type is assumed to be functional.
-	 * 
+	 *
 	 * @param obj
 	 * @throws OpMatchingException
 	 *      if the type of the specified object is not functional,
 	 *      if the Op matching the functional type and the name could not be found,
 	 *      if an exception occurs during injection
 	 */
-	public void resolveOpDependencies(Object obj) throws OpMatchingException {
+	public void resolveOpDependencies(Object obj, OpCandidate parentOp) throws OpMatchingException {
 		final Class<?> c = obj.getClass();
 		final List<Field> opFields = ClassUtils.getAnnotatedFields(c, OpDependency.class);
-		
+
 		for (final Field opField : opFields) {
 			final String opName = opField.getAnnotation(OpDependency.class).name();
 			final Type fieldType = Types.fieldType(opField, c);
-			
-			OpRef inferredRef = inferOpRef(fieldType, opName);
+			final Type mappedFieldType = Types.mapVarToTypes(new Type[] {fieldType}, parentOp.typeVarAssigns())[0];
+
+			OpRef inferredRef = inferOpRef(mappedFieldType, opName, parentOp.typeVarAssigns());
 			if (inferredRef == null) {
 				throw new OpMatchingException("Could not infer functional "
 						+ "method inputs and outputs of Op dependency field: "
 						+ opField);
 			}
-			
+
 			Object matchedOp = null;
 			try {
 				matchedOp = findOpInstance(opName, inferredRef);
 			} catch (Exception e) {
 				throw new OpMatchingException(
-						"Could not find Op that matches requested Op dependency field:" 
-						+ "\nOp class: " + c.getName()
-						+ "\nDependency field: " + opField.getName()
-						+ "\n\n Attempted request:\n"
-						+ inferredRef, e);
+						"Could not find Op that matches requested Op dependency field:"
+								+ "\nOp class: " + c.getName()
+								+ "\nDependency field: " + opField.getName()
+								+ "\n\n Attempted request:\n"
+								+ inferredRef, e);
 			}
 
 			try {
@@ -217,13 +219,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				throw new OpMatchingException(
 						"Exception trying to inject Op dependency field.\n"
-						+ "\tOp dependency field to resolve: " + opField + "\n"
-						+ "\tFound Op to inject: " + matchedOp.getClass().getName() + "\n"
-						+ "\tWith inferred OpRef: " + inferredRef, e);
+								+ "\tOp dependency field to resolve: " + opField + "\n"
+								+ "\tFound Op to inject: " + matchedOp.getClass().getName() + "\n"
+								+ "\tWith inferred OpRef: " + inferredRef, e);
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?>[] outTypes, final Object... secondaryArgs) {
@@ -233,21 +235,22 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	public Object findOpInstance(final String opName, final OpRef ref, final Object... secondaryArgs) {
 		Object op = null;
+		OpCandidate match = null;
 		try {
 			// Find single match which matches the specified types
-			OpCandidate match = matcher.findSingleMatch(this, ref);
+			match = matcher.findSingleMatch(this, ref);
 			op = match.createOp(secondaryArgs);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
-			
+
 			// If we can't find an op matching the original request, we try to find a transformation
 			OpTransformationCandidate transformation = transformer.findTransfromation(this, ref);
 			if (transformation == null) {
 				log.debug("No matching Op transformation found");
 				throw new IllegalArgumentException(e);
 			}
-			
+
 			// If we found one, try to do transformation and return transformed op
 			log.debug("Matching Op transformation found:\n" + transformation + "\n");
 			try {
@@ -255,18 +258,18 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			} catch (OpMatchingException | OpTransformationException e1) {
 				log.debug("Execution of Op transformatioon failed:\n");
 				log.debug(e1);
-				
+
 			}
 		}
 		try {
 			// Try to resolve annotated OpDependency fields
-			resolveOpDependencies(op);
+			resolveOpDependencies(op, match);
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
 		return op;
 	}
-	
+
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
 			final Object... secondaryArgs) {
 		return findOpInstance(opName, specialType, inTypes, outTypes, secondaryArgs);
@@ -280,7 +283,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
 	}
-	
+
 	/**
 	 * Tries to infer a {@link OpRef} from a functional Op type. E.g. the type:
 	 * <pre>Computer&lt;Double[], Double[]&gt</pre>
@@ -293,32 +296,38 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * </pre>
 	 * Input and output types will be inferred by looking at the signature of the functional
 	 * method of the specified type. Also see {@link ParameterStructs#getFunctionalMethodTypes(Type)}.
-	 * 
+	 *
 	 * @param type
 	 * @param name
 	 * @return null if
 	 *          the specified type has no functional method
 	 */
-	private OpRef inferOpRef(Type type, String name) {
+	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		List<FunctionalMethodType> fmts = ParameterStructs.getFunctionalMethodTypes(type);
 		if (fmts == null) return null;
-		
+
 		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.BOTH, ItemIO.INPUT);
 		EnumSet<ItemIO> outIos = EnumSet.of(ItemIO.BOTH, ItemIO.OUTPUT);
-		
+
 		Type[] inputs = fmts.stream().filter(fmt -> inIos.contains(fmt.itemIO()))
 				.map(fmt -> fmt.type()).toArray(Type[]::new);
+
 		Type[] outputs = fmts.stream().filter(fmt -> outIos.contains(fmt.itemIO()))
 				.map(fmt -> fmt.type()).toArray(Type[]::new);
-		
-		return new OpRef(name, new Type[]{type}, outputs, inputs);
+
+		Type[] mappedInputs = Types.mapVarToTypes(inputs, typeVarAssigns);
+		Type[] mappedOutputs = Types.mapVarToTypes(outputs, typeVarAssigns);
+
+		return new OpRef(name, new Type[]{type}, mappedOutputs, mappedInputs);
 	}
+
+
 
 	/**
 	 * Updates alias map using the specified String list. The first String in
 	 * the list is assumed to be the canonical name of the op. After this method
 	 * returns, all String in the specified list will map to the canonical name.
-	 * 
+	 *
 	 * @param opNames
 	 */
 	private void addAliases(String[] opNames, String opImpl) {
@@ -331,7 +340,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				if (!opAliases.get(alias).equals(opName)) {
 					log.warn("Possible naming clash for op '" + opImpl + "' detected. Attempting to add alias '"
 							+ alias + "' for op name '" + opName + "'. However the alias '" + alias + "' is already "
-									+ "associated with op name '" + opAliases.get(alias) + "'.");
+							+ "associated with op name '" + opAliases.get(alias) + "'.");
 				}
 				continue;
 			}
@@ -341,7 +350,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	/**
 	 * Constructs a string with the specified number of tabs '\t'.
-	 * 
+	 *
 	 * @param numOfTabs
 	 * @return
 	 */
@@ -362,7 +371,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private static class PrefixQuery {
 		String cachedToString;
 
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<String> list = new LinkedList<>();
 
 		public static PrefixQuery all() {
 			return new PrefixQuery("");
@@ -371,7 +380,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		/**
 		 * Construct a new query from the specified string. Prefixes must be
 		 * separated by dots.
-		 * 
+		 *
 		 * @param query
 		 *            the string to use as query
 		 */
@@ -387,7 +396,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 		/**
 		 * Remove and return the first prefix.
-		 * 
+		 *
 		 * @return
 		 */
 		public String pop() {
@@ -396,7 +405,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 		/**
 		 * Whether there are more prefixes.
-		 * 
+		 *
 		 * @return
 		 */
 		public boolean hasNext() {
@@ -423,7 +432,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	/**
 	 * Data structure to group elements which share common prefixes. E.g. adding
 	 * the following elements:
-	 * 
+	 *
 	 * <pre>
 	 *	Prefix:		Elem:
 	 *	"math.add"	obj1
@@ -432,9 +441,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 *	"math"		obj4
 	 *	""		obj5
 	 * </pre>
-	 * 
+	 *
 	 * Will result in the following tree:
-	 * 
+	 *
 	 * <pre>
 	 *               root [obj5]
 	 *                     |
@@ -444,7 +453,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 *              /             \
 	 *      add [obj1, obj2]   sqrt [obj3]
 	 * </pre>
-	 * 
+	 *
 	 * @author David Kolb
 	 *
 	 * @param <T>
@@ -453,13 +462,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		private PrefixNode<T> root;
 
 		public PrefixTree() {
-			root = new PrefixNode<T>();
+			root = new PrefixNode<>();
 		}
 
 		/**
 		 * Adds the specified element on the level represented by the specified
 		 * query. This method is in O(#number of prefixes in query)
-		 * 
+		 *
 		 * @param query
 		 * @param node
 		 * @param data
@@ -486,7 +495,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		 * returns an iterable over these elements in O(# number of all nodes
 		 * below query). The number of nodes is the number of distinct prefixes
 		 * below the specified query.
-		 * 
+		 *
 		 * @param query
 		 * @return
 		 */
@@ -527,13 +536,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		 * will be retained. Added lists will be simply saved in a super
 		 * LinkedList. If the iterator reaches the end of one list, it will
 		 * switch to the next if available.
-		 * 
+		 *
 		 * @author David Kolb
 		 */
 		private class LinkedLinkedLists implements Iterable<T> {
 
 			LinkedList<LinkedList<T>> lists = new LinkedList<>();
-			
+
 			long size = 0;
 
 			private void append(LinkedList<T> list) {

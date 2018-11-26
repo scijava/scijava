@@ -113,7 +113,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		// List of valid candidates needs to be sorted according to priority.
 		// This is used as an optimization in order to not look at ops with
 		// lower priority than the already found one.
-		validCandidates.sort((c1, c2) -> Double.compare(c1.opInfo().priority(), c2.opInfo().priority()));
+		validCandidates.sort((c1, c2) -> Double.compare(c2.opInfo().priority(), c1.opInfo().priority()));
 
 		List<OpCandidate> matches;
 		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));

@@ -30,8 +30,8 @@
 package org.scijava.ops;
 
 import org.junit.Test;
-import org.scijava.ops.core.BiComputer;
-import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.util.Computers;
 import org.scijava.ops.types.Nil;
 

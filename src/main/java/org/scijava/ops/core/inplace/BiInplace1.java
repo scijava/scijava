@@ -1,4 +1,4 @@
-package org.scijava.ops.core;
+package org.scijava.ops.core.inplace;
 
 import java.util.function.BiConsumer;
 

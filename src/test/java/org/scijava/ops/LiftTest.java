@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.util.Maps;
 import org.scijava.param.ValidityException;
 import org.scijava.ops.types.Nil;

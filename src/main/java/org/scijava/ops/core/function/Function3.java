@@ -1,4 +1,4 @@
-package org.scijava.ops.core;
+package org.scijava.ops.core.function;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -24,7 +24,7 @@ import java.util.function.Function;
  * @since 1.8
  */
 @FunctionalInterface
-public interface TriFunction<I1, I2, I3, O> {
+public interface Function3<I1, I2, I3, O> {
 
 	/**
 	 * Applies this function to the given arguments.
@@ -55,7 +55,7 @@ public interface TriFunction<I1, I2, I3, O> {
 	 * @throws NullPointerException
 	 *             if after is null
 	 */
-	default <O2> TriFunction<I1, I2, I3, O2> andThen(Function<? super O, ? extends O2> after) {
+	default <O2> Function3<I1, I2, I3, O2> andThen(Function<? super O, ? extends O2> after) {
 		Objects.requireNonNull(after);
 		return (I1 in1, I2 in2, I3 in3) -> after.apply(apply(in1, in2, in3));
 	}

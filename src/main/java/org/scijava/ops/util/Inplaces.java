@@ -3,8 +3,8 @@ package org.scijava.ops.util;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.BiInplace1;
-import org.scijava.ops.core.Inplace;
+import org.scijava.ops.core.inplace.BiInplace1;
+import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;

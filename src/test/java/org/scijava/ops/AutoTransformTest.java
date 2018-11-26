@@ -28,16 +28,16 @@
  */
 
 package org.scijava.ops;
+import com.google.common.collect.Streams;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.core.Computer;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.types.Nil;
-
-import com.google.common.collect.Streams;
 
 public class AutoTransformTest extends AbstractTestEnvironment {
 

@@ -2,8 +2,8 @@ package org.scijava.ops.copy;
 
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
-import org.scijava.ops.core.Computer;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

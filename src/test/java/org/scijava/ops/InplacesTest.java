@@ -30,8 +30,8 @@
 package org.scijava.ops;
 
 import org.junit.Test;
-import org.scijava.ops.core.BiInplace1;
-import org.scijava.ops.core.Inplace;
+import org.scijava.ops.core.inplace.BiInplace1;
+import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.ops.util.Inplaces;
 import org.scijava.ops.types.Nil;
 

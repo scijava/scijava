@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * @since 1.8
  */
 @FunctionalInterface
-public interface TriConsumer<T, U, V> {
+public interface Consumer3<T, U, V> {
 
 	/**
 	 * Performs this operation on the given arguments.
@@ -48,7 +48,7 @@ public interface TriConsumer<T, U, V> {
 	 * @throws NullPointerException
 	 *             if {@code after} is null
 	 */
-	default TriConsumer<T, U, V> andThen(TriConsumer<? super T, ? super U, ? super V> after) {
+	default Consumer3<T, U, V> andThen(Consumer3<? super T, ? super U, ? super V> after) {
 		Objects.requireNonNull(after);
 
 		return (t, u, v) -> {

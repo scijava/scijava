@@ -3,9 +3,10 @@ package org.scijava.ops.math;
 import com.google.common.collect.Streams;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.scijava.core.Priority;
 import org.scijava.ops.core.Op;
@@ -16,11 +17,11 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 public class Add {
-	
+
 	public static final String NAMES = MathOps.ADD;
-	
+
 	// --------- Functions ---------
-	
+
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
@@ -33,26 +34,26 @@ public class Add {
 	}
 
 	// This Op is not needed anymore, can be handled via auto op transformation
-//	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
-//	@Parameter(key = "array1")
-//	@Parameter(key = "array2")
-//	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
-//	public static class MathPointwiseAddDoubleArraysFunction
-//			implements BiFunction<double[], double[], double[]> {
-//		@Override
-//		public double[] apply(double[] arr1, double[] arr2) {
-//			Stream<Double> s1 = Arrays.stream(arr1).boxed();
-//			Stream<Double> s2 = Arrays.stream(arr2).boxed();
-//			return Streams.zip(s1, s2, (num1, num2) -> num1 + num2).mapToDouble(Double::doubleValue).toArray();
-//		}
-//	}
-	
+	//	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
+	//	@Parameter(key = "array1")
+	//	@Parameter(key = "array2")
+	//	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
+	//	public static class MathPointwiseAddDoubleArraysFunction
+	//			implements BiFunction<double[], double[], double[]> {
+	//		@Override
+	//		public double[] apply(double[] arr1, double[] arr2) {
+	//			Stream<Double> s1 = Arrays.stream(arr1).boxed();
+	//			Stream<Double> s2 = Arrays.stream(arr2).boxed();
+	//			return Streams.zip(s1, s2, (num1, num2) -> num1 + num2).mapToDouble(Double::doubleValue).toArray();
+	//		}
+	//	}
+
 	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
 	@Parameter(key = "iter1")
 	@Parameter(key = "iter2")
 	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
 	public static class MathPointwiseAddIterablesFunction<M extends Number, I extends Iterable<M>>
-			implements BiFunction<I, I, Iterable<Double>> {
+	implements BiFunction<I, I, Iterable<Double>> {
 		@Override
 		public Iterable<Double> apply(I i1, I i2) {
 			Stream<? extends Number> s1 = Streams.stream((Iterable<? extends Number>) i1);
@@ -62,7 +63,7 @@ public class Add {
 	}
 
 	// --------- Computers ---------
-			
+
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "integer1")
 	@Parameter(key = "integer2")
@@ -86,9 +87,9 @@ public class Add {
 			}
 		}
 	}
-	
+
 	// --------- Inplaces ---------
-	
+
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
 	@Parameter(key = "array1")
@@ -100,7 +101,31 @@ public class Add {
 			}
 		}
 	}
-	
+
+	@Plugin(type = Op.class, name = NAMES)
+	@Parameter(key = "val1")
+	@Parameter(key = "val2")
+	@Parameter(key = "output", type = ItemIO.OUTPUT)
+	public static class MathAddNumbersFunction <N extends Number> implements BiFunction<N, N, Double>{
+
+		@Override
+		public Double apply(N in1, N in2) {
+			return in1.doubleValue() + in2.doubleValue();
+		}
+	}
+
+	@Plugin(type = Op.class, name = NAMES)
+	@Parameter(key = "iterable")
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	public static class MathReductionAdd <N extends Number> implements Function<Iterable<N>, Double>{
+
+		@Override
+		public Double apply(Iterable<N> iterable) {
+			return StreamSupport.stream(iterable.spliterator(), false).mapToDouble(Number::doubleValue).sum();
+		}
+	}
+
+
 	// @Op
 	// @Parameter(key = "number1")
 	// @Parameter(key = "number2")

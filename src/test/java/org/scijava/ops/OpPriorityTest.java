@@ -29,13 +29,39 @@
 
 package org.scijava.ops;
 import static org.junit.Assert.assertTrue;
+
 import java.util.function.BiFunction;
 
 import org.junit.Test;
+import org.scijava.core.Priority;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.core.Source;
+import org.scijava.param.Parameter;
 import org.scijava.param.ValidityException;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 
 public class OpPriorityTest extends AbstractTestEnvironment {
+	
+	@Plugin(type = Op.class, name = "test.priority", priority = Priority.HIGH)
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	private static final class testDouble implements Source<Number>{
+		@Override
+		public Number create() {
+			return new Double(0.0);
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.priority", priority = Priority.LOW)
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	private static final class testFloat implements Source<Number>{
+		@Override
+		public Number create() {
+			return new Float(0.0);
+		}
+	}
+	
 
 	Nil<Double> nilDouble = new Nil<Double>() {
 	};
@@ -51,5 +77,13 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 
 		// The found op is assumed to come from the MathOpCollection
 		assertTrue(divFunction.getClass().getName().contains("MathOpCollection$$Lambda"));
+	}
+	
+	@Test
+	public void testOpPriority() {
+
+		Source<Number> testFunc = ops().findOp("test.priority", new Nil<Source<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
+		Number x = testFunc.create();
+		assertTrue(x instanceof Double);
 	}
 }

@@ -31,6 +31,7 @@ import net.imglib2.view.composite.NumericComposite;
 import net.imglib2.view.composite.RealComposite;
 
 import org.scijava.core.Priority;
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;

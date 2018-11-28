@@ -78,7 +78,7 @@ public class Add {
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwiseAddDoubleArraysComputer implements BiComputer<double[], double[], double[]> {
+	public static class MathPointwiseAddDoubleArraysComputer implements Op, BiComputer<double[], double[], double[]> {
 		@Override
 		public void compute(double[] in1, double[] in2, double[] out) {
 			for (int i = 0; i < out.length; i++) {

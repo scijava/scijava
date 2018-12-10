@@ -37,10 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
-
-import com.google.common.primitives.Primitives;
 
 /**
  * Utility class to do modification on {@link Type}s.

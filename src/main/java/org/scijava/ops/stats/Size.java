@@ -28,7 +28,7 @@ public class Size {
 
 	        @Override
 	        public Double apply(Iterable<T> iterable) {
-	            return (double) (long) StreamSupport.stream(iterable.spliterator(), false).count();
+	            return (double) StreamSupport.stream(iterable.spliterator(), false).count();
 	        }
 	    }
 }

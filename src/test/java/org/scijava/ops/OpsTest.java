@@ -41,7 +41,6 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.inplace.BiInplace1;
 import org.scijava.ops.core.inplace.Inplace;
-import org.scijava.ops.math.Add.MathAddDoublesFunction;
 import org.scijava.types.Nil;
 
 public class OpsTest extends AbstractTestEnvironment {

@@ -3,7 +3,6 @@ package org.scijava.ops.transform;
 import java.util.List;
 
 import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.plugin.SingletonService;
 import org.scijava.service.SciJavaService;

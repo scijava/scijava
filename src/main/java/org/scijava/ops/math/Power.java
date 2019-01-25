@@ -18,7 +18,7 @@ public class Power {
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static class MathPowerDoublConstantFunction implements Function<Double, Double> {
 
-		@Parameter
+		@Parameter(itemIO=ItemIO.INPUT)
 		private double exponent;
 
 		@Override
@@ -43,7 +43,7 @@ public class Power {
 	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static class MathPointwisePowerDoubleArrayComputer implements Computer<double[], double[]> {
 
-		@Parameter
+		@Parameter(itemIO=ItemIO.INPUT)
 		private Double exponent;
 
 		@Override

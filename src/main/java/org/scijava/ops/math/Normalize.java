@@ -17,10 +17,10 @@ public class Normalize {
 	@Parameter(key = "normalized", itemIO = ItemIO.OUTPUT)
 	public static class MathMinMaxNormalizeFunction implements Function<double[], double[]> {
 
-		@Parameter
+		@Parameter(itemIO=ItemIO.INPUT)
 		private Double newMin;
 		
-		@Parameter(required = false)
+		@Parameter(itemIO=ItemIO.INPUT, required = false)
 		private Double newMax;
 
 		@Override

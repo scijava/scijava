@@ -8,7 +8,7 @@ import org.scijava.struct.ItemIO;
 
 public abstract class OneToOneCommand<I, O> implements Command, Supplier<O> {
 
-	@Parameter
+	@Parameter(itemIO=ItemIO.INPUT)
 	protected I input;
 	
 	@Parameter(itemIO = ItemIO.OUTPUT)

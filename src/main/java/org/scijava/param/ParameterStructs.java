@@ -103,14 +103,6 @@ public final class ParameterStructs {
 		return items;
 	}
 
-	public static <T> Field field(final Member<T> item) {
-		if (item instanceof FieldParameterMember) {
-			final FieldParameterMember<T> fpItem = (FieldParameterMember<T>) item;
-			return fpItem.getField();
-		}
-		return null;
-	}
-
 	// -- Helper methods --
 	
 	/**

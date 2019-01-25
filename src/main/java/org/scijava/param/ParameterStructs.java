@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.struct.ItemIO;
@@ -34,15 +35,30 @@ import io.leangen.geantyref.TypeFactory;
  * Utility functions for working with {@link org.scijava.param} classes.
  * 
  * @author Curtis Rueden
+ * @author David Kolb
  */
 public final class ParameterStructs {
 
+	/**
+	 * Convenience method to call {@link #structOf(Class)} dot {@link Struct#createInstance(Object)}
+	 * 
+	 * @param object
+	 * @return
+	 * @throws ValidityException
+	 */
 	public static <C> StructInstance<C> create(final C object)
 		throws ValidityException
 	{
 		return structOf(object.getClass()).createInstance(object);
 	}
 
+	/**
+	 * Convenience method to () -> parse(type)
+	 * 
+	 * @param type
+	 * @return
+	 * @throws ValidityException
+	 */
 	public static Struct structOf(final Class<?> type)
 		throws ValidityException
 	{
@@ -50,6 +66,13 @@ public final class ParameterStructs {
 		return () -> items;
 	}
 	
+	/**
+	 * Convenience method to () -> parse(field)
+	 * 
+	 * @param field
+	 * @return
+	 * @throws ValidityException
+	 */
 	public static Struct structOf(final Field field)
 			throws ValidityException
 	{
@@ -57,6 +80,23 @@ public final class ParameterStructs {
 		return () -> items;
 	}
 
+	/**
+	 * Parses the specified functional class for @{@link Parameter} annotations. This consists of the following steps:
+	 * <br><br>
+	 * 1) First annotations on the class level are checked. These annotate the signature (parameters and return type) of
+	 * the specified functional class (or subtype of one). The annotations re expected to be in the following order: 
+	 * parameters, return type.
+	 * <br>
+	 * E.g. a {@link Function} may be annotated with two @{@link Parameter} annotations, where the first annotation will
+	 * annotate the parameter and the second the return type of the functional method {@link Function#apply(Object)} of
+	 * {@link Function}.
+	 * <br><br>
+	 * 2) Second, annotations on the fields of the specified class are checked.
+	 * 
+	 * @param type the class to parse, is expected to contain some functional interface in its hierarchy
+	 * @return list of identified member instances
+	 * @throws ValidityException if there are problems during parsing
+	 */
 	public static List<Member<?>> parse(final Class<?> type)
 		throws ValidityException
 	{
@@ -84,6 +124,14 @@ public final class ParameterStructs {
 		return items;
 	}
 	
+	/**
+	 * Parses the specified field for @{@link Parameter} annotations. Has the same behavior as the first parsing step
+	 * of {@link #parse(Class)}. 
+	 * 
+	 * @param field the field to parse, is expected to contain some functional interface in the hierarchy of its type
+	 * @return list of identified member instances
+	 * @throws ValidityException if there are problems during parsing
+	 */
 	public static List<Member<?>> parse(final Field field) throws ValidityException {
 		Class<?> c = field.getDeclaringClass();
 		if (c == null || field == null) return null;
@@ -166,6 +214,20 @@ public final class ParameterStructs {
 			}
 	}
 	
+	/**
+	 * Create new instances of {@link Parameter} annotations having default names (key) and the {@link ItemIO}
+	 * from the specified list of {@link FunctionalMethodType}s. Default names will be:<br><br>
+	 * 'mutable{index}' for {@link ItemIO#BOTH}<br>
+	 * 'input{index}' for {@link ItemIO#INPUT}<br>
+	 * 'output{index}' for {@link ItemIO#OUTPUT}<br><br>
+	 * with {index} being counted individually.
+	 * 
+	 * This is used to infer the annotations for {@link FunctionalParameterMember}s if the {@link Parameter} is not
+	 * explicitly specified by a user and should thus be inferred from the functional method type.
+	 * 
+	 * @param fmts
+	 * @return
+	 */
 	private static Parameter[] synthesizeParameterAnnotations(final List<FunctionalMethodType> fmts) {
 		List<Parameter> params = new ArrayList<>();
 		
@@ -206,12 +268,26 @@ public final class ParameterStructs {
 		return params.toArray(new Parameter[params.size()]);
 	}
 	
+	/**
+	 * Mutates {@link ItemIO#AUTO} in the specified annotations array by replacing it with the inferred {@link ItemIO}
+	 * from the specified {@link FunctionalMethodType}s. Also checks if the user defined {@link ItemIO} matches the 
+	 * inferred one if its different from AUTO and logs the errors in the specified problems list. It is expected that
+	 * the order of annotations matches the order of specified {@link FunctionalMethodType}s.
+	 * 
+	 * @param annotations the {@link Parameter} annotations to mutate
+	 * @param fmts inferred method types from the functional method
+	 * @param problems list to record problems
+	 * @return true if new problems got added to the problems list
+	 */
 	private static boolean resolveItemIOAuto(Parameter[] annotations, List<FunctionalMethodType> fmts, final ArrayList<ValidityProblem> problems) {
 		boolean dirty = false;
 		int i = 0;
 		for (Parameter anno : annotations) {
 			FunctionalMethodType fmt = fmts.get(i);
 			if (anno.itemIO().equals(ItemIO.AUTO)) {
+				// NB: Mutating the annotation should be fine here, as the functional signature can't change dynamically.
+				// Hence, the inferred ITemIO should stay valid. (And for now we do not need information about AUTO after
+				// this point)
 				ItemIO io = (ItemIO) AnnotationUtils.mutateAnnotationInstance(anno, Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
 				assert io.equals(ItemIO.AUTO);
 			// if the ItemIO is explicitly specified, we can check if it matches the inferred ItemIO from the functional method

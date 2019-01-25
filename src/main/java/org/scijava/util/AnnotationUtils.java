@@ -75,7 +75,7 @@ public final class AnnotationUtils {
 	 * Changes the annotation value for the given key of the given annotation to
 	 * newValue and returns the previous value.
 	 * 
-	 * Taken and modified from: https://stackoverflow.com/a/28118436
+	 * Taken and modified (only renaming) from: https://stackoverflow.com/a/28118436
 	 * 
 	 * @param instance the annotation to mutate
 	 * @param key the key of the field to mutate

@@ -36,23 +36,30 @@ import org.scijava.param.Mutable;
 
 /**
  * Defines the input/output type of a module.
- * <p>
- * Choices are:
- * </p>
- * <ul>
- * <li>INPUT: item is an input for the module.</li>
- * <li>OUTPUT: item is an output for the module.</li>
- * <li>BOTH: item is both an input and an output for the module. This type is
- * used to indicate an object that is mutated somehow during execution.</li>
- * <li>AUTO: marker to specify that one of the above should be inferred automatically 
- * during structification. I.e. the type can be inferred from the functional method 
- * signature of a functional type. The return type will always be ItemIO.Output and 
- * method parameters should be ItemIO.Input. If a method parameter is ItemIO.Both, 
- * it should be annotated with {@link Mutable}.</li>
- * </ul>
+ *
  * @author Curtis Rueden
  * @author David Kolb
  */
 public enum ItemIO {
-	INPUT, OUTPUT, BOTH, AUTO
+	/**
+	 * The item is an input for the module.
+	 */
+	INPUT, 
+	/**
+	 * The item is an output for the module.
+	 */
+	OUTPUT,
+	/**
+	 * The item is both an input and an output for the module. This type is
+	 * used to indicate an object that is mutated somehow during execution.
+	 */
+	BOTH, 
+	/**
+	 * Marker to specify that one of the above should be inferred automatically 
+	 * during structification. I.e. the type can be inferred from the functional method 
+	 * signature of a functional type. The return type will always be ItemIO.Output and 
+	 * method parameters should be ItemIO.Input. If a method parameter is ItemIO.Both, 
+	 * it should be annotated with {@link Mutable}.
+	 */
+	AUTO
 }

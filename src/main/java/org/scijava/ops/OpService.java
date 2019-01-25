@@ -452,10 +452,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * InputTypes:  [Double[], Double[]]
 	 * OutputTypes: [Double[]]
 	 * </pre>
-	 * 
 	 * Input and output types will be inferred by looking at the signature of the
 	 * functional method of the specified type. Also see
-	 * {@link ParameterStructs#getFunctionalMethodTypes(Type)}.
+	 * {@link ParameterStructs#findFunctionalMethodTypes(Type)}.
 	 *
 	 * @param type
 	 * @param name
@@ -464,7 +463,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns)
 		throws OpMatchingException
 	{
-		List<FunctionalMethodType> fmts = ParameterStructs.getFunctionalMethodTypes(type);
+		List<FunctionalMethodType> fmts = ParameterStructs.findFunctionalMethodTypes(type);
 		if (fmts == null)
 			return null;
 

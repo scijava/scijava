@@ -24,7 +24,7 @@ public class Add {
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static class MathAddDoublesFunction implements BiFunction<Double, Double, Double> {
 		@Override
 		public Double apply(Double t, Double u) {
@@ -50,7 +50,7 @@ public class Add {
 	@Plugin(type = Op.class, priority = Priority.HIGH, name = NAMES)
 	@Parameter(key = "iter1")
 	@Parameter(key = "iter2")
-	@Parameter(key = "resultArray", type = ItemIO.OUTPUT)
+	@Parameter(key = "resultArray", itemIO = ItemIO.OUTPUT)
 	public static class MathPointwiseAddIterablesFunction<M extends Number, I extends Iterable<M>>
 			implements BiFunction<I, I, Iterable<Double>> {
 		@Override
@@ -66,7 +66,7 @@ public class Add {
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "integer1")
 	@Parameter(key = "integer2")
-	@Parameter(key = "resultInteger", type = ItemIO.OUTPUT)
+	@Parameter(key = "resultInteger", itemIO = ItemIO.OUTPUT)
 	public static class MathAddBigIntegersComputer implements BiFunction<BigInteger, BigInteger, BigInteger> {
 		@Override
 		public BigInteger apply(BigInteger t, BigInteger u) {
@@ -77,7 +77,7 @@ public class Add {
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
+	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static class MathPointwiseAddDoubleArraysComputer implements BiComputer<double[], double[], double[]> {
 		@Override
 		public void compute(double[] in1, double[] in2, double[] out) {
@@ -90,7 +90,7 @@ public class Add {
 	// --------- Inplaces ---------
 	
 	@Plugin(type = Op.class, name = NAMES)
-	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
+	@Parameter(key = "arrayIO", itemIO = ItemIO.BOTH)
 	@Parameter(key = "array1")
 	public static class MathPointwiseAddDoubleArraysInplace1 implements BiInplace1<double[], double[]> {
 		@Override

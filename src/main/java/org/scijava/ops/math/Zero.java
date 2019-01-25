@@ -15,7 +15,7 @@ public class Zero {
 	// --------- Computers ---------
 
 	@Plugin(type = Op.class, name = NAMES)
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
+	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static class MathParallelPointwiseZeroDoubleArrayComputer implements NullaryComputer<double[]> {
 		@Override
 		public void compute(double[] out) {

@@ -15,13 +15,13 @@ public class CreateOpCollection {
 
 	@OpField(names = "create, src, source", priority = Priority.LOW)
 	@Parameter(key = "array")
-	@Parameter(key = "arrayLike", type = ItemIO.OUTPUT)
+	@Parameter(key = "arrayLike", itemIO = ItemIO.OUTPUT)
 	public static final Function<double[], double[]> createDoubleArrayInputAware = from -> new double[from.length];
 	
 	@OpField(names = "create, src, source", priority = Priority.LOW)
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
-	@Parameter(key = "arrayLike", type = ItemIO.OUTPUT)
+	@Parameter(key = "arrayLike", itemIO = ItemIO.OUTPUT)
 	public static final BiFunction<double[], double[], double[]> createDoubleArrayBiInputAware = (i1, i2) -> {
 		if (i1.length != i2.length) {
 			throw new IllegalArgumentException("Input array length muss be equal");

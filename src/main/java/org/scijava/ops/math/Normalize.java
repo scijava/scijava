@@ -14,7 +14,7 @@ public class Normalize {
 
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "numbers")
-	@Parameter(key = "normalized", type = ItemIO.OUTPUT)
+	@Parameter(key = "normalized", itemIO = ItemIO.OUTPUT)
 	public static class MathMinMaxNormalizeFunction implements Function<double[], double[]> {
 
 		@Parameter

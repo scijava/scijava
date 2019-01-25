@@ -15,7 +15,7 @@ public class Power {
 
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static class MathPowerDoublConstantFunction implements Function<Double, Double> {
 
 		@Parameter
@@ -30,7 +30,7 @@ public class Power {
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static class MathPowerDoubleFunction implements BiFunction<Double, Double, Double> {
 		@Override
 		public Double apply(Double t, Double exp) {
@@ -40,7 +40,7 @@ public class Power {
 
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "array")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
+	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static class MathPointwisePowerDoubleArrayComputer implements Computer<double[], double[]> {
 
 		@Parameter

@@ -18,7 +18,7 @@ public class Sqrt {
 
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "number1")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static class MathSqrtDoubleFunction implements Function<Double, Double> {
 		@Override
 		public Double apply(Double t) {
@@ -30,7 +30,7 @@ public class Sqrt {
 
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "array1")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
+	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static class MathPointwiseSqrtDoubleArrayComputer implements Computer<double[], double[]> {
 		@Override
 		public void compute(double[] in1, double[] out) {
@@ -43,7 +43,7 @@ public class Sqrt {
 	// --------- Inplaces ---------
 	
 	@Plugin(type = Op.class, name = NAMES)
-	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
+	@Parameter(key = "arrayIO", itemIO = ItemIO.BOTH)
 	public static class MathPointwiseSqrtDoubleArrayInplace implements Inplace<double[]> {
 		@Override
 		public void mutate(double[] in1) {

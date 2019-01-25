@@ -11,7 +11,7 @@ public abstract class OneToOneCommand<I, O> implements Command, Supplier<O> {
 	@Parameter
 	protected I input;
 	
-	@Parameter(type = ItemIO.OUTPUT)
+	@Parameter(itemIO = ItemIO.OUTPUT)
 	protected O output;
 	
 	@Override

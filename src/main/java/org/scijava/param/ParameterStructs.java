@@ -12,8 +12,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,8 +26,12 @@ import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.util.AnnotationUtils;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
+
+import io.leangen.geantyref.AnnotationFormatException;
+import io.leangen.geantyref.TypeFactory;
 
 /**
  * Utility functions for working with {@link org.scijava.param} classes.
@@ -54,7 +60,6 @@ public final class ParameterStructs {
 		return () -> items;
 	}
 
-	// TODO parse methods need to be way more dry
 	public static List<Member<?>> parse(final Class<?> type)
 		throws ValidityException
 	{
@@ -129,42 +134,119 @@ public final class ParameterStructs {
 		}
 	}
 	
-	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
-			AnnotatedElement annotationBearer, Type type) {		
-		Parameter[] annotations = parameters(annotationBearer);
+	private static Parameter[] synthesizeParameterAnnotations(final List<FunctionalMethodType> fmts) {
+		List<Parameter> params = new ArrayList<>();
 		
-		final Class<?> functionalType = findFunctionalInterface(Types.raw(type), annotations.length);
-		if (functionalType == null) {
-			problems.add(new ValidityProblem("Could not find functional interface of " + type.getTypeName() + " with the required number of "
-					+ "type parameters: " + annotations.length));
-		} else {
-			// TODO: Consider allowing partial override of class @Parameters.
-			for (int i=0; i<annotations.length; i++) {
-				String key = annotations[i].key();
-				
-				Type paramType = type;
-				if (type instanceof Class) {
-					paramType = Types.parameterizeRaw((Class<?>) type);
-				}
-				
-				final Type itemType = Types.param(paramType, functionalType, i);
-				final Class<?> rawItemType = Types.raw(itemType);
-				final boolean valid = checkValidity(annotations[i], key, rawItemType, false,
-						names, problems);
-				if (!valid) continue; // NB: Skip invalid parameters.
-				
-				// add item to the list
-				try {
-					final ParameterMember<?> item = //
-							new FunctionalParameterMember<>(itemType, annotations[i]);
-					names.add(key);
-					items.add(item);
-				}
-				catch (final ValidityException exc) {
-					problems.addAll(exc.problems());
-				}
+		int ins, outs, insOuts;
+		ins = outs = insOuts = 1;
+		for (FunctionalMethodType fmt : fmts) {
+			Map<String, Object> paramValues = new HashMap<>();
+			paramValues.put(Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
+			
+			String key;
+			switch (fmt.itemIO()) {
+			case BOTH:
+				key = "mutable" + insOuts;
+				insOuts++;
+				break;
+			case INPUT:
+				key = "input" + ins;
+				ins++;
+				break;
+			case OUTPUT:
+				key = "output" + outs;
+				outs++;
+				break;
+			default:
+				throw new RuntimeException("Unexpected ItemIO type encountered!");
+			}
+			
+			paramValues.put(Parameter.KEY_FIELD_NAME, key);
+			
+			try {
+				params.add(TypeFactory.annotation(Parameter.class, paramValues));
+			} catch (AnnotationFormatException e) {
+				throw new RuntimeException("Error during Parameter annotation synthetization. This is "
+						+ "most likely an implementation error.", e);
 			}
 		}
+		
+		return params.toArray(new Parameter[params.size()]);
+	}
+	
+	private static boolean resolveItemIOAuto(Parameter[] annotations, List<FunctionalMethodType> fmts, final ArrayList<ValidityProblem> problems) {
+		boolean dirty = false;
+		int i = 0;
+		for (Parameter anno : annotations) {
+			FunctionalMethodType fmt = fmts.get(i);
+			if (anno.itemIO().equals(ItemIO.AUTO)) {
+				ItemIO io = (ItemIO) AnnotationUtils.mutateAnnotationInstance(anno, Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
+				assert io.equals(ItemIO.AUTO);
+			// if the ItemIO is explicitly specified, we can check if it matches the inferred ItemIO from the functional method
+			} else if (!anno.itemIO().equals(fmt.itemIO())) {
+				String message = "";
+				message += "Inferred ItemIO of parameter annotation number " + i + " does not match "
+						+ "the specified ItemIO of the annotation: "
+						+ "inferred: " + fmt.itemIO() + " vs. "
+						+ "specified: " + anno.itemIO();
+				problems.add(new ValidityProblem(message));
+				dirty = true;
+			}
+			i++;
+		}
+		return dirty;
+	}
+	
+	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
+			AnnotatedElement annotationBearer, Type type) {
+		//Search for the functional method of 'type' and map its signature to ItemIO
+		List<FunctionalMethodType> fmts = findFunctionalMethodTypes(type);
+		if (fmts == null) {
+			problems.add(new ValidityProblem("Could not find functional method of " + type.getTypeName()));
+			return;
+		}
+		
+		// Get parameter annotations (may not be present)
+		Parameter[] annotations = AnnotationUtils.parameters(annotationBearer);
+		// 'type' is annotated, resolve ItemIO.AUTO by matching it to the signature of the functional method
+		if (annotations.length > 0) {
+			if (annotations.length != fmts.size()) {
+				String fmtIOs = Arrays.deepToString(fmts.stream().map(fmt -> fmt.itemIO()).toArray(ItemIO[]::new));
+				problems.add(new ValidityProblem("The number of inferred functional method types does not match "
+						+ "the number of specified parameters annotations.\n"
+						+ "#inferred functional method types: " + fmts.size() + " " +  fmtIOs + "\n"
+						+ "#specified paraeter annotations: " + annotations.length));
+				return;
+			}
+			if (resolveItemIOAuto(annotations, fmts, problems)) {
+				// specified parameter annotations do not match functional method signature
+				return;
+			}
+		// 'type' is not annotated, synthesize parameter annotations using defaults and ItemIO inferred from 
+		// the functional method
+		} else {
+			annotations = synthesizeParameterAnnotations(fmts);
+		}
+		
+		for (int i=0; i<annotations.length; i++) {
+			String key = annotations[i].key();
+			final Type itemType = fmts.get(i).type();
+			
+			final boolean valid = checkValidity(annotations[i], key, Types.raw(itemType), false,
+					names, problems);
+			if (!valid) continue;
+			
+			try {
+				final ParameterMember<?> item = //
+						new FunctionalParameterMember<>(itemType, annotations[i]);
+				names.add(key);
+				items.add(item);
+			}
+			catch (final ValidityException exc) {
+				problems.addAll(exc.problems());
+			}
+		}
+		
 	}
 
 	private static void parseFieldOpDependencies(final List<Member<?>> items,
@@ -232,32 +314,6 @@ public final class ParameterStructs {
 		}
 		return findFunctionalInterface(type.getSuperclass());
 	}
-	
-	/**
-	 * Searches for a {@code @FunctionalInterface} annotated interface in the 
-	 * class hierarchy of the specified type with the specified number of
-	 * type parameters. After the first interface is found, its super interfaces
-	 * will be checked. If no such interface can be found, null will be returned.
-	 * 
-	 * @param type
-	 * @param numberOfParams
-	 * @return
-	 */
-	public static Class<?> findFunctionalInterface(Class<?> type, int numberOfParams) {
-		Class<?> i = findFunctionalInterface(type);
-		if (i == null) {
-			return null;
-		}
-		if (i != null && i.getTypeParameters().length == numberOfParams) {
-			return i;
-		} else {
-			for (Class<?> iface : i.getInterfaces()) {
-				final Class<?> result = findFunctionalInterface(iface, numberOfParams);
-				if (result != null) return result;
-			}
-		}
-		return null;
-	}
 
 	public static boolean checkValidity(Parameter param, String name,
 		Class<?> type, boolean isFinal, Set<String> names,
@@ -292,15 +348,6 @@ public final class ParameterStructs {
 		return valid;
 	}
 	
-	public static Parameter[] parameters(final AnnotatedElement element) {
-		final Parameters params = element.getAnnotation(Parameters.class);
-		if (params != null) {
-			return params.value();
-		}
-		final Parameter p = element.getAnnotation(Parameter.class);
-		return p == null ? new Parameter[0] : new Parameter[] { p };
-	}
-	
 	/**
 	 * Returns a list of {@link FunctionalMethodType}s describing the input and output
 	 * types of the functional method of the specified functional type. In doing so,
@@ -308,7 +355,8 @@ public final class ParameterStructs {
 	 * all method parameters as {@link ItemIO#OUTPUT}, except for parameters annotated
 	 * with {@link Mutable} which will be marked as {@link ItemIO#BOTH}. If the specified
 	 * type does not have a functional method in its hierarchy, null will be
-	 * returned.
+	 * returned.<br>
+	 * The order will be the following: method parameters from left to right, return type
 	 * 
 	 * @param functionalType
 	 * @return
@@ -316,15 +364,21 @@ public final class ParameterStructs {
 	public static List<FunctionalMethodType> findFunctionalMethodTypes(Type functionalType) {
 		Method functionalMethod = findFunctionalMethod(Types.raw(functionalType));
 		if (functionalMethod == null) return null;
+		
+		Type paramfunctionalType = functionalType;
+		if (functionalType instanceof Class) {
+			paramfunctionalType = Types.parameterizeRaw((Class<?>) functionalType);
+		}
+		
 		List<FunctionalMethodType> out = new ArrayList<>();
 		int i = 0;
-		for (Type t : Types.getExactParameterTypes(functionalMethod, functionalType)) {
+		for (Type t : Types.getExactParameterTypes(functionalMethod, paramfunctionalType)) {
 			boolean isMutable = getMethodParameterAnnotation(functionalMethod, i, Mutable.class) != null;
 			out.add(new FunctionalMethodType(t, isMutable ? ItemIO.BOTH : ItemIO.INPUT));
 			i++;
 		}
 		
-		Type returnType = Types.getExactReturnType(functionalMethod, functionalType);
+		Type returnType = Types.getExactReturnType(functionalMethod, paramfunctionalType);
 		if (!returnType.equals(void.class)) {
 			out.add(new FunctionalMethodType(returnType, ItemIO.OUTPUT));
 		}

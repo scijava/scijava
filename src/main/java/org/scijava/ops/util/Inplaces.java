@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.inplace.BiInplace1;
-import org.scijava.ops.core.inplace.BiInplace2;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
+import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.ops.core.inplace.Inplace3First;
 import org.scijava.ops.core.inplace.Inplace3Second;
@@ -55,13 +55,13 @@ public class Inplaces {
 				secondaryArgs);
 	}
 
-	public static <IO, I2> BiInplace1<IO, I2> binary1(final OpService ops, final String opName,
+	public static <IO, I2> BiInplaceFirst<IO, I2> binary1(final OpService ops, final String opName,
 			final Nil<IO> inputOutputType, final Nil<I2> input2Type, final Object... secondaryArgs) {
 
-		Nil<BiInplace1<IO, I2>> inplaceNil = new Nil<BiInplace1<IO, I2>>() {
+		Nil<BiInplaceFirst<IO, I2>> inplaceNil = new Nil<BiInplaceFirst<IO, I2>>() {
 			@Override
 			public Type getType() {
-				return Types.parameterize(BiInplace1.class,
+				return Types.parameterize(BiInplaceFirst.class,
 						new Type[] { inputOutputType.getType(), input2Type.getType() });
 			}
 		};
@@ -74,13 +74,13 @@ public class Inplaces {
 				secondaryArgs);
 	}
 
-	public static <I1, IO> BiInplace2<I1, IO> binary2(final OpService ops, final String opName,
+	public static <I1, IO> BiInplaceSecond<I1, IO> binary2(final OpService ops, final String opName,
 			final Nil<I1> input1Type, final Nil<IO> inputOutputType, final Object... secondaryArgs) {
 
-		Nil<BiInplace2<I1, IO>> inplaceNil = new Nil<BiInplace2<I1, IO>>() {
+		Nil<BiInplaceSecond<I1, IO>> inplaceNil = new Nil<BiInplaceSecond<I1, IO>>() {
 			@Override
 			public Type getType() {
-				return Types.parameterize(BiInplace2.class,
+				return Types.parameterize(BiInplaceSecond.class,
 						new Type[] { input1Type.getType(), inputOutputType.getType() });
 			}
 		};

@@ -15,7 +15,7 @@ import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.inplace.BiInplace1;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.Inplace3First;
 import org.scijava.ops.core.inplace.Inplace4First;
 import org.scijava.ops.core.inplace.Inplace5First;
@@ -65,7 +65,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source", type = ItemIO.BOTH)
 	@Parameter(key = "distance")
-	public final BiInplace1<RandomAccessibleInterval<T>, Distance> transformInplaceDistance = DistanceTransform::transform;
+	public final BiInplaceFirst<RandomAccessibleInterval<T>, Distance> transformInplaceDistance = DistanceTransform::transform;
 
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source", type = ItemIO.BOTH)

@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.NullaryComputer;
-import org.scijava.ops.core.inplace.BiInplace1;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.types.Nil;
 
@@ -132,8 +132,8 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void binaryInplace() {
-		BiInplace1<double[], double[]> inplaceAdd = ops().findOp( //
-				"math.add", new Nil<BiInplace1<double[], double[]>>() {
+		BiInplaceFirst<double[], double[]> inplaceAdd = ops().findOp( //
+				"math.add", new Nil<BiInplaceFirst<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//

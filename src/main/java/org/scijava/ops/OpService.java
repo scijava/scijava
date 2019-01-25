@@ -292,7 +292,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * OutputTypes: [Double[]]
 	 * </pre>
 	 * Input and output types will be inferred by looking at the signature of the functional
-	 * method of the specified type. Also see {@link ParameterStructs#getFunctionalMethodTypes(Type)}.
+	 * method of the specified type. Also see {@link ParameterStructs#findFunctionalMethodTypes(Type)}.
 	 * 
 	 * @param type
 	 * @param name
@@ -300,7 +300,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 *          the specified type has no functional method
 	 */
 	private OpRef inferOpRef(Type type, String name) {
-		List<FunctionalMethodType> fmts = ParameterStructs.getFunctionalMethodTypes(type);
+		List<FunctionalMethodType> fmts = ParameterStructs.findFunctionalMethodTypes(type);
 		if (fmts == null) return null;
 		
 		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.BOTH, ItemIO.INPUT);

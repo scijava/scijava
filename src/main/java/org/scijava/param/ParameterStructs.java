@@ -324,7 +324,7 @@ public final class ParameterStructs {
 	 * @param functionalType
 	 * @return
 	 */
-	public static List<FunctionalMethodType> getFunctionalMethodTypes(Type functionalType) {
+	public static List<FunctionalMethodType> findFunctionalMethodTypes(Type functionalType) {
 		Method functionalMethod = findFunctionalMethod(Types.raw(functionalType));
 		if (functionalMethod == null) return null;
 		List<FunctionalMethodType> out = new ArrayList<>();

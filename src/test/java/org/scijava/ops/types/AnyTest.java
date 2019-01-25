@@ -88,7 +88,7 @@ public class AnyTest extends AbstractTestEnvironment {
 @Plugin(type = Op.class, name = "test.functionAndLongToLong")
 @Parameter(key = "input")
 @Parameter(key = "op")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Long> {
 
 	@Override
@@ -101,7 +101,7 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 @Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")
 @Parameter(key = "input1")
 @Parameter(key = "input2")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class IntegerAndLongAndNotAnyComputer implements BiComputer<Integer, Long, MutableNotAny> {
 
 	@Override
@@ -124,7 +124,7 @@ class MutableNotAny {
 }
 
 @Plugin(type = Op.class, name = "create, create.mutableNotAny")
-@Parameter(key = "mutableNotAny", type = ItemIO.OUTPUT)
+@Parameter(key = "mutableNotAny", itemIO = ItemIO.OUTPUT)
 class MutableNotAnyCreator implements Source<MutableNotAny> {
 
 	@Override
@@ -166,7 +166,7 @@ class NestedThing<U, V extends Thing<?>> {
 
 @Plugin(type = Op.class, name = "test.any")
 @Parameter(key = "thing")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class ThingFunction implements Function<Thing<String>, Double> {
 
 	@Override
@@ -178,7 +178,7 @@ class ThingFunction implements Function<Thing<String>, Double> {
 
 @Plugin(type = Op.class, name = "test.exceptionalAny")
 @Parameter(key = "thing")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class ExceptionalThingFunction implements Function<ExceptionalThing<String>, Double> {
 
 	@Override
@@ -191,7 +191,7 @@ class ExceptionalThingFunction implements Function<ExceptionalThing<String>, Dou
 
 @Plugin(type = Op.class, name = "test.nestedAny")
 @Parameter(key = "nestedThing")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class NestedThingFunction implements Function<NestedThing<String, Thing<String>>, Double> {
 
 	@Override

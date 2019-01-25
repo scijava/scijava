@@ -12,7 +12,7 @@ public class Size {
 
 	@Plugin(type = Op.class, name = "stats.size")
 	@Parameter(key = "iterable")
-	@Parameter(key = "size", type = ItemIO.OUTPUT)
+	@Parameter(key = "size", itemIO = ItemIO.OUTPUT)
 	public static class StatsSizeFunction<T> implements Function<Iterable<T>, Long>{
 
 		@Override
@@ -23,7 +23,7 @@ public class Size {
 	
 	   @Plugin(type = Op.class, name = "stats.size")
 	    @Parameter(key = "iterable")
-	    @Parameter(key = "size", type = ItemIO.OUTPUT)
+	    @Parameter(key = "size", itemIO = ItemIO.OUTPUT)
 	    public static class StatsSizeFunctionDouble<T> implements Function<Iterable<T>, Double>{
 
 	        @Override

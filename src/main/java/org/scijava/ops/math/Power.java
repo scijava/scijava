@@ -17,13 +17,13 @@ public class Power {
 	@OpField(names = NAMES)
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> MathPowerDoubleFunction = (base, exp) -> Math.pow(base, exp);
 
 	@OpField(names = NAMES)
 	@Parameter(key = "array")
 	@Parameter(key = "power")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
+	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static final BiComputer<double[], Double, double[]> MathPointwisePowerDoubleArrayComputer = (in, pow, out) -> {
 		for (int i = 0; i < in.length; i++)
 			out[i] = Math.pow(in[i], pow);

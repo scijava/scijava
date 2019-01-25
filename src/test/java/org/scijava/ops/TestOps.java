@@ -43,7 +43,7 @@ public class TestOps {
 
 	@Plugin(type = Op.class, name = "test.liftSqrt")
 	@Parameter(key = "in")
-	@Parameter(key = "out", type = ItemIO.BOTH)
+	@Parameter(key = "out", itemIO = ItemIO.BOTH)
 	public static class LiftSqrt implements Computer<double[], double[]> {
 
 		@Override
@@ -59,7 +59,7 @@ public class TestOps {
 	@Plugin(type = Op.class, name = "test.adapters")
 	@Parameter(key = "arr1")
 	@Parameter(key = "arr2")
-	@Parameter(key = "arrout", type = ItemIO.BOTH)
+	@Parameter(key = "arrout", itemIO = ItemIO.BOTH)
 	public static class testAddTwoArraysComputer implements BiComputer<double[], double[], double[]> {
 		@Override
 		public void compute(double[] arr1, double[] arr2, double[] out) {
@@ -71,7 +71,7 @@ public class TestOps {
 	@Plugin(type = Op.class, name = "test.adapters")
 	@Parameter(key = "arr1")
 	@Parameter(key = "arr2")
-	@Parameter(key = "arrout", type = ItemIO.OUTPUT)
+	@Parameter(key = "arrout", itemIO = ItemIO.OUTPUT)
 	public static class testAddTwoArraysFunction implements BiFunction<double[], double[], double[]> {
 		@Override
 		public double[] apply(double[] arr1, double[] arr2) {
@@ -86,7 +86,7 @@ public class TestOps {
 
 	@Plugin(type = Op.class, name = "test.liftFunction")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.OUTPUT)
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 	public static class liftFunction implements Function<Double, Double> {
 		@Override
 		public Double apply(Double in) {
@@ -96,7 +96,7 @@ public class TestOps {
 
 	@Plugin(type = Op.class, name = "test.liftComputer")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public static class liftComputer implements Computer<double[], double[]> {
 		@Override
 		public void compute(double[] in, double[] out) {
@@ -109,7 +109,7 @@ public class TestOps {
 
 	@Plugin(type = Op.class, name = "test.computerToFunctionTestOp")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public static class ComputerToFunctionTestOp implements Computer<Byte, AtomicReference<String>> {
 
 		@Override
@@ -121,7 +121,7 @@ public class TestOps {
 	@Plugin(type = Op.class, name = "test.biComputerToBiFunctionTestOp")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public static class BiComputerToBiFunctionTestOp implements BiComputer<Byte, Double, AtomicReference<String>> {
 
 		@Override
@@ -134,7 +134,7 @@ public class TestOps {
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "input3")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public static class Computer3ToFunction3TestOp implements Computer3<Byte, Double, Float, AtomicReference<String>> {
 
 		@Override
@@ -148,7 +148,7 @@ public class TestOps {
 	@Parameter(key = "input2")
 	@Parameter(key = "input3")
 	@Parameter(key = "input4")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public static class Computer4ToFunction4TestOp implements
 		Computer4<Byte, Double, Float, Integer, AtomicReference<String>>
 	{
@@ -165,7 +165,7 @@ public class TestOps {
 	@Parameter(key = "input3")
 	@Parameter(key = "input4")
 	@Parameter(key = "input5")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public static class Computer5ToFunction5TestOp implements
 		Computer5<Byte, Double, Float, Integer, Long, AtomicReference<String>>
 	{
@@ -177,7 +177,7 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "create")
-	@Parameter(key = "output", type = ItemIO.OUTPUT)
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 	public static class AtomicStringReferenceCreator implements Source<AtomicReference<String>> {
 
 		@Override
@@ -189,7 +189,7 @@ public class TestOps {
 	// InplaceToFunctionTransformTest
 
 	@Plugin(type = Op.class, name = "test.inplaceToFunctionTestOp")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	public static class InplaceToFunctionTestOp implements Inplace<AtomicReference<String>> {
 
 		@Override
@@ -199,7 +199,7 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "test.biInplaceFirstToBiFunctionTestOp")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	@Parameter(key = "input2")
 	public static class BiInplaceFirstToBiFunctionTestOp implements BiInplaceFirst<AtomicReference<String>, Byte> {
 
@@ -211,7 +211,7 @@ public class TestOps {
 
 	@Plugin(type = Op.class, name = "test.biInplaceSecondToBiFunctionTestOp")
 	@Parameter(key = "input1")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	public static class BiInplaceSecondToBiFunctionTestOp implements BiInplaceSecond<Byte, AtomicReference<String>> {
 
 		@Override
@@ -221,7 +221,7 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "test.inplace3FirstToFunction3TestOp")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	@Parameter(key = "input2")
 	@Parameter(key = "input3")
 	public static class Inplace3FirstToFunction3TestOp implements Inplace3First<AtomicReference<String>, Byte, Double> {
@@ -234,7 +234,7 @@ public class TestOps {
 
 	@Plugin(type = Op.class, name = "test.inplace3SecondToFunction3TestOp")
 	@Parameter(key = "input1")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	@Parameter(key = "input3")
 	public static class Inplace3SecondToFunction3TestOp implements Inplace3Second<Byte, AtomicReference<String>, Double> {
 
@@ -245,7 +245,7 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "test.inplace4FirstToFunction4TestOp")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	@Parameter(key = "input2")
 	@Parameter(key = "input3")
 	@Parameter(key = "input4")
@@ -260,7 +260,7 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "test.inplace5FirstToFunction5TestOp")
-	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "inout", itemIO = ItemIO.BOTH)
 	@Parameter(key = "input2")
 	@Parameter(key = "input3")
 	@Parameter(key = "input4")

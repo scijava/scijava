@@ -66,18 +66,10 @@ public @interface Parameter {
 
 	/**
 	 * Defines the input/output type of the parameter.
-	 * <p>
-	 * Choices are:
-	 * </p>
-	 * <ul>
-	 * <li>INPUT: parameter is an input for the plugin.</li>
-	 * <li>OUTPUT: parameter is an output for the plugin.</li>
-	 * <li>BOTH: parameter is both and input and an output for the plugin. This
-	 * type is used to indicate an object that is mutated somehow during
-	 * execution.</li>
-	 * </ul>
+	 * 
+	 * @see ItemIO
 	 */
-	ItemIO type() default ItemIO.INPUT;
+	ItemIO itemIO() default ItemIO.INPUT;
 
 	/**
 	 * Defines whether the parameter references an object which itself has

@@ -119,7 +119,7 @@ public abstract class AnnotatedParameterMember<T> implements ParameterMember<T> 
 
 	@Override
 	public ItemIO getIOType() {
-		return getAnnotation().type();
+		return getAnnotation().itemIO();
 	}
 	
 	@Override

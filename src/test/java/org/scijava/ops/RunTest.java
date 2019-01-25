@@ -31,7 +31,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@OpField(names = "test.Function")
 	@Parameter(key = "num1")
-	@Parameter(key = "sum", type = ItemIO.OUTPUT)
+	@Parameter(key = "sum", itemIO = ItemIO.OUTPUT)
 	public static final Function<Double, Double> testFunction = (num1) -> num1 + 1;
 
 	@Test
@@ -43,7 +43,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@OpField(names = "test.BiFunction")
 	@Parameter(key = "num1")
 	@Parameter(key = "num2")
-	@Parameter(key = "sum", type = ItemIO.OUTPUT)
+	@Parameter(key = "sum", itemIO = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> testBiFunction = (num1, num2) -> num1 + num2;
 
 	@Test
@@ -56,7 +56,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Parameter(key = "num1")
 	@Parameter(key = "num2")
 	@Parameter(key = "num3")
-	@Parameter(key = "sum", type = ItemIO.OUTPUT)
+	@Parameter(key = "sum", itemIO = ItemIO.OUTPUT)
 	public static final Function3<Double, Double, Double, Double> testFunction3 = (num1, num2, num3) -> num1 + num2
 			+ num3;
 
@@ -71,7 +71,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Parameter(key = "num2")
 	@Parameter(key = "num3")
 	@Parameter(key = "num4")
-	@Parameter(key = "sum", type = ItemIO.OUTPUT)
+	@Parameter(key = "sum", itemIO = ItemIO.OUTPUT)
 	public static final Function4<Double, Double, Double, Double, Double> testFunction4 = (num1, num2, num3,
 			num4) -> num1 + num2 + num3 + num4;
 
@@ -87,7 +87,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Parameter(key = "num3")
 	@Parameter(key = "num4")
 	@Parameter(key = "num5")
-	@Parameter(key = "sum", type = ItemIO.OUTPUT)
+	@Parameter(key = "sum", itemIO = ItemIO.OUTPUT)
 	public static final Function5<Double, Double, Double, Double, Double, Double> testFunction5 = (num1, num2, num3,
 			num4, num5) -> num1 + num2 + num3 + num4 + num5;
 
@@ -101,7 +101,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@OpField(names = "test.Computer")
 	@Parameter(key = "arr1")
-	@Parameter(key = "arr2", type = ItemIO.BOTH)
+	@Parameter(key = "arr2", itemIO = ItemIO.BOTH)
 	public static final Computer<double[], double[]> testComputer = (arr1, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
 			out[i] = arr1[i] * 2;
@@ -119,7 +119,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@OpField(names = "test.BiComputer")
 	@Parameter(key = "arr1")
 	@Parameter(key = "arr2")
-	@Parameter(key = "out", type = ItemIO.BOTH)
+	@Parameter(key = "out", itemIO = ItemIO.BOTH)
 	public static final BiComputer<double[], double[], double[]> testBiComputer = (arr1, arr2, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
 			out[i] = arr1[i] + arr2[i];
@@ -139,7 +139,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Parameter(key = "arr1")
 	@Parameter(key = "arr2")
 	@Parameter(key = "arr3")
-	@Parameter(key = "out", type = ItemIO.BOTH)
+	@Parameter(key = "out", itemIO = ItemIO.BOTH)
 	public static final Computer3<double[], double[], double[], double[]> testComputer3 = (arr1, arr2, arr3, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
 			out[i] = arr1[i] + arr2[i] + arr3[i];
@@ -161,7 +161,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Parameter(key = "arr2")
 	@Parameter(key = "arr3")
 	@Parameter(key = "arr4")
-	@Parameter(key = "out", type = ItemIO.BOTH)
+	@Parameter(key = "out", itemIO = ItemIO.BOTH)
 	public static final Computer4<double[], double[], double[], double[], double[]> testComputer4 = (arr1, arr2, arr3,
 			arr4, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
@@ -186,7 +186,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Parameter(key = "arr3")
 	@Parameter(key = "arr4")
 	@Parameter(key = "arr5")
-	@Parameter(key = "out", type = ItemIO.BOTH)
+	@Parameter(key = "out", itemIO = ItemIO.BOTH)
 	public static final Computer5<double[], double[], double[], double[], double[], double[]> testComputer5 = (arr1,
 			arr2, arr3, arr4, arr5, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
@@ -209,7 +209,7 @@ public class RunTest extends AbstractTestEnvironment {
 	// INPLACES
 
 	@OpField(names = "test.Inplace")
-	@Parameter(key = "io", type = ItemIO.BOTH)
+	@Parameter(key = "io", itemIO = ItemIO.BOTH)
 	public static final Inplace<double[]> testInplace = (io) -> {
 		for (int i = 0; i < io.length; i++)
 			io[i] *= 2;
@@ -223,7 +223,7 @@ public class RunTest extends AbstractTestEnvironment {
 	}
 
 	@OpField(names = "test.BiInplaceFirst")
-	@Parameter(key = "io", type = ItemIO.BOTH)
+	@Parameter(key = "io", itemIO = ItemIO.BOTH)
 	@Parameter(key = "in2")
 	public static final BiInplaceFirst<double[], double[]> testBiInplaceFirst = (io, in2) -> {
 		for (int i = 0; i < io.length; i++)
@@ -240,7 +240,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@OpField(names = "test.BiInplaceSecond")
 	@Parameter(key = "in1")
-	@Parameter(key = "io", type = ItemIO.BOTH)
+	@Parameter(key = "io", itemIO = ItemIO.BOTH)
 	public static final BiInplaceSecond<double[], double[]> testBiInplaceSecond = (in1, io) -> {
 		for (int i = 0; i < io.length; i++)
 			io[i] *= in1[i];
@@ -255,7 +255,7 @@ public class RunTest extends AbstractTestEnvironment {
 	}
 
 	@OpField(names = "test.Inplace3First")
-	@Parameter(key = "io", type = ItemIO.BOTH)
+	@Parameter(key = "io", itemIO = ItemIO.BOTH)
 	@Parameter(key = "in2")
 	@Parameter(key = "in3")
 	public static final Inplace3First<double[], double[], double[]> testInplace3First = (io, in2, in3) -> {
@@ -275,7 +275,7 @@ public class RunTest extends AbstractTestEnvironment {
 	}
 
 	@OpField(names = "test.Inplace4First")
-	@Parameter(key = "io", type = ItemIO.BOTH)
+	@Parameter(key = "io", itemIO = ItemIO.BOTH)
 	@Parameter(key = "in2")
 	@Parameter(key = "in3")
 	@Parameter(key = "in4")
@@ -299,7 +299,7 @@ public class RunTest extends AbstractTestEnvironment {
 	}
 	
 	@OpField(names = "test.Inplace5First")
-	@Parameter(key = "io", type = ItemIO.BOTH)
+	@Parameter(key = "io", itemIO = ItemIO.BOTH)
 	@Parameter(key = "in2")
 	@Parameter(key = "in3")
 	@Parameter(key = "in4")

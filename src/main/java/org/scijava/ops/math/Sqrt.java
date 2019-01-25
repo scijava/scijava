@@ -19,14 +19,14 @@ public class Sqrt {
 
 	@OpField(names = NAMES)
 	@Parameter(key = "number1")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static final Function<Double, Double> MathSqrtDoubleFunction = (t) -> Math.sqrt(t);
 
 	// --------- Computers ---------
 
 	@OpField(names = NAMES)
 	@Parameter(key = "array1")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
+	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static final Computer<double[], double[]> MathPointwiseSqrtDoubleArrayComputer = (arr1, arr2) -> {
 		for (int i = 0; i < arr1.length; i++)
 			arr2[i] = Math.sqrt(arr1[i]);
@@ -35,7 +35,7 @@ public class Sqrt {
 	// --------- Inplaces ---------
 
 	@OpField(names = NAMES)
-	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
+	@Parameter(key = "arrayIO", itemIO = ItemIO.BOTH)
 	public static final Inplace<double[]> MathPointwiseSqrtDoubleArrayInplace = (arr) -> {
 		for(int i = 0; i < arr.length; i++) arr[i] = Math.sqrt(arr[i]);
 	};

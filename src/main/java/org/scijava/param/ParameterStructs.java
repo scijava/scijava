@@ -288,7 +288,7 @@ public final class ParameterStructs {
 			valid = false;
 		}
 
-		if (param.type() == ItemIO.BOTH && isImmutable(type)) {
+		if (param.itemIO() == ItemIO.BOTH && isImmutable(type)) {
 			// NB: The BOTH type signifies that the parameter will be changed
 			// in-place somehow. But immutable parameters cannot be changed in
 			// such a manner, so it makes no sense to label them as BOTH.

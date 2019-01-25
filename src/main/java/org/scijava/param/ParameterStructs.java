@@ -53,10 +53,10 @@ public final class ParameterStructs {
 		return () -> items;
 	}
 	
-	public static Struct structOf(final Class<?> c, final Field f)
+	public static Struct structOf(final Field field)
 			throws ValidityException
 	{
-		final List<Member<?>> items = parse(c, f);
+		final List<Member<?>> items = parse(field);
 		return () -> items;
 	}
 
@@ -87,7 +87,8 @@ public final class ParameterStructs {
 		return items;
 	}
 	
-	public static List<Member<?>> parse(final Class<?> c, final Field field) throws ValidityException {
+	public static List<Member<?>> parse(final Field field) throws ValidityException {
+		Class<?> c = field.getDeclaringClass();
 		if (c == null || field == null) return null;
 
 		field.setAccessible(true);

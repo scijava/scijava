@@ -83,7 +83,7 @@ public class OpFieldInfo implements OpInfo {
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
 		try {
-			struct = ParameterStructs.structOf(field.getDeclaringClass(), field);
+			struct = ParameterStructs.structOf(field);
 			OpUtils.checkHasSingleOutput(struct);
 			// NB: Contextual parameters not supported for now.
 		} catch (ValidityException e) {

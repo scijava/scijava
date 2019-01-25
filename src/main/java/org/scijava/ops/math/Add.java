@@ -11,7 +11,7 @@ import java.util.stream.StreamSupport;
 import org.scijava.core.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.inplace.BiInplace1;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -93,7 +93,7 @@ public class Add {
 	@Plugin(type = Op.class, name = NAMES)
 	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
 	@Parameter(key = "array1")
-	public static class MathPointwiseAddDoubleArraysInplace1 implements BiInplace1<double[], double[]> {
+	public static class MathPointwiseAddDoubleArraysInplace1 implements BiInplaceFirst<double[], double[]> {
 		@Override
 		public void mutate(double[] io, double[] in2) {
 			for (int i = 0; i < io.length; i++ ) {

@@ -37,7 +37,9 @@ package org.scijava.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
@@ -104,5 +106,25 @@ public final class AnnotationUtils {
 		}
 		memberValues.put(key, newValue);
 		return oldValue;
+	}
+	
+	/**
+	 * Attempt to retrieve the specified annotation from the i'th parameter
+	 * of the specified method. This method will only find annotations with:
+	 * <pre>@Target(ElementType.TYPE_USE)</pre>
+	 * If the ElementType is different or no annotation with specified type
+	 * is present, null is returned. 
+	 * 
+	 * @param method
+	 * @param i
+	 * @param annotationClass
+	 * @return
+	 */
+	public static <A extends Annotation> A getMethodParameterAnnotation(Method method, int i, Class<A> annotationClass) {
+		AnnotatedType[] params = method.getAnnotatedParameterTypes();
+		if (i >= params.length) {
+			return null;
+		}
+		return params[i].getAnnotation(annotationClass);
 	}
 }

@@ -52,9 +52,12 @@ import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
+import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformerService;
+import org.scijava.ops.types.Nil;
+import org.scijava.ops.types.TypeService;
 import org.scijava.param.FunctionalMethodType;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Parameter;
@@ -65,7 +68,6 @@ import org.scijava.service.AbstractService;
 import org.scijava.service.SciJavaService;
 import org.scijava.service.Service;
 import org.scijava.struct.ItemIO;
-import org.scijava.ops.types.Nil;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
 
@@ -89,6 +91,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	@Parameter
 	private OpTransformerService transformer;
+	
+	@Parameter
+	private TypeService typeService;
 
 	/**
 	 * Prefix tree to cache and quickly find {@link OpInfo}s.
@@ -282,6 +287,18 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
+	}
+	
+	
+	public Object run(final String opName, final Object... args) {
+		
+		Nil<?>[] inTypes = Arrays.stream(args).map(arg -> Nil.of(typeService.reify(arg))).toArray(Nil[]::new);
+		Nil<?>[] outTypes = new Nil<?>[] {new Nil<Object>() {}};
+		
+		OpRunner<Object> op = findOpInstance(opName, new Nil<OpRunner<Object>>() {}, inTypes, outTypes);
+		
+		//TODO change
+		return op.run(args);
 	}
 
 	/**

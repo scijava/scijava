@@ -11,8 +11,16 @@ import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.core.computer.Computer5;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
+import org.scijava.ops.core.inplace.BiInplaceSecond;
+import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.core.inplace.Inplace4First;
+import org.scijava.ops.core.inplace.Inplace5First;
 
 /**
  * Utility providing adaptation between {@link Op} types.
@@ -170,6 +178,24 @@ public class Adapt {
 				return out;
 			};
 		}
+		
+		public static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> asFunction5(
+				final Computer5<I1, I2, I3, I4, I5, O> computer, final Source<O> source) {
+			return (in1, in2, in3, in4, in5) -> {
+				O out = source.create();
+				computer.compute(in1, in2, in3, in4, in5, out);
+				return out;
+			};
+		}
+
+		public static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> asFunction5(
+				Computer5<I1, I2, I3, I4, I5, O> computer, Function5<I1, I2, I3, I4, I5, O> inputAwareSource) {
+			return (in1, in2, in3, in4, in5) -> {
+				O out = inputAwareSource.apply(in1, in2, in3, in4, in5);
+				computer.compute(in1, in2, in3, in4, in5, out);
+				return out;
+			};
+		}
 
 		public static <I, O> OneToOneCommand<I, O> asCommand(final Computer<I, O> computer, I input, O output) {
 			OneToOneCommand<I, O> command = new OneToOneCommand<I, O>() {
@@ -203,6 +229,50 @@ public class Adapt {
 			};
 		}
 
+	}
+	
+	public static class Inplaces {
+		public static <IO> Function<IO, IO> asFunction(Inplace<IO> inplace){
+			return (io) -> {
+				inplace.mutate(io);
+				return io;
+			};
+		}
+
+		public static <IO, I2> BiFunction<IO, I2, IO> asBiFunction(BiInplaceFirst<IO, I2> inplace){
+			return (io, in2) -> {
+				inplace.mutate(io, in2);
+				return io;
+			};
+		}
+
+		public static <I1, IO> BiFunction<I1, IO, IO> asBiFunction(BiInplaceSecond<I1, IO> inplace){
+			return (in1, io) -> {
+				inplace.mutate(in1, io);
+				return io;
+			};
+		}
+		
+		public static <IO, I2, I3> Function3<IO, I2, I3, IO> asFunction3(Inplace3First<IO, I2, I3> inplace){
+			return (io, in2, in3) -> {
+				inplace.mutate(io, in2, in3);
+				return io;
+			};
+		}
+		
+		public static <IO, I2, I3, I4> Function4<IO, I2, I3, I4, IO> asFunction4(Inplace4First<IO, I2, I3, I4> inplace){
+			return (io, in2, in3, in4) -> {
+				inplace.mutate(io, in2, in3, in4);
+				return io;
+			};
+		}
+
+		public static <IO, I2, I3, I4, I5> Function5<IO, I2, I3, I4, I5, IO> asFunction5(Inplace5First<IO, I2, I3, I4, I5> inplace){
+			return (io, in2, in3, in4, in5) -> {
+				inplace.mutate(io, in2, in3, in4, in5);
+				return io;
+			};
+		}
 	}
 
 }

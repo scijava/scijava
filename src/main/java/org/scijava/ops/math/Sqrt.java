@@ -1,55 +1,43 @@
 package org.scijava.ops.math;
 
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
-import org.scijava.ops.core.Op;
+import org.scijava.ops.OpField;
+import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
+@Plugin(type = OpCollection.class)
 public class Sqrt {
 
 	public static final String NAMES = MathOps.SQRT;
-	
+
 	// --------- Functions ---------
 
-	@Plugin(type = Op.class, name = NAMES)
+	@OpField(names = NAMES)
 	@Parameter(key = "number1")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathSqrtDoubleFunction implements Function<Double, Double> {
-		@Override
-		public Double apply(Double t) {
-			return Math.sqrt(t);
-		}
-	}
-	
+	public static final Function<Double, Double> MathSqrtDoubleFunction = (t) -> Math.sqrt(t);
+
 	// --------- Computers ---------
 
-	@Plugin(type = Op.class, name = NAMES)
+	@OpField(names = NAMES)
 	@Parameter(key = "array1")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwiseSqrtDoubleArrayComputer implements Computer<double[], double[]> {
-		@Override
-		public void compute(double[] in1, double[] out) {
-			for (int i = 0; i < out.length; i++) {
-				out[i] = Math.sqrt(in1[i]);
-			}
-		}
-	}
-	
+	public static final Computer<double[], double[]> MathPointwiseSqrtDoubleArrayComputer = (arr1, arr2) -> {
+		for (int i = 0; i < arr1.length; i++)
+			arr2[i] = Math.sqrt(arr1[i]);
+	};
+
 	// --------- Inplaces ---------
-	
-	@Plugin(type = Op.class, name = NAMES)
+
+	@OpField(names = NAMES)
 	@Parameter(key = "arrayIO", type = ItemIO.BOTH)
-	public static class MathPointwiseSqrtDoubleArrayInplace implements Inplace<double[]> {
-		@Override
-		public void mutate(double[] in1) {
-			IntStream.range(0, in1.length).forEach(index -> {
-				in1[index] = Math.sqrt(in1[index]);
-			});
-		}
-	}
+	public static final Inplace<double[]> MathPointwiseSqrtDoubleArrayInplace = (arr) -> {
+		for(int i = 0; i < arr.length; i++) arr[i] = Math.sqrt(arr[i]);
+	};
+
 }

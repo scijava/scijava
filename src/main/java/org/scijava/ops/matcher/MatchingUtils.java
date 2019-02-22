@@ -109,22 +109,30 @@ public final class MatchingUtils {
 			Type from = froms[i];
 			Type to = tos[i];
 
-			// HACK: we CAN assign, for example, a Function<Iterable<N>, O> to a
-			// Function<Iterable<Integer>, Double>,
-			// because in this situation O is not bounded to any other types. However
-			// isAssignable will fail,
-			// since we cannot just cast Double to O without that required knowledge that O
-			// can be fixed to Double.
-			// We get around this by recording in typeBounds that our previously unbounded
-			// TypeVariable (from) \
-			// is now fixed to (to), then simply assigning (from) to (to), since from only
-			// has one bound, being to.
-			if (from instanceof TypeVariable && typeBounds.get(from) == null) {
-				TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
-				TypeVarFromParameterizedTypeInfo fromInfo = new TypeVarFromParameterizedTypeInfo(fromTypeVar);
-				fromInfo.fixBounds(to, true);
-				typeBounds.put(fromTypeVar, fromInfo);
-				from = to;
+			if (from instanceof TypeVariable) {
+				TypeVarInfo typeVarInfo = typeBounds.get(from);
+				// HACK: we CAN assign, for example, a Function<Iterable<N>, O> to a
+				// Function<Iterable<Integer>, Double>,
+				// because in this situation O is not bounded to any other types. However
+				// isAssignable will fail,
+				// since we cannot just cast Double to O without that required knowledge that O
+				// can be fixed to Double.
+				// We get around this by recording in typeBounds that our previously unbounded
+				// TypeVariable (from) \
+				// is now fixed to (to), then simply assigning (from) to (to), since from only
+				// has one bound, being to.
+				if (typeVarInfo == null) {
+					TypeVariable<?> fromTypeVar = (TypeVariable<?>) from;
+					TypeVarFromParameterizedTypeInfo fromInfo = new TypeVarFromParameterizedTypeInfo(fromTypeVar);
+					fromInfo.fixBounds(to, true);
+					typeBounds.put(fromTypeVar, fromInfo);
+					from = to;
+				}
+				// similar to the above, if we know that O is already bound to a Type, and that
+				// Type is to, then we can assign this without any issues.
+				else {
+					if(typeVarInfo.allowType(to, true)) from = to;
+				}
 			}
 
 			if (!Types.isAssignable(Types.raw(from), Types.raw(to)))
@@ -215,10 +223,10 @@ public final class MatchingUtils {
 	 *            the map of TypeVariables to Types that would occur in this
 	 *            scenario
 	 * @param safeAssignability
-	 *            used to determine if we want to check if the src->dest
-	 *            assignment would be safely assignable even though it would cause a
-	 *            compiler error if we explicitly tried to do this (useful pretty
-	 *            much only for Op matching)
+	 *            used to determine if we want to check if the src->dest assignment
+	 *            would be safely assignable even though it would cause a compiler
+	 *            error if we explicitly tried to do this (useful pretty much only
+	 *            for Op matching)
 	 * @return whether and assignment of source to destination would be a legal java
 	 *         statement
 	 */
@@ -249,10 +257,10 @@ public final class MatchingUtils {
 	 * @param dest
 	 *            the parameterized type for which assignment should be checked to
 	 * @param safeAssignability
-	 *            used to determine if we want to check if the src->dest
-	 *            assignment would be safely assignable even though it would cause a
-	 *            compiler error if we explicitly tried to do this (useful pretty
-	 *            much only for Op matching)
+	 *            used to determine if we want to check if the src->dest assignment
+	 *            would be safely assignable even though it would cause a compiler
+	 *            error if we explicitly tried to do this (useful pretty much only
+	 *            for Op matching)
 	 * @return whether and assignment of source to destination would be a legal java
 	 *         statement
 	 */
@@ -261,17 +269,19 @@ public final class MatchingUtils {
 	}
 
 	/**
-	 * @param srcTypes the Type arguments for the source Type
-	 * @param destTypes the Type arguments for the destination Type
+	 * @param srcTypes
+	 *            the Type arguments for the source Type
+	 * @param destTypes
+	 *            the Type arguments for the destination Type
 	 * @param src
 	 *            the type for which assignment should be checked from
 	 * @param dest
 	 *            the parameterized type for which assignment should be checked to
 	 * @param safeAssignability
-	 *            used to determine if we want to check if the src->dest
-	 *            assignment would be safely assignable even though it would cause a
-	 *            compiler error if we explicitly tried to do this (useful pretty
-	 *            much only for Op matching)
+	 *            used to determine if we want to check if the src->dest assignment
+	 *            would be safely assignable even though it would cause a compiler
+	 *            error if we explicitly tried to do this (useful pretty much only
+	 *            for Op matching)
 	 * @return whether and assignment of source to destination would be a legal java
 	 *         statement
 	 */
@@ -283,8 +293,10 @@ public final class MatchingUtils {
 
 	/**
 	 * 
-	 * @param srcTypes the Type arguments for the source Type
-	 * @param destTypes the Type arguments for the destination Type
+	 * @param srcTypes
+	 *            the Type arguments for the source Type
+	 * @param destTypes
+	 *            the Type arguments for the destination Type
 	 * @param src
 	 *            the type for which assignment should be checked from
 	 * @param dest
@@ -293,10 +305,10 @@ public final class MatchingUtils {
 	 *            the map of TypeVariables to Types that would occur in this
 	 *            scenario
 	 * @param safeAssignability
-	 *            used to determine if we want to check if the src->dest
-	 *            assignment would be safely assignable even though it would cause a
-	 *            compiler error if we explicitly tried to do this (useful pretty
-	 *            much only for Op matching)
+	 *            used to determine if we want to check if the src->dest assignment
+	 *            would be safely assignable even though it would cause a compiler
+	 *            error if we explicitly tried to do this (useful pretty much only
+	 *            for Op matching)
 	 * @return whether and assignment of source to destination would be a legal java
 	 *         statement
 	 */

@@ -28,6 +28,11 @@ public class OpRunners {
 
 		public static <I, O> OpRunner<O> toRunner(Function<I, O> function) {
 			return new OpRunner<O>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
 
 				@Override
 				public Nil<?>[] inTypes() {
@@ -48,6 +53,11 @@ public class OpRunners {
 			return new OpRunner<O>() {
 
 				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
+				
+				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
 					}, new Nil<I2>() {
@@ -66,6 +76,11 @@ public class OpRunners {
 		public static <I1, I2, I3, O> OpRunner<O> toRunner(Function3<I1, I2, I3, O> function) {
 			return new OpRunner<O>() {
 
+				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
@@ -87,6 +102,11 @@ public class OpRunners {
 			return new OpRunner<O>() {
 
 				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
+				
+				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
 					}, new Nil<I2>() {
@@ -107,6 +127,11 @@ public class OpRunners {
 		public static <I1, I2, I3, I4, I5, O> OpRunner<O> toRunner(Function5<I1, I2, I3, I4, I5, O> function) {
 			return new OpRunner<O>() {
 
+				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
@@ -132,6 +157,11 @@ public class OpRunners {
 			return new OpRunner<O>() {
 
 				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
+				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I>() {
 					} };
@@ -150,6 +180,11 @@ public class OpRunners {
 		public static <I1, I2, O> OpRunner<O> toRunner(BiComputer<I1, I2, O> computer) {
 			return new OpRunner<O>() {
 
+				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
@@ -170,6 +205,11 @@ public class OpRunners {
 		public static <I1, I2, I3, O> OpRunner<O> toRunner(Computer3<I1, I2, I3, O> computer) {
 			return new OpRunner<O>() {
 
+				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
@@ -193,6 +233,11 @@ public class OpRunners {
 			return new OpRunner<O>() {
 
 				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
+				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
 					}, new Nil<I2>() {
@@ -215,6 +260,11 @@ public class OpRunners {
 		public static <I1, I2, I3, I4, I5, O> OpRunner<O> toRunner(Computer5<I1, I2, I3, I4, I5, O> computer) {
 			return new OpRunner<O>() {
 
+				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
@@ -242,6 +292,12 @@ public class OpRunners {
 	public static class Inplaces {
 		public static <IO> OpRunner<IO> toRunner(Inplace<IO> inplace) {
 			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<IO>() {
@@ -258,6 +314,12 @@ public class OpRunners {
 
 		public static <IO, I2> OpRunner<IO> toRunner(BiInplaceFirst<IO, I2> inplace) {
 			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<IO>() {
@@ -275,6 +337,12 @@ public class OpRunners {
 
 		public static <I1, IO> OpRunner<IO> toRunner(BiInplaceSecond<I1, IO> inplace) {
 			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<I1>() {
@@ -292,6 +360,12 @@ public class OpRunners {
 		
 		public static <IO, I2, I3> OpRunner<IO> toRunner(Inplace3First<IO, I2, I3> inplace) {
 			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<IO>() {
@@ -310,6 +384,12 @@ public class OpRunners {
 
 		public static <IO, I2, I3, I4> OpRunner<IO> toRunner(Inplace4First<IO, I2, I3, I4> inplace) {
 			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<IO>() {
@@ -329,6 +409,12 @@ public class OpRunners {
 
 		public static <IO, I2, I3, I4, I5> OpRunner<IO> toRunner(Inplace5First<IO, I2, I3, I4, I5> inplace) {
 			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
 				@Override
 				public Nil<?>[] inTypes() {
 					return new Nil<?>[] { new Nil<IO>() {

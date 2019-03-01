@@ -1,56 +1,32 @@
 package org.scijava.ops.math;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
-import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.OpField;
+import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
+@Plugin(type = OpCollection.class)
 public class Power {
 
 	public static final String NAMES = MathOps.POW;
 
-	@Plugin(type = Op.class, name = NAMES)
-	@Parameter(key = "number")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoublConstantFunction implements Function<Double, Double> {
-
-		@Parameter
-		private double exponent;
-
-		@Override
-		public Double apply(Double t) {
-			return Math.pow(t, exponent);
-		}
-	}
-
-	@Plugin(type = Op.class, name = NAMES)
+	@OpField(names = NAMES)
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoubleFunction implements BiFunction<Double, Double, Double> {
-		@Override
-		public Double apply(Double t, Double exp) {
-			return Math.pow(t, exp);
-		}
-	}
+	public static final BiFunction<Double, Double, Double> MathPowerDoubleFunction = (base, exp) -> Math.pow(base, exp);
 
-	@Plugin(type = Op.class, name = NAMES)
+	@OpField(names = NAMES)
 	@Parameter(key = "array")
+	@Parameter(key = "power")
 	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwisePowerDoubleArrayComputer implements Computer<double[], double[]> {
+	public static final BiComputer<double[], Double, double[]> MathPointwisePowerDoubleArrayComputer = (in, pow, out) -> {
+		for (int i = 0; i < in.length; i++)
+			out[i] = Math.pow(in[i], pow);
+	};
 
-		@Parameter
-		private Double exponent;
-
-		@Override
-		public void compute(double[] in1, double[] out) {
-			for (int i = 0; i < out.length; i++) {
-				out[i] = Math.pow(in1[i], exponent);
-			}
-		}
-	}
 }

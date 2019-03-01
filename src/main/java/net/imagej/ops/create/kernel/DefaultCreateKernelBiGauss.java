@@ -31,7 +31,6 @@ package net.imagej.ops.create.kernel;
 
 import java.util.function.BiFunction;
 
-import net.imagej.ops.Ops;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalInterval;
@@ -41,6 +40,7 @@ import net.imglib2.type.Type;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.view.Views;
 
+import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -69,7 +69,7 @@ import org.scijava.plugin.Plugin;
  * @author Vladimír Ulman
  * @param <T>
  */
-@Plugin(type = Ops.Create.KernelBiGauss.class, name = "create.kernelBiGauss")
+@Plugin(type = Op.class, name = "create.kernelBiGauss")
 public class DefaultCreateKernelBiGauss
 {
 

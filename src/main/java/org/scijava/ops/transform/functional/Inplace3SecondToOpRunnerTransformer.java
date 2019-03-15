@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.core.inplace.Inplace3Second;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformer;
@@ -16,7 +16,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.util.Types;
 
 @Plugin(type = OpTransformer.class)
-public class Inplace3FirstToOpRunnerTransformer implements FunctionalTypeTransformer {
+public class Inplace3SecondToOpRunnerTransformer implements FunctionalTypeTransformer {
 
 	@Parameter
 	private TypeService typeService;
@@ -25,12 +25,12 @@ public class Inplace3FirstToOpRunnerTransformer implements FunctionalTypeTransfo
 	@Override
 	public Object transform(OpService opService, OpRef ref, Object src) {
 //		Type[] outTypes = ref.getOutTypes();
-		return OpRunners.Inplaces.toRunner((Inplace3First) src);
+		return OpRunners.Inplaces.toRunner((Inplace3Second) src);
 	}
 
 	@Override
 	public Class<?> srcClass() {
-		return Inplace3First.class;
+		return Inplace3Second.class;
 	}
 
 	@Override

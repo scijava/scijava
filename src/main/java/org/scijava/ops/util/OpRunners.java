@@ -16,6 +16,7 @@ import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.core.inplace.Inplace3Second;
 import org.scijava.ops.core.inplace.Inplace4First;
 import org.scijava.ops.core.inplace.Inplace5First;
 import org.scijava.ops.transform.OpRunner;
@@ -377,6 +378,30 @@ public class OpRunners {
 				@Override
 				public IO run(Object[] args) {
 					return Adapt.Inplaces.asFunction3(inplace).apply((IO) args[0], (I2) args[1], (I3) args[2]);
+				}
+
+			};
+		}
+		
+		public static <I1, IO, I3> OpRunner<IO> toRunner(Inplace3Second<I1, IO, I3> inplace) {
+			return new OpRunner<IO>() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return inplace;
+				}
+				
+				@Override
+				public Nil<?>[] inTypes() {
+					return new Nil<?>[] { new Nil<I1>() {
+					}, new Nil<IO>() {
+					}, new Nil<I3>() {
+					} };
+				}
+
+				@Override
+				public IO run(Object[] args) {
+					return Adapt.Inplaces.asFunction3(inplace).apply((I1) args[0], (IO) args[1], (I3) args[2]);
 				}
 
 			};

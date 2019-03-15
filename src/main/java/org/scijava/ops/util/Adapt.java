@@ -19,6 +19,7 @@ import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
 import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.core.inplace.Inplace3Second;
 import org.scijava.ops.core.inplace.Inplace4First;
 import org.scijava.ops.core.inplace.Inplace5First;
 
@@ -232,6 +233,19 @@ public class Adapt {
 	}
 	
 	public static class Inplaces {
+		
+		public static <IO, I2> Inplace<IO> asInplace(BiInplaceFirst<IO, I2> inplace, I2 in2) {
+			return (io) -> {
+				inplace.mutate(io, in2);
+			};
+		}
+		
+		public static <I1, IO> Inplace<IO> asInplace(BiInplaceSecond<I1, IO> inplace, I1 in1) {
+			return (io) -> {
+				inplace.mutate(in1, io);
+			};
+		}
+		
 		public static <IO> Function<IO, IO> asFunction(Inplace<IO> inplace){
 			return (io) -> {
 				inplace.mutate(io);
@@ -256,6 +270,13 @@ public class Adapt {
 		public static <IO, I2, I3> Function3<IO, I2, I3, IO> asFunction3(Inplace3First<IO, I2, I3> inplace){
 			return (io, in2, in3) -> {
 				inplace.mutate(io, in2, in3);
+				return io;
+			};
+		}
+		
+		public static <I1, IO, I3> Function3<I1, IO, I3, IO> asFunction3(Inplace3Second<I1, IO, I3> inplace){
+			return (in1, io, in3) -> {
+				inplace.mutate(in1, io, in3);
 				return io;
 			};
 		}

@@ -136,5 +136,43 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- TEMP: BEGIN DEPENDENCIES FOR imagej-ops -->
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>junit-benchmarks</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.scif</groupId>
+			<artifactId>scifio</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- TEMP: END DEPENDENCIES FOR imagej-ops -->
 	</dependencies>
 </project>

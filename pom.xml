@@ -118,8 +118,14 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>
+			<version>${scijava-common.version}</version>
 		</dependency>
 		
+		<!-- Only really needed for the imagej-Ops base, these should be moved when Ops is moved -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2</artifactId>
@@ -137,11 +143,31 @@
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithm</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-common</artifactId>
+		</dependency>
 
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- TODO only used by AbstractOpTest, delete when ops move out of this project -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>junit-benchmarks</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.scif</groupId>
+			<artifactId>scifio</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

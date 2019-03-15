@@ -882,8 +882,21 @@ public final class Types {
 		if (arg instanceof Class) {
 			argType = parameterizeRaw((Class<?>) arg);
 		}
-		ParameterizedType parameterizedSuperType = (ParameterizedType) GenericTypeReflector
-				.getExactSuperType(argType, Types.raw(param));
+		
+		Type superType = GenericTypeReflector.getExactSuperType(argType, Types.raw(param));
+		// HACK Ops coming from lambdas(or is this Ops in general?) will have their
+		// types erased once they become parameters being passed through. This will
+		// cause the above line to return an interface, not a parameterizedType. If we
+		// follow the standard procedure for this case we would get a ClassCastException
+		// on the next line, thus we just check assignability
+		// TODO can we just return true here? If we have presumably already checked raw
+		// types in isApplicable and there are no type variables to check. Also, this
+		// might be a bad idea if the Op needs a BiComputer<I, I, I> and we pass through
+		// a BiComputer<I, I, O>.
+		if (!(superType instanceof ParameterizedType))
+			return TypeUtils.isAssignable(superType, param);
+		
+		ParameterizedType parameterizedSuperType = (ParameterizedType) superType;
 		Type[] srcTypes = parameterizedSuperType.getActualTypeArguments();
 
 		// List to collect the indices of destination parameters that are type vars

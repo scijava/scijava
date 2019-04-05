@@ -29,41 +29,40 @@
 
 package org.scijava.ops;
 
+import com.google.common.collect.Streams;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.util.Maps;
-import org.scijava.param.ValidityException;
 import org.scijava.ops.types.Nil;
-
-import com.google.common.collect.Streams;
+import org.scijava.ops.util.Computers;
+import org.scijava.ops.util.Functions;
+import org.scijava.ops.util.Maps;
 
 public class LiftTest extends AbstractTestEnvironment {
 
-	Nil<Double> nilDouble = new Nil<Double>() {};
+	Nil<Double> nilDouble = new Nil<Double>() {
+	};
 
-	Nil<double[]> nilDoubleArray = new Nil<double[]>() {};
+	Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	};
 
 	@Test
-	public void testliftFunction() throws ValidityException {
-		Function<Double, Double> powFunction = ops().findOp( //
-				"math.pow", new Nil<Function<Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble, 2.0//
-		);
+	public void testliftFunction(){
+		Function<Double, Double> powFunction = Functions.unary(ops(), "test.liftFunction", nilDouble, nilDouble);
 
 		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.Functions.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
-		arrayEquals(toArray(res2), 1.0, 4.0, 9.0, 16.0);
-		
+		Assert.assertTrue(arrayEquals(toArray(res2), 2.0, 3.0, 4.0, 5.0));
+
 		Function<Double[], Double[]> liftedToArray = Maps.Functions.Arrays.liftBoth(powFunction, Double.class);
-		Double[] res3 = liftedToArray.apply(new Double[]{1.0, 2.0, 3.0, 4.0});
-		arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 1.0, 4.0, 9.0, 16.0);
+		Double[] res3 = liftedToArray.apply(new Double[] { 1.0, 2.0, 3.0, 4.0 });
+		Assert.assertTrue(arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 2.0, 3.0, 4.0, 5.0));
 	}
 
 	private static double[] toArray(Iterable<Double> iter) {
@@ -71,22 +70,18 @@ public class LiftTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testliftComputer() throws ValidityException {
+	public void testliftComputer() {
 
-		Computer<double[], double[]> powComputer = ops().findOp( //
-				"math.pow", new Nil<Computer<double[], double[]>>() {
-				}, //
-				new Nil[] { nilDoubleArray, nilDoubleArray, nilDouble }, //
-				nilDoubleArray, 2.0//
-		);
+		Computer<double[], double[]> powComputer = Computers.unary(ops(), "test.liftComputer", nilDoubleArray, nilDoubleArray);
 
-		Computer<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.Computers.Iterables.liftBoth(powComputer);
+		Computer<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.Computers.Iterables
+				.liftBoth(powComputer);
 		Iterable<double[]> res = wrap(new double[4]);
-		liftedToIterable.compute(wrap(new double[]{1.0, 2.0, 3.0, 4.0}), res);
-		
-		arrayEquals(unwrap(res), 1.0, 4.0, 9.0, 16.0);
+		liftedToIterable.compute(wrap(new double[] { 1.0, 2.0, 3.0, 4.0 }), res);
+
+		Assert.assertTrue(arrayEquals(unwrap(res), 2.0, 3.0, 4.0, 5.0));
 	}
-	
+
 	private static double[] unwrap(Iterable<double[]> ds) {
 		List<Double> wraps = new ArrayList<>();
 		for (double[] d : ds) {

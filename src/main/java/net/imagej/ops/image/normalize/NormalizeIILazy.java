@@ -29,56 +29,53 @@
 
 package net.imagej.ops.image.normalize;
 
-import net.imglib2.converter.Converter;
-import net.imglib2.type.numeric.RealType;
+import java.util.function.Function;
 
+import net.imglib2.IterableInterval;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Pair;
+
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.core.computer.Computer5;
+import org.scijava.param.Mutable;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
- * Simple {@link UnaryComputerOp} and {@link Converter} to perform a
- * normalization.
+ * Normalizes an {@link IterableInterval} given its minimum and maximum to
+ * another range defined by minimum and maximum.
+ * 
+ * TODO: Should this be a scale op?
  * 
  * @author Christian Dietz (University of Konstanz)
  * @author Leon Yang
+ * @param <I> - the type of the input image
+ * @param <O> - the type of the output image
  */
-class NormalizeRealTypeComputer<I extends RealType<I>, O extends RealType<O>> implements Computer<I, O>, Converter<I, O> {
+@Plugin(type = Op.class, name = "image.normalize")
+@Parameter(key = "input")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
+		implements Computer<IterableInterval<I>, IterableInterval<O>> {
 
-	//TODO: should this become an Op?
-	private double targetMin, targetMax, sourceMin, factor;
+	@OpDependency(name = "stats.minMax")
+	private Function<IterableInterval<I>, Pair<I, I>> minMaxFunc;
 
-	public NormalizeRealTypeComputer() {
-	}
-
-	public NormalizeRealTypeComputer(final double sourceMin, final double sourceMax, final double targetMin,
-			final double targetMax) {
-		setup(sourceMin, sourceMax, targetMin, targetMax);
-	}
-
-	public void setup(final double sourceMin, final double sourceMax, final double targetMin, final double targetMax) {
-		this.sourceMin = sourceMin;
-		final double tmp = sourceMax;
-		this.targetMin = targetMin;
-		this.targetMax = targetMax;
-
-		this.factor = 1.0d / (tmp - this.sourceMin) * (this.targetMax - this.targetMin);
-	}
+	@OpDependency(name = "image.normalize")
+	private Computer5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizerFunc;
 
 	@Override
-	public void compute(final I input, final O output) {
+	public void compute(IterableInterval<I> img, @Mutable IterableInterval<O> output) {
+		Pair<I, I> sourceMinMax = minMaxFunc.apply(img);
+		O min = output.firstElement().createVariable();
+		min.setReal(min.getMinValue());
+		O max = output.firstElement().createVariable();
+		max.setReal(max.getMaxValue());
 
-		final double res = (input.getRealDouble() - sourceMin) * factor + targetMin;
-
-		if (res > targetMax) {
-			output.setReal(targetMax);
-		} else if (res < targetMin) {
-			output.setReal(targetMin);
-		} else {
-			output.setReal(res);
-		}
+		normalizerFunc.accept(img, sourceMinMax.getA(), sourceMinMax.getB(), min, max, output);
 	}
 
-	@Override
-	public void convert(I input, O output) {
-		compute(input, output);
-	}
 }

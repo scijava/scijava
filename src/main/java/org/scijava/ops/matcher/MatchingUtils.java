@@ -336,7 +336,7 @@ public final class MatchingUtils {
 		// assignability
 		Class<?> matchingRawType = Types.raw(dest);
 		Type inferredSrcType = Types.parameterize(matchingRawType, mappedSrcTypes);
-		if (!Types.isAssignable(inferredSrcType, dest)) {
+		if (!Types.isAssignable(inferredSrcType, dest, typeVarAssigns)) {
 			if (!safeAssignability || !isSafeAssignable(destTypes, typeVarAssigns, src, dest))
 				return false;
 		}
@@ -477,7 +477,7 @@ public final class MatchingUtils {
 				if (!(inferFrom[i] instanceof ParameterizedType)) {
 					Type[] fromType = { types[i] };
 					fromType = Types.mapVarToTypes(fromType, typeAssigns);
-					if (!Types.isAssignable(inferFrom[i], fromType[0])) {
+					if (!Types.isAssignable(inferFrom[i], fromType[0], typeAssigns)) {
 						throw new TypeInferenceException();
 					}
 				} else {

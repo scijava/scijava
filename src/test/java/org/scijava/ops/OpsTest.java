@@ -143,11 +143,11 @@ public class OpsTest extends AbstractTestEnvironment {
 		inplaceAdd.mutate(a1, a2);
 		assert arrayEquals(a1, 5.0, 9.0, 16.0);
 	}
-
+	
 	@Test
 	public void testSecondaryInputs() {
 		Function<Double, Double> power3 = ops().findOp( //
-				"math.pow", new Nil<Function<Double, Double>>() {
+				"test.secondaryInputsFunction", new Nil<Function<Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
 				nilDouble, //
@@ -164,7 +164,7 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert powerFunction.apply(2.0, 3.0).equals(8.0);
 
 		Computer<double[], double[]> power3Arrays = ops().findOp( //
-				"math.pow", new Nil<Computer<double[], double[]>>() {
+				"test.secondaryInputsComputer", new Nil<Computer<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDouble }, //
 				nilDoubleArray, //

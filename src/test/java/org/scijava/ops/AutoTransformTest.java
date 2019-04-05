@@ -28,6 +28,8 @@
  */
 
 package org.scijava.ops;
+import com.google.common.collect.Streams;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -37,8 +39,6 @@ import org.junit.Test;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.types.Nil;
 
-import com.google.common.collect.Streams;
-
 public class AutoTransformTest extends AbstractTestEnvironment {
 
 	private static Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {
@@ -46,7 +46,8 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 
 	@Test
 	public void autoLiftFunctionToIterables() {
-		// There is no sqrt function for iterables in the system, however we can auto transform
+		// There is no sqrt function for iterables in the system, however we can auto
+		// transform
 		// as there is a lifter for Functions to iterables
 		Function<Iterable<Double>, Iterable<Double>> sqrtFunction = ops().findOp( //
 				"math.sqrt", new Nil<Function<Iterable<Double>, Iterable<Double>>>() {
@@ -54,11 +55,11 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 				new Nil[] { nilIterableDouble }, //
 				nilIterableDouble//
 		);
-		
+
 		Iterable<Double> res = sqrtFunction.apply(Arrays.asList(0.0, 4.0, 16.0));
 		arrayEquals(Streams.stream(res).mapToDouble(d -> d).toArray(), 0.0, 2.0, 4.0);
 	}
-	
+
 	@Test
 	public void autoFunctionToComputer() {
 		Function<double[], double[]> sqrtArrayFunction = ops().findOp( //
@@ -67,10 +68,10 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 				new Nil[] { Nil.of(double[].class) }, //
 				Nil.of(double[].class)//
 		);
-		double[] res = sqrtArrayFunction.apply(new double[]{4.0, 16.0});
+		double[] res = sqrtArrayFunction.apply(new double[] { 4.0, 16.0 });
 		arrayEquals(res, 2.0, 4.0);
 	}
-	
+
 	@Test
 	public void autoBiFunctionToBiComputer() {
 		BiFunction<double[], double[], double[]> addArrayFunction = ops().findOp( //
@@ -79,52 +80,52 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 				new Nil[] { Nil.of(double[].class), Nil.of(double[].class) }, //
 				Nil.of(double[].class)//
 		);
-		double[] res = addArrayFunction.apply(new double[]{4.0, 16.0}, new double[]{4.0, 16.0});
+		double[] res = addArrayFunction.apply(new double[] { 4.0, 16.0 }, new double[] { 4.0, 16.0 });
 		arrayEquals(res, 8.0, 32.0);
 	}
-	
+
 	@Test
 	public void autoLiftFuncToArray() {
 		Function<Double[], Double[]> power3ArraysFunc = ops().findOp( //
-				"math.pow", new Nil<Function<Double[], Double[]>>() {
+				"test.secondaryInputsFunction", new Nil<Function<Double[], Double[]>>() {
 				}, //
 				new Nil[] { Nil.of(Double[].class), Nil.of(double.class) }, //
 				Nil.of(Double[].class), //
 				3.0//
 		);
-		
+
 		Double[] result = power3ArraysFunc.apply(new Double[] { 1.0, 2.0, 3.0 });
 		assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0, 8.0, 27.0);
 	}
-	
+
 	@Test
 	public void autoTransformWithSecondaryArgs() {
 		Computer<Double[], Double[]> power3Arrays = ops().findOp( //
-				"math.pow", new Nil<Computer<Double[], Double[]>>() {
+				"test.secondaryInputsFunction", new Nil<Computer<Double[], Double[]>>() {
 				}, //
 				new Nil[] { Nil.of(Double[].class), Nil.of(Double[].class), Nil.of(double.class) }, //
 				Nil.of(Double[].class), //
 				3.0//
 		);
-		
+
 		Double[] result = new Double[3];
 		power3Arrays.compute(new Double[] { 1.0, 2.0, 3.0 }, result);
 		assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0, 8.0, 27.0);
 	}
-	
+
 	@Test
 	public void autoCompToFuncAndLift() {
 		Nil<List<double[]>> n = new Nil<List<double[]>>() {
 		};
-		
+
 		Function<List<double[]>, List<double[]>> sqrtListFunction = ops().findOp( //
-				"math.sqrt", new Nil<Function<List<double[]>, List<double[]>>>() {
+				"test.liftSqrt", new Nil<Function<List<double[]>, List<double[]>>>() {
 				}, //
 				new Nil[] { n }, //
 				n//
 		);
-		
-		List<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[]{4.0}, new double[]{4.0, 25.0}));
+
+		List<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
 		double[] resArray = res.stream().flatMapToDouble(ds -> Arrays.stream(ds)).toArray();
 		arrayEquals(resArray, 2.0, 2.0, 5.0);
 	}

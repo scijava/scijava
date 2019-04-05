@@ -30,12 +30,9 @@
 package org.scijava.ops;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.core.OneToOneCommand;
 import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.util.Adapt;
 import org.scijava.types.Nil;
 
@@ -48,38 +45,9 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	};
 
 	@Test
-	public void testFunctionAsCommand() {
-		Function<Double, Double> sqrtFunction = ops().findOp( //
-				"math.sqrt", new Nil<Function<Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble }, //
-				nilDouble//
-		);
-
-		OneToOneCommand<Double, Double> sqrtCommand = Adapt.Functions.asCommand(sqrtFunction, 25.0);
-		sqrtCommand.run();
-		assert sqrtCommand.get().equals(5.0);
-	}
-
-	@Test
-	public void testComputerAsCommand() {
-		Computer<double[], double[]> sqrtComputer = ops().findOp( //
-				"math.sqrt", new Nil<Computer<double[], double[]>>() {
-				}, //
-				new Nil[] { nilDoubleArray, nilDoubleArray }, //
-				nilDoubleArray//
-		);
-
-		OneToOneCommand<double[], double[]> sqrtCommand = Adapt.Computers.asCommand(sqrtComputer,
-				new double[] { 25, 100, 4 }, new double[3]);
-		sqrtCommand.run();
-		assert arrayEquals(sqrtCommand.get(), 5.0, 10.0, 2.0);
-	}
-
-	@Test
 	public void testComputerAsFunction() {
 		final BiComputer<double[], double[], double[]> computer = ops().findOp( //
-				"math.add", new Nil<BiComputer<double[], double[], double[]>>() {
+				"test.adapters", new Nil<BiComputer<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -95,12 +63,13 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		double[] result = computerAsFunction.apply(a1, a2);
 		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
-
+	
+	
 	@Test
 	public void testFunctionAsComputer() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<double[], double[], double[]> function = ops().findOp( //
-				"math.add", new Nil<BiFunction<double[], double[], double[]>>() {
+				"test.adapters", new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//

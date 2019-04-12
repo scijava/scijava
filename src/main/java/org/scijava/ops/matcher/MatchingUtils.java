@@ -370,8 +370,8 @@ public final class MatchingUtils {
 
 		Method[] destMethods = Arrays.stream(Types.raw(dest).getDeclaredMethods())
 				.filter(method -> Modifier.isAbstract(method.getModifiers())).toArray(Method[]::new);
-		Type[] params = Types.methodParamTypes(destMethods[0], Types.raw(src));
-		Type returnType = Types.methodReturnType(destMethods[0], Types.raw(src));
+		Type[] params = Types.getExactParameterTypes(destMethods[0], src);
+		Type returnType = Types.getExactReturnType(destMethods[0], src);
 		for (int i = 0; i < params.length; i++) {
 			if (!Types.isAssignable(destTypes[i], params[i], typeVarAssigns))
 				return false;

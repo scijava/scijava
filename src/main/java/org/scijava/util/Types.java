@@ -2236,6 +2236,11 @@ public final class Types {
 			if (toTypeVariable.equals(type)) {
 				return true;
 			}
+			
+			// if toTypeVariable is assigned to type in typeVarAssigns, then it is assignable
+			if (typeVarAssigns.get(toTypeVariable) == type) {
+				return true;
+			}
 
 			if (type instanceof TypeVariable) {
 				// a type variable is assignable to another type variable, if

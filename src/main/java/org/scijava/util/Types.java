@@ -758,6 +758,29 @@ public final class Types {
 		}
 		return TypeUtils.isAssignable(source, target);
 	}
+	
+	/**
+	 * <p>
+	 * Checks if the subject type may be implicitly cast to the target type
+	 * following the Java generics rules.
+	 * </p>
+	 *
+	 * @param type the subject type to be assigned to the target type
+	 * @param toType the target type
+	 * @param typeVarAssigns optional map of type variable assignments
+	 * @return {@code true} if {@code type} is assignable to {@code toType}.
+	 */
+	public static boolean isAssignable(final Type type, final Type toType,
+			final Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		// Workaround for possible bug in TypeUtils.isAssignable, which returns
+				// false if one wants to assign primitives to their wrappers and the other
+				// way around
+				if (type instanceof Class && toType instanceof Class) {
+					return TypeUtils.isAssignable(Types.box((Class<?>) type), Types.box((Class<?>) toType));
+				}
+				return TypeUtils.isAssignable(type, toType, typeVarAssigns);
+	}
 
 	/**
 	 * Checks whether the given object can be cast to the specified type.
@@ -4355,6 +4378,7 @@ public final class Types {
 			return result;
 		}
 	}
+
 
 	// -- END FORK OF GENTYREF 1.1.0 CODE --
 }

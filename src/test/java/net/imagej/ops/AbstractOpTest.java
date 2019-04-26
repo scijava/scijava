@@ -86,6 +86,7 @@ import org.scijava.cache.CacheService;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
+import org.scijava.thread.ThreadService;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -103,7 +104,7 @@ public abstract class AbstractOpTest extends AbstractTestEnvironment{
 	/** Subclasses can override to create a context with different services. */
 	protected Context createContext() {
 		return new Context(OpService.class,
-			CacheService.class);
+			CacheService.class, ThreadService.class);
 	}
 
 	private int seed;

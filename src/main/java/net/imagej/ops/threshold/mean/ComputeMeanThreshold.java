@@ -27,29 +27,56 @@
  * #L%
  */
 
-package net.imagej.ops.threshold;
+package net.imagej.ops.threshold.mean;
 
+import net.imagej.ops.threshold.AbstractComputeThresholdHistogram;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.core.Op;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
+
+// NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
+// plugin found in Fiji (version 1.14).
 
 /**
- * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
+ * Implements a mean threshold method by Glasbey.
  *
- * @author Curtis Rueden
+ * @author Barry DeZonia
+ * @author Gabriel Landini
  */
-public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
-	implements Computer<Histogram1d<T>, T>
+@Plugin(type = Op.class, name = "threshold.mean")
+@Parameter(key = "inputHistogram")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public class ComputeMeanThreshold<T extends RealType<T>> extends
+	AbstractComputeThresholdHistogram<T>
 {
 
 	@Override
-	public void compute(final Histogram1d<T> input, final T output) {
-		final long binPos = computeBin(input);
-
-		// convert bin number to corresponding gray level
-		input.getCenterValue(binPos, output);
+	public long computeBin(final Histogram1d<T> hist) {
+		final long[] histogram = hist.toLongArray();
+		return computeBin(histogram);
 	}
 
-	protected abstract long computeBin(final Histogram1d<T> input);
+	/**
+	 * C. A. Glasbey,<br>
+	 * "An analysis of histogram-based thresholding algorithms,"<br>
+	 * CVGIP: Graphical Models and Image Processing, vol. 55, pp. 532-537,<br>
+	 * 1993.
+	 * <P>
+	 * The threshold is the mean of the greyscale data
+	 */
+	public static long computeBin(final long[] histogram) {
+		int threshold = -1;
+		double tot = 0, sum = 0;
+		for (int i = 0; i < histogram.length; i++) {
+			tot += histogram[i];
+			sum += (i * histogram[i]);
+		}
+		threshold = (int) Math.floor(sum / tot);
+		return threshold;
+	}
+
 }

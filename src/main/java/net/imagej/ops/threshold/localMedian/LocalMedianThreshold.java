@@ -27,29 +27,54 @@
  * #L%
  */
 
-package net.imagej.ops.threshold;
+package net.imagej.ops.threshold.localMedian;
 
-import net.imglib2.histogram.Histogram1d;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.core.computer.Computer3;
+import org.scijava.param.Mutable;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
- * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
+ * LocalThresholdMethod using median.
  *
- * @author Curtis Rueden
+ * @author Jonathan Hale
+ * @author Stefan Helfrich (University of Konstanz)
  */
-public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
-	implements Computer<Histogram1d<T>, T>
+@Plugin(type = Op.class, name = "threshold.localMedian")
+@Parameter(key = "inputNeighborhood")
+@Parameter(key = "inputCenterPixel")
+@Parameter(key = "c")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public class LocalMedianThreshold<T extends RealType<T>> implements
+	Computer3<Iterable<T>, T, Double, BitType>
 {
 
-	@Override
-	public void compute(final Histogram1d<T> input, final T output) {
-		final long binPos = computeBin(input);
+	@OpDependency(name = "stats.median")
+	private Computer<Iterable<T>, DoubleType> medianOp;
 
-		// convert bin number to corresponding gray level
-		input.getCenterValue(binPos, output);
+	@Override
+	public void compute(final Iterable<T> inputNeighborhood,
+		final T inputCenterPixel, final Double c, @Mutable final BitType output)
+	{
+		compute(inputNeighborhood, inputCenterPixel, c, medianOp, output);
 	}
 
-	protected abstract long computeBin(final Histogram1d<T> input);
+	public static <T extends RealType<T>> void compute(
+		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
+		final Double c, final Computer<Iterable<T>, DoubleType> medianOp,
+		@Mutable final BitType output)
+	{
+		final DoubleType m = new DoubleType();
+		medianOp.compute(inputNeighborhood, m);
+		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() - c);
+	}
+
 }

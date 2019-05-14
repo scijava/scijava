@@ -29,27 +29,34 @@
 
 package net.imagej.ops.threshold;
 
-import net.imglib2.histogram.Histogram1d;
-import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.logic.BitType;
 
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
+import org.scijava.param.Mutable;
+import org.scijava.param.Parameter;
+import org.scijava.struct.ItemIO;
 
 /**
- * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
- *
  * @author Curtis Rueden
+ * @author Christian Dietz (University of Konstanz)
  */
-public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
-	implements Computer<Histogram1d<T>, T>
+@Parameter(key = "input")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public abstract class AbstractApplyThresholdIterable<T> implements
+	Computer<Iterable<T>, Iterable<BitType>>
 {
 
-	@Override
-	public void compute(final Histogram1d<T> input, final T output) {
-		final long binPos = computeBin(input);
+	@OpDependency(name = "threshold.apply")
+	private BiComputer<Iterable<T>, T, Iterable<BitType>> applyThresholdOp;
 
-		// convert bin number to corresponding gray level
-		input.getCenterValue(binPos, output);
+	@Override
+	public void compute(final Iterable<T> input,
+		@Mutable final Iterable<BitType> output)
+	{
+		applyThresholdOp.compute(input, computeThreshold(input), output);
 	}
 
-	protected abstract long computeBin(final Histogram1d<T> input);
+	protected abstract T computeThreshold(Iterable<T> input);
 }

@@ -27,29 +27,37 @@
  * #L%
  */
 
-package net.imagej.ops.threshold;
+package net.imagej.ops.threshold.apply;
 
-import net.imglib2.histogram.Histogram1d;
-import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.logic.BitType;
 
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.param.Mutable;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
- * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
+ * Applies a threshold value (the second input) to the given comparable object,
+ * producing a {@link BitType} set to 1 iff the object compares above the
+ * threshold.
  *
- * @author Curtis Rueden
+ * @author Martin Horn (University of Konstanz)
  */
-public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
-	implements Computer<Histogram1d<T>, T>
+@Plugin(type = Op.class, name = "threshold.apply")
+@Parameter(key = "input")
+@Parameter(key = "threshold")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public class ApplyThresholdComparable<T> implements
+	BiComputer<Comparable<? super T>, T, BitType>
 {
 
 	@Override
-	public void compute(final Histogram1d<T> input, final T output) {
-		final long binPos = computeBin(input);
-
-		// convert bin number to corresponding gray level
-		input.getCenterValue(binPos, output);
+	public void compute(final Comparable<? super T> input, final T threshold,
+		final @Mutable BitType output)
+	{
+		output.set(input.compareTo(threshold) > 0);
 	}
 
-	protected abstract long computeBin(final Histogram1d<T> input);
 }

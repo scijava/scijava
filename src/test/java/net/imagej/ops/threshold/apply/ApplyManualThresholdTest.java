@@ -31,6 +31,7 @@ package net.imagej.ops.threshold.apply;
 
 import java.util.Comparator;
 
+import net.imagej.ops.threshold.AbstractThresholdTest;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;

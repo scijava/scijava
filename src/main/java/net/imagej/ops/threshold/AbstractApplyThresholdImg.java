@@ -2,7 +2,8 @@
  * #%L
  * ImageJ software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2016 Board of Regents of the University of
+ * Wisconsin-Madison and University of Konstanz.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,27 +30,35 @@
 
 package net.imagej.ops.threshold;
 
+import java.util.function.Function;
+
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.computer.Computer;
 
 /**
- * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
- *
  * @author Curtis Rueden
+ * @author Christian Dietz (University of Konstanz)
  */
-public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
-	implements Computer<Histogram1d<T>, T>
+public abstract class AbstractApplyThresholdImg<T extends RealType<T>> extends
+	AbstractApplyThresholdIterable<T>
 {
 
-	@Override
-	public void compute(final Histogram1d<T> input, final T output) {
-		final long binPos = computeBin(input);
+	@OpDependency(name = "image.histogram")
+	private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
 
-		// convert bin number to corresponding gray level
-		input.getCenterValue(binPos, output);
+	@Override
+	protected T computeThreshold(final Iterable<T> input) {
+		final Histogram1d<T> inputHistogram = createHistogramOp.apply(input);
+		final T threshold = input.iterator().next().createVariable();
+		final Computer<Histogram1d<T>, T> computeThresholdOp =
+			getComputeThresholdOp();
+		computeThresholdOp.compute(inputHistogram, threshold);
+		return threshold;
 	}
 
-	protected abstract long computeBin(final Histogram1d<T> input);
+	protected abstract Computer<Histogram1d<T>, T> getComputeThresholdOp();
+
 }

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.apply;
+package net.imagej.ops.threshold;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

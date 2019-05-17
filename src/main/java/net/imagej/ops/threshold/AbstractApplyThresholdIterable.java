@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,42 +27,36 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.apply;
+package net.imagej.ops.threshold;
 
-import java.util.Comparator;
-
-import net.imagej.ops.threshold.AbstractThresholdTest;
-import net.imglib2.exception.IncompatibleTypeException;
-import net.imglib2.img.Img;
 import net.imglib2.type.logic.BitType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 
-import org.junit.Test;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.util.Computers;
-import org.scijava.types.Nil;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer;
+import org.scijava.param.Mutable;
+import org.scijava.param.Parameter;
+import org.scijava.struct.ItemIO;
 
 /**
- * Tests {@link ApplyManualThreshold}.
- * 
  * @author Curtis Rueden
+ * @author Christian Dietz (University of Konstanz)
  */
-public class ApplyManualThresholdTest extends AbstractThresholdTest {
+@Parameter(key = "input")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public abstract class AbstractApplyThresholdIterable<T> implements
+	Computer<Iterable<T>, Iterable<BitType>>
+{
 
-	@Test
-	public void testApplyThreshold() throws IncompatibleTypeException {
-		Computer3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>,Iterable<BitType>> createFunc = Computers.ternary(ops(),
-				"threshold.apply", new Nil<Img<UnsignedShortType>>() {
-				}, new Nil<UnsignedShortType>() {
-				}, new Nil<Comparator<UnsignedShortType>>() {
-				}, new Nil<Iterable<BitType>>() {
-				});
+	@OpDependency(name = "threshold.apply")
+	private BiComputer<Iterable<T>, T, Iterable<BitType>> applyThresholdOp;
 
-		final Img<BitType> out = bitmap();
-		final UnsignedShortType threshold = new UnsignedShortType(30000);
-		Comparator<UnsignedShortType> comparator = (c1, c2) -> (int) Math.ceil(c1.getRealDouble() - c2.getRealDouble());
-		createFunc.compute(in, threshold, comparator, out);
-		assertCount(out, 54);
+	@Override
+	public void compute(final Iterable<T> input,
+		@Mutable final Iterable<BitType> output)
+	{
+		applyThresholdOp.compute(input, computeThreshold(input), output);
 	}
 
+	protected abstract T computeThreshold(Iterable<T> input);
 }

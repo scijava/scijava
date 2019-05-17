@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localPhansalkar;
+package net.imagej.ops.threshold.localSauvola;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 
 /**
  * <p>
- * Local thresholding algorithm as proposed by Phansalkar et al.
+ * Local thresholding algorithm as proposed by Sauvola et al.
  * </p>
  * <p>
  * This implementation improves execution speed by using integral images for the
@@ -61,25 +61,23 @@ import org.scijava.struct.ItemIO;
  * required.
  * </p>
  *
- * @see LocalPhansalkarThreshold
+ * @see ComputeLocalSauvolaThreshold
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localPhansalkar",
+@Plugin(type = Op.class, name = "threshold.localSauvola",
 	priority = Priority.LOW - 1)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalPhansalkarThresholdIntegral<T extends RealType<T>> implements
+public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
+	implements
 	Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>
 {
 
-	public static final double DEFAULT_K = 0.25;
+	public static final double DEFAULT_K = 0.5;
 	public static final double DEFAULT_R = 0.5;
-
-	private static final double P = 2.0;
-	private static final double Q = 10.0;
 
 	@OpDependency(name = "stats.integralMean")
 	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
@@ -116,8 +114,7 @@ public class LocalPhansalkarThresholdIntegral<T extends RealType<T>> implements
 		final DoubleType stdDev = new DoubleType(Math.sqrt(variance.get()));
 
 		final DoubleType threshold = new DoubleType(mean.getRealDouble() * (1.0d +
-			P * Math.exp(-Q * mean.getRealDouble()) + k * ((stdDev.getRealDouble() /
-				r) - 1.0)));
+			k * ((Math.sqrt(stdDev.getRealDouble()) / r) - 1.0)));
 
 		// Set value
 		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
@@ -127,11 +124,5 @@ public class LocalPhansalkarThresholdIntegral<T extends RealType<T>> implements
 
 		output.set(centerPixelAsDoubleType.compareTo(threshold) > 0);
 	}
-
-	// TODO: Port
-	// @Override
-	// protected int[] requiredIntegralImages() {
-	// return new int[] { 1, 2 };
-	// }
 
 }

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localNiblack;
+package net.imagej.ops.threshold.localPhansalkar;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 
 /**
  * <p>
- * Niblack's local thresholding algorithm.
+ * Local thresholding algorithm as proposed by Phansalkar et al.
  * </p>
  * <p>
  * This implementation improves execution speed by using integral images for the
@@ -61,19 +61,26 @@ import org.scijava.struct.ItemIO;
  * required.
  * </p>
  *
- * @see LocalNiblackThreshold
+ * @see ComputeLocalPhansalkarThreshold
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localNiblack",
+@Plugin(type = Op.class, name = "threshold.localPhansalkar",
 	priority = Priority.LOW - 1)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
-@Parameter(key = "c")
-@Parameter(key = "k")
+@Parameter(key = "k", required = false)
+@Parameter(key = "r", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalNiblackThresholdIntegral<T extends RealType<T>> implements
+public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
+	implements
 	Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>
 {
+
+	public static final double DEFAULT_K = 0.25;
+	public static final double DEFAULT_R = 0.5;
+
+	private static final double P = 2.0;
+	private static final double Q = 10.0;
 
 	@OpDependency(name = "stats.integralMean")
 	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
@@ -84,37 +91,34 @@ public class LocalNiblackThresholdIntegral<T extends RealType<T>> implements
 	@Override
 	public void compute(
 		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, final Double c, final Double k,
+		final T inputCenterPixel, final Double k, final Double r,
 		@Mutable final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, k, integralMeanOp,
+		compute(inputNeighborhood, inputCenterPixel, k, r, integralMeanOp,
 			integralVarianceOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
 		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, final Double c, final Double k,
+		final T inputCenterPixel, Double k, Double r,
 		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp,
 		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp,
 		@Mutable final BitType output)
 	{
-		final DoubleType threshold = new DoubleType(0.0d);
+		if (k == null) k = DEFAULT_K;
+		if (r == null) r = DEFAULT_R;
 
 		final DoubleType mean = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, mean);
-
-		threshold.add(mean);
 
 		final DoubleType variance = new DoubleType();
 		integralVarianceOp.compute(inputNeighborhood, variance);
 
 		final DoubleType stdDev = new DoubleType(Math.sqrt(variance.get()));
-		stdDev.mul(k);
 
-		threshold.add(stdDev);
-
-		// Subtract the contrast
-		threshold.sub(new DoubleType(c));
+		final DoubleType threshold = new DoubleType(mean.getRealDouble() * (1.0d +
+			P * Math.exp(-Q * mean.getRealDouble()) + k * ((stdDev.getRealDouble() /
+				r) - 1.0)));
 
 		// Set value
 		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
@@ -124,11 +128,5 @@ public class LocalNiblackThresholdIntegral<T extends RealType<T>> implements
 
 		output.set(centerPixelAsDoubleType.compareTo(threshold) > 0);
 	}
-
-	// TODO: How to port that? (Or rather, LocalThreshold(Integral) in general.)
-	// @Override
-	// protected int[] requiredIntegralImages() {
-	// return new int[] { 1, 2 };
-	// }
 
 }

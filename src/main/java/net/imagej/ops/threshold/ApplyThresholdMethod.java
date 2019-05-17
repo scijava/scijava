@@ -30,17 +30,16 @@
 
 package net.imagej.ops.threshold;
 
-import java.util.function.Function;
-
 import net.imglib2.histogram.Histogram1d;
-import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
+import org.scijava.plugin.Plugin;
 
 /**
- * Ops which compute and apply a global threshold to an {@link Img}.
+ * Ops which compute and apply a global threshold to an image.
  *
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
@@ -52,8 +51,9 @@ public final class ApplyThresholdMethod {
 		// NB: Prevent instantiation of utility class.
 	}
 
+	@Plugin(type = Op.class, name = "threshold.huang")
 	public static class Huang<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.huang")
@@ -65,8 +65,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.ij1")
 	public static class IJ1<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.ij1")
@@ -78,8 +79,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.intermodes")
 	public static class Intermodes<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.intermodes")
@@ -91,8 +93,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.isoData")
 	public static class IsoData<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.isoData")
@@ -104,8 +107,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.li")
 	public static class Li<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.li")
@@ -117,8 +121,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.maxEntropy")
 	public static class MaxEntropy<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.maxEntropy")
@@ -130,8 +135,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.maxLikelihood")
 	public static class MaxLikelihood<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.maxLikelihood")
@@ -143,8 +149,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.mean")
 	public static class Mean<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.mean")
@@ -156,8 +163,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.minError")
 	public static class MinError<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.minError")
@@ -169,8 +177,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.minimum")
 	public static class Minimum<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.minimum")
@@ -182,8 +191,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.moments")
 	public static class Moments<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.moments")
@@ -195,8 +205,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.otsu")
 	public static class Otsu<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.otsu")
@@ -208,8 +219,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.percentile")
 	public static class Percentile<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.percentile")
@@ -221,8 +233,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.renyiEntropy")
 	public static class RenyiEntropy<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.renyiEntropy")
@@ -234,8 +247,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.rosin")
 	public static class Rosin<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.rosin")
@@ -247,8 +261,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.shanbhag")
 	public static class Shanbhag<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.shanbhag")
@@ -260,8 +275,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.triangle")
 	public static class Triangle<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.triangle")
@@ -273,8 +289,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
+	@Plugin(type = Op.class, name = "threshold.yen")
 	public static class Yen<T extends RealType<T>> extends
-		AbstractApplyGlobalHistogramBasedThreshold<T>
+		AbstractApplyThresholdImg<T>
 	{
 
 		@OpDependency(name = "threshold.yen")
@@ -284,26 +301,6 @@ public final class ApplyThresholdMethod {
 		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
-	}
-
-	private abstract static class AbstractApplyGlobalHistogramBasedThreshold<T extends RealType<T>>
-		extends AbstractApplyGlobalThreshold<T>
-	{
-
-		@OpDependency(name = "image.histogram")
-		private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
-
-		@Override
-		protected T computeThreshold(final Iterable<T> input) {
-			final Histogram1d<T> inputHistogram = createHistogramOp.apply(input);
-			final T threshold = input.iterator().next().createVariable();
-			final Computer<Histogram1d<T>, T> computeThresholdOp =
-				getComputeThresholdOp();
-			computeThresholdOp.compute(inputHistogram, threshold);
-			return threshold;
-		}
-
-		protected abstract Computer<Histogram1d<T>, T> getComputeThresholdOp();
 	}
 
 }

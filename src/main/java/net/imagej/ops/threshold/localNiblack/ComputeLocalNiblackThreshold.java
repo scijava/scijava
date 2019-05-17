@@ -27,17 +27,16 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localBernsen;
+package net.imagej.ops.threshold.localNiblack;
 
-import java.util.function.Function;
-
-import net.imagej.ops.threshold.localMidGrey.LocalMidGreyThreshold;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.Pair;
+import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
@@ -45,53 +44,52 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * LocalThresholdMethod which is similar to {@link LocalMidGreyThreshold}, but
- * uses a constant value rather than the value of the input pixel when the
- * contrast in the neighborhood of that pixel is too small.
+ * LocalThresholdMethod using Niblack's thresholding method.
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
- * @param <T> input type
  */
-@Plugin(type = Op.class, name = "threshold.localBernsen")
+@Plugin(type = Op.class, name = "threshold.localNiblack",
+	priority = Priority.LOW)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
-@Parameter(key = "contrastThreshold")
-@Parameter(key = "halfMaxValue")
+@Parameter(key = "c")
+@Parameter(key = "k")
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalBernsenThreshold<T extends RealType<T>> implements
+public class ComputeLocalNiblackThreshold<T extends RealType<T>> implements
 	Computer4<Iterable<T>, T, Double, Double, BitType>
 {
 
-	@OpDependency(name = "stats.minMax")
-	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
+	@OpDependency(name = "stats.mean")
+	private Computer<Iterable<T>, DoubleType> meanOp;
+
+	@OpDependency(name = "stats.stdDev")
+	private Computer<Iterable<T>, DoubleType> stdDeviationOp;
 
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double contrastThreshold,
-		final Double halfMaxValue, @Mutable final BitType output)
+		final T inputCenterPixel, final Double c, final Double k,
+		@Mutable final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, contrastThreshold,
-			halfMaxValue, minMaxOp, output);
+		compute(inputNeighborhood, inputCenterPixel, c, k, meanOp, stdDeviationOp,
+			output);
 	}
 
 	public static <T extends RealType<T>> void compute(
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double contrastThreshold, final Double halfMaxValue,
-		final Function<Iterable<T>, Pair<T, T>> minMaxOp,
+		final Double c, final Double k,
+		final Computer<Iterable<T>, DoubleType> meanOp,
+		final Computer<Iterable<T>, DoubleType> stdDeviationOp,
 		@Mutable final BitType output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
-		final double minValue = outputs.getA().getRealDouble();
-		final double maxValue = outputs.getB().getRealDouble();
-		final double midGrey = (maxValue + minValue) / 2.0;
+		final DoubleType m = new DoubleType();
+		meanOp.compute(inputNeighborhood, m);
 
-		if ((maxValue - minValue) < contrastThreshold) {
-			output.set(midGrey >= halfMaxValue);
-		}
-		else {
-			output.set(inputCenterPixel.getRealDouble() >= midGrey);
-		}
+		final DoubleType stdDev = new DoubleType();
+		stdDeviationOp.compute(inputNeighborhood, stdDev);
+
+		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() + k * stdDev
+			.getRealDouble() - c);
 	}
 
 }

@@ -27,13 +27,12 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localMean;
+package net.imagej.ops.threshold.localMedian;
 
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
@@ -44,48 +43,38 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * LocalThresholdMethod that uses the mean and operates directly of RAIs.
+ * LocalThresholdMethod using median.
  *
- * @author Jonathan Hale (University of Konstanz)
- * @author Martin Horn (University of Konstanz)
+ * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW)
+@Plugin(type = Op.class, name = "threshold.localMedian")
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalMeanThreshold<T extends RealType<T>> implements
+public class ComputeLocalMedianThreshold<T extends RealType<T>> implements
 	Computer3<Iterable<T>, T, Double, BitType>
 {
 
-	@OpDependency(name = "stats.mean")
-	private Computer<Iterable<T>, DoubleType> meanOp;
+	@OpDependency(name = "stats.median")
+	private Computer<Iterable<T>, DoubleType> medianOp;
 
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double c, @Mutable final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, meanOp, output);
+		compute(inputNeighborhood, inputCenterPixel, c, medianOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double c, final Computer<Iterable<T>, DoubleType> meanOp,
+		final Double c, final Computer<Iterable<T>, DoubleType> medianOp,
 		@Mutable final BitType output)
 	{
 		final DoubleType m = new DoubleType();
-
-		meanOp.compute(inputNeighborhood, m);
+		medianOp.compute(inputNeighborhood, m);
 		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() - c);
 	}
-
-	// TODO: How to port old Contingent code?:
-	// final RectangleShape rect = getShape() instanceof RectangleShape
-	// ? (RectangleShape) getShape() : null;
-	// if (rect == null) {
-	// return true;
-	// }
-	// return rect.getSpan()<=2;
 
 }

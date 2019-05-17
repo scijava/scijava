@@ -27,17 +27,20 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localMidGrey;
+package net.imagej.ops.threshold.localMean;
 
-import java.util.function.Function;
-
+import net.imagej.ops.stats.IntegralMean;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.Pair;
+import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.view.composite.Composite;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
@@ -45,44 +48,60 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * LocalThresholdMethod which thresholds against the average of the maximum and
- * minimum pixels of a neighborhood.
+ * <p>
+ * Local threshold method that uses the {@link IntegralMean} for the threshold
+ * computation.
+ * </p>
+ * <p>
+ * This implementation improves execution speed by using integral images for the
+ * computations of mean and standard deviation in the local windows. A
+ * significant improvement can be observed for increased window sizes (
+ * {@code span > 10}). It operates on {@link RandomAccessibleInterval}s of
+ * {@link RealType}, i.e. explicit conversion to an integral image is <b>not</b>
+ * required.
+ * </p>
  *
- * @author Jonathan Hale
+ * @see ComputeLocalMeanThreshold
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localMidGrey",
-	priority = Priority.LOW)
+@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW -
+	1)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalMidGreyThreshold<T extends RealType<T>> implements
-	Computer3<Iterable<T>, T, Double, BitType>
+public class ComputeLocalMeanThresholdIntegral<T extends RealType<T>> implements
+	Computer3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType>
 {
 
-	@OpDependency(name = "stats.minMax")
-	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
+	@OpDependency(name = "stats.integralMean")
+	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
 
 	@Override
-	public void compute(final Iterable<T> inputNeighborhood,
+	public void compute(
+		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
 		final T inputCenterPixel, final Double c, @Mutable final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, minMaxOp, output);
+		compute(inputNeighborhood, inputCenterPixel, c, integralMeanOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double c, final Function<Iterable<T>, Pair<T, T>> minMaxOp,
+		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
+		final T inputCenterPixel, final Double c,
+		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp,
 		@Mutable final BitType output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
+		final DoubleType sum = new DoubleType();
+		integralMeanOp.compute(inputNeighborhood, sum);
 
-		final double minValue = outputs.getA().getRealDouble();
-		final double maxValue = outputs.getB().getRealDouble();
+		// Subtract the contrast
+		sum.sub(new DoubleType(c));
 
-		output.set(inputCenterPixel.getRealDouble() > ((maxValue + minValue) /
-			2.0) - c);
+		// Set value
+		final DoubleType centerPixelAsDoubleType = new DoubleType();
+		centerPixelAsDoubleType.set(inputCenterPixel.getRealDouble());
+
+		output.set(centerPixelAsDoubleType.compareTo(sum) > 0);
 	}
 
 }

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localPhansalkar;
+package net.imagej.ops.threshold.localSauvola;
 
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
@@ -45,46 +45,35 @@ import org.scijava.struct.ItemIO;
 
 /**
  * <p>
- * This is a modification of Sauvola's thresholding method to deal with low
- * contrast images. In this algorithm the threshold is computed as t =
- * mean*(1+p*exp(-q*mean)+k*((stdev/r)-1)) for an image that is normalized to
- * [0, 1].
+ * This is a modification of Niblack's thresholding method. In contrast to the
+ * recommendation on parameters in the publication, this implementation operates
+ * on normalized images (to the [0, 1] range). Hence, the r parameter defaults
+ * to half the possible standard deviation in a normalized image, namely 0.5.
  * </p>
  * <p>
- * Phansalkar recommends k = 0.25, r = 0.5, p = 2 and q = 10. In the current
- * implementation, the values of p and q are fixed but can be implemented as
- * additional parameters.
+ * Sauvola J. and Pietaksinen M. (2000) "Adaptive Document Image Binarization"
+ * Pattern Recognition, 33(2): 225-236.
+ * <a href="http://www.ee.oulu.fi/mvg/publications/show_pdf.php?ID=24">PDF</a>
  * </p>
  * <p>
- * <a href="http://fiji.sc/Auto_Local_Threshold#Phansalkar">Originally
- * implemented</a> from Phansalkar's paper description by G. Landini.
- * </p>
- * <p>
- * <i>Phansalkar N. et al. Adaptive local thresholding for detection of nuclei
- * in diversity stained cytology images. International Conference on
- * Communications and Signal Processing (ICCSP), 2011, 218 - 220.
- * <a href="http://dx.doi.org/10.1109/ICCSP.2011.5739305">
- * doi:10.1109/ICCSP.2011.5739305</a></i>
+ * Original ImageJ1 implementation by Gabriel Landini.
  * </p>
  *
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localPhansalkar",
+@Plugin(type = Op.class, name = "threshold.localSauvola",
 	priority = Priority.LOW)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalPhansalkarThreshold<T extends RealType<T>> implements
+public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 	Computer4<Iterable<T>, T, Double, Double, BitType>
 {
 
-	public static final double DEFAULT_K = 0.25;
+	public static final double DEFAULT_K = 0.5;
 	public static final double DEFAULT_R = 0.5;
-
-	private static final double P = 2.0;
-	private static final double Q = 10.0;
 
 	@OpDependency(name = "stats.mean")
 	private Computer<Iterable<T>, DoubleType> meanOp;
@@ -116,18 +105,10 @@ public class LocalPhansalkarThreshold<T extends RealType<T>> implements
 		final DoubleType stdDevValue = new DoubleType();
 		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
 
-		final double threshold = meanValue.get() * (1.0d + P * Math.exp(-Q *
-			meanValue.get()) + k * ((stdDevValue.get() / r) - 1.0));
+		final double threshold = meanValue.get() * (1.0d + k * ((Math.sqrt(
+			stdDevValue.get()) / r) - 1.0));
 
 		output.set(inputCenterPixel.getRealDouble() >= threshold);
 	}
-
-	// TODO: How to port old Contingent code?:
-	// final RectangleShape rect = getShape() instanceof RectangleShape
-	// ? (RectangleShape) getShape() : null;
-	// if (rect == null) {
-	// return true;
-	// }
-	// return rect.getSpan()<=2;
 
 }

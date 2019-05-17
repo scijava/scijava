@@ -27,11 +27,12 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localMean;
+package net.imagej.ops.threshold.localNiblack;
 
-import net.imagej.ops.stats.IntegralMean;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
+import net.imglib2.converter.Converter;
+import net.imglib2.converter.RealDoubleConverter;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -41,7 +42,7 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.core.computer.Computer4;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -49,8 +50,7 @@ import org.scijava.struct.ItemIO;
 
 /**
  * <p>
- * Local threshold method that uses the {@link IntegralMean} for the threshold
- * computation.
+ * Niblack's local thresholding algorithm.
  * </p>
  * <p>
  * This implementation improves execution speed by using integral images for the
@@ -61,53 +61,69 @@ import org.scijava.struct.ItemIO;
  * required.
  * </p>
  *
- * @see LocalMeanThreshold
+ * @see ComputeLocalNiblackThreshold
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW -
-	1)
+@Plugin(type = Op.class, name = "threshold.localNiblack",
+	priority = Priority.LOW - 1)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
+@Parameter(key = "k")
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalMeanThresholdIntegral<T extends RealType<T>> implements
-	Computer3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType>
+public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>>
+	implements
+	Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>
 {
 
 	@OpDependency(name = "stats.integralMean")
 	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
 
+	@OpDependency(name = "stats.integralVariance")
+	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp;
+
 	@Override
 	public void compute(
 		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, final Double c, @Mutable final BitType output)
+		final T inputCenterPixel, final Double c, final Double k,
+		@Mutable final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, integralMeanOp, output);
+		compute(inputNeighborhood, inputCenterPixel, c, k, integralMeanOp,
+			integralVarianceOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
 		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, final Double c,
+		final T inputCenterPixel, final Double c, final Double k,
 		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp,
+		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp,
 		@Mutable final BitType output)
 	{
-		final DoubleType sum = new DoubleType();
-		integralMeanOp.compute(inputNeighborhood, sum);
+		final DoubleType threshold = new DoubleType(0.0d);
+
+		final DoubleType mean = new DoubleType();
+		integralMeanOp.compute(inputNeighborhood, mean);
+
+		threshold.add(mean);
+
+		final DoubleType variance = new DoubleType();
+		integralVarianceOp.compute(inputNeighborhood, variance);
+
+		final DoubleType stdDev = new DoubleType(Math.sqrt(variance.get()));
+		stdDev.mul(k);
+
+		threshold.add(stdDev);
 
 		// Subtract the contrast
-		sum.sub(new DoubleType(c));
+		threshold.sub(new DoubleType(c));
 
 		// Set value
-		final DoubleType centerPixelAsDoubleType = new DoubleType();
-		centerPixelAsDoubleType.set(inputCenterPixel.getRealDouble());
+		final Converter<T, DoubleType> conv = new RealDoubleConverter<>();
+		final DoubleType centerPixelAsDoubleType = variance; // NB: Reuse
+		// DoubleType
+		conv.convert(inputCenterPixel, centerPixelAsDoubleType);
 
-		output.set(centerPixelAsDoubleType.compareTo(sum) > 0);
+		output.set(centerPixelAsDoubleType.compareTo(threshold) > 0);
 	}
-
-	// TODO: How to port that? (Or rather, LocalThreshold(Integral) in general.)
-	// @Override
-	// protected int[] requiredIntegralImages() {
-	// return new int[] { 1 };
-	// }
 
 }

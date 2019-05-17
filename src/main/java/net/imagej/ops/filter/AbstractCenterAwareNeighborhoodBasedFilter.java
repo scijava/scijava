@@ -29,23 +29,19 @@
 
 package net.imagej.ops.filter;
 
-import net.imagej.ops.special.computer.UnaryComputerOp;
+import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer4;
 import org.scijava.param.Mutable;
 
-public abstract class AbstractCenterAwareNeighborhoodBasedFilter<I, O>
-	implements
-	Computer4<RandomAccessibleInterval<I>, Shape, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, //
-			BiComputer<Iterable<I>, I, O>, IterableInterval<O>> {
+public abstract class AbstractCenterAwareNeighborhoodBasedFilter<I, O> {
 
 	private static final OutOfBoundsFactory<?, ?> DEFAULT_OUT_OF_BOUNDS_FACTORY =
 		new OutOfBoundsBorderFactory<>();
@@ -57,33 +53,40 @@ public abstract class AbstractCenterAwareNeighborhoodBasedFilter<I, O>
 		return (OutOfBoundsFactory<I, RandomAccessibleInterval<I>>) DEFAULT_OUT_OF_BOUNDS_FACTORY;
 	}
 
-	private UnaryComputerOp<RandomAccessibleInterval<I>, IterableInterval<O>> map;
-
-	// TODO: Op dependency?
-	private BiComputer<IterableInterval<Neighborhood<I>>, RandomAccessibleInterval<I>, IterableInterval<O>> newMap;
-
-	// @Override
-	// public void initialize() {
-	// TODO: Lift (also see newMap). Do we want a "real" lifting mechanism here
-	// (org.scijava.ops.util.Maps) or does it suffice to be ad-hoc here?
-	// map = Computers.unary(ops(), Map.class, out(), in(), shape, filterOp);
-	// }
-
-	@Override
-	public void compute(final RandomAccessibleInterval<I> input,
-		final Shape neighborhoodShape,
+	protected void computeInternal(final RandomAccessibleInterval<I> input,
+		final Shape inputNeighborhoodShape,
 		OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory,
 		final BiComputer<Iterable<I>, I, O> filterOp,
 		@Mutable final IterableInterval<O> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
 			defaultOutOfBoundsFactory();
+		final RandomAccessibleInterval<I> inputCenterPixels = Views.interval(Views
+			.extend(input, outOfBoundsFactory), input);
+		final IterableInterval<? extends Iterable<I>> inputNeighborhoods =
+			inputNeighborhoodShape.neighborhoodsSafe(inputCenterPixels);
+		map(inputNeighborhoods, inputCenterPixels, filterOp, output);
+	}
 
-		final IterableInterval<Neighborhood<I>> inputNeighborhoods =
-			neighborhoodShape.neighborhoodsSafe(Views.interval((Views.extend(input,
-				outOfBoundsFactory)), input));
-		final RandomAccessibleInterval<I> inputCenterPixels = input;
-		newMap.compute(inputNeighborhoods, inputCenterPixels, output);
+	private static <I1, I2, O> void map(
+		final IterableInterval<? extends I1> inputNeighborhoods,
+		final RandomAccessibleInterval<I2> inputCenterPixels,
+		final BiComputer<I1, I2, O> filterOp, final IterableInterval<O> output)
+	{
+		// TODO: This used to be done via a net.imagej.ops.Ops.Map meta op. We may
+		// want to revert to that approach if this proves to be too inflexible.
+		// (Parallelization would be useful, for instance.)
+		final Cursor<? extends I1> neighborhoodCursor = inputNeighborhoods
+			.localizingCursor();
+		final RandomAccess<I2> centerPixelsAccess = inputCenterPixels
+			.randomAccess();
+		final Cursor<O> outputCursor = output.cursor();
+		while (neighborhoodCursor.hasNext()) {
+			neighborhoodCursor.fwd();
+			centerPixelsAccess.setPosition(neighborhoodCursor);
+			filterOp.compute(neighborhoodCursor.get(), centerPixelsAccess.get(),
+				outputCursor.next());
+		}
 	}
 
 }

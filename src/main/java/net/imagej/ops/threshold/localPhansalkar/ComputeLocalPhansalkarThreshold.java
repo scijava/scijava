@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localNiblack;
+package net.imagej.ops.threshold.localPhansalkar;
 
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
@@ -44,21 +44,47 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * LocalThresholdMethod using Niblack's thresholding method.
+ * <p>
+ * This is a modification of Sauvola's thresholding method to deal with low
+ * contrast images. In this algorithm the threshold is computed as t =
+ * mean*(1+p*exp(-q*mean)+k*((stdev/r)-1)) for an image that is normalized to
+ * [0, 1].
+ * </p>
+ * <p>
+ * Phansalkar recommends k = 0.25, r = 0.5, p = 2 and q = 10. In the current
+ * implementation, the values of p and q are fixed but can be implemented as
+ * additional parameters.
+ * </p>
+ * <p>
+ * <a href="http://fiji.sc/Auto_Local_Threshold#Phansalkar">Originally
+ * implemented</a> from Phansalkar's paper description by G. Landini.
+ * </p>
+ * <p>
+ * <i>Phansalkar N. et al. Adaptive local thresholding for detection of nuclei
+ * in diversity stained cytology images. International Conference on
+ * Communications and Signal Processing (ICCSP), 2011, 218 - 220.
+ * <a href="http://dx.doi.org/10.1109/ICCSP.2011.5739305">
+ * doi:10.1109/ICCSP.2011.5739305</a></i>
+ * </p>
  *
- * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localNiblack",
+@Plugin(type = Op.class, name = "threshold.localPhansalkar",
 	priority = Priority.LOW)
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
-@Parameter(key = "c")
-@Parameter(key = "k")
+@Parameter(key = "k", required = false)
+@Parameter(key = "r", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class LocalNiblackThreshold<T extends RealType<T>> implements
+public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	Computer4<Iterable<T>, T, Double, Double, BitType>
 {
+
+	public static final double DEFAULT_K = 0.25;
+	public static final double DEFAULT_R = 0.5;
+
+	private static final double P = 2.0;
+	private static final double Q = 10.0;
 
 	@OpDependency(name = "stats.mean")
 	private Computer<Iterable<T>, DoubleType> meanOp;
@@ -68,36 +94,32 @@ public class LocalNiblackThreshold<T extends RealType<T>> implements
 
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double c, final Double k,
+		final T inputCenterPixel, final Double k, final Double r,
 		@Mutable final BitType output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, k, meanOp, stdDeviationOp,
+		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,
 			output);
 	}
 
 	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double c, final Double k,
-		final Computer<Iterable<T>, DoubleType> meanOp,
+		final Iterable<T> inputNeighborhood, final T inputCenterPixel, Double k,
+		Double r, final Computer<Iterable<T>, DoubleType> meanOp,
 		final Computer<Iterable<T>, DoubleType> stdDeviationOp,
 		@Mutable final BitType output)
 	{
-		final DoubleType m = new DoubleType();
-		meanOp.compute(inputNeighborhood, m);
+		if (k == null) k = DEFAULT_K;
+		if (r == null) r = DEFAULT_R;
 
-		final DoubleType stdDev = new DoubleType();
-		stdDeviationOp.compute(inputNeighborhood, stdDev);
+		final DoubleType meanValue = new DoubleType();
+		meanOp.compute(inputNeighborhood, meanValue);
 
-		output.set(inputCenterPixel.getRealDouble() > m.getRealDouble() + k * stdDev
-			.getRealDouble() - c);
+		final DoubleType stdDevValue = new DoubleType();
+		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
+
+		final double threshold = meanValue.get() * (1.0d + P * Math.exp(-Q *
+			meanValue.get()) + k * ((stdDevValue.get() / r) - 1.0));
+
+		output.set(inputCenterPixel.getRealDouble() >= threshold);
 	}
-
-	// TODO: How to port old Contingent code?:
-	// final RectangleShape rect = getShape() instanceof RectangleShape
-	// ? (RectangleShape) getShape() : null;
-	// if (rect == null) {
-	// return true;
-	// }
-	// return rect.getSpan()<=2;
 
 }

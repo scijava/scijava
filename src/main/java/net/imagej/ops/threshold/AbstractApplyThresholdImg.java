@@ -2,7 +2,8 @@
  * #%L
  * ImageJ software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2016 Board of Regents of the University of
+ * Wisconsin-Madison and University of Konstanz.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,30 +30,35 @@
 
 package net.imagej.ops.threshold;
 
-import net.imglib2.type.logic.BitType;
+import java.util.function.Function;
+
+import net.imglib2.histogram.Histogram1d;
+import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
-import org.scijava.param.Mutable;
 
 /**
  * @author Curtis Rueden
  * @author Christian Dietz (University of Konstanz)
  */
-public abstract class AbstractApplyGlobalThreshold<T> implements
-	Computer<Iterable<T>, Iterable<BitType>>
+public abstract class AbstractApplyThresholdImg<T extends RealType<T>> extends
+	AbstractApplyThresholdIterable<T>
 {
 
-	@OpDependency(name = "threshold.apply")
-	private BiComputer<Iterable<T>, T, Iterable<BitType>> applyThresholdOp;
+	@OpDependency(name = "image.histogram")
+	private Function<Iterable<T>, Histogram1d<T>> createHistogramOp;
 
 	@Override
-	public void compute(final Iterable<T> input,
-		@Mutable final Iterable<BitType> output)
-	{
-		applyThresholdOp.compute(input, computeThreshold(input), output);
+	protected T computeThreshold(final Iterable<T> input) {
+		final Histogram1d<T> inputHistogram = createHistogramOp.apply(input);
+		final T threshold = input.iterator().next().createVariable();
+		final Computer<Histogram1d<T>, T> computeThresholdOp =
+			getComputeThresholdOp();
+		computeThresholdOp.compute(inputHistogram, threshold);
+		return threshold;
 	}
 
-	protected abstract T computeThreshold(Iterable<T> input);
+	protected abstract Computer<Histogram1d<T>, T> getComputeThresholdOp();
+
 }

@@ -12,6 +12,7 @@ import org.scijava.ops.core.computer.Computer5;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.core.function.Function6;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
@@ -147,6 +148,34 @@ public class OpRunners {
 				@Override
 				public O run(Object[] args) {
 					return function.apply((I1) args[0], (I2) args[1], (I3) args[2], (I4) args[3], (I5) args[4]);
+				}
+
+			};
+		}
+		
+		public static <I1, I2, I3, I4, I5, I6, O> OpRunner<O> toRunner(Function6<I1, I2, I3, I4, I5, I6, O> function) {
+			return new OpRunner<O>() {
+
+				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
+				
+				@Override
+				public Nil<?>[] inTypes() {
+					return new Nil<?>[] { new Nil<I1>() {
+					}, new Nil<I2>() {
+					}, new Nil<I3>() {
+					}, new Nil<I4>() {
+					}, new Nil<I5>() {
+					}, new Nil<I6>() {
+					} };
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public O run(Object[] args) {
+					return function.apply((I1) args[0], (I2) args[1], (I3) args[2], (I4) args[3], (I5) args[4], (I6) args[5]);
 				}
 
 			};

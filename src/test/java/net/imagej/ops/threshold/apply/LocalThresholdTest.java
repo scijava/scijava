@@ -32,8 +32,6 @@ package net.imagej.ops.threshold.apply;
 import static org.junit.Assert.assertEquals;
 
 import net.imagej.ops.AbstractOpTest;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalBernsen;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalContrast;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalHuang;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalIJ1;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalIntermodes;
@@ -41,23 +39,23 @@ import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalIsoData;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalLi;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMaxEntropy;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMaxLikelihood;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMean;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMedian;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMidGrey;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMinError;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMinimum;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalMoments;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalNiblack;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalOtsu;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalPercentile;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalPhansalkar;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalRenyiEntropy;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalRosin;
-import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalSauvola;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalShanbhag;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalTriangle;
 import net.imagej.ops.threshold.ApplyThresholdMethodLocal.LocalYen;
 import net.imagej.ops.threshold.LocalThresholdMethod;
+import net.imagej.ops.threshold.localBernsen.LocalBernsenThreshold;
+import net.imagej.ops.threshold.localContrast.LocalContrastThreshold;
+import net.imagej.ops.threshold.localMean.LocalMeanThreshold;
+import net.imagej.ops.threshold.localMedian.LocalMedianThreshold;
+import net.imagej.ops.threshold.localNiblack.LocalNiblackThreshold;
+import net.imagej.ops.threshold.localSauvola.LocalSauvolaThreshold;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
@@ -109,7 +107,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 		in = generateByteArrayTestImg(true, new long[] { 10, 10 });
 		Pair<ByteType, ByteType> minMax = (Pair<ByteType, ByteType>) ops.run("stats.minMax", in);
 		normalizedIn = (Img<DoubleType>) ops.run("image.normalize", in,
-			minMax.getA(), minMax.getB(), new DoubleType(0.0), new DoubleType(1.0), false);
+			minMax.getA(), minMax.getB(), new DoubleType(0.0), new DoubleType(1.0));
 
 		out = in.factory().imgFactory(new BitType()).create(in, new BitType());
 	}
@@ -262,7 +260,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 //	}
 
 	/**
-	 * @see LocalBernsen
+	 * @see LocalBernsenThreshold
 	 */
 	@Test
 	public void testLocalBernsenThreshold() {
@@ -291,7 +289,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see LocalContrast
+	 * @see LocalContrastThreshold
 	 */
 	@Test
 	public void testLocalContrastThreshold() {
@@ -485,7 +483,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see LocalMean
+	 * @see LocalMeanThreshold
 	 */
 	@Test
 	public void testLocalThresholdMean() {
@@ -553,7 +551,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 //	}
 //
 	/**
-	 * @see LocalMedian
+	 * @see LocalMedianThreshold
 	 */
 	@Test
 	public void testLocalMedianThreshold() {
@@ -677,7 +675,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see LocalNiblack
+	 * @see LocalNiblackThreshold
 	 */
 	@Test
 	public void testLocalNiblackThreshold() {
@@ -891,7 +889,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see LocalSauvola
+	 * @see LocalSauvolaThreshold
 	 */
 	@Test
 	public void testLocalSauvola() {

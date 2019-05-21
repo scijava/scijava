@@ -182,7 +182,7 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	private Computer<Histogram1d<UnsignedShortType>, UnsignedShortType>
 		getComputeThresholdOp(final String name)
 	{
-		return Computers.unary(ops(), name,
+		return Computers.unary(ops, name,
 			new Nil<Histogram1d<UnsignedShortType>>()
 			{}, new Nil<UnsignedShortType>() {});
 	}

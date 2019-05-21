@@ -2,7 +2,8 @@
  * #%L
  * ImageJ software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2016 Board of Regents of the University of
+ * Wisconsin-Madison and University of Konstanz.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,62 +28,65 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.localMidGrey;
+package net.imagej.ops.threshold.localMedian;
 
-import java.util.function.Function;
-
+import net.imagej.ops.filter.ApplyCenterAwareNeighborhoodBasedFilter;
+import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.Pair;
 
-import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.core.computer.Computer4;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Local threshold method which thresholds against the average of the maximum
- * and minimum pixels of a neighborhood.
- *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "threshold.localMidGrey",
-	priority = Priority.LOW)
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
+@Plugin(type = Op.class, name = "threshold.localMedian")
+@Parameter(key = "input")
+@Parameter(key = "inputNeighborhoodShape")
 @Parameter(key = "c")
+@Parameter(key = "outOfBoundsFactory", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
-	Computer3<Iterable<T>, T, Double, BitType>
-{
+public class LocalMedianThreshold<T extends RealType<T>> implements
+	Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+			IterableInterval<BitType>> {
 
-	@OpDependency(name = "stats.minMax")
-	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
+	@OpDependency(name = "threshold.localMedian")
+	private Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
 	@Override
-	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double c, @Mutable final BitType output)
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Shape inputNeighborhoodShape, final Double c,
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Mutable final IterableInterval<BitType> output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, c, minMaxOp, output);
+		compute(input, inputNeighborhoodShape, c, outOfBoundsFactory,
+			computeThresholdOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double c, final Function<Iterable<T>, Pair<T, T>> minMaxOp,
-		@Mutable final BitType output)
+		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
+		final Double c,
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp,
+		@Mutable final IterableInterval<BitType> output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
-
-		final double minValue = outputs.getA().getRealDouble();
-		final double maxValue = outputs.getB().getRealDouble();
-
-		output.set(inputCenterPixel.getRealDouble() > ((maxValue + minValue) /
-			2.0) - c);
+		final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
+		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
+			inputNeighborhoodShape, outOfBoundsFactory,
+			parametrizedComputeThresholdOp, output);
 	}
 
 }

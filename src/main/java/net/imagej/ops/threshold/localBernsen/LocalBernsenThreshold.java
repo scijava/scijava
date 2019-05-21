@@ -2,7 +2,8 @@
  * #%L
  * ImageJ software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2016 Board of Regents of the University of
+ * Wisconsin-Madison and University of Konstanz.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,70 +30,67 @@
 
 package net.imagej.ops.threshold.localBernsen;
 
-import java.util.function.Function;
-
-import net.imagej.ops.threshold.localMidGrey.ComputeLocalMidGreyThreshold;
+import net.imagej.ops.filter.ApplyCenterAwareNeighborhoodBasedFilter;
+import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.core.computer.Computer5;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Local threshold method which is similar to
- * {@link ComputeLocalMidGreyThreshold}, but uses a constant value rather than
- * the value of the input pixel when the contrast in the neighborhood of that
- * pixel is too small.
- * 
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T> input type
  */
 @Plugin(type = Op.class, name = "threshold.localBernsen")
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
+@Parameter(key = "input")
+@Parameter(key = "inputNeighborhoodShape")
 @Parameter(key = "contrastThreshold")
 @Parameter(key = "halfMaxValue")
+@Parameter(key = "outOfBoundsFactory", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
-	Computer4<Iterable<T>, T, Double, Double, BitType>
-{
+public class LocalBernsenThreshold<T extends RealType<T>> implements
+	Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+			IterableInterval<BitType>> {
 
-	@OpDependency(name = "stats.minMax")
-	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
+	@OpDependency(name = "threshold.localBernsen")
+	private Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
 
 	@Override
-	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double contrastThreshold,
-		final Double halfMaxValue, @Mutable final BitType output)
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Shape inputNeighborhoodShape, final Double contrastThreshold,
+		final Double halfMaxValue,
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Mutable final IterableInterval<BitType> output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, contrastThreshold,
-			halfMaxValue, minMaxOp, output);
+		compute(input, inputNeighborhoodShape, contrastThreshold, halfMaxValue,
+			outOfBoundsFactory, computeThresholdOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
+		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 		final Double contrastThreshold, final Double halfMaxValue,
-		final Function<Iterable<T>, Pair<T, T>> minMaxOp,
-		@Mutable final BitType output)
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
+		@Mutable final IterableInterval<BitType> output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
-		final double minValue = outputs.getA().getRealDouble();
-		final double maxValue = outputs.getB().getRealDouble();
-		final double midGrey = (maxValue + minValue) / 2.0;
-
-		if ((maxValue - minValue) < contrastThreshold) {
-			output.set(midGrey >= halfMaxValue);
-		}
-		else {
-			output.set(inputCenterPixel.getRealDouble() >= midGrey);
-		}
+		final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, contrastThreshold,
+				halfMaxValue, o);
+		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
+			inputNeighborhoodShape, outOfBoundsFactory,
+			parametrizedComputeThresholdOp, output);
 	}
 
 }

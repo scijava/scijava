@@ -44,7 +44,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * LocalThresholdMethod that uses the mean and operates directly of RAIs.
+ * Local threshold method that uses the mean and operates directly of RAIs.
  *
  * @author Jonathan Hale (University of Konstanz)
  * @author Martin Horn (University of Konstanz)

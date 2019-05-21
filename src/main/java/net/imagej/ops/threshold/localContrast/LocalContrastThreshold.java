@@ -2,7 +2,8 @@
  * #%L
  * ImageJ software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2016 Board of Regents of the University of
+ * Wisconsin-Madison and University of Konstanz.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,60 +30,57 @@
 
 package net.imagej.ops.threshold.localContrast;
 
-import java.util.function.Function;
-
+import net.imagej.ops.filter.ApplyCenterAwareNeighborhoodBasedFilter;
+import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer3;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Local threshold method which determines whether a pixel is closer to the
- * maximum or minimum pixel of a neighborhood.
- *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.localContrast")
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
+@Parameter(key = "input")
+@Parameter(key = "inputNeighborhoodShape")
+@Parameter(key = "outOfBoundsFactory", required = false)
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
-	BiComputer<Iterable<T>, T, BitType>
-{
+public class LocalContrastThreshold<T extends RealType<T>> implements
+	Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+			IterableInterval<BitType>> {
 
-	@OpDependency(name = "stats.minMax")
-	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
+	@OpDependency(name = "threshold.localContrast")
+	private BiComputer<Iterable<T>, T, BitType> computeThresholdOp;
 
 	@Override
-	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, @Mutable final BitType output)
+	public void compute(final RandomAccessibleInterval<T> input,
+		final Shape inputNeighborhoodShape,
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Mutable final IterableInterval<BitType> output)
 	{
-		compute(inputNeighborhood, inputCenterPixel, minMaxOp, output);
+		compute(input, inputNeighborhoodShape, outOfBoundsFactory,
+			computeThresholdOp, output);
 	}
 
 	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Function<Iterable<T>, Pair<T, T>> minMaxOp,
-		@Mutable final BitType output)
+		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
+		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final BiComputer<Iterable<T>, T, BitType> computeThresholdOp,
+		@Mutable final IterableInterval<BitType> output)
 	{
-		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
-
-		final double centerValue = inputCenterPixel.getRealDouble();
-		final double diffMin = centerValue - outputs.getA().getRealDouble();
-		final double diffMax = outputs.getB().getRealDouble() - centerValue;
-
-		// set to background (false) if pixel closer to min value,
-		// and to foreground (true) if pixel closer to max value.
-		// If diffMin and diffMax are equal, output will be set to fg.
-		output.set(diffMin <= diffMax);
+		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
+			inputNeighborhoodShape, outOfBoundsFactory, computeThresholdOp, output);
 	}
 
 }

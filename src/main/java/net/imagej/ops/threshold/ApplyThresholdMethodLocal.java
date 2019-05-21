@@ -32,426 +32,35 @@ package net.imagej.ops.threshold;
 
 import java.util.function.BiFunction;
 
-import net.imagej.ops.filter.AbstractCenterAwareNeighborhoodBasedFilter;
+import net.imagej.ops.filter.ApplyCenterAwareNeighborhoodBasedFilter;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
-import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
-import net.imglib2.view.composite.Composite;
 
-import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
+/**
+ * Ops which compute and apply a local threshold to an image.
+ *
+ * @author Stefan Helfrich (University of Konstanz)
+ */
 public final class ApplyThresholdMethodLocal {
 
-	/**
-	 * Ops which compute and apply a local threshold to an image.
-	 *
-	 * @author Stefan Helfrich (University of Konstanz)
-	 */
 	private ApplyThresholdMethodLocal() {
 		// NB: Prevent instantiation of utility class.
 	}
-
-	@Plugin(type = Op.class, name = "threshold.localBernsen")
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "contrastThreshold")
-	@Parameter(key = "halfMaxValue")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalBernsen<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localBernsen")
-		private Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double contrastThreshold,
-			final Double halfMaxValue,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, contrastThreshold,
-					halfMaxValue, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localContrast")
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalContrast<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localContrast")
-		private BiComputer<Iterable<T>, T, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				computeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localMean",
-		priority = Priority.LOW)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "c")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalMean<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localMean")
-		private Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double c,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			if (inputNeighborhoodShape instanceof RectangleShape &&
-				((RectangleShape) inputNeighborhoodShape).getSpan() > 2)
-			{
-				throw new IllegalStateException(
-					"Local mean thresholding is not applicable to rectangle neighborhoods of spans larger than two.");
-			}
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localMean",
-		priority = Priority.LOW - 1)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "c")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalMeanIntegral<T extends RealType<T>> extends
-		LocalThresholdIntegral<T> implements
-		Computer4<RandomAccessibleInterval<T>, RectangleShape, Double, //
-				OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localMean")
-		private Computer3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType> computeThresholdOp;
-
-		public LocalMeanIntegral() {
-			super(new int[] { 1 });
-		}
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final RectangleShape inputNeighborhoodShape, final Double c,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final IterableInterval<BitType> output)
-		{
-			final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localMedian")
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "c")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalMedian<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localMedian")
-		private Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double c,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localMidGrey",
-		priority = Priority.LOW)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "c")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalMidGrey<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localMidGrey")
-		private Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double c,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localNiblack",
-		priority = Priority.LOW)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "c")
-	@Parameter(key = "k")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalNiblack<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localNiblack")
-		private Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double c, final Double k,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			if (inputNeighborhoodShape instanceof RectangleShape &&
-				((RectangleShape) inputNeighborhoodShape).getSpan() > 2)
-			{
-				throw new IllegalStateException(
-					"Local Niblack thresholding is not applicable to rectangle neighborhoods of spans larger than two.");
-			}
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, k, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localNiblack",
-		priority = Priority.LOW - 1)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "c")
-	@Parameter(key = "k")
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalNiblackIntegral<T extends RealType<T>> extends
-		LocalThresholdIntegral<T> implements
-		Computer5<RandomAccessibleInterval<T>, RectangleShape, Double, Double, //
-				OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localNiblack")
-		private Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp;
-
-		public LocalNiblackIntegral() {
-			super(new int[] { 1, 2 });
-		}
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final RectangleShape inputNeighborhoodShape, final Double c,
-			final Double k,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final IterableInterval<BitType> output)
-		{
-			final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, k, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localPhansalkar",
-		priority = Priority.LOW)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "k", required = false)
-	@Parameter(key = "r", required = false)
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalPhansalkar<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localPhansalkar")
-		private Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double k, final Double r,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			if (inputNeighborhoodShape instanceof RectangleShape &&
-				((RectangleShape) inputNeighborhoodShape).getSpan() > 2)
-			{
-				throw new IllegalStateException(
-					"Local Phansalkar thresholding is not applicable to rectangle neighborhoods of spans larger than two.");
-			}
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localPhansalkar",
-		priority = Priority.LOW - 1)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "k", required = false)
-	@Parameter(key = "r", required = false)
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalPhansalkarIntegral<T extends RealType<T>> extends
-		LocalThresholdIntegral<T> implements
-		Computer5<RandomAccessibleInterval<T>, RectangleShape, Double, Double, //
-				OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localPhansalkar")
-		private Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp;
-
-		public LocalPhansalkarIntegral() {
-			super(new int[] { 1, 2 });
-		}
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final RectangleShape inputNeighborhoodShape, final Double k,
-			final Double r,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final IterableInterval<BitType> output)
-		{
-			final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localSauvola",
-		priority = Priority.LOW)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "k", required = false)
-	@Parameter(key = "r", required = false)
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalSauvola<T extends RealType<T>> extends
-		AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
-		Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localSauvola")
-		private Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final Shape inputNeighborhoodShape, final Double k, final Double r,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
-		{
-			if (inputNeighborhoodShape instanceof RectangleShape &&
-				((RectangleShape) inputNeighborhoodShape).getSpan() > 2)
-			{
-				throw new IllegalStateException(
-					"Local Sauvola thresholding is not applicable to rectangle neighborhoods of spans larger than two.");
-			}
-			final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "threshold.localSauvola",
-		priority = Priority.LOW - 1)
-	@Parameter(key = "input")
-	@Parameter(key = "inputNeighborhoodShape")
-	@Parameter(key = "k", required = false)
-	@Parameter(key = "r", required = false)
-	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
-	public static class LocalSauvolaIntegral<T extends RealType<T>> extends
-		LocalThresholdIntegral<T> implements
-		Computer5<RandomAccessibleInterval<T>, RectangleShape, Double, Double, //
-				OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<BitType>> {
-
-		@OpDependency(name = "threshold.localSauvola")
-		private Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp;
-
-		public LocalSauvolaIntegral() {
-			super(new int[] { 1, 2 });
-		}
-
-		@Override
-		public void compute(final RandomAccessibleInterval<T> input,
-			final RectangleShape inputNeighborhoodShape, final Double k,
-			final Double r,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final IterableInterval<BitType> output)
-		{
-			final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
-				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				parametrizedComputeThresholdOp, output);
-		}
-	}
-
-	// Histogram-based threshold methods, applied locally:
 
 	@Plugin(type = Op.class, name = "threshold.huang")
 	public static class LocalHuang<T extends RealType<T>> extends
@@ -710,7 +319,7 @@ public final class ApplyThresholdMethodLocal {
 	@Parameter(key = "outOfBoundsFactory", required = false)
 	@Parameter(key = "output", type = ItemIO.BOTH)
 	private abstract static class AbstractApplyLocalHistogramBasedThreshold<T extends RealType<T>>
-		extends AbstractCenterAwareNeighborhoodBasedFilter<T, BitType> implements
+		implements
 		Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 				IterableInterval<BitType>> {
 
@@ -733,8 +342,8 @@ public final class ApplyThresholdMethodLocal {
 			@Mutable final IterableInterval<BitType> output)
 		{
 			if (thresholdOp == null) thresholdOp = getThresholdOp();
-			computeInternal(input, inputNeighborhoodShape, outOfBoundsFactory,
-				thresholdOp, output);
+			ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
+				inputNeighborhoodShape, outOfBoundsFactory, thresholdOp, output);
 		}
 
 		private BiComputer<Iterable<T>, T, BitType> getThresholdOp() {

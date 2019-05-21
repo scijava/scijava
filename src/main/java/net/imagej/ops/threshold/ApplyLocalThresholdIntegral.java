@@ -60,11 +60,11 @@ import org.scijava.ops.core.computer.BiComputer;
 
 /**
  * Apply a local thresholding method to an image using integral images for speed
- * up, optionally using a out of bounds strategy.
+ * up, optionally using an out of bounds strategy.
  *
  * @author Stefan Helfrich (University of Konstanz)
  */
-public abstract class LocalThresholdIntegral<T extends RealType<T>> {
+public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 
 	private static final OutOfBoundsFactory<?, ?> DEFAULT_OUT_OF_BOUNDS_FACTORY =
 		new OutOfBoundsBorderFactory<>();
@@ -76,7 +76,9 @@ public abstract class LocalThresholdIntegral<T extends RealType<T>> {
 		return (OutOfBoundsFactory<I, RandomAccessibleInterval<I>>) DEFAULT_OUT_OF_BOUNDS_FACTORY;
 	}
 
-	private final int[] requiredIntegralImageOrders;
+	// TODO: The only reason this class is not fully static (but also serves as
+	// abstract base class), is to be able to use op dependencies here to avoid
+	// boilerplate code in extending classes. Is there some better way to do this?
 
 	@OpDependency(name = "image.integral")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> integralImgOp;
@@ -84,14 +86,24 @@ public abstract class LocalThresholdIntegral<T extends RealType<T>> {
 	@OpDependency(name = "image.squareIntegral")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> squareIntegralImgOp;
 
-	public LocalThresholdIntegral(final int[] requiredIntegralImageOrders) {
-		this.requiredIntegralImageOrders = requiredIntegralImageOrders;
+	protected
+		Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>>
+		getIntegralImageOp(final int integralImageOrder)
+	{
+		if (integralImageOrder == 1) return integralImgOp;
+		else if (integralImageOrder == 2) return squareIntegralImgOp;
+		else throw new OpExecutionException(
+			"Threshold op requires to compute an integral image of order " +
+				integralImageOrder +
+				". There is no op available to do that (available orders are: 1, 2).");
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected void computeInternal(final RandomAccessibleInterval<T> input,
+	public static <T extends RealType<T>> void compute(
+		final RandomAccessibleInterval<T> input,
 		RectangleShape inputNeighborhoodShape,
 		OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>>> integralImageOps,
 		final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> thresholdOp,
 		final IterableInterval<BitType> output)
 	{
@@ -103,15 +115,16 @@ public abstract class LocalThresholdIntegral<T extends RealType<T>> {
 			.getSpan() + 1, false);
 
 		final List<RandomAccessibleInterval<RealType>> listOfIntegralImages =
-			new ArrayList<>();
-		for (final int order : requiredIntegralImageOrders) {
+			new ArrayList<>(integralImageOps.size());
+		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> //
+		integralImageOp : integralImageOps) {
 			final RandomAccessibleInterval<RealType> requiredIntegralImg =
 				getIntegralImage(input, inputNeighborhoodShape, outOfBoundsFactory,
-					order);
+					integralImageOp);
 			listOfIntegralImages.add(requiredIntegralImg);
 		}
 
-		// Composite image of integral images of order 1 and 2
+		// Composite image of integral images of all orders
 		final RandomAccessibleInterval<RealType> stacked = Views.stack(
 			listOfIntegralImages);
 		final RandomAccessibleInterval<? extends Composite<RealType>> compositeRAI =
@@ -131,14 +144,14 @@ public abstract class LocalThresholdIntegral<T extends RealType<T>> {
 	 * {@link IntegralMean} et al work with them.
 	 *
 	 * @param input The RAI for which an integral image is computed
-	 * @param order
 	 * @return An extended integral image for the input RAI
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private RandomAccessibleInterval<RealType> getIntegralImage(
-		final RandomAccessibleInterval<T> input, final RectangleShape shape,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final int order)
+	private static <T extends RealType<T>> RandomAccessibleInterval<RealType>
+		getIntegralImage(final RandomAccessibleInterval<T> input,
+			final RectangleShape shape,
+			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+			final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> integralOp)
 	{
 		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedInput =
 			Views.extend(input, outOfBoundsFactory);
@@ -146,21 +159,8 @@ public abstract class LocalThresholdIntegral<T extends RealType<T>> {
 			.getSpan() - 1l);
 		final IntervalView<T> offsetInterval2 = Views.offsetInterval(extendedInput,
 			expandedInterval);
-
-		RandomAccessibleInterval<RealType> img = null;
-		switch (order) {
-			case 1:
-				img = (RandomAccessibleInterval) integralImgOp.apply(offsetInterval2);
-				break;
-			case 2:
-				img = (RandomAccessibleInterval) squareIntegralImgOp.apply(
-					offsetInterval2);
-				break;
-			default:
-				throw new OpExecutionException(
-					"Threshold op requires an integral image of order " + order +
-						". This is not available (available orders: 1, 2).");
-		}
+		final RandomAccessibleInterval<RealType> img =
+			(RandomAccessibleInterval) integralOp.apply(offsetInterval2);
 		return addLeadingZeros(img);
 	}
 
@@ -223,6 +223,9 @@ public abstract class LocalThresholdIntegral<T extends RealType<T>> {
 	{
 		// TODO: This used to be done via a net.imagej.ops.Ops.Map meta op. We may
 		// want to revert to that approach if this proves to be too inflexible.
+		// (Parallelization would be useful, for instance.) In this case, we would
+		// need to make this static method part of a proper op, again (or let
+		// clients pass a mapper op).
 		final Cursor<? extends I1> neighborhoodCursor = inputNeighborhoods
 			.localizingCursor();
 		final RandomAccess<I2> centerPixelsAccess = inputCenterPixels

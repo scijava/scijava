@@ -43,7 +43,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * LocalThresholdMethod using median.
+ * Local threshold method using median.
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)

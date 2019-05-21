@@ -41,7 +41,7 @@ import net.imglib2.view.Views;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.param.Mutable;
 
-public abstract class AbstractCenterAwareNeighborhoodBasedFilter<I, O> {
+public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 
 	private static final OutOfBoundsFactory<?, ?> DEFAULT_OUT_OF_BOUNDS_FACTORY =
 		new OutOfBoundsBorderFactory<>();
@@ -53,7 +53,11 @@ public abstract class AbstractCenterAwareNeighborhoodBasedFilter<I, O> {
 		return (OutOfBoundsFactory<I, RandomAccessibleInterval<I>>) DEFAULT_OUT_OF_BOUNDS_FACTORY;
 	}
 
-	protected void computeInternal(final RandomAccessibleInterval<I> input,
+	private ApplyCenterAwareNeighborhoodBasedFilter() {
+		// Utility class
+	}
+
+	public static <I, O> void compute(final RandomAccessibleInterval<I> input,
 		final Shape inputNeighborhoodShape,
 		OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory,
 		final BiComputer<Iterable<I>, I, O> filterOp,
@@ -75,7 +79,9 @@ public abstract class AbstractCenterAwareNeighborhoodBasedFilter<I, O> {
 	{
 		// TODO: This used to be done via a net.imagej.ops.Ops.Map meta op. We may
 		// want to revert to that approach if this proves to be too inflexible.
-		// (Parallelization would be useful, for instance.)
+		// (Parallelization would be useful, for instance.) In this case, we would
+		// need to make this static class a proper op, again (or let clients pass a
+		// mapper op).
 		final Cursor<? extends I1> neighborhoodCursor = inputNeighborhoods
 			.localizingCursor();
 		final RandomAccess<I2> centerPixelsAccess = inputCenterPixels

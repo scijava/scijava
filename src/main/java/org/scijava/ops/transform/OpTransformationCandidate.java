@@ -1,5 +1,7 @@
 package org.scijava.ops.transform;
 
+import java.util.List;
+
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpMatchingException;
@@ -24,9 +26,10 @@ public class OpTransformationCandidate {
 		return srcOp;
 	}
 
-	public Object exceute(OpService opService, Object... secondaryArgs)
-			throws OpMatchingException, OpTransformationException {
-		Object op = srcOp.createOp(secondaryArgs);
+	public Object exceute(OpService opService, List<?> dependencies, Object... secondaryArgs)
+		throws OpMatchingException, OpTransformationException
+	{
+		Object op = srcOp.createOp(dependencies, secondaryArgs);
 		return transformation.execute(op, opService);
 	}
 

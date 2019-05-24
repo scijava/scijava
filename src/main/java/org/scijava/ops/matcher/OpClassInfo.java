@@ -32,8 +32,10 @@ package org.scijava.ops.matcher;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import org.scijava.core.Priority;
+import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.core.Op;
 import org.scijava.param.ParameterStructs;
@@ -91,22 +93,43 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public StructInstance<?> createOpInstance() {
-		final Object object;
+	public StructInstance<?> createOpInstance(List<?> dependencies) {
+		final Object op;
 		try {
 			// TODO: Consider whether this is really the best way to
 			// instantiate the op class here. No framework usage?
 			// E.g., what about pluginService.createInstance?
 			Constructor<? extends Op> ctor = opClass.getDeclaredConstructor();
 			ctor.setAccessible(true);
-			object = ctor.newInstance();
-		} catch (final InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
+			op = ctor.newInstance();
+		}
+		catch (final InstantiationException | IllegalAccessException
+				| NoSuchMethodException | SecurityException | IllegalArgumentException
+				| InvocationTargetException e)
+		{
 			// TODO: Think about whether exception handling here should be
 			// different.
-			throw new IllegalStateException("Unable to instantiate op: '" + opClass.getName()
-					+ "' Ensure that the Op has a no-args constructor.", e);
+			throw new IllegalStateException("Unable to instantiate op: '" + opClass
+				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
-		return struct().createInstance(object);
+		final List<OpDependencyMember<?>> dependencyMembers = dependencies();
+		for (int i = 0; i < dependencyMembers.size(); i++) {
+			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
+			try {
+				dependencyMember.createInstance(op).set(dependencies.get(i));
+			}
+			catch (final Exception ex) {
+				// TODO: Improve error message. Used to include exact OpRef of Op
+				// dependency.
+				throw new IllegalStateException(
+					"Exception trying to inject Op dependency field.\n" +
+						"\tOp dependency field to resolve: " + dependencyMember.getKey() +
+						"\n" + "\tFound Op to inject: " + dependencies.get(i).getClass()
+							.getName() + //
+						"\n" + "\tField signature: " + dependencyMember.getType(), ex);
+			}
+		}
+		return struct().createInstance(op);
 	}
 
 	@Override

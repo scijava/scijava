@@ -46,8 +46,8 @@ public interface OpInfo {
 	/** A fully qualified, unambiguous name for this specific op implementation. */
 	String implementationName();
 
-	/** Create a StructInstance using the Struct metadata backed by an object of the op itself.  */
-	StructInstance<?> createOpInstance();
+	/** Create a StructInstance using the Struct metadata backed by an object of the op itself. */
+	StructInstance<?> createOpInstance(List<?> dependencies);
 
 	// TODO Consider if we really want to keep the following methods.
 	boolean isValid();

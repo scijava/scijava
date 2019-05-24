@@ -189,7 +189,8 @@ public final class OpUtils {
 	}
 
 	public static Type[] padTypes(final OpCandidate candidate, Type[] types) {
-		return (Type[]) padArgs(candidate, false, (Object[])types);
+		final Object[] padded = padArgs(candidate, false, (Object[]) types);
+		return Arrays.copyOf(padded, padded.length, Type[].class);
 	}
 	
 	public static Object[] padArgs(final OpCandidate candidate, final boolean secondary, Object... args) {

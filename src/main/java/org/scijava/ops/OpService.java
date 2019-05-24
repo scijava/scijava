@@ -188,48 +188,35 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 *             matching the functional type and the name could not be found, if
 	 *             an exception occurs during injection
 	 */
-	private void resolveOpDependencies(Object op, OpCandidate parentOp) throws OpMatchingException {
-		// HACK: Only works with Op instances and OpRunner, not extensible.
-		// Consider extensible ways to achieve something similar e.g. extending OpInfo
-		// to support OpDependencies.
-		if (op instanceof OpRunner) {
-			op = ((OpRunner<?>) op).getAdaptedOp();
-		}
-		final List<OpDependencyMember<?>> dependencies = parentOp.opInfo()
-			.dependencies();
+	private List<Object> resolveOpDependencies(OpCandidate op)
+		throws OpMatchingException
+	{
+		final List<OpDependencyMember<?>> dependencies = op.opInfo().dependencies();
+		final List<Object> resolvedDependencies = new ArrayList<>(dependencies
+			.size());
 		for (final OpDependencyMember<?> dependency : dependencies) {
 			final String dependencyName = dependency.getDependencyName();
 			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-				dependency.getType() }, parentOp.typeVarAssigns())[0];
+				dependency.getType() }, op.typeVarAssigns())[0];
 			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
-				parentOp.typeVarAssigns());
+				op.typeVarAssigns());
 			if (inferredRef == null) {
 				throw new OpMatchingException("Could not infer functional " +
 					"method inputs and outputs of Op dependency field: " + dependency
 						.getKey());
 			}
-			Object matchedOp = null;
 			try {
-				matchedOp = findOpInstance(dependencyName, inferredRef);
+				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef));
 			}
 			catch (final Exception e) {
 				throw new OpMatchingException(
-					"Could not find Op that matches requested Op dependency field:" +
-						"\nOp class: " + op.getClass().getName() + //
-						"\nDependency field: " + dependency.getKey() + //
+					"Could not find Op that matches requested Op dependency:" +
+						"\nOp class: " + op.opInfo().implementationName() + //
+						"\nDependency identifier: " + dependency.getKey() + //
 						"\n\n Attempted request:\n" + inferredRef, e);
 			}
-			try {
-				dependency.createInstance(op).set(matchedOp);
-			}
-			catch (final Exception e) {
-				throw new OpMatchingException(
-					"Exception trying to inject Op dependency field.\n" +
-						"\tOp dependency field to resolve: " + dependency.getKey() + "\n" +
-						"\tFound Op to inject: " + matchedOp.getClass().getName() + "\n" +
-						"\tWith inferred OpRef: " + inferredRef, e);
-			}
 		}
+		return resolvedDependencies;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -247,7 +234,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		try {
 			// Find single match which matches the specified types
 			match = matcher.findSingleMatch(this, ref);
-			op = match.createOp(secondaryArgs);
+			final List<Object> dependencies = resolveOpDependencies(match);
+			op = match.createOp(dependencies, secondaryArgs);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
@@ -263,7 +251,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			// If we found one, try to do transformation and return transformed op
 			log.debug("Matching Op transformation found:\n" + transformation + "\n");
 			try {
-				op = transformation.exceute(this, secondaryArgs);
+				final List<Object> dependencies = resolveOpDependencies(transformation
+					.getSourceOp());
+				op = transformation.exceute(this, dependencies, secondaryArgs);
 			} catch (OpMatchingException | OpTransformationException e1) {
 				log.debug("Execution of Op transformatioon failed:\n");
 				log.debug(e1);
@@ -273,9 +263,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		try {
 			// Try to resolve annotated OpDependency fields
 			if (match != null)
-				resolveOpDependencies(op, match);
+				resolveOpDependencies(match);
 			else if (transformation != null)
-				resolveOpDependencies(op, transformation.getSourceOp());
+				resolveOpDependencies(transformation.getSourceOp());
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}

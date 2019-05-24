@@ -110,7 +110,11 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public StructInstance<?> createOpInstance() {
+	public StructInstance<?> createOpInstance(List<?> dependencies)
+	{
+		if (dependencies != null && !dependencies.isEmpty())
+			throw new IllegalArgumentException(
+				"Op fields are not allowed to have any Op dependencies.");
 		// 1. Can we create another instance of the same function by calling
 		// clone()?
 		// 2. _SHOULD_ we do that? Or can we simply reuse the same function

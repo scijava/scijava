@@ -1,11 +1,9 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * ImageJ software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2009 - 2017 Board of Regents of the University of
- * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
- * Institute of Molecular Cell Biology and Genetics, University of
- * Konstanz, and KNIME GmbH.
+ * Copyright (C) 2014 - 2016 Board of Regents of the University of
+ * Wisconsin-Madison and University of Konstanz.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,22 +28,49 @@
  * #L%
  */
 
-package org.scijava.struct;
+package org.scijava.ops;
+
+import java.lang.reflect.Type;
 
 /**
- * Defines the input/output type of a module.
- * <p>
- * Choices are:
- * </p>
- * <ul>
- * <li>INPUT: item is an input for the module.</li>
- * <li>OUTPUT: item is an output for the module.</li>
- * <li>BOTH: item is both an input and an output for the module. This type is
- * used to indicate an object that is mutated somehow during execution.</li>
- * </ul>
- * 
- * @author Curtis Rueden
+ * @author Marcel Wiedenmann
  */
-public enum ItemIO {
-	INPUT, OUTPUT, BOTH, AUTO, NONE
+public abstract class AnnotatedOpDependencyMember<T> implements
+	OpDependencyMember<T>
+{
+
+	private String key;
+	private Type type;
+	private final OpDependency annotation;
+
+	public AnnotatedOpDependencyMember(String key, Type type,
+		final OpDependency annotation)
+	{
+		this.key = key;
+		this.type = type;
+		this.annotation = annotation;
+	}
+
+	public OpDependency getAnnotation() {
+		return annotation;
+	}
+
+	// -- OpDependencyMember methods --
+
+	@Override
+	public String getDependencyName() {
+		return annotation.name();
+	}
+
+	// -- Member methods --
+
+	@Override
+	public String getKey() {
+		return key;
+	}
+
+	@Override
+	public Type getType() {
+		return type;
+	}
 }

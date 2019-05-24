@@ -4,6 +4,7 @@ package org.scijava.ops.matcher;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
@@ -32,6 +33,11 @@ public interface OpInfo {
 	/** Gets the op's output parameters. */
 	default Member<?> output() {
 		return OpUtils.outputs(struct()).get(0);
+	}
+
+	/** Gets the op's dependencies on other ops. */
+	default List<OpDependencyMember<?>> dependencies() {
+		return OpUtils.dependencies(struct());
 	}
 
 	/** The op's priority. */

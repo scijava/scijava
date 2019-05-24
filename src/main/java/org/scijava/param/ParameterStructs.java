@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.FieldOpDependencyMember;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.OpDependencyMember;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -72,6 +75,9 @@ public final class ParameterStructs {
 
 		// Parse field level @Parameter annotations.
 		parseFieldParameters(items, names, problems, type);
+
+		// Parse field level @OpDependency annotations.
+		parseFieldOpDependencies(items, problems, type);
 
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) throw new ValidityException(problems);
@@ -197,6 +203,28 @@ public final class ParameterStructs {
 					problems.addAll(exc.problems());
 				}
 			}
+		}
+	}
+
+	private static void parseFieldOpDependencies(final List<Member<?>> items,
+		final List<ValidityProblem> problems, Class<?> annotatedClass)
+	{
+		final List<Field> fields = ClassUtils.getAnnotatedFields(annotatedClass,
+			OpDependency.class);
+		for (final Field f : fields) {
+			f.setAccessible(true);
+			final boolean isFinal = Modifier.isFinal(f.getModifiers());
+			if (isFinal) {
+				final String name = f.getName();
+				// Final fields are bad because they cannot be modified.
+				final String error = "Invalid final Op dependency field: " + name;
+				problems.add(new ValidityProblem(error));
+				// Skip invalid Op dependencies.
+				continue;
+			}
+			final OpDependencyMember<?> item = new FieldOpDependencyMember<>(f,
+				annotatedClass);
+			items.add(item);
 		}
 	}
 

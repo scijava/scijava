@@ -173,6 +173,13 @@ public final class OpUtils {
 		}
 	}
 
+	public static List<OpDependencyMember<?>> dependencies(Struct struct) {
+		return struct.members().stream() //
+			.filter(member -> member instanceof OpDependencyMember) //
+			.map(member -> (OpDependencyMember<?>) member) //
+			.collect(Collectors.toList());
+	}
+
 	public static Type[] types(OpCandidate candidate) {
 		return getTypes(candidate.struct().members());
 	}

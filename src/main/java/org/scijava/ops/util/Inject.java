@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.scijava.command.Command;
+import org.scijava.ops.OpDependencyMember;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.ItemIO;
@@ -23,7 +24,10 @@ public class Inject {
 		}
 		
 		public static boolean isInjectable(final StructInstance<?> instance) {
-			return !getAccessibles(instance).isEmpty();
+			// HACK: Exclude Op dependencies since they were already injected when
+			// constructing the instance.
+			return !filterAccessibles(getAccessibles(instance), mi -> !(mi
+				.member() instanceof OpDependencyMember)).isEmpty();
 		}
 		
 		public static void inputs(StructInstance<?> instance, Object... objs) {

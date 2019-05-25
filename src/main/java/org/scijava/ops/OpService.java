@@ -29,6 +29,8 @@
 package org.scijava.ops;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -45,11 +47,14 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.matcher.MatchingUtils;
+import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatchingException;
+import org.scijava.ops.matcher.OpMethodInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.matcher.OpTypeMatchingService;
 import org.scijava.ops.transform.OpRunner;
@@ -123,10 +128,19 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		// Add Ops contained in an OpCollection
 		for (final PluginInfo<OpCollection> pluginInfo : pluginService.getPluginsOfType(OpCollection.class)) {
 			try {
-				final List<Field> fields = ClassUtils.getAnnotatedFields(pluginInfo.loadClass(), OpField.class);
+				final Class<? extends OpCollection> opCollectionClass = pluginInfo
+					.loadClass();
+				final List<Field> fields = ClassUtils.getAnnotatedFields(
+					opCollectionClass, OpField.class);
 				for (Field field : fields) {
 					OpInfo opInfo = new OpFieldInfo(field);
 					addToCache(opInfo, field.getAnnotation(OpField.class).names());
+				}
+				final List<Method> methods = ClassUtils.getAnnotatedMethods(
+					opCollectionClass, OpMethod.class);
+				for (final Method method : methods) {
+					OpInfo opInfo = new OpMethodInfo(method);
+					addToCache(opInfo, method.getAnnotation(OpMethod.class).names());
 				}
 			} catch (InstantiableException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
@@ -191,13 +205,32 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private List<Object> resolveOpDependencies(OpCandidate op)
 		throws OpMatchingException
 	{
-		final List<OpDependencyMember<?>> dependencies = op.opInfo().dependencies();
+		final OpInfo opInfo = op.opInfo();
+		final List<OpDependencyMember<?>> dependencies = opInfo.dependencies();
 		final List<Object> resolvedDependencies = new ArrayList<>(dependencies
 			.size());
 		for (final OpDependencyMember<?> dependency : dependencies) {
 			final String dependencyName = dependency.getDependencyName();
+			Map<TypeVariable<?>, Type> typeVarAssigns = op.typeVarAssigns();
+			if (opInfo instanceof OpMethodInfo) {
+				// TODO: Avoid treating Op methods differently here.
+				final Type opType = opInfo.opType();
+				if (opType instanceof ParameterizedType) {
+					typeVarAssigns = new HashMap<>(typeVarAssigns);
+					final Type[] declaredOpParamTypes = ((ParameterizedType) opType)
+						.getActualTypeArguments();
+					final Type[] actualOpParamTypes = op.getRef().getArgs();
+					try {
+						MatchingUtils.inferTypeVariables(declaredOpParamTypes,
+							actualOpParamTypes, typeVarAssigns);
+					}
+					catch (TypeInferenceException exc) {
+						// Ignore, matching will probably fail anyway. But let's try.
+					}
+				}
+			}
 			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-				dependency.getType() }, op.typeVarAssigns())[0];
+				dependency.getType() }, typeVarAssigns)[0];
 			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
 				op.typeVarAssigns());
 			if (inferredRef == null) {
@@ -211,7 +244,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			catch (final Exception e) {
 				throw new OpMatchingException(
 					"Could not find Op that matches requested Op dependency:" +
-						"\nOp class: " + op.opInfo().implementationName() + //
+						"\nOp class: " + opInfo.implementationName() + //
 						"\nDependency identifier: " + dependency.getKey() + //
 						"\n\n Attempted request:\n" + inferredRef, e);
 			}

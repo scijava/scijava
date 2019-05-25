@@ -391,7 +391,7 @@ public final class MatchingUtils {
 	/**
 	 * Exception indicating that type vars could not be inferred.
 	 */
-	private static class TypeInferenceException extends Exception {
+	public static class TypeInferenceException extends Exception {
 		/**
 		 *
 		 */
@@ -425,7 +425,7 @@ public final class MatchingUtils {
 	 * @param typeAssigns
 	 * @throws TypeInferenceException
 	 */
-	private static void inferTypeVariables(Type[] types, Type[] inferFrom, Map<TypeVariable<?>, Type> typeAssigns)
+	public static void inferTypeVariables(Type[] types, Type[] inferFrom, Map<TypeVariable<?>, Type> typeAssigns)
 			throws TypeInferenceException {
 		if (typeAssigns == null)
 			throw new IllegalArgumentException();

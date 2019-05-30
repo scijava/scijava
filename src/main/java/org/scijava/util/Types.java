@@ -46,6 +46,7 @@ package org.scijava.util;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
@@ -726,6 +727,13 @@ public final class Types {
 	{
 		final Type pType = parameterizeRaw(type);
 		return GenericTypeReflector.getExactParameterTypes(method, pType);
+	}
+
+	public static Type[] constructorParamTypes(final Constructor<?> constructor,
+		final Class<?> type)
+	{
+		final Type pType = parameterizeRaw(type);
+		return GenericTypeReflector.getExactParameterTypes(constructor, pType);
 	}
 
 	/**
@@ -4157,6 +4165,25 @@ public final class Types {
 			if (exactDeclaringType == null) {
 				// capture(type) is not a subtype of m.getDeclaringClass()
 				throw new IllegalArgumentException("The method " + m +
+					" is not a member of type " + type);
+			}
+
+			final Type[] result = new Type[parameterTypes.length];
+			for (int i = 0; i < parameterTypes.length; i++) {
+				result[i] = mapTypeParameters(parameterTypes[i], exactDeclaringType);
+			}
+			return result;
+		}
+
+		public static Type[] getExactParameterTypes(final Constructor<?> c,
+			final Type type)
+		{
+			final Type[] parameterTypes = c.getGenericParameterTypes();
+			final Type exactDeclaringType = getExactSuperType(capture(type), c
+				.getDeclaringClass());
+			if (exactDeclaringType == null) {
+				// capture(type) is not a subtype of m.getDeclaringClass()
+				throw new IllegalArgumentException("The method " + c +
 					" is not a member of type " + type);
 			}
 

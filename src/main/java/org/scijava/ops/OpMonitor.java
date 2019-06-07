@@ -28,46 +28,66 @@
  */
 package org.scijava.ops;
 
+import java.util.concurrent.CancellationException;
+
+import org.scijava.util.Logger;
+
 /**
- * Thrown to indicate that an Op failed in its execution
+ * Used as a bridge between the {@link Op} and the user. Allows the user to
+ * cancel any Op as well as allowing the Op to notify the user of the Op's
+ * progress and of any warnings encountered through the course of computation.
  * 
  * @author Gabriel Selzer
+ * @author Marcel Wiedenmann
  *
  */
-public class OpExecutionException extends RuntimeException {
+public interface OpMonitor {
 
 	/**
-	 * Constructs a <code>OpExecutionException</code> with the specified reason for
-	 * failure.
+	 * Checks if the user has canceled computation.
 	 * 
-	 * @param s
-	 *            the reason for the failure
+	 * @return true if the user has canceled computation.
 	 */
-	public OpExecutionException(String s) {
-		super(s);
+	boolean isCanceled();
+
+	/**
+	 * Throws an {@link CancellationException} if the user has canceled
+	 * computation.
+	 */
+	default void checkCanceled() {
+		if (isCanceled())
+			throw new CancellationException("The Op was canceled before it was able to complete computation");
 	}
 
 	/**
-	 * Constructs a <code>OpExecutionException</code> with the specified cause.
-	 * 
-	 * @param cause
-	 *            the cause of the failure
+	 * If called by the user, computation is canceled.
 	 */
-	public OpExecutionException(Throwable cause) {
-		super(cause);
-	}
+	void cancel();
 
 	/**
-	 * Constructs a <code>OpExecutionException</code> with the specified reason for
-	 * failure and cause.
+	 * Returns a {@link Logger} for use by the {@link Op}.
 	 * 
-	 * @param message
-	 *            the reason for the failure
-	 * @param cause
-	 *            the cause of the failure
+	 * @return a {@link Logger}.
 	 */
-	public OpExecutionException(String message, Throwable cause) {
-		super(message, cause);
-	}
+	Logger logger();
+
+	/**
+	 * Sets the progress of the computation monitored by this {@link OpMonitor}
+	 * 
+	 * @param progress
+	 *            - the progress <i>p</i> of the {@link Op}'s computation. 0 &lt;=
+	 *            <i>p</i> &lt;= 1
+	 */
+	void setProgress(double progress);
+
+	/**
+	 * Returns the completion progress of the Op's computation as a decimal.
+	 * 
+	 * @return progress - the progress <i>p</i> of the {@link Op}'s computation. 0
+	 *         &lt;= <i>p</i> &lt;= 1
+	 */
+	double getProgress();
+
+	// OpMonitor createSubMonitor();
 
 }

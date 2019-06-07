@@ -18,91 +18,90 @@ import org.scijava.log.LogSource;
  */
 public class Logger {
 
-	private Logger() {
-		// Static utility class
+	public Logger() {
 	}
 
-	public static void debug(final Object msg) {
+	public void debug(final Object msg) {
 		log(DEBUG, msg);
 	}
 
-	public static void debug(final Throwable t) {
+	public void debug(final Throwable t) {
 		log(DEBUG, t);
 	}
 
-	public static void debug(final Object msg, final Throwable t) {
+	public void debug(final Object msg, final Throwable t) {
 		log(DEBUG, msg, t);
 	}
 
-	public static void error(final Object msg) {
+	public void error(final Object msg) {
 		log(ERROR, msg);
 	}
 
-	public static void error(final Throwable t) {
+	public void error(final Throwable t) {
 		log(ERROR, t);
 	}
 
-	public static void error(final Object msg, final Throwable t) {
+	public void error(final Object msg, final Throwable t) {
 		log(ERROR, msg, t);
 	}
 
-	public static void info(final Object msg) {
+	public void info(final Object msg) {
 		log(INFO, msg);
 	}
 
-	public static void info(final Throwable t) {
+	public void info(final Throwable t) {
 		log(INFO, t);
 	}
 
-	public static void info(final Object msg, final Throwable t) {
+	public void info(final Object msg, final Throwable t) {
 		log(INFO, msg, t);
 	}
 
-	public static void trace(final Object msg) {
+	public void trace(final Object msg) {
 		log(TRACE, msg);
 	}
 
-	public static void trace(final Throwable t) {
+	public void trace(final Throwable t) {
 		log(TRACE, t);
 	}
 
-	public static void trace(final Object msg, final Throwable t) {
+	public void trace(final Object msg, final Throwable t) {
 		log(TRACE, msg, t);
 	}
 
-	public static void warn(final Object msg) {
+	public void warn(final Object msg) {
 		log(WARN, msg);
 	}
 
-	public static void warn(final Throwable t) {
+	public void warn(final Throwable t) {
 		log(WARN, t);
 	}
 
-	public static void warn(final Object msg, final Throwable t) {
+	public void warn(final Object msg, final Throwable t) {
 		log(WARN, msg, t);
 	}
 
-	public static boolean isDebug() {
+	public boolean isDebug() {
 		return isLevel(DEBUG);
 	}
 
-	public static boolean isError() {
+	public boolean isError() {
 		return isLevel(ERROR);
 	}
 
-	public static boolean isInfo() {
+	public boolean isInfo() {
 		return isLevel(INFO);
 	}
 
-	public static boolean isTrace() {
+	public boolean isTrace() {
 		return isLevel(TRACE);
 	}
 
-	public static boolean isWarn() {
+	public boolean isWarn() {
 		return isLevel(WARN);
 	}
 
-	public static boolean isLevel(final int level) {
+	public boolean isLevel(final int level) {
 		return getLevel() >= level;
 	}
 
@@ -114,7 +113,7 @@ public class Logger {
 	 *          is performed.
 	 * @param msg The message to log.
 	 */
-	public static void log(final int level, final Object msg) {
+	public void log(final int level, final Object msg) {
 		log(level, msg, null);
 	}
 
@@ -126,7 +125,7 @@ public class Logger {
 	 *          logging is performed.
 	 * @param t The exception to log.
 	 */
-	public static void log(final int level, final Throwable t) {
+	public void log(final int level, final Throwable t) {
 		log(level, null, t);
 	}
 
@@ -139,7 +138,7 @@ public class Logger {
 	 * @param msg The message to log.
 	 * @param t The exception to log.
 	 */
-	public static void log(final int level, final Object msg, final Throwable t) {
+	public void log(final int level, final Object msg, final Throwable t) {
 		if (isLevel(level)) alwaysLog(level, msg, t);
 	}
 
@@ -151,24 +150,24 @@ public class Logger {
 	 * @param msg The message to log.
 	 * @param t The exception to log.
 	 */
-	public static void alwaysLog(final int level, final Object msg,
+	public void alwaysLog(final int level, final Object msg,
 		final Throwable t)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	/** Returns the name of this logger. */
-	public static String getName() {
+	public String getName() {
 		return getSource().name();
 	}
 
 	/** Returns the {@link LogSource} associated with this logger. */
-	public static LogSource getSource() {
+	public LogSource getSource() {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 
 	/** Returns the log level of this logger. see {@link LogLevel} */
-	public static int getLevel() {
+	public int getLevel() {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 
@@ -176,7 +175,7 @@ public class Logger {
 	 * Creates a sub logger, that forwards the message it gets to this logger. The
 	 * sub logger will have the same log level as this logger.
 	 */
-	public static Logger subLogger(final String name) {
+	public Logger subLogger(final String name) {
 		return subLogger(name, getLevel());
 	}
 
@@ -186,7 +185,7 @@ public class Logger {
 	 * @param name The name of the sub logger.
 	 * @param level The log level of the sub logger.
 	 */
-	public static Logger subLogger(final String name, final int level) {
+	public Logger subLogger(final String name, final int level) {
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 

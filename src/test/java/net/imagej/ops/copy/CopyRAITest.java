@@ -32,8 +32,11 @@ package net.imagej.ops.copy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.function.BiFunction;
+
 import net.imagej.ops.AbstractOpTest;
 import net.imglib2.Cursor;
+import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccess;
@@ -51,6 +54,7 @@ import org.junit.Test;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Computers;
+import org.scijava.ops.util.Functions;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -74,8 +78,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 	@Before
 	public void createData() {
-		input = new ArrayImgFactory<UnsignedByteType>().create(new int[] { 120,
-			100 }, new UnsignedByteType());
+		input = new ArrayImgFactory<UnsignedByteType>().create(new int[] { 120, 100 }, new UnsignedByteType());
 
 		final MersenneTwisterFast r = new MersenneTwisterFast(System.currentTimeMillis());
 
@@ -89,13 +92,14 @@ public class CopyRAITest extends AbstractOpTest {
 		final long[] start = new long[] { 16, 16, 16 };
 		final long[] end = new long[] { 47, 47, 47 };
 
-		// create an input with a cube at the center
-		input2 = (Img<UnsignedByteType>) ops.run("create.img", new FinalDimensions(size1),
-			new UnsignedByteType());
+		// create an input with a cube at the center TODO can we use ops.run() here?
+		BiFunction<Dimensions, UnsignedByteType, Img<UnsignedByteType>> imgOp = Functions.binary(ops, "create.img",
+				new Nil<Dimensions>() {}, new Nil<UnsignedByteType>() {}, new Nil<Img<UnsignedByteType>>() {});
+		input2 = imgOp.apply(new FinalDimensions(size1), new UnsignedByteType());
 
 		// create the same input but force it to be a planar image
 		inputPlanar = (Img<UnsignedByteType>) ops.run("create.img", new FinalDimensions(size1),
-			new UnsignedByteType(), new PlanarImgFactory<UnsignedByteType>());
+				new UnsignedByteType(), new PlanarImgFactory<>(new UnsignedByteType()));
 
 		// get centered views
 		view = Views.interval(input2, new FinalInterval(start, end));
@@ -133,8 +137,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 	@Test
 	public void copyRAIWithOutputTest() {
-		final Img<UnsignedByteType> output = input.factory().create(input, input
-			.firstElement());
+		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
 		ops.run("copy.rai", output, input);
 
@@ -152,9 +155,6 @@ public class CopyRAITest extends AbstractOpTest {
 
 		// create a copy op
 		final Computer<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = Computers.unary(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
-//		final UnaryHybridCF<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy =
-//			(UnaryHybridCF) Hybrids.unaryCF(ops, CopyRAI.class,
-//				RandomAccessibleInterval.class, IntervalView.class);
 
 		assertNotNull(copy);
 

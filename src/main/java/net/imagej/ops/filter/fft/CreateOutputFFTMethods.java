@@ -27,62 +27,57 @@
  * #L%
  */
 
-package net.imagej.ops.copy;
+package net.imagej.ops.filter.fft;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import net.imglib2.Dimensions;
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.util.Intervals;
-import net.imglib2.util.Util;
-import net.imglib2.view.Views;
+import net.imglib2.img.Img;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Copies a {@link RandomAccessibleInterval} into another
- * {@link RandomAccessibleInterval}
- * 
- * @author Christian Dietz (University of Konstanz)
+ * Function that creates an output for FFTMethods FFT
+ *
+ * @author Brian Northan
  * @param <T>
  */
-@Plugin(type = Op.class, name = "copy.rai", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "copy", type = ItemIO.BOTH)
-public class CopyRAI<T> implements Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
+@Plugin(type = Op.class, name = "filter.createFFTOutput")
+@Parameter(key = "Dimensions")
+@Parameter(key = "outType")
+@Parameter(key = "fast")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+public class CreateOutputFFTMethods<T> implements Function3<Dimensions, T, Boolean, Img<T>> {
 
-	@OpDependency(name = "copy.type")
-	private Computer<Iterable<T>, Iterable<T>> mapComputer;
+	@OpDependency(name = "create.img")
+	private BiFunction<Dimensions, T, Img<T>> create;
 
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final RandomAccessibleInterval<T> output) {
-		if (!Intervals.equalDimensions(input, output))
-			throw new IllegalArgumentException("input and output must be of the same dimensionality!");
-		mapComputer.compute(Views.flatIterable(input), Views.flatIterable(output));
+	public Img<T> apply(Dimensions paddedDimensions, T outType, Boolean fast) {
+
+		Dimensions paddedFFTMethodsFFTDimensions = FFTMethodsUtility.getFFTDimensionsRealToComplex(fast,
+				paddedDimensions);
+
+		return create.apply(paddedFFTMethodsFFTDimensions, outType);
 	}
+
 }
 
-@Plugin(type = Op.class, name = "copy.rai", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "copy", type = ItemIO.OUTPUT)
-class CopyRAIFunction<T> implements Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
-	
-	@OpDependency(name = "create.img")
-	private BiFunction<Dimensions, T, RandomAccessibleInterval<T>> createOp;
-	@OpDependency(name = "copy.rai")
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> copyOp;
+@Plugin(type = Op.class, name = "filter.createFFTOutput")
+@Parameter(key = "Dimensions")
+@Parameter(key = "outType")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
+	@OpDependency(name = "filter.createFFTOutput")
+	private Function3<Dimensions, T, Boolean, Img<T>> create;
 
 	@Override
-	public RandomAccessibleInterval<T> apply(RandomAccessibleInterval<T> input) {
-		RandomAccessibleInterval<T> output = createOp.apply(input, Util.getTypeFromInterval(input));
-		copyOp.compute(input, output);
-		return output;
+	public Img<T> apply(Dimensions paddedDimensions, T outType) {
+		return create.apply(paddedDimensions, outType, true);
 	}
-
 }

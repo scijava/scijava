@@ -29,9 +29,6 @@
 
 package net.imagej.ops.filter.convolve;
 
-import net.imagej.ops.Contingent;
-import net.imagej.ops.Ops;
-import net.imagej.ops.special.computer.AbstractUnaryComputerOp;
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccess;
@@ -41,28 +38,32 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
-import org.scijava.plugin.Parameter;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
  * Convolves an image naively.
  */
-@Plugin(type = Ops.Filter.Convolve.class)
+@Plugin(type = Op.class, name = "filter.convolve")
+@Parameter(key = "input")
+@Parameter(key = "kernel")
+@Parameter(key = "output", type = ItemIO.BOTH)
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
-	extends
-	AbstractUnaryComputerOp<RandomAccessible<I>, RandomAccessibleInterval<O>>
-	implements Ops.Filter.Convolve, Contingent
-{
-	// TODO: should this be binary so we can use different kernels??  Not sure.. what if someone tried to re-use
+		implements BiComputer<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
+	// TODO: should this be binary so we can use different kernels?? Not sure.. what
+	// if someone tried to re-use
 	// with a big kernel that should be matched with ConvolveFFT
-	
-	@Parameter
-	private RandomAccessibleInterval<K> kernel;
 
 	@Override
-	public void compute(final RandomAccessible<I> input,
-		final RandomAccessibleInterval<O> output)
-	{
+	public void compute(final RandomAccessible<I> input, final RandomAccessibleInterval<K> kernel,
+			final RandomAccessibleInterval<O> output) {
+		// conforms only if the kernel is sufficiently small
+		if (Intervals.numElements(kernel) <= 9)
+			throw new IllegalArgumentException("The kernel is too small to perform computation!");
+
 		// TODO: try a decomposition of the kernel into n 1-dim kernels
 
 		final long[] min = new long[input.numDimensions()];
@@ -73,8 +74,7 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 			max[d] = kernel.dimension(d) + output.dimension(d);
 		}
 
-		final RandomAccess<I> inRA =
-			input.randomAccess(new FinalInterval(min, max));
+		final RandomAccess<I> inRA = input.randomAccess(new FinalInterval(min, max));
 
 		final Cursor<K> kernelC = Views.iterable(kernel).localizingCursor();
 
@@ -104,8 +104,7 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 				for (int i = 0; i < kernelRadius.length; i++) {
 					// dimension can have zero extension e.g. vertical 1d kernel
 					if (kernelRadius[i] > 0) {
-						inRA.setPosition(pos[i] + kernelC.getLongPosition(i) -
-							kernelRadius[i], i);
+						inRA.setPosition(pos[i] + kernelC.getLongPosition(i) - kernelRadius[i], i);
 					}
 				}
 
@@ -114,12 +113,6 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 
 			outC.get().setReal(val);
 		}
-	}
-
-	@Override
-	public boolean conforms() {
-		// conforms only if the kernel is sufficiently small
-		return Intervals.numElements(kernel) <= 9;
 	}
 
 }

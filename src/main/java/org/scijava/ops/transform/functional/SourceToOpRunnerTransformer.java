@@ -57,7 +57,6 @@ public class SourceToOpRunnerTransformer implements FunctionalTypeTransformer {
 		// this op type, return null.
 		int expectedNumTypes = ((ParameterizedType) Types.parameterizeRaw(srcClass())).getActualTypeArguments().length;
 		if (toParamTypes.length != expectedNumTypes)
-			return null;
 
 		// parameterize the OpRef types with the type parameters of the op
 		Type[] refTypes = Arrays.stream(toRef.getTypes())

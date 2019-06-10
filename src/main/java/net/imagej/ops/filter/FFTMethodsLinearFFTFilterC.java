@@ -27,21 +27,18 @@
  * #L%
  */
 
-package net.imagej.ops.filter.convolve;
+package net.imagej.ops.filter;
 
-import net.imagej.ops.filter.AbstractFFTFilterC;
-import net.imagej.ops.filter.FFTMethodsLinearFFTFilterC;
-import net.imagej.ops.math.IIToIIOutputII;
+import net.imagej.ops.filter.fft.FFTMethodsOpC;
+import net.imagej.ops.filter.ifft.IFFTMethodsOpC;
 import net.imagej.ops.special.computer.BinaryComputerOp;
 import net.imagej.ops.special.computer.Computers;
-import net.imagej.ops.special.hybrid.BinaryHybridCF;
-import net.imagej.ops.special.hybrid.Hybrids;
+import net.imagej.ops.special.computer.UnaryComputerOp;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
-import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -56,43 +53,77 @@ import org.scijava.struct.ItemIO;
  * @param <K>
  * @param <C>
  */
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.LOW)
+@Plugin(type = Op.class, name = "filter.linearFilter", priority = Priority.LOW)
 @Parameter(key = "input")
 @Parameter(key = "kernel")
 @Parameter(key = "fftInput")
 @Parameter(key = "fftKernel")
 @Parameter(key = "performInputFFT")
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
+public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		extends AbstractFFTFilterC<I, O, K, C> {
 
-	@OpDependency(name = "math.multiply")
-	private BinaryHybridCF<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
+	// TODO: should this be a parameter? figure out best way to override
+	// frequencyOp
+	@Parameter
+	private BinaryComputerOp<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp;
 
-	private BinaryComputerOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> linearFilter;
+	private UnaryComputerOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<C>> fftIn;
+
+	private UnaryComputerOp<RandomAccessibleInterval<K>, RandomAccessibleInterval<C>> fftKernel;
+
+	private UnaryComputerOp<RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> ifft;
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void initialize() {
 		super.initialize();
 
-		mul = Hybrids.binaryCF(ops(), IIToIIOutputII.Multiply.class, getFFTInput(), getFFTKernel(), getFFTInput());
+		fftIn = (UnaryComputerOp) Computers.unary(ops(), FFTMethodsOpC.class, getFFTInput(),
+				RandomAccessibleInterval.class);
 
-		// create a convolver by creating a linear filter and passing the multiplier as
-		// the frequency operation
-		linearFilter = (BinaryComputerOp) Computers.binary(ops(), FFTMethodsLinearFFTFilterC.class,
-				RandomAccessibleInterval.class, RandomAccessibleInterval.class, RandomAccessibleInterval.class,
-				getFFTInput(), getFFTKernel(), getPerformInputFFT(), getPerformKernelFFT(), mul);
+		fftKernel = (UnaryComputerOp) Computers.unary(ops(), FFTMethodsOpC.class, getFFTKernel(),
+				RandomAccessibleInterval.class);
+
+		ifft = (UnaryComputerOp) Computers.unary(ops(), IFFTMethodsOpC.class, RandomAccessibleInterval.class,
+				getFFTKernel());
 
 	}
 
 	/**
-	 * Call the linear filter that is set up to perform convolution
+	 * Perform convolution by multiplying the FFTs in the frequency domain
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
-		linearFilter.compute(in, kernel, out);
+		// create FFT input memory if needed
+		if (getFFTInput() == null) {
+			setFFTInput(getCreateOp().calculate(in));
+		}
+
+		// create FFT kernel memory if needed
+		if (getFFTKernel() == null) {
+			setFFTKernel(getCreateOp().calculate(in));
+		}
+
+		// perform input FFT if needed
+		if (getPerformInputFFT()) {
+			fftIn.compute(in, getFFTInput());
+		}
+
+		// perform kernel FFT if needed
+		if (getPerformKernelFFT()) {
+			fftKernel.compute(kernel, getFFTKernel());
+		}
+
+		// perform the operation in frequency domain (ie multiplication for
+		// convolution, complex conjugate multiplication for correlation,
+		// Wiener Filter, etc.)
+		frequencyOp.compute(getFFTInput(), getFFTKernel(), getFFTInput());
+
+		// perform inverse fft
+		ifft.compute(getFFTInput(), out);
+		// linearFilter.compute(in, kernel, out);
 	}
 }

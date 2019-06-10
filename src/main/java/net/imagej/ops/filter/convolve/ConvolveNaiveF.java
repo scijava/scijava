@@ -29,11 +29,9 @@
 
 package net.imagej.ops.filter.convolve;
 
-import net.imagej.ops.Contingent;
-import net.imagej.ops.Ops;
-import net.imagej.ops.special.computer.Computers;
-import net.imagej.ops.special.computer.UnaryComputerOp;
-import net.imagej.ops.special.function.AbstractBinaryFunctionOp;
+import java.util.function.BiFunction;
+
+import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
@@ -46,59 +44,60 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.function.Function4;
+import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
  * Convolves an image naively (no FFTs).
  */
-@Plugin(type = Ops.Filter.Convolve.class, priority = Priority.HIGH + 1)
+@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH + 1)
+@Parameter(key = "input")
+@Parameter(key = "kernel")
+@Parameter(key = "outOfBoundsFactory")
+@Parameter(key = "outType")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
 public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
-	extends
-	AbstractBinaryFunctionOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>>
-	implements Ops.Filter.Convolve, Contingent
-{
+		implements
+		Function4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, Type<O>, RandomAccessibleInterval<O>> {
+	//
+	// /**
+	// * Defines the out of bounds strategy for the extended area of the
+	// input>>>>>>>
+	// * Delete AbstractFilterF
+	// */
+	// @Parameter(required = false)
+	// private OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf;
+	//
+	// /**
+	// * The output type. If null a default output type will be used.
+	// */
+	// @Parameter(required = false)
+	// private Type<O> outType;
 
-	/**
-	 * Defines the out of bounds strategy for the extended area of the
-	 * input>>>>>>> Delete AbstractFilterF
-	 */
-	@Parameter(required = false)
-	private OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf;
+	@OpDependency(name = "filter.convolve")
+	private BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> convolver;
 
-	/**
-	 * The output type. If null a default output type will be used.
-	 */
-	@Parameter(required = false)
-	private Type<O> outType;
-
-	private UnaryComputerOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> convolver;
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void initialize() {
-		super.initialize();
-
-		convolver = (UnaryComputerOp) Computers.unary(ops(), ConvolveNaiveC.class,
-			RandomAccessibleInterval.class, RandomAccessibleInterval.class, in2());
-
-	}
+	@OpDependency(name = "create.img")
+	private BiFunction<Dimensions, Type<O>, RandomAccessibleInterval<O>> createOp;
 
 	/**
 	 * Create the output using the outFactory and outType if they exist. If these
 	 * are null use a default factory and type
 	 */
 	@SuppressWarnings("unchecked")
-	public RandomAccessibleInterval<O> createOutput(
-		RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel)
-	{
+	public RandomAccessibleInterval<O> createOutput(RandomAccessibleInterval<I> input,
+			RandomAccessibleInterval<K> kernel, Type<O> outType) {
 
+		// TODO can we remove this null check?
 		if (outType == null) {
 
 			// if the input type and kernel type are the same use this type
-			if (Util.getTypeFromInterval(input).getClass() == Util
-				.getTypeFromInterval(kernel).getClass())
-			{
+			if (Util.getTypeFromInterval(input).getClass() == Util.getTypeFromInterval(kernel).getClass()) {
 				Object temp = Util.getTypeFromInterval(input).createVariable();
 				outType = (Type<O>) temp;
 
@@ -110,44 +109,38 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 			}
 		}
 
-		return ops().create().img(input, outType.createVariable());
+		return createOp.apply(input, outType.createVariable());
 	}
 
 	@Override
-	public RandomAccessibleInterval<O> calculate(
-		final RandomAccessibleInterval<I> img,
-		final RandomAccessibleInterval<K> kernel)
-	{
+	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
+			final RandomAccessibleInterval<K> kernel, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
+			final Type<O> outType) {
 
-		RandomAccessibleInterval<O> out = createOutput(img, kernel);
+		// conforms only if the kernel is sufficiently small
+		if (Intervals.numElements(kernel) <= 9)
+			throw new IllegalArgumentException("The kernel is too small to perform computation!");
 
+		RandomAccessibleInterval<O> out = createOutput(input, kernel, outType);
+
+		// TODO can we remove this null check?
 		if (obf == null) {
-			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in())
-				.createVariable());
+			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
 		}
 
 		// extend the input
-		RandomAccessibleInterval<I> extendedIn = Views.interval(Views.extend(img,
-			obf), img);
+		RandomAccessibleInterval<I> extendedIn = Views.interval(Views.extend(input, obf), input);
 
-		OutOfBoundsFactory<O, RandomAccessibleInterval<O>> obfOutput =
-			new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(out)
-				.createVariable());
+		OutOfBoundsFactory<O, RandomAccessibleInterval<O>> obfOutput = new OutOfBoundsConstantValueFactory<>(
+				Util.getTypeFromInterval(out).createVariable());
 
 		// extend the output
-		RandomAccessibleInterval<O> extendedOut = Views.interval(Views.extend(out,
-			obfOutput), out);
+		RandomAccessibleInterval<O> extendedOut = Views.interval(Views.extend(out, obfOutput), out);
 
 		// ops().filter().convolve(extendedOut, extendedIn, kernel);
-		convolver.compute(extendedIn, extendedOut);
+		convolver.compute(extendedIn, kernel, extendedOut);
 
 		return out;
-	}
-
-	@Override
-	public boolean conforms() {
-		// conforms only if the kernel is sufficiently small
-		return Intervals.numElements(in2()) <= 9;
 	}
 
 }

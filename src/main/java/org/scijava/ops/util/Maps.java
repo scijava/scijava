@@ -1,14 +1,14 @@
 package org.scijava.ops.util;
 
+import com.google.common.collect.Streams;
+
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.core.Computer;
-
-import com.google.common.collect.Streams;
+import org.scijava.ops.core.computer.Computer;
 
 public class Maps {
 
@@ -51,7 +51,9 @@ public class Maps {
 				return (iter1, iter2) -> {
 					Iterator<I> i1 = iter1.iterator();
 					Iterator<O> i2 = iter2.iterator();
-					computer.compute(i1.next(), i2.next());
+					while(i1.hasNext() && i2.hasNext()) {
+						computer.compute(i1.next(), i2.next());
+					}
 				};
 			}
 		}

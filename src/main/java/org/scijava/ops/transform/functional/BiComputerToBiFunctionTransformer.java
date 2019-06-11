@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.BiComputer;
+import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.transform.TypeModUtils;

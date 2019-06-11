@@ -37,10 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
-
-import com.google.common.primitives.Primitives;
 
 /**
  * Utility class to do modification on {@link Type}s.
@@ -240,7 +237,8 @@ public final class TypeModUtils {
 	public static Type[] insert(Type[] types, Type type, int index) {
 		List<Type> out = new ArrayList<>();
 		out.addAll(Arrays.asList(types));
-		out.add(index, type);
+		if(index < out.size()) out.add(index, type);
+		else out.add(type);
 		return out.toArray(new Type[out.size()]);
 	}
 	
@@ -255,7 +253,7 @@ public final class TypeModUtils {
 	public static Type[] remove(Type[] types, int index) {
 		List<Type> out = new ArrayList<>();
 		out.addAll(Arrays.asList(types));
-		out.remove(index);
+		if(index < types.length) out.remove(index);
 		return out.toArray(new Type[out.size()]);
 	}
 	

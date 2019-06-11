@@ -31,8 +31,6 @@
 
 package org.scijava.util;
 
-import com.google.common.reflect.TypeToken;
-
 // Portions of this class were adapted from the
 // org.apache.commons.lang3.reflect.TypeUtils and
 // org.apache.commons.lang3.Validate classes of
@@ -762,6 +760,29 @@ public final class Types {
 		}
 		return TypeUtils.isAssignable(source, target);
 	}
+	
+	/**
+	 * <p>
+	 * Checks if the subject type may be implicitly cast to the target type
+	 * following the Java generics rules.
+	 * </p>
+	 *
+	 * @param type the subject type to be assigned to the target type
+	 * @param toType the target type
+	 * @param typeVarAssigns optional map of type variable assignments
+	 * @return {@code true} if {@code type} is assignable to {@code toType}.
+	 */
+	public static boolean isAssignable(final Type type, final Type toType,
+			final Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		// Workaround for possible bug in TypeUtils.isAssignable, which returns
+				// false if one wants to assign primitives to their wrappers and the other
+				// way around
+				if (type instanceof Class && toType instanceof Class) {
+					return TypeUtils.isAssignable(Types.box((Class<?>) type), Types.box((Class<?>) toType));
+				}
+				return TypeUtils.isAssignable(type, toType, typeVarAssigns);
+	}
 
 	/**
 	 * Checks whether the given object can be cast to the specified type.
@@ -1057,6 +1078,41 @@ public final class Types {
 		return result;
 	}
 
+	public static Type substituteTypeVariables(Type type, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		if (type == null || type instanceof Class) {
+			return type;
+		}
+
+		if (type instanceof ParameterizedType) {
+		}
+
+		if (type instanceof GenericArrayType) {
+		}
+
+		if (type instanceof WildcardType) {
+			return type;
+		}
+
+		if (type instanceof TypeVariable) {
+			return TypeUtils.substituteTypeVariables(type, typeVarAssigns);
+		}
+
+		throw new IllegalStateException("found an unhandled type: " + type);
+	}
+
+	/**
+	 * Map type vars in specified type list to types using the specified map. In
+	 * doing so, type vars mapping to other type vars will not be followed but
+	 * just repalced.
+	 *
+	 * @param typesToMap
+	 * @param typeAssigns
+	 * @return
+	 */
+	public static Type[] mapVarToTypes(Type[] typesToMap, Map<TypeVariable<?>, Type> typeAssigns) {
+		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(typeAssigns, type, false))
+				.toArray(Type[]::new);
+	}
 	/**
 	 * Converts the given string value to an enumeration constant of the specified
 	 * type.
@@ -1482,7 +1538,7 @@ public final class Types {
 	 * The only difference to {@link TypeVarInfo} is that {@link TypeVarInfo#allowType(Type, boolean)}
 	 * will be always called with refuseWildcards flag to be true.
 	 */
-	private static class TypeVarFromParameterizedTypeInfo extends TypeVarInfo {
+	public static class TypeVarFromParameterizedTypeInfo extends TypeVarInfo {
 
 		public TypeVarFromParameterizedTypeInfo(TypeVariable<?> var) {
 			super(var);
@@ -2179,6 +2235,11 @@ public final class Types {
 
 			// all types are assignable to themselves
 			if (toTypeVariable.equals(type)) {
+				return true;
+			}
+			
+			// if toTypeVariable is assigned to type in typeVarAssigns, then it is assignable
+			if (typeVarAssigns.get(toTypeVariable) == type) {
 				return true;
 			}
 
@@ -4326,6 +4387,7 @@ public final class Types {
 			return result;
 		}
 	}
+
 
 	// -- END FORK OF GENTYREF 1.1.0 CODE --
 }

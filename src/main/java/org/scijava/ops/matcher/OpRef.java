@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -31,7 +31,10 @@ package org.scijava.ops.matcher;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.scijava.ops.core.Op;
@@ -44,7 +47,7 @@ import org.scijava.util.Types;
  * With the help of the {@link OpTypeMatchingService}, an {@code OpRef} holds all
  * information needed to create an appropriate {@link Op}.
  * </p>
- * 
+ *
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
  */
@@ -67,7 +70,7 @@ public class OpRef {
 	public static OpRef fromTypes(final Type[] types, final Type[] outTypes, final Type... args) {
 		return new OpRef(null, filterNulls(types), filterNulls(outTypes), filterNulls(args));
 	}
-	
+
 	public static OpRef fromTypes(final String name, final Type[] types, final Type[] outTypes, final Type... args) {
 		return new OpRef(name, filterNulls(types), filterNulls(outTypes), filterNulls(args));
 	}
@@ -76,7 +79,7 @@ public class OpRef {
 
 	/**
 	 * Creates a new op reference.
-	 * 
+	 *
 	 * @param name
 	 *            name of the op, or null for any name.
 	 * @param types
@@ -132,16 +135,20 @@ public class OpRef {
 		return sb.toString();
 	}
 
+	public boolean typesMatch(final Type opType) {
+		return typesMatch(opType, new HashMap<>());
+	}
+
 	/**
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
-	public boolean typesMatch(final Type opType) {
+	public boolean typesMatch(final Type opType, final Map<TypeVariable<?>, Type> typeVarAssigns) {
 		if (types == null)
 			return true;
 		for (Type t : types) {
 			if(t instanceof ParameterizedType) {
-				if (!MatchingUtils.checkGenericAssignability(opType, (ParameterizedType) t)) {
+				if (!MatchingUtils.checkGenericAssignability(opType, (ParameterizedType) t, typeVarAssigns, true)) {
 					return false;
 				}
 			} else {

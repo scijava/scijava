@@ -33,6 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -55,9 +56,9 @@ public class MatchingUtilsTest {
 	private void assertAll(Class<?> from, boolean condition, Type... tos) {
 		for (Type to : tos) {
 			if (to instanceof ParameterizedType) {
-				assertTrue(MatchingUtils.checkGenericAssignability(from, (ParameterizedType) to) == condition);
+				assertTrue(MatchingUtils.checkGenericAssignability(from, (ParameterizedType) to, false) == condition);
 			} else {
-				assertTrue(Types.isAssignable(from, to) == condition);
+				assertTrue(Types.isAssignable(from, to, new HashMap<TypeVariable<?>, Type>()) == condition);
 			}
 		}
 	}
@@ -420,12 +421,12 @@ public class MatchingUtilsTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableNullToNull() {
-		MatchingUtils.checkGenericAssignability(null, null);
+		MatchingUtils.checkGenericAssignability(null, null, false);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableClassToNull() {
-		MatchingUtils.checkGenericAssignability(Object.class, null);
+		MatchingUtils.checkGenericAssignability(Object.class, null, false);
 	}
 
 	@Test

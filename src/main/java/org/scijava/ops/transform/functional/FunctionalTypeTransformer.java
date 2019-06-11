@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.transform.TypeModUtils;
+import org.scijava.util.Types;
 
 /**
  * Interface for transformers converting between functional Op types.</br>
@@ -17,6 +18,7 @@ public interface FunctionalTypeTransformer extends OpTransformer {
 	@Override
 	default OpRef getRefTransformingTo(OpRef toRef) {
 		Type[] refTypes = toRef.getTypes();
+		if(Types.raw(refTypes[0]) != targetClass()) return null;
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, targetClass(), srcClass());
 		if (hit) {
 			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputTypes(toRef),

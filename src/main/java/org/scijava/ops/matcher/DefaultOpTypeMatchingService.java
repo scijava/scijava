@@ -6,13 +6,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import org.scijava.Context;
@@ -52,7 +53,7 @@ import org.scijava.util.Types.TypeVarInfo;
 
 /**
  * Default service for finding ops which match a request.
- * 
+ *
  * @author David Kolb
  */
 @Plugin(type = Service.class)
@@ -63,7 +64,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 
 	@Parameter
 	private LogService log;
-	
+
 	@Override
 	public OpCandidate findSingleMatch(final OpEnvironment ops, final OpRef ref) throws OpMatchingException {
 		return findMatch(ops, ref).singleMatch();
@@ -96,8 +97,9 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
 		for (final OpRef ref : refs) {
 			for (final OpInfo info : ops.infos(ref.getName())) {
-				if (ref.typesMatch(info.opType())) {
-					candidates.add(new OpCandidate(ops, ref, info));
+				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
+					candidates.add(new OpCandidate(ops, ref, info, typeVarAssigns));
 				}
 			}
 		}
@@ -107,12 +109,12 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	@Override
 	public List<OpCandidate> filterMatches(final List<OpCandidate> candidates) {
 		final List<OpCandidate> validCandidates = checkCandidates(candidates);
-		
+
 		// List of valid candidates needs to be sorted according to priority.
 		// This is used as an optimization in order to not look at ops with
 		// lower priority than the already found one.
-		validCandidates.sort((c1, c2) -> Double.compare(c1.opInfo().priority(), c2.opInfo().priority()));
-		
+		validCandidates.sort((c1, c2) -> Double.compare(c2.opInfo().priority(), c1.opInfo().priority()));
+
 		List<OpCandidate> matches;
 		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
 		if (!matches.isEmpty())
@@ -126,7 +128,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * Checks whether the arg types of the candidate satisfy the padded arg
 	 * types of the candidate. Sets candidate status code if there are too many,
 	 * to few,not matching arg types or if a match was found.
-	 * 
+	 *
 	 * @param candidate
 	 *            the candidate to check args for
 	 * @return whether the arg types are satisfied
@@ -155,7 +157,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * * {@link #missArgs(OpCandidate, Type[])}</br>
 	 * </br>
 	 * then returns the candidates which fulfill this criteria.
-	 * 
+	 *
 	 * @param candidates
 	 *            the candidates to check
 	 * @return candidates passing checks
@@ -179,7 +181,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * Filters specified list of candidates using specified predicate. This
 	 * method stops filtering when the priority decreases. Expects list of candidates
 	 * to be sorted in non-ascending order.
-	 * 
+	 *
 	 * @param candidates
 	 *            the candidates to filter
 	 * @param filter
@@ -254,7 +256,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	/**
 	 * Determines if the specified candidate is valid and sets status code if
 	 * not.
-	 * 
+	 *
 	 * @param candidate
 	 *            the candidate to check
 	 * @return whether the candidate is valid
@@ -271,7 +273,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * Checks whether the output types of the candidate are applicable to the
 	 * input types of the {@link OpRef}. Sets candidate status code if there are
 	 * too many, to few, or not matching types.
-	 * 
+	 *
 	 * @param candidate
 	 *            the candidate to check inputs for
 	 * @param typeBounds
@@ -294,7 +296,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			candidate.setStatus(StatusCode.TOO_MANY_ARGS);
 			return false;
 		}
-		
+
 		int conflictingIndex = Types.isApplicable(refArgTypes, candidateArgTypes, typeBounds);
 		if (conflictingIndex != -1) {
 			final Type to = refArgTypes[conflictingIndex];
@@ -310,7 +312,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * Checks whether the output types of the candidate match the output types
 	 * of the {@link OpRef}. Sets candidate status code if there are too many,
 	 * to few, or not matching types.
-	 * 
+	 *
 	 * @param candidate
 	 *            the candidate to check outputs for
 	 * @param typeBounds

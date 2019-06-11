@@ -24,11 +24,11 @@ public abstract class AbstractTestEnvironment {
 		ops = null;
 	}
 	
-	static OpService ops() {
+	public static OpService ops() {
 		return ops;
 	}
 	
-	static boolean arrayEquals(double[] arr1, Double... arr2) {
+	public static boolean arrayEquals(double[] arr1, Double... arr2) {
 		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new), arr2);
 	}
 }

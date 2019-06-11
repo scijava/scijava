@@ -19,6 +19,10 @@ public class OpTransformationCandidate {
 		this.srcOp = scrOp;
 		this.transformation = transformation;
 	}
+	
+	public OpCandidate getSourceOp() {
+		return srcOp;
+	}
 
 	public Object exceute(OpService opService, Object... secondaryArgs)
 			throws OpMatchingException, OpTransformationException {

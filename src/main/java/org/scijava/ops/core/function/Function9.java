@@ -1,11 +1,11 @@
-package org.scijava.ops.core;
+package org.scijava.ops.core.function;
 
 import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Represents a function that accepts three arguments and produces a result.
- * This is the four-arity specialization of {@link Function}.
+ * Represents a function that accepts nine arguments and produces a result.
+ * This is the nine-arity specialization of {@link Function}.
  *
  * <p>
  * This is a <a href="package-summary.html">functional interface</a> whose
@@ -19,6 +19,16 @@ import java.util.function.Function;
  *            the type of the third argument to the function
  * @param <I4>
  *            the type of the fourth argument to the function
+ * @param <I5>
+ *            the type of the fifth argument to the function
+ * @param <I6>
+ *            the type of the sixth argument to the function
+ * @param <I7>
+ *            the type of the seventh argument to the function
+ * @param <I8>
+ *            the type of the eighth argument to the function
+ * @param <I9>
+ *            the type of the ninth argument to the function
  * @param <O>
  *            the type of the output of the function
  *
@@ -26,7 +36,7 @@ import java.util.function.Function;
  * @since 1.8
  */
 @FunctionalInterface
-public interface QuadFunction<I1, I2, I3, I4, O> {
+public interface Function9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
 
 	/**
 	 * Applies this function to the given arguments.
@@ -39,9 +49,19 @@ public interface QuadFunction<I1, I2, I3, I4, O> {
 	 *            the third function argument
 	 * @param w
 	 *            the fourth function argument
+	 * @param x
+	 *            the fifth function argument
+	 * @param y
+	 *            the sixth function argument
+	 * @param z
+	 *            the seventh function argument
+	 * @param a
+	 *            the eighth function argument
+	 * @param b
+	 *            the ninth function argument
 	 * @return the function output
 	 */
-	O apply(I1 t, I2 u, I3 v, I4 w);
+	O apply(I1 t, I2 u, I3 v, I4 w, I5 x, I6 y, I7 z, I8 a, I9 b);
 
 	/**
 	 * Returns a composed function that first applies this function to its input,
@@ -59,8 +79,8 @@ public interface QuadFunction<I1, I2, I3, I4, O> {
 	 * @throws NullPointerException
 	 *             if after is null
 	 */
-	default <O2> QuadFunction<I1, I2, I3, I4, O2> andThen(Function<? super O, ? extends O2> after) {
+	default <O2> Function9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O2> andThen(Function<? super O, ? extends O2> after) {
 		Objects.requireNonNull(after);
-		return (I1 in1, I2 in2, I3 in3, I4 in4) -> after.apply(apply(in1, in2, in3, in4));
+		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9));
 	}
 }

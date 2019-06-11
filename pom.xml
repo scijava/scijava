@@ -90,7 +90,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>Travis CI</system>
-		<url>https://travis-ci.org/scijava/scijava-ops</url>
+		<url>https://travis-ci.com/scijava/scijava-ops</url>
 	</ciManagement>
 
 	<properties>
@@ -99,6 +99,9 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava Ops developers.</license.copyrightOwners>
+
+		<!-- NB: Deploy releases to the SciJava Maven repository. -->
+		<releaseProfiles>deploy-to-scijava</releaseProfiles>
 	</properties>
 
 	<repositories>

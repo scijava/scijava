@@ -1,3 +1,5 @@
+[![](https://travis-ci.com/scijava/scijava-ops.svg?branch=master)](https://travis-ci.com/scijava/scijava-ops)
+
 The SciJava Ops projects offers a framework for typed operations, or Ops.
 
 Each op implements a particular functional interface, possessing typed inputs

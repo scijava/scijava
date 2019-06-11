@@ -1,25 +1,57 @@
 package org.scijava.ops.util;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.Computer6;
 import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
 
-/**
- * Utility providing adaptation between {@link Op} types.
- */
 public class Computers {
+
+	/**
+	 * All known computer types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 */
+	public static final BiMap<Class<?>, Integer> ALL_COMPUTERS;
+
+	static {
+		final Map<Class<?>, Integer> computers = new HashMap<>(7);
+		computers.put(NullaryComputer.class, 0);
+		computers.put(Computer.class, 1);
+		computers.put(BiComputer.class, 2);
+		computers.put(Computer3.class, 3);
+		computers.put(Computer4.class, 4);
+		computers.put(Computer5.class, 5);
+		computers.put(Computer6.class, 6);
+		ALL_COMPUTERS = ImmutableBiMap.copyOf(computers);
+	}
 
 	private Computers() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	/**
+	 * @return {@code true} if the given type is a {@link #ALL_COMPUTERS known}
+	 *         computer type, {@code false} otherwise. <br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code type} is {@code null}.
+	 */
+	public static boolean isComputer(Type type) {
+		return ALL_COMPUTERS.containsKey(Types.raw(type));
 	}
 
 	public static <O> NullaryComputer<O> nullary(final OpService ops, final String opName, final Nil<O> outputType,

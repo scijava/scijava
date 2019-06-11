@@ -1,6 +1,14 @@
 package org.scijava.ops.util;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
@@ -25,16 +33,66 @@ import org.scijava.ops.core.inplace.Inplace6Fourth;
 import org.scijava.ops.core.inplace.Inplace6Second;
 import org.scijava.ops.core.inplace.Inplace6Sixth;
 import org.scijava.ops.core.inplace.Inplace6Third;
+import org.scijava.ops.core.inplace.Inplace7Second;
 import org.scijava.ops.types.Nil;
+import org.scijava.ops.util.Inplaces.InplaceInfo;
 import org.scijava.util.Types;
 
-/**
- * Utility providing adaptation between {@link Op} types.
- */
 public class Inplaces {
+
+	/**
+	 * All known inplace types and their arities and mutable positions. The
+	 * entries are sorted by arity and mutable position.
+	 */
+	public static final Map<Class<?>, InplaceInfo> ALL_INPLACES;
+
+	static {
+		final Map<Class<?>, InplaceInfo> inplaces = new LinkedHashMap<>(22);
+		inplaces.put(Inplace.class, new InplaceInfo(1, 0));
+		inplaces.put(BiInplaceFirst.class, new InplaceInfo(2, 0));
+		inplaces.put(BiInplaceSecond.class, new InplaceInfo(2, 1));
+		inplaces.put(Inplace3First.class, new InplaceInfo(3, 0));
+		inplaces.put(Inplace3Second.class, new InplaceInfo(3, 1));
+		inplaces.put(Inplace3Third.class, new InplaceInfo(3, 2));
+		inplaces.put(Inplace4First.class, new InplaceInfo(4, 0));
+		inplaces.put(Inplace4Second.class, new InplaceInfo(4, 1));
+		inplaces.put(Inplace4Third.class, new InplaceInfo(4, 2));
+		inplaces.put(Inplace4Fourth.class, new InplaceInfo(4, 3));
+		inplaces.put(Inplace5First.class, new InplaceInfo(5, 0));
+		inplaces.put(Inplace5Second.class, new InplaceInfo(5, 1));
+		inplaces.put(Inplace5Third.class, new InplaceInfo(5, 2));
+		inplaces.put(Inplace5Fourth.class, new InplaceInfo(5, 3));
+		inplaces.put(Inplace5Fifth.class, new InplaceInfo(5, 4));
+		inplaces.put(Inplace6First.class, new InplaceInfo(6, 0));
+		inplaces.put(Inplace6Second.class, new InplaceInfo(6, 1));
+		inplaces.put(Inplace6Third.class, new InplaceInfo(6, 2));
+		inplaces.put(Inplace6Fourth.class, new InplaceInfo(6, 3));
+		inplaces.put(Inplace6Fifth.class, new InplaceInfo(6, 4));
+		inplaces.put(Inplace6Sixth.class, new InplaceInfo(6, 5));
+		inplaces.put(Inplace7Second.class, new InplaceInfo(7, 1));
+		ALL_INPLACES = Collections.unmodifiableMap(inplaces);
+	}
 
 	private Inplaces() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	/**
+	 * @return {@code true} if the given type is a {@link #ALL_INPLACES known}
+	 *         inplace type, {@code false} otherwise. <br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code type} is {@code null}.
+	 */
+	public static boolean isInplace(Type type) {
+		return ALL_INPLACES.containsKey(Types.raw(type));
+	}
+
+	public static List<Class<?>> getInplacesOfArity(final int arity) {
+		return Inplaces.ALL_INPLACES.entrySet().stream() //
+			.filter(e -> e.getValue().arity() == arity) //
+			.map(Entry<Class<?>, InplaceInfo>::getKey) //
+			.collect(Collectors.toList());
 	}
 
 	public static <IO> Inplace<IO> unary(final OpService ops, final String opName, final Nil<IO> inputOutputType,
@@ -457,5 +515,24 @@ public class Inplaces {
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, input5Type, inputOutputType }, //
 				inputOutputType, //
 				secondaryArgs);
+	}
+
+	public static class InplaceInfo {
+
+		private final int arity;
+		private final int mutablePosition;
+
+		public InplaceInfo(final int arity, final int mutablePosition) {
+			this.arity = arity;
+			this.mutablePosition = mutablePosition;
+		}
+
+		public int arity() {
+			return arity;
+		}
+
+		public int mutablePosition() {
+			return mutablePosition;
+		}
 	}
 }

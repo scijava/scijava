@@ -154,7 +154,7 @@ public interface TypeService extends
 
 		// fill in any remaining unresolved type parameters with wildcards
 		for (final TypeVariable<?> typeVar : typeVars) {
-			resolved.putIfAbsent(typeVar, Types.wildcard());
+			resolved.putIfAbsent(typeVar, new Any());
 		}
 
 		// now apply all the type variables we resolved

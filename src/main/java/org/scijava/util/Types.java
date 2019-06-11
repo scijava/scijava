@@ -70,6 +70,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import org.scijava.ops.types.Any;
+
 /**
  * Utility class for working with generic types, fields and methods.
  * <p>
@@ -317,7 +319,7 @@ public final class Types {
 	public static String name(final Type t) {
 		if (t instanceof Class) {
 			final Class<?> c = (Class<?>) t;
-			return c.isArray() ? (name(component(c)) + "[]") : c.getName();
+			return c.isArray() ? name(component(c)) + "[]" : c.getName();
 		}
 		return t.toString();
 	}
@@ -831,6 +833,10 @@ public final class Types {
 		for (int i = 0; i < params.length; i++) {
 			Type arg = args[i];
 			Type param = params[i];
+
+			// if arg is an Any, it must be applicable to param.
+			if(arg instanceof Any) continue;
+
 			// First, check raw type assignability.
 			if (!isApplicableToRawTypes(arg, param)) return i;
 
@@ -894,7 +900,7 @@ public final class Types {
 		// that the type var was contained in a parameterized type. Hence, it will be handled
 		// like a normal type var which allow more assignability regarding wildcards compared
 		// to type vars contained in parameterized types
-		List<Integer> ignoredIndices = new ArrayList<Integer>();
+		List<Integer> ignoredIndices = new ArrayList<>();
 		// check to see if any of the Types of this ParameterizedType are
 		// TypeVariables, if so restrict them to the type parameter of the argument.
 		for (int i = 0; i < destTypes.length; i++) {
@@ -1721,7 +1727,7 @@ public final class Types {
 			@Override
 			public boolean equals(final Object obj) {
 				return obj == this || obj instanceof ParameterizedType && TypeUtils
-					.equals(this, ((ParameterizedType) obj));
+					.equals(this, (ParameterizedType) obj);
 			}
 
 			@Override
@@ -1845,6 +1851,9 @@ public final class Types {
 		private static boolean isAssignable(final Type type, final Type toType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
+			if (type instanceof Any) {
+				return true;
+			}
 			if (toType == null || toType instanceof Class) {
 				return isAssignable(type, (Class<?>) toType);
 			}
@@ -2003,6 +2012,7 @@ public final class Types {
 					!(toTypeArg instanceof WildcardType && isAssignable(fromTypeArg,
 						toTypeArg, typeVarAssigns)))
 				{
+					if(fromTypeArg instanceof Any) continue;
 					return false;
 				}
 			}
@@ -3376,6 +3386,9 @@ public final class Types {
 			if (type instanceof Class) {
 				return classToString((Class<?>) type, done);
 			}
+			if (type instanceof Any) {
+				return type.toString();
+			}
 			if (type instanceof ParameterizedType) {
 				return parameterizedTypeToString((ParameterizedType) type, done);
 			}
@@ -4181,7 +4194,7 @@ public final class Types {
 				for (final CaptureTypeImpl captured : toInit) {
 					captured.init(varMap);
 				}
-				final Type ownerType = (pType.getOwnerType() == null) ? null : capture(
+				final Type ownerType = pType.getOwnerType() == null ? null : capture(
 					pType.getOwnerType());
 				return parameterize(clazz, ownerType, capturedArguments);
 			}

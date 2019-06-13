@@ -35,7 +35,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { outputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -53,7 +53,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { inputType, outputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -73,7 +73,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, outputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -93,7 +93,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, input3Type, outputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -113,7 +113,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, outputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -134,7 +134,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, input5Type, outputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 

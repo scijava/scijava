@@ -51,7 +51,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { inputOutputType }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -70,7 +70,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { inputOutputType, input2Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -88,8 +88,8 @@ public class Inplaces {
 		return ops.findOp( //
 				opName, //
 				inplaceNil, //
-				new Nil[] { inputOutputType, input1Type }, //
-				new Nil[] { inputOutputType }, //
+				new Nil[] { input1Type, inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -109,7 +109,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { inputOutputType, input2Type, input3Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -129,7 +129,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, inputOutputType, input3Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -149,7 +149,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, inputOutputType }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -169,7 +169,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { inputOutputType, input2Type, input3Type, input4Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -189,7 +189,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, inputOutputType, input3Type, input4Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -209,7 +209,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, inputOutputType, input4Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -229,7 +229,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, input3Type, inputOutputType }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -249,7 +249,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { inputOutputType, input2Type, input3Type, input4Type, input5Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -269,7 +269,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, inputOutputType, input3Type, input4Type, input5Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -289,7 +289,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, inputOutputType, input4Type, input5Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -309,7 +309,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, input3Type, inputOutputType, input5Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -329,7 +329,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, inputOutputType }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 
@@ -350,7 +350,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { inputOutputType, input2Type, input3Type, input4Type, input5Type, input6Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 	
@@ -371,7 +371,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, inputOutputType, input3Type, input4Type, input5Type, input6Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 	
@@ -392,7 +392,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, inputOutputType, input4Type, input5Type, input6Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 	
@@ -413,7 +413,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, input3Type, inputOutputType, input5Type, input6Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 	
@@ -434,7 +434,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, inputOutputType, input6Type }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 	
@@ -455,7 +455,7 @@ public class Inplaces {
 				opName, //
 				inplaceNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, input5Type, inputOutputType }, //
-				new Nil[] { inputOutputType }, //
+				inputOutputType, //
 				secondaryArgs);
 	}
 }

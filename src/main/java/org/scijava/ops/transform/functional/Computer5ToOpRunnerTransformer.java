@@ -24,7 +24,6 @@ public class Computer5ToOpRunnerTransformer implements FunctionalTypeTransformer
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object transform(OpService opService, OpRef ref, Object src) {
-		Type[] outTypes = ref.getOutTypes();
 		return OpRunners.Computers.toRunner((Computer5) src);
 	}
 
@@ -44,8 +43,8 @@ public class Computer5ToOpRunnerTransformer implements FunctionalTypeTransformer
 	}
 
 	@Override
-	public Type[] getTransformedOutputTypes(OpRef toRef) {
-		return toRef.getOutTypes();
+	public Type getTransformedOutputType(OpRef toRef) {
+		return toRef.getOutType();
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class Computer5ToOpRunnerTransformer implements FunctionalTypeTransformer
 		// from here it is the s
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, targetClass(), srcClass());
 		if (hit) {
-			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputTypes(toRef),
+			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputType(toRef),
 					getTransformedArgTypes(toRef));
 		}
 		return null;

@@ -31,7 +31,9 @@ package org.scijava.ops;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.matcher.DefaultOpTypeMatchingService;
@@ -41,6 +43,8 @@ import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ParameterMember;
+import org.scijava.param.ValidityException;
+import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
@@ -139,12 +143,12 @@ public final class OpUtils {
 		return getTypes(inputs(candidate.struct()));
 	}
 
-	public static List<Member<?>> outputs(OpCandidate candidate) {
-		return outputs(candidate.struct());
+	public static Member<?> output(OpCandidate candidate) {
+		return candidate.opInfo().output();
 	}
 
-	public static Type[] outputTypes(OpCandidate candidate) {
-		return getTypes(outputs(candidate.struct()));
+	public static Type outputType(OpCandidate candidate) {
+		return output(candidate).getType();
 	}
 
 	public static List<Member<?>> outputs(final Struct struct) {
@@ -158,7 +162,17 @@ public final class OpUtils {
 				.filter(memberInstance -> memberInstance.member().isOutput()) //
 				.collect(Collectors.toList());
 	}
-	
+
+	public static void checkHasSingleOutput(Struct struct) throws ValidityException {
+		final int numOutputs = OpUtils.outputs(struct).size();
+		if (numOutputs != 1) {
+			final String error = numOutputs == 0 //
+				? "No output parameters specified. Must specify exactly one." //
+				: "Multiple output parameters specified. Only a single output is allowed.";
+			throw new ValidityException(Collections.singletonList(new ValidityProblem(error)));
+		}
+	}
+
 	public static Type[] types(OpCandidate candidate) {
 		return getTypes(candidate.struct().members());
 	}
@@ -238,7 +252,7 @@ public final class OpUtils {
 
 	/**
 	 * Checks if incomplete type matching could have occurred. If we have
-	 * several matches that do not have equal output types, output types may not
+	 * several matches that do not have equal output types, the output type may not
 	 * completely match the request as only raw type assignability will be checked
 	 * at the moment.
 	 * @see DefaultOpTypeMatchingService#typesMatch(OpCandidate)
@@ -246,11 +260,11 @@ public final class OpUtils {
 	 * @return
 	 */
 	private static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
-		Type[] outputTypes = null;
+		Type outputType = null;
 		for (OpCandidate match : matches) {
-			Type[] ts = getTypes(outputs(match));
-			if (outputTypes == null || Arrays.deepEquals(outputTypes, ts)) {
-				outputTypes = ts;
+			Type ts = output(match).getType();
+			if (outputType == null || Objects.equals(outputType, ts)) {
+				outputType = ts;
 				continue;
 			} else {
 				return true;
@@ -404,13 +418,12 @@ public final class OpUtils {
 			sb.append("\n");
 		}
 		sb.append("\t Outputs:\n");
-		for (final Member<?> arg : info.outputs()) {
-			sb.append("\t\t");
-			sb.append(arg.getType().getTypeName());
-			sb.append(" ");
-			sb.append(arg.getKey());
-			sb.append("\n");
-		}
+		final Member<?> arg = info.output();
+		sb.append("\t\t");
+		sb.append(arg.getType().getTypeName());
+		sb.append(" ");
+		sb.append(arg.getKey());
+		sb.append("\n");
 		sb.append(")\n");
 		return sb.toString();
 	}

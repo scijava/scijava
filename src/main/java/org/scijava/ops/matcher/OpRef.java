@@ -60,19 +60,19 @@ public class OpRef {
 	private final Type[] types;
 
 	/** The op's output parameter types, or null for no constraints. */
-	private final Type[] outTypes;
+	private final Type outType;
 
 	/** Arguments to be passed to the op. */
 	private final Type[] args;
 
 	// -- Static construction methods --
 
-	public static OpRef fromTypes(final Type[] types, final Type[] outTypes, final Type... args) {
-		return new OpRef(null, filterNulls(types), filterNulls(outTypes), filterNulls(args));
+	public static OpRef fromTypes(final Type[] types, final Type outType, final Type... args) {
+		return new OpRef(null, filterNulls(types), outType, filterNulls(args));
 	}
 
-	public static OpRef fromTypes(final String name, final Type[] types, final Type[] outTypes, final Type... args) {
-		return new OpRef(name, filterNulls(types), filterNulls(outTypes), filterNulls(args));
+	public static OpRef fromTypes(final String name, final Type[] types, final Type outType, final Type... args) {
+		return new OpRef(name, filterNulls(types), outType, filterNulls(args));
 	}
 
 	// -- Constructor --
@@ -84,15 +84,15 @@ public class OpRef {
 	 *            name of the op, or null for any name.
 	 * @param types
 	 *            types which the ops must match.
-	 * @param outTypes
-	 *            the op's required output types.
+	 * @param outType
+	 *            the op's required output type.
 	 * @param args
 	 *            arguments to the op.
 	 */
-	public OpRef(final String name, final Type[] types, final Type[] outTypes, final Type[] args) {
+	public OpRef(final String name, final Type[] types, final Type outType, final Type[] args) {
 		this.name = name;
 		this.types = types;
-		this.outTypes = outTypes;
+		this.outType = outType;
 		this.args = args;
 	}
 
@@ -109,11 +109,10 @@ public class OpRef {
 	}
 
 	/**
-	 * Gets the op's output types (one constraint per output), or null for no
-	 * constraints.
+	 * Gets the op's output type constraint, or null for no constraint.
 	 */
-	public Type[] getOutTypes() {
-		return outTypes.clone();
+	public Type getOutType() {
+		return outType;
 	}
 
 	/** Gets the op's arguments. */
@@ -172,12 +171,10 @@ public class OpRef {
 			n += arg.getTypeName();
 			n += "\n";
 		}
-		n += "Output Types: \n";
-		for (Type out : outTypes) {
-			n += "\t\t* ";
-			n += out.getTypeName();
-			n += "\n";
-		}
+		n += "Output Type: \n";
+		n += "\t\t* ";
+		n += outType.getTypeName();
+		n += "\n";
 		return n.substring(0, n.length() - 1);
 	}
 
@@ -194,7 +191,7 @@ public class OpRef {
 			return false;
 		if (!Objects.equals(types, other.types))
 			return false;
-		if (!Objects.equals(outTypes, other.outTypes))
+		if (!Objects.equals(outType, other.outType))
 			return false;
 		if (!Objects.equals(args, other.args))
 			return false;
@@ -203,7 +200,7 @@ public class OpRef {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, types, outTypes, args);
+		return Objects.hash(name, types, outType, args);
 	}
 
 	// -- Utility methods --

@@ -80,11 +80,11 @@ public final class OpRefTransformUtils {
 		// From the functional type we know how many there must be.
 		Type[] args = toRef.getArgs();
 		boolean argsChanged = TypeModUtils.unliftTypes(args, unliftRawClass, argIndices);
-		Type[] outs = toRef.getOutTypes();
+		Type[] outs = new Type[] { toRef.getOutType() };
 		boolean outsChanged = TypeModUtils.unliftTypes(outs, unliftRawClass, outputIndices);
 
 		if (typesChanged && argsChanged && outsChanged) {
-			return OpRef.fromTypes(toRef.getName(), refTypes, outs, args);
+			return OpRef.fromTypes(toRef.getName(), refTypes, outs[0], args);
 		}
 		return null;
 	}

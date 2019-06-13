@@ -35,7 +35,7 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { inputType }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -55,7 +55,7 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -75,7 +75,7 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type, input3Type }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 
@@ -95,7 +95,7 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 	
@@ -115,7 +115,7 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, input5Type }, //
-				new Nil[] { outputType }, //
+				outputType, //
 				secondaryArgs);
 	}
 }

@@ -5,29 +5,43 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.transform.OpMapper;
 import org.scijava.ops.transform.OpRefTransformUtils;
+import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.util.Maps;
 import org.scijava.plugin.Plugin;
 import org.scijava.util.Types;
 
+/**
+ * @author David Kolb
+ */
 @Plugin(type = OpTransformer.class)
-public class LiftFunctionToArrayTransformer implements OpTransformer {
+public class LiftFunctionToArrayTransformer<I, O> implements OpMapper<Function<I, O>, Function<I[], O[]>> {
 
 	@Override
-	public Object transform(OpService opService, OpRef targetRef, Object src) {
-		Class<?> outRaw = Types.raw(getRefTransformingTo(targetRef).getOutType());
-		return Maps.Functions.Arrays.liftBoth((Function) src, outRaw);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Class<Function<I, O>> srcClass() {
+		return (Class) Function.class;
 	}
 
 	@Override
-	public OpRef getRefTransformingTo(OpRef toRef) {
-		return OpRefTransformUtils.unliftTransform(toRef, Function.class, Array.class, new Integer[] {},
-				new Integer[] { 0 }, new Integer[] { 0 });
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Class<Function<I[], O[]>> targetClass() {
+		return (Class) Function.class;
 	}
 
 	@Override
-	public Class<?> srcClass() {
-		return Function.class;
+	public Function<I[], O[]> transformTypesafe(final OpService opService, final Function<I, O> src,
+		final OpRef targetRef) throws OpTransformationException
+	{
+		final Class<O> outRaw = (Class<O>) Types.raw(getRefTransformingTo(targetRef).getOutType());
+		return Maps.Functions.Arrays.liftBoth(src, outRaw);
+	}
+
+	@Override
+	public OpRef getRefTransformingTo(final OpRef targetRef) {
+		return OpRefTransformUtils.unliftTransform(targetRef, Function.class, Array.class, new Integer[] {}, new Integer[] {
+			0 }, new Integer[] { 0 });
 	}
 }

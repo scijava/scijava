@@ -102,7 +102,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			for (final OpInfo info : ops.infos(ref.getName())) {
 				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
-					candidates.add(new OpCandidate(ops, ref, info, typeVarAssigns));
+					candidates.add(new OpCandidate(ops, log, ref, info, typeVarAssigns));
 				}
 			}
 		}

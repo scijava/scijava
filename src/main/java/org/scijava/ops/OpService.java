@@ -254,11 +254,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return infos;
 	}
 
-	@Override
-	public LogService logger() {
-		return log;
-	}
-
 	/**
 	 * Attempts to inject {@link OpDependency} annotated fields of the specified
 	 * object by looking for Ops matching the field type and the name specified in

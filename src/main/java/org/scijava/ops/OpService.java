@@ -184,7 +184,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		// Add regular Ops
 		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
 			try {
-				final Class<? extends Op> opClass = pluginInfo.loadClass();
+				final Class<?> opClass = pluginInfo.loadClass();
 				OpInfo opInfo = new OpClassInfo(opClass);
 				addToCache(opInfo, pluginInfo.getName());
 

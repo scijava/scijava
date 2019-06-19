@@ -36,10 +36,11 @@ import java.lang.reflect.Type;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 
 import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.TypeExtractor;
 import org.scijava.ops.types.TypeService;
+import org.scijava.plugin.Parameter;
+import org.scijava.plugin.Plugin;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory} objects.
@@ -61,9 +62,7 @@ public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBound
 	public Type reify(final OutOfBoundsFactory<?, ?> o, final int n) {
 		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
 		
-		if(n == 0) {
-		}
-		// otherwise n == 1
+		return new Any();
 
 	}
 

@@ -100,6 +100,12 @@ import org.scijava.util.MersenneTwisterFast;
  * @author Curtis Rueden
  */
 public abstract class AbstractOpTest extends AbstractTestEnvironment{
+	
+	@Override
+	public void setUp() {
+		super.setUp();
+		context = createContext();
+	}
 
 	/** Subclasses can override to create a context with different services. */
 	protected Context createContext() {

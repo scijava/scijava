@@ -68,18 +68,6 @@ public final class OpUtils {
 	// -- Utility methods --
 
 	/**
-	 * The canonical op name is defined as the first name in the list of op
-	 * names used for each op. This method will call
-	 * {@link #parseOpNames(String)} and return the first one.
-	 * 
-	 * @param names
-	 * @return
-	 */
-	public static String getCanonicalOpName(String names) {
-		return parseOpNames(names)[0];
-	}
-
-	/**
 	 * Parses op names contained in specified String according to the following
 	 * format:
 	 * 

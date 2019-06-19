@@ -8,8 +8,8 @@ import org.scijava.Context;
 
 public abstract class AbstractTestEnvironment {
 
-	private static Context context;
-	private static OpService ops;
+	private Context context;
+	private OpService ops;
 
 	@Before
 	public void setUp() {
@@ -24,7 +24,7 @@ public abstract class AbstractTestEnvironment {
 		ops = null;
 	}
 	
-	public static OpService ops() {
+	public OpService ops() {
 		return ops;
 	}
 	

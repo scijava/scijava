@@ -29,16 +29,17 @@
 
 package net.imagej.ops.filter.ifft;
 
-import net.imagej.ops.Contingent;
-import net.imagej.ops.Ops;
-import net.imagej.ops.special.inplace.AbstractUnaryInplaceOp;
+import java.util.concurrent.ExecutorService;
+
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.plugin.Parameter;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
+import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.thread.ThreadService;
+import org.scijava.struct.ItemIO;
 
 /**
  * Inverse FFT inplace operator -- complex to complex only, output size must
@@ -48,46 +49,43 @@ import org.scijava.thread.ThreadService;
  * 
  * @author Brian Northan
  */
-@Plugin(type = Ops.Filter.IFFT.class)
-public class IFFTMethodsOpI<C extends ComplexType<C>> extends
-	AbstractUnaryInplaceOp<RandomAccessibleInterval<C>> implements
-	Ops.Filter.IFFT, Contingent
-{
-
-	@Parameter
-	ThreadService ts;
+@Plugin(type = Op.class, name = "filter.fft")
+@Parameter(key = "input", type = ItemIO.BOTH)
+@Parameter(key = "executorService")
+public class IFFTMethodsOpI<C extends ComplexType<C>>
+		implements BiInplaceFirst<RandomAccessibleInterval<C>, ExecutorService> {
 
 	/**
 	 * Compute an ND inverse FFT
 	 */
 	@Override
-	public void mutate(final RandomAccessibleInterval<C> inout) {
+	public void mutate(final RandomAccessibleInterval<C> inout, final ExecutorService es) {
+		if (!conforms(inout))
+			throw new IllegalArgumentException("The input size does not conform to a supported FFT size!");
 		for (int d = inout.numDimensions() - 1; d >= 0; d--)
-			FFTMethods.complexToComplex(inout, d, false, true, ts
-				.getExecutorService());
+			FFTMethods.complexToComplex(inout, d, false, true, es);
 	}
 
 	/**
 	 * Make sure that the input size conforms to a supported FFT size.
 	 */
-	@Override
-	public boolean conforms() {
+	public boolean conforms(final RandomAccessibleInterval inout) {
 
-		long[] paddedDimensions = new long[in().numDimensions()];
+		long[] paddedDimensions = new long[inout.numDimensions()];
 
 		boolean fastSizeConforms = false;
 
-		FFTMethods.dimensionsComplexToComplexFast(in(), paddedDimensions);
+		FFTMethods.dimensionsComplexToComplexFast(inout, paddedDimensions);
 
-		if (FFTMethods.dimensionsEqual(in(), paddedDimensions) == true) {
+		if (FFTMethods.dimensionsEqual(inout, paddedDimensions) == true) {
 			fastSizeConforms = true;
 		}
 
 		boolean smallSizeConforms = false;
 
-		FFTMethods.dimensionsComplexToComplexSmall(in(), paddedDimensions);
+		FFTMethods.dimensionsComplexToComplexSmall(inout, paddedDimensions);
 
-		if ((FFTMethods.dimensionsEqual(in(), paddedDimensions) == true)) {
+		if (FFTMethods.dimensionsEqual(inout, paddedDimensions) == true) {
 			smallSizeConforms = true;
 		}
 

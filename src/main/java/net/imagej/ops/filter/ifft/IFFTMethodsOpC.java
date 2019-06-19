@@ -30,20 +30,19 @@
 package net.imagej.ops.filter.ifft;
 
 import java.util.concurrent.ExecutorService;
+import java.util.function.Function;
 
-import net.imagej.ops.Ops;
-import net.imagej.ops.special.chain.RAIs;
-import net.imagej.ops.special.function.UnaryFunctionOp;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.plugin.Parameter;
+import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.thread.ThreadService;
+import org.scijava.struct.ItemIO;
 
 /**
  * Inverse FFT computer that operates on an RAI and wraps FFTMethods. The input
@@ -56,63 +55,53 @@ import org.scijava.thread.ThreadService;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "filter.ifft")
+@Parameter(key = "input")
+@Parameter(key = "executorService")
+@Parameter(key = "output", type = ItemIO.BOTH)
 public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
-	implements
-	BiComputer<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>>
-{
+		implements BiComputer<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
 
-	@Parameter
-	ThreadService ts;
-
-	private UnaryFunctionOp<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> copyOp;
-
-	@Override
-	public void initialize() {
-		super.initialize();
-		copyOp = RAIs.function(ops(), Ops.Copy.RAI.class, in());
-	}
+	@OpDependency(name = "copy.rai")
+	private Function<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> copyOp;
 
 	/**
 	 * Compute an ND inverse FFT
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<C> input,
-		final RandomAccessibleInterval<T> output)
-	{
-		final RandomAccessibleInterval<C> temp = copyOp.calculate(input);
+	public void compute(final RandomAccessibleInterval<C> input, final ExecutorService es,
+			final RandomAccessibleInterval<T> output) {
+		if (!conforms(input))
+			throw new IllegalArgumentException("The input image dimensions to not conform to a supported FFT size");
+
+		final RandomAccessibleInterval<C> temp = copyOp.apply(input);
 
 		for (int d = input.numDimensions() - 1; d > 0; d--)
-			FFTMethods.complexToComplex(temp, d, false, true, ts
-				.getExecutorService());
+			FFTMethods.complexToComplex(temp, d, false, true, es);
 
-		FFTMethods.complexToReal(temp, output, FFTMethods.unpaddingIntervalCentered(
-			temp, output), 0, true, ts.getExecutorService());
+		FFTMethods.complexToReal(temp, output, FFTMethods.unpaddingIntervalCentered(temp, output), 0, true, es);
 	}
 
 	/**
 	 * Make sure that the input size conforms to a supported FFT size.
 	 */
-	@Override
-	public boolean conforms() {
+	public boolean conforms(RandomAccessibleInterval<C> input) {
 
-		long[] paddedDimensions = new long[in().numDimensions()];
-		long[] realDimensions = new long[in().numDimensions()];
+		long[] paddedDimensions = new long[input.numDimensions()];
+		long[] realDimensions = new long[input.numDimensions()];
 
 		boolean fastSizeConforms = false;
 
-		FFTMethods.dimensionsComplexToRealFast(in(), paddedDimensions,
-			realDimensions);
+		FFTMethods.dimensionsComplexToRealFast(input, paddedDimensions, realDimensions);
 
-		if (FFTMethods.dimensionsEqual(in(), paddedDimensions) == true) {
+		if (FFTMethods.dimensionsEqual(input, paddedDimensions) == true) {
 			fastSizeConforms = true;
 		}
 
 		boolean smallSizeConforms = false;
 
-		FFTMethods.dimensionsComplexToRealSmall(in(), paddedDimensions,
-			realDimensions);
+		FFTMethods.dimensionsComplexToRealSmall(input, paddedDimensions, realDimensions);
 
-		if (FFTMethods.dimensionsEqual(in(), paddedDimensions) == true) {
+		if (FFTMethods.dimensionsEqual(input, paddedDimensions) == true) {
 			smallSizeConforms = true;
 		}
 

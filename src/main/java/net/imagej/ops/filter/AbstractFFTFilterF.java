@@ -29,22 +29,22 @@
 
 package net.imagej.ops.filter;
 
-import net.imagej.ops.filter.fft.CreateOutputFFTMethods;
-import net.imagej.ops.filter.pad.PadInputFFTMethods;
-import net.imagej.ops.filter.pad.PadShiftKernelFFTMethods;
-import net.imagej.ops.special.computer.BinaryComputerOp;
-import net.imagej.ops.special.function.BinaryFunctionOp;
-import net.imagej.ops.special.function.Functions;
-import net.imagej.ops.special.function.UnaryFunctionOp;
+import java.util.function.BiFunction;
+
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.complex.ComplexFloatType;
 
-import org.scijava.plugin.Parameter;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.core.function.Function7;
+import org.scijava.ops.util.Adapt;
 
 /**
  * Abstract class for binary filter that performs operations using an image and
@@ -57,71 +57,57 @@ import org.scijava.plugin.Parameter;
  * @param <C>
  */
 public abstract class AbstractFFTFilterF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>, C extends ComplexType<C> & NativeType<C>>
-	extends AbstractFilterF<I, O, K, C>
-{
+		extends AbstractFilterF<I, O, K, C> implements
+		Function7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, C, O, RandomAccessibleInterval<O>> {
 
-	/**
-	 * FFT type
-	 */
-	@Parameter(required = false)
-	private ComplexType<C> fftType;
+	// /**
+	// * FFT type
+	// */
+	// @Parameter(required = false)
+	// private ComplexType<C> fftType;
 
-	/**
-	 * Op used to create the complex FFTs
-	 */
-	private UnaryFunctionOp<Dimensions, RandomAccessibleInterval<C>> createOp;
+	@OpDependency(name = "filter.pad")
+	private Function4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
+
+	@OpDependency(name = "filter.padShiftFFTKernel")
+	private BiFunction<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp;
+
+	@OpDependency(name = "filter.createFFTOutput")
+	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
+
+	@OpDependency(name = "create.img")
+	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> outputCreator;
+
+	private C complexType;
 
 	/**
 	 * Filter Op
 	 */
-	private BinaryComputerOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter;
+	private BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter;
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void initialize() {
-		super.initialize();
-
-		/**
-		 * Op used to pad the input
-		 */
-		setPadOp((BinaryFunctionOp) Functions.binary(ops(),
-			PadInputFFTMethods.class, RandomAccessibleInterval.class,
-			RandomAccessibleInterval.class, Dimensions.class, true, getOBFInput()));
-
-		/**
-		 * Op used to pad the kernel
-		 */
-		setPadKernelOp((BinaryFunctionOp) Functions.binary(ops(),
-			PadShiftKernelFFTMethods.class, RandomAccessibleInterval.class,
-			RandomAccessibleInterval.class, Dimensions.class, true));
-
-		if (fftType == null) {
-			fftType = (ComplexType<C>) ops().create().nativeType(
-				ComplexFloatType.class);
-		}
-
-		/**
-		 * Op used to create the complex FFTs
-		 */
-		createOp = (UnaryFunctionOp) Functions.unary(ops(),
-			CreateOutputFFTMethods.class, RandomAccessibleInterval.class,
-			Dimensions.class, fftType, true);
+	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
+			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
+			final OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			final OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel, C fftType, final O outType) {
+		final RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
+		BiFunction<RandomAccessibleInterval<I>, Dimensions, RandomAccessibleInterval<I>> adaptedPadInput = Adapt.Functions
+				.asBiFunction(padOp, true, obfInput);
+		complexType = fftType;
+		computeOutput(input, kernel, borderSize, obfInput, obfKernel, adaptedPadInput, padKernelOp, output);
+		return output;
 	}
 
 	/**
 	 * create FFT memory, create FFT filter and run it
 	 */
 	@Override
-	public void computeFilter(final RandomAccessibleInterval<I> input,
-		final RandomAccessibleInterval<K> kernel,
-		RandomAccessibleInterval<O> output, long[] paddedSize)
-	{
+	public void computeFilter(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<K> kernel,
+			RandomAccessibleInterval<O> output, long[] paddedSize) {
 
-		RandomAccessibleInterval<C> fftInput = createOp.calculate(
-			new FinalDimensions(paddedSize));
+		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(paddedSize), complexType, true);
 
-		RandomAccessibleInterval<C> fftKernel = createOp.calculate(
-			new FinalDimensions(paddedSize));
+		RandomAccessibleInterval<C> fftKernel = createOp.apply(new FinalDimensions(paddedSize), complexType, true);
 
 		// TODO: in this case it is difficult to match the filter op in the
 		// 'initialize' as we don't know the size yet, thus we can't create
@@ -142,10 +128,8 @@ public abstract class AbstractFFTFilterF<I extends RealType<I>, O extends RealTy
 	 * @param fftKernel
 	 * @param output
 	 */
-	abstract public
-		BinaryComputerOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>>
-		createFilterComputer(RandomAccessibleInterval<I> raiExtendedInput,
-			RandomAccessibleInterval<K> raiExtendedKernel,
+	abstract public BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
+			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
 			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
 			RandomAccessibleInterval<O> output);
 

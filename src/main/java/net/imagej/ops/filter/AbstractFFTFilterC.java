@@ -29,16 +29,16 @@
 
 package net.imagej.ops.filter;
 
-import net.imagej.ops.filter.fft.CreateOutputFFTMethods;
-import net.imagej.ops.special.function.Functions;
-import net.imagej.ops.special.function.UnaryFunctionOp;
+import java.util.function.Function;
+
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.complex.ComplexFloatType;
 
-import org.scijava.ops.core.computer.Computer6;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.util.Adapt;
 
 /**
  * Abstract class for FFT based filter computers
@@ -50,61 +50,41 @@ import org.scijava.ops.core.computer.Computer6;
  * @param <K>
  * @param <C>
  */
-public abstract class AbstractFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements
-		Computer6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> {
+public abstract class AbstractFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>{
 
-//	/**
-//	 * Buffer to be used to store FFTs for input. Size of fftInput must correspond
-//	 * to the fft size of raiExtendedInput
-//	 */
-//	@Parameter(required = false)
-//	private RandomAccessibleInterval<C> fftInput;
-//
-//	/**
-//	 * Buffer to be used to store FFTs for kernel. Size of fftKernel must correspond
-//	 * to the fft size of raiExtendedKernel
-//	 */
-//	@Parameter(required = false)
-//	private RandomAccessibleInterval<C> fftKernel;
-//
-//	/**
-//	 * boolean indicating that the input FFT has already been calculated
-//	 */
-//	@Parameter(required = false)
-//	private boolean performInputFFT = true;
-//
-//	/**
-//	 * boolean indicating that the kernel FFT has already been calculated
-//	 */
-//	@Parameter(required = false)
-//	private boolean performKernelFFT = true;
+	/**
+	 * Buffer to be used to store FFTs for input. Size of fftInput must correspond
+	 * to the fft size of raiExtendedInput
+	 */
+	private RandomAccessibleInterval<C> fftInput;
+
+	/**
+	 * Buffer to be used to store FFTs for kernel. Size of fftKernel must correspond
+	 * to the fft size of raiExtendedKernel
+	 */
+	private RandomAccessibleInterval<C> fftKernel;
+
+	/**
+	 * boolean indicating that the input FFT has already been calculated
+	 */
+	private boolean performInputFFT = true;
+
+	/**
+	 * boolean indicating that the kernel FFT has already been calculated
+	 */
+	private boolean performKernelFFT = true;
 
 	/**
 	 * FFT type
 	 */
-	private ComplexType<C> fftType;
+	private C fftType;
 
 	/**
 	 * Op used to create the complex FFTs
+	 * NOTE: Boolean is always true.
 	 */
-	private UnaryFunctionOp<Dimensions, RandomAccessibleInterval<C>> createOp;
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void initialize() {
-		super.initialize();
-
-		if (fftType == null) {
-			fftType = (ComplexType<C>) ops().create().nativeType(ComplexFloatType.class);
-		}
-
-		/**
-		 * Op used to create the complex FFTs
-		 */
-		createOp = (UnaryFunctionOp) Functions.unary(ops(), CreateOutputFFTMethods.class,
-				RandomAccessibleInterval.class, Dimensions.class, fftType, true);
-	}
+	@OpDependency(name = "filter.createFFTOutput")
+	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	protected RandomAccessibleInterval<C> getFFTInput() {
 		return fftInput;
@@ -130,8 +110,8 @@ public abstract class AbstractFFTFilterC<I extends RealType<I>, O extends RealTy
 		return performKernelFFT;
 	}
 
-	public UnaryFunctionOp<Dimensions, RandomAccessibleInterval<C>> getCreateOp() {
-		return createOp;
+	public Function<Dimensions, RandomAccessibleInterval<C>> getCreateOp() {
+		return Adapt.Functions.asFunction(createOp, fftType, true);
 	}
 
 }

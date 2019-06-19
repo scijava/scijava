@@ -29,13 +29,9 @@
 
 package net.imagej.ops.filter.convolve;
 
+import java.util.concurrent.ExecutorService;
+
 import net.imagej.ops.filter.AbstractFFTFilterC;
-import net.imagej.ops.filter.FFTMethodsLinearFFTFilterC;
-import net.imagej.ops.math.IIToIIOutputII;
-import net.imagej.ops.special.computer.BinaryComputerOp;
-import net.imagej.ops.special.computer.Computers;
-import net.imagej.ops.special.hybrid.BinaryHybridCF;
-import net.imagej.ops.special.hybrid.Hybrids;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
@@ -43,6 +39,10 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.Computer7;
+import org.scijava.ops.core.computer.Computer8;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -62,29 +62,18 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "fftInput")
 @Parameter(key = "fftKernel")
 @Parameter(key = "performInputFFT")
+@Parameter(key = "performKernelFFT")
+@Parameter(key = "executorService")
 @Parameter(key = "output", type = ItemIO.BOTH)
 public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		extends AbstractFFTFilterC<I, O, K, C> {
+		extends AbstractFFTFilterC<I, O, K, C> implements
+		Computer7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "math.multiply")
-	private BinaryHybridCF<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
+	private BiComputer<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
 
-	private BinaryComputerOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> linearFilter;
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void initialize() {
-		super.initialize();
-
-		mul = Hybrids.binaryCF(ops(), IIToIIOutputII.Multiply.class, getFFTInput(), getFFTKernel(), getFFTInput());
-
-		// create a convolver by creating a linear filter and passing the multiplier as
-		// the frequency operation
-		linearFilter = (BinaryComputerOp) Computers.binary(ops(), FFTMethodsLinearFFTFilterC.class,
-				RandomAccessibleInterval.class, RandomAccessibleInterval.class, RandomAccessibleInterval.class,
-				getFFTInput(), getFFTKernel(), getPerformInputFFT(), getPerformKernelFFT(), mul);
-
-	}
+	@OpDependency(name = "filter.linearFilter")
+	private Computer8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, BiComputer<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> linearFilter;
 
 	/**
 	 * Call the linear filter that is set up to perform convolution
@@ -92,7 +81,29 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
-			Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
-		linearFilter.compute(in, kernel, out);
+			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {
+		linearFilter.compute(in, kernel, fftInput, fftKernel, performInputFFT, performKernelFFT, es, mul, out);
+	}
+}
+
+@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.LOW)
+@Parameter(key = "input")
+@Parameter(key = "kernel")
+@Parameter(key = "fftInput")
+@Parameter(key = "fftKernel")
+@Parameter(key = "executorService")
+@Parameter(key = "output", type = ItemIO.BOTH)
+class ConvolveFFTCSimple<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
+		implements
+		Computer5<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>> {
+
+	@OpDependency(name = "filter.convolve")
+	private Computer7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> convolveOp;
+
+	@Override
+	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
+			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
+			RandomAccessibleInterval<O> output) {
+		convolveOp.compute(in, kernel, fftInput, fftKernel, true, true, es, output);
 	}
 }

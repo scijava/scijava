@@ -36,7 +36,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction() {
-		Double answer = (Double) ops().run("test.Function", 1.0);
+		Double answer = (Double) ops.run("test.Function", 1.0);
 		Assert.assertEquals(2.0, answer, 0);
 	}
 
@@ -48,7 +48,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunBiFunction() {
-		Double answer = (Double) ops().run("test.BiFunction", 1.0, 1.0);
+		Double answer = (Double) ops.run("test.BiFunction", 1.0, 1.0);
 		Assert.assertEquals(2.0, answer, 0);
 	}
 
@@ -62,7 +62,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction3() {
-		Double answer = (Double) ops().run("test.Function3", 1.0, 1.0, 1.0);
+		Double answer = (Double) ops.run("test.Function3", 1.0, 1.0, 1.0);
 		Assert.assertEquals(3.0, answer, 0);
 	}
 
@@ -77,7 +77,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction4() {
-		Double answer = (Double) ops().run("test.Function4", 1.0, 1.0, 1.0, 1.0);
+		Double answer = (Double) ops.run("test.Function4", 1.0, 1.0, 1.0, 1.0);
 		Assert.assertEquals(4.0, answer, 0);
 	}
 
@@ -93,7 +93,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction5() {
-		Double answer = (Double) ops().run("test.Function5", 1.0, 1.0, 1.0, 1.0, 1.0);
+		Double answer = (Double) ops.run("test.Function5", 1.0, 1.0, 1.0, 1.0, 1.0);
 		Assert.assertEquals(5.0, answer, 0);
 	}
 
@@ -112,7 +112,7 @@ public class RunTest extends AbstractTestEnvironment {
 	public void testRunComputer() {
 		double[] arr1 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops().run("test.Computer", arr1, out);
+		ops.run("test.Computer", arr1, out);
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, out, 0);
 	}
 
@@ -131,7 +131,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] arr1 = { 1, 2, 3 };
 		double[] arr2 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops().run("test.BiComputer", arr1, arr2, out);
+		ops.run("test.BiComputer", arr1, arr2, out);
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, out, 0);
 	}
 
@@ -152,7 +152,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] arr2 = { 1, 2, 3 };
 		double[] arr3 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops().run("test.Computer3", arr1, arr2, arr3, out);
+		ops.run("test.Computer3", arr1, arr2, arr3, out);
 		Assert.assertArrayEquals(new double[] { 3, 6, 9 }, out, 0);
 	}
 
@@ -176,7 +176,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] arr3 = { 1, 2, 3 };
 		double[] arr4 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops().run("test.Computer4", arr1, arr2, arr3, arr4, out);
+		ops.run("test.Computer4", arr1, arr2, arr3, arr4, out);
 		Assert.assertArrayEquals(new double[] { 4, 8, 12 }, out, 0);
 	}
 
@@ -202,7 +202,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] arr4 = { 1, 2, 3 };
 		double[] arr5 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops().run("test.Computer5", arr1, arr2, arr3, arr4, arr5, out);
+		ops.run("test.Computer5", arr1, arr2, arr3, arr4, arr5, out);
 		Assert.assertArrayEquals(new double[] { 5, 10, 15 }, out, 0);
 	}
 
@@ -218,7 +218,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Test
 	public void testRunInplace() {
 		double[] io = { 1, 2, 3 };
-		ops().run("test.Inplace", io);
+		ops.run("test.Inplace", io);
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, io, 0);
 	}
 
@@ -234,7 +234,7 @@ public class RunTest extends AbstractTestEnvironment {
 	public void testRunBiInplaceFirst() {
 		double[] io = { 1, 2, 3 };
 		double[] in2 = { 1, 2, 3 };
-		ops().run("test.BiInplaceFirst", io, in2);
+		ops.run("test.BiInplaceFirst", io, in2);
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, io, 0);
 	}
 
@@ -250,7 +250,7 @@ public class RunTest extends AbstractTestEnvironment {
 	public void testRunBiInplaceSecond() {
 		double[] in1 = { 1, 2, 3 };
 		double[] io = { 1, 2, 3 };
-		ops().run("test.BiInplaceSecond", in1, io);
+		ops.run("test.BiInplaceSecond", in1, io);
 		Assert.assertArrayEquals(new double[] { 1, 4, 9 }, io, 0);
 	}
 
@@ -270,7 +270,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] io = { 1, 2, 3 };
 		double[] in2 = { 1, 2, 3 };
 		double[] in3 = { 1, 2, 3 };
-		ops().run("test.Inplace3First", io, in2, in3);
+		ops.run("test.Inplace3First", io, in2, in3);
 		Assert.assertArrayEquals(new double[] { 3, 6, 9 }, io, 0);
 	}
 
@@ -294,7 +294,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] in2 = { 1, 2, 3 };
 		double[] in3 = { 1, 2, 3 };
 		double[] in4 = { 1, 2, 3 };
-		ops().run("test.Inplace4First", io, in2, in3, in4);
+		ops.run("test.Inplace4First", io, in2, in3, in4);
 		Assert.assertArrayEquals(new double[] { 4, 8, 12 }, io, 0);
 	}
 	
@@ -321,7 +321,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] in3 = { 1, 2, 3 };
 		double[] in4 = { 1, 2, 3 };
 		double[] in5 = { 1, 2, 3 };
-		ops().run("test.Inplace5First", io, in2, in3, in4, in5);
+		ops.run("test.Inplace5First", io, in2, in3, in4, in5);
 		Assert.assertArrayEquals(new double[] { 5, 10, 15 }, io, 0);
 	}
 

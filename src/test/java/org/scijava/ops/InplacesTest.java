@@ -42,7 +42,7 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryInplaces() {
-		Inplace<double[]> inplaceSqrt = Inplaces.unary(ops(), "math.sqrt", nilDoubleArray);
+		Inplace<double[]> inplaceSqrt = Inplaces.unary(ops, "math.sqrt", nilDoubleArray);
 		final double[] a1 = { 4, 100, 36 };
 		inplaceSqrt.mutate(a1);
 		assert arrayEquals(a1, 2.0, 10.0, 6.0);
@@ -50,7 +50,7 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryInplaces() {
-		final BiInplaceFirst<double[], double[]> inplaceAdd = Inplaces.binary1(ops(), "math.add", nilDoubleArray,
+		final BiInplaceFirst<double[], double[]> inplaceAdd = Inplaces.binary1(ops, "math.add", nilDoubleArray,
 				nilDoubleArray);
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };

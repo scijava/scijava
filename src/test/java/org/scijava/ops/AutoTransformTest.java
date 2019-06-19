@@ -49,7 +49,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		// There is no sqrt function for iterables in the system, however we can auto
 		// transform
 		// as there is a lifter for Functions to iterables
-		Function<Iterable<Double>, Iterable<Double>> sqrtFunction = ops().findOp( //
+		Function<Iterable<Double>, Iterable<Double>> sqrtFunction = ops.findOp( //
 				"math.sqrt", new Nil<Function<Iterable<Double>, Iterable<Double>>>() {
 				}, //
 				new Nil[] { nilIterableDouble }, //
@@ -62,7 +62,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 
 	@Test
 	public void autoFunctionToComputer() {
-		Function<double[], double[]> sqrtArrayFunction = ops().findOp( //
+		Function<double[], double[]> sqrtArrayFunction = ops.findOp( //
 				"math.sqrt", new Nil<Function<double[], double[]>>() {
 				}, //
 				new Nil[] { Nil.of(double[].class) }, //
@@ -74,7 +74,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 
 	@Test
 	public void autoBiFunctionToBiComputer() {
-		BiFunction<double[], double[], double[]> addArrayFunction = ops().findOp( //
+		BiFunction<double[], double[], double[]> addArrayFunction = ops.findOp( //
 				"add", new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { Nil.of(double[].class), Nil.of(double[].class) }, //
@@ -86,7 +86,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 
 	@Test
 	public void autoLiftFuncToArray() {
-		Function<Double[], Double[]> power3ArraysFunc = ops().findOp( //
+		Function<Double[], Double[]> power3ArraysFunc = ops.findOp( //
 				"test.secondaryInputsFunction", new Nil<Function<Double[], Double[]>>() {
 				}, //
 				new Nil[] { Nil.of(Double[].class), Nil.of(double.class) }, //
@@ -100,7 +100,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 
 	@Test
 	public void autoTransformWithSecondaryArgs() {
-		Computer<Double[], Double[]> power3Arrays = ops().findOp( //
+		Computer<Double[], Double[]> power3Arrays = ops.findOp( //
 				"test.secondaryInputsFunction", new Nil<Computer<Double[], Double[]>>() {
 				}, //
 				new Nil[] { Nil.of(Double[].class), Nil.of(Double[].class), Nil.of(double.class) }, //
@@ -118,7 +118,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		Nil<List<double[]>> n = new Nil<List<double[]>>() {
 		};
 
-		Function<List<double[]>, List<double[]>> sqrtListFunction = ops().findOp( //
+		Function<List<double[]>, List<double[]>> sqrtListFunction = ops.findOp( //
 				"test.liftSqrt", new Nil<Function<List<double[]>, List<double[]>>>() {
 				}, //
 				new Nil[] { n }, //

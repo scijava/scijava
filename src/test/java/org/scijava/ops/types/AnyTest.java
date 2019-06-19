@@ -17,10 +17,10 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = (Double) ops().run("test.nestedAny", nthing);
+		Double e = (Double) ops.run("test.nestedAny", nthing);
 
 		Thing<Double> thing = new Thing<>();
-		Double d = (Double) ops().run("test.any", thing);
+		Double d = (Double) ops.run("test.any", thing);
 
 		assert d == 5.;
 		assert e == 5.;
@@ -36,7 +36,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
-		Double d = (Double) ops().run("test.exceptionalAny", ething);
+		Double d = (Double) ops.run("test.exceptionalAny", ething);
 
 	}
 

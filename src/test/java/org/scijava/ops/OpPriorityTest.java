@@ -68,7 +68,7 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testOpCollection() throws ValidityException {
-		BiFunction<Double, Double, Double> divFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> divFunction = ops.findOp( //
 				"math.add", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -82,7 +82,7 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 	@Test
 	public void testOpPriority() {
 
-		Source<Number> testFunc = ops().findOp("test.priority", new Nil<Source<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
+		Source<Number> testFunc = ops.findOp("test.priority", new Nil<Source<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
 		Number x = testFunc.create();
 		assertTrue(x instanceof Double);
 	}

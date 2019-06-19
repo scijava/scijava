@@ -54,7 +54,7 @@ public class LiftTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testliftFunction(){
-		Function<Double, Double> powFunction = Functions.unary(ops(), "test.liftFunction", nilDouble, nilDouble);
+		Function<Double, Double> powFunction = Functions.unary(ops, "test.liftFunction", nilDouble, nilDouble);
 
 		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.Functions.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
@@ -72,7 +72,7 @@ public class LiftTest extends AbstractTestEnvironment {
 	@Test
 	public void testliftComputer() {
 
-		Computer<double[], double[]> powComputer = Computers.unary(ops(), "test.liftComputer", nilDoubleArray, nilDoubleArray);
+		Computer<double[], double[]> powComputer = Computers.unary(ops, "test.liftComputer", nilDoubleArray, nilDoubleArray);
 
 		Computer<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.Computers.Iterables
 				.liftBoth(powComputer);

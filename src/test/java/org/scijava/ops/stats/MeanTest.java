@@ -16,7 +16,7 @@ public class MeanTest <N extends Number> extends AbstractTestEnvironment{
 	@Test
 	public void regressionTest() {
 
-		Function<Iterable<Integer>, Double> goodFunc = Functions.unary(ops(), "stats.mean", new Nil<Iterable<Integer>>() {}, new Nil<Double>() {});
+		Function<Iterable<Integer>, Double> goodFunc = Functions.unary(ops, "stats.mean", new Nil<Iterable<Integer>>() {}, new Nil<Double>() {});
 
 		List<Integer> goodNums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		double expected = 5.5;

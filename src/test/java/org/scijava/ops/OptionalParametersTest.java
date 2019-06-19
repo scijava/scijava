@@ -52,7 +52,7 @@ public class OptionalParametersTest extends AbstractTestEnvironment {
 		double max = 2.9;
 		
 		// Min and max set
-		Function<double[], double[]> normFunction = ops().findOp( //
+		Function<double[], double[]> normFunction = ops.findOp( //
 				"minmax", new Nil<Function<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDouble, nilDouble }, //
@@ -66,7 +66,7 @@ public class OptionalParametersTest extends AbstractTestEnvironment {
 		assertTrue(Math.abs(max - Arrays.stream(res).max().getAsDouble()) < 0.000001);
 		assertTrue(Math.abs(min - Arrays.stream(res).min().getAsDouble()) < 0.000001);
 		
-		normFunction = ops().findOp( //
+		normFunction = ops.findOp( //
 				"minmax", new Nil<Function<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDouble, nilDouble }, //
@@ -82,7 +82,7 @@ public class OptionalParametersTest extends AbstractTestEnvironment {
 	@Test(expected = RuntimeException.class)
 	public void testRequiredMissing() throws ValidityException {
 		// One required, but none are given
-		ops().findOp( //
+		ops.findOp( //
 				"minmax", new Nil<Function<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDouble, nilDouble }, //
@@ -93,7 +93,7 @@ public class OptionalParametersTest extends AbstractTestEnvironment {
 	@Test(expected = RuntimeException.class)
 	public void testTooMannyArgs() throws ValidityException {
 		// One required, one optional, but three given
-		ops().findOp( //
+		ops.findOp( //
 				"minmax", new Nil<Function<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDouble, nilDouble }, //

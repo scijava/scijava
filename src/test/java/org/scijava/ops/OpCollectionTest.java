@@ -42,7 +42,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testOpCollection() throws ValidityException {
-		BiFunction<Double, Double, Double> divFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> divFunction = ops.findOp( //
 				"math.div", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -50,7 +50,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 1.0 == divFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> addFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> addFunction = ops.findOp( //
 				"math.add", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -58,7 +58,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 4.0 == addFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> mulFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> mulFunction = ops.findOp( //
 				"math.mul", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -66,7 +66,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 4.0 == mulFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> subFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> subFunction = ops.findOp( //
 				"math.sub", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -77,7 +77,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testOpAliases() throws ValidityException {
-		BiFunction<Double, Double, Double> divFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> divFunction = ops.findOp( //
 				"div", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -85,7 +85,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 1.0 == divFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> addFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> addFunction = ops.findOp( //
 				"add", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -93,7 +93,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 4.0 == addFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> mulFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> mulFunction = ops.findOp( //
 				"mul", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -101,7 +101,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 4.0 == mulFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> subFunction = ops().findOp( //
+		BiFunction<Double, Double, Double> subFunction = ops.findOp( //
 				"sub", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //

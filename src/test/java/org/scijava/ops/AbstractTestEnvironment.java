@@ -8,8 +8,8 @@ import org.scijava.Context;
 
 public abstract class AbstractTestEnvironment {
 
-	private Context context;
-	private OpService ops;
+	protected Context context;
+	protected OpService ops;
 
 	@Before
 	public void setUp() {
@@ -24,11 +24,7 @@ public abstract class AbstractTestEnvironment {
 		ops = null;
 	}
 	
-	public OpService ops() {
-		return ops;
-	}
-	
-	public static boolean arrayEquals(double[] arr1, Double... arr2) {
+	protected static boolean arrayEquals(double[] arr1, Double... arr2) {
 		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new), arr2);
 	}
 }

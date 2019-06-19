@@ -8,8 +8,7 @@ public interface OpRunner<O> extends KnowsTypes {
 	Object getAdaptedOp();
 
 	@Override
-	default Nil<?>[] outTypes() {
-		return new Nil<?>[] { new Nil<O>() {
-		} };
+	default Nil<?> outType() {
+		return new Nil<O>() {};
 	}
 }

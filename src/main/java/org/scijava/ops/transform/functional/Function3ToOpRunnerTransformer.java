@@ -43,8 +43,8 @@ public class Function3ToOpRunnerTransformer implements FunctionalTypeTransformer
 	}
 
 	@Override
-	public Type[] getTransformedOutputTypes(OpRef toRef) {
-		return toRef.getOutTypes();
+	public Type getTransformedOutputType(OpRef toRef) {
+		return toRef.getOutType();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class Function3ToOpRunnerTransformer implements FunctionalTypeTransformer
 		// OpRunner) into one array so that we can use them to parameterize the
 		// BiFunction.
 		Type[] toParamTypes = Stream
-				.concat(Arrays.stream(getTransformedArgTypes(toRef)), Arrays.stream(getTransformedOutputTypes(toRef)))
+				.concat(Arrays.stream(getTransformedArgTypes(toRef)), Stream.of(getTransformedOutputType(toRef)))
 				.toArray(Type[]::new);
 
 		// parameterize the OpRef types with the 3 BiFunction type parameters
@@ -64,7 +64,7 @@ public class Function3ToOpRunnerTransformer implements FunctionalTypeTransformer
 		// from here it is the s
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, targetClass(), srcClass());
 		if (hit) {
-			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputTypes(toRef),
+			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputType(toRef),
 					getTransformedArgTypes(toRef));
 		}
 		return null;

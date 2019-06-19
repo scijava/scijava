@@ -231,8 +231,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?>[] outTypes, final Object... secondaryArgs) {
-		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), toTypes(outTypes), toTypes(inTypes));
+			final Nil<?> outType, final Object... secondaryArgs) {
+		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), outType != null ? outType.getType() : null, toTypes(
+			inTypes));
 		return (T) findOpInstance(opName, ref, secondaryArgs);
 	}
 
@@ -278,14 +279,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return op;
 	}
 
-	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?>[] outTypes,
-			final Object... secondaryArgs) {
-		return findOpInstance(opName, specialType, inTypes, outTypes, secondaryArgs);
-	}
-
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType,
 			final Object... secondaryArgs) {
-		return findOpInstance(opName, specialType, inTypes, new Nil[] { outType }, secondaryArgs);
+		return findOpInstance(opName, specialType, inTypes, outType, secondaryArgs);
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -295,11 +291,10 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	public Object run(final String opName, final Object... args) {
 
 		Nil<?>[] inTypes = Arrays.stream(args).map(arg -> Nil.of(typeService.reify(arg))).toArray(Nil[]::new);
-		Nil<?>[] outTypes = new Nil<?>[] { new Nil<Object>() {
-		} };
+		Nil<?> outType = new Nil<Object>() {};
 
 		OpRunner<Object> op = findOpInstance(opName, new Nil<OpRunner<Object>>() {
-		}, inTypes, outTypes);
+		}, inTypes, outType);
 
 		// TODO change
 		return op.run(args);
@@ -329,7 +324,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * @param name
 	 * @return null if the specified type has no functional method
 	 */
-	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns) {
+	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns)
+		throws OpMatchingException
+	{
 		List<FunctionalMethodType> fmts = ParameterStructs.getFunctionalMethodTypes(type);
 		if (fmts == null)
 			return null;
@@ -346,7 +343,16 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		Type[] mappedInputs = Types.mapVarToTypes(inputs, typeVarAssigns);
 		Type[] mappedOutputs = Types.mapVarToTypes(outputs, typeVarAssigns);
 
-		return new OpRef(name, new Type[] { type }, mappedOutputs, mappedInputs);
+		final int numOutputs = mappedOutputs.length;
+		if (numOutputs != 1) {
+			String error = "Op '" + name + "' of type " + type + " specifies ";
+			error += numOutputs == 0 //
+				? "no outputs" //
+				: "multiple outputs: " + Arrays.toString(outputs);
+			error += ". This is not supported.";
+			throw new OpMatchingException(error);
+		}
+		return new OpRef(name, new Type[] { type }, mappedOutputs[0], mappedInputs);
 	}
 
 	/**

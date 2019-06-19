@@ -21,7 +21,7 @@ public interface FunctionalTypeTransformer extends OpTransformer {
 		if(Types.raw(refTypes[0]) != targetClass()) return null;
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, targetClass(), srcClass());
 		if (hit) {
-			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputTypes(toRef),
+			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputType(toRef),
 					getTransformedArgTypes(toRef));
 		}
 		return null;
@@ -52,5 +52,5 @@ public interface FunctionalTypeTransformer extends OpTransformer {
 	 * @return
 	 * @see OpTransformer#getRefTransformingTo(OpRef)
 	 */
-	Type[] getTransformedOutputTypes(OpRef targetRef);
+	Type getTransformedOutputType(OpRef targetRef);
 }

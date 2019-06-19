@@ -8,19 +8,18 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.transform.TypeModUtils;
+import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Functions;
 import org.scijava.plugin.Plugin;
-import org.scijava.ops.types.Nil;
 
 @Plugin(type = OpTransformer.class)
 public class ComputerToFunctionTransformer implements FunctionalTypeTransformer {
 	
 	@Override
 	public Object transform(OpService opService, OpRef ref, Object src) throws Exception {
-		Type[] outTypes = ref.getOutTypes();
 		Type[] argTypes = ref.getArgs();
-		Function srcOp = Functions.unary(opService, "create", Nil.of(argTypes[0]), Nil.of(outTypes[0]));
+		Function srcOp = Functions.unary(opService, "create", Nil.of(argTypes[0]), Nil.of(ref.getOutType()));
 		return Adapt.Computers.asFunction((Computer) src, srcOp);
 	}
 
@@ -36,11 +35,11 @@ public class ComputerToFunctionTransformer implements FunctionalTypeTransformer 
 
 	@Override
 	public Type[] getTransformedArgTypes(OpRef toRef) {
-		return TypeModUtils.insert(toRef.getArgs(), toRef.getOutTypes()[0], 1);
+		return TypeModUtils.insert(toRef.getArgs(), toRef.getOutType(), 1);
 	}
 
 	@Override
-	public Type[] getTransformedOutputTypes(OpRef toRef) {
-		return toRef.getOutTypes();
+	public Type getTransformedOutputType(OpRef toRef) {
+		return toRef.getOutType();
 	}
 }

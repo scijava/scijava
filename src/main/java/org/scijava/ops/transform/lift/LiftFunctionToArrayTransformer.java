@@ -16,7 +16,7 @@ public class LiftFunctionToArrayTransformer implements OpTransformer {
 
 	@Override
 	public Object transform(OpService opService, OpRef targetRef, Object src) {
-		Class<?> outRaw = Types.raw(getRefTransformingTo(targetRef).getOutTypes()[0]);
+		Class<?> outRaw = Types.raw(getRefTransformingTo(targetRef).getOutType());
 		return Maps.Functions.Arrays.liftBoth((Function) src, outRaw);
 	}
 

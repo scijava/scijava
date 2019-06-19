@@ -30,8 +30,8 @@ public interface OpInfo {
 	}
 
 	/** Gets the op's output parameters. */
-	default List<Member<?>> outputs() {
-		return OpUtils.outputs(struct());
+	default Member<?> output() {
+		return OpUtils.outputs(struct()).get(0);
 	}
 
 	/** The op's priority. */

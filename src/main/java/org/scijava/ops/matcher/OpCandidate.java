@@ -53,8 +53,6 @@ public class OpCandidate {
 	public static enum StatusCode {
 		MATCH, //
 		INVALID_STRUCT, //
-		TOO_FEW_OUTPUTS, //
-		TOO_MANY_OUTPUTS,
 		OUTPUT_TYPES_DO_NOT_MATCH, //
 		TOO_MANY_ARGS, //
 		TOO_FEW_ARGS, //
@@ -167,9 +165,6 @@ public class OpCandidate {
 				sb.append("\n\t");
 				sb.append(vp.getMessage());
 			}
-			break;
-		case TOO_FEW_OUTPUTS:
-			sb.append("Too few outputs");
 			break;
 		case OUTPUT_TYPES_DO_NOT_MATCH:
 			sb.append("Output types do not match");

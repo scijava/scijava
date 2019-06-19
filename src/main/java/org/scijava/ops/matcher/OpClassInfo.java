@@ -32,7 +32,6 @@ package org.scijava.ops.matcher;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import org.scijava.core.Priority;
 import org.scijava.ops.OpUtils;
@@ -40,7 +39,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.util.Types;
@@ -61,6 +59,7 @@ public class OpClassInfo implements OpInfo {
 		this.opClass = opClass;
 		try {
 			struct = ParameterStructs.structOf(opClass);
+			OpUtils.checkHasSingleOutput(struct);
 		} catch (ValidityException e) {
 			validityException = e;
 		} 
@@ -78,16 +77,6 @@ public class OpClassInfo implements OpInfo {
 	@Override
 	public Struct struct() {
 		return struct;
-	}
-
-	@Override
-	public List<Member<?>> inputs() {
-		return OpUtils.inputs(struct());
-	}
-
-	@Override
-	public List<Member<?>> outputs() {
-		return OpUtils.outputs(struct());
 	}
 
 	@Override

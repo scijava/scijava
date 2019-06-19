@@ -69,6 +69,7 @@ public class OpFieldInfo implements OpInfo {
 		this.field = field;
 		try {
 			struct = ParameterStructs.structOf(field.getDeclaringClass(), field);
+			OpUtils.checkHasSingleOutput(struct);
 			if (!Modifier.isStatic(field.getModifiers())) {
 				instance = field.getDeclaringClass().newInstance();
 			}

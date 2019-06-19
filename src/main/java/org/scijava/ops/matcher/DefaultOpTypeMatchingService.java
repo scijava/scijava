@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.scijava.Context;
@@ -239,15 +240,9 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			i++;
 		}
 
-		Type[] outputTypes = candidate.getRef().getOutTypes();
-		i = 0;
-		for (final Type t : OpUtils.outputTypes(candidate)) {
-			if (outputTypes[i] != null) {
-				if (!t.equals(outputTypes[i]))
-					return false;
-			}
-			i++;
-		}
+		final Type outputType = candidate.getRef().getOutType();
+		if (Objects.equals(outputType, OpUtils.outputType(candidate)))
+			return false;
 
 		candidate.setStatus(StatusCode.MATCH);
 		return true;
@@ -309,37 +304,26 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	}
 
 	/**
-	 * Checks whether the output types of the candidate match the output types
-	 * of the {@link OpRef}. Sets candidate status code if there are too many,
-	 * to few, or not matching types.
+	 * Checks whether the output type of the candidate matches the output type
+	 * of the {@link OpRef}. Sets candidate status code if they are not matching.
 	 *
 	 * @param candidate
-	 *            the candidate to check outputs for
+	 *            the candidate to check output for
 	 * @param typeBounds
 	 *            possibly predetermined type bounds for type variables
 	 * @return whether the output types match
 	 */
 	private boolean outputsMatch(final OpCandidate candidate, HashMap<TypeVariable<?>, TypeVarInfo> typeBounds) {
-		final Type[] refOutTypes = candidate.getRef().getOutTypes();
-		if (refOutTypes == null)
+		final Type refOutType = candidate.getRef().getOutType();
+		if (refOutType == null)
 			return true; // no constraints on output types
 
-		Type[] candidateOutTypes = OpUtils.outputTypes(candidate);
-		if (candidateOutTypes.length < refOutTypes.length) {
-			candidate.setStatus(StatusCode.TOO_FEW_OUTPUTS);
-			return false;
-		} else if (candidateOutTypes.length > refOutTypes.length) {
-			candidate.setStatus(StatusCode.TOO_MANY_OUTPUTS);
-			return false;
-		}
-
-		int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(candidateOutTypes, refOutTypes,
-				typeBounds);
+		final Type candidateOutType = OpUtils.outputType(candidate);
+		final int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(new Type[] { candidateOutType },
+			new Type[] { refOutType }, typeBounds);
 		if (conflictingIndex != -1) {
-			final Type to = refOutTypes[conflictingIndex];
-			final Type from = candidateOutTypes[conflictingIndex];
 			candidate.setStatus(StatusCode.OUTPUT_TYPES_DO_NOT_MATCH, //
-					"request=" + to.getTypeName() + ", actual=" + from.getTypeName());
+					"request=" + refOutType.getTypeName() + ", actual=" + candidateOutType.getTypeName());
 			return false;
 		}
 		return true;

@@ -36,11 +36,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.matcher.DefaultOpTypeMatchingService;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ParameterMember;
 import org.scijava.param.ParameterStructs;
@@ -253,7 +253,7 @@ public final class OpUtils {
 	 * several matches that do not have equal output types, the output type may not
 	 * completely match the request as only raw type assignability will be checked
 	 * at the moment.
-	 * @see DefaultOpTypeMatchingService#typesMatch(OpCandidate)
+	 * @see OpMatcher#typesMatch(OpCandidate)
 	 * @param matches
 	 * @return
 	 */

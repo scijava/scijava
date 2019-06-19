@@ -7,7 +7,7 @@ import org.scijava.ops.OpUtils;
 
 /**
  * Class representing the result from type matching done by the
- * {@link OpTypeMatchingService}. Contains the original candidates which match
+ * {@link OpMatcher}. Contains the original candidates which match
  * the types specified by {@link OpRef} and the final matches that match all
  * inputs, outputs, and arguments.
  * 

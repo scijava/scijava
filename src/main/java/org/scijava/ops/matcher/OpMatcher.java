@@ -32,18 +32,17 @@ package org.scijava.ops.matcher;
 import java.util.List;
 
 import org.scijava.ops.OpEnvironment;
-import org.scijava.service.SciJavaService;
 
 /**
- * Interface for services that find ops which match an {@link OpRef}.
- * 
+ * Finds Ops which match an {@link OpRef}.
+ *
  * @author Curtis Rueden
  */
 //TODO javadoc
-public interface OpTypeMatchingService extends SciJavaService {
+public interface OpMatcher {
 
-	OpCandidate findSingleMatch(final OpEnvironment ops, final OpRef ref) throws OpMatchingException;
-	
+	OpCandidate findSingleMatch(OpEnvironment ops, OpRef ref) throws OpMatchingException;
+
 	MatchingResult findMatch(OpEnvironment ops, OpRef ref);
 
 	MatchingResult findMatch(OpEnvironment ops, List<OpRef> refs);

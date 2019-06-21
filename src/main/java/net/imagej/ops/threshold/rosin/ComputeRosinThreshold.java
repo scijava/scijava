@@ -38,7 +38,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
-import org.scijava.util.Logger;
 
 /**
  * Implements Rosin's threshold method. From : Rosin, Paul L. "Unimodal
@@ -54,9 +53,7 @@ import org.scijava.util.Logger;
 @Plugin(type = Op.class, name = "threshold.rosin", priority = Priority.HIGH)
 @Parameter(key = "inputHistogram")
 @Parameter(key = "output", type = ItemIO.BOTH)
-public class ComputeRosinThreshold<T extends RealType<T>> extends
-	AbstractComputeThresholdHistogram<T>
-{
+public class ComputeRosinThreshold<T extends RealType<T>> extends AbstractComputeThresholdHistogram<T> {
 
 	@Override
 	public long computeBin(final Histogram1d<T> histo) {
@@ -78,9 +75,11 @@ public class ComputeRosinThreshold<T extends RealType<T>> extends
 		d1 = pk - st;
 		d2 = fi - pk;
 
-		if ((d1 < 0) || (d2 < 0)) {
-			Logger.warn("Histogram peak at a strange location");
-		}
+		// TODO: figure out how to log. If we wanted to pass an OpMonitor then all
+		// thresholds would have to take an OpMonito(?)
+		// if ((d1 < 0) || (d2 < 0)) {
+		// Logger.warn("Histogram peak at a strange location");
+		// }
 
 		if (d1 > d2) {
 			doInvert = true;
@@ -162,7 +161,7 @@ public class ComputeRosinThreshold<T extends RealType<T>> extends
 		}
 
 		end = noPts - 1;
-		while ((Y[end] == 0) && (end >= 0)) {
+		while (Y[end] == 0 && end >= 0) {
 			end--;
 		}
 		noPts = end;
@@ -172,11 +171,11 @@ public class ComputeRosinThreshold<T extends RealType<T>> extends
 
 		for (i = st; i <= noPts; i++) {
 			dist = (Y[st] - Y[noPts - 1]) * X[i] //
-				- (X[st] - X[noPts - 1]) * Y[i] //
-				- (X[noPts - 1] * Y[st]) //
-				+ (X[st] * Y[noPts - 1]);
-			dist = (float) (Math.pow(dist, 2) / (Math.pow(X[st] - X[noPts - 1], 2) +
-				Math.pow(Y[st] - Y[noPts - 1], 2)));
+					- (X[st] - X[noPts - 1]) * Y[i] //
+					- X[noPts - 1] * Y[st] //
+					+ X[st] * Y[noPts - 1];
+			dist = (float) (Math.pow(dist, 2)
+					/ (Math.pow(X[st] - X[noPts - 1], 2) + Math.pow(Y[st] - Y[noPts - 1], 2)));
 			dist = Math.abs(dist);
 
 			if (dist > maxDist) {

@@ -262,9 +262,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			try {
 				op = transformation.exceute(this, secondaryArgs);
 			} catch (OpMatchingException | OpTransformationException e1) {
-				log.debug("Execution of Op transformatioon failed:\n");
-				log.debug(e1);
-
+				throw new IllegalArgumentException("Execution of Op transformatioon failed:\n" + e1);
 			}
 		}
 		try {

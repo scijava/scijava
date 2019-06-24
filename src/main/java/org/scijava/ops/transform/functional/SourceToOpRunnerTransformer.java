@@ -1,5 +1,6 @@
 package org.scijava.ops.transform.functional;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -41,7 +42,7 @@ public class SourceToOpRunnerTransformer implements FunctionalTypeTransformer {
 	public Type getTransformedOutputType(OpRef toRef) {
 		return toRef.getOutType();
 	}
-	
+
 	@Override
 	public OpRef getRefTransformingTo(OpRef toRef) {
 
@@ -52,11 +53,17 @@ public class SourceToOpRunnerTransformer implements FunctionalTypeTransformer {
 				.concat(Arrays.stream(getTransformedArgTypes(toRef)), Arrays.stream(new Type[] {getTransformedOutputType(toRef)}))
 				.toArray(Type[]::new);
 
-		// parameterize the OpRef types with the 3 BiFunction type parameters
+		// if toParamTypes does not contain the number of types needed to parameterize
+		// this op type, return null.
+		int expectedNumTypes = ((ParameterizedType) Types.parameterizeRaw(srcClass())).getActualTypeArguments().length;
+		if (toParamTypes.length != expectedNumTypes)
+			return null;
+
+		// parameterize the OpRef types with the type parameters of the op
 		Type[] refTypes = Arrays.stream(toRef.getTypes())
 				.map(refType -> Types.parameterize(Types.raw(refType), toParamTypes)).toArray(Type[]::new);
 
-		// from here it is the s
+		// if we can make an OpRef out of this, return it. Otherwise return null.
 		boolean hit = TypeModUtils.replaceRawTypes(refTypes, targetClass(), srcClass());
 		if (hit) {
 			return OpRef.fromTypes(toRef.getName(), refTypes, getTransformedOutputType(toRef),

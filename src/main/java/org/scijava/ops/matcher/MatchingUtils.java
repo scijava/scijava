@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
 import org.scijava.util.Types.TypeVarFromParameterizedTypeInfo;
@@ -108,6 +109,8 @@ public final class MatchingUtils {
 		for (int i = 0; i < froms.length; i++) {
 			Type from = froms[i];
 			Type to = tos[i];
+			
+			if (to instanceof Any) continue;
 
 			if (from instanceof TypeVariable) {
 				TypeVarInfo typeVarInfo = typeBounds.get(from);

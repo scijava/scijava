@@ -25,11 +25,24 @@ public class OpTransformationCandidate {
 	public OpCandidate getSourceOp() {
 		return srcOp;
 	}
+	
+//	private void substituteAnyInTransformation() {
+//		// obtain the type info from the matched Op
+//		OpInfo srcInfo = srcOp.opInfo();
+//		List<Member<?>> inputs = srcInfo.inputs();
+//		Member<?> output = srcInfo.output();
+//		
+//		//work through the deepest transformation level any resolve the Any types. TODO: how many levels through do we have to go?
+//		OpRef deepestRef = transformation.getTarget();
+//		deepestRef.
+//		
+//	}
 
 	public Object exceute(OpService opService, List<?> dependencies, Object... secondaryArgs)
 		throws OpMatchingException, OpTransformationException
 	{
 		Object op = srcOp.createOp(dependencies, secondaryArgs);
+//		substituteAnyInTransformation();
 		return transformation.execute(op, opService);
 	}
 

@@ -73,7 +73,7 @@ import org.scijava.util.Types;
 public class FunctionalToOpRunnerTransformer implements OpTransformer {
 
 	@Override
-	public OpRunner<?> transform(final OpService opService, final Object src, final OpRef targetRef)
+	public OpRunner transform(final OpService opService, final Object src, final OpRef targetRef)
 		throws OpTransformationException
 	{
 		final Class<?> srcFunctionalRawType = ParameterStructs.findFunctionalInterface(src.getClass());
@@ -121,7 +121,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 			.anyMatch(t -> OpRunner.class.isAssignableFrom(Types.raw(t)));
 	}
 
-	private static OpRunner<?> computerToRunner(final Object src, final Class<?> srcFunctionalRawType)
+	private static OpRunner computerToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
 		if (src instanceof Computer) return OpRunners.Computers.toRunner((Computer<?, ?>) src);
@@ -134,7 +134,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 			srcFunctionalRawType.getName());
 	}
 
-	private static OpRunner<?> functionToRunner(final Object src, final Class<?> srcFunctionalRawType)
+	private static OpRunner functionToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
 		if (src instanceof Function) return OpRunners.Functions.toRunner((Function<?, ?>) src);
@@ -148,7 +148,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 			srcFunctionalRawType.getName());
 	}
 
-	private static OpRunner<?> inplaceToRunner(final Object src, final Class<?> srcFunctionalRawType)
+	private static OpRunner inplaceToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
 		if (src instanceof Inplace) return OpRunners.Inplaces.toRunner((Inplace<?>) src);

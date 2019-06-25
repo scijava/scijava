@@ -14,6 +14,13 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
+import org.scijava.ops.core.inplace.BiInplaceSecond;
+import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.core.inplace.Inplace3Second;
+import org.scijava.ops.core.inplace.Inplace4First;
+import org.scijava.ops.core.inplace.Inplace5First;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -208,6 +215,95 @@ public class TestOps {
 		@Override
 		public AtomicReference<String> create() {
 			return new AtomicReference<>();
+		}
+	}
+
+	// InplaceToFunctionTransformTest
+
+	@Plugin(type = Op.class, name = "test.inplaceToFunctionTestOp")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	public static class InplaceToFunctionTestOp implements Inplace<AtomicReference<String>> {
+
+		@Override
+		public void mutate(@Mutable AtomicReference<String> in1) {
+			in1.set(in1.get() + " inplace");
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.biInplaceFirstToBiFunctionTestOp")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "input2")
+	public static class BiInplaceFirstToBiFunctionTestOp implements BiInplaceFirst<AtomicReference<String>, Byte> {
+
+		@Override
+		public void mutate(@Mutable AtomicReference<String> io, Byte in2) {
+			io.set(argsToString(io, in2));
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.biInplaceSecondToBiFunctionTestOp")
+	@Parameter(key = "input1")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	public static class BiInplaceSecondToBiFunctionTestOp implements BiInplaceSecond<Byte, AtomicReference<String>> {
+
+		@Override
+		public void mutate(Byte in1, @Mutable AtomicReference<String> io) {
+			io.set(argsToString(in1, io));
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.inplace3FirstToFunction3TestOp")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "input2")
+	@Parameter(key = "input3")
+	public static class Inplace3FirstToFunction3TestOp implements Inplace3First<AtomicReference<String>, Byte, Double> {
+
+		@Override
+		public void mutate(@Mutable AtomicReference<String> io, Byte in2, Double in3) {
+			io.set(argsToString(io, in2, in3));
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.inplace3SecondToFunction3TestOp")
+	@Parameter(key = "input1")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "input3")
+	public static class Inplace3SecondToFunction3TestOp implements Inplace3Second<Byte, AtomicReference<String>, Double> {
+
+		@Override
+		public void mutate(Byte in1, @Mutable AtomicReference<String> io, Double in3) {
+			io.set(argsToString(in1, io, in3));
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.inplace4FirstToFunction4TestOp")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "input2")
+	@Parameter(key = "input3")
+	@Parameter(key = "input4")
+	public static class Inplace4FirstToFunction4TestOp implements
+		Inplace4First<AtomicReference<String>, Byte, Double, Float>
+	{
+
+		@Override
+		public void mutate(@Mutable AtomicReference<String> io, Byte in2, Double in3, Float in4) {
+			io.set(argsToString(io, in2, in3, in4));
+		}
+	}
+
+	@Plugin(type = Op.class, name = "test.inplace5FirstToFunction5TestOp")
+	@Parameter(key = "inout", type = ItemIO.BOTH)
+	@Parameter(key = "input2")
+	@Parameter(key = "input3")
+	@Parameter(key = "input4")
+	@Parameter(key = "input5")
+	public static class Inplace5FirstToFunction5TestOp implements
+		Inplace5First<AtomicReference<String>, Byte, Double, Float, Integer>
+	{
+
+		@Override
+		public void mutate(@Mutable AtomicReference<String> io, Byte in2, Double in3, Float in4, Integer in5) {
+			io.set(argsToString(io, in2, in3, in4, in5));
 		}
 	}
 

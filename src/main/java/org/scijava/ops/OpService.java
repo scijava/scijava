@@ -286,8 +286,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 		OpRunner<Object> op = findOpInstance(opName, new Nil<OpRunner<Object>>() {
 		}, inTypes, outType);
-
-		// TODO change
 		return op.run(args);
 	}
 

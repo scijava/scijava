@@ -129,6 +129,11 @@ public class FunctionToComputerTransformer implements FunctionalTypeTransformer 
 	}
 
 	@Override
+	public OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
+		throw new UnsupportedOperationException("not yet implemented");
+	}
+	
+	@Override
 	public Integer getTargetArity(final Class<?> targetFunctionalRawType) {
 		return Computers.ALL_COMPUTERS.get(targetFunctionalRawType);
 	}

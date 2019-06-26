@@ -66,16 +66,21 @@ public class OpTransformation {
 	 * be executed.
 	 * 
 	 * @param obj
+	 * @param targetRef2 
 	 * @param opService
 	 * @return
 	 * @throws OpTransformationException 
 	 */
-	public Object execute(Object obj, OpService opService) throws OpTransformationException {
+	public Object execute(Object obj, OpRef targetRef, OpService opService) throws OpTransformationException {
 		Object candidate = obj;
 		OpTransformation c = this;
+		OpRef tr = targetRef;
 		do {
-			candidate = c.getTransformer().transform(opService, candidate, c.targetRef);
+			candidate = c.getTransformer().transform(opService, candidate, tr);
 			c = c.getChild();
+			if (c != null) {
+				tr = c.getTarget();
+			}
 		} while (c != null);
 		
 		return candidate;

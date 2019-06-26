@@ -1,10 +1,16 @@
+
 package org.scijava.ops.transform;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatchingException;
+import org.scijava.ops.matcher.OpRef;
+import org.scijava.struct.Member;
 
 /**
  * Wrapper class to match a {@link OpTransformation} with a matching
@@ -21,11 +27,11 @@ public class OpTransformationCandidate {
 		this.srcOp = scrOp;
 		this.transformation = transformation;
 	}
-	
+
 	public OpCandidate getSourceOp() {
 		return srcOp;
 	}
-	
+
 //	private void substituteAnyInTransformation() {
 //		// obtain the type info from the matched Op
 //		OpInfo srcInfo = srcOp.opInfo();
@@ -43,7 +49,13 @@ public class OpTransformationCandidate {
 	{
 		Object op = srcOp.createOp(dependencies, secondaryArgs);
 //		substituteAnyInTransformation();
-		return transformation.execute(op, opService);
+
+		OpInfo srcInfo = srcOp.opInfo();
+		OpRef srcRef = new OpRef(srcOp.getRef().getName(), new Type[] { srcInfo.opType() }, srcInfo.output().getType(),
+			srcInfo.inputs().stream().map(Member::getType).toArray(Type[]::new));
+		OpRef targetRef = transformation.getTransformer().substituteAnyInTargetRef(srcRef, transformation.getTarget());
+
+		return transformation.execute(op, targetRef, opService);
 	}
 
 	@Override

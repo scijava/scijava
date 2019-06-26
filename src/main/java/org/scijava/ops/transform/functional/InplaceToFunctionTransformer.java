@@ -115,6 +115,11 @@ public class InplaceToFunctionTransformer implements FunctionalTypeTransformer {
 	}
 
 	@Override
+	public OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
+		throw new UnsupportedOperationException("not yet implemented");
+	}
+
+	@Override
 	public Integer getTargetArity(final Class<?> targetFunctionalRawType) {
 		return Functions.ALL_FUNCTIONS.get(targetFunctionalRawType);
 	}

@@ -63,7 +63,9 @@ public interface OpTransformer extends SingletonPlugin {
 	Object transform(OpService opService, Object src, OpRef targetRef) throws OpTransformationException;
 
 	
-	OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef);
+	default OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
+		return targetRef;
+	};
 	
 	/**
 	 * Returns a collection that contains the {@link OpRef}s of all Ops which can

@@ -171,11 +171,6 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 	}
 
 	@Override
-	public OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-
-	@Override
 	public Collection<OpRef> getRefsTransformingTo(final OpRef targetRef) {
 		if (!isOpRunner(targetRef)) {
 			return Collections.emptyList();

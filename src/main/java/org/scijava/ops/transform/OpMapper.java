@@ -84,11 +84,6 @@ public interface OpMapper<S, T> extends OpTransformer {
 			" is not of required class: " + srcClass().getName());
 	}
 
-	@Override
-	default OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-	
 	/**
 	 * One-to-one specialization of {@link #getRefsTransformingTo(OpRef)}. Returns
 	 * a non-{@code null} source if one could be found and {@code null} otherwise.

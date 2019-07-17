@@ -99,7 +99,7 @@ public class HaralickFeatureTest extends AbstractOpTest {
 
 	@Test
 	public void differenceEntropy() {
-		DoubleType entropy = (DoubleType) ops.run("features.haralick.entropy", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType entropy = (DoubleType) ops.run("features.haralick.differenceEntropy", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
 		assertEquals(4.517886362509830,
 				entropy.get(), EPSILON);
 	}

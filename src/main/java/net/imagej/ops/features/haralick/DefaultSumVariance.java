@@ -38,6 +38,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.function.Function4;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -58,11 +59,11 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", type = ItemIO.OUTPUT)
 public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
-	@OpDependency(name = "featurs.haralick.coocPXPlus")
+	@OpDependency(name = "features.haralick.coocPXPlusY")
 	private Function<double[][], double[]> coocPXPlusYFunc;
 	@SuppressWarnings("rawtypes")
 	@OpDependency(name = "features.haralick.sumEntropy")
-	private Function<IterableInterval<T>, RealType> sumEntropyFunc;
+	private Function4<IterableInterval<T>, Integer, Integer, MatrixOrientation, RealType> sumEntropyFunc;
 
 	@Override
 	public DoubleType apply(final IterableInterval<T> input, final Integer numGreyLevels, final Integer distance,
@@ -71,7 +72,7 @@ public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickF
 
 		final double[] pxplusy = coocPXPlusYFunc.apply(matrix);
 		final int nrGrayLevels = matrix.length;
-		final double sumEntropy = sumEntropyFunc.apply(input).getRealDouble();
+		final double sumEntropy = sumEntropyFunc.apply(input, numGreyLevels, distance, orientation).getRealDouble();
 
 		double res = 0;
 		for (int i = 2; i <= 2 * nrGrayLevels; i++) {

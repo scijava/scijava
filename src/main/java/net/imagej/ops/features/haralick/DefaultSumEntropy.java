@@ -61,7 +61,7 @@ public class DefaultSumEntropy<T extends RealType<T>> extends
 	// Avoid log 0
 	private static final double EPSILON = Double.MIN_NORMAL;
 	
-	@OpDependency(name = "features.haralick.coocPXPlus")
+	@OpDependency(name = "features.haralick.coocPXPlusY")
 	private Function<double[][], double[]> coocPXPlusFunc;
 	
 	@Override

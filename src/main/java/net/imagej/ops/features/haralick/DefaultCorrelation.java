@@ -60,13 +60,13 @@ public class DefaultCorrelation<T extends RealType<T>> extends
 		AbstractHaralickFeature<T> {
 
 	// required functions
-	@OpDependency(name = "filter.haralick.coocMeanX")
+	@OpDependency(name = "features.haralick.coocMeanX")
 	private Function<double[][], DoubleType> coocMeanXFunc;
-	@OpDependency(name = "filter.haralick.coocMeanY")
+	@OpDependency(name = "features.haralick.coocMeanY")
 	private Function<double[][], DoubleType> coocMeanYFunc;
-	@OpDependency(name = "filter.haralick.coocStdY")
+	@OpDependency(name = "features.haralick.coocStdY")
 	private Function<double[][], DoubleType> coocStdYFunc;
-	@OpDependency(name = "filter.haralick.coocStdX")
+	@OpDependency(name = "features.haralick.coocStdX")
 	private Function<double[][], DoubleType> coocStdXFunc;
 
 	@Override

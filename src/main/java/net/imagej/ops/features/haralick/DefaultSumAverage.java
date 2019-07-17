@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", type = ItemIO.OUTPUT)
 public class DefaultSumAverage<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
-	@OpDependency(name = "features.haralick.coocPXPlus")
+	@OpDependency(name = "features.haralick.coocPXPlusY")
 	private Function<double[][], double[]> coocPXPlusFunc;
 
 	@Override

@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
-@Plugin(type = Op.class, name = "features.haralick.asm")
+@Plugin(type = Op.class, name = "features.haralick.ifdm")
 @Parameter(key = "input")
 @Parameter(key = "numGreyLevels")
 @Parameter(key = "distance")

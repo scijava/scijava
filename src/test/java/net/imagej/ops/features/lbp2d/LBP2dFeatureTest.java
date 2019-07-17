@@ -32,7 +32,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import net.imagej.ops.Ops;
 import net.imagej.ops.features.AbstractFeatureTest;
 import net.imglib2.type.numeric.integer.LongType;
 
@@ -54,10 +53,10 @@ public class LBP2dFeatureTest extends AbstractFeatureTest {
 			"features.lbp2d", random, 1, 4);
 	
 		// Test values proved by calculating small toy example by hand.
-		assertEquals(Ops.LBP.LBP2D.NAME, 5412.0, hist.get(0).getRealDouble(), 1e-3);
-		assertEquals(Ops.LBP.LBP2D.NAME, 0.0, hist.get(1).getRealDouble(), 1e-3);
-		assertEquals(Ops.LBP.LBP2D.NAME, 4251.0, hist.get(2).getRealDouble(), 1e-3);
-		assertEquals(Ops.LBP.LBP2D.NAME, 337.0, hist.get(3).getRealDouble(), 1e-3);
+		assertEquals("features.lbp2d", 5412.0, hist.get(0).getRealDouble(), 1e-3);
+		assertEquals("features.lbp2d", 0.0, hist.get(1).getRealDouble(), 1e-3);
+		assertEquals("features.lbp2d", 4251.0, hist.get(2).getRealDouble(), 1e-3);
+		assertEquals("features.lbp2d", 337.0, hist.get(3).getRealDouble(), 1e-3);
 		
 	}
 	

@@ -62,7 +62,9 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 		implements Function4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
 
 	@OpDependency(name = "stats.mean")
-	private Computer<Iterable<? extends RealType<?>>, DoubleType> meanOp;
+	private Computer<Iterable<T>, DoubleType> meanTOp;
+	@OpDependency(name = "stats.mean")
+	private Computer<Iterable<U>, DoubleType> meanUOp;
 
 	@Override
 	public Double apply(final Iterable<T> image1, final Iterable<U> image2, final DoubleType mean1, final DoubleType mean2) {
@@ -73,8 +75,8 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 
 		final Iterable<Pair<T, U>> samples = new IterablePair<>(image1, image2);
 
-		final double m1 = mean1 == null ? computeMeanOf(image1) : mean1.get();
-		final double m2 = mean2 == null ? computeMeanOf(image2) : mean2.get();
+		final double m1 = mean1 == null ? computeMeanTOf(image1) : mean1.get();
+		final double m2 = mean2 == null ? computeMeanUOf(image2) : mean2.get();
 
 		// variables to count the positive and negative results
 		// of Li's product of the difference of means.
@@ -104,9 +106,14 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 		return icqValue;
 	}
 
-	private double computeMeanOf(final Iterable<? extends RealType<?>> in) {
+	private double computeMeanTOf(final Iterable<T> in) {
 		DoubleType mean = new DoubleType();
-		meanOp.compute(in, mean);
+		meanTOp.compute(in, mean);
+		return mean.get();
+	}
+	private double computeMeanUOf(final Iterable<U> in) {
+		DoubleType mean = new DoubleType();
+		meanUOp.compute(in, mean);
 		return mean.get();
 	}
 

@@ -2001,18 +2001,24 @@ public final class Types {
 
 			// now to check each type argument
 			for (final TypeVariable<?> var : toTypeVarAssigns.keySet()) {
-				final Type toTypeArg = unrollVariableAssignments(var, toTypeVarAssigns);
-				final Type fromTypeArg = unrollVariableAssignments(var,
-					fromTypeVarAssigns);
+				Type toTypeArg = unrollVariableAssignments(var, toTypeVarAssigns);
+				final Type fromTypeArg = unrollVariableAssignments(var, fromTypeVarAssigns);
+
+				if (Types.containsTypeVars(toTypeArg) && toTypeArg instanceof ParameterizedType) {
+					Type[] toParameters = ((ParameterizedType) toTypeArg).getActualTypeArguments();
+					Type[] toParamsResolved = Arrays.stream(toParameters)
+							.map(param -> typeVarAssigns.keySet().contains(param) ? typeVarAssigns.get(param) : param)
+							.toArray(Type[]::new);
+					toTypeArg = Types.parameterize(Types.raw(toTypeArg), toParamsResolved);
+				}
 
 				// parameters must either be absent from the subject type, within
 				// the bounds of the wildcard type, or be an exact match to the
 				// parameters of the target type.
-				if (fromTypeArg != null && !fromTypeArg.equals(toTypeArg) &&
-					!(toTypeArg instanceof WildcardType && isAssignable(fromTypeArg,
-						toTypeArg, typeVarAssigns)))
-				{
-					if(fromTypeArg instanceof Any) continue;
+				if (fromTypeArg != null && !fromTypeArg.equals(toTypeArg) && !(toTypeArg instanceof WildcardType
+						&& isAssignable(fromTypeArg, toTypeArg, typeVarAssigns))) {
+					if (fromTypeArg instanceof Any)
+						continue;
 					return false;
 				}
 			}

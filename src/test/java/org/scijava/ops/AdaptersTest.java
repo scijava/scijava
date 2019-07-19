@@ -54,7 +54,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		);
 
 		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer,
-				(arr1, arr2) -> {
+				(arr1) -> {
 					return new double[arr1.length];
 				});
 
@@ -87,4 +87,5 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		functionAsComputer.compute(a1, a2, result);
 		assert arrayEquals(result, 5.0, 9.0, 16.0);
 	}
+	
 }

@@ -2,17 +2,17 @@
  * #%L
  * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2018 SciJava developers.
+ * Copyright (C) 2016 - 2019 SciJava Ops developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * 
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,43 +27,38 @@
  * #L%
  */
 
-package org.scijava.ops;
-import static org.junit.Assert.assertTrue;
+package org.scijava.ops.types;
 
-import org.junit.Test;
-import org.scijava.core.Priority;
-import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Source;
-import org.scijava.ops.types.Nil;
-import org.scijava.param.Parameter;
+import java.lang.reflect.ParameterizedType;
+
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
-public class OpPriorityTest extends AbstractTestEnvironment {
+/**
+ * {@link TypeExtractor} plugin which operates on {@link GenericTyped} objects.
+ * <p>
+ * We assume that if the Object implements {@link GenericTyped} then it knows
+ * best about what type it is.
+ * </p>
+ *
+ * @author Gabriel Selzer
+ */
+@Plugin(type = TypeExtractor.class)
+public class GenericTypedTypeExtractor implements TypeExtractor<GenericTyped> {
+
+	@Parameter
+	private TypeService typeService;
 	
-	@Plugin(type = Op.class, name = "test.priority", priority = Priority.HIGH)
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	private static final class testDouble implements Source<Number>{
-		@Override
-		public Number create() {
-			return new Double(0.0);
-		}
+	@Override
+	public ParameterizedType reify(final GenericTyped o) {
+		// TODO: is this safe?
+		return (ParameterizedType) o.getType();
 	}
 
-	@Plugin(type = Op.class, name = "test.priority", priority = Priority.LOW)
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	private static final class testFloat implements Source<Number>{
-		@Override
-		public Number create() {
-			return new Float(0.0);
-		}
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Class<GenericTyped> getRawType() {
+		return GenericTyped.class;
 	}
-	
-	@Test
-	public void testOpPriority() {
 
-		Source<Number> testFunc = ops.findOp("test.priority", new Nil<Source<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
-		Number x = testFunc.create();
-		assertTrue(x instanceof Double);
-	}
 }

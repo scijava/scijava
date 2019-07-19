@@ -51,13 +51,29 @@ import org.scijava.struct.StructInstance;
  */
 public class OpFieldInfo implements OpInfo {
 
+	private final Object instance;
 	private final Field field;
+
 	private Struct struct;
 	private ValidityException validityException;
-	private Object instance;
 
-	public OpFieldInfo(final Field field) {
+	public OpFieldInfo(final Object instance, final Field field) {
+		this.instance = instance;
+		this.field = field;
 
+		if (Modifier.isStatic(field.getModifiers())) {
+			// Field is static; instance must be null.
+			if (instance != null) {
+				// Static field; instance should be null!
+			}
+		}
+		else {
+			// NB: Field is not static; instance must match field.getDeclaringClass().
+			if (!field.getDeclaringClass().isInstance(instance)) {
+				// Mismatch between given object and the class containing the field
+				// But: we need to have proper case logic for the field being static or not.
+			}
+		}
 		List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public fields
 		if (!Modifier.isPublic(field.getModifiers())) {
@@ -66,18 +82,12 @@ public class OpFieldInfo implements OpInfo {
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
-		this.field = field;
 		try {
 			struct = ParameterStructs.structOf(field.getDeclaringClass(), field);
 			OpUtils.checkHasSingleOutput(struct);
-			if (!Modifier.isStatic(field.getModifiers())) {
-				instance = field.getDeclaringClass().newInstance();
-			}
 			// NB: Contextual parameters not supported for now.
 		} catch (ValidityException e) {
 			problems.addAll(e.problems());
-		} catch (InstantiationException | IllegalAccessException e) {
-			problems.add(new ValidityProblem("Could not instantiate field's class", e));
 		}
 		if (!problems.isEmpty()) {
 			validityException = new ValidityException(problems);
@@ -115,12 +125,12 @@ public class OpFieldInfo implements OpInfo {
 		if (dependencies != null && !dependencies.isEmpty())
 			throw new IllegalArgumentException(
 				"Op fields are not allowed to have any Op dependencies.");
-		// 1. Can we create another instance of the same function by calling
-		// clone()?
-		// 2. _SHOULD_ we do that? Or can we simply reuse the same function
-		// instance every time?
+		// NB: In general, there is no way to create a new instance of the field value.
+		// Calling clone() may or may not work; it does not work with e.g. lambdas.
+		// Better to just use the same value directly, rather than trying to copy.
 		try {
-			final Object object = field.get(instance); // NB: value of static field!
+			final Object object = field.get(instance);
+			// TODO: Wrap object in a generic holder with the same interface.
 			return struct().createInstance(object);
 		} catch (final IllegalAccessException exc) {
 			// FIXME

@@ -3,7 +3,6 @@ package org.scijava.ops.util;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
@@ -200,7 +199,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[1];
+					Function<I, O> source = (in) -> (O) args[1];
 					return Adapt.Computers.asFunction(computer, source).apply((I) args[0]);
 				}
 
@@ -225,7 +224,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[2];
+					Function<I1, O> source = (in1) -> (O) args[2];
 					return Adapt.Computers.asBiFunction(computer, source).apply((I1) args[0], (I2) args[1]);
 				}
 
@@ -251,7 +250,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[3];
+					Function<I1, O> source = (in1) -> (O) args[3];
 					return Adapt.Computers.asFunction3(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2]);
 				}
@@ -279,7 +278,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[4];
+					Function<I1, O> source = (in1) -> (O) args[4];
 					return Adapt.Computers.asFunction4(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2], (I4) args[3]);
 				}
@@ -308,7 +307,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[5];
+					Function<I1, O> source = (in1) -> (O) args[5];
 					return Adapt.Computers.asFunction5(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2], (I4) args[3], (I5) args[4]);
 				}

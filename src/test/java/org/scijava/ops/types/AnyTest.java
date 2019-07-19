@@ -3,16 +3,15 @@ package org.scijava.ops.types;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Type;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.core.Priority;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.core.function.Source;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -77,6 +76,26 @@ public class AnyTest extends AbstractTestEnvironment {
 		assert out instanceof MutableNotAny;
 		assertEquals(Long.toString(in1 + in2), ((MutableNotAny) out).getValue());
 	}
+	
+	@Test
+	public void testAnyInjectionIntoFunctionRaws() {
+		final Function<Long, Long> func = (in) -> in / 2;
+		final Long output = (Long) ops.run("test.functionAndLongToLong", func, 20l);
+		assert(output == 10);
+	}
+}
+
+@Plugin(type = Op.class, name = "test.functionAndLongToLong")
+@Parameter(key = "input")
+@Parameter(key = "op")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Long> {
+
+	@Override
+	public Long apply(Function<Long, Long> t, Long u) {
+		return t.apply(u);
+	}
+	
 }
 
 @Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")

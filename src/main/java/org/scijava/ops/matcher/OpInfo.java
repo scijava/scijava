@@ -19,7 +19,7 @@ import org.scijava.struct.StructInstance;
  */
 public interface OpInfo {
 
-	/** Generic type of the op. */
+	/** Generic type of the op. This will be the parameterized type of the concrete class */
 	Type opType();
 
 	/** Gets the associated {@link Struct} metadata. */

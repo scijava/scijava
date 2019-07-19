@@ -29,6 +29,8 @@
 package org.scijava.ops;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -45,6 +47,34 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.core.computer.ComputerOps.BiComputerOp;
+import org.scijava.ops.core.computer.ComputerOps.Computer3Op;
+import org.scijava.ops.core.computer.ComputerOps.Computer4Op;
+import org.scijava.ops.core.computer.ComputerOps.Computer5Op;
+import org.scijava.ops.core.computer.ComputerOps.Computer6Op;
+import org.scijava.ops.core.computer.ComputerOps.Computer7Op;
+import org.scijava.ops.core.computer.ComputerOps.Computer8Op;
+import org.scijava.ops.core.computer.ComputerOps.ComputerOp;
+import org.scijava.ops.core.function.FunctionOps.BiFunctionOp;
+import org.scijava.ops.core.function.FunctionOps.Function3Op;
+import org.scijava.ops.core.function.FunctionOps.Function4Op;
+import org.scijava.ops.core.function.FunctionOps.Function5Op;
+import org.scijava.ops.core.function.FunctionOps.Function6Op;
+import org.scijava.ops.core.function.FunctionOps.Function7Op;
+import org.scijava.ops.core.function.FunctionOps.Function8Op;
+import org.scijava.ops.core.function.FunctionOps.Function9Op;
+import org.scijava.ops.core.function.FunctionOps.FunctionOp;
+import org.scijava.ops.core.function.SourceOp;
+import org.scijava.ops.core.inplace.InplaceOps.BiInplaceFirstOp;
+import org.scijava.ops.core.inplace.InplaceOps.BiInplaceSecondOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace3FirstOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace3SecondOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace3ThirdOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace4FirstOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace5FirstOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace6FirstOp;
+import org.scijava.ops.core.inplace.InplaceOps.Inplace7SecondOp;
+import org.scijava.ops.core.inplace.InplaceOps.InplaceOp;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
@@ -107,6 +137,46 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 */
 	private Map<String, String> opAliases = new HashMap<>();
 
+	private static Map<Class<?>, Class<?>> wrappers = wrappers();
+
+	private static Map<Class<?>, Class<?>> wrappers() {
+		final Map<Class<?>, Class<?>> result = new HashMap<>();
+		final Class<?>[] wrapperClasses = { //
+				FunctionOp.class, //
+				BiFunctionOp.class, //
+				Function3Op.class, //
+				Function4Op.class, //
+				Function5Op.class, //
+				Function6Op.class, //
+				Function7Op.class, //
+				Function8Op.class, //
+				Function9Op.class, //
+				ComputerOp.class, //
+				BiComputerOp.class, //
+				Computer3Op.class, //
+				Computer4Op.class, //
+				Computer5Op.class, //
+				Computer6Op.class, //
+				Computer7Op.class, //
+				Computer8Op.class, //
+				InplaceOp.class, //
+				BiInplaceFirstOp.class, //
+				BiInplaceSecondOp.class, //
+				Inplace3FirstOp.class, //
+				Inplace3SecondOp.class, //
+				Inplace3ThirdOp.class, //
+				Inplace4FirstOp.class, //
+				Inplace5FirstOp.class, //
+				Inplace6FirstOp.class, //
+				Inplace7SecondOp.class, //
+				SourceOp.class
+		};
+		for (final Class<?> c : wrapperClasses) {
+			result.put(c.getInterfaces()[0], c);
+		}
+		return result;
+	}
+
 	public void initOpCache() {
 		opCache = new PrefixTree<>();
 
@@ -124,12 +194,18 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		// Add Ops contained in an OpCollection
 		for (final PluginInfo<OpCollection> pluginInfo : pluginService.getPluginsOfType(OpCollection.class)) {
 			try {
-				final List<Field> fields = ClassUtils.getAnnotatedFields(pluginInfo.loadClass(), OpField.class);
+				Class<? extends OpCollection> c = pluginInfo.loadClass();
+				final List<Field> fields = ClassUtils.getAnnotatedFields(c, OpField.class);
+				Object instance = null; 
 				for (Field field : fields) {
-					OpInfo opInfo = new OpFieldInfo(field);
+					final boolean isStatic = Modifier.isStatic(field.getModifiers());
+					if (!isStatic && instance == null) {
+						instance = field.getDeclaringClass().newInstance();
+					}
+					OpInfo opInfo = new OpFieldInfo(isStatic ? null : instance, field);
 					addToCache(opInfo, field.getAnnotation(OpField.class).names());
 				}
-			} catch (InstantiableException exc) {
+			} catch (InstantiableException | InstantiationException | IllegalAccessException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
 			}
 		}
@@ -268,7 +344,53 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
-		return op;
+		Object wrappedOp = wrapOp(op, match, transformation);
+		return wrappedOp;
+	}
+
+	/**
+	 * Wraps the matched op into an {@link Op} that knows its generic typing and
+	 * {@link OpInfo}.
+	 * 
+	 * @param op
+	 *            - the matched op to wrap.
+	 * @param match
+	 *            - where to retrieve the {@link OpInfo} if no transformation is
+	 *            needed.
+	 * @param transformation
+	 *            - where to retrieve the {@link OpInfo} if a transformation is
+	 *            needed.
+	 * @return an {@link Op} wrapping of op.
+	 */
+	private Object wrapOp(Object op, OpCandidate match, OpTransformationCandidate transformation) {
+		// TODO: we don't want to wrap OpRunners, do we? What is the point?
+		if(OpRunner.class.isInstance(op)) return op;
+
+		OpInfo opInfo = match == null ? transformation.getSourceOp().opInfo() : match.opInfo();
+		// FIXME: this type is not necessarily Computer, Function, etc. but often
+		// something more specific (like the class of an Op).
+		Type type = opInfo.opType();
+		try {
+			// determine the Op wrappers that could wrap the matched Op
+			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
+					.toArray(Class[]::new);
+			if (suitableWrappers.length == 0)
+				throw new IllegalArgumentException(opInfo.implementationName() + ": matched op Type " + type.getClass()
+						+ " does not match a wrappable Op type.");
+			if (suitableWrappers.length > 1)
+				throw new IllegalArgumentException(
+						"Matched op Type " + type.getClass() + " matches multiple Op types: " + wrappers.toString());
+			// get the wrapper and wrap up the Op
+			Class<?> wrapper = wrappers.get(suitableWrappers[0]);
+			return wrapper.getConstructors()[0].newInstance(op, type, opInfo);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException exc) {
+			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
+			return op;
+		} catch (NullPointerException e) {
+			log.error("No wrapper exists for " + Types.raw(type).toString() + ".");
+			return op;
+		}
 	}
 
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
@@ -358,9 +480,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			}
 			if (opAliases.containsKey(alias)) {
 				if (!opAliases.get(alias).equals(opName)) {
-					log.warn("Possible naming clash for op '" + opImpl + "' detected. Attempting to add alias '" + alias
-							+ "' for op name '" + opName + "'. However the alias '" + alias + "' is already "
-							+ "associated with op name '" + opAliases.get(alias) + "'.");
+//					log.warn("Possible naming clash for op '" + opImpl + "' detected. Attempting to add alias '" + alias
+//							+ "' for op name '" + opName + "'. However the alias '" + alias + "' is already "
+//							+ "associated with op name '" + opAliases.get(alias) + "'.");
 				}
 				continue;
 			}

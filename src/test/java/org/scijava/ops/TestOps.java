@@ -8,12 +8,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;

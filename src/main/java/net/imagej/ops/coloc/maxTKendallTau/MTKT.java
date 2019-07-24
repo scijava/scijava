@@ -32,6 +32,7 @@ package net.imagej.ops.coloc.maxTKendallTau;
 
 import java.util.Collections;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import net.imagej.ops.coloc.ColocUtil;
@@ -75,14 +76,15 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	implements Function3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
 {
 
-//	@Parameter(required=false)
-//	private long seed = 0x89302341;
-	
 	@OpDependency(name = "image.histogram")
-	private Function<Iterable<? extends RealType<?>>, Histogram1d<RealType<?>>> histogramOp;
+	private Function<Iterable<T>, Histogram1d<T>> histogramOpT;
+	@OpDependency(name = "image.histogram")
+	private Function<Iterable<U>, Histogram1d<U>> histogramOpU;
 	
 	@OpDependency(name = "threshold.otsu")
-	private Computer<Histogram1d<? extends RealType<?>>, RealType<?>> thresholdOp;
+	private Computer<Histogram1d<T>, T> thresholdOpT;
+	@OpDependency(name = "threshold.otsu")
+	private Computer<Histogram1d<U>, U> thresholdOpU;
 
 	@Override
 	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, final Long seed) {
@@ -98,8 +100,8 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		final int n = (int) n1;
 
 		// compute thresholds
-		final double thresh1 = threshold(image1);
-		final double thresh2 = threshold(image2);
+		final double thresh1 = thresholdT(image1);
+		final double thresh2 = thresholdU(image2);
 
 		double[][] rank = rankTransformation(image1, image2, thresh1, thresh2, n, seed);
 
@@ -107,10 +109,17 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		return maxtau;
 	}
 
-	double threshold(final RandomAccessibleInterval<? extends RealType<?>> image) {
-		final Histogram1d<? extends RealType<?>> histogram = histogramOp.apply(Views.iterable(image));
-		final RealType<?> result = Util.getTypeFromInterval(image).createVariable();
-		thresholdOp.compute(histogram, result);
+	double thresholdT(final RandomAccessibleInterval<T> image) {
+		final Histogram1d<T> histogram = histogramOpT.apply(Views.iterable(image));
+		final T result = Util.getTypeFromInterval(image).createVariable();
+		thresholdOpT.compute(histogram, result);
+		return result.getRealDouble();
+	}
+
+	double thresholdU(final RandomAccessibleInterval<U> image) {
+		final Histogram1d<U> histogram = histogramOpU.apply(Views.iterable(image));
+		final U result = Util.getTypeFromInterval(image).createVariable();
+		thresholdOpU.compute(histogram, result);
 		return result.getRealDouble();
 	}
 
@@ -234,6 +243,26 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 		final long n0 = an * (long) (an - 1) / 2;
 		final long S = mergeSort.sort();
 		return (n0 - 2 * S) / (double) n0;
+	}
+
+}
+
+@Plugin(type = Op.class, name = "coloc.maxTKendallTau")
+@Parameter(key = "image1")
+@Parameter(key = "image2")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
+	implements BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> 
+{
+	
+	@OpDependency(name = "coloc.maxTKendallTau")
+	private Function3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> colocOp;
+	
+	private long seed = 0x89302341;
+
+	@Override
+	public Double apply(RandomAccessibleInterval<T> image1, RandomAccessibleInterval<U> image2) {
+		return colocOp.apply(image1, image2, seed);
 	}
 
 }

@@ -32,6 +32,7 @@ package net.imagej.ops.coloc.maxTKendallTau;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops.coloc.ColocalisationTest;
@@ -46,8 +47,10 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
+import org.scijava.ops.core.function.GenericFunctions;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Functions;
+import org.scijava.thread.ThreadService;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Coloc.MaxTKendallTau}.
@@ -195,6 +198,7 @@ public class MTKTTest extends ColocalisationTest {
 	// First, we can test no correlation.
 	@Test
 	public void testMTKTpValueNone() {
+		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		double[][] values = new double[10][2];
 	  double[] values1 = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 	  double[] values2 = { 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0 };
@@ -206,14 +210,27 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+		//TODO: remove once there is a PValue Op that can take the above function.
+		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedOp = (in1, in2) -> {
+			if (!(in1 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in1 not a RAI");
+			if (!(in2 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in2 not a RAI");
+			return op.apply((RandomAccessibleInterval<DoubleType>) in1, (RandomAccessibleInterval<DoubleType>) in2);
+		};
+		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedGenericOp = GenericFunctions.Functions
+				.generic(wrappedOp,
+						new Nil<BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double>>() {}
+								.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", vImage1, vImage2, op, 5, value);
+		ops.run("coloc.pValue", vImage1, vImage2, wrappedGenericOp, 5, es, value);
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
 	// Second, we test fully correlated datasets (identical).
 	@Test
 	public void testMTKTpValueAll() {
+		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		double[][] values = new double[10][2];
 		double[] values1 = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
 		double[] values2 = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
@@ -225,14 +242,27 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
-		PValueResult value = (PValueResult) ops.run("coloc.pValue", new PValueResult(), vImage1, vImage2, op,
-				5);
+		//TODO: remove once there is a PValue Op that can take the above function.
+		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedOp = (in1, in2) -> {
+			if (!(in1 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in1 not a RAI");
+			if (!(in2 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in2 not a RAI");
+			return op.apply((RandomAccessibleInterval<DoubleType>) in1, (RandomAccessibleInterval<DoubleType>) in2);
+		};
+		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedGenericOp = GenericFunctions.Functions
+				.generic(wrappedOp,
+						new Nil<BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double>>() {}
+								.getType());
+		PValueResult value = new PValueResult();
+		ops.run("coloc.pValue", vImage1, vImage2, wrappedGenericOp, 5, es, value);
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
 	// Thirdly, we test random datasets.
 	@Test
 	public void testMTKTpValueRandom() {
+		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -240,21 +270,36 @@ public class MTKTTest extends ColocalisationTest {
 				0x01234567);
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
-		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
-		PValueResult value = (PValueResult) ops.run("coloc.pValue", new PValueResult(), ch1, ch2, op, 10);
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
+			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+		
+		//TODO: remove once there is a PValue Op that can take the above function.
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = (in1, in2) -> {
+			if (!(in1 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in1 not a RAI");
+			if (!(in2 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in2 not a RAI");
+			return op.apply((RandomAccessibleInterval<FloatType>) in1, (RandomAccessibleInterval<FloatType>) in2);
+		};
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedGenericOp = GenericFunctions.Functions
+				.generic(wrappedOp,
+						new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}
+								.getType());
+		PValueResult value = new PValueResult();
+		ops.run("coloc.pValue", ch1, ch2, wrappedGenericOp, 10, es, value);
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 
 	// Lastly, we test a 'real' image.
 	@Test
 	public void testMTKTpValueImage() {
+		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(zeroCorrelationImageCh1,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+		BiFunction<RandomAccessibleInterval<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>, Double> op =
+			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
 		final int[] blockSize = new int[cropCh1.numDimensions()];
 		for (int d = 0; d < blockSize.length; d++) {
 			final long size = (long) Math.floor(Math.sqrt(cropCh1.dimension(d)));
@@ -262,7 +307,20 @@ public class MTKTTest extends ColocalisationTest {
 		}
 		RandomAccessibleInterval<UnsignedByteType> ch1 = ShuffledView.cropAtMin(cropCh1, blockSize);
 		RandomAccessibleInterval<UnsignedByteType> ch2 = ShuffledView.cropAtMin(cropCh2, blockSize);
-		PValueResult value = (PValueResult) ops.run("coloc.pValue", new PValueResult(), ch1, ch2, op, 5);
+		//TODO: remove once there is a PValue Op that can take the above function.
+		BiFunction<Iterable<UnsignedByteType>, Iterable<UnsignedByteType>, Double> wrappedOp = (in1, in2) -> {
+			if (!(in1 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in1 not a RAI");
+			if (!(in2 instanceof RandomAccessibleInterval))
+				throw new RuntimeException("in2 not a RAI");
+			return op.apply((RandomAccessibleInterval<UnsignedByteType>) in1, (RandomAccessibleInterval<UnsignedByteType>) in2);
+		};
+		BiFunction<Iterable<UnsignedByteType>, Iterable<UnsignedByteType>, Double> wrappedGenericOp = GenericFunctions.Functions
+				.generic(wrappedOp,
+						new Nil<BiFunction<Iterable<UnsignedByteType>, Iterable<UnsignedByteType>, Double>>() {}
+								.getType());
+		PValueResult value = new PValueResult();
+		ops.run("coloc.pValue", ch1, ch2, wrappedGenericOp, 5, es, value);
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 }

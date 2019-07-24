@@ -87,16 +87,19 @@ public class DefaultPValueTest extends ColocalisationTest {
 		// Mock the underlying op.
 		final int[] count = { 0 };
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = //
-			op((input1, input2) -> {
-				Double r;
-				synchronized(this) {
-				r = result[count[0]++];
-				}
-				return r;
-			});
-		
+				op((input1, input2) -> {
+					Double r;
+					synchronized (this) {
+						r = result[count[0]++];
+					}
+					return r;
+				});
+
+//		GenericBiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> genOp = new GenericBiFunction(op,
+//				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
+
 		PValueResult output = new PValueResult();
-		output = (PValueResult) ops.run("coloc.pValue", ch1, ch2, op, result.length - 1, es);
+		ops.run("coloc.pValue", ch1, ch2, op, result.length - 1, es, output);
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

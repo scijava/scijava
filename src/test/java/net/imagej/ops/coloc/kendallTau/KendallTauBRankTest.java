@@ -40,7 +40,6 @@ import java.util.function.BiFunction;
 import net.imagej.ops.AbstractOpTest;
 import net.imagej.ops.coloc.ColocalisationTest;
 import net.imagej.ops.coloc.pValue.PValueResult;
-import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.RealType;
@@ -50,6 +49,7 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.junit.Test;
+import org.scijava.ops.core.function.GenericFunctions;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Functions;
 import org.scijava.thread.ThreadService;
@@ -120,15 +120,18 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
-			mean, spread, sigma, 0x01234567);
-		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
-			mean, spread, sigma, 0x98765432);
-		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			Functions.binary(ops, "coloc.kendallTau", nilRAI, nilRAI, new Nil<Double>() {});
+		Img<FloatType> ch1 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+				0x01234567);
+		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+				0x98765432);
+		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.binary(ops,
+				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = GenericFunctions.Functions.generic(
+				op,
+				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, op, es, value);
+		ops.run("coloc.pValue", ch1, ch2, wrappedOp, es, value);
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 

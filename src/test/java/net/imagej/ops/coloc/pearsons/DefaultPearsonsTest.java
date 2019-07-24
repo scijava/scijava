@@ -30,6 +30,7 @@ package net.imagej.ops.coloc.pearsons;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops.coloc.ColocalisationTest;
@@ -39,8 +40,10 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
+import org.scijava.ops.core.function.GenericFunctions;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Functions;
+import org.scijava.thread.ThreadService;
 
 /**
  * Tests {@link DefaultPearsons}.
@@ -96,6 +99,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 
 	@Test
 	public void testPValue() {
+		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -103,10 +107,11 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 			mean, spread, sigma, 0x01234567);
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
 			mean, spread, sigma, 0x98765432);
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			Functions.binary(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op =
+			Functions.binary(ops, "coloc.pearsons", new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = GenericFunctions.Functions.generic(op, new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, op, value);
+		ops.run("coloc.pValue", ch1, ch2, wrappedOp, es, value);
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

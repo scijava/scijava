@@ -35,7 +35,6 @@ import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
-import net.imglib2.type.Type;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
@@ -44,7 +43,8 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function6;
+import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.core.function.Function5;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -58,22 +58,21 @@ import org.scijava.struct.ItemIO;
  * @param <C>
  *            TODO Documentation
  */
-@Plugin(type = Op.class, name = "filter.FFT", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "filter.fft", priority = Priority.HIGH)
 @Parameter(key = "input")
 @Parameter(key = "borderSize", description = "the size of border to apply in each dimension")
-@Parameter(key = "fast", description = "whether to perform a fast FFT")
-@Parameter(key = "outOfBoundsFactory", description = "used to extend the image")
+@Parameter(key = "fast", description = "whether to perform a fast FFT; default true")
 @Parameter(key = "fftType", description = "the complex type of the output")
 @Parameter(key = "executorService")
 @Parameter(key = "output", type = ItemIO.OUTPUT)
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
-		Function6<RandomAccessibleInterval<T>, long[], Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Type<C>, ExecutorService, RandomAccessibleInterval<C>> {
+		Function5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
 
-	@OpDependency(name = "filter.pad")
-	private Function3<RandomAccessibleInterval<T>, Dimensions, Boolean, RandomAccessibleInterval<T>> padOp;
+	@OpDependency(name = "filter.padInputFFTMethods")
+	private Function4<RandomAccessibleInterval<T>, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> padOp;
 
 	@OpDependency(name = "filter.createFFTOutput")
-	private Function3<Dimensions, Type<C>, Boolean, RandomAccessibleInterval<C>> createOp;
+	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "filter.fft")
 	private BiComputer<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>> fftMethodsOp;
@@ -87,8 +86,7 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 */
 	@Override
 	public RandomAccessibleInterval<C> apply(final RandomAccessibleInterval<T> input, final long[] borderSize,
-			final Boolean fast, final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf, final Type<C> fftType,
-			final ExecutorService es) {
+			final Boolean fast, final C fftType, final ExecutorService es) {
 		// calculate the padded size
 		long[] paddedSize = new long[input.numDimensions()];
 
@@ -106,7 +104,7 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 		RandomAccessibleInterval<C> output = createOp.apply(paddedDimensions, fftType, fast);
 
 		// pad the input
-		RandomAccessibleInterval<T> paddedInput = padOp.apply(input, paddedDimensions, fast);
+		RandomAccessibleInterval<T> paddedInput = padOp.apply(input, paddedDimensions, fast, null);
 
 		// compute and return fft
 		fftMethodsOp.compute(paddedInput, es, output);

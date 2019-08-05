@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  * 
  * @author Brian Northan
  */
-@Plugin(type = Op.class, name = "filter.fft")
+@Plugin(type = Op.class, name = "filter.ifft")
 @Parameter(key = "input", type = ItemIO.BOTH)
 @Parameter(key = "executorService")
 public class IFFTMethodsOpI<C extends ComplexType<C>>

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops.filter.convolve;
+package net.imagej.ops.filter.correlate;
 
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
@@ -35,14 +35,11 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.complex.ComplexFloatType;
-import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.util.Util;
+import net.imglib2.util.Intervals;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
@@ -51,13 +48,13 @@ import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer7;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function7;
+import org.scijava.ops.core.function.Function8;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Convolve op for (@link Img)
+ * Correlate op for (@link Img)
  * 
  * @author Brian Northan
  * @param <I>
@@ -65,41 +62,44 @@ import org.scijava.struct.ItemIO;
  * @param <K>
  * @param <C>
  */
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "filter.correlate", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "kernel")
 @Parameter(key = "borderSize")
 @Parameter(key = "obfInput")
+@Parameter(key = "obfKernel")
 @Parameter(key = "outType")
 @Parameter(key = "fftType")
 @Parameter(key = "executorService")
 @Parameter(key = "output", type = ItemIO.OUTPUT)
-public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-		/* extends AbstractFFTFilterF<I, O, K, C> */ implements
-		Function7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, C, ExecutorService, RandomAccessibleInterval<O>> {
+public class CorrelateFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
+//	extends AbstractFFTFilterF<I, O, K, C>
+implements Function8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, ExecutorService, RandomAccessibleInterval<O>> {
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> outputCreator;
 
-	@OpDependency(name = "filter.padInputFFTMethods")
+	@OpDependency(name = "filter.pad")
 	private Function4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
 
-	@OpDependency(name = "filter.padShiftKernelFFTMethods")
+	@OpDependency(name = "filter.padShiftFFTKernel")
 	private BiFunction<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp;
 
 	@OpDependency(name = "filter.createFFTOutput")
 	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
-	@OpDependency(name = "filter.convolve")
-	private Computer7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> convolveOp;
+	@OpDependency(name = "filter.correlate")
+	private Computer7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlateOp;
 
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
 			final OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-			final O outType, final C complexType,
+			final OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel, final O outType, final C complexType,
 			final ExecutorService es) {
+		
+		if(Intervals.numElements(kernel) <= 9) throw new IllegalArgumentException("The kernel is not sufficiently large -- use the naive approach instead");
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
 
@@ -154,35 +154,15 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 		filter.compute(input, kernel, output);
 	}
 
+
 	/**
-	 * create a convolve filter computer
+	 * create a correlation filter computer
 	 */
 	public BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
 			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
 			RandomAccessibleInterval<O> output) {
-		return (in1, in2, out) -> convolveOp.compute(in1, in2, fftImg, fftKernel, true, true, es, out);
+		return (in1, in2, out) -> correlateOp.compute(in1, in2, fftImg, fftKernel, true, true, es, output);
 	}
-
-}
-
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
-class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-		implements
-		Function3<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<FloatType>> {
-
-		@OpDependency(name = "filter.convolve")
-		Function7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, FloatType, ComplexFloatType, ExecutorService, RandomAccessibleInterval<FloatType>> convolveOp;
-
-		@Override
-		public RandomAccessibleInterval<FloatType> apply(RandomAccessibleInterval<I> t, RandomAccessibleInterval<K> u, ExecutorService es) {
-			OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput = new OutOfBoundsConstantValueFactory<>(Util
-					.getTypeFromInterval(t).createVariable());
-			return convolveOp.apply(t, u, null, obfInput, new FloatType(), new ComplexFloatType(), es);
-		}
 
 }

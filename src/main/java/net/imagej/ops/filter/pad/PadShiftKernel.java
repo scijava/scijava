@@ -41,6 +41,10 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.Op;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
  * Op used to pad a kernel and shift the center of the kernel to the origin
@@ -50,17 +54,19 @@ import org.scijava.ops.OpDependency;
  * @param <I>
  * @param <O>
  */
+@Plugin(type = Op.class, name = "filter.padShiftKernel")
+@Parameter(key = "kernel")
+@Parameter(key = "paddedDimensions")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
 public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	implements BiFunction<I, Dimensions, O> 
 {
 
 	@OpDependency(name = "filter.padIntervalCentered")
-	private BiFunction<I, Dimensions, O> paddingIntervalCentered;
+	private BiFunction<I, Dimensions, Interval> paddingIntervalCentered;
 
 	@OpDependency(name = "filter.padIntervalOrigin")
-	private BiFunction<I, Interval, O> paddingIntervalOrigin;
-
-	private Function<Dimensions, long[][]> fftSizeOp = null;
+	private BiFunction<I, Interval, Interval> paddingIntervalOrigin;
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -69,7 +75,7 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 		Dimensions paddedFFTInputDimensions;
 
 		// if an fftsize op has been set recompute padded size
-		if (fftSizeOp != null) {
+		if (getFFTSizeOp() != null) {
 			long[][] sizes = getFFTSizeOp().apply(paddedDimensions);
 
 			paddedFFTInputDimensions = new FinalDimensions(sizes[0]);
@@ -96,7 +102,7 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 	}
 
 	protected Function<Dimensions, long[][]> getFFTSizeOp() {
-		return fftSizeOp;
+		return null;
 	}
 
 }

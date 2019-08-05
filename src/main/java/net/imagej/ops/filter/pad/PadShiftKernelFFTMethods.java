@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
  * @param <I>
  * @param <O>
  */
-@Plugin(type = Op.class, name = "filter.padShiftFFTKernel",
+@Plugin(type = Op.class, name = "filter.padShiftKernelFFTMethods",
 	priority = Priority.HIGH)
 @Parameter(key = "input")
 @Parameter(key = "paddedDimensions")

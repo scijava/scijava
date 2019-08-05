@@ -62,7 +62,7 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 			final RandomAccessibleInterval<O> output) {
 		// conforms only if the kernel is sufficiently small
 		if (Intervals.numElements(kernel) > 9)
-			throw new IllegalArgumentException("The kernel is too small to perform computation!");
+			throw new IllegalArgumentException("The kernel is too large to perform computation!");
 
 		// TODO: try a decomposition of the kernel into n 1-dim kernels
 

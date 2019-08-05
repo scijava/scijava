@@ -27,54 +27,48 @@
  * #L%
  */
 
-package net.imagej.ops.filter;
+package net.imagej.ops.deconvolve;
 
-import net.imagej.ops.special.inplace.UnaryInplaceOp;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.app.StatusService;
-import org.scijava.plugin.Parameter;
+import org.scijava.Priority;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.computer.Computer;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
 
 /**
- * Abstract class for iterative FFT filters that perform on RAI.
+ * Implements update step for Richardson-Lucy algorithm on
+ * {@link RandomAccessibleInterval}. See: <blockquote>Lucy, L. B. (1974).
+ * "An iterative technique for the rectification of observed distributions"
+ * </blockquote>
  * 
  * @author Brian Northan
- * @param <I>
- * @param <O>
- * @param <K>
- * @param <C>
+ * @param <T> Type of {@link RandomAccessibleInterval} upon which to operate.
  */
-public abstract class AbstractIterativeFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-	extends AbstractFFTFilterC<I, O, K, C>
+@Plugin(type = Op.class, name = "deconvolve.richardsonLucyUpdate",
+	priority = Priority.HIGH)
+@Parameter(key = "input")
+@Parameter(key = "output", type = ItemIO.BOTH)
+public class RichardsonLucyUpdate<T extends RealType<T>> implements
+	Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {
 
-	@Parameter(required = false)
-	protected StatusService status;
+	@OpDependency(name = "math.multiply")
+	private BiComputer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> mul;
 
 	/**
-	 * Max number of iterations to perform
+	 * performs update step of the Richardson Lucy Algorithm
 	 */
-	@Parameter
-	private int maxIterations;
-
-	/**
-	 * An op which implements an acceleration strategy (takes a larger step at
-	 * each iteration).
-	 */
-	@Parameter(required = false)
-	private UnaryInplaceOp<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> accelerator;
-
-	public
-		UnaryInplaceOp<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>
-		getAccelerator()
+	@Override
+	public void compute(RandomAccessibleInterval<T> correction,
+		RandomAccessibleInterval<T> estimate)
 	{
-		return accelerator;
-	}
-
-	public int getMaxIterations() {
-		return maxIterations;
+		mul.compute(estimate, correction, estimate);
 	}
 
 }

@@ -36,7 +36,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
-import net.imglib2.type.Type;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
@@ -63,27 +62,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", type = ItemIO.OUTPUT)
 public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
 		implements
-		Function4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, Type<O>, RandomAccessibleInterval<O>> {
-	//
-	// /**
-	// * Defines the out of bounds strategy for the extended area of the
-	// input>>>>>>>
-	// * Delete AbstractFilterF
-	// */
-	// @Parameter(required = false)
-	// private OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf;
-	//
-	// /**
-	// * The output type. If null a default output type will be used.
-	// */
-	// @Parameter(required = false)
-	// private Type<O> outType;
+		Function4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "filter.convolve")
 	private BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> convolver;
 
 	@OpDependency(name = "create.img")
-	private BiFunction<Dimensions, Type<O>, RandomAccessibleInterval<O>> createOp;
+	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> createOp;
 
 	/**
 	 * Create the output using the outFactory and outType if they exist. If these
@@ -91,7 +76,7 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	 */
 	@SuppressWarnings("unchecked")
 	public RandomAccessibleInterval<O> createOutput(RandomAccessibleInterval<I> input,
-			RandomAccessibleInterval<K> kernel, Type<O> outType) {
+			RandomAccessibleInterval<K> kernel, O outType) {
 
 		// TODO can we remove this null check?
 		if (outType == null) {
@@ -99,13 +84,13 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 			// if the input type and kernel type are the same use this type
 			if (Util.getTypeFromInterval(input).getClass() == Util.getTypeFromInterval(kernel).getClass()) {
 				Object temp = Util.getTypeFromInterval(input).createVariable();
-				outType = (Type<O>) temp;
+				outType = (O) temp;
 
 			}
 			// otherwise default to float
 			else {
 				Object temp = new FloatType();
-				outType = (Type<O>) temp;
+				outType = (O) temp;
 			}
 		}
 
@@ -115,7 +100,7 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
-			final Type<O> outType) {
+			final O outType) {
 
 		// conforms only if the kernel is sufficiently small
 		if (Intervals.numElements(kernel) <= 9)
@@ -143,4 +128,21 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 		return out;
 	}
 
+}
+
+@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH + 1)
+@Parameter(key = "input")
+@Parameter(key = "kernel")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
+		implements
+		BiFunction<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
+	
+	@OpDependency(name = "filter.convolve")
+	Function4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, RandomAccessibleInterval<O>> convolveOp;
+
+	@Override
+	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> t, RandomAccessibleInterval<K> u) {
+		return convolveOp.apply(t, u, null, null);
+	}
 }

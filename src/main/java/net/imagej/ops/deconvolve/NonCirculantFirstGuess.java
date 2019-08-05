@@ -27,45 +27,87 @@
  * #L%
  */
 
-package net.imagej.ops.filter.pad;
+package net.imagej.ops.deconvolve;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.Img;
 import net.imglib2.type.numeric.ComplexType;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.view.Views;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.util.Adapt;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Op used to pad the image to a size that is compatible with FFTMethods
- * 
- * @author bnorthan
- * @param <T>
+ * Calculate non-circulant first guess. This is used as part of the Boundary
+ * condition handling scheme described here
+ * http://bigwww.epfl.ch/deconvolution/challenge2013/index.html?p=doc_math_rl)
+ *
+ * @author Brian Northan
  * @param <I>
  * @param <O>
+ * @param <K>
+ * @param <C>
  */
-@Plugin(type = Op.class, name = "filter.padInputFFTMethods", priority = Priority.HIGH)
+
+@Plugin(type = Op.class, name = "deconvolve.firstGuess", priority = Priority.LOW)
 @Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "fast")
-@Parameter(key = "outOfBoundsFactory")
+@Parameter(key = "outType")
+@Parameter(key = "k")
 @Parameter(key = "output", type = ItemIO.OUTPUT)
-public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
-		extends PadInputFFT<T, I, O> {
-	
-	@OpDependency(name = "filter.fftSize")
-	private Function3<Dimensions, Boolean, Boolean, long[][]> fftSizeOp;
-	
+public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
+	implements
+	Function3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>
+{
+
+
+	@OpDependency(name = "create.img")
+	BiFunction<Dimensions, O, Img<O>> create;
+
+	@OpDependency(name = "stats.sum")
+	Computer<Iterable<I>, O> sum;
+
+	/**
+	 * k is the size of the measurement window. That is the size of the acquired
+	 * image before extension, k is required to calculate the non-circulant
+	 * normalization factor
+	 */
 	@Override
-	protected Function<Dimensions, long[][]> getFFTSizeOp(boolean fast) {
-		return Adapt.Functions.asFunction(fftSizeOp, true, fast);
+	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> in, final O outType, final Dimensions k) {
+
+		final Img<O> firstGuess = create.apply(in, outType);
+
+		// set first guess to be a constant = to the average value
+
+		// so first compute the sum...
+		final O s = outType.createVariable(); 
+		sum.compute(Views.iterable(in), s);
+
+		// then the number of pixels
+		long numPixels = 1;
+
+		for (int d = 0; d < k.numDimensions(); d++) {
+			numPixels = numPixels * k.dimension(d);
+		}
+
+		// then the average value...
+		final double average = s.getRealDouble() / (numPixels);
+
+		// set first guess as the average value computed above (TODO: use fill op)
+		for (final O type : firstGuess) {
+			type.setReal(average);
+		}
+
+		return firstGuess;
 	}
+
 }

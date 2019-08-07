@@ -187,6 +187,13 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	@OpField(names = "create.integerType")
 	@Parameter(key = "integerType", type = ItemIO.OUTPUT)
 	public final Source<IntegerType> integerTypeSource = () -> integerTypeFromLong.apply(new Long(0));
+	
+	/* Type */
+
+	@OpField(names = "create.type")
+	@Parameter(key = "sampleType")
+	@Parameter(key = "type", type = ItemIO.OUTPUT)
+	public final Function<T, T> typeFromSampleType = (sample) -> sample.createVariable();
 
 	/* ImgLabeling */
 

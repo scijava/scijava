@@ -54,42 +54,42 @@ public class BooleanTypeLogicTest extends AbstractOpTest {
 
 	@Test
 	public void testComparableGreaterThan() {
-		assertTrue(((BitType) ops.run("logic.greaterThan", new BitType(), 5.0, 3.0)).get());
-		assertFalse(((BitType) ops.run("logic.greaterThan", new BitType(), 5.0, 6.0)).get());
+		assertTrue(((BitType) ops.run("logic.greaterThan", 5.0, 3.0)).get());
+		assertFalse(((BitType) ops.run("logic.greaterThan", 5.0, 6.0)).get());
 	}
 
 	@Test
 	public void testComparableGreaterThanOrEqual() {
-		assertTrue(((BitType) ops.run("logic.greaterThanOrEqual", new BitType(), 5.0, 3.0)).get());
-		assertTrue(((BitType) ops.run("logic.greaterThanOrEqual", new BitType(), 5.0, 5.0)).get());
-		assertFalse(((BitType) ops.run("logic.greaterThanOrEqual", new BitType(), 5.0, 6.0)).get());
+		assertTrue(((BitType) ops.run("logic.greaterThanOrEqual", 5.0, 3.0)).get());
+		assertTrue(((BitType) ops.run("logic.greaterThanOrEqual", 5.0, 5.0)).get());
+		assertFalse(((BitType) ops.run("logic.greaterThanOrEqual", 5.0, 6.0)).get());
 	}
 
 	@Test
 	public void testComparableLessThan() {
-		assertFalse(((BitType) ops.run("logic.lessThan", new BitType(), 5.0, 3.0)).get());
-		assertTrue(((BitType) ops.run("logic.lessThan", new BitType(), 5.0, 6.0)).get());
+		assertFalse(((BitType) ops.run("logic.lessThan", 5.0, 3.0)).get());
+		assertTrue(((BitType) ops.run("logic.lessThan", 5.0, 6.0)).get());
 	}
 
 	@Test
 	public void testComparableLessThanOrEqual() {
-		assertFalse(((BitType) ops.run("logic.lessThanOrEqual", new BitType(), 5.0, 3.0)).get());
-		assertTrue(((BitType) ops.run("logic.lessThanOrEqual", new BitType(), 5.0, 6.0)).get());
-		assertTrue(((BitType) ops.run("logic.lessThanOrEqual", new BitType(), 5.0, 5.0)).get());
+		assertFalse(((BitType) ops.run("logic.lessThanOrEqual", 5.0, 3.0)).get());
+		assertTrue(((BitType) ops.run("logic.lessThanOrEqual", 5.0, 6.0)).get());
+		assertTrue(((BitType) ops.run("logic.lessThanOrEqual", 5.0, 5.0)).get());
 	}
 
 	@Test
 	public void testObjectsEqual() {
-		assertFalse(((BitType) ops.run("logic.equal", new BitType(), 2, 1)).get());
-		assertTrue(((BitType) ops.run("logic.equal", new BitType(), 2, 2)).get());
-		assertFalse(((BitType) ops.run("logic.equal", new BitType(), 2, 3)).get());
+		assertFalse(((BitType) ops.run("logic.equal", 2, 1)).get());
+		assertTrue(((BitType) ops.run("logic.equal", 2, 2)).get());
+		assertFalse(((BitType) ops.run("logic.equal", 2, 3)).get());
 	}
 
 	@Test
 	public void testObjectsNotEqual() {
-		assertTrue(((BitType) ops.run("logic.notEqual", new BitType(), 2, 1)).get());
-		assertFalse(((BitType) ops.run("logic.notEqual", new BitType(), 2, 2)).get());
-		assertTrue(((BitType) ops.run("logic.notEqual", new BitType(), 2, 3)).get());
+		assertTrue(((BitType) ops.run("logic.notEqual", 2, 1)).get());
+		assertFalse(((BitType) ops.run("logic.notEqual", 2, 2)).get());
+		assertTrue(((BitType) ops.run("logic.notEqual", 2, 3)).get());
 	}
 
 	@Test

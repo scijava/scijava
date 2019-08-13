@@ -25,6 +25,7 @@ import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelingMapping;
+import net.imglib2.type.BooleanType;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.Type;
 import net.imglib2.type.logic.BitType;
@@ -57,7 +58,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 @Plugin(type = OpCollection.class)
-public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T extends Type<T>, C extends ComplexType<C>, W extends ComplexType<W> & NativeType<W>> {
+public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T extends Type<T>, C extends ComplexType<C>, W extends ComplexType<W> & NativeType<W>, B extends BooleanType<B>> {
 
 	/* ImgFactories */
 
@@ -195,6 +196,11 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	@Parameter(key = "sampleType")
 	@Parameter(key = "type", type = ItemIO.OUTPUT)
 	public final Function<T, T> typeFromSampleType = (sample) -> sample.createVariable();
+	
+	// TODO: is this safe?
+	@OpField(names = "create.type")
+	@Parameter(key = "booleanType", type = ItemIO.OUTPUT)
+	public final Source<BitType> booleanTypeSource = () -> new BitType();
 
 	/* ImgLabeling */
 

@@ -161,34 +161,10 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 			Util.getTypeFromInterval(rai));
 
 	/* IntegerType */
-	// TODO: delete
 
-	@OpField(names = "create.integerType")
-	@Parameter(key = "maxValue")
+	@OpField(names = "create.integerType", priority = Priority.NORMAL)
 	@Parameter(key = "integerType", type = ItemIO.OUTPUT)
-	public final Function<Long, IntegerType> integerTypeFromLong = (maxValue) -> {
-		if (maxValue <= 0L)
-			return new IntType();
-		if (maxValue <= 1L)
-			return new BitType();
-		if (maxValue <= 0x7fL)
-			return new ByteType();
-		if (maxValue <= 0xffL)
-			return new UnsignedByteType();
-		if (maxValue <= 0x7fffL)
-			return new ShortType();
-		if (maxValue <= 0xffffL)
-			return new UnsignedShortType();
-		if (maxValue <= 0x7fffffffL)
-			return new IntType();
-		if (maxValue <= 0xffffffffL)
-			return new UnsignedIntType();
-		return new LongType();
-	};
-
-	@OpField(names = "create.integerType")
-	@Parameter(key = "integerType", type = ItemIO.OUTPUT)
-	public final Source<IntegerType> integerTypeSource = () -> integerTypeFromLong.apply(new Long(0));
+	public final Source<LongType> integerTypeSource = () -> new LongType();
 	
 	/* Type */
 
@@ -197,8 +173,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	@Parameter(key = "type", type = ItemIO.OUTPUT)
 	public final Function<T, T> typeFromSampleType = (sample) -> sample.createVariable();
 	
-	// TODO: is this safe?
-	@OpField(names = "create.type")
+	@OpField(names = "create.type", priority = Priority.LOW)
 	@Parameter(key = "booleanType", type = ItemIO.OUTPUT)
 	public final Source<BitType> booleanTypeSource = () -> new BitType();
 
@@ -506,6 +481,26 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	@Parameter(key = "labelingMapping", type = ItemIO.OUTPUT)
 	public final Source<LabelingMapping<L>> labelingMappingSource = () -> new LabelingMapping<>(
 			integerTypeSource.create());
+	
+	public final Function<Long, IntegerType> integerTypeFromLong = (maxValue) -> {
+		if (maxValue <= 0L)
+			return new IntType();
+		if (maxValue <= 1L)
+			return new BitType();
+		if (maxValue <= 0x7fL)
+			return new ByteType();
+		if (maxValue <= 0xffL)
+			return new UnsignedByteType();
+		if (maxValue <= 0x7fffL)
+			return new ShortType();
+		if (maxValue <= 0xffffL)
+			return new UnsignedShortType();
+		if (maxValue <= 0x7fffffffL)
+			return new IntType();
+		if (maxValue <= 0xffffffffL)
+			return new UnsignedIntType();
+		return new LongType();
+	};
 
 	@OpField(names = "create.labelingMapping")
 	@Parameter(key = "maxNumSets")
@@ -530,7 +525,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* NativeType */
 
-	@OpField(names = "create.nativeType")
+	@OpField(names = "create.nativeType", priority = Priority.HIGH)
 	@Parameter(key = "nativeType", type = ItemIO.OUTPUT)
 	public final Source<DoubleType> defaultNativeType = () -> new DoubleType();
 

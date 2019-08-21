@@ -29,11 +29,8 @@
 
 package net.imagej.ops.copy;
 
-import java.util.function.Function;
-
 import net.imglib2.type.Type;
 
-import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.param.Parameter;
@@ -54,23 +51,6 @@ public class CopyType<T extends Type<T>> implements Computer<T, T> {
 	@Override
 	public void compute(final T input, final T output) {
 		output.set(input);
-	}
-
-}
-
-@Plugin(type = Op.class, name = "copy.type")
-@Parameter(key = "input")
-@Parameter(key = "copy", type = ItemIO.OUTPUT)
-class CopyTypeFunction<T extends Type<T>> implements Function<T, T> {
-	
-	@OpDependency(name = "copy.type")
-	Computer<T, T> copyOp;
-
-	@Override
-	public T apply(T input) {
-		T output = input.createVariable();
-		copyOp.compute(input, output);
-		return output;
 	}
 
 }

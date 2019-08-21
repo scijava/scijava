@@ -29,13 +29,8 @@
 
 package net.imagej.ops.copy;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.util.Intervals;
-import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
@@ -66,23 +61,4 @@ public class CopyRAI<T> implements Computer<RandomAccessibleInterval<T>, RandomA
 			throw new IllegalArgumentException("input and output must be of the same dimensionality!");
 		mapComputer.compute(Views.flatIterable(input), Views.flatIterable(output));
 	}
-}
-
-@Plugin(type = Op.class, name = "copy.rai", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "copy", type = ItemIO.OUTPUT)
-class CopyRAIFunction<T> implements Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
-	
-	@OpDependency(name = "create.img")
-	private BiFunction<Dimensions, T, RandomAccessibleInterval<T>> createOp;
-	@OpDependency(name = "copy.rai")
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> copyOp;
-
-	@Override
-	public RandomAccessibleInterval<T> apply(RandomAccessibleInterval<T> input) {
-		RandomAccessibleInterval<T> output = createOp.apply(input, Util.getTypeFromInterval(input));
-		copyOp.compute(input, output);
-		return output;
-	}
-
 }

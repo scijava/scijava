@@ -139,7 +139,7 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		ops.run("copy.rai", output, input);
+		ops.run("copy.rai", input, output);
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();

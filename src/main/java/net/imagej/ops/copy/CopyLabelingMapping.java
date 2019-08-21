@@ -31,13 +31,11 @@ package net.imagej.ops.copy;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 import net.imglib2.roi.labeling.LabelingMapping;
 import net.imglib2.roi.labeling.LabelingMapping.SerialisationAccess;
 
 import org.scijava.Priority;
-import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.param.Parameter;
@@ -64,23 +62,23 @@ public class CopyLabelingMapping<L> implements Computer<LabelingMapping<L>, Labe
 
 }
 
-@Plugin(type = Op.class, name = "copy.labelingMapping", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
-class CopyLabelingMappingFunction<L> implements Function<LabelingMapping<L>, LabelingMapping<L>> {
-
-	@OpDependency(name = "copy.labelingMapping")
-	Computer<LabelingMapping<L>, LabelingMapping<L>> copyOp;
-	@OpDependency(name = "create.labelingMapping")
-	private Function<Integer, LabelingMapping<L>> outputCreator;
-
-	@Override
-	public LabelingMapping<L> apply(LabelingMapping<L> input) {
-		LabelingMapping<L> output = outputCreator.apply(input.numSets());
-		copyOp.compute(input, output);
-		return output;
-	}
-}
+//@Plugin(type = Op.class, name = "copy.labelingMapping", priority = Priority.VERY_HIGH)
+//@Parameter(key = "input")
+//@Parameter(key = "output", type = ItemIO.OUTPUT)
+//class CopyLabelingMappingFunction<L> implements Function<LabelingMapping<L>, LabelingMapping<L>> {
+//
+//	@OpDependency(name = "copy.labelingMapping")
+//	Computer<LabelingMapping<L>, LabelingMapping<L>> copyOp;
+//	@OpDependency(name = "create.labelingMapping")
+//	private Function<Integer, LabelingMapping<L>> outputCreator;
+//
+//	@Override
+//	public LabelingMapping<L> apply(LabelingMapping<L> input) {
+//		LabelingMapping<L> output = outputCreator.apply(input.numSets());
+//		copyOp.compute(input, output);
+//		return output;
+//	}
+//}
 
 /*
  * Access to LabelingMapping

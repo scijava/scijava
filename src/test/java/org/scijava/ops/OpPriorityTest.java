@@ -30,15 +30,12 @@
 package org.scijava.ops;
 import static org.junit.Assert.assertTrue;
 
-import java.util.function.BiFunction;
-
 import org.junit.Test;
 import org.scijava.core.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.Source;
 import org.scijava.ops.types.Nil;
 import org.scijava.param.Parameter;
-import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
@@ -60,23 +57,6 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 		public Number create() {
 			return new Float(0.0);
 		}
-	}
-	
-
-	Nil<Double> nilDouble = new Nil<Double>() {
-	};
-	
-	@Test
-	public void testOpCollection() throws ValidityException {
-		BiFunction<Double, Double, Double> divFunction = ops.findOp( //
-				"math.add", new Nil<BiFunction<Double, Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-
-		// The found op is assumed to come from the MathOpCollection
-		assertTrue(divFunction.getClass().getName().contains("MathOpCollection$$Lambda"));
 	}
 	
 	@Test

@@ -17,11 +17,25 @@ public class OpTransformation {
 	private OpTransformer transformation;
 	
 	private OpTransformation child;
+	private int chainLength;
 
-	public OpTransformation(OpRef from, OpRef to, OpTransformer transformer) {
+	/**
+	 * Constructor
+	 * 
+	 * @param from
+	 *            the OpRef we are transforming from
+	 * @param to
+	 *            the OpRef we are transforming to
+	 * @param transformer
+	 *            the OpTransformer that will take an Op with the fromRef signature
+	 *            and transform it to the toRef signature
+	 * @param chainLength the length of the chain from what was originally requested to toRef
+	 */
+	public OpTransformation(OpRef from, OpRef to, OpTransformer transformer, int chainLength) {
 		this.srcRef = from;
 		this.targetRef = to;
 		this.transformation = transformer;
+		this.chainLength = chainLength;
 	}
 
 	/**
@@ -58,6 +72,15 @@ public class OpTransformation {
 	 */
 	public OpTransformation getChild() {
 		return this.child;
+	}
+	
+	/**
+	 * Get the length of the transformation chain
+	 * 
+	 * @return
+	 */
+	public int getChainLength() {
+		return this.chainLength;
 	}
 
 	/**

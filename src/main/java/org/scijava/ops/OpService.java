@@ -319,7 +319,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 			// If we can't find an op matching the original request, we try to find a
 			// transformation
-			transformation = transformer.findTransfromation(this, ref);
+			transformation = transformer.findTransformation(this, ref);
 			if (transformation == null) {
 				log.debug("No matching Op transformation found");
 				throw new IllegalArgumentException(e);

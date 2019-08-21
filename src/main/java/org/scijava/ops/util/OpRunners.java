@@ -2,6 +2,7 @@ package org.scijava.ops.util;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
@@ -26,6 +27,28 @@ import org.scijava.ops.types.Nil;
 // 2. Improve the matcher to respect the ops that implement KnowsTypes
 public class OpRunners {
 	public static class Functions {
+		
+		public static <O> OpRunner toRunner(Supplier<O> function) {
+			return new OpRunner() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
+
+				@Override
+				public Nil<?>[] inTypes() {
+					return new Nil<?>[] {};
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public O run(Object[] args) {
+					return function.get();
+				}
+
+			};
+		}
 
 		public static <I, O> OpRunner toRunner(Function<I, O> function) {
 			return new OpRunner() {

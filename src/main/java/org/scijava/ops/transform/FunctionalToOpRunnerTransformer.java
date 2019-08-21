@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.scijava.ops.OpService;
@@ -137,6 +138,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 	private static OpRunner functionToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
+		if (src instanceof Supplier) return OpRunners.Functions.toRunner((Supplier<?>) src);
 		if (src instanceof Function) return OpRunners.Functions.toRunner((Function<?, ?>) src);
 		if (src instanceof BiFunction) return OpRunners.Functions.toRunner((BiFunction<?, ?, ?>) src);
 		if (src instanceof Function3) return OpRunners.Functions.toRunner((Function3<?, ?, ?, ?>) src);

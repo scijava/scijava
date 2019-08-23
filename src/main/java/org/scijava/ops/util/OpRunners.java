@@ -9,10 +9,12 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
 import org.scijava.ops.core.function.Function6;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
@@ -205,6 +207,29 @@ public class OpRunners {
 	}
 
 	public static class Computers {
+		public static <O> OpRunner toRunner(NullaryComputer<O> computer) {
+			return new OpRunner() {
+
+				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
+				@Override
+				public Nil<?>[] inTypes() {
+					return new Nil<?>[] {};
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public O run(Object[] args) {
+					Source<O> source = () -> (O) args[0];
+					return Adapt.Computers.asFunction(computer, source).get();
+				}
+
+			};
+		}
+		
 		public static <I, O> OpRunner toRunner(Computer<I, O> computer) {
 			return new OpRunner() {
 

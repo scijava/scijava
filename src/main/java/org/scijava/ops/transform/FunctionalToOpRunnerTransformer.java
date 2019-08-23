@@ -46,6 +46,7 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
@@ -125,6 +126,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 	private static OpRunner computerToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
+		if (src instanceof NullaryComputer) return OpRunners.Computers.toRunner((NullaryComputer<?>) src); 
 		if (src instanceof Computer) return OpRunners.Computers.toRunner((Computer<?, ?>) src);
 		if (src instanceof BiComputer) return OpRunners.Computers.toRunner((BiComputer<?, ?, ?>) src);
 		if (src instanceof Computer3) return OpRunners.Computers.toRunner((Computer3<?, ?, ?, ?>) src);

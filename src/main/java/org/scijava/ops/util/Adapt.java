@@ -17,9 +17,11 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
@@ -120,6 +122,15 @@ public class Adapt {
 	 */
 	public static class Computers {
 		private Computers() {}
+		
+		public static <O> Source<O> asFunction(final NullaryComputer<O> computer,
+				final Source<O> inputAwareSource) {
+			return () -> {
+				O out = inputAwareSource.get();
+				computer.compute(out);
+				return out;
+			};
+		}
 
 		public static <I, O> Function<I, O> asFunction(final Computer<I, O> computer,
 				final Function<I, O> inputAwareSource) {

@@ -229,6 +229,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 		final Type[] targetParamTypes = targetInputParamTypes.clone();
 		final Type[] targetOpTypes = parameterizeTargetOpTypes(targetRef, targetParamTypes);
 		if (srcComputer != null) addSourceRef(srcRefs, srcComputer, targetRef, targetOpTypes, targetInputParamTypes);
+//		if (srcComputer != null) addComputerSourceRef(srcRefs, srcComputer, targetRef, targetOpTypes, targetInputParamTypes);
 		for (final Class<?> srcInplace : srcInplaces) {
 			addSourceRef(srcRefs, srcInplace, targetRef, targetOpTypes, targetInputParamTypes);
 		}
@@ -246,6 +247,16 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 		final boolean hit = TypeModUtils.replaceRawTypes(srcOpTypes, OpRunner.class, srcOpRawType);
 		if (hit) {
 			srcRefs.add(OpRef.fromTypes(targetRef.getName(), srcOpTypes, targetRef.getOutType(), targetInputParamTypes));
+		}
+	}
+
+	private static void addComputerSourceRef(final List<OpRef> srcRefs, final Class<?> srcOpRawType, final OpRef targetRef,
+		final Type[] targetOpTypes, final Type[] targetInputParamTypes)
+	{
+		final Type[] srcOpTypes = targetOpTypes.clone();
+		final boolean hit = TypeModUtils.replaceRawTypes(srcOpTypes, OpRunner.class, srcOpRawType);
+		if (hit) {
+			srcRefs.add(OpRef.fromTypes(targetRef.getName(), srcOpTypes, targetInputParamTypes[targetInputParamTypes.length - 1], targetInputParamTypes));
 		}
 	}
 }

@@ -339,6 +339,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		if (refOutType == null)
 			return true; // no constraints on output types
 
+		if(candidate.opInfo().output().isInput()) return true;
 		final Type candidateOutType = OpUtils.outputType(candidate);
 		final int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(new Type[] { candidateOutType },
 			new Type[] { refOutType }, typeBounds);

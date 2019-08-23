@@ -172,14 +172,20 @@ public final class TypeModUtils {
 			return Types.component(type);
 		} else if (type instanceof ParameterizedType) {
 			ParameterizedType casted = (ParameterizedType) type;
-			
-			if (Types.raw(casted).equals(unliftRawType)) {
-				Type[] typeArgs = casted.getActualTypeArguments();
+			// determine the type parameter of type with respect to unliftRawType
+			Type inheritedType = Types.getExactSuperType(casted, unliftRawType); 
+			if (!(inheritedType instanceof ParameterizedType))
+				return null;
+			ParameterizedType pInheritedType = (ParameterizedType) inheritedType;
+			// TODO: this cast should now be unnecessary?
+//			if (Types.raw(casted).equals(unliftRawType)) {
+				Type[] typeArgs = pInheritedType.getActualTypeArguments();
 				if (typeArgs.length == 1) {
 					return typeArgs[0];
 				}
-			}
+//			}
 		}
+		if (type instanceof Any) return type;
 		return null;
 	}
 

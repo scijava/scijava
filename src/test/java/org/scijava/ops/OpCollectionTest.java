@@ -32,8 +32,8 @@ package org.scijava.ops;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
-import org.scijava.param.ValidityException;
 import org.scijava.ops.types.Nil;
+import org.scijava.param.ValidityException;
 
 public class OpCollectionTest extends AbstractTestEnvironment {
 
@@ -75,38 +75,4 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		assert 0.0 == subFunction.apply(2.0, 2.0);
 	}
 	
-	@Test
-	public void testOpAliases() throws ValidityException {
-		BiFunction<Double, Double, Double> divFunction = ops.findOp( //
-				"div", new Nil<BiFunction<Double, Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-		assert 1.0 == divFunction.apply(2.0, 2.0);
-		
-		BiFunction<Double, Double, Double> addFunction = ops.findOp( //
-				"add", new Nil<BiFunction<Double, Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-		assert 4.0 == addFunction.apply(2.0, 2.0);
-		
-		BiFunction<Double, Double, Double> mulFunction = ops.findOp( //
-				"mul", new Nil<BiFunction<Double, Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-		assert 4.0 == mulFunction.apply(2.0, 2.0);
-		
-		BiFunction<Double, Double, Double> subFunction = ops.findOp( //
-				"sub", new Nil<BiFunction<Double, Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-		assert 0.0 == subFunction.apply(2.0, 2.0);
-	}
 }

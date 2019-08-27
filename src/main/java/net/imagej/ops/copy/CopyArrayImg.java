@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
  */
-@Plugin(type = Op.class, name = "copy.img", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "copy", type = ItemIO.BOTH)
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
@@ -68,7 +68,7 @@ public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 	}
 }
 
-@Plugin(type = Op.class, name = "copy.img", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "copy", type = ItemIO.OUTPUT)
 class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>>

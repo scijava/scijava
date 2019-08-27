@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <L>
  */
-@Plugin(type = Op.class, name = "copy.labelingMapping", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "copy, copy.labelingMapping", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "output", type = ItemIO.BOTH)
 public class CopyLabelingMapping<L> implements Computer<LabelingMapping<L>, LabelingMapping<L>> {

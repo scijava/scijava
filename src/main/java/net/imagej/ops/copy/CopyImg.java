@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
  */
-@Plugin(type = Op.class, name = "copy.img")
+@Plugin(type = Op.class, name = "copy, copy.img")
 @Parameter(key = "input")
 @Parameter(key = "output", type = ItemIO.BOTH)
 public class CopyImg<T extends NativeType<T>> implements Computer<Img<T>, Img<T>> {
@@ -64,7 +64,7 @@ public class CopyImg<T extends NativeType<T>> implements Computer<Img<T>, Img<T>
 	}
 }
 
-@Plugin(type = Op.class, name = "copy.img")
+@Plugin(type = Op.class, name = "copy, copy.img")
 @Parameter(key = "input")
 @Parameter(key = "output", type = ItemIO.OUTPUT)
 class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T>> {

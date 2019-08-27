@@ -43,7 +43,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
  */
-@Plugin(type = Op.class, name = "copy.type")
+@Plugin(type = Op.class, name = "copy, copy.type")
 @Parameter(key = "input")
 @Parameter(key = "copy", type = ItemIO.BOTH)
 public class CopyType<T extends Type<T>> implements Computer<T, T> {

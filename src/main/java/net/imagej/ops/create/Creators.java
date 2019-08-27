@@ -62,32 +62,32 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* ImgFactories */
 
-	@OpField(names = "create.imgFactory")
+	@OpField(names = "create, create.imgFactory")
 	@Parameter(key = "imgFactory", type = ItemIO.OUTPUT)
 	public final Source<ImgFactory<DoubleType>> factorySource = () -> new ArrayImgFactory(new DoubleType());
 
 	// note that dims is not actually passed to the ImgFactory but instead is
 	// inspected to determine which will be returned.
-	@OpField(names = "create.imgFactory")
+	@OpField(names = "create, create.imgFactory")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "imgFactory", type = ItemIO.OUTPUT)
 	public final Function<Dimensions, ImgFactory<DoubleType>> factoryFromDims = (dims) -> Util
 			.getSuitableImgFactory(dims, new DoubleType());
 
-	@OpField(names = "create.imgFactory")
+	@OpField(names = "create, create.imgFactory")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "type")
 	@Parameter(key = "imgFactory", type = ItemIO.OUTPUT)
 	public final BiFunction<Dimensions, L, ImgFactory<L>> factoryFromDimsAndType = Util::getSuitableImgFactory;
 
-	@OpField(names = "create.imgFactory")
+	@OpField(names = "create, create.imgFactory")
 	@Parameter(key = "img")
 	@Parameter(key = "factory", type = ItemIO.OUTPUT)
 	public final Function<Img<L>, ImgFactory<L>> factoryFromImg = (img) -> img.factory();
 
 	/* Imgs */
 
-	@OpField(names = "create.img")
+	@OpField(names = "create, create.img")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "type")
 	@Parameter(key = "factory")
@@ -95,7 +95,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	public final Function3<Dimensions, T, ImgFactory<T>, Img<T>> imgFromDimsTypeAndFactory = (dims, type,
 			factory) -> Imgs.create(factory, dims, type);
 
-	@OpField(names = "create.img")
+	@OpField(names = "create, create.img")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "type")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
@@ -105,7 +105,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return Imgs.create(factory, dims, type);
 	};
 
-	@OpField(names = "create.img")
+	@OpField(names = "create, create.img")
 	@Parameter(key = "intArray")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<int[], Img<DoubleType>> imgFromIntArray = (array) -> {
@@ -114,13 +114,13 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return Imgs.create(Util.getSuitableImgFactory(dims, type), dims, type);
 	};
 
-	@OpField(names = "create.img")
+	@OpField(names = "create, create.img")
 	@Parameter(key = "integerArray")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<Integer[], Img<DoubleType>> imgFromIntegerArray = (array) -> imgFromIntArray
 			.apply(Arrays.stream(array).mapToInt(Integer::intValue).toArray());
 
-	@OpField(names = "create.img")
+	@OpField(names = "create, create.img")
 	@Parameter(key = "longArray")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<long[], Img<DoubleType>> imgFromPrimitiveLongArray = (array) -> {
@@ -129,24 +129,24 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return Imgs.create(Util.getSuitableImgFactory(dims, type), dims, type);
 	};
 
-	@OpField(names = "create.img")
+	@OpField(names = "create, create.img")
 	@Parameter(key = "longArray")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<Long[], Img<DoubleType>> imgFromLongArray = (array) -> imgFromPrimitiveLongArray
 			.apply(Arrays.stream(array).mapToLong(Long::longValue).toArray());
 
-	@OpField(names = "create.img", priority = Priority.NORMAL)
+	@OpField(names = "create, create.img", priority = Priority.NORMAL)
 	@Parameter(key = "iterableInterval")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<IterableInterval<T>, Img<T>> imgFromII = (ii) -> imgFromDimsAndType.apply(ii,
 			ii.firstElement());
 
-	@OpField(names = "create.img", priority = Priority.HIGH)
+	@OpField(names = "create, create.img", priority = Priority.HIGH)
 	@Parameter(key = "inputImg")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<Img<T>, Img<T>> imgFromImg = (img) -> Imgs.create(img.factory(), img, img.firstElement());
 
-	@OpField(names = "create.img", priority = Priority.LOW)
+	@OpField(names = "create, create.img", priority = Priority.LOW)
 	@Parameter(key = "interval")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<Interval, Img<DoubleType>> imgFromInterval = (interval) -> {
@@ -154,7 +154,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return Imgs.create(Util.getSuitableImgFactory(interval, type), interval, type);
 	};
 
-	@OpField(names = "create.img", priority = Priority.NORMAL)
+	@OpField(names = "create, create.img", priority = Priority.NORMAL)
 	@Parameter(key = "rai")
 	@Parameter(key = "img", type = ItemIO.OUTPUT)
 	public final Function<RandomAccessibleInterval<T>, Img<T>> imgFromRAI = (rai) -> imgFromDimsAndType.apply(rai,
@@ -162,29 +162,29 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* IntegerType */
 
-	@OpField(names = "create.integerType", priority = Priority.NORMAL)
+	@OpField(names = "create, create.integerType", priority = Priority.NORMAL)
 	@Parameter(key = "integerType", type = ItemIO.OUTPUT)
 	public final Source<LongType> integerTypeSource = () -> new LongType();
 	
 	/* Type */
 
-	@OpField(names = "create.type")
+	@OpField(names = "create, create.type")
 	@Parameter(key = "sampleType")
 	@Parameter(key = "type", type = ItemIO.OUTPUT)
 	public final Function<T, T> typeFromSampleType = (sample) -> sample.createVariable();
 	
-	@OpField(names = "create.type", priority = Priority.LOW)
+	@OpField(names = "create, create.type", priority = Priority.LOW)
 	@Parameter(key = "booleanType", type = ItemIO.OUTPUT)
 	public final Source<BitType> booleanTypeSource = () -> new BitType();
 
 	/* ImgLabeling */
 
-	@OpField(names = "create.imgLabeling")
+	@OpField(names = "create, create.imgLabeling")
 	@Parameter(key = "img")
 	@Parameter(key = "imgLabeling", type = ItemIO.OUTPUT)
 	public final Function<Img<I>, ImgLabeling<L, I>> imgLabelingFromImg = ImgLabeling::new;
 
-	@OpField(names = "create.imgLabeling")
+	@OpField(names = "create, create.imgLabeling")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "type")
 	@Parameter(key = "factory")
@@ -195,7 +195,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return imgLabelingFromImg.apply(img);
 	};
 
-	@OpField(names = "create.imgLabeling")
+	@OpField(names = "create, create.imgLabeling")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "type")
 	@Parameter(key = "imgLabeling", type = ItemIO.OUTPUT)
@@ -204,12 +204,12 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* ImgPlus */
 
-	@OpField(names = "create.imgPlus")
+	@OpField(names = "create, create.imgPlus")
 	@Parameter(key = "img")
 	@Parameter(key = "imgPlus", type = ItemIO.OUTPUT)
 	public final Function<Img<T>, ImgPlus<T>> imgPlusFromImg = ImgPlus::new;
 
-	@OpField(names = "create.imgPlus")
+	@OpField(names = "create, create.imgPlus")
 	@Parameter(key = "img")
 	@Parameter(key = "imgPlusMetadata")
 	@Parameter(key = "imgPlus", type = ItemIO.OUTPUT)
@@ -217,7 +217,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Kernel */
 
-	@OpField(names = "create.kernel")
+	@OpField(names = "create, create.kernel")
 	@Parameter(key = "values")
 	@Parameter(key = "type")
 	@Parameter(key = "kernelRAI", type = ItemIO.OUTPUT)
@@ -236,7 +236,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	};
 
 	// TODO do we want to support this and if so is this the right way to do it?
-	@OpField(names = "create.kernel")
+	@OpField(names = "create, create.kernel")
 	@Parameter(key = "values")
 	@Parameter(key = "kernelRAI", type = ItemIO.OUTPUT)
 	public final Function<double[][], RandomAccessibleInterval<DoubleType>> kernel2DFromValues = (
@@ -244,7 +244,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Gaussian Kernel */
 
-	@OpField(names = "create.kernelGauss")
+	@OpField(names = "create, create.kernelGauss")
 	@Parameter(key = "numDims")
 	@Parameter(key = "type")
 	@Parameter(key = "gaussKernelRAI", type = ItemIO.OUTPUT)
@@ -253,13 +253,13 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	};
 
 	// TODO do we want to support this and if so is this the right way to do it?
-	@OpField(names = "create.kernelGauss")
+	@OpField(names = "create, create.kernelGauss")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "gaussKernelRAI", type = ItemIO.OUTPUT)
 	public final Function<double[], RandomAccessibleInterval<DoubleType>> kernelGaussDoubleType = (
 			sigmas) -> (RandomAccessibleInterval<DoubleType>) kernelGauss.apply(sigmas, (C) new DoubleType());
 
-	@OpField(names = "create.kernelGauss")
+	@OpField(names = "create, create.kernelGauss")
 	@Parameter(key = "sigma")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "outType")
@@ -272,7 +272,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	};
 
 	// TODO is this cast safe?
-	@OpField(names = "create.kernelGauss")
+	@OpField(names = "create, create.kernelGauss")
 	@Parameter(key = "sigma")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "gaussKernelRAI", type = ItemIO.OUTPUT)
@@ -282,20 +282,20 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Kernel Log */
 
-	@OpField(names = "create.kernelLog")
+	@OpField(names = "create, create.kernelLog")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "outType")
 	@Parameter(key = "logKernelRAI", type = ItemIO.OUTPUT)
 	public final BiFunction<double[], C, RandomAccessibleInterval<C>> kernelLog = (sigmas,
 			type) -> DefaultCreateKernelLog.createKernel(sigmas, type, imgFromDimsAndType);
 
-	@OpField(names = "create.kernelLog")
+	@OpField(names = "create, create.kernelLog")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "logKernelRAI", type = ItemIO.OUTPUT)
 	public final Function<double[], RandomAccessibleInterval<DoubleType>> kernelLogDoubleType = (
 			sigmas) -> (RandomAccessibleInterval<DoubleType>) kernelLog.apply(sigmas, (C) new DoubleType());
 
-	@OpField(names = "create.kernelLog")
+	@OpField(names = "create, create.kernelLog")
 	@Parameter(key = "sigma")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "outType")
@@ -307,7 +307,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return kernelLog.apply(sigmas, type);
 	};
 
-	@OpField(names = "create.kernelLog")
+	@OpField(names = "create, create.kernelLog")
 	@Parameter(key = "sigma")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "logKernelRAI", type = ItemIO.OUTPUT)
@@ -317,7 +317,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Kernel Diffraction */
 
-	@OpField(names = "create.kernelDiffraction")
+	@OpField(names = "create, create.kernelDiffraction")
 	@Parameter(key = "dimensions")
 	@Parameter(key = "NA")
 	@Parameter(key = "lambda")	
@@ -333,7 +333,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Kernel BiGauss */
 
-	@OpField(names = "create.kernelBiGauss")
+	@OpField(names = "create, create.kernelBiGauss")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "outType")
@@ -341,7 +341,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	public final Function3<double[], Integer, C, RandomAccessibleInterval<C>> kernelBiGauss = (sigmas, numDims,
 			outType) -> DefaultCreateKernelBiGauss.createKernel(sigmas, numDims, outType, imgFromDimsAndType);
 
-	@OpField(names = "create.kernelBiGauss")
+	@OpField(names = "create, create.kernelBiGauss")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "biGaussKernelRAI", type = ItemIO.OUTPUT)
@@ -349,7 +349,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 			numDims) -> (RandomAccessibleInterval<DoubleType>) kernelBiGauss.apply(sigmas, numDims,
 					(C) new DoubleType());
 
-	@OpField(names = "create.kernel2ndDerivBiGauss")
+	@OpField(names = "create, create.kernel2ndDerivBiGauss")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "numDims")
 	@Parameter(key = "outType")
@@ -357,7 +357,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	public final Function3<double[], Integer, C, RandomAccessibleInterval<C>> kernel2ndDerivBiGauss = (sigmas, numDims,
 			outType) -> DefaultCreateKernel2ndDerivBiGauss.createKernel(sigmas, numDims, outType, imgFromDimsAndType);
 
-	@OpField(names = "create.kernel2ndDerivBiGauss")
+	@OpField(names = "create, create.kernel2ndDerivBiGauss")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "numDimensions")
 	@Parameter(key = "biGaussKernelRAI", type = ItemIO.OUTPUT)
@@ -367,7 +367,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Kernel Gabor */
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "outType")
@@ -375,21 +375,21 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	public final Function3<double[], double[], C, RandomAccessibleInterval<C>> kernelGabor = (sigmas, periods,
 			outType) -> DefaultCreateKernelGabor.createKernel(sigmas, periods, outType, imgFromDimsAndType);
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
 	public final BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> kernelGaborDouble = (sigmas,
 			periods) -> (RandomAccessibleInterval<DoubleType>) kernelGabor.apply(sigmas, periods, (C) new DoubleType());
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
 	public final BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> kernelGaborFloat = (sigmas,
 			periods) -> (RandomAccessibleInterval<FloatType>) kernelGabor.apply(sigmas, periods, (C) new FloatType());
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
@@ -397,7 +397,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 			sigmas, periods) -> (RandomAccessibleInterval<ComplexDoubleType>) kernelGabor.apply(sigmas, periods,
 					(C) new ComplexDoubleType());
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
@@ -405,7 +405,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 			sigmas, periods) -> (RandomAccessibleInterval<ComplexFloatType>) kernelGabor.apply(sigmas, periods,
 					(C) new ComplexFloatType());
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "outType")
@@ -417,7 +417,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return DefaultCreateKernelGabor.createKernel(sigmas, periods, outType, imgFromDimsAndType);
 	};
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
@@ -428,7 +428,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return (RandomAccessibleInterval<DoubleType>) kernelGabor.apply(sigmas, periods, (C) new DoubleType());
 	};
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
@@ -439,7 +439,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return (RandomAccessibleInterval<FloatType>) kernelGabor.apply(sigmas, periods, (C) new FloatType());
 	};
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
@@ -451,7 +451,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 				(C) new ComplexDoubleType());
 	};
 
-	@OpField(names = "create.kernelGabor")
+	@OpField(names = "create, create.kernelGabor")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "periods")
 	@Parameter(key = "gaborKernelRAI", type = ItemIO.OUTPUT)
@@ -465,7 +465,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Kernel Sobel */
 
-	@OpField(names = "create.kernelSobel")
+	@OpField(names = "create, create.kernelSobel")
 	@Parameter(key = "outType")
 	@Parameter(key = "sobelKernelRAI", type = ItemIO.OUTPUT)
 	public final Function<C, RandomAccessibleInterval<C>> kernelSobel = (outType) -> DefaultCreateKernelSobel
@@ -477,7 +477,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	// L can be anything. So in this case it is safe to return an object with an
 	// unbounded type variable because the caller has to restrict it in the
 	// declaration.
-	@OpField(names = "create.labelingMapping")
+	@OpField(names = "create, create.labelingMapping")
 	@Parameter(key = "labelingMapping", type = ItemIO.OUTPUT)
 	public final Source<LabelingMapping<L>> labelingMappingSource = () -> new LabelingMapping<>(
 			integerTypeSource.create());
@@ -502,7 +502,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 		return new LongType();
 	};
 
-	@OpField(names = "create.labelingMapping")
+	@OpField(names = "create, create.labelingMapping")
 	@Parameter(key = "maxNumSets")
 	@Parameter(key = "labelingMapping", type = ItemIO.OUTPUT)
 	public final Function<Integer, LabelingMapping<L>> labelingMapping = (maxNumSets) -> new LabelingMapping<>(
@@ -510,7 +510,7 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* Object */
 
-	@OpField(names = "create.object")
+	@OpField(names = "create, create.object")
 	@Parameter(key = "class")
 	@Parameter(key = "object", type = ItemIO.OUTPUT)
 	public final Function<Class<L>, L> object=(clazz)->{try{return clazz.newInstance();}catch(
@@ -525,21 +525,21 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 
 	/* NativeType */
 
-	@OpField(names = "create.nativeType", priority = Priority.HIGH)
+	@OpField(names = "create, create.nativeType", priority = Priority.HIGH)
 	@Parameter(key = "nativeType", type = ItemIO.OUTPUT)
 	public final Source<DoubleType> defaultNativeType = () -> new DoubleType();
 
 	// TODO is this a safe cast?
-	@OpField(names = "create.nativeType")
+	@OpField(names = "create, create.nativeType")
 	@Parameter(key = "type")
 	@Parameter(key = "nativeType", type = ItemIO.OUTPUT)
 	public final Function<Class<N>, N> nativeTypeFromClass = (clazz) -> (N) object.apply((Class<L>) clazz);
 
-	@OpField(names = "create.vector")
+	@OpField(names = "create, create.vector")
 	@Parameter(key = "vector3d", type = ItemIO.OUTPUT)
 	public final Source<Vector3d> defaultVector3d = () -> new Vector3d();
 
-	@OpField(names = "create.vector")
+	@OpField(names = "create, create.vector")
 	@Parameter(key = "vector3f", type = ItemIO.OUTPUT)
 	public final Source<Vector3f> defaultVector3f = () -> new Vector3f();
 }

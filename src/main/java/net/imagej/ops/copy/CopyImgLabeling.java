@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
  */
-@Plugin(type = Op.class, name = "copy.imgLabeling")
+@Plugin(type = Op.class, name = "copy, copy.imgLabeling")
 @Parameter(key = "input")
 @Parameter(key = "output", type = ItemIO.BOTH)
 public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>

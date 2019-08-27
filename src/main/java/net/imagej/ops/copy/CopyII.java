@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
  */
-@Plugin(type = Op.class, name = "copy.iterableInterval", priority = 1.0)
+@Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
 @Parameter(key = "input")
 @Parameter(key = "output", type = ItemIO.BOTH)
 public class CopyII<T> implements Computer<IterableInterval<T>, IterableInterval<T>> {
@@ -68,7 +68,7 @@ public class CopyII<T> implements Computer<IterableInterval<T>, IterableInterval
 	}
 }
 
-@Plugin(type = Op.class, name = "copy.iterableInterval", priority = 1.0)
+@Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
 @Parameter(key = "input")
 @Parameter(key = "output", type = ItemIO.OUTPUT)
 class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterval<T>> {

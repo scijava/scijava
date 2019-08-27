@@ -42,6 +42,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
@@ -129,13 +130,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	/**
 	 * Prefix tree to cache and quickly find {@link OpInfo}s.
 	 */
-	private PrefixTree<OpInfo> opCache;
+//	private PrefixTree<OpInfo> opCache;
 
 	/**
 	 * Map to collect all aliases for a specific op. All aliases will map to one
 	 * canonical name of the op which is defined as the first one.
 	 */
-	private Map<String, String> opAliases = new HashMap<>();
+	private Map<String, List<OpInfo>> opCache;
 
 	private static Map<Class<?>, Class<?>> wrappers = wrappers();
 
@@ -178,7 +179,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	}
 
 	public void initOpCache() {
-		opCache = new PrefixTree<>();
+		opCache = new HashMap<>();
 
 		// Add regular Ops
 		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
@@ -222,8 +223,11 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 					+ opInfo.getValidityException().getMessage());
 			return;
 		}
-		addAliases(parsedOpNames, opInfo.implementationName());
-		opCache.add(new PrefixQuery(parsedOpNames[0]), opInfo);
+		for(String opName: parsedOpNames) {
+			if (!opCache.containsKey(opName))
+				opCache.put(opName, new ArrayList<>());
+			opCache.get(opName).add(opInfo);
+		}
 	}
 
 	@Override
@@ -231,7 +235,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		if (opCache == null) {
 			initOpCache();
 		}
-		return opCache.getAndBelow(PrefixQuery.all());
+        return opCache.values().stream()
+        		.flatMap(list -> list.stream())
+        		.collect(Collectors.toList());
 	}
 
 	@Override
@@ -242,11 +248,10 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		if (name == null || name.isEmpty()) {
 			return infos();
 		}
-		String opName = opAliases.get(OpUtils.getCanonicalOpName(name));
-		if (opName == null) {
+		Iterable<OpInfo> infos = opCache.get(name);
+		if (infos == null)
 			throw new IllegalArgumentException("No op infos with name: " + name + " available.");
-		}
-		return opCache.getAndBelow(new PrefixQuery(opName));
+		return infos;
 	}
 
 	@Override
@@ -463,31 +468,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			throw new OpMatchingException(error);
 		}
 		return new OpRef(name, new Type[] { type }, mappedOutputs[0], mappedInputs);
-	}
-
-	/**
-	 * Updates alias map using the specified String list. The first String in the
-	 * list is assumed to be the canonical name of the op. After this method
-	 * returns, all String in the specified list will map to the canonical name.
-	 *
-	 * @param opNames
-	 */
-	private void addAliases(String[] opNames, String opImpl) {
-		String opName = opNames[0];
-		for (String alias : opNames) {
-			if (alias == null || alias.isEmpty()) {
-				continue;
-			}
-			if (opAliases.containsKey(alias)) {
-				if (!opAliases.get(alias).equals(opName)) {
-//					log.warn("Possible naming clash for op '" + opImpl + "' detected. Attempting to add alias '" + alias
-//							+ "' for op name '" + opName + "'. However the alias '" + alias + "' is already "
-//							+ "associated with op name '" + opAliases.get(alias) + "'.");
-				}
-				continue;
-			}
-			opAliases.put(alias, opName);
-		}
 	}
 
 	/**

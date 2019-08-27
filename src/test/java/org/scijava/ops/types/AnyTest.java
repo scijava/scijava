@@ -123,7 +123,7 @@ class MutableNotAny {
 	}
 }
 
-@Plugin(type = Op.class, name = "create.mutableNotAny")
+@Plugin(type = Op.class, name = "create, create.mutableNotAny")
 @Parameter(key = "mutableNotAny", type = ItemIO.OUTPUT)
 class MutableNotAnyCreator implements Source<MutableNotAny> {
 

@@ -102,6 +102,11 @@
 
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->
 		<releaseProfiles>deploy-to-scijava</releaseProfiles>
+
+		<!-- NB: Store method parameter names into the bytecode. -->
+		<!-- Overkill, but lets us look up parameter names at runtime. -->
+		<!-- https://www.beyondjava.net/reading-java-8-method-parameter-named-reflection -->
+		<maven.compiler.parameters>true</maven.compiler.parameters>
 	</properties>
 
 	<repositories>

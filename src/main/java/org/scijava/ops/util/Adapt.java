@@ -39,6 +39,12 @@ public class Adapt {
 		private Functions() {
 		}
 
+		// TODO: when converting, add to a type map, so this computer can have its generic type discerned at will.
+		// The type map also needs to be populated by OpField and OpMethod generic types when they are discovered.
+		// The goal of the type map is to store, for each lambda op instance, what its generic type is.
+		// We know what the generic type is during op discovery, because it's the
+		// generic type of the field (in the case of OpField), or the generic type
+		// parameters of the method (in the case of OpMethod).
 		public static <I, O> Computer<I, O> asComputer(final Function<I, O> function, final Computer<O, O> copy) {
 			return (in, out) -> {
 				final O tmp = function.apply(in);

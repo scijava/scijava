@@ -21,11 +21,11 @@ public class Maps {
 		public interface Iterables {
 			
 			public static <I, O> Function<Iterable<I>, Iterable<O>> liftBoth(final Function<I, O> function) {
-				return iter -> () -> Streams.stream(iter).map(function).iterator();
+				return iter -> Streams.stream(iter).map(function).collect(Collectors.toList());
 			}
 
 			public static <I, O> Function<Iterable<I>, Iterable<O>> bothFlat(final Function<I, Iterable<O>> function) {
-				return iter -> () -> Streams.stream(iter).flatMap(i -> Streams.stream(function.apply(i))).iterator();
+				return iter -> Streams.stream(iter).flatMap(i -> Streams.stream(function.apply(i))).collect(Collectors.toList());
 			}
 		}
 		

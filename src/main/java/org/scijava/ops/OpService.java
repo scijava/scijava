@@ -222,13 +222,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?> outType, final Object... secondaryArgs) {
+			final Nil<?> outType) {
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), outType != null ? outType.getType() : null, toTypes(
 			inTypes));
-		return (T) findOpInstance(opName, ref, secondaryArgs);
+		return (T) findOpInstance(opName, ref);
 	}
 
-	public Object findOpInstance(final String opName, final OpRef ref, final Object... secondaryArgs) {
+	public Object findOpInstance(final String opName, final OpRef ref) {
 		Object op = null;
 		OpCandidate match = null;
 		OpTransformationCandidate transformation = null;
@@ -236,7 +236,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			// Find single match which matches the specified types
 			match = matcher.findSingleMatch(this, ref);
 			final List<Object> dependencies = resolveOpDependencies(match);
-			op = match.createOp(dependencies, secondaryArgs);
+			op = match.createOp(dependencies);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
@@ -254,7 +254,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			try {
 				final List<Object> dependencies = resolveOpDependencies(transformation
 					.getSourceOp());
-				op = transformation.exceute(this, dependencies, secondaryArgs);
+				op = transformation.exceute(this, dependencies);
 			} catch (OpMatchingException | OpTransformationException e1) {
 				throw new IllegalArgumentException("Execution of Op transformatioon failed:\n" + e1);
 			}
@@ -271,9 +271,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return op;
 	}
 
-	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType,
-			final Object... secondaryArgs) {
-		return findOpInstance(opName, specialType, inTypes, outType, secondaryArgs);
+	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
+		return findOpInstance(opName, specialType, inTypes, outType);
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {

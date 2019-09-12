@@ -3,7 +3,6 @@ package org.scijava.ops.transform;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpCandidate;
@@ -44,10 +43,10 @@ public class OpTransformationCandidate {
 //		
 //	}
 
-	public Object exceute(OpService opService, List<?> dependencies, Object... secondaryArgs)
+	public Object exceute(OpService opService, List<?> dependencies)
 		throws OpMatchingException, OpTransformationException
 	{
-		Object op = srcOp.createOp(dependencies, secondaryArgs);
+		Object op = srcOp.createOp(dependencies);
 //		substituteAnyInTransformation();
 
 		OpInfo srcInfo = srcOp.opInfo();

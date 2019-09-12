@@ -4,7 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +53,7 @@ public class Computers {
 		return ALL_COMPUTERS.containsKey(Types.raw(type));
 	}
 
-	public static <O> NullaryComputer<O> nullary(final OpService ops, final String opName, final Nil<O> outputType,
-			final Object... secondaryArgs) {
+	public static <O> NullaryComputer<O> nullary(final OpService ops, final String opName, final Nil<O> outputType) {
 		Nil<NullaryComputer<O>> computerNil = new Nil<NullaryComputer<O>>() {
 			@Override
 			public Type getType() {
@@ -67,12 +65,11 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { outputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I, O> Computer<I, O> unary(final OpService ops, final String opName, final Nil<I> inputType,
-			final Nil<O> outputType, final Object... secondaryArgs) {
+			final Nil<O> outputType) {
 
 		Nil<Computer<I, O>> computerNil = new Nil<Computer<I, O>>() {
 			@Override
@@ -85,13 +82,11 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { inputType, outputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, O> BiComputer<I1, I2, O> binary(final OpService ops, final String opName,
-			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<O> outputType,
-			final Object... secondaryArgs) {
+			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<O> outputType) {
 
 		Nil<BiComputer<I1, I2, O>> computerNil = new Nil<BiComputer<I1, I2, O>>() {
 			@Override
@@ -105,13 +100,11 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, outputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, I3, O> Computer3<I1, I2, I3, O> ternary(final OpService ops, final String opName,
-			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type, final Nil<O> outputType,
-			final Object... secondaryArgs) {
+			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type, final Nil<O> outputType) {
 
 		Nil<Computer3<I1, I2, I3, O>> computerNil = new Nil<Computer3<I1, I2, I3, O>>() {
 			@Override
@@ -125,13 +118,12 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, input3Type, outputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, I3, I4, O> Computer4<I1, I2, I3, I4, O> quaternary(final OpService ops, final String opName,
 			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type, final Nil<I4> input4Type,
-			final Nil<O> outputType, final Object... secondaryArgs) {
+			final Nil<O> outputType) {
 
 		Nil<Computer4<I1, I2, I3, I4, O>> computerNil = new Nil<Computer4<I1, I2, I3, I4, O>>() {
 			@Override
@@ -145,14 +137,12 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, outputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, I3, I4, I5, O> Computer5<I1, I2, I3, I4, I5, O> quinary(final OpService ops,
 			final String opName, final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type,
-			final Nil<I4> input4Type, final Nil<I5> input5Type, final Nil<O> outputType,
-			final Object... secondaryArgs) {
+			final Nil<I4> input4Type, final Nil<I5> input5Type, final Nil<O> outputType) {
 
 		Nil<Computer5<I1, I2, I3, I4, I5, O>> computerNil = new Nil<Computer5<I1, I2, I3, I4, I5, O>>() {
 			@Override
@@ -166,8 +156,7 @@ public class Computers {
 				opName, //
 				computerNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, input5Type, outputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 }

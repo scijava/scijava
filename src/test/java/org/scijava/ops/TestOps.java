@@ -39,38 +39,6 @@ public class TestOps {
 
 	// -- Op Classes -- //
 
-	// OpsTest
-
-	@Plugin(type = Op.class, name = "test.secondaryInputsFunction")
-	@Parameter(key = "number")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoublConstantFunction implements Function<Double, Double> {
-
-		@Parameter(type = ItemIO.INPUT)
-		private double exponent;
-
-		@Override
-		public Double apply(Double t) {
-			return Math.pow(t, exponent);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "test.secondaryInputsComputer")
-	@Parameter(key = "array")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwisePowerDoubleArrayComputer implements Computer<double[], double[]> {
-
-		@Parameter(type = ItemIO.INPUT)
-		private Double exponent;
-
-		@Override
-		public void compute(double[] in1, double[] out) {
-			for (int i = 0; i < out.length; i++) {
-				out[i] = Math.pow(in1[i], exponent);
-			}
-		}
-	}
-
 	// AutoTransformTest
 
 	@Plugin(type = Op.class, name = "test.liftSqrt")

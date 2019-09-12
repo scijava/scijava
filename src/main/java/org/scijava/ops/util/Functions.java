@@ -60,7 +60,7 @@ public class Functions {
 	}
 
 	public static <I, O> Function<I, O> unary(final OpService ops, final String opName,
-			final Nil<I> inputType, final Nil<O> outputType, final Object... secondaryArgs) {
+			final Nil<I> inputType, final Nil<O> outputType) {
 
 		Nil<Function<I, O>> functionNil = new Nil<Function<I, O>>() {
 			@Override
@@ -73,13 +73,11 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { inputType }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, O> BiFunction<I1, I2, O> binary(final OpService ops, final String opName,
-			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<O> outputType,
-			final Object... secondaryArgs) {
+			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<O> outputType) {
 
 		Nil<BiFunction<I1, I2, O>> functionNil = new Nil<BiFunction<I1, I2, O>>() {
 			@Override
@@ -93,13 +91,11 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, I3, O> Function3<I1, I2, I3, O> ternary(final OpService ops, final String opName,
-			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type, final Nil<O> outputType,
-			final Object... secondaryArgs) {
+			final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type, final Nil<O> outputType) {
 
 		Nil<Function3<I1, I2, I3, O>> functionNil = new Nil<Function3<I1, I2, I3, O>>() {
 			@Override
@@ -113,13 +109,12 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type, input3Type }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 
 	public static <I1, I2, I3, I4, O> Function4<I1, I2, I3, I4, O> quaternary(final OpService ops,
 			final String opName, final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type,
-			final Nil<I4> input4Type, final Nil<O> outputType, final Object... secondaryArgs) {
+			final Nil<I4> input4Type, final Nil<O> outputType) {
 
 		Nil<Function4<I1, I2, I3, I4, O>> functionNil = new Nil<Function4<I1, I2, I3, I4, O>>() {
 			@Override
@@ -133,13 +128,12 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 	
 	public static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> quinary(final OpService ops,
 			final String opName, final Nil<I1> input1Type, final Nil<I2> input2Type, final Nil<I3> input3Type,
-			final Nil<I4> input4Type, final Nil<I5> input5Type, final Nil<O> outputType, final Object... secondaryArgs) {
+			final Nil<I4> input4Type, final Nil<I5> input5Type, final Nil<O> outputType) {
 
 		Nil<Function5<I1, I2, I3, I4, I5, O>> functionNil = new Nil<Function5<I1, I2, I3, I4, I5, O>>() {
 			@Override
@@ -153,7 +147,6 @@ public class Functions {
 				opName, //
 				functionNil, //
 				new Nil[] { input1Type, input2Type, input3Type, input4Type, input5Type }, //
-				outputType, //
-				secondaryArgs);
+				outputType);
 	}
 }

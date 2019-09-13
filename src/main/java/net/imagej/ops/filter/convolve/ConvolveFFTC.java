@@ -67,7 +67,7 @@ import org.scijava.struct.ItemIO;
 public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computer7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
 
-	@OpDependency(name = "math.complexConjugateMultiply")
+	@OpDependency(name = "math.multiply")
 	private BiComputer<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
 
 	@OpDependency(name = "filter.linearFilter")

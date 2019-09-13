@@ -108,7 +108,7 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	@OpDependency(name = "filter.padInputFFTMethods")
 	private Function4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
 
-	@OpDependency(name = "filter.padShiftFFTKernel")
+	@OpDependency(name = "filter.padShiftKernelFFTMethods")
 	private BiFunction<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp;
 
 	@OpDependency(name = "filter.createFFTOutput")

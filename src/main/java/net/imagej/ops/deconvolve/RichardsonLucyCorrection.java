@@ -29,12 +29,14 @@
 
 package net.imagej.ops.deconvolve;
 
-import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
+import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.ComplexType;
@@ -44,9 +46,9 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer5;
 import org.scijava.ops.core.computer.Computer7;
+import org.scijava.ops.core.inplace.Inplace3First;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -88,14 +90,17 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 
 	//TODO is this allowed (to divide an O by an I)? Should it be?
 //	@OpDependency(name = "math.divide") TODO: allow the matcher to fix this
-	private Computer3<Iterable<O>, Iterable<I>, Double, Iterable<O>> divide = (in1, in2, in3, out) -> {
-		Iterator<O> itr1 = in1.iterator();
-		Iterator<I> itr2 = in2.iterator();
-		Iterator<O> itrout = out.iterator();
+	private Inplace3First<IterableInterval<O>, RandomAccessibleInterval<I>, Double> divide = (io, in2, in3) -> {
+		Cursor<O> ioCursor = io.cursor();
+		RandomAccess<I> inRA = in2.randomAccess();
 		
-		while(itr1.hasNext() && itr2.hasNext() && itrout.hasNext()) {
-			Double val2 = itr2.next().getRealDouble();
-			itrout.next().setReal(val2 == 0 ? in3 : itr1.next().getRealDouble() / val2);
+		while(ioCursor.hasNext()) {
+			Double val1 = ioCursor.next().getRealDouble();
+			inRA.setPosition(ioCursor);
+			Double val2 = inRA.get().getRealDouble();
+			if(val2 != 0) System.out.println(val2);
+			if(val1 == 0) ioCursor.next().setReal(in3);
+			else ioCursor.next().setReal(val2 / val1);
 		}
 	};
 
@@ -115,10 +120,8 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 		ExecutorService es,
 		RandomAccessibleInterval<O> correction)
 	{
-		RandomAccessibleInterval<O> copyReblurred = copy.apply(reblurred);
-		
 		// divide observed image by reblurred
-		divide.compute(Views.iterable(reblurred), Views.iterable(observed), 0.0, Views.iterable(copyReblurred));
+		divide.mutate(Views.iterable(reblurred), observed, 0.0);
 
 		// correlate with psf to compute the correction factor
 		// Note: FFT of psf is pre-computed and set as an input parameter of the op

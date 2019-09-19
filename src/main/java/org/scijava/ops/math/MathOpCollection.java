@@ -22,7 +22,7 @@ public class MathOpCollection {
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static final BiFunction<Double, Double, Double> addDoublesFunction = (x, y) -> x + y;
+	public static final BiFunction<Number, Number, Double> addDoublesFunction = (x, y) -> x.doubleValue() + y.doubleValue();
 
 	@OpField(names = MathOps.ADD, priority = Priority.EXTREMELY_HIGH)
 	@Parameter(key = "number1")
@@ -34,18 +34,25 @@ public class MathOpCollection {
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static final BiFunction<Double, Double, Double> subDoublesFunction = (t, u) -> t - u;
+	public static final BiFunction<Number, Number, Double> subDoublesFunction = (t, u) -> t.doubleValue() - u.doubleValue();
 
 	@OpField(names = MathOps.MUL)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static final BiFunction<Double, Double, Double> mulDoublesFunction = (t, u) -> t * u;
+	public static final BiFunction<Number, Number, Double> mulDoublesFunction = (t, u) -> t.doubleValue() * u.doubleValue();
 
 	@OpField(names = MathOps.DIV)
 	@Parameter(key = "number1")
 	@Parameter(key = "number2")
 	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static final BiFunction<Double, Double, Double> divDoublesFunction = (t, u) -> t / u;
+	public static final BiFunction<Number, Number, Double> divDoublesFunction = (t, u) -> t.doubleValue() / u.doubleValue();
+	
+	
+	@OpField(names = MathOps.MOD)
+	@Parameter(key = "number1")
+	@Parameter(key = "number2")
+	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	public static final BiFunction<Number, Number, Double> remainderDoublesFunction = (t, u) -> t.doubleValue() % u.doubleValue();
 
 }

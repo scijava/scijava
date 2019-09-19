@@ -44,6 +44,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
@@ -524,4 +526,11 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	@Parameter(key = "nativeType", type = ItemIO.OUTPUT)
 	public final Function<Class<N>, N> nativeTypeFromClass = (clazz) -> (N) object.apply((Class<L>) clazz);
 
+	@OpField(names = "create.vector")
+	@Parameter(key = "vector3d", type = ItemIO.OUTPUT)
+	public final Source<Vector3d> defaultVector3d = () -> new Vector3d();
+
+	@OpField(names = "create.vector")
+	@Parameter(key = "vector3f", type = ItemIO.OUTPUT)
+	public final Source<Vector3f> defaultVector3f = () -> new Vector3f();
 }

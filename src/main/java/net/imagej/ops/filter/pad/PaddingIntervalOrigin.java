@@ -27,57 +27,54 @@
  * #L%
  */
 
-package net.imagej.ops.filter.convolve;
+package net.imagej.ops.filter.pad;
 
-import net.imagej.ops.filter.AbstractFFTFilterF;
+import java.util.function.BiFunction;
+
+import net.imglib2.FinalInterval;
+import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
-import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
-import org.scijava.ops.OpDependency;
+import org.scijava.core.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.util.Adapt;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Convolve op for (@link Img)
+ * Op used to translate the center of an interval the origin. This is needed for
+ * FFT operations
  * 
- * @author Brian Northan
+ * @author bnorthan
+ * @param <T>
  * @param <I>
  * @param <O>
- * @param <K>
- * @param <C>
  */
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "filter.padIntervalOrigin", priority = Priority.HIGH)
 @Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "borderSize")
-@Parameter(key = "obfInput")
-@Parameter(key = "obfKernel")
-@Parameter(key = "fftType")
-@Parameter(key = "outType")
-@Parameter(key = "output", type = ItemIO.BOTH)
-public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-		extends AbstractFFTFilterF<I, O, K, C> {
+@Parameter(key = "interval")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+public class PaddingIntervalOrigin<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
+		implements BiFunction<I, Interval, O> {
 
-	@OpDependency(name = "filter.convolve")
-	private Computer4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> convolveOp;
-
-	/**
-	 * create a convolve filter computer
-	 */
 	@Override
-	public BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
-			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
-			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
-			RandomAccessibleInterval<O> output) {
-		return Adapt.Computers.asBiComputer(convolveOp, fftImg, fftKernel);
-	}
+	@SuppressWarnings("unchecked")
+	public O apply(final I input, final Interval centeredInterval) {
 
+		int numDimensions = input.numDimensions();
+
+		// compute where to place the final Interval for the input so that the
+		// coordinate in the center
+		// of the input is at position (0,0).
+		final long[] min = new long[numDimensions];
+		final long[] max = new long[numDimensions];
+
+		for (int d = 0; d < numDimensions; ++d) {
+			min[d] = input.min(d) + input.dimension(d) / 2;
+			max[d] = min[d] + centeredInterval.dimension(d) - 1;
+		}
+
+		return (O) new FinalInterval(min, max);
+	}
 }

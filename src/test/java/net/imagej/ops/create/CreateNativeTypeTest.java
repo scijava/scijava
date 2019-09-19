@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.Source;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.types.Nil;
 
 /**

@@ -27,57 +27,57 @@
  * #L%
  */
 
-package net.imagej.ops.filter.convolve;
+package net.imagej.ops.filter.pad;
 
-import net.imagej.ops.filter.AbstractFFTFilterF;
+import java.util.function.BiFunction;
+
+import net.imglib2.Dimensions;
+import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.type.NativeType;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.ComplexType;
-import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Util;
+import net.imglib2.view.Views;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.util.Adapt;
+import org.scijava.ops.core.function.Function3;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Convolve op for (@link Img)
+ * Op used to pad the image by extending the borders
  * 
- * @author Brian Northan
+ * @author bnorthan
+ * @param <T>
  * @param <I>
  * @param <O>
- * @param <K>
- * @param <C>
  */
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "filter.padInput", priority = Priority.HIGH)
 @Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "borderSize")
-@Parameter(key = "obfInput")
-@Parameter(key = "obfKernel")
-@Parameter(key = "fftType")
-@Parameter(key = "outType")
-@Parameter(key = "output", type = ItemIO.BOTH)
-public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-		extends AbstractFFTFilterF<I, O, K, C> {
+@Parameter(key = "paddedDimensions")
+@Parameter(key = "outOfBoundsFactory", description = "The OutOfBoundsFactory used to extend the image")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
+		implements Function3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 
-	@OpDependency(name = "filter.convolve")
-	private Computer4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> convolveOp;
+	@OpDependency(name = "filter.padIntervalCentered")
+	private BiFunction<I, Dimensions, O> paddingIntervalCentered;
 
-	/**
-	 * create a convolve filter computer
-	 */
 	@Override
-	public BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
-			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
-			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
-			RandomAccessibleInterval<O> output) {
-		return Adapt.Computers.asBiComputer(convolveOp, fftImg, fftKernel);
-	}
+	@SuppressWarnings("unchecked")
+	public O apply(final I input, final Dimensions paddedDimensions,
+			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
 
+		if (obf == null) {
+			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
+		}
+
+		Interval inputInterval = paddingIntervalCentered.apply(input, paddedDimensions);
+
+		return (O) Views.interval(Views.extend(input, obf), inputInterval);
+	}
 }

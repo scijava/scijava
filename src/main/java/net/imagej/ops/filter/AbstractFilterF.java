@@ -29,22 +29,17 @@
 
 package net.imagej.ops.filter;
 
-import net.imagej.ops.special.function.AbstractBinaryFunctionOp;
-import net.imagej.ops.special.function.BinaryFunctionOp;
+import java.util.function.BiFunction;
+
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
-import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
-import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.Type;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Util;
-
-import org.scijava.plugin.Parameter;
 
 /**
  * Abstract class for binary filter that performs operations using an image and
@@ -56,107 +51,56 @@ import org.scijava.plugin.Parameter;
  * @param <K>
  * @param <C>
  */
-public abstract class AbstractFilterF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>, C extends ComplexType<C> & NativeType<C>>
-		extends
-		AbstractBinaryFunctionOp<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
+public abstract class AbstractFilterF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>, C extends ComplexType<C> & NativeType<C>> {
 
 	/**
-	 * Border size in each dimension. If null default border size will be
-	 * calculated and added.
+	 * Border size in each dimension. If null default border size will be calculated
+	 * and added.
 	 */
-	@Parameter(required = false)
 	private long[] borderSize = null;
 
 	/**
 	 * Defines the out of bounds strategy for the extended area of the input
 	 */
-	@Parameter(required = false)
 	private OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput;
 
 	/**
 	 * Defines the out of bounds strategy for the extended area of the kernel
 	 */
-	@Parameter(required = false)
 	private OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel;
 
 	/**
 	 * The output type. If null a default output type will be used.
 	 */
-	@Parameter(required = false)
 	private Type<O> outType;
 
-	/**
-	 * Op used to pad the input
-	 */
-	private BinaryFunctionOp<RandomAccessibleInterval<I>, Dimensions, RandomAccessibleInterval<I>> padOp;
-
-	public BinaryFunctionOp<RandomAccessibleInterval<I>, Dimensions, RandomAccessibleInterval<I>> getPadOp() {
-		return padOp;
-	}
-
-	public void setPadOp(BinaryFunctionOp<RandomAccessibleInterval<I>, Dimensions, RandomAccessibleInterval<I>> padOp) {
-		this.padOp = padOp;
-	}
-
-	public BinaryFunctionOp<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> getPadKernelOp() {
-		return padKernelOp;
-	}
-
-	public void setPadKernelOp(
-			BinaryFunctionOp<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp) {
-		this.padKernelOp = padKernelOp;
-	}
-
-	/**
-	 * Op used to pad the kernel
-	 */
-	private BinaryFunctionOp<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp;
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void initialize() {
-		super.initialize();
-
-		if (this.obfInput == null) {
-			obfInput = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
-		}
-
-	}
-
-	/**
-	 * Create the output using the outFactory and outType if they exist. If
-	 * these are null use a default factory and type
-	 */
-	@SuppressWarnings("unchecked")
-	public RandomAccessibleInterval<O> createOutput(RandomAccessibleInterval<I> input,
-			RandomAccessibleInterval<K> kernel) {
-
-		if (outType == null) {
-
-			// if the input type and kernel type are the same use this type
-			if (Util.getTypeFromInterval(input).getClass() == Util.getTypeFromInterval(kernel).getClass()) {
-				Object temp = Util.getTypeFromInterval(input).createVariable();
-				outType = (Type<O>) temp;
-
-			}
-			// otherwise default to float
-			else {
-				Object temp = new FloatType();
-				outType = (Type<O>) temp;
-			}
-		}
-
-		return ops().create().img(input, outType.createVariable());
-	}
-
+	//
+	/// **
+	// * Op used to pad the input
+	// */
+	// protected BiFunction<RandomAccessibleInterval<I>, Dimensions,
+	// RandomAccessibleInterval<I>> padOp;
+	//
+	/// **
+	// * Op used to pad the kernel
+	// */
+	// protected BiFunction<RandomAccessibleInterval<K>, Dimensions,
+	// RandomAccessibleInterval<K>> padKernelOp;
+	//
 	/**
 	 * compute output by extending the input(s) and running the filter
 	 */
-	@Override
-	public RandomAccessibleInterval<O> calculate(final RandomAccessibleInterval<I> input,
-			final RandomAccessibleInterval<K> kernel) {
+	public void computeOutput(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<K> kernel,
+			final long[] borderSize, final OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			final OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel,
+			final BiFunction<RandomAccessibleInterval<I>, Dimensions, RandomAccessibleInterval<I>> padOp,
+			final BiFunction<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp,
+			final RandomAccessibleInterval<O> output) {
 
-		RandomAccessibleInterval<O> output = createOutput(input, kernel);
+		this.borderSize = borderSize;
+		this.obfInput = obfInput;
+		this.obfKernel = obfKernel;
+		this.outType = Util.getTypeFromInterval(output).createVariable();
 
 		final int numDimensions = input.numDimensions();
 
@@ -179,13 +123,11 @@ public abstract class AbstractFilterF<I extends RealType<I>, O extends RealType<
 			}
 		}
 
-		RandomAccessibleInterval<I> paddedInput = padOp.calculate(input, new FinalDimensions(paddedSize));
+		RandomAccessibleInterval<I> paddedInput = padOp.apply(input, new FinalDimensions(paddedSize));
 
-		RandomAccessibleInterval<K> paddedKernel = padKernelOp.calculate(kernel, new FinalDimensions(paddedSize));
+		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
 		computeFilter(paddedInput, paddedKernel, output, paddedSize);
-
-		return output;
 
 	}
 

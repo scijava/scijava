@@ -241,7 +241,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		}
 
 		final Type outputType = candidate.getRef().getOutType();
-		if (Objects.equals(outputType, OpUtils.outputType(candidate)))
+		if (!Objects.equals(outputType, OpUtils.outputType(candidate)))
 			return false;
 
 		candidate.setStatus(StatusCode.MATCH);

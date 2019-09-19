@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.scijava.ops.types.Any;
 import org.scijava.util.Types;
 
 /**
@@ -276,6 +277,6 @@ public final class TypeModUtils {
 	}
 	
 	private static boolean containsPrimitive(Type[] types) {
-		return Arrays.stream(types).anyMatch(t -> Types.raw(t).isPrimitive());
+		return Arrays.stream(types).filter(t -> !(t instanceof Any)).anyMatch(t -> Types.raw(t).isPrimitive());
 	}
 }

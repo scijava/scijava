@@ -194,6 +194,13 @@ public class ComputerToFunctionTransformer implements FunctionalTypeTransformer 
 	}
 
 	@Override
+	public OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
+		final Type[] targetTypes = srcRef.getTypes();
+		TypeModUtils.replaceRawTypes(targetTypes, Types.raw(srcRef.getTypes()[0]), Types.raw(targetRef.getTypes()[0]));
+		return new OpRef(targetRef.getName(), targetTypes, srcRef.getOutType(), targetRef.getArgs());
+	}
+	
+	@Override
 	public Integer getTargetArity(final Class<?> targetFunctionalRawType) {
 		return Functions.ALL_FUNCTIONS.get(targetFunctionalRawType);
 	}

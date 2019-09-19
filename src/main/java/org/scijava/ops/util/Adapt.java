@@ -94,6 +94,18 @@ public class Adapt {
 				return function3.apply(in1, in2, in3);
 			};
 		}
+		
+		public static <I1, I2, I3, I4, O> Function3<I1, I2, I3, O> asFunction3(final Function4<I1, I2, I3, I4, O> function4, I4 in4){
+			return (in1, in2, in3) ->{
+				return function4.apply(in1, in2, in3, in4);
+			};
+		}
+
+		public static <I1, I2, I3, I4, O> BiFunction<I1, I2, O> asBiFunction(final Function4<I1, I2, I3, I4, O> function4, I3 in3, I4 in4){
+			return (in1, in2) ->{
+				return function4.apply(in1, in2, in3, in4);
+			};
+		}
 
 	}
 
@@ -227,6 +239,12 @@ public class Adapt {
 				I3 in3) {
 			return (in1, in2, out) -> {
 				computer.compute(in1, in2, in3, out);
+			};
+		}
+		public static <I1, I2, I3, I4, O> BiComputer<I1, I2, O> asBiComputer(final Computer4<I1, I2, I3, I4, O> computer,
+				I3 in3, I4 in4) {
+			return (in1, in2, out) -> {
+				computer.compute(in1, in2, in3, in4, out);
 			};
 		}
 

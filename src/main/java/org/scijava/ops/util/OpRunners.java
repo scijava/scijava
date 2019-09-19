@@ -28,8 +28,8 @@ import org.scijava.ops.types.Nil;
 public class OpRunners {
 	public static class Functions {
 
-		public static <I, O> OpRunner<O> toRunner(Function<I, O> function) {
-			return new OpRunner<O>() {
+		public static <I, O> OpRunner toRunner(Function<I, O> function) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -51,8 +51,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, O> OpRunner<O> toRunner(BiFunction<I1, I2, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, O> OpRunner toRunner(BiFunction<I1, I2, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -75,8 +75,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, O> OpRunner<O> toRunner(Function3<I1, I2, I3, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, O> OpRunner toRunner(Function3<I1, I2, I3, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -100,8 +100,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> OpRunner<O> toRunner(Function4<I1, I2, I3, I4, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, O> OpRunner toRunner(Function4<I1, I2, I3, I4, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -126,8 +126,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, I2, I3, I4, I5, O> OpRunner<O> toRunner(Function5<I1, I2, I3, I4, I5, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, I5, O> OpRunner toRunner(Function5<I1, I2, I3, I4, I5, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -153,8 +153,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, I2, I3, I4, I5, I6, O> OpRunner<O> toRunner(Function6<I1, I2, I3, I4, I5, I6, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, I5, I6, O> OpRunner toRunner(Function6<I1, I2, I3, I4, I5, I6, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -183,8 +183,8 @@ public class OpRunners {
 	}
 
 	public static class Computers {
-		public static <I, O> OpRunner<O> toRunner(Computer<I, O> computer) {
-			return new OpRunner<O>() {
+		public static <I, O> OpRunner toRunner(Computer<I, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -207,8 +207,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, O> OpRunner<O> toRunner(BiComputer<I1, I2, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, O> OpRunner toRunner(BiComputer<I1, I2, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -232,8 +232,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, O> OpRunner<O> toRunner(Computer3<I1, I2, I3, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, O> OpRunner toRunner(Computer3<I1, I2, I3, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -259,8 +259,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> OpRunner<O> toRunner(Computer4<I1, I2, I3, I4, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, O> OpRunner toRunner(Computer4<I1, I2, I3, I4, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -287,8 +287,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, I2, I3, I4, I5, O> OpRunner<O> toRunner(Computer5<I1, I2, I3, I4, I5, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, I5, O> OpRunner toRunner(Computer5<I1, I2, I3, I4, I5, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -320,8 +320,8 @@ public class OpRunners {
 	// INPLACES
 
 	public static class Inplaces {
-		public static <IO> OpRunner<IO> toRunner(Inplace<IO> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO> OpRunner toRunner(Inplace<IO> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -342,8 +342,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <IO, I2> OpRunner<IO> toRunner(BiInplaceFirst<IO, I2> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2> OpRunner toRunner(BiInplaceFirst<IO, I2> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -365,8 +365,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, IO> OpRunner<IO> toRunner(BiInplaceSecond<I1, IO> inplace) {
-			return new OpRunner<IO>() {
+		public static <I1, IO> OpRunner toRunner(BiInplaceSecond<I1, IO> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -388,8 +388,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <IO, I2, I3> OpRunner<IO> toRunner(Inplace3First<IO, I2, I3> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2, I3> OpRunner toRunner(Inplace3First<IO, I2, I3> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -412,8 +412,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, IO, I3> OpRunner<IO> toRunner(Inplace3Second<I1, IO, I3> inplace) {
-			return new OpRunner<IO>() {
+		public static <I1, IO, I3> OpRunner toRunner(Inplace3Second<I1, IO, I3> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -436,8 +436,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <IO, I2, I3, I4> OpRunner<IO> toRunner(Inplace4First<IO, I2, I3, I4> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2, I3, I4> OpRunner toRunner(Inplace4First<IO, I2, I3, I4> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -461,8 +461,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <IO, I2, I3, I4, I5> OpRunner<IO> toRunner(Inplace5First<IO, I2, I3, I4, I5> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2, I3, I4, I5> OpRunner toRunner(Inplace5First<IO, I2, I3, I4, I5> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {

@@ -1851,7 +1851,7 @@ public final class Types {
 		private static boolean isAssignable(final Type type, final Type toType,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
-			if (type instanceof Any) {
+			if (type instanceof Any || toType instanceof Any) {
 				return true;
 			}
 			if (toType == null || toType instanceof Class) {

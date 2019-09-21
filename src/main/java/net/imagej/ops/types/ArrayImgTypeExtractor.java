@@ -51,7 +51,7 @@ import org.scijava.plugin.Plugin;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
+@Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class ArrayImgTypeExtractor implements TypeExtractor<ArrayImg<?, ?>> {
 
 	@Parameter
@@ -68,7 +68,7 @@ public class ArrayImgTypeExtractor implements TypeExtractor<ArrayImg<?, ?>> {
 			return labelingType;
 		}
 		// type of the backing array
-		return typeService.reify(o.update(new Object()));
+		return typeService.reify(o.update(null));
 	}
 
 	@Override

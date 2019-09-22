@@ -107,11 +107,11 @@ public class CreateLabelingTest extends AbstractTestEnvironment {
 				});
 
 		assertEquals("Labeling Factory: ", ArrayImgFactory.class,
-				((Img<IntType>) createFunc.apply(dim, new IntType(), new ArrayImgFactory<IntType>()).getIndexImg())
+				((Img<IntType>) createFunc.apply(dim, new IntType(), new ArrayImgFactory<>(new IntType())).getIndexImg())
 						.factory().getClass());
 
 		assertEquals("Labeling Factory: ", CellImgFactory.class,
-				((Img<IntType>) createFunc.apply(dim, new IntType(), new CellImgFactory<IntType>()).getIndexImg())
+				((Img<IntType>) createFunc.apply(dim, new IntType(), new CellImgFactory<>(new IntType())).getIndexImg())
 						.factory().getClass());
 
 	}

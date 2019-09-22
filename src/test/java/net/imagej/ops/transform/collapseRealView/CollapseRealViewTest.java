@@ -63,8 +63,7 @@ public class CollapseRealViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultCollapseRealTest() {
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 },
-				new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, RealComposite<DoubleType>>> collapseFunc = Functions
 				.unary(ops, "transform.collapseRealView", new Nil<RandomAccessibleInterval<DoubleType>>() {

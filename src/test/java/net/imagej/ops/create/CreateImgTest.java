@@ -163,13 +163,13 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 				});
 
 		@SuppressWarnings("unchecked")
-		final Img<DoubleType> arrayImg = createFunc.apply(dim, new DoubleType(), new ArrayImgFactory<DoubleType>());
+		final Img<DoubleType> arrayImg = createFunc.apply(dim, new DoubleType(), new ArrayImgFactory<>(new DoubleType()));
 		final Class<?> arrayFactoryClass = arrayImg.factory().getClass();
 		assertEquals("Image Factory: ", ArrayImgFactory.class, arrayFactoryClass);
 
 		@SuppressWarnings("unchecked")
 		final Img<DoubleType> cellImg = createFunc.apply(dim, new DoubleType(),
-				new CellImgFactory<DoubleType>());
+				new CellImgFactory<>(new DoubleType()));
 		final Class<?> cellFactoryClass = cellImg.factory().getClass();
 		assertEquals("Image Factory: ", CellImgFactory.class, cellFactoryClass);
 	}

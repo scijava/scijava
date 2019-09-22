@@ -37,7 +37,6 @@ import java.util.List;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.core.Op;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
@@ -53,11 +52,11 @@ import org.scijava.util.Types;
  */
 public class OpClassInfo implements OpInfo {
 
-	private final Class<? extends Op> opClass;
+	private final Class<?> opClass;
 	private Struct struct;
 	private ValidityException validityException;
 
-	public OpClassInfo(final Class<? extends Op> opClass) {
+	public OpClassInfo(final Class<?> opClass) {
 		this.opClass = opClass;
 		try {
 			struct = ParameterStructs.structOf(opClass);
@@ -99,7 +98,7 @@ public class OpClassInfo implements OpInfo {
 			// TODO: Consider whether this is really the best way to
 			// instantiate the op class here. No framework usage?
 			// E.g., what about pluginService.createInstance?
-			Constructor<? extends Op> ctor = opClass.getDeclaredConstructor();
+			Constructor<?> ctor = opClass.getDeclaredConstructor();
 			ctor.setAccessible(true);
 			op = ctor.newInstance();
 		}

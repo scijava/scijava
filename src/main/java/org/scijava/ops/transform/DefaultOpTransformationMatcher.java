@@ -40,34 +40,31 @@ import java.util.stream.Collectors;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.matcher.OpTypeMatchingService;
-import org.scijava.plugin.AbstractSingletonService;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.Service;
 
 /**
- * Default service to find Op transformations. This default service will chain two transformations
- * at maximum.
- * 
+ * Default implementation of {@link OpTransformationMatcher}. This
+ * implementation will chain two transformations at maximum.
+ *
  * @author David Kolb
  */
-@Plugin(type = Service.class)
-public final class DefaultOpTransformerService extends AbstractSingletonService<OpTransformer>
-		implements OpTransformerService {
+public class DefaultOpTransformationMatcher implements OpTransformationMatcher {
 
-	@Parameter
-	private OpTypeMatchingService matcher;
-	
+	private final OpMatcher matcher;
+
 	private final int maxTransformations = 2;
 	
+	public DefaultOpTransformationMatcher(final OpMatcher matcher) {
+		this.matcher = matcher;
+	}
+
 	@Override
-	public List<OpTransformation> getTransformationsTo(OpRef toRef, int currentChainLength) {
+	public List<OpTransformation> getTransformationsTo(final Iterable<OpTransformer> transformers, OpRef toRef, int currentChainLength) {
 		List<OpTransformation> transforms = new ArrayList<>();
 		
-		for (OpTransformer ot: getInstances()) {
+		for (OpTransformer ot: transformers) {
 			final Collection<OpRef> fromRefs = ot.getRefsTransformingTo(toRef);
 			if (fromRefs != null) {
 				for (OpRef fromRef : fromRefs) {
@@ -79,11 +76,11 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 		}
 		return transforms;
 	}
-	
+
 	@Override
-	public OpTransformationCandidate findTransformation(OpEnvironment opEnv, OpRef ref) {
+	public OpTransformationCandidate findTransformation(OpEnvironment opEnv, final Iterable<OpTransformer> transformers, OpRef ref) {
 		LinkedList<OpTransformation> tsQueue = new LinkedList<>();
-		tsQueue.addAll(getTransformationsTo(ref, 0));
+		tsQueue.addAll(getTransformationsTo(transformers, ref, 0));
 		while (!tsQueue.isEmpty()) {
 			OpTransformation t = tsQueue.pop();
 			OpRef fromRef = t.getSource();
@@ -96,7 +93,7 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 				if (t.getChainLength() < maxTransformations)
 					// we need to make sure chain all of these transformations to t, thus we map the
 					// results of getTransformationsTo
-					tsQueue.addAll(getTransformationsTo(fromRef, t.getChainLength())//
+					tsQueue.addAll(getTransformationsTo(transformers, fromRef, t.getChainLength())//
 							.stream().map(next -> next.chain(t))//
 							.collect(Collectors.toList()));
 			}

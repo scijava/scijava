@@ -76,18 +76,21 @@ import org.scijava.ops.core.inplace.InplaceOps.Inplace5FirstOp;
 import org.scijava.ops.core.inplace.InplaceOps.Inplace6FirstOp;
 import org.scijava.ops.core.inplace.InplaceOps.Inplace7SecondOp;
 import org.scijava.ops.core.inplace.InplaceOps.InplaceOp;
+import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.matcher.OpTypeMatchingService;
+import org.scijava.ops.matcher.OpMatcher;
+import org.scijava.ops.transform.DefaultOpTransformationMatcher;
 import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
-import org.scijava.ops.transform.OpTransformerService;
 import org.scijava.ops.types.Any;
+import org.scijava.ops.transform.OpTransformationMatcher;
+import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.param.FunctionalMethodType;
@@ -115,14 +118,12 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	@Parameter
 	private PluginService pluginService;
 
-	@Parameter
-	private OpTypeMatchingService matcher;
+	private OpMatcher opMatcher;
 
 	@Parameter
 	private LogService log;
 
-	@Parameter
-	private OpTransformerService transformer;
+	private OpTransformationMatcher transformationMatcher;
 
 	@Parameter
 	private TypeService typeService;
@@ -137,6 +138,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * canonical name of the op which is defined as the first one.
 	 */
 	private Map<String, List<OpInfo>> opCache;
+
+	private List<OpTransformer> transformerIndex;
 
 	private static Map<Class<?>, Class<?>> wrappers = wrappers();
 
@@ -184,10 +187,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		// Add regular Ops
 		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
 			try {
-				final Class<? extends Op> opClass = pluginInfo.loadClass();
+				final Class<?> opClass = pluginInfo.loadClass();
 				OpInfo opInfo = new OpClassInfo(opClass);
-				addToCache(opInfo, pluginInfo.getName());
-
+				addToOpIndex(opInfo, pluginInfo.getName());
 			} catch (InstantiableException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
 			}
@@ -204,7 +206,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 						instance = field.getDeclaringClass().newInstance();
 					}
 					OpInfo opInfo = new OpFieldInfo(isStatic ? null : instance, field);
-					addToCache(opInfo, field.getAnnotation(OpField.class).names());
+					addToOpIndex(opInfo, field.getAnnotation(OpField.class).names());
 				}
 			} catch (InstantiableException | InstantiationException | IllegalAccessException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
@@ -212,7 +214,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 	}
 
-	private void addToCache(OpInfo opInfo, String opNames) {
+	private void addToOpIndex(final OpInfo opInfo, final String opNames) {
 		String[] parsedOpNames = OpUtils.parseOpNames(opNames);
 		if (parsedOpNames == null || parsedOpNames.length == 0) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" + "Op implementation must provide name.");
@@ -228,6 +230,10 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				opCache.put(opName, new ArrayList<>());
 			opCache.get(opName).add(opInfo);
 		}
+	}
+
+	public synchronized void initTransformerIndex() {
+		transformerIndex = pluginService.createInstancesOfType(OpTransformer.class);
 	}
 
 	@Override
@@ -254,9 +260,25 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return infos;
 	}
 
-	@Override
-	public LogService logger() {
-		return log;
+	private OpMatcher getOpMatcher() {
+		if (opMatcher == null) {
+			opMatcher = new DefaultOpMatcher(log);
+		}
+		return opMatcher;
+	}
+
+	private synchronized List<OpTransformer> getTransformerIndex() {
+		if (transformerIndex == null) {
+			initTransformerIndex();
+		}
+		return transformerIndex;
+	}
+
+	private OpTransformationMatcher getTransformationMatcher() {
+		if (transformationMatcher == null) {
+			transformationMatcher = new DefaultOpTransformationMatcher(getOpMatcher());
+		}
+		return transformationMatcher;
 	}
 
 	/**
@@ -315,7 +337,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		OpTransformationCandidate transformation = null;
 		try {
 			// Find single match which matches the specified types
-			match = matcher.findSingleMatch(this, ref);
+			match = getOpMatcher().findSingleMatch(this, ref);
 			final List<Object> dependencies = resolveOpDependencies(match);
 			op = match.createOp(dependencies);
 		} catch (OpMatchingException e) {
@@ -324,7 +346,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 			// If we can't find an op matching the original request, we try to find a
 			// transformation
-			transformation = transformer.findTransformation(this, ref);
+			transformation = getTransformationMatcher().findTransformation(this, getTransformerIndex(), ref);
 			if (transformation == null) {
 				log.debug("No matching Op transformation found");
 				throw new IllegalArgumentException(e);

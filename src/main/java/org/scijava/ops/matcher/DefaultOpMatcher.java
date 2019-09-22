@@ -41,12 +41,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.scijava.Context;
-import org.scijava.log.LogService;
+import org.scijava.log.Logger;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
@@ -55,18 +53,19 @@ import org.scijava.util.Types;
 import org.scijava.util.Types.TypeVarInfo;
 
 /**
- * Default service for finding ops which match a request.
+ * Default implementation of {@link OpMatcher}. Used for finding Ops which match
+ * a {@link OpRef request}.
  *
  * @author David Kolb
  */
 @Plugin(type = Service.class)
-public class DefaultOpTypeMatchingService extends AbstractService implements OpTypeMatchingService {
+public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 
-	@Parameter
-	private Context context;
+	private final Logger log;
 
-	@Parameter
-	private LogService log;
+	public DefaultOpMatcher(final Logger log) {
+		this.log = log;
+	}
 
 	@Override
 	public OpCandidate findSingleMatch(final OpEnvironment ops, final OpRef ref) throws OpMatchingException {
@@ -102,7 +101,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 			for (final OpInfo info : ops.infos(ref.getName())) {
 				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
-					candidates.add(new OpCandidate(ops, ref, info, typeVarAssigns));
+					candidates.add(new OpCandidate(ops, log, ref, info, typeVarAssigns));
 				}
 			}
 		}
@@ -155,7 +154,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 	 * Performs several checks, whether the specified candidate:</br>
 	 * </br>
 	 * * {@link #isValid(OpCandidate)}</br>
-	 * * {@link #outputsMatch(OpCandidate)}</br>
+	 * * {@link #outputsMatch(OpCandidate, HashMap)}</br>
 	 * * has a matching number of args</br>
 	 * * {@link #missArgs(OpCandidate, Type[])}</br>
 	 * </br>

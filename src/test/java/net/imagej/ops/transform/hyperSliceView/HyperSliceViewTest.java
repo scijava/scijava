@@ -78,8 +78,7 @@ public class HyperSliceViewTest extends AbstractTestEnvironment {
 						new Nil<MixedTransformView<DoubleType>>() {
 				});
 
-		final Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10, 10 },
-				new DoubleType());
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
 
 		final MixedTransformView<DoubleType> il2 = Views.hyperSlice((RandomAccessible<DoubleType>) img, 1, 8);
 		final MixedTransformView<DoubleType> opr = hyperSliceFunc.apply(deinterval(img), 1, 8l);
@@ -100,8 +99,7 @@ public class HyperSliceViewTest extends AbstractTestEnvironment {
 						new Nil<IntervalView<DoubleType>>() {
 						});
 
-		final Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10, 10 },
-				new DoubleType());
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
 
 		final IntervalView<DoubleType> il2 = Views.hyperSlice((RandomAccessibleInterval<DoubleType>) img, 1, 8);
 		final IntervalView<DoubleType> opr = hyperSliceFunc.apply(img, 1, 8l);

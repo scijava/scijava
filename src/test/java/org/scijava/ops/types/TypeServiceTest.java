@@ -30,7 +30,7 @@
 package org.scijava.ops.types;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class TypeServiceTest {
 	@Test
 	public void testNull() {
 		final Type nullType = types.reify(null);
-		assertNull(nullType);
+		assertTrue(Any.class.isInstance(nullType));
 	}
 
 	/** Tests type extraction for {@link Nil} objects. */

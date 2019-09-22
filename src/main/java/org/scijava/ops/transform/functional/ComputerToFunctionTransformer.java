@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
@@ -47,6 +46,7 @@ import org.scijava.ops.core.computer.Computer5;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
@@ -76,24 +76,28 @@ public class ComputerToFunctionTransformer implements FunctionalTypeTransformer 
 	{
 		final Class<?> targetFunctionalRawType = OpUtils.findFirstImplementedFunctionalInterface(targetRef);
 		checkCanTransform(src, targetRef, targetFunctionalRawType);
+		// It is almost always the case with Ops that the output is of the same typing
+		// as the input (more specifically, the first input). Let's take a look for one
+		// of those.
 		final Type[] targetInputParamTypes = targetRef.getArgs();
 		final Type targetOutputParamType = targetRef.getOutType();
 		// NB: Resort to ordinary create Op if no input-aware one is available. Fail
 		// if none of them is available.
-		Object inputAwareCreate = null;
+		Function<?, ?> inputAwareCreate = null;
 		Source<?> create = null;
 		try {
-			inputAwareCreate = findInputAwareCreate(opService, targetFunctionalRawType, targetInputParamTypes,
+			final Type firstInput = targetInputParamTypes[0];
+			if(Types.isApplicable(new Type[] {firstInput}, new Type[] {targetOutputParamType}) != -1) throw new IllegalArgumentException();
+			inputAwareCreate = (Function<?, ?>) findInputAwareCreate(opService, Function.class, new Type[] {firstInput},
 				targetOutputParamType);
 		}
-		catch (final IllegalArgumentException ex) {
+		catch (final IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
 			try {
 				create = findCreate(opService, targetOutputParamType);
-			}
-			catch (final IllegalArgumentException ex1) {
+			} catch (final IllegalArgumentException ex1) {
 				ex1.addSuppressed(ex);
 				throw createCannotTransformException(src, targetRef,
-					"No suitable create Op available to create output parameter of source computer.", ex1);
+						"No suitable create Op available to create output parameter of source computer.", ex1);
 			}
 		}
 		if (src instanceof Computer) return computerToFunction((Computer<?, ?>) src, inputAwareCreate, create);
@@ -156,43 +160,50 @@ public class ComputerToFunctionTransformer implements FunctionalTypeTransformer 
 	private static <I, O> Function<I, O> computerToFunction(final Computer<I, O> src, final Object inputAwareCreate,
 		final Source<?> create)
 	{
-		return inputAwareCreate != null //
-			? Adapt.Computers.asFunction(src, (Function<I, O>) inputAwareCreate) //
-			: Adapt.Computers.asFunction(src, (Source<O>) create);
+		if(inputAwareCreate != null) return Adapt.Computers.asFunction(src, (Function<I, O>) inputAwareCreate);
+		Function<I, O> inputAwareSource = (in) -> ((Source<O>)create).create();
+		return Adapt.Computers.asFunction(src, inputAwareSource);
 	}
 
 	private static <I1, I2, O> BiFunction<I1, I2, O> computerToFunction(final BiComputer<I1, I2, O> src,
 		final Object inputAwareCreate, final Source<?> create)
 	{
-		return inputAwareCreate != null //
-			? Adapt.Computers.asBiFunction(src, (BiFunction<I1, I2, O>) inputAwareCreate) //
-			: Adapt.Computers.asBiFunction(src, (Source<O>) create);
+		if(inputAwareCreate != null) return Adapt.Computers.asBiFunction(src, (Function<I1, O>) inputAwareCreate);
+		Function<I1, O> inputAwareSource = (in) -> ((Source<O>)create).create();
+		return Adapt.Computers.asBiFunction(src, inputAwareSource);
 	}
 
 	private static <I1, I2, I3, O> Function3<I1, I2, I3, O> computerToFunction(final Computer3<I1, I2, I3, O> src,
 		final Object inputAwareCreate, final Source<?> create)
 	{
-		return inputAwareCreate != null //
-			? Adapt.Computers.asFunction3(src, (Function3<I1, I2, I3, O>) inputAwareCreate) //
-			: Adapt.Computers.asFunction3(src, (Source<O>) create);
+		if(inputAwareCreate != null) return Adapt.Computers.asFunction3(src, (Function<I1, O>) inputAwareCreate);
+		Function<I1, O> inputAwareSource = (in) -> ((Source<O>)create).create();
+		return Adapt.Computers.asFunction3(src, inputAwareSource);
 	}
 
 	private static <I1, I2, I3, I4, O> Function4<I1, I2, I3, I4, O> computerToFunction(
 		final Computer4<I1, I2, I3, I4, O> src, final Object inputAwareCreate, final Source<?> create)
 	{
-		return inputAwareCreate != null //
-			? Adapt.Computers.asFunction4(src, (Function4<I1, I2, I3, I4, O>) inputAwareCreate) //
-			: Adapt.Computers.asFunction4(src, (Source<O>) create);
+		if(inputAwareCreate != null) return Adapt.Computers.asFunction4(src, (Function<I1, O>) inputAwareCreate);
+		Function<I1, O> inputAwareSource = (in) -> ((Source<O>)create).create();
+		return Adapt.Computers.asFunction4(src, inputAwareSource);
 	}
 
 	private static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> computerToFunction(
 		final Computer5<I1, I2, I3, I4, I5, O> src, final Object inputAwareCreate, final Source<?> create)
 	{
-		return inputAwareCreate != null //
-			? Adapt.Computers.asFunction5(src, (Function5<I1, I2, I3, I4, I5, O>) inputAwareCreate) //
-			: Adapt.Computers.asFunction5(src, (Source<O>) create);
+		if(inputAwareCreate != null) return Adapt.Computers.asFunction5(src, (Function<I1, O>) inputAwareCreate);
+		Function<I1, O> inputAwareSource = (in) -> ((Source<O>)create).create();
+		return Adapt.Computers.asFunction5(src, inputAwareSource);
 	}
 
+	@Override
+	public OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
+		final Type[] targetTypes = srcRef.getTypes();
+		TypeModUtils.replaceRawTypes(targetTypes, Types.raw(srcRef.getTypes()[0]), Types.raw(targetRef.getTypes()[0]));
+		return new OpRef(targetRef.getName(), targetTypes, srcRef.getOutType(), targetRef.getArgs());
+	}
+	
 	@Override
 	public Integer getTargetArity(final Class<?> targetFunctionalRawType) {
 		return Functions.ALL_FUNCTIONS.get(targetFunctionalRawType);

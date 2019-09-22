@@ -29,9 +29,11 @@
 
 package org.scijava.ops.matcher;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -241,7 +243,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		}
 
 		final Type outputType = candidate.getRef().getOutType();
-		if (Objects.equals(outputType, OpUtils.outputType(candidate)))
+		if (!Objects.equals(outputType, OpUtils.outputType(candidate)))
 			return false;
 
 		candidate.setStatus(StatusCode.MATCH);
@@ -279,7 +281,26 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
 			return false;
 		final Type[] refArgTypes = candidate.paddedArgs();
-		final Type[] candidateArgTypes = OpUtils.inputTypes(candidate);
+		final Type[] refTypes = candidate.getRef().getTypes();
+		final Type infoType = candidate.opInfo().opType();
+		Type[] candidateArgTypes = OpUtils.inputTypes(candidate);
+		for (Type refType : refTypes) {
+			//TODO: can this be simplified?
+			Type implementedInfoType = Types.getExactSuperType(infoType, Types.raw(refType));
+			if (implementedInfoType instanceof ParameterizedType) {
+				Type[] implTypeParams = ((ParameterizedType) implementedInfoType).getActualTypeArguments();
+				candidateArgTypes = candidate.opInfo().struct().members().stream()//
+						.map(member -> member.isInput() ? member.getType() : null) //
+						.toArray(Type[]::new);
+				for (int i = 0; i < implTypeParams.length; i++) {
+					if (candidateArgTypes[i] == null)
+						implTypeParams[i] = null;
+				}
+				candidateArgTypes = Arrays.stream(implTypeParams) //
+						.filter(t -> t != null).toArray(Type[]::new);
+				break;
+			}
+		}
 
 		if (refArgTypes == null)
 			return true; // no constraints on output types
@@ -318,6 +339,7 @@ public class DefaultOpTypeMatchingService extends AbstractService implements OpT
 		if (refOutType == null)
 			return true; // no constraints on output types
 
+		if(candidate.opInfo().output().isInput()) return true;
 		final Type candidateOutType = OpUtils.outputType(candidate);
 		final int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(new Type[] { candidateOutType },
 			new Type[] { refOutType }, typeBounds);

@@ -8,12 +8,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
@@ -38,38 +38,6 @@ import org.scijava.struct.ItemIO;
 public class TestOps {
 
 	// -- Op Classes -- //
-
-	// OpsTest
-
-	@Plugin(type = Op.class, name = "test.secondaryInputsFunction")
-	@Parameter(key = "number")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
-	public static class MathPowerDoublConstantFunction implements Function<Double, Double> {
-
-		@Parameter(type = ItemIO.INPUT)
-		private double exponent;
-
-		@Override
-		public Double apply(Double t) {
-			return Math.pow(t, exponent);
-		}
-	}
-
-	@Plugin(type = Op.class, name = "test.secondaryInputsComputer")
-	@Parameter(key = "array")
-	@Parameter(key = "resultArray", type = ItemIO.BOTH)
-	public static class MathPointwisePowerDoubleArrayComputer implements Computer<double[], double[]> {
-
-		@Parameter(type = ItemIO.INPUT)
-		private Double exponent;
-
-		@Override
-		public void compute(double[] in1, double[] out) {
-			for (int i = 0; i < out.length; i++) {
-				out[i] = Math.pow(in1[i], exponent);
-			}
-		}
-	}
 
 	// AutoTransformTest
 

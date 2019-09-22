@@ -141,37 +141,6 @@ public class OpsTest extends AbstractTestEnvironment {
 		assert arrayEquals(a1, 5.0, 9.0, 16.0);
 	}
 
-	@Test
-	public void testSecondaryInputs() {
-		Function<Double, Double> power3 = ops.findOp( //
-				"test.secondaryInputsFunction", new Nil<Function<Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble, //
-				3.0//
-		);
-		assert power3.apply(2.0).equals(8.0);
-
-		BiFunction<Double, Double, Double> powerFunction = ops.findOp( //
-				"math.pow", new Nil<BiFunction<Double, Double, Double>>() {
-				}, //
-				new Nil[] { nilDouble, nilDouble }, //
-				nilDouble//
-		);
-		assert powerFunction.apply(2.0, 3.0).equals(8.0);
-
-		Computer<double[], double[]> power3Arrays = ops.findOp( //
-				"test.secondaryInputsComputer", new Nil<Computer<double[], double[]>>() {
-				}, //
-				new Nil[] { nilDoubleArray, nilDoubleArray, nilDouble }, //
-				nilDoubleArray, //
-				3.0//
-		);
-		double[] result = new double[3];
-		power3Arrays.compute(new double[] { 1.0, 2.0, 3.0 }, result);
-		assert arrayEquals(result, 1.0, 8.0, 27.0);
-	}
-
 //	@Test
 //	public void genericFunction() {
 //		Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {};

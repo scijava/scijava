@@ -2,17 +2,19 @@ package org.scijava.ops.util;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
 import org.scijava.ops.core.function.Function6;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
@@ -27,9 +29,31 @@ import org.scijava.ops.types.Nil;
 // 2. Improve the matcher to respect the ops that implement KnowsTypes
 public class OpRunners {
 	public static class Functions {
+		
+		public static <O> OpRunner toRunner(Supplier<O> function) {
+			return new OpRunner() {
+				
+				@Override
+				public Object getAdaptedOp() {
+					return function;
+				}
 
-		public static <I, O> OpRunner<O> toRunner(Function<I, O> function) {
-			return new OpRunner<O>() {
+				@Override
+				public Nil<?>[] inTypes() {
+					return new Nil<?>[] {};
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public O run(Object[] args) {
+					return function.get();
+				}
+
+			};
+		}
+
+		public static <I, O> OpRunner toRunner(Function<I, O> function) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -51,8 +75,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, O> OpRunner<O> toRunner(BiFunction<I1, I2, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, O> OpRunner toRunner(BiFunction<I1, I2, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -75,8 +99,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, O> OpRunner<O> toRunner(Function3<I1, I2, I3, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, O> OpRunner toRunner(Function3<I1, I2, I3, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -100,8 +124,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> OpRunner<O> toRunner(Function4<I1, I2, I3, I4, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, O> OpRunner toRunner(Function4<I1, I2, I3, I4, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -126,8 +150,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, I2, I3, I4, I5, O> OpRunner<O> toRunner(Function5<I1, I2, I3, I4, I5, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, I5, O> OpRunner toRunner(Function5<I1, I2, I3, I4, I5, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -153,8 +177,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, I2, I3, I4, I5, I6, O> OpRunner<O> toRunner(Function6<I1, I2, I3, I4, I5, I6, O> function) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, I5, I6, O> OpRunner toRunner(Function6<I1, I2, I3, I4, I5, I6, O> function) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -183,8 +207,31 @@ public class OpRunners {
 	}
 
 	public static class Computers {
-		public static <I, O> OpRunner<O> toRunner(Computer<I, O> computer) {
-			return new OpRunner<O>() {
+		public static <O> OpRunner toRunner(NullaryComputer<O> computer) {
+			return new OpRunner() {
+
+				@Override
+				public Object getAdaptedOp() {
+					return computer;
+				}
+				
+				@Override
+				public Nil<?>[] inTypes() {
+					return new Nil<?>[] {};
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public O run(Object[] args) {
+					Source<O> source = () -> (O) args[0];
+					return Adapt.Computers.asFunction(computer, source).get();
+				}
+
+			};
+		}
+		
+		public static <I, O> OpRunner toRunner(Computer<I, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -200,15 +247,15 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[1];
+					Function<I, O> source = (in) -> (O) args[1];
 					return Adapt.Computers.asFunction(computer, source).apply((I) args[0]);
 				}
 
 			};
 		}
 
-		public static <I1, I2, O> OpRunner<O> toRunner(BiComputer<I1, I2, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, O> OpRunner toRunner(BiComputer<I1, I2, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -225,15 +272,15 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[2];
+					Function<I1, O> source = (in1) -> (O) args[2];
 					return Adapt.Computers.asBiFunction(computer, source).apply((I1) args[0], (I2) args[1]);
 				}
 
 			};
 		}
 
-		public static <I1, I2, I3, O> OpRunner<O> toRunner(Computer3<I1, I2, I3, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, O> OpRunner toRunner(Computer3<I1, I2, I3, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -251,7 +298,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[3];
+					Function<I1, O> source = (in1) -> (O) args[3];
 					return Adapt.Computers.asFunction3(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2]);
 				}
@@ -259,8 +306,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> OpRunner<O> toRunner(Computer4<I1, I2, I3, I4, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, O> OpRunner toRunner(Computer4<I1, I2, I3, I4, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -279,7 +326,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[4];
+					Function<I1, O> source = (in1) -> (O) args[4];
 					return Adapt.Computers.asFunction4(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2], (I4) args[3]);
 				}
@@ -287,8 +334,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, I2, I3, I4, I5, O> OpRunner<O> toRunner(Computer5<I1, I2, I3, I4, I5, O> computer) {
-			return new OpRunner<O>() {
+		public static <I1, I2, I3, I4, I5, O> OpRunner toRunner(Computer5<I1, I2, I3, I4, I5, O> computer) {
+			return new OpRunner() {
 
 				@Override
 				public Object getAdaptedOp() {
@@ -308,7 +355,7 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[5];
+					Function<I1, O> source = (in1) -> (O) args[5];
 					return Adapt.Computers.asFunction5(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2], (I4) args[3], (I5) args[4]);
 				}
@@ -320,8 +367,8 @@ public class OpRunners {
 	// INPLACES
 
 	public static class Inplaces {
-		public static <IO> OpRunner<IO> toRunner(Inplace<IO> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO> OpRunner toRunner(Inplace<IO> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -342,8 +389,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <IO, I2> OpRunner<IO> toRunner(BiInplaceFirst<IO, I2> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2> OpRunner toRunner(BiInplaceFirst<IO, I2> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -365,8 +412,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, IO> OpRunner<IO> toRunner(BiInplaceSecond<I1, IO> inplace) {
-			return new OpRunner<IO>() {
+		public static <I1, IO> OpRunner toRunner(BiInplaceSecond<I1, IO> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -388,8 +435,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <IO, I2, I3> OpRunner<IO> toRunner(Inplace3First<IO, I2, I3> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2, I3> OpRunner toRunner(Inplace3First<IO, I2, I3> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -412,8 +459,8 @@ public class OpRunners {
 			};
 		}
 		
-		public static <I1, IO, I3> OpRunner<IO> toRunner(Inplace3Second<I1, IO, I3> inplace) {
-			return new OpRunner<IO>() {
+		public static <I1, IO, I3> OpRunner toRunner(Inplace3Second<I1, IO, I3> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -436,8 +483,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <IO, I2, I3, I4> OpRunner<IO> toRunner(Inplace4First<IO, I2, I3, I4> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2, I3, I4> OpRunner toRunner(Inplace4First<IO, I2, I3, I4> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {
@@ -461,8 +508,8 @@ public class OpRunners {
 			};
 		}
 
-		public static <IO, I2, I3, I4, I5> OpRunner<IO> toRunner(Inplace5First<IO, I2, I3, I4, I5> inplace) {
-			return new OpRunner<IO>() {
+		public static <IO, I2, I3, I4, I5> OpRunner toRunner(Inplace5First<IO, I2, I3, I4, I5> inplace) {
+			return new OpRunner() {
 				
 				@Override
 				public Object getAdaptedOp() {

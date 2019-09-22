@@ -21,14 +21,19 @@ public interface OpTransformerService extends SciJavaService, SingletonService<O
 	
 	/**
 	 * Retrieve a list of {@link OpTransformation}s that describe a transformation
-	 * that is able to transform an Op matching an {@link OpRef} into another Op matching
-	 * the specified {@link OpRef}. This can be used to find Ops that are transformable 
-	 * into the specified {@link OpRef}.
+	 * that is able to transform an Op matching an {@link OpRef} into another Op
+	 * matching the specified {@link OpRef}. This can be used to find Ops that are
+	 * transformable into the specified {@link OpRef}.
 	 * 
-	 * @param opRef the ref which should be the target of the transformations to look for
+	 * @param opRef
+	 *            the ref which should be the target of the transformations to look
+	 *            for
+	 * @param currentChainLength
+	 *            the number of transformations between the requested OpRef and the
+	 *            passed argument
 	 * @return
 	 */
-	List<OpTransformation> getTansformationsTo (OpRef opRef);
+	List<OpTransformation> getTransformationsTo (OpRef opRef, int currentChainLength);
 	
 	/**
 	 * Attempts to find an {@link OpTransformationCandidate}, transforming an existing Op into another
@@ -44,5 +49,5 @@ public interface OpTransformerService extends SciJavaService, SingletonService<O
 	 * @param ref the ref which should be the target of the transformation to look for
 	 * @return
 	 */
-	OpTransformationCandidate findTransfromation(OpEnvironment opEnv, OpRef ref);
+	OpTransformationCandidate findTransformation(OpEnvironment opEnv, OpRef ref);
 }

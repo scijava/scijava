@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.scijava.ops.types.Any;
 import org.scijava.util.Types;
 
 /**
@@ -171,14 +172,20 @@ public final class TypeModUtils {
 			return Types.component(type);
 		} else if (type instanceof ParameterizedType) {
 			ParameterizedType casted = (ParameterizedType) type;
-			
-			if (Types.raw(casted).equals(unliftRawType)) {
-				Type[] typeArgs = casted.getActualTypeArguments();
+			// determine the type parameter of type with respect to unliftRawType
+			Type inheritedType = Types.getExactSuperType(casted, unliftRawType); 
+			if (!(inheritedType instanceof ParameterizedType))
+				return null;
+			ParameterizedType pInheritedType = (ParameterizedType) inheritedType;
+			// TODO: this cast should now be unnecessary?
+//			if (Types.raw(casted).equals(unliftRawType)) {
+				Type[] typeArgs = pInheritedType.getActualTypeArguments();
 				if (typeArgs.length == 1) {
 					return typeArgs[0];
 				}
-			}
+//			}
 		}
+		if (type instanceof Any) return type;
 		return null;
 	}
 
@@ -276,6 +283,6 @@ public final class TypeModUtils {
 	}
 	
 	private static boolean containsPrimitive(Type[] types) {
-		return Arrays.stream(types).anyMatch(t -> Types.raw(t).isPrimitive());
+		return Arrays.stream(types).filter(t -> !(t instanceof Any)).anyMatch(t -> Types.raw(t).isPrimitive());
 	}
 }

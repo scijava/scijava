@@ -36,7 +36,6 @@ import java.util.Map;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.util.Inject;
 import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -203,7 +202,7 @@ public class OpCandidate {
 		return info.toString();
 	}
 
-	public StructInstance<?> createOpInstance(List<?> dependencies, Object... secondaryArgs) throws OpMatchingException
+	public StructInstance<?> createOpInstance(List<?> dependencies) throws OpMatchingException
 	{
 		if (!getStatusCode().equals(StatusCode.MATCH)) {
 			throw new OpMatchingException(
@@ -211,29 +210,13 @@ public class OpCandidate {
 		}
 
 		StructInstance<?> inst = opInfo().createOpInstance(dependencies);
-		inject(inst, secondaryArgs);
 		return inst;
 	}
 
-	public Object createOp(List<?> dependencies, Object... secondaryArgs)
+	public Object createOp(List<?> dependencies)
 		throws OpMatchingException
 	{
-		return createOpInstance(dependencies, secondaryArgs).object();
+		return createOpInstance(dependencies).object();
 	}
 
-	private void inject(StructInstance<?> opInst, Object... secondaryArgs) {
-		// Inject the secondary args if there are any
-		if (Inject.Structs.isInjectable(opInst)) {
-			// Get padded secondary args
-			Object[] paddedArgs = OpUtils.padArgs(this, true, secondaryArgs);
-			if (paddedArgs == null) {
-				throw new IllegalArgumentException(opInfo().implementationName() + " | " + getStatus());
-			}
-			Inject.Structs.inputs(opInst, paddedArgs);
-			// Secondary args are given, however there are no to inject
-		} else if (secondaryArgs.length > 0) {
-			ops().logger().warn("Specified Op has no secondary args, however secondary args are given. "
-					+ "The specified args will not be injected.");
-		}
-	}
 }

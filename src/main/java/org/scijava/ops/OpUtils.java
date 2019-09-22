@@ -100,7 +100,7 @@ public final class OpUtils {
 	 * @return
 	 */
 	public static String[] parseOpNames(String names) {
-		return Arrays.stream(names.split(",")).map(s -> s.trim()).flatMap(s -> Arrays.stream(parseOpName(s)))
+		return Arrays.stream(names.split(",")).map(s -> s.trim())
 				.toArray(String[]::new);
 	}
 

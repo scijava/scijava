@@ -17,11 +17,25 @@ public class OpTransformation {
 	private OpTransformer transformation;
 	
 	private OpTransformation child;
+	private int chainLength;
 
-	public OpTransformation(OpRef from, OpRef to, OpTransformer transformer) {
+	/**
+	 * Constructor
+	 * 
+	 * @param from
+	 *            the OpRef we are transforming from
+	 * @param to
+	 *            the OpRef we are transforming to
+	 * @param transformer
+	 *            the OpTransformer that will take an Op with the fromRef signature
+	 *            and transform it to the toRef signature
+	 * @param chainLength the length of the chain from what was originally requested to toRef
+	 */
+	public OpTransformation(OpRef from, OpRef to, OpTransformer transformer, int chainLength) {
 		this.srcRef = from;
 		this.targetRef = to;
 		this.transformation = transformer;
+		this.chainLength = chainLength;
 	}
 
 	/**
@@ -59,6 +73,15 @@ public class OpTransformation {
 	public OpTransformation getChild() {
 		return this.child;
 	}
+	
+	/**
+	 * Get the length of the transformation chain
+	 * 
+	 * @return
+	 */
+	public int getChainLength() {
+		return this.chainLength;
+	}
 
 	/**
 	 * Executes this transformation on the specified object.
@@ -66,16 +89,21 @@ public class OpTransformation {
 	 * be executed.
 	 * 
 	 * @param obj
+	 * @param targetRef2 
 	 * @param opService
 	 * @return
 	 * @throws OpTransformationException 
 	 */
-	public Object execute(Object obj, OpService opService) throws OpTransformationException {
+	public Object execute(Object obj, OpRef targetRef, OpService opService) throws OpTransformationException {
 		Object candidate = obj;
 		OpTransformation c = this;
+		OpRef tr = targetRef;
 		do {
-			candidate = c.getTransformer().transform(opService, candidate, c.targetRef);
+			candidate = c.getTransformer().transform(opService, candidate, tr);
 			c = c.getChild();
+			if (c != null) {
+				tr = c.getTarget();
+			}
 		} while (c != null);
 		
 		return candidate;

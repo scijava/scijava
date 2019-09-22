@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
 import org.scijava.util.Types.TypeVarFromParameterizedTypeInfo;
@@ -108,6 +109,8 @@ public final class MatchingUtils {
 		for (int i = 0; i < froms.length; i++) {
 			Type from = froms[i];
 			Type to = tos[i];
+			
+			if (to instanceof Any) continue;
 
 			if (from instanceof TypeVariable) {
 				TypeVarInfo typeVarInfo = typeBounds.get(from);
@@ -426,6 +429,10 @@ public final class MatchingUtils {
 			throws TypeInferenceException {
 		if (typeAssigns == null)
 			throw new IllegalArgumentException();
+		// TODO: is this the correct place to put this? We could get a marginal increase
+		// in Type Variable information if we put this farther into the loop.
+		if (types.length != inferFrom.length)
+			throw new TypeInferenceException();
 		// Check all pairs of types
 		for (int i = 0; i < types.length; i++) {
 			if (types[i] instanceof TypeVariable) {

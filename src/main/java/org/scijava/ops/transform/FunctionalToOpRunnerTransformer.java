@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.scijava.ops.OpService;
@@ -45,6 +46,7 @@ import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
@@ -73,7 +75,7 @@ import org.scijava.util.Types;
 public class FunctionalToOpRunnerTransformer implements OpTransformer {
 
 	@Override
-	public OpRunner<?> transform(final OpService opService, final Object src, final OpRef targetRef)
+	public OpRunner transform(final OpService opService, final Object src, final OpRef targetRef)
 		throws OpTransformationException
 	{
 		final Class<?> srcFunctionalRawType = ParameterStructs.findFunctionalInterface(src.getClass());
@@ -121,9 +123,10 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 			.anyMatch(t -> OpRunner.class.isAssignableFrom(Types.raw(t)));
 	}
 
-	private static OpRunner<?> computerToRunner(final Object src, final Class<?> srcFunctionalRawType)
+	private static OpRunner computerToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
+		if (src instanceof NullaryComputer) return OpRunners.Computers.toRunner((NullaryComputer<?>) src); 
 		if (src instanceof Computer) return OpRunners.Computers.toRunner((Computer<?, ?>) src);
 		if (src instanceof BiComputer) return OpRunners.Computers.toRunner((BiComputer<?, ?, ?>) src);
 		if (src instanceof Computer3) return OpRunners.Computers.toRunner((Computer3<?, ?, ?, ?>) src);
@@ -134,9 +137,10 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 			srcFunctionalRawType.getName());
 	}
 
-	private static OpRunner<?> functionToRunner(final Object src, final Class<?> srcFunctionalRawType)
+	private static OpRunner functionToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
+		if (src instanceof Supplier) return OpRunners.Functions.toRunner((Supplier<?>) src);
 		if (src instanceof Function) return OpRunners.Functions.toRunner((Function<?, ?>) src);
 		if (src instanceof BiFunction) return OpRunners.Functions.toRunner((BiFunction<?, ?, ?>) src);
 		if (src instanceof Function3) return OpRunners.Functions.toRunner((Function3<?, ?, ?, ?>) src);
@@ -148,7 +152,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 			srcFunctionalRawType.getName());
 	}
 
-	private static OpRunner<?> inplaceToRunner(final Object src, final Class<?> srcFunctionalRawType)
+	private static OpRunner inplaceToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
 		if (src instanceof Inplace) return OpRunners.Inplaces.toRunner((Inplace<?>) src);
@@ -225,6 +229,7 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 		final Type[] targetParamTypes = targetInputParamTypes.clone();
 		final Type[] targetOpTypes = parameterizeTargetOpTypes(targetRef, targetParamTypes);
 		if (srcComputer != null) addSourceRef(srcRefs, srcComputer, targetRef, targetOpTypes, targetInputParamTypes);
+//		if (srcComputer != null) addComputerSourceRef(srcRefs, srcComputer, targetRef, targetOpTypes, targetInputParamTypes);
 		for (final Class<?> srcInplace : srcInplaces) {
 			addSourceRef(srcRefs, srcInplace, targetRef, targetOpTypes, targetInputParamTypes);
 		}
@@ -242,6 +247,16 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 		final boolean hit = TypeModUtils.replaceRawTypes(srcOpTypes, OpRunner.class, srcOpRawType);
 		if (hit) {
 			srcRefs.add(OpRef.fromTypes(targetRef.getName(), srcOpTypes, targetRef.getOutType(), targetInputParamTypes));
+		}
+	}
+
+	private static void addComputerSourceRef(final List<OpRef> srcRefs, final Class<?> srcOpRawType, final OpRef targetRef,
+		final Type[] targetOpTypes, final Type[] targetInputParamTypes)
+	{
+		final Type[] srcOpTypes = targetOpTypes.clone();
+		final boolean hit = TypeModUtils.replaceRawTypes(srcOpTypes, OpRunner.class, srcOpRawType);
+		if (hit) {
+			srcRefs.add(OpRef.fromTypes(targetRef.getName(), srcOpTypes, targetInputParamTypes[targetInputParamTypes.length - 1], targetInputParamTypes));
 		}
 	}
 }

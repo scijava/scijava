@@ -1,20 +1,27 @@
 package org.scijava.ops.util;
 
+import java.lang.invoke.LambdaMetafactory;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.core.OneToOneCommand;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.Source;
 import org.scijava.ops.core.computer.BiComputer;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer4;
 import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.core.computer.NullaryComputer;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.core.function.Source;
 import org.scijava.ops.core.inplace.BiInplaceFirst;
 import org.scijava.ops.core.inplace.BiInplaceSecond;
 import org.scijava.ops.core.inplace.Inplace;
@@ -36,8 +43,7 @@ public class Adapt {
 	 * Adapters from Functions to Computers
 	 */
 	public static class Functions {
-		private Functions() {
-		}
+		private Functions() {}
 
 		public static <I, O> Computer<I, O> asComputer(final Function<I, O> function, final Computer<O, O> copy) {
 			return (in, out) -> {
@@ -95,19 +101,33 @@ public class Adapt {
 			};
 		}
 
+		public static <I1, I2, I3, I4, O> Function3<I1, I2, I3, O> asFunction3(
+				final Function4<I1, I2, I3, I4, O> function4, I4 in4) {
+			return (in1, in2, in3) -> {
+				return function4.apply(in1, in2, in3, in4);
+			};
+		}
+
+		public static <I1, I2, I3, I4, O> BiFunction<I1, I2, O> asBiFunction(
+				final Function4<I1, I2, I3, I4, O> function4, I3 in3, I4 in4) {
+			return (in1, in2) -> {
+				return function4.apply(in1, in2, in3, in4);
+			};
+		}
+
 	}
 
 	/**
 	 * Adapters from Computers to Functions
 	 */
 	public static class Computers {
-		private Computers() {
-		}
-
-		public static <I, O> Function<I, O> asFunction(final Computer<I, O> computer, final Source<O> source) {
-			return (in) -> {
-				O out = source.create();
-				computer.compute(in, out);
+		private Computers() {}
+		
+		public static <O> Source<O> asFunction(final NullaryComputer<O> computer,
+				final Source<O> inputAwareSource) {
+			return () -> {
+				O out = inputAwareSource.get();
+				computer.compute(out);
 				return out;
 			};
 		}
@@ -127,72 +147,36 @@ public class Adapt {
 		}
 
 		public static <I1, I2, O> BiFunction<I1, I2, O> asBiFunction(final BiComputer<I1, I2, O> computer,
-				final Source<O> source) {
+				final Function<I1, O> inputAwareSource) {
 			return (in1, in2) -> {
-				O out = source.create();
+				O out = inputAwareSource.apply(in1);
 				computer.compute(in1, in2, out);
-				return out;
-			};
-		}
-
-		public static <I1, I2, O> BiFunction<I1, I2, O> asBiFunction(final BiComputer<I1, I2, O> computer,
-				final BiFunction<I1, I2, O> inputAwareSource) {
-			return (in1, in2) -> {
-				O out = inputAwareSource.apply(in1, in2);
-				computer.compute(in1, in2, out);
-				return out;
-			};
-		}
-
-		public static <I1, I2, I3, O> Function3<I1, I2, I3, O> asFunction3(final Computer3<I1, I2, I3, O> computer,
-				final Source<O> source) {
-			return (in1, in2, in3) -> {
-				O out = source.create();
-				computer.compute(in1, in2, in3, out);
 				return out;
 			};
 		}
 
 		public static <I1, I2, I3, O> Function3<I1, I2, I3, O> asFunction3(Computer3<I1, I2, I3, O> computer,
-				Function3<I1, I2, I3, O> inputAwareSource) {
+				Function<I1, O> inputAwareSource) {
 			return (in1, in2, in3) -> {
-				O out = inputAwareSource.apply(in1, in2, in3);
+				O out = inputAwareSource.apply(in1);
 				computer.compute(in1, in2, in3, out);
 				return out;
 			};
 		}
 
 		public static <I1, I2, I3, I4, O> Function4<I1, I2, I3, I4, O> asFunction4(
-				final Computer4<I1, I2, I3, I4, O> computer, final Source<O> source) {
+				Computer4<I1, I2, I3, I4, O> computer, Function<I1, O> inputAwareSource) {
 			return (in1, in2, in3, in4) -> {
-				O out = source.create();
+				O out = inputAwareSource.apply(in1);
 				computer.compute(in1, in2, in3, in4, out);
 				return out;
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> Function4<I1, I2, I3, I4, O> asFunction4(
-				Computer4<I1, I2, I3, I4, O> computer, Function4<I1, I2, I3, I4, O> inputAwareSource) {
-			return (in1, in2, in3, in4) -> {
-				O out = inputAwareSource.apply(in1, in2, in3, in4);
-				computer.compute(in1, in2, in3, in4, out);
-				return out;
-			};
-		}
-		
 		public static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> asFunction5(
-				final Computer5<I1, I2, I3, I4, I5, O> computer, final Source<O> source) {
+				Computer5<I1, I2, I3, I4, I5, O> computer, Function<I1, O> inputAwareSource) {
 			return (in1, in2, in3, in4, in5) -> {
-				O out = source.create();
-				computer.compute(in1, in2, in3, in4, in5, out);
-				return out;
-			};
-		}
-
-		public static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> asFunction5(
-				Computer5<I1, I2, I3, I4, I5, O> computer, Function5<I1, I2, I3, I4, I5, O> inputAwareSource) {
-			return (in1, in2, in3, in4, in5) -> {
-				O out = inputAwareSource.apply(in1, in2, in3, in4, in5);
+				O out = inputAwareSource.apply(in1);
 				computer.compute(in1, in2, in3, in4, in5, out);
 				return out;
 			};
@@ -230,69 +214,103 @@ public class Adapt {
 			};
 		}
 
+		public static <I1, I2, I3, I4, O> BiComputer<I1, I2, O> asBiComputer(
+				final Computer4<I1, I2, I3, I4, O> computer, I3 in3, I4 in4) {
+			return (in1, in2, out) -> {
+				computer.compute(in1, in2, in3, in4, out);
+			};
+		}
+
 	}
-	
+
 	public static class Inplaces {
-		
+
 		public static <IO, I2> Inplace<IO> asInplace(BiInplaceFirst<IO, I2> inplace, I2 in2) {
 			return (io) -> {
 				inplace.mutate(io, in2);
 			};
 		}
-		
+
 		public static <I1, IO> Inplace<IO> asInplace(BiInplaceSecond<I1, IO> inplace, I1 in1) {
 			return (io) -> {
 				inplace.mutate(in1, io);
 			};
 		}
-		
-		public static <IO> Function<IO, IO> asFunction(Inplace<IO> inplace){
+
+		public static <IO> Function<IO, IO> asFunction(Inplace<IO> inplace) {
 			return (io) -> {
 				inplace.mutate(io);
 				return io;
 			};
 		}
 
-		public static <IO, I2> BiFunction<IO, I2, IO> asBiFunction(BiInplaceFirst<IO, I2> inplace){
+		public static <IO, I2> BiFunction<IO, I2, IO> asBiFunction(BiInplaceFirst<IO, I2> inplace) {
 			return (io, in2) -> {
 				inplace.mutate(io, in2);
 				return io;
 			};
 		}
 
-		public static <I1, IO> BiFunction<I1, IO, IO> asBiFunction(BiInplaceSecond<I1, IO> inplace){
+		public static <I1, IO> BiFunction<I1, IO, IO> asBiFunction(BiInplaceSecond<I1, IO> inplace) {
 			return (in1, io) -> {
 				inplace.mutate(in1, io);
 				return io;
 			};
 		}
-		
-		public static <IO, I2, I3> Function3<IO, I2, I3, IO> asFunction3(Inplace3First<IO, I2, I3> inplace){
+
+		public static <IO, I2, I3> Function3<IO, I2, I3, IO> asFunction3(Inplace3First<IO, I2, I3> inplace) {
 			return (io, in2, in3) -> {
 				inplace.mutate(io, in2, in3);
 				return io;
 			};
 		}
-		
-		public static <I1, IO, I3> Function3<I1, IO, I3, IO> asFunction3(Inplace3Second<I1, IO, I3> inplace){
+
+		public static <I1, IO, I3> Function3<I1, IO, I3, IO> asFunction3(Inplace3Second<I1, IO, I3> inplace) {
 			return (in1, io, in3) -> {
 				inplace.mutate(in1, io, in3);
 				return io;
 			};
 		}
-		
-		public static <IO, I2, I3, I4> Function4<IO, I2, I3, I4, IO> asFunction4(Inplace4First<IO, I2, I3, I4> inplace){
+
+		public static <IO, I2, I3, I4> Function4<IO, I2, I3, I4, IO> asFunction4(
+				Inplace4First<IO, I2, I3, I4> inplace) {
 			return (io, in2, in3, in4) -> {
 				inplace.mutate(io, in2, in3, in4);
 				return io;
 			};
 		}
 
-		public static <IO, I2, I3, I4, I5> Function5<IO, I2, I3, I4, I5, IO> asFunction5(Inplace5First<IO, I2, I3, I4, I5> inplace){
+		public static <IO, I2, I3, I4, I5> Function5<IO, I2, I3, I4, I5, IO> asFunction5(
+				Inplace5First<IO, I2, I3, I4, I5> inplace) {
 			return (io, in2, in3, in4, in5) -> {
 				inplace.mutate(io, in2, in3, in4, in5);
 				return io;
 			};
+		}
+	}
+
+	public static class Methods {
+
+		public static <T> T lambdaize(Class<T> functionalInterface, MethodHandle methodHandle) throws Throwable {
+			MethodHandles.Lookup caller = MethodHandles.lookup();
+
+			// determine the method name used by the functionalInterface (e.g. for
+			// Consumer this name is "accept").
+			String[] invokedNames = Arrays.stream(functionalInterface.getDeclaredMethods())
+					.filter(method -> Modifier.isAbstract(method.getModifiers())).map(method -> method.getName())
+					.toArray(String[]::new);
+			if (invokedNames.length != 1)
+				throw new IllegalArgumentException("The passed class is not a functional interface");
+			
+			// see the LambdaMetafactory javadocs for explanations on these MethodTypes.
+			MethodType invokedType = MethodType.methodType(functionalInterface);
+			MethodType methodType = methodHandle.type();
+			Class<?> rType = methodType.returnType();
+			MethodType samMethodType = methodType.generic()
+					.changeReturnType(rType == void.class ? rType : Object.class);
+			MethodHandle callSite = LambdaMetafactory.metafactory(caller, invokedNames[0], //
+					invokedType, samMethodType, methodHandle, methodType).getTarget();
+			return (T) callSite.invoke();
 		}
 	}
 

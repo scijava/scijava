@@ -34,7 +34,9 @@ package org.scijava.ops.transform;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.matcher.OpCandidate;
@@ -59,8 +61,10 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 	@Parameter
 	private OpTypeMatchingService matcher;
 	
+	private final int maxTransformations = 2;
+	
 	@Override
-	public List<OpTransformation> getTansformationsTo(OpRef toRef) {
+	public List<OpTransformation> getTransformationsTo(OpRef toRef, int currentChainLength) {
 		List<OpTransformation> transforms = new ArrayList<>();
 		
 		for (OpTransformer ot: getInstances()) {
@@ -68,7 +72,7 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 			if (fromRefs != null) {
 				for (OpRef fromRef : fromRefs) {
 					if (fromRef != null) {
-						transforms.add(new OpTransformation(fromRef, toRef, ot));
+						transforms.add(new OpTransformation(fromRef, toRef, ot, currentChainLength + 1));
 					}
 				}
 			}
@@ -77,35 +81,27 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 	}
 	
 	@Override
-	public OpTransformationCandidate findTransfromation(OpEnvironment opEnv, OpRef ref) {
-		List<OpTransformation> ts = getTansformationsTo(ref);
-		for (OpTransformation t : ts) {
-			OpTransformationCandidate match = findTransfromation(opEnv, t, 0);
-			if (match != null) {
-				return match;
+	public OpTransformationCandidate findTransformation(OpEnvironment opEnv, OpRef ref) {
+		LinkedList<OpTransformation> tsQueue = new LinkedList<>();
+		tsQueue.addAll(getTransformationsTo(ref, 0));
+		while (!tsQueue.isEmpty()) {
+			OpTransformation t = tsQueue.pop();
+			OpRef fromRef = t.getSource();
+			try {
+				OpCandidate match = matcher.findSingleMatch(opEnv, fromRef);
+				return new OpTransformationCandidate(match, t);
+			} catch (OpMatchingException e) {
+				// if we have done fewer than the maximum allowed number of transformations from
+				// ref, find more transformations from t
+				if (t.getChainLength() < maxTransformations)
+					// we need to make sure chain all of these transformations to t, thus we map the
+					// results of getTransformationsTo
+					tsQueue.addAll(getTransformationsTo(fromRef, t.getChainLength())//
+							.stream().map(next -> next.chain(t))//
+							.collect(Collectors.toList()));
 			}
 		}
 		return null;
 	}
 	
-	private OpTransformationCandidate findTransfromation(OpEnvironment opEnv, OpTransformation candidate, int depth) {
-		if (candidate == null || depth > 1) {
-			return null;
-		} else {
-			OpRef fromRef = candidate.getSource();
-			try {
-				OpCandidate match = matcher.findSingleMatch(opEnv, fromRef);
-				return new OpTransformationCandidate(match, candidate);
-			} catch (OpMatchingException e) {
-				List<OpTransformation> ts = getTansformationsTo(fromRef);
-				for (OpTransformation t : ts) {
-					OpTransformationCandidate cand = findTransfromation(opEnv, t.chain(candidate), depth + 1);
-					if (cand != null) {
-						return cand;
-					}
-				}
-			}
-		}
-		return null;
-	}
 }

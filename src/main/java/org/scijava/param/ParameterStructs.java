@@ -73,9 +73,6 @@ public final class ParameterStructs {
 			parseFunctionalParameters(items, names, problems, paramsClass, type);
 		}
 
-		// Parse field level @Parameter annotations.
-		parseFieldParameters(items, names, problems, type);
-
 		// Parse field level @OpDependency annotations.
 		parseFieldOpDependencies(items, problems, type);
 
@@ -138,34 +135,6 @@ public final class ParameterStructs {
 				}
 			}
 		}
-	}
-	
-	private static void parseFieldParameters (final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
-			Class<?> annotatedClass) {
-		final List<Field> fields = ClassUtils.getAnnotatedFields(annotatedClass,
-				Parameter.class);
-
-			for (final Field f : fields) {
-				f.setAccessible(true); // expose private fields
-
-				final Parameter param = f.getAnnotation(Parameter.class);
-
-				final String name = f.getName();
-				final boolean isFinal = Modifier.isFinal(f.getModifiers());
-				final boolean valid = checkValidity(param, name, f.getType(),
-					isFinal, names, problems);
-				if (!valid) continue; // NB: Skip invalid parameters.
-
-				// add item to the list
-				try {
-					final ParameterMember<?> item = new FieldParameterMember<>(f, annotatedClass);
-					names.add(name);
-					items.add(item);
-				}
-				catch (final ValidityException exc) {
-					problems.addAll(exc.problems());
-				}
-			}
 	}
 	
 	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,

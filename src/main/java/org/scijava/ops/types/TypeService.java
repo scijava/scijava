@@ -105,7 +105,7 @@ public interface TypeService extends
 	 * </p>
 	 */
 	default Type reify(final Object o) {
-		if (o == null) return null;
+		if (o == null) return new Any();
 		
 		if (o instanceof GenericTyped) {
 			// Object implements the GenericTyped interface; it explicitly declares

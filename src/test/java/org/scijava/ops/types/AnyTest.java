@@ -1,12 +1,18 @@
 package org.scijava.ops.types;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.reflect.Type;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.core.Priority;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.core.function.Source;
+import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,6 +65,72 @@ public class AnyTest extends AbstractTestEnvironment {
 
 	}
 
+	// TODO: Note that this wouldn't work for Computer -> Function because here
+	// LiftFunctionToArrayTransformer is the first transformer which is asked for
+	// source refs. This transformer doesn't support Any and would fail.
+	@Test
+	public void testRunAnyBiFunctionFromBiComputer() {
+		final int in1 = 11;
+		final long in2 = 31;
+		final Object out = ops.run("test.integerAndLongAndNotAnyComputer", in1, in2);
+		assert out instanceof MutableNotAny;
+		assertEquals(Long.toString(in1 + in2), ((MutableNotAny) out).getValue());
+	}
+	
+	@Test
+	public void testAnyInjectionIntoFunctionRaws() {
+		final Function<Long, Long> func = (in) -> in / 2;
+		final Long output = (Long) ops.run("test.functionAndLongToLong", func, 20l);
+		assert(output == 10);
+	}
+}
+
+@Plugin(type = Op.class, name = "test.functionAndLongToLong")
+@Parameter(key = "input")
+@Parameter(key = "op")
+@Parameter(key = "output", type = ItemIO.OUTPUT)
+class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Long> {
+
+	@Override
+	public Long apply(Function<Long, Long> t, Long u) {
+		return t.apply(u);
+	}
+	
+}
+
+@Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")
+@Parameter(key = "input1")
+@Parameter(key = "input2")
+@Parameter(key = "output", type = ItemIO.BOTH)
+class IntegerAndLongAndNotAnyComputer implements BiComputer<Integer, Long, MutableNotAny> {
+
+	@Override
+	public void compute(Integer in1, Long in2, @Mutable MutableNotAny out) {
+		out.setValue(Long.toString(in1 + in2));
+	}
+}
+
+class MutableNotAny {
+
+	private String value;
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+}
+
+@Plugin(type = Op.class, name = "create, create.mutableNotAny")
+@Parameter(key = "mutableNotAny", type = ItemIO.OUTPUT)
+class MutableNotAnyCreator implements Source<MutableNotAny> {
+
+	@Override
+	public MutableNotAny create() {
+		return new MutableNotAny();
+	}
 }
 
 class Thing<U> {

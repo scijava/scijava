@@ -68,7 +68,7 @@ public class ExtendRandomViewTest extends AbstractTestEnvironment {
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		RandomAccess<DoubleType> il2 = Views.extendRandom(img, 0, 0).randomAccess();
 

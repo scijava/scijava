@@ -70,7 +70,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 				}, new Nil<MixedTransformView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		MixedTransformView<DoubleType> il2 = Views.offset((RandomAccessible<DoubleType>) img, new long[] { 2, 2 });
 		MixedTransformView<DoubleType> opr = offsetFunc.apply(img, new long[] { 2, 2 });
@@ -92,7 +92,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		IntervalView<DoubleType> il2 = Views.offsetInterval(img,
 				new FinalInterval(new long[] { 2, 2 }, new long[] { 9, 9 }));
@@ -115,7 +115,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		IntervalView<DoubleType> il2 = Views.offsetInterval(img, new long[] { 2, 2 }, new long[] { 9, 9 });
 		IntervalView<DoubleType> opr = offsetFunc.apply(img, new long[] { 2, 2 }, new long[] { 9, 9 });

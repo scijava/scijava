@@ -65,7 +65,7 @@ public class DeconvolveTest extends AbstractOpTest {
 		int[] size = new int[] { 225, 167 };
 
 		// create an input with a small sphere at the center
-		Img<FloatType> in = new ArrayImgFactory<FloatType>().create(size, new FloatType());
+		Img<FloatType> in = new ArrayImgFactory<>(new FloatType()).create(size);
 		placeSphereInCenter(in);
 
 		// crop the image so the sphere is truncated at the corner

@@ -56,7 +56,7 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Before
 	public void createData() {
-		input = new PlanarImgFactory<DoubleType>().create(new int[] { 120, 100 }, new DoubleType());
+		input = new PlanarImgFactory<>(new DoubleType()).create(new int[] { 120, 100 });
 
 		final MersenneTwisterFast r = new MersenneTwisterFast(System.currentTimeMillis());
 
@@ -85,7 +85,7 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Test
 	public void copyTypeTest() {
-		Img<FloatType> inputFloat = new ArrayImgFactory<FloatType>().create(new int[] { 120, 100 }, new FloatType());
+		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(new int[] { 120, 100 });
 
 		@SuppressWarnings("unchecked")
 		Img<FloatType> output = (Img<FloatType>) ops.run("copy.iterableInterval", inputFloat);

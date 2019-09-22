@@ -66,7 +66,7 @@ public class FlatIterableViewTest extends AbstractTestEnvironment {
 		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc = Functions
 				.unary(ops, "transform.flatIterableView", raiNil, iiNil);
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		Cursor<DoubleType> il2 = Views.flatIterable(img).cursor();
 

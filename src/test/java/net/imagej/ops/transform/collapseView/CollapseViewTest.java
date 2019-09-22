@@ -61,7 +61,7 @@ public class CollapseViewTest extends AbstractTestEnvironment {
 
 	@Test
 	public void defaultCollapseTest() {
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = Functions
 				.unary(ops, "transform.collapseView", new Nil<RandomAccessibleInterval<DoubleType>>() {
@@ -77,7 +77,7 @@ public class CollapseViewTest extends AbstractTestEnvironment {
 	@Test
 	public void collapseRATest() {
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
 
 		Function<RandomAccessible<DoubleType>, CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = Functions
 				.unary(ops, "transform.collapseView", new Nil<RandomAccessible<DoubleType>>() {

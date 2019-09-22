@@ -82,7 +82,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 				}, new Nil<MixedTransformView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		MixedTransformView<DoubleType> il2 = Views.permute((RandomAccessible<DoubleType>) img, 1, 0);
 		MixedTransformView<DoubleType> opr = permuteFunc.apply(deinterval(img), 1, 0);
@@ -104,7 +104,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 2, 2 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
@@ -131,7 +131,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 2, 2 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
@@ -159,7 +159,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 2, 2 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
@@ -187,7 +187,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 2, 2 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 2, 2 });
 		Cursor<DoubleType> c = img.cursor();
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		while (c.hasNext()) {
@@ -218,7 +218,7 @@ public class PermuteViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		IntervalView<DoubleType> expected = Views.permute((RandomAccessibleInterval<DoubleType>) img, 1, 0);
 		IntervalView<DoubleType> actual = permuteFunc.apply(img, 1, 0);

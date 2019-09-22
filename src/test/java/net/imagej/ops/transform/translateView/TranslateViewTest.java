@@ -76,7 +76,7 @@ public class TranslateViewTest extends AbstractTestEnvironment {
 		}, new Nil<MixedTransformView<DoubleType>>() {
 		});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		MixedTransformView<DoubleType> il2 = Views.translate(deinterval(img), 2, 5);
 		MixedTransformView<DoubleType> opr = translateFunc.apply(img, new long[] { 2, 5 });

@@ -73,7 +73,7 @@ public class RotateViewTest extends AbstractTestEnvironment {
 				}, new Nil<MixedTransformView<DoubleType>>() {
 				});
 
-		final Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 20, 10 }, new DoubleType());
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 20, 10 });
 
 		final MixedTransformView<DoubleType> il2 = Views.rotate((RandomAccessible<DoubleType>) img, 1, 0);
 		final MixedTransformView<DoubleType> opr = rotateFunc.apply(deinterval(img), 1, 0);
@@ -123,7 +123,7 @@ public class RotateViewTest extends AbstractTestEnvironment {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
 
-		final Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 20, 10 }, new DoubleType());
+		final Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 20, 10 });
 
 		final IntervalView<DoubleType> il2 = Views.rotate((RandomAccessibleInterval<DoubleType>) img, 1, 0);
 		final IntervalView<DoubleType> opr = rotateFunc.apply(img, 1,

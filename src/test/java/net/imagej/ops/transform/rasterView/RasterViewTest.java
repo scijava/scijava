@@ -69,7 +69,7 @@ public class RasterViewTest extends AbstractTestEnvironment {
 				.unary(ops, "transform.rasterView", new Nil<RealRandomAccessible<DoubleType>>() {
 				}, new Nil<RandomAccessibleOnRealRandomAccessible<DoubleType>>() {
 				});
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 		MersenneTwisterFast r = new MersenneTwisterFast(SEED);
 		for (DoubleType d : img) {
 			d.set(r.nextDouble());

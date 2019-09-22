@@ -66,7 +66,7 @@ public class StackViewTest extends AbstractTestEnvironment {
 		}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 		});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		List<Img<DoubleType>> list = new ArrayList<>();
 		list.add(img);
@@ -87,7 +87,7 @@ public class StackViewTest extends AbstractTestEnvironment {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
 
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		List<Img<DoubleType>> list = new ArrayList<>();
 		list.add(img);

@@ -66,7 +66,7 @@ public class ExtendZeroViewTest extends AbstractTestEnvironment {
 				.unary(ops, "transform.extendZeroView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
-		Img<DoubleType> img = new ArrayImgFactory<DoubleType>().create(new int[] { 10, 10 }, new DoubleType());
+		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 
 		RandomAccess<DoubleType> il2 = Views.extendZero(img).randomAccess();

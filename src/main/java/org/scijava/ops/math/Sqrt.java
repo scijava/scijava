@@ -20,7 +20,7 @@ public class Sqrt {
 	@OpField(names = NAMES)
 	@Parameter(key = "number1")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
-	public static final Function<Double, Double> MathSqrtDoubleFunction = (t) -> Math.sqrt(t);
+	public static final Function<Double, Double> MathSqrtDoubleFunction = Math::sqrt;
 
 	// --------- Computers ---------
 

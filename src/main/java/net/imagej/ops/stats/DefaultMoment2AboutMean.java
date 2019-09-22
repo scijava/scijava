@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.moment2AboutMean")
 @Parameter(key = "iterableInput")
-@Parameter(key = "moment2AboutMean", type = ItemIO.BOTH)
+@Parameter(key = "moment2AboutMean", itemIO = ItemIO.BOTH)
 public class DefaultMoment2AboutMean<I extends RealType<I>, O extends RealType<O>>
 implements Computer<Iterable<I>, O>
 {

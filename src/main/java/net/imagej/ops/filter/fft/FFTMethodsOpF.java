@@ -64,7 +64,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "fast", description = "whether to perform a fast FFT; default true")
 @Parameter(key = "fftType", description = "the complex type of the output")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
 		Function5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
 

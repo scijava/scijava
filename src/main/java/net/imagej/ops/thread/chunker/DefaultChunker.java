@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "thread.chunker")
-@Parameter(key = "chunk", type = ItemIO.BOTH)
+@Parameter(key = "chunk", itemIO = ItemIO.BOTH)
 @Parameter(key = "numberOfElements")
 @Parameter(key = "executorService")
 public class DefaultChunker implements Inplace3First<Chunk, Long, ExecutorService> {

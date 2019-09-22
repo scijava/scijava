@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "copy, copy.img")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class CopyImg<T extends NativeType<T>> implements Computer<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.iterableInterval")
@@ -66,7 +66,7 @@ public class CopyImg<T extends NativeType<T>> implements Computer<Img<T>, Img<T>
 
 @Plugin(type = Op.class, name = "copy, copy.img")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.img")

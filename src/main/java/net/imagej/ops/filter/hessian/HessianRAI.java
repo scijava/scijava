@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "filter.hessian")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class HessianRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 

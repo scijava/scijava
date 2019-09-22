@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
 @Parameter(key = "k")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalNiblackThreshold<T extends RealType<T>> implements
 	Computer4<Iterable<T>, T, Double, Double, BitType>
 {

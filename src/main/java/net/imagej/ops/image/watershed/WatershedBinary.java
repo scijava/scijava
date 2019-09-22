@@ -97,7 +97,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computer6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -153,7 +153,7 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computer5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -175,7 +175,7 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Function6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -199,7 +199,7 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends BooleanType<B>>
 		implements Function5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 

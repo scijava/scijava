@@ -20,7 +20,7 @@ public class LiftingTest <I extends RealType<I>, O extends RealType<O>> extends 
 
 	@OpField(names = "test.liftImg")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> testOp = (in, out) -> out.setReal(10.);
 	
 	@Test

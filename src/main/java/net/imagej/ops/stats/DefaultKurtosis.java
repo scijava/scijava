@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.kurtosis")
 @Parameter(key = "iterableInput")
-@Parameter(key = "kurtosis", type = ItemIO.BOTH)
+@Parameter(key = "kurtosis", itemIO = ItemIO.BOTH)
 public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	implements Computer<Iterable<I>, O>
 {

@@ -69,7 +69,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalMeanThresholdIntegral<T extends RealType<T>> implements
 	Computer3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType>
 {

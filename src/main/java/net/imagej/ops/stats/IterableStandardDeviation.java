@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.stdDev", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "stdDev", type = ItemIO.BOTH)
+@Parameter(key = "stdDev", itemIO = ItemIO.BOTH)
 public class IterableStandardDeviation<I extends RealType<I>, O extends RealType<O>>
 		implements Computer<Iterable<I>, O> {
 

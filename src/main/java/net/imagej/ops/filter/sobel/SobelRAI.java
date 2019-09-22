@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "filter.sobel")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class SobelRAI<T extends RealType<T>>
 		implements Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 	

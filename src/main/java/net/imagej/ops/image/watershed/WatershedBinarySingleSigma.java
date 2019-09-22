@@ -97,7 +97,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computer6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -148,7 +148,7 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computer5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -170,7 +170,7 @@ class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends Boolea
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Function6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -194,7 +194,7 @@ class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends Boolea
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedBinarySigngleSigmaFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Function5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 

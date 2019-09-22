@@ -72,7 +72,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "topology.eulerCharacteristic26NFloating")
 @Parameter(key = "interval")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class EulerCharacteristic26NFloating
         <B extends BooleanType<B>> implements Computer<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */

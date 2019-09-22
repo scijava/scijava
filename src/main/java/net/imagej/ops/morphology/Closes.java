@@ -30,14 +30,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, List<Shape>, Integer, Img<R>> closeImgList = Closing::close;
 
 	@OpField(names = "morphology.close")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, Shape, Integer, Img<R>> closeImgSingle = Closing::close;
 
 	@OpField(names = "morphology.close")
@@ -46,7 +46,7 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "minValue")
 	@Parameter(key = "maxValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function5<Img<T>, List<Shape>, T, T, Integer, Img<T>> closeImgListMinMax = Closing::close;
 
 	@OpField(names = "morphology.close")
@@ -55,14 +55,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "minValue")
 	@Parameter(key = "maxValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function5<Img<T>, Shape, T, T, Integer, Img<T>> closeImgSingleMinMax = Closing::close;
 
 	@OpField(names = "morphology.close")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> closeImgListComputer = (in1, in2, in3, out) -> Closing.close(in1, out, in2, in3);
 
 	@OpField(names = "morphology.close")
@@ -71,14 +71,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "minVal")
 	@Parameter(key = "maxVal")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessible<T>, List<Shape>, T, T, Integer, IterableInterval<T>> closeImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Closing.close(in1, out, in2, in3, in4, in5);
 
 	@OpField(names = "morphology.close")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> closeImgComputer = (in1, in2, in3, out) -> Closing.close(in1, out, in2, in3);
 
 	@OpField(names = "morphology.close")
@@ -87,18 +87,18 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "minVal")
 	@Parameter(key = "maxVal")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> closeImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Closing.close(in1, out, in2, in3, in4, in5);
 
 	@OpField(names = "morphology.close")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	public final Inplace4First<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> closeImgListInPlace = Closing::closeInPlace;
 
 	@OpField(names = "morphology.close")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
@@ -107,14 +107,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	public final Inplace6First<RandomAccessibleInterval<T>, Interval, List<Shape>, T, T, Integer> closeImgListMinMaxInplace = Closing::closeInPlace;
 
 	@OpField(names = "morphology.close")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	public final Inplace4First<RandomAccessibleInterval<R>, Interval, Shape, Integer> closeImgSingleInPlace = Closing::closeInPlace;
 
 	@OpField(names = "morphology.close")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")

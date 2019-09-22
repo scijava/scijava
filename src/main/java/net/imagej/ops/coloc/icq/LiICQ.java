@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "image2")
 @Parameter(key = "mean1")
 @Parameter(key = "mean2")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 		implements Function4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
 
@@ -122,7 +122,7 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 @Plugin(type = Op.class, name = "coloc.icq")
 @Parameter(key = "image1")
 @Parameter(key = "image2")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 		implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 	

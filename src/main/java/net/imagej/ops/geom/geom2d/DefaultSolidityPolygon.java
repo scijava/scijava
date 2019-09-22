@@ -43,5 +43,5 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.solidity", label = "Geometric (2D): Solidity", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "solidity", type = ItemIO.BOTH)
+@Parameter(key = "solidity", itemIO = ItemIO.BOTH)
 public class DefaultSolidityPolygon extends AbstractSolidity<Polygon2D> {}

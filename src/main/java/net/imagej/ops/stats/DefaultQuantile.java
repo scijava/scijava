@@ -55,7 +55,7 @@ import org.scijava.util.DoubleArray;
 @Plugin(type = Op.class, name = "stats.quantile")
 @Parameter(key = "iterableInput")
 @Parameter(key = "quantile", min = "0.0", max = "1.0")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
 implements BiComputer<Iterable<I>, Double, O>
 {

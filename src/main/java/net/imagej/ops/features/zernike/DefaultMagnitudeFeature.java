@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "order")
 @Parameter(key = "repetition")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultMagnitudeFeature<T extends RealType<T>, O extends RealType<O>>
 		implements Computer3<IterableInterval<T>, Integer, Integer, O> {
 

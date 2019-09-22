@@ -67,7 +67,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "lowerThreshold")
 @Parameter(key = "higherThreshold")
 @Parameter(key = "ridgeLengthMin")
-@Parameter(key = "ridges", type = ItemIO.OUTPUT)
+@Parameter(key = "ridges", itemIO = ItemIO.OUTPUT)
 public class DefaultDetectRidges<T extends RealType<T>> implements
 		Function5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<? extends WritablePolyline>> {
 

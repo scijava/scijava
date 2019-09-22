@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "filter.padIntervalOrigin", priority = Priority.HIGH)
 @Parameter(key = "input")
 @Parameter(key = "interval")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class PaddingIntervalOrigin<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
 		implements BiFunction<I, Interval, O> {
 

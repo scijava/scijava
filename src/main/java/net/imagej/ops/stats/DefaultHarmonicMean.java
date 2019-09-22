@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.harmonicMean")
 @Parameter(key = "iterableInput")
-@Parameter(key = "harmonicMean", type = ItemIO.BOTH)
+@Parameter(key = "harmonicMean", itemIO = ItemIO.BOTH)
 public class DefaultHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	implements Computer<Iterable<I>, O>
 {

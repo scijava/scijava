@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "filter.padIntervalCentered", priority = Priority.HIGH)
 @Parameter(key = "input")
 @Parameter(key = "paddedDimensions")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
 		implements BiFunction<I, Dimensions, O> {
 

@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.size", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "size", type = ItemIO.BOTH)
+@Parameter(key = "size", itemIO = ItemIO.BOTH)
 public class IISize<I extends RealType<I>, O extends RealType<O>> implements Computer<IterableInterval<I>, O> {
 
 	@Override

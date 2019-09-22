@@ -26,7 +26,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	@Parameter(key = "input")
 	@Parameter(key = "min")
 	@Parameter(key = "max")
-	@Parameter(key = "invertedOutput", type = ItemIO.BOTH)
+	@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
 	public final Computer3<IterableInterval<T>, T, T, IterableInterval<T>> delegatorInvert = (input, min, max,
 			output) -> {
 
@@ -58,7 +58,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 
 	@OpField(names = "image.invert")
 	@Parameter(key = "input")
-	@Parameter(key = "invertedOutput", type = ItemIO.BOTH)
+	@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
 	public final Computer<IterableInterval<T>, IterableInterval<T>> simpleInvert = (input, output) -> delegatorInvert
 			.compute(input, minValue(input.firstElement()), maxValue(input.firstElement()), output);
 

@@ -312,7 +312,7 @@ class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
 @Parameter(key = "binaryInput")
 @Parameter(key = "calibration")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computer3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>>{
 
 	@Override

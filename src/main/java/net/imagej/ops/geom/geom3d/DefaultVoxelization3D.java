@@ -67,17 +67,17 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "width", required = false)
 @Parameter(key = "height", required = false)
 @Parameter(key = "depth", required = false)
-@Parameter(key = "voxelizedImage", type = ItemIO.OUTPUT)
+@Parameter(key = "voxelizedImage", itemIO = ItemIO.OUTPUT)
 public class DefaultVoxelization3D
 		implements Function4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 
-	// @Parameter(type = ItemIO.INPUT, required = false)
+	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	// private int width = 10;
 	//
-	// @Parameter(type = ItemIO.INPUT, required = false)
+	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	// private int height = 10;
 	//
-	// @Parameter(type = ItemIO.INPUT, required = false)
+	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	// private int depth = 10;
 
 	@OpDependency(name = "create.img")

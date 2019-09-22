@@ -46,7 +46,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.feretsAngle", label = "Geometric (2D): Ferets Angle")
 @Parameter(key = "points")
-@Parameter(key = "feretsAngle", type = ItemIO.BOTH)
+@Parameter(key = "feretsAngle", itemIO = ItemIO.BOTH)
 public class DefaultFeretsAngle implements Computer<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
 
 	@Override

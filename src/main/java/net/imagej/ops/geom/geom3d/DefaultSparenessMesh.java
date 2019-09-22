@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.spareness", label = "Geometric (3D): Spareness", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "spareness", type = ItemIO.BOTH)
+@Parameter(key = "spareness", itemIO = ItemIO.BOTH)
 public class DefaultSparenessMesh implements Computer<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

@@ -51,7 +51,7 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	@OpField(names = "logic.and")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<B, B, B> ander = (in1, in2, out) -> {
 		out.set(in1);
 		out.and(in2);
@@ -60,31 +60,31 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	@OpField(names = "logic.greaterThan")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<C, C, B> greaterThan = (in1, in2, out) -> out.set(in1.compareTo(in2) > 0);
 
 	@OpField(names = "logic.greaterThanOrEqual")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<C, C, B> greaterThanOrEqual = (in1, in2, out) -> out.set(in1.compareTo(in2) >= 0);
 
 	@OpField(names = "logic.lessThan")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<C, C, B> lessThan = (in1, in2, out) -> out.set(in1.compareTo(in2) < 0);
 
 
 	@OpField(names = "logic.lessThanOrEqual")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<C, C, B> lessThanOrEqual = (in1, in2, out) -> out.set(in1.compareTo(in2) <= 0);
 
 	@OpField(names = "logic.not")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<B, B> not = (in, out) -> {
 		out.set(in);
 		out.not();
@@ -93,19 +93,19 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	@OpField(names = "logic.equal")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<C, C, B> equals = (in1, in2, out) -> out.set(in1.equals(in2));
 
 	@OpField(names = "logic.notEqual")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<C, C, B> notEquals = (in1, in2, out) -> out.set(!in1.equals(in2));
 
 	@OpField(names = "logic.or")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<B, B, B> or = (in1, in2, out) -> {
 		out.set(in1);
 		out.or(in2);
@@ -114,7 +114,7 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 	@OpField(names = "logic.xor")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<B, B, B> xor = (in1, in2, out) -> {
 		out.set(in1);
 		out.xor(in2);

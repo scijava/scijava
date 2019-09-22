@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "filter.partialDerivative")
 @Parameter(key = "input")
-@Parameter(key = "outputComposite", type = ItemIO.OUTPUT)
+@Parameter(key = "outputComposite", itemIO = ItemIO.OUTPUT)
 public class PartialDerivativesRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 

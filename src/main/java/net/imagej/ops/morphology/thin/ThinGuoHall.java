@@ -45,7 +45,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "morphology.thinGuoHall")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ThinGuoHall extends AbstractThin {
 
 	@Override

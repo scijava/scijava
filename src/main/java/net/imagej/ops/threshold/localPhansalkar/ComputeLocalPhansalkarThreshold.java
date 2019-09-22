@@ -75,7 +75,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	Computer4<Iterable<T>, T, Double, Double, BitType>
 {

@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.centroid", priority = 1)
 @Parameter(key = "input")
-@Parameter(key = "centroid", type = ItemIO.OUTPUT)
+@Parameter(key = "centroid", itemIO = ItemIO.OUTPUT)
 public class CentroidII implements Function<IterableInterval<?>, RealLocalizable> {
 
 	@Override

@@ -72,7 +72,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "topology.eulerCorrection")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class EulerCorrection<B extends BooleanType<B>>
         implements Computer<RandomAccessibleInterval<B>, DoubleType> {
 

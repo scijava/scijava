@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.sumOfSquares")
 @Parameter(key = "iterableInput")
-@Parameter(key = "sumOfSquares", type = ItemIO.BOTH)
+@Parameter(key = "sumOfSquares", itemIO = ItemIO.BOTH)
 public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>> implements Computer<Iterable<I>, O> {
 
 	@Override

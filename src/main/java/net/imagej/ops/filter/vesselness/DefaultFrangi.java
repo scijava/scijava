@@ -62,7 +62,7 @@ import Jama.Matrix;
 @Parameter(key = "input")
 @Parameter(key = "spacing", description = "physicl distance between data points")
 @Parameter(key = "scale", description = "size of vessels to search for")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		implements Computer3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
 

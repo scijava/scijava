@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory")
 @Parameter(key = "range")
 @Parameter(key = "minPixelFraction")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
 		Computer5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, IterableInterval<V>> {
 

@@ -43,7 +43,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public abstract class AbstractApplyThresholdIterable<T> implements
 	Computer<Iterable<T>, Iterable<BitType>>
 {

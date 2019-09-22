@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.compactness", label = "Geometric (3D): Compactness", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "compactness", type = ItemIO.BOTH)
+@Parameter(key = "compactness", itemIO = ItemIO.BOTH)
 public class DefaultCompactness implements Computer<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.boundarySize")

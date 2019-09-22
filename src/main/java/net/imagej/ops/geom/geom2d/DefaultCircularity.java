@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.circularity", label = "Geometric (2D): Circularity")
 @Parameter(key = "input")
-@Parameter(key = "circularity", type = ItemIO.BOTH)
+@Parameter(key = "circularity", itemIO = ItemIO.BOTH)
 public class DefaultCircularity implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")

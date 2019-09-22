@@ -30,14 +30,14 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, List<Shape>, Integer, Img<R>> dilateImgList = Dilation::dilate;
 
 	@OpField(names = "morphology.dilate")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, Shape, Integer, Img<R>> dilateImgSingle = Dilation::dilate;
 
 	@OpField(names = "morphology.dilate")
@@ -45,7 +45,7 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "strels")
 	@Parameter(key = "minValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function4<Img<T>, List<Shape>, T, Integer, Img<T>> dilateImgListMinValue = Dilation::dilate;
 
 	@OpField(names = "morphology.dilate")
@@ -53,14 +53,14 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "strel")
 	@Parameter(key = "minValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function4<Img<T>, Shape, T, Integer, Img<T>> dilateImgSingleMinValue = Dilation::dilate;
 
 	@OpField(names = "morphology.dilate")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> dilateImgListComputer = (in1, in2, in3, out) -> Dilation.dilate(in1, out, in2, in3);
 
 	@OpField(names = "morphology.dilate")
@@ -68,14 +68,14 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessible<T>, List<Shape>, T, Integer, IterableInterval<T>> dilateImgListMinValComputer = (in1, in2, in3, in4, out) -> Dilation.dilate(in1, out, in2, in3, in4);
 
 	@OpField(names = "morphology.dilate")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> dilateImgComputer = (in1, in2, in3, out) -> Dilation.dilate(in1, out, in2, in3);
 
 	@OpField(names = "morphology.dilate")
@@ -83,21 +83,21 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessible<T>, Shape, T, Integer, IterableInterval<T>> dilateImgMinValComputer = (in1, in2, in3, in4, out) -> Dilation.dilate(in1, out, in2, in3, in4);
 
 	@OpField(names = "morphology.dilate")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, List<Shape>, Integer, Img<R>> dilateFullImgList = Dilation::dilateFull;
 
 	@OpField(names = "morphology.dilate")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, Shape, Integer, Img<R>> dilateFullImgSingle = Dilation::dilateFull;
 
 	@OpField(names = "morphology.dilate")
@@ -105,7 +105,7 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "strels")
 	@Parameter(key = "minValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function4<Img<T>, List<Shape>, T, Integer, Img<T>> dilateFullImgListMinValue = Dilation::dilateFull;
 
 	@OpField(names = "morphology.dilate")
@@ -113,18 +113,18 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	@Parameter(key = "strel")
 	@Parameter(key = "minValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function4<Img<T>, Shape, T, Integer, Img<T>> dilateFullImgSingleMinValue = Dilation::dilateFull;
 
 	@OpField(names = "morphology.dilate")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	public final Inplace4First<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> dilateImgListInPlace = Dilation::dilateInPlace;
 
 	@OpField(names = "morphology.dilate")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
@@ -132,14 +132,14 @@ public class Dilations<T extends RealType<T> & Comparable<T>, R extends RealType
 	public final Inplace5First<RandomAccessibleInterval<T>, Interval, List<Shape>, T, Integer> dilateImgListMinValInplace = Dilation::dilateInPlace;
 
 	@OpField(names = "morphology.dilate")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	public final Inplace4First<RandomAccessibleInterval<R>, Interval, Shape, Integer> dilateImgSingleInPlace = Dilation::dilateInPlace;
 
 	@OpField(names = "morphology.dilate")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")

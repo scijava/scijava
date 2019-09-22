@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "dimensions")
 @Parameter(key = "forward")
 @Parameter(key = "fast")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class ComputeFFTMethodsSize implements Function3<Dimensions, Boolean, Boolean, long[][]> {
 
 	@Override

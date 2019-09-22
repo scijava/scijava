@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "threshold.apply")
 @Parameter(key = "input")
 @Parameter(key = "threshold")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ApplyThresholdComparable<T> implements
 	BiComputer<Comparable<? super T>, T, BitType>
 {

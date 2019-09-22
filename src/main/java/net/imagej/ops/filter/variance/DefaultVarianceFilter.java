@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "shape")
 @Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultVarianceFilter<T, V> implements
 		Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<V>> {
 

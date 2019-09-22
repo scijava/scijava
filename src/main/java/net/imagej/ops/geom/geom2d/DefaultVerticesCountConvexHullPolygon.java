@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.verticesCountConvexHull", label = "Geometric (2D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "verticesCountConvexHull", type = ItemIO.BOTH)
+@Parameter(key = "verticesCountConvexHull", itemIO = ItemIO.BOTH)
 public class DefaultVerticesCountConvexHullPolygon implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")

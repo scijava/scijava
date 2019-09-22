@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.majorAxis", label = "Geometric (2D): Major Axis")
 @Parameter(key = "input")
-@Parameter(key = "majorAxis", type = ItemIO.BOTH)
+@Parameter(key = "majorAxis", itemIO = ItemIO.BOTH)
 public class DefaultMajorAxis implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

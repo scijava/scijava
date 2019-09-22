@@ -26,7 +26,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "nrGreyLevels", min = "0", max = "128", stepSize = "1", initializer = "32")
 @Parameter(key = "distance", min = "0", max = "128", stepSize = "1", initializer = "1")
 @Parameter(key = "matrixOrientation")
-@Parameter(key = "cooccurrenceMatrix", type = ItemIO.OUTPUT)
+@Parameter(key = "cooccurrenceMatrix", itemIO = ItemIO.OUTPUT)
 public class CooccurrenceMatrix<T extends RealType<T>>
 		implements Function4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 

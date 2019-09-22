@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.variance", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "variance", type = ItemIO.BOTH)
+@Parameter(key = "variance", itemIO = ItemIO.BOTH)
 public class IterableVariance<I extends RealType<I>, O extends RealType<O>> implements Computer<Iterable<I>, O> {
 
 	@Override

@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "features.tamura.directionality")
 @Parameter(key = "input")
 @Parameter(key = "histogramSize")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealType<O>>
 	implements BiComputer<RandomAccessibleInterval<I>, Integer, O> {
 

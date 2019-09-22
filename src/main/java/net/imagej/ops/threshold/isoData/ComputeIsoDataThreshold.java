@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.isoData", priority = Priority.HIGH)
 @Parameter(key = "inputHistogram")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeIsoDataThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

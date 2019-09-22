@@ -80,7 +80,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRA = (input,
 			es, sigmas, output) -> {
 		try {
@@ -105,7 +105,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "outOfBoundsFactory")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessibleInterval<T>, ExecutorService, double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> defaultGaussRAI = (input,
 					es, sigmas, outOfBounds, output) -> {
@@ -137,7 +137,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessibleInterval<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRAISimple = (
 			input, es, sigmas, output) -> defaultGaussRAI.compute(input, es, sigmas,
 					new OutOfBoundsMirrorFactory<>(Boundary.SINGLE), output);
@@ -156,7 +156,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigma")
 	@Parameter(key = "outOfBoundsFactory")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessibleInterval<T>, ExecutorService, Double, //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> //
 	gaussRAISingleSigma = (input, es, sigma, outOfBounds, output) -> { //
@@ -178,7 +178,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigma")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessibleInterval<T>, ExecutorService, Double, RandomAccessibleInterval<T>> gaussRAISingleSigmaSimple = (
 			input, es, sigma, output) -> gaussRAISingleSigma.compute(input, es, sigma,
 					new OutOfBoundsMirrorFactory<>(Boundary.SINGLE), output);

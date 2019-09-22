@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.integral", priority = Priority.LOW)
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class WrappedIntegralImg<I extends RealType<I>>
 	implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<DoubleType>>
 {

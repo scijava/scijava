@@ -64,7 +64,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
 @Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T> implements
 	Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

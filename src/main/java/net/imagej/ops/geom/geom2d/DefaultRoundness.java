@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.roundness", label = "Geometric (2D): Roundness")
 @Parameter(key = "input")
-@Parameter(key = "roundness", type = ItemIO.BOTH)
+@Parameter(key = "roundness", itemIO = ItemIO.BOTH)
 public class DefaultRoundness implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")

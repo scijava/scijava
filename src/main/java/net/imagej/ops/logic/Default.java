@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "logic.default")
 @Parameter(key = "input")
 @Parameter(key = "defaultValue")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	BiComputer<I, O, O> 
 {

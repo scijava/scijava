@@ -27,13 +27,13 @@ import org.scijava.struct.ItemIO;
 public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 
 	@OpField(names = "morphology.distanceTransform")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distanceType")
 	@Parameter(key = "weights")
 	public final Inplace3First<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[]> transformInplace = DistanceTransform::transform;
 
 	@OpField(names = "morphology.distanceTransform")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distanceType")
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
@@ -46,7 +46,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "source")
 	@Parameter(key = "distanceType")
 	@Parameter(key = "weights")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[], RandomAccessibleInterval<T>> transformComputer = (
 			in1, in2, in3, out) -> DistanceTransform.transform(in1, out, in2, in3);
 
@@ -56,19 +56,19 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
 	@Parameter(key = "weights")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessibleInterval<T>, DISTANCE_TYPE, ExecutorService, Integer, double[], RandomAccessibleInterval<U>> transformExServiceComputer = (
 			source, distanceType, executorService, numTasks, weights,
 			target) -> ExceptionUtils.execute(() -> DistanceTransform.transform(source, target, distanceType,
 					executorService, numTasks, weights));
 
 	@OpField(names = "morphology.distanceTransform")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distance")
 	public final BiInplaceFirst<RandomAccessibleInterval<T>, Distance> transformInplaceDistance = DistanceTransform::transform;
 
 	@OpField(names = "morphology.distanceTransform")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distance")
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
@@ -79,7 +79,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source")
 	@Parameter(key = "distance")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final BiComputer<RandomAccessibleInterval<T>, Distance, RandomAccessibleInterval<T>> transformComputerDistance = (in1, in2, out) -> DistanceTransform.transform(in1, out, in2);
 	
 	@OpField(names = "morphology.distanceTransform")
@@ -87,7 +87,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "distance")
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
-	@Parameter(key = "target", type = ItemIO.OUTPUT)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessibleInterval<T>, Distance, ExecutorService, Integer, RandomAccessibleInterval<T>> transformComputerExServiceDistance = (
 			source, distance, executorService, numTasks, target) -> ExceptionUtils
 				.execute(() -> DistanceTransform.transform(source, target, distance, executorService, numTasks));

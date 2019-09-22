@@ -84,7 +84,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "numOrientations")
 @Parameter(key = "spanOfNeighborhood")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		Computer4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -278,7 +278,7 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 @Parameter(key = "numOrientations")
 @Parameter(key = "spanOfNeighborhood")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 		Function4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 

@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.minimumFeret")
 @Parameter(key = "input")
-@Parameter(key = "minFeret", type = ItemIO.OUTPUT)
+@Parameter(key = "minFeret", itemIO = ItemIO.OUTPUT)
 public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")

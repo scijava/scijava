@@ -45,7 +45,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "convert.clip")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ClipRealTypes<I extends RealType<I>, O extends RealType<O>>
 	implements Computer<I, O>
 {

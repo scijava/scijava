@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.minMax")
 @Parameter(key = "iterableInput")
-@Parameter(key = "minMax", type = ItemIO.OUTPUT)
+@Parameter(key = "minMax", itemIO = ItemIO.OUTPUT)
 public class DefaultMinMax<I extends RealType<I>> implements Function<Iterable<I>, Pair<I, I>> {
 
 	@Override

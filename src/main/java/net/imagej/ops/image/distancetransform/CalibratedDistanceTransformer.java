@@ -58,7 +58,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "binaryInput")
 @Parameter(key = "calibration")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computer3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
 

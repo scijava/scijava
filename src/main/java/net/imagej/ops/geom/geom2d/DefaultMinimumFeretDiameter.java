@@ -44,7 +44,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "geom.minimumFeretsDiameter")
 @Parameter(key = "input")
-@Parameter(key = "minFeretDiameter", type = ItemIO.BOTH)
+@Parameter(key = "minFeretDiameter", itemIO = ItemIO.BOTH)
 public class DefaultMinimumFeretDiameter implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minimumFeret")

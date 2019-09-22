@@ -44,7 +44,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "geom.minimumFeretsAngle")
 @Parameter(key = "input")
-@Parameter(key = "minFeretAngle", type = ItemIO.BOTH)
+@Parameter(key = "minFeretAngle", itemIO = ItemIO.BOTH)
 public class DefaultMinimumFeretAngle implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minimumFeret")

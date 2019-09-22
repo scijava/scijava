@@ -100,7 +100,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "mask")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computer4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -391,7 +391,7 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 @Parameter(key = "input")
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 class WatershedMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computer3<RandomAccessibleInterval<T>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 	
@@ -411,7 +411,7 @@ class WatershedMaskless<T extends RealType<T>, B extends BooleanType<B>> impleme
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "mask")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedFunction<T extends RealType<T>, B extends BooleanType<B>>
 		implements Function4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -433,7 +433,7 @@ class WatershedFunction<T extends RealType<T>, B extends BooleanType<B>>
 @Parameter(key = "input")
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>>
 		implements Function3<RandomAccessibleInterval<T>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 

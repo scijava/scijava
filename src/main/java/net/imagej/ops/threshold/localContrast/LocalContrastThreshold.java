@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "inputNeighborhoodShape")
 @Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalContrastThreshold<T extends RealType<T>> implements
 	Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			IterableInterval<BitType>> {

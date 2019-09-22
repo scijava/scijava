@@ -29,38 +29,39 @@
 
 package org.scijava.ops.transform.functional;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.core.inplace.BiInplaceFirst;
+import org.scijava.ops.core.inplace.BiInplaceSecond;
+import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.core.inplace.Inplace3Second;
+import org.scijava.ops.core.inplace.Inplace4First;
+import org.scijava.ops.core.inplace.Inplace5First;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
-import org.scijava.ops.transform.TypeModUtils;
-import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Adapt;
-import org.scijava.ops.util.Computers;
 import org.scijava.ops.util.Functions;
+import org.scijava.ops.util.Inplaces;
+import org.scijava.ops.util.Inplaces.InplaceInfo;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Plugin;
+import org.scijava.util.Types;
 
 /**
- * Transforms functions into computers using the corresponding adapters in
- * {@link org.scijava.ops.util.Adapt.Functions}.
+ * Transforms inplaces into functions using the corresponding adapters in
+ * {@link org.scijava.ops.util.Adapt.Inplaces}.
  *
- * @author David Kolb
  * @author Marcel Wiedenmann
  */
 @Plugin(type = OpTransformer.class)
-public class FunctionToComputerTransformer implements FunctionalTypeTransformer {
-
-	private static final String COPY_OP_NAME = "copy";
+public class InplaceToFunctionTransformer implements FunctionalTypeTransformer {
 
 	@Override
 	public Object transform(final OpService opService, final Object src, final OpRef targetRef)
@@ -68,18 +69,14 @@ public class FunctionToComputerTransformer implements FunctionalTypeTransformer 
 	{
 		final Class<?> targetFunctionalRawType = OpUtils.findFirstImplementedFunctionalInterface(targetRef);
 		checkCanTransform(src, targetRef, targetFunctionalRawType);
-		final Type targetOutputParamType = targetRef.getOutType();
-		Computer<?, ?> copy;
-		try {
-			copy = findCopy(opService, targetOutputParamType);
-		}
-		catch (final IllegalArgumentException ex) {
-			throw createCannotTransformException(src, targetRef,
-				"No suitable copy Op available to copy function output to computer output.", ex);
-		}
-		if (src instanceof Function) return functionToComputer((Function<?, ?>) src, copy);
-		if (src instanceof BiFunction) return functionToComputer((BiFunction<?, ?, ?>) src, copy);
-		throw createCannotTransformException(src, targetRef, "Source does not implement a supported function interface.",
+		if (src instanceof Inplace) return Adapt.Inplaces.asFunction((Inplace<?>) src);
+		if (src instanceof BiInplaceFirst) return Adapt.Inplaces.asBiFunction((BiInplaceFirst<?, ?>) src);
+		if (src instanceof BiInplaceSecond) return Adapt.Inplaces.asBiFunction((BiInplaceSecond<?, ?>) src);
+		if (src instanceof Inplace3First) return Adapt.Inplaces.asFunction3((Inplace3First<?, ?, ?>) src);
+		if (src instanceof Inplace3Second) return Adapt.Inplaces.asFunction3((Inplace3Second<?, ?, ?>) src);
+		if (src instanceof Inplace4First) return Adapt.Inplaces.asFunction4((Inplace4First<?, ?, ?, ?>) src);
+		if (src instanceof Inplace5First) return Adapt.Inplaces.asFunction5((Inplace5First<?, ?, ?, ?, ?>) src);
+		throw createCannotTransformException(src, targetRef, "Source does not implement a supported inplace interface.",
 			null);
 	}
 
@@ -95,17 +92,20 @@ public class FunctionToComputerTransformer implements FunctionalTypeTransformer 
 			problem = "Target does not implement a functional interface.";
 		}
 		else {
-			final Integer srcArity = Functions.ALL_FUNCTIONS.get(srcFunctionalRawType);
-			if (srcArity == null) {
-				problem = "Source does not implement a known function interface.";
+			final InplaceInfo srcInfo = Inplaces.ALL_INPLACES.get(srcFunctionalRawType);
+			if (srcInfo == null) {
+				problem = "Source does not implement a known inplace interface.";
 			}
 			else {
-				final Integer targetArity = Computers.ALL_COMPUTERS.get(targetFunctionalRawType);
+				final Integer targetArity = Functions.ALL_FUNCTIONS.get(targetFunctionalRawType);
 				if (targetArity == null) {
-					problem = "Target does not implement a known computer interface.";
+					problem = "Target does not implement a known function interface.";
 				}
-				else if (!srcArity.equals(targetArity)) {
-					problem = "Source and target arities disagree (" + srcArity + " vs. " + targetArity + ").";
+				else {
+					final int srcArity = srcInfo.arity();
+					if (srcArity != targetArity.intValue()) {
+						problem = "Source and target arities disagree (" + srcArity + " vs. " + targetArity + ").";
+					}
 				}
 			}
 		}
@@ -114,34 +114,35 @@ public class FunctionToComputerTransformer implements FunctionalTypeTransformer 
 		}
 	}
 
-	private static Computer<?, ?> findCopy(final OpService opService, final Type outputParamType) {
-		return Computers.unary(opService, COPY_OP_NAME, Nil.of(outputParamType), Nil.of(outputParamType));
-	}
-
-	private static <I, O> Computer<I, O> functionToComputer(final Function<I, O> src, final Computer<?, ?> copy) {
-		return Adapt.Functions.asComputer(src, (Computer<O, O>) copy);
-	}
-
-	private static <I1, I2, O> BiComputer<I1, I2, O> functionToComputer(final BiFunction<I1, I2, O> src,
-		final Computer<?, ?> copy)
-	{
-		return Adapt.Functions.asBiComputer(src, (Computer<O, O>) copy);
-	}
-
 	@Override
 	public Integer getTargetArity(final Class<?> targetFunctionalRawType) {
-		return Computers.ALL_COMPUTERS.get(targetFunctionalRawType);
+		return Functions.ALL_FUNCTIONS.get(targetFunctionalRawType);
 	}
 
 	@Override
 	public List<Class<?>> getSourceFunctionalInterfaces(final int targetArity) {
-		final Class<?> function = Functions.ALL_FUNCTIONS.inverse().get(targetArity);
-		return function != null ? Collections.singletonList(function) : Collections.emptyList();
+		return Inplaces.getInplacesOfArity(targetArity);
+	}
+
+	@Override
+	public Type getSourceOpType(final Type targetOpType, final Class<?> targetFunctionalRawType,
+		final Class<?> sourceFunctionalRawType)
+	{
+		if (targetOpType instanceof ParameterizedType) {
+			final Type[] targetParamTypes = ((ParameterizedType) targetOpType).getActualTypeArguments();
+			final int srcMutableParamPosition = Inplaces.ALL_INPLACES.get(sourceFunctionalRawType).mutablePosition();
+			final int targetOutputParamPosition = targetParamTypes.length - 1;
+			if (targetParamTypes[srcMutableParamPosition].equals(targetParamTypes[targetOutputParamPosition])) {
+				// NB: Drop output parameter of the function as it's essentially the
+				// mutable position of the inplace.
+				return Types.parameterize(sourceFunctionalRawType, Arrays.copyOf(targetParamTypes, targetOutputParamPosition));
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public Type[] getSourceInputParameterTypes(final OpRef targetRef, final int targetArity) {
-		// NB: Output parameter is not part of input parameters in functions.
-		return TypeModUtils.remove(targetRef.getArgs(), targetArity);
+		return targetRef.getArgs();
 	}
 }

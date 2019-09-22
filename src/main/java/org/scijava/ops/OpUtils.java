@@ -43,6 +43,7 @@ import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ParameterMember;
+import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
@@ -50,6 +51,7 @@ import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.ValueAccessible;
+import org.scijava.util.Types;
 
 /**
  * Utility methods for working with ops.
@@ -173,6 +175,13 @@ public final class OpUtils {
 		}
 	}
 
+	public static List<OpDependencyMember<?>> dependencies(Struct struct) {
+		return struct.members().stream() //
+			.filter(member -> member instanceof OpDependencyMember) //
+			.map(member -> (OpDependencyMember<?>) member) //
+			.collect(Collectors.toList());
+	}
+
 	public static Type[] types(OpCandidate candidate) {
 		return getTypes(candidate.struct().members());
 	}
@@ -182,7 +191,8 @@ public final class OpUtils {
 	}
 
 	public static Type[] padTypes(final OpCandidate candidate, Type[] types) {
-		return (Type[]) padArgs(candidate, false, (Object[])types);
+		final Object[] padded = padArgs(candidate, false, (Object[]) types);
+		return Arrays.copyOf(padded, padded.length, Type[].class);
 	}
 	
 	public static Object[] padArgs(final OpCandidate candidate, final boolean secondary, Object... args) {
@@ -426,5 +436,15 @@ public final class OpUtils {
 		sb.append("\n");
 		sb.append(")\n");
 		return sb.toString();
+	}
+
+	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {
+		for (final Type opType : opRef.getTypes()) {
+			final Class<?> functionalInterface = ParameterStructs.findFunctionalInterface(Types.raw(opType));
+			if (functionalInterface != null) {
+				return functionalInterface;
+			}
+		}
+		return null;
 	}
 }

@@ -33,6 +33,7 @@
 package org.scijava.ops.transform;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.scijava.ops.OpEnvironment;
@@ -63,9 +64,13 @@ public final class DefaultOpTransformerService extends AbstractSingletonService<
 		List<OpTransformation> transforms = new ArrayList<>();
 		
 		for (OpTransformer ot: getInstances()) {
-			OpRef fromRef = ot.getRefTransformingTo(toRef);
-			if (fromRef != null) {
-				transforms.add(new OpTransformation(fromRef, toRef, ot));
+			final Collection<OpRef> fromRefs = ot.getRefsTransformingTo(toRef);
+			if (fromRefs != null) {
+				for (OpRef fromRef : fromRefs) {
+					if (fromRef != null) {
+						transforms.add(new OpTransformation(fromRef, toRef, ot));
+					}
+				}
 			}
 		}
 		return transforms;

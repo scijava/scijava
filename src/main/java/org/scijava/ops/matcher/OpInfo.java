@@ -4,6 +4,7 @@ package org.scijava.ops.matcher;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
@@ -34,14 +35,19 @@ public interface OpInfo {
 		return OpUtils.outputs(struct()).get(0);
 	}
 
+	/** Gets the op's dependencies on other ops. */
+	default List<OpDependencyMember<?>> dependencies() {
+		return OpUtils.dependencies(struct());
+	}
+
 	/** The op's priority. */
 	double priority();
 
 	/** A fully qualified, unambiguous name for this specific op implementation. */
 	String implementationName();
 
-	/** Create a StructInstance using the Struct metadata backed by an object of the op itself.  */
-	StructInstance<?> createOpInstance();
+	/** Create a StructInstance using the Struct metadata backed by an object of the op itself. */
+	StructInstance<?> createOpInstance(List<?> dependencies);
 
 	// TODO Consider if we really want to keep the following methods.
 	boolean isValid();

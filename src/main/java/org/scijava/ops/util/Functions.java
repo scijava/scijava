@@ -1,24 +1,62 @@
 package org.scijava.ops.util;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.Op;
 import org.scijava.ops.core.function.Function3;
 import org.scijava.ops.core.function.Function4;
 import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.core.function.Function6;
+import org.scijava.ops.core.function.Function7;
+import org.scijava.ops.core.function.Function8;
+import org.scijava.ops.core.function.Function9;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
 
-/**
- * Utility providing adaptation between {@link Op} types.
- */
 public class Functions {
+
+	/**
+	 * All known function types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 */
+	public static final BiMap<Class<?>, Integer> ALL_FUNCTIONS;
+
+	static {
+		final Map<Class<?>, Integer> functions = new HashMap<>(10);
+		functions.put(Supplier.class, 0);
+		functions.put(Function.class, 1);
+		functions.put(BiFunction.class, 2);
+		functions.put(Function3.class, 3);
+		functions.put(Function4.class, 4);
+		functions.put(Function5.class, 5);
+		functions.put(Function6.class, 6);
+		functions.put(Function7.class, 7);
+		functions.put(Function8.class, 8);
+		functions.put(Function9.class, 9);
+		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
+	}
 
 	private Functions() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	/**
+	 * @return {@code true} if the given type is a {@link #ALL_FUNCTIONS known}
+	 *         function type, {@code false} otherwise.<br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code type} is {@code null}.
+	 */
+	public static boolean isFunction(Type type) {
+		return ALL_FUNCTIONS.containsKey(Types.raw(type));
 	}
 
 	public static <I, O> Function<I, O> unary(final OpService ops, final String opName,

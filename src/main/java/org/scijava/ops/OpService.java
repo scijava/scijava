@@ -182,51 +182,41 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * object by looking for Ops matching the field type and the name specified in
 	 * the annotation. The field type is assumed to be functional.
 	 *
-	 * @param obj
+	 * @param op
 	 * @throws OpMatchingException
 	 *             if the type of the specified object is not functional, if the Op
 	 *             matching the functional type and the name could not be found, if
 	 *             an exception occurs during injection
 	 */
-	private void resolveOpDependencies(Object obj, OpCandidate parentOp) throws OpMatchingException {
-		Object op = obj;
-		// HACK: Only works with Op instances and OpRunner, not extensible.
-		// Consider extensible ways to achieve something similar e.g. extending OpInfo
-		// to support OpDependencies.
-		if (obj instanceof OpRunner) {
-			op = ((OpRunner) obj).getAdaptedOp();
-		}
-		final List<Field> opFields = ClassUtils.getAnnotatedFields(op.getClass(), OpDependency.class);
-
-		for (final Field opField : opFields) {
-			final String opName = opField.getAnnotation(OpDependency.class).name();
-			final Type fieldType = Types.fieldType(opField, op.getClass());
-			final Type mappedFieldType = Types.mapVarToTypes(new Type[] { fieldType }, parentOp.typeVarAssigns())[0];
-
-			OpRef inferredRef = inferOpRef(mappedFieldType, opName, parentOp.typeVarAssigns());
+	private List<Object> resolveOpDependencies(OpCandidate op)
+		throws OpMatchingException
+	{
+		final List<OpDependencyMember<?>> dependencies = op.opInfo().dependencies();
+		final List<Object> resolvedDependencies = new ArrayList<>(dependencies
+			.size());
+		for (final OpDependencyMember<?> dependency : dependencies) {
+			final String dependencyName = dependency.getDependencyName();
+			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
+				dependency.getType() }, op.typeVarAssigns())[0];
+			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
+				op.typeVarAssigns());
 			if (inferredRef == null) {
+				throw new OpMatchingException("Could not infer functional " +
+					"method inputs and outputs of Op dependency field: " + dependency
+						.getKey());
+			}
+			try {
+				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef));
+			}
+			catch (final Exception e) {
 				throw new OpMatchingException(
-						"Could not infer functional " + "method inputs and outputs of Op dependency field: " + opField);
-			}
-
-			Object matchedOp = null;
-			try {
-				matchedOp = findOpInstance(opName, inferredRef);
-			} catch (Exception e) {
-				throw new OpMatchingException("Could not find Op that matches requested Op dependency field:"
-						+ "\nOp class: " + op.getClass().getName() + "\nDependency field: " + opField.getName()
-						+ "\n\n Attempted request:\n" + inferredRef, e);
-			}
-
-			try {
-				opField.setAccessible(true);
-				opField.set(op, matchedOp);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw new OpMatchingException("Exception trying to inject Op dependency field.\n"
-						+ "\tOp dependency field to resolve: " + opField + "\n" + "\tFound Op to inject: "
-						+ matchedOp.getClass().getName() + "\n" + "\tWith inferred OpRef: " + inferredRef, e);
+					"Could not find Op that matches requested Op dependency:" +
+						"\nOp class: " + op.opInfo().implementationName() + //
+						"\nDependency identifier: " + dependency.getKey() + //
+						"\n\n Attempted request:\n" + inferredRef, e);
 			}
 		}
+		return resolvedDependencies;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -244,7 +234,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		try {
 			// Find single match which matches the specified types
 			match = matcher.findSingleMatch(this, ref);
-			op = match.createOp(secondaryArgs);
+			final List<Object> dependencies = resolveOpDependencies(match);
+			op = match.createOp(dependencies, secondaryArgs);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			log.debug("Attempting Op transformation...");
@@ -260,19 +251,19 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			// If we found one, try to do transformation and return transformed op
 			log.debug("Matching Op transformation found:\n" + transformation + "\n");
 			try {
-				op = transformation.exceute(this, secondaryArgs);
+				final List<Object> dependencies = resolveOpDependencies(transformation
+					.getSourceOp());
+				op = transformation.exceute(this, dependencies, secondaryArgs);
 			} catch (OpMatchingException | OpTransformationException e1) {
-				log.debug("Execution of Op transformatioon failed:\n");
-				log.debug(e1);
-
+				throw new IllegalArgumentException("Execution of Op transformatioon failed:\n" + e1);
 			}
 		}
 		try {
 			// Try to resolve annotated OpDependency fields
 			if (match != null)
-				resolveOpDependencies(op, match);
+				resolveOpDependencies(match);
 			else if (transformation != null)
-				resolveOpDependencies(op, transformation.getSourceOp());
+				resolveOpDependencies(transformation.getSourceOp());
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}

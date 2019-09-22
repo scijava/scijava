@@ -31,6 +31,7 @@ package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.List;
 import java.util.Map;
 
 import org.scijava.ops.OpEnvironment;
@@ -202,19 +203,22 @@ public class OpCandidate {
 		return info.toString();
 	}
 
-	public StructInstance<?> createOpInstance(Object... secondaryArgs) throws OpMatchingException {
+	public StructInstance<?> createOpInstance(List<?> dependencies, Object... secondaryArgs) throws OpMatchingException
+	{
 		if (!getStatusCode().equals(StatusCode.MATCH)) {
 			throw new OpMatchingException(
 					"Status of candidate to create op from indicates a problem: " + getStatus());
 		}
 
-		StructInstance<?> inst = opInfo().createOpInstance();
+		StructInstance<?> inst = opInfo().createOpInstance(dependencies);
 		inject(inst, secondaryArgs);
 		return inst;
 	}
 
-	public Object createOp(Object... secondaryArgs) throws OpMatchingException {
-		return createOpInstance(secondaryArgs).object();
+	public Object createOp(List<?> dependencies, Object... secondaryArgs)
+		throws OpMatchingException
+	{
+		return createOpInstance(dependencies, secondaryArgs).object();
 	}
 
 	private void inject(StructInstance<?> opInst, Object... secondaryArgs) {

@@ -1,21 +1,18 @@
 /*
  * #%L
- * SciJava Common shared library for SciJava software.
+ * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2009 - 2017 Board of Regents of the University of
- * Wisconsin-Madison, Broad Institute of MIT and Harvard, Max Planck
- * Institute of Molecular Cell Biology and Genetics, University of
- * Konstanz, and KNIME GmbH.
+ * Copyright (C) 2018 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,22 +27,20 @@
  * #L%
  */
 
-package org.scijava.struct;
+package org.scijava.ops;
+
+import java.util.Arrays;
 
 /**
- * Defines the input/output type of a module.
- * <p>
- * Choices are:
- * </p>
- * <ul>
- * <li>INPUT: item is an input for the module.</li>
- * <li>OUTPUT: item is an output for the module.</li>
- * <li>BOTH: item is both an input and an output for the module. This type is
- * used to indicate an object that is mutated somehow during execution.</li>
- * </ul>
- * 
- * @author Curtis Rueden
+ * @author Marcel Wiedenmann
  */
-public enum ItemIO {
-	INPUT, OUTPUT, BOTH, AUTO, NONE
+public class TestUtils {
+
+	private TestUtils() {
+		// NB: Prevent instantiation of utility class.
+	}
+
+	public static String argsToString(Object... args) {
+		return Arrays.toString(args);
+	}
 }

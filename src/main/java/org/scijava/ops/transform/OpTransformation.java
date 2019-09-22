@@ -74,7 +74,7 @@ public class OpTransformation {
 		Object candidate = obj;
 		OpTransformation c = this;
 		do {
-			candidate = c.getTransformer().transformFailSafe(opService, c.targetRef, candidate);
+			candidate = c.getTransformer().transform(opService, candidate, c.targetRef);
 			c = c.getChild();
 		} while (c != null);
 		

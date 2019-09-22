@@ -168,12 +168,12 @@ public class OpRef {
 		n += "Input Types: \n";
 		for (Type arg : args) {
 			n += "\t\t* ";
-			n += arg.getTypeName();
+			n += arg == null ? "" : arg.getTypeName();
 			n += "\n";
 		}
 		n += "Output Type: \n";
 		n += "\t\t* ";
-		n += outType.getTypeName();
+		n += outType == null ? "" : outType.getTypeName();
 		n += "\n";
 		return n.substring(0, n.length() - 1);
 	}

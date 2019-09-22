@@ -32,73 +32,49 @@
 
 package org.scijava.ops.transform;
 
+import java.util.Collection;
+
 import org.scijava.ops.OpService;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.plugin.SingletonPlugin;
 
 /**
- * Interface describing an OpTransformer that is able to transform between Ops
- * (the actual Op object and a matching ref).
- * 
+ * Interface describing a transformer that is able to convert between different
+ * types of Ops.
+ *
  * @author David Kolb
+ * @author Marcel Wiedenmann
  */
 public interface OpTransformer extends SingletonPlugin {
 
 	/**
-	 * Version of {@link #transform(OpService, OpRef, Object)} doing some error
-	 * handling. All exceptions occurring during transformation will be wrapped
-	 * into a {@link OpTransformationException} by the default implementation.
-	 * 
-	 * @param opService
-	 * @param ref
-	 * @param src
-	 * @return
-	 * @throws OpTransformationException
+	 * Transforms the given {@code src} Op into the target Op specified by the
+	 * given {@code targetRef}. If the transformation depends on other Ops, the
+	 * given {@link OpService} is used to retrieve them.
+	 *
+	 * @param opService The {@link OpService} to use for retrieving further Ops.
+	 * @param src The source Op to transform.
+	 * @param targetRef The {@link OpRef} that describes the Op into which to
+	 *          transform {@code src}.
+	 * @return The transformed Op.
+	 * @throws OpTransformationException If any exception occurs during
+	 *           transformation.
 	 */
-	default Object transformFailSafe(OpService opService, OpRef ref, Object src) throws OpTransformationException {
-		if (srcClass().isAssignableFrom(src.getClass())) {
-			try {
-				return transform(opService, ref, src);
-			} catch (Exception e) {
-				throw new OpTransformationException("Exception during Op transformation", e);
-			}
-		}
-		throw new OpTransformationException("Object to transfrom: " + src.getClass().getName()
-				+ " is not of required class: " + srcClass().getName());
-	}
+	Object transform(OpService opService, Object src, OpRef targetRef) throws OpTransformationException;
 
 	/**
-	 * Get the (possible raw) class of the source type this transformer operates
-	 * on.
-	 * 
-	 * @return
+	 * Returns a collection that contains the {@link OpRef}s of all Ops which can
+	 * be transformed into the Op described by the given {@code targetRef} using
+	 * this transformer.
+	 * <P>
+	 * This method effectively applies the inverse of the
+	 * {@link #transform(OpService, Object, OpRef) transformation} of this
+	 * transformer to the given {@code targetRef}. It can be used to inquire about
+	 * Ops that can be transformed into the specified target using this
+	 * transformer.
+	 *
+	 * @param targetRef The target {@link OpRef}.
+	 * @return The possible source {@link OpRef}s.
 	 */
-	Class<?> srcClass();
-
-	/**
-	 * Transforms the specified Op object. If the transformation depends on
-	 * other Ops, the given {@link OpService} will be used to retrieve them. The
-	 * specified {@link OpRef} will be the ref matching the target Op of this
-	 * transformation.
-	 * 
-	 * @param opService
-	 * @param ref
-	 * @param src
-	 * @return
-	 */
-	Object transform(OpService opService, OpRef ref, Object src) throws Exception;
-
-	/**
-	 * Create and return an {@link OpRef} that matches an Op which can be
-	 * transformed into another Op, matching the specified ref, by this
-	 * transformer. This method should apply the backwards transformation
-	 * compared to {@link #transform(OpService, OpRef, Object)} to the specified
-	 * target ref. This is used to inquire about Ops that can be transformed
-	 * into the specified target using this transformation.
-	 * 
-	 * @param targetRef
-	 * @return
-	 */
-	OpRef getRefTransformingTo(OpRef targetRef);
-
+	Collection<OpRef> getRefsTransformingTo(OpRef targetRef);
 }

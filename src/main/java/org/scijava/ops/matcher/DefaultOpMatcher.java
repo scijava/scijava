@@ -58,7 +58,6 @@ import org.scijava.util.Types.TypeVarInfo;
  *
  * @author David Kolb
  */
-@Plugin(type = Service.class)
 public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 
 	private final Logger log;

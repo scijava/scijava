@@ -24,11 +24,10 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 	private final Class<?> structType;
 	private final Struct struct;
 
-	public FieldParameterMember(final Field field, final Class<?> structType)
+	public FieldParameterMember(final Field field, final Class<?> structType, Parameter parameterAnnotation)
 		throws ValidityException
 	{
-		super(Types.fieldType(field, structType), //
-			field.getAnnotation(Parameter.class));
+		super(Types.fieldType(field, structType), parameterAnnotation);
 		this.field = field;
 		this.structType = structType;
 		struct = isStruct() ? ParameterStructs.structOf(getRawType()) : null;
@@ -46,7 +45,7 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 	public T get(final Object o) {
 		try {
 			@SuppressWarnings("unchecked")
-			final T value = (T) ParameterStructs.field(this).get(o);
+			final T value = (T) field(this).get(o);
 			return value;
 		}
 		catch (final IllegalAccessException exc) {
@@ -57,7 +56,7 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 	@Override
 	public void set(final T value, final Object o) {
 		try {
-			ParameterStructs.field(this).set(o, value);
+			field(this).set(o, value);
 		}
 		catch (final IllegalAccessException exc) {
 			// FIXME
@@ -97,6 +96,14 @@ public class FieldParameterMember<T> extends AnnotatedParameterMember<T>
 	}
 
 	// -- Member methods --
+	
+	public static <T> Field field(final Member<T> item) {
+		if (item instanceof FieldParameterMember) {
+			final FieldParameterMember<T> fpItem = (FieldParameterMember<T>) item;
+			return fpItem.getField();
+		}
+		return null;
+	}
 
 	@Override
 	public String getKey() {

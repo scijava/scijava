@@ -55,6 +55,20 @@ import org.scijava.struct.MemberInstance;
 @Repeatable(Parameters.class)
 public @interface Parameter {
 
+	/**
+	 * IMPORTANT: Parameter annotation instances are mutated using reflections
+	 * in order to resolve {@link ItemIO#AUTO} which accesses this field
+	 * by name. If the name is changed, this has to be changed accordingly.
+	 */
+	public static final String ITEMIO_FIELD_NAME = "itemIO";
+	
+	/**
+	 * IMPORTANT: Parameter annotation instances are mutated using reflections
+	 * in order to resolve {@link ItemIO#AUTO} which accesses this field
+	 * by name. If the name is changed, this has to be changed accordingly.
+	 */
+	public static final String KEY_FIELD_NAME = "key";
+	
 	/** Defines a key for the parameter. */
 	String key() default "";
 
@@ -66,18 +80,10 @@ public @interface Parameter {
 
 	/**
 	 * Defines the input/output type of the parameter.
-	 * <p>
-	 * Choices are:
-	 * </p>
-	 * <ul>
-	 * <li>INPUT: parameter is an input for the plugin.</li>
-	 * <li>OUTPUT: parameter is an output for the plugin.</li>
-	 * <li>BOTH: parameter is both and input and an output for the plugin. This
-	 * type is used to indicate an object that is mutated somehow during
-	 * execution.</li>
-	 * </ul>
+	 * 
+	 * @see ItemIO
 	 */
-	ItemIO type() default ItemIO.INPUT;
+	ItemIO itemIO() default ItemIO.AUTO;
 
 	/**
 	 * Defines whether the parameter references an object which itself has

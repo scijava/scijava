@@ -42,7 +42,7 @@ import org.scijava.struct.ItemIO;
 public class OpPriorityTest extends AbstractTestEnvironment {
 	
 	@Plugin(type = Op.class, name = "test.priority", priority = Priority.HIGH)
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	private static final class testDouble implements Source<Number>{
 		@Override
 		public Number create() {
@@ -51,7 +51,7 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 	}
 
 	@Plugin(type = Op.class, name = "test.priority", priority = Priority.LOW)
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	private static final class testFloat implements Source<Number>{
 		@Override
 		public Number create() {

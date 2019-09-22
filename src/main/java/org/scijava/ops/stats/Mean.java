@@ -13,7 +13,7 @@ public class Mean {
 
 	@Plugin(type = Op.class, name = "stats.mean")
 	@Parameter(key = "iterable")
-	@Parameter(key = "mean", type = ItemIO.OUTPUT)
+	@Parameter(key = "mean", itemIO = ItemIO.OUTPUT)
 	public static class MeanFunction <N, O> implements Function<Iterable<N>, O>{
 
 		@OpDependency(name = "math.add")

@@ -60,7 +60,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sigmas2")
 @Parameter(key = "outOfBoundsFactory")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
 		Computer5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -96,7 +96,7 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 @Parameter(key = "sigma2")
 @Parameter(key = "outOfBoundsFactory")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 		Computer5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 

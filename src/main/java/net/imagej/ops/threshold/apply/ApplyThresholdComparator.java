@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "threshold")
 @Parameter(key = "comparator")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ApplyThresholdComparator<T> implements Computer3<T, T, Comparator<? super T>, BitType>
 {
 

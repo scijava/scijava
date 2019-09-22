@@ -30,14 +30,14 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, List<Shape>, Integer, Img<R>> BlackTopHatImgList = BlackTopHat::blackTopHat;
 
 	@OpField(names = "morphology.BlackTopHat")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function3<Img<R>, Shape, Integer, Img<R>> BlackTopHatImgSingle = BlackTopHat::blackTopHat;
 
 	@OpField(names = "morphology.BlackTopHat")
@@ -46,7 +46,7 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "minValue")
 	@Parameter(key = "maxValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function5<Img<T>, List<Shape>, T, T, Integer, Img<T>> BlackTopHatImgListMinMax = BlackTopHat::blackTopHat;
 
 	@OpField(names = "morphology.BlackTopHat")
@@ -55,14 +55,14 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "minValue")
 	@Parameter(key = "maxValue")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "result", type = ItemIO.OUTPUT)
+	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function5<Img<T>, Shape, T, T, Integer, Img<T>> BlackTopHatImgSingleMinMax = BlackTopHat::blackTopHat;
 
 	@OpField(names = "morphology.BlackTopHat")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> BlackTopHatImgListComputer = (in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3);
 
 	@OpField(names = "morphology.BlackTopHat")
@@ -71,14 +71,14 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "minVal")
 	@Parameter(key = "maxVal")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessible<T>, List<Shape>, T, T, Integer, IterableInterval<T>> BlackTopHatImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3, in4, in5);
 
 	@OpField(names = "morphology.BlackTopHat")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> BlackTopHatImgComputer = (in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3);
 
 	@OpField(names = "morphology.BlackTopHat")
@@ -87,18 +87,18 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "minVal")
 	@Parameter(key = "maxVal")
 	@Parameter(key = "numThreads")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> BlackTopHatImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3, in4, in5);
 
 	@OpField(names = "morphology.BlackTopHat")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	public final Inplace4First<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> BlackTopHatImgListInPlace = BlackTopHat::blackTopHatInPlace;
 
 	@OpField(names = "morphology.BlackTopHat")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
@@ -107,14 +107,14 @@ public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	public final Inplace6First<RandomAccessibleInterval<T>, Interval, List<Shape>, T, T, Integer> BlackTopHatImgListMinMaxInplace = BlackTopHat::blackTopHatInPlace;
 
 	@OpField(names = "morphology.BlackTopHat")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	public final Inplace4First<RandomAccessibleInterval<R>, Interval, Shape, Integer> BlackTopHatImgSingleInPlace = BlackTopHat::blackTopHatInPlace;
 
 	@OpField(names = "morphology.BlackTopHat")
-	@Parameter(key = "source", type = ItemIO.BOTH)
+	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")

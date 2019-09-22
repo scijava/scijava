@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric: Size", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "size", type = ItemIO.OUTPUT)
+@Parameter(key = "size", itemIO = ItemIO.OUTPUT)
 public class SizeII implements Function<IterableInterval<?>, DoubleType> {
 
 	@Override

@@ -31,7 +31,7 @@ public class TypeExtractorTests extends AbstractOpTest {
 
 	@OpField(names = "test.oobcvfTypeExtractor")
 	@Parameter(key = "oobf")
-	@Parameter(key = "output", type = ItemIO.OUTPUT)
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func = (
 			oobf) -> "oobcvf";
 
@@ -50,7 +50,7 @@ public class TypeExtractorTests extends AbstractOpTest {
 	@OpField(names = "test.oobrvfTypeExtractor")
 	@Parameter(key = "oobf")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.OUTPUT)
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = (
 			oobf, rai) -> "oobrvf";
 

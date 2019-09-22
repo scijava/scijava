@@ -30,7 +30,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "seed")
 	@Parameter(key = "fillLabel")
 	@Parameter(key = "shape")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessible<T>, Localizable, U, Shape, RandomAccessible<U>> fill = (source, seed,
 			fillLabel, shape, target) -> FloodFill.fill(source, target, seed, fillLabel, shape);
 
@@ -40,7 +40,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "fillLabel")
 	@Parameter(key = "shape")
 	@Parameter(key = "filter")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessible<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessible<U>> fillWithPredicate = (
 			source, seed, fillLabel, shape, filter,
 			target) -> FloodFill.fill(source, target, seed, fillLabel, shape, filter);
@@ -51,7 +51,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "shape")
 	@Parameter(key = "filter")
 	@Parameter(key = "writer")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessible<T>, Localizable, Shape, BiPredicate<T, U>, Consumer<U>, RandomAccessible<U>> fillWithPredicateAndConsumer = (
 			source, seed, shape, filter, writer, target) -> FloodFill.fill(source, target, seed, shape, filter, writer);
 
@@ -59,7 +59,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessible<T>, Localizable, Shape, RandomAccessible<T>> fillSimple = (source, seed,
 			shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
@@ -73,7 +73,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "seed")
 	@Parameter(key = "fillLabel")
 	@Parameter(key = "shape")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer4<RandomAccessibleInterval<T>, Localizable, U, Shape, RandomAccessibleInterval<U>> fillRAI = (
 			source, seed, fillLabel, shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
@@ -88,7 +88,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "fillLabel")
 	@Parameter(key = "shape")
 	@Parameter(key = "filter")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer5<RandomAccessibleInterval<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessibleInterval<U>> fillWithPredicateRAI = (
 			source, seed, fillLabel, shape, filter, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
@@ -101,7 +101,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")
-	@Parameter(key = "target", type = ItemIO.BOTH)
+	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computer3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> fillSimpleRAI = (
 			source, seed, shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();

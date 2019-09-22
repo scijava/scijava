@@ -46,7 +46,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric3D: Surface Vertices Count", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "verticesCountMesh", type = ItemIO.BOTH)
+@Parameter(key = "verticesCountMesh", itemIO = ItemIO.BOTH)
 public class DefaultVerticesCountMesh implements Computer<Mesh, DoubleType> {
 
 	@Override

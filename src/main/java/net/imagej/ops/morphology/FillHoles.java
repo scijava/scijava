@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "morphology.fillHoles")
 @Parameter(key = "input")
 @Parameter(key = "structElement")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class FillHoles<T extends BooleanType<T>> implements
 	BiComputer<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {

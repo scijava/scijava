@@ -66,7 +66,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "image.equation")
 @Parameter(key = "input")
 @Parameter(key = "scriptService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultEquation<T extends RealType<T>> implements
 	BiComputer<String, ScriptService, IterableInterval<T>> 
 {

@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "morphology.extractHoles")
 @Parameter(key = "input")
 @Parameter(key = "structElement")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ExtractHoles<T extends BooleanType<T>> implements
 	BiComputer<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
@@ -77,7 +77,7 @@ public class ExtractHoles<T extends BooleanType<T>> implements
 
 @Plugin(type = Op.class, name = "morphology.extractHoles")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class SimpleExtractHolesComputer<T extends BooleanType<T>> implements
 	Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {

@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "op")
 @Parameter(key = "dim")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ProjectRAIToIterableInterval<T, V>
 		implements Computer3<RandomAccessibleInterval<T>, Computer<Iterable<T>, V>, Integer, IterableInterval<V>> {
 

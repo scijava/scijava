@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.skewness")
 @Parameter(key = "iterableInput")
-@Parameter(key = "skewness", type = ItemIO.BOTH)
+@Parameter(key = "skewness", itemIO = ItemIO.BOTH)
 public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computer<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.moment3AboutMean")

@@ -61,7 +61,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sourceMax")
 @Parameter(key = "targetMin")
 @Parameter(key = "targetMax")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 		implements Computer5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
 

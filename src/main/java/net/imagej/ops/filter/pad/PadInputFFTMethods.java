@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "paddedDimensions")
 @Parameter(key = "fast")
 @Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadInputFFT<T, I, O> {
 	

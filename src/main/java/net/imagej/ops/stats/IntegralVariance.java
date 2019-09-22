@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.integralVariance")
 @Parameter(key = "iterableInput")
-@Parameter(key = "integralVariance", type = ItemIO.BOTH)
+@Parameter(key = "integralVariance", itemIO = ItemIO.BOTH)
 public class IntegralVariance<I extends RealType<I>>
 		implements Computer<RectangleNeighborhood<Composite<I>>, DoubleType> {
 

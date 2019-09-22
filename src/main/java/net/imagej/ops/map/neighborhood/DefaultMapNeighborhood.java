@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "shape")
 @Parameter(key = "op")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultMapNeighborhood<I, O> implements
 	Computer3<RandomAccessibleInterval<I>, Shape, Computer<Iterable<I>, O>, IterableInterval<O>>
 {

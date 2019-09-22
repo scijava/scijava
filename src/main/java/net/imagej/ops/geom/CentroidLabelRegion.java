@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.centroid", priority = 2)
 @Parameter(key = "input")
-@Parameter(key = "centroid", type = ItemIO.OUTPUT)
+@Parameter(key = "centroid", itemIO = ItemIO.OUTPUT)
 public class CentroidLabelRegion implements Function<LabelRegion<?>, RealLocalizable> {
 
 	@Override

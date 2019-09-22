@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (3D): Surface Area", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "boundarySize", type = ItemIO.BOTH)
+@Parameter(key = "boundarySize", itemIO = ItemIO.BOTH)
 public class DefaultSurfaceArea implements Computer<Mesh, DoubleType> {
 
 	@Override

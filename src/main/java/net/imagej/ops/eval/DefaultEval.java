@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "vars")
 @Parameter(key = "opService")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultEval implements Function3<String, Map<String, Object>, OpService, Object>
 {
 

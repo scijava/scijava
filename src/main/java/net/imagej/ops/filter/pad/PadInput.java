@@ -60,7 +60,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "paddedDimensions")
 @Parameter(key = "outOfBoundsFactory", description = "The OutOfBoundsFactory used to extend the image")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		implements Function3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 

@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "copy", type = ItemIO.BOTH)
+@Parameter(key = "copy", itemIO = ItemIO.BOTH)
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Computer<ArrayImg<T, A>, ArrayImg<T, A>> {
 	@Override
@@ -70,7 +70,7 @@ public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "copy", type = ItemIO.OUTPUT)
+@Parameter(key = "copy", itemIO = ItemIO.OUTPUT)
 class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Function<ArrayImg<T, A>, ArrayImg<T, A>> {
 

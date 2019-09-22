@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "features.haralick.coocStdX")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class CoocStdX implements Function<double[][], DoubleType> {
 
 	@OpDependency(name = "features.haralick.coocMeanX")

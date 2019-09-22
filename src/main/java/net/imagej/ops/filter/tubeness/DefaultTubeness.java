@@ -103,7 +103,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "sigma")
 @Parameter(key = "calibration")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultTubeness<T extends RealType<T>> implements
 		Computer4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
 		Cancelable {
@@ -259,7 +259,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 @Parameter(key = "input")
 @Parameter(key = "executorService")
 @Parameter(key = "sigma")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 		Computer3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
 

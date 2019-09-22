@@ -58,7 +58,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@OpField(names = "math.add", priority = Priority.HIGH)
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "sum", type = ItemIO.BOTH)
+	@Parameter(key = "sum", itemIO = ItemIO.BOTH)
 	public final BiComputer<T, T, T> adder = (input1, input2, output) -> {
 		output.set(input1);
 		output.add(input2);
@@ -72,7 +72,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "divideByZeroValue")
-	@Parameter(key = "result", type = ItemIO.BOTH)
+	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computer3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
 		try {
 			output.set(input1);
@@ -89,7 +89,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@OpField(names = "math.multiply", priority = Priority.HIGH)
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "result", type = ItemIO.BOTH)
+	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final BiComputer<T, T, T> multiplier = (input1, input2, output) -> {
 		output.set(input1);
 		output.mul(input2);
@@ -102,7 +102,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@OpField(names = "math.subtract", priority = Priority.HIGH)
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
-	@Parameter(key = "result", type = ItemIO.BOTH)
+	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final BiComputer<T, T, T> subtracter = (input1, input2, output) -> {
 		output.set(input1);
 		output.sub(input2);

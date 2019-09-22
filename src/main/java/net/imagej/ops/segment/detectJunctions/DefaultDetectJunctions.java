@@ -64,7 +64,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "segment.detectJunctions")
 @Parameter(key = "lines")
 @Parameter(key = "threshold", description = "Maximum distance between polylines to be considered a junction")
-@Parameter(key = "junctions", type = ItemIO.OUTPUT)
+@Parameter(key = "junctions", itemIO = ItemIO.OUTPUT)
 public class DefaultDetectJunctions implements BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> {
 
 	// @Parameter(required = false)
@@ -318,7 +318,7 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 
 @Plugin(type = Op.class, name = "segment.detectJunctions")
 @Parameter(key = "lines")
-@Parameter(key = "junctions", type = ItemIO.OUTPUT)
+@Parameter(key = "junctions", itemIO = ItemIO.OUTPUT)
 class SimpleDetectJunctions implements Function<List<? extends WritablePolyline>, List<RealPoint>> {
 
 	@OpDependency(name = "segment.detectJunctions")

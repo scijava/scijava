@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.integralMean")
 @Parameter(key = "iterableInput")
-@Parameter(key = "integralMean", type = ItemIO.BOTH)
+@Parameter(key = "integralMean", itemIO = ItemIO.BOTH)
 public class IntegralMean<I extends RealType<I>> implements Computer<RectangleNeighborhood<Composite<I>>, DoubleType> {
 
 	@Override

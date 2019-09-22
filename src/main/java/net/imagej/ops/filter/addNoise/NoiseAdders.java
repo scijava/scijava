@@ -79,7 +79,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@Parameter(key = "rangeMax")
 	@Parameter(key = "rangeStdDev")
 	@Parameter(key = "seed")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer5<IterableInterval<I>, Double, Double, Double, Long, IterableInterval<O>> addNoiseInterval = (
 			input, rangeMin, rangeMax, rangeStdDev, seed, output) -> {
 		addNoise(input, output, rangeMin, rangeMax, rangeStdDev, new Random(seed));
@@ -94,7 +94,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@Parameter(key = "rangeMin")
 	@Parameter(key = "rangeMax")
 	@Parameter(key = "rangeStdDev")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer4<IterableInterval<I>, Double, Double, Double, IterableInterval<O>> addNoiseIntervalSeedless = (
 			input, rangeMin, rangeMax, rangeStdDev,
 			output) -> addNoiseInterval.compute(input, rangeMin, rangeMax, rangeStdDev, 0xabcdef1234567890L, output);
@@ -159,7 +159,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@OpField(names = "filter.addPoissonNoise")
 	@Parameter(key = "input")
 	@Parameter(key = "seed")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<IterableInterval<I>, Long, IterableInterval<O>> addPoissonNoiseInterval = (input, seed,
 			output) -> addPoissonNoise(input, new Random(seed), output);
 
@@ -169,7 +169,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 */
 	@OpField(names = "filter.addPoissonNoise")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<IterableInterval<I>, IterableInterval<O>> addPoissonNoiseIntervalSeedless = (input,
 			output) -> addPoissonNoise(input, new Random(0xabcdef1234567890L), output);
 

@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.mean", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "mean", type = ItemIO.BOTH)
+@Parameter(key = "mean", itemIO = ItemIO.BOTH)
 public class IterableMean<I extends RealType<I>, O extends RealType<O>> implements Computer<Iterable<I>, O> {
 
 	@Override

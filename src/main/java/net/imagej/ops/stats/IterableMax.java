@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.max", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "max", type = ItemIO.BOTH)
+@Parameter(key = "max", itemIO = ItemIO.BOTH)
 public class IterableMax<T extends RealType<T>> implements Computer<Iterable<T>, T> {
 
 	@Override

@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "Op")
 @Parameter(key = "axisIndices")
 @Parameter(key = "dropSingleDimensions")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class SliceRAI2RAI<I, O> implements
 		Computer4<RandomAccessibleInterval<I>, Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>, int[], Boolean, RandomAccessibleInterval<O>> {
 

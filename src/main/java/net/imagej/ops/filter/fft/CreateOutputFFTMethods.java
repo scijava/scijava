@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "Dimensions")
 @Parameter(key = "outType")
 @Parameter(key = "fast")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class CreateOutputFFTMethods<T> implements Function3<Dimensions, T, Boolean, Img<T>> {
 
 	@OpDependency(name = "create.img")
@@ -71,7 +71,7 @@ public class CreateOutputFFTMethods<T> implements Function3<Dimensions, T, Boole
 @Plugin(type = Op.class, name = "filter.createFFTOutput")
 @Parameter(key = "Dimensions")
 @Parameter(key = "outType")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
 	@OpDependency(name = "filter.createFFTOutput")
 	private Function3<Dimensions, T, Boolean, Img<T>> create;

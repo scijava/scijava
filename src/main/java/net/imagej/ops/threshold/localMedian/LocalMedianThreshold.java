@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputNeighborhoodShape")
 @Parameter(key = "c")
 @Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalMedianThreshold<T extends RealType<T>> implements
 	Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			IterableInterval<BitType>> {

@@ -59,7 +59,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.abs")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> absoluteValue = (input, output) -> output.setReal(Math.abs(input.getRealDouble()));
 
 	/**
@@ -68,7 +68,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arccos")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arccos = (input, output) -> output.setReal(Math.acos(input.getRealDouble()));
 
 	/**
@@ -77,7 +77,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arccosh")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arccosh = (input, output) -> {
 		final double xt = input.getRealDouble();
 		double delta = Math.sqrt(xt * xt - 1);
@@ -92,7 +92,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arccot")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arccot = (input, output) -> {
 		double value = Math.atan(1.0 / input.getRealDouble());
 		if (input.getRealDouble() < 0)
@@ -106,7 +106,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arccoth")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arccoth = (input, output) -> {
 		final double xt = input.getRealDouble();
 		output.setReal(0.5 * Math.log((xt + 1) / (xt - 1)));
@@ -118,7 +118,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arccsc")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arccsc = (input, output) -> {
 		final double xt = input.getRealDouble();
 		if (xt > -1 && xt < 1)
@@ -142,7 +142,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arccsch")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arccsch = (input, output) -> {
 		final double xt = input.getRealDouble();
 		final double delta = Math.sqrt(1 + 1 / (xt * xt));
@@ -155,7 +155,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arcsec")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arcsec = (input, output) -> {
 		final double xt = input.getRealDouble();
 		if (xt > -1 && xt < 1)
@@ -182,7 +182,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arcsech")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arcsech = (input, output) -> {
 		final double xt = input.getRealDouble();
 		final double numer = 1 + Math.sqrt(1 - xt * xt);
@@ -195,7 +195,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arcsin")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arcsin = (input, output) -> output.setReal(Math.asin(input.getRealDouble()));
 
 	/**
@@ -204,7 +204,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arcsinh")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arcsinh = (input, output) -> {
 		final double xt = input.getRealDouble();
 		final double delta = Math.sqrt(xt * xt + 1);
@@ -217,7 +217,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arctan")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arctan = (input, output) -> output.setReal(Math.atan(input.getRealDouble()));
 
 	/**
@@ -226,7 +226,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.arctanh")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> arctanh = (input, output) -> {
 		final double xt = input.getRealDouble();
 		output.setReal(0.5 * Math.log((1 + xt) / (1 - xt)));
@@ -238,7 +238,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.ceil")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> ceil = (input, output) -> output.setReal(Math.ceil(input.getRealDouble()));
 
 	/**
@@ -247,7 +247,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.cos")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> cos = (input, output) -> output.setReal(Math.cos(input.getRealDouble()));
 
 	/**
@@ -256,7 +256,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.cosh")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> cosh = (input, output) -> output.setReal(Math.cosh(input.getRealDouble()));
 
 	/**
@@ -265,7 +265,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.cot")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> cot = (input, output) -> output.setReal(1.0 / Math.tan(input.getRealDouble()));
 
 	/**
@@ -274,7 +274,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.coth")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> coth = (input, output) -> output.setReal(1.0 / Math.tanh(input.getRealDouble()));
 
 	/**
@@ -283,7 +283,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.csc")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> csc = (input, output) -> output.setReal(1.0 / Math.sin(input.getRealDouble()));
 
 	/**
@@ -292,7 +292,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.csch")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> csch = (input, output) -> output.setReal(1.0 / Math.sinh(input.getRealDouble()));
 
 	/**
@@ -301,7 +301,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.cubeRoot")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> cubeRoot = (input, output) -> output.setReal(Math.cbrt(input.getRealDouble()));
 
 	/**
@@ -310,7 +310,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.exp")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> exp = (input, output) -> output.setReal(Math.exp(input.getRealDouble()));
 
 	/**
@@ -319,7 +319,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.expMinusOne")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> expMinusOne = (input, output) -> output.setReal(Math.exp(input.getRealDouble()) - 1);
 
 	/**
@@ -328,7 +328,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.floor")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> floor = (input, output) -> output.setReal(Math.floor(input.getRealDouble()));
 
 	/**
@@ -338,7 +338,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.gamma")
 	@Parameter(key = "input")
 	@Parameter(key = "constant")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Double, O> gamma = (input, constant, output) -> {
 		final double inputVal = input.getRealDouble();
 		if (inputVal <= 0)
@@ -356,7 +356,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@Parameter(key = "input")
 	@Parameter(key = "specifiedMin")
 	@Parameter(key = "specifiedMax")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer3<I, Double, Double, O> invert = (input, specifiedMin, specifiedMax, output) -> output
 			.setReal(specifiedMax - (input.getRealDouble() - specifiedMin));
 
@@ -366,7 +366,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.log")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> log = (input, output) -> output.setReal(Math.log(input.getRealDouble()));
 
 	/**
@@ -375,7 +375,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.log10")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> log10 = (input, output) -> output.setReal(Math.log10(input.getRealDouble()));
 
 	/**
@@ -384,7 +384,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.log2")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> log2 = (input, output) -> output.setReal(Math.log(input.getRealDouble()) / Math.log(2));
 
 	/**
@@ -394,7 +394,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.logOnePlusX")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> logOnePlusX = (input, output) -> output.setReal(Math.log1p(input.getRealDouble()));
 
 	/**
@@ -405,7 +405,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.max")
 	@Parameter(key = "input")
 	@Parameter(key = "constant")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Double, O> max = (input, constant, output) -> {
 		final double value = input.getRealDouble();
 		if (value < constant)
@@ -423,7 +423,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.min")
 	@Parameter(key = "input")
 	@Parameter(key = "constant")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Double, O> min = (input, constant, output) -> {
 		final double value = input.getRealDouble();
 		if (value > constant)
@@ -438,7 +438,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.nearestInt")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> nearestInt = (input, output) -> output.setReal(Math.rint(input.getRealDouble()));
 
 	/**
@@ -447,7 +447,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.negate")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> negate = (input, output) -> output.setReal(-input.getRealDouble());
 
 	/**
@@ -457,7 +457,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.power")
 	@Parameter(key = "input")
 	@Parameter(key = "constant")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Double, O> power = (input, constant, output) -> output
 			.setReal(Math.pow(input.getRealDouble(), constant));
 
@@ -470,7 +470,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.randomGaussian")
 	@Parameter(key = "input")
 	@Parameter(key = "random")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Random, O> randomGaussian = (input, random, output) -> output
 			.setReal(random.nextGaussian() * Math.abs(input.getRealDouble()));
 
@@ -481,7 +481,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.randomGaussian")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> randomGaussianWithoutRandom = (input, output) -> randomGaussian.accept(input,
 			new Random(), output);
 
@@ -493,7 +493,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.randomGaussian")
 	@Parameter(key = "input")
 	@Parameter(key = "seed")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Long, O> randomGaussianWithSeed = (input, seed, output) -> randomGaussian.accept(input,
 			new Random(seed), output);
 
@@ -504,7 +504,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.randomUniform")
 	@Parameter(key = "input")
 	@Parameter(key = "random")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Random, O> randomUniform = (input, random, output) -> output
 			.setReal(random.nextDouble() * Math.abs(input.getRealDouble()));
 
@@ -515,7 +515,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.randomUniform")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> randomUniformWithoutRandom = (input, output) -> randomUniform.accept(input,
 			new Random(), output);
 
@@ -527,7 +527,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.randomUniform")
 	@Parameter(key = "input")
 	@Parameter(key = "seed")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Long, O> randomUniformWithSeed = (input, seed, output) -> randomUniform.accept(input,
 			new Random(seed), output);
 
@@ -538,7 +538,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.reciprocal")
 	@Parameter(key = "input")
 	@Parameter(key = "divideByZeroValue")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final BiComputer<I, Double, O> reciprocal = (input, dbzVal, output) -> {
 		final double inputVal = input.getRealDouble();
 		if (inputVal == 0)
@@ -553,7 +553,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.round")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> round = (input, output) -> output.setReal((double) Math.round(input.getRealDouble()));
 
 	/**
@@ -562,7 +562,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sec")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sec = (input, output) -> output.setReal(1.0 / Math.cos(input.getRealDouble()));
 
 	/**
@@ -571,7 +571,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sech")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sech = (input, output) -> output.setReal(1.0 / Math.cosh(input.getRealDouble()));
 
 	/**
@@ -582,7 +582,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.signum")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> signum = (input, output) -> output.setReal(Math.signum(input.getRealDouble()));
 
 	/**
@@ -591,7 +591,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sin")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sin = (input, output) -> output.setReal(Math.sin(input.getRealDouble()));
 
 	/**
@@ -601,7 +601,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sinc")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sinc = (input, output) -> {
 		final double x = input.getRealDouble();
 		double value;
@@ -619,7 +619,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sincPi")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sincPi = (input, output) -> {
 		final double x = input.getRealDouble();
 		double value;
@@ -636,7 +636,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sinh")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sinh = (input, output) -> output.setReal(Math.sinh(input.getRealDouble()));
 
 	/**
@@ -645,7 +645,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sqr")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> square = (input, output) -> output
 			.setReal(input.getRealDouble() * input.getRealDouble());
 
@@ -655,7 +655,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.sqrt")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> sqrt = (input, output) -> output.setReal(Math.sqrt(input.getRealDouble()));
 
 	/**
@@ -666,7 +666,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.step")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> step = (input, output) -> {
 		if (input.getRealDouble() < 0)
 			output.setZero();
@@ -680,7 +680,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.tan")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> tan = (input, output) -> output.setReal(Math.tan(input.getRealDouble()));
 
 	/**
@@ -689,7 +689,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.tanh")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> tanh = (input, output) -> output.setReal(Math.tanh(input.getRealDouble()));
 
 	/**
@@ -700,7 +700,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 */
 	@OpField(names = "math.ulp")
 	@Parameter(key = "input")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<I, O> ulp = (input, output) -> output.setReal(Math.ulp(input.getRealDouble()));
 
 }

@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.normalize")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 		implements Computer<IterableInterval<I>, IterableInterval<O>> {
 

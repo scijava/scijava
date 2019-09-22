@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "ifTrueVal")
 @Parameter(key = "ifFalseVal")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computer3<I, O, O, O>
 
 {

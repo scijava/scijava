@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.percentile")
 @Parameter(key = "iterableInput")
 @Parameter(key = "percent", min="0", max="100")
-@Parameter(key = "percentile", type = ItemIO.BOTH)
+@Parameter(key = "percentile", itemIO = ItemIO.BOTH)
 public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 		implements BiComputer<Iterable<I>, Double, O> {
 

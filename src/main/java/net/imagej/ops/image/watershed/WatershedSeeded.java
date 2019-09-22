@@ -110,7 +110,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "mask")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computer5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -395,7 +395,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 @Parameter(key = "seeds")
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling", type = ItemIO.BOTH)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computer4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -416,7 +416,7 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 @Parameter(key = "seeds")
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Function4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -440,7 +440,7 @@ class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanTy
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "mask")
-@Parameter(key = "outputLabeling", type = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedSeededFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Function5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 

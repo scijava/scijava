@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.centerOfGravity")
 @Parameter(key = "input")
-@Parameter(key = "centerOfGravity", type = ItemIO.OUTPUT)
+@Parameter(key = "centerOfGravity", itemIO = ItemIO.OUTPUT)
 public class DefaultCenterOfGravity<T extends RealType<T>> implements Function<IterableInterval<T>, RealLocalizable> {
 
 	@Override

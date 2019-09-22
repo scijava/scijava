@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.sphericity", label = "Geometric (3D): Sphericity", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "sphericity", type = ItemIO.BOTH)
+@Parameter(key = "sphericity", itemIO = ItemIO.BOTH)
 public class DefaultSphericity implements Computer<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.size")

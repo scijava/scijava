@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
 @Parameter(key = "input")
-@Parameter(key = "inertiaTensor", type = ItemIO.OUTPUT)
+@Parameter(key = "inertiaTensor", itemIO = ItemIO.OUTPUT)
 public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")

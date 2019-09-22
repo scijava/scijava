@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.squareIntegral", priority = Priority.LOW + 1)
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class SquareIntegralImg<I extends RealType<I>, O extends RealType<O>> extends AbstractIntegralImg<I, O>
 {
 

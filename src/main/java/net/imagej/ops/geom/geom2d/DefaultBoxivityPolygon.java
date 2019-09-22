@@ -43,5 +43,5 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.boxivity", label = "Geometric (2D): Rectangularity", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "boxivity", type = ItemIO.BOTH)
+@Parameter(key = "boxivity", itemIO = ItemIO.BOTH)
 public class DefaultBoxivityPolygon extends AbstractBoxivity<Polygon2D> {}

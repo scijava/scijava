@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.geometricMean")
 @Parameter(key = "iterableInput")
-@Parameter(key = "geometricMean", type = ItemIO.BOTH)
+@Parameter(key = "geometricMean", itemIO = ItemIO.BOTH)
 public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computer<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.size")

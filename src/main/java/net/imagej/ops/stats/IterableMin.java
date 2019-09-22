@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.min", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "min", type = ItemIO.BOTH)
+@Parameter(key = "min", itemIO = ItemIO.BOTH)
 public class IterableMin<T extends RealType<T>> implements Computer<Iterable<T>, T> {
 
 	@Override

@@ -70,7 +70,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	implements
 	Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>

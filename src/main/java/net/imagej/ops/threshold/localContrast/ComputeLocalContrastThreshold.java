@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "threshold.localContrast")
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	BiComputer<Iterable<T>, T, BitType>
 {

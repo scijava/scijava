@@ -43,7 +43,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "features.haralick.coocPX")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class CoocPX implements Function<double[][], double[]> {
 
 	@Override

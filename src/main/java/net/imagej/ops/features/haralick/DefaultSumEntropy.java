@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "numGreyLevels")
 @Parameter(key = "distance")
 @Parameter(key = "matrixOrientation")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultSumEntropy<T extends RealType<T>> extends
 		AbstractHaralickFeature<T> {
 

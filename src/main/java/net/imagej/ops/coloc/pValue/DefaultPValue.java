@@ -73,7 +73,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "psfSize")
 @Parameter(key = "seed")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
 		Computer7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
 
@@ -201,7 +201,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 @Parameter(key = "op")
 @Parameter(key = "nrRandomizations")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U>> implements
 		Computer5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> {
 	
@@ -223,7 +223,7 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 @Parameter(key = "image2")
 @Parameter(key = "op")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 		Computer4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>,  ExecutorService, PValueResult> {
 	

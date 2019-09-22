@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "gauss1")
 @Parameter(key = "gauss2")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 		Computer3<RandomAccessibleInterval<T>, Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
 

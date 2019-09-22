@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.smallestEnclosingBoundingBox", label = "Geometric (2D): Smallest Enclosing Rectangle")
 @Parameter(key = "input")
-@Parameter(key = "smallestEnclosingBoundingBox", type = ItemIO.OUTPUT)
+@Parameter(key = "smallestEnclosingBoundingBox", itemIO = ItemIO.OUTPUT)
 public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Polygon2D> {
 
 	@OpDependency(name = "geom.convexHull")

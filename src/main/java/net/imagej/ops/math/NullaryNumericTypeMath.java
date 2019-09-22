@@ -54,14 +54,14 @@ public class NullaryNumericTypeMath <T extends Type<T>, N extends NumericType<N>
 	 */
 	@OpField(names = "math.assign")
 	@Parameter(key = "constant")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computer<T, T> assigner = (constant, output) -> output.set(constant);
 
 	/**
 	 * Sets the output to zero.
 	 */
 	@OpField(names = "math.zero")
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final NullaryComputer<N> zeroer = (output) -> output.setZero();
 
 }

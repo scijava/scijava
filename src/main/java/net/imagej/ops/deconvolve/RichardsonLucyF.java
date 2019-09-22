@@ -82,7 +82,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "nonCirculant", description = "indicates whether to use non-circulant edge handling")
 @Parameter(key = "accelerate", description = "indicates whether or not to use acceleration")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
 		Function11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {

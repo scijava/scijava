@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "filter.ifft")
 @Parameter(key = "input")
 @Parameter(key = "executorService")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 		implements BiComputer<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
 

@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "kernel")
 @Parameter(key = "outOfBoundsFactory")
 @Parameter(key = "outType")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
 		implements
 		Function4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, RandomAccessibleInterval<O>> {
@@ -133,7 +133,7 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 @Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH + 1)
 @Parameter(key = "input")
 @Parameter(key = "kernel")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
 		implements
 		BiFunction<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {

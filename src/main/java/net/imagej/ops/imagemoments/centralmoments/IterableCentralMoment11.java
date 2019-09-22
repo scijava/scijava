@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "imageMoments.centralMoment11", label = "Image Moment: CentralMoment11", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class IterableCentralMoment11<I extends RealType<I>, O extends RealType<O>>
 		implements AbstractImageMomentOp<I, O> {
 

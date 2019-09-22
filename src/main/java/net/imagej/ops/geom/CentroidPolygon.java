@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Center of Gravity")
 @Parameter(key = "input")
-@Parameter(key = "centroid", type = ItemIO.OUTPUT)
+@Parameter(key = "centroid", itemIO = ItemIO.OUTPUT)
 public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")

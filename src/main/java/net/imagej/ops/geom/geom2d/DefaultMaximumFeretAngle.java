@@ -44,7 +44,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "geom.maximumFeretsAngle")
 @Parameter(key = "input")
-@Parameter(key = "maxFeretsAngle", type = ItemIO.BOTH)
+@Parameter(key = "maxFeretsAngle", itemIO = ItemIO.BOTH)
 public class DefaultMaximumFeretAngle implements Computer<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.maximumFeret")

@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "coloc.pearsons")
 @Parameter(key = "image1")
 @Parameter(key = "image2")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> implements
 	BiFunction<Iterable<T>, Iterable<U>, Double> 
 {

@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
 	description = "Gets documentation for all Ops with the given name")
 @Parameter(key = "name")
 @Parameter(key = "opService")
-@Parameter(key = "opInfo", type = ItemIO.OUTPUT)
+@Parameter(key = "opInfo", itemIO = ItemIO.OUTPUT)
 public class HelpForName extends AbstractHelp implements BiFunction<String, OpService, String> {
 
 	@Override

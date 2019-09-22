@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.equation")
 @Parameter(key = "op")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
 		implements Computer<Function<long[], N>, IterableInterval<T>> {
 

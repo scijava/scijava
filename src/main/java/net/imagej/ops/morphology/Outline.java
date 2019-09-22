@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "morphology.outline")
 @Parameter(key = "input")
 @Parameter(key = "excludeEdges")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class Outline<B extends BooleanType<B>>
 		implements BiComputer<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
 

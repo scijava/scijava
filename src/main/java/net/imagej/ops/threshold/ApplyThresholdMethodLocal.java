@@ -317,7 +317,7 @@ public final class ApplyThresholdMethodLocal {
 	@Parameter(key = "input")
 	@Parameter(key = "inputNeighborhoodShape")
 	@Parameter(key = "outOfBoundsFactory", required = false)
-	@Parameter(key = "output", type = ItemIO.BOTH)
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	private abstract static class AbstractApplyLocalHistogramBasedThreshold<T extends RealType<T>>
 		implements
 		Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

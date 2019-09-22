@@ -43,5 +43,5 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.convexity", label = "Geometric (3D): Convexity", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "convexity", type = ItemIO.BOTH)
+@Parameter(key = "convexity", itemIO = ItemIO.BOTH)
 public class DefaultConvexityMesh extends AbstractConvexity<Mesh> {}

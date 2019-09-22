@@ -46,7 +46,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "features.haralick.coocHXY")
 @Parameter(key = "matix")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class CoocHXY implements Function<double[][], double[]> {
 
 	private static final double EPSILON = Double.MIN_NORMAL;

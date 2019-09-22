@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "features.tamura.contrast")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.BOTH)
+@Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>>
 		implements Computer<IterableInterval<I>, O> {
 

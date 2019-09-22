@@ -19,7 +19,7 @@ public class Converters<I, O extends Type<O>> {
 	@Parameter(key = "inputII")
 	@Parameter(key = "converter")
 	@Parameter(key = "outputType")
-	@Parameter(key = "outputII", type = ItemIO.OUTPUT)
+	@Parameter(key = "outputII", itemIO = ItemIO.OUTPUT)
 	public final Function3<RandomAccessible<I>, Converter<? super I, ? super O>, O, RandomAccessible<O>> generalConverterRA = (
 			inputRA, converter, type) -> net.imglib2.converter.Converters.convert(inputRA, converter, type);
 
@@ -27,7 +27,7 @@ public class Converters<I, O extends Type<O>> {
 	@Parameter(key = "inputII")
 	@Parameter(key = "converter")
 	@Parameter(key = "outputType")
-	@Parameter(key = "outputII", type = ItemIO.OUTPUT)
+	@Parameter(key = "outputII", itemIO = ItemIO.OUTPUT)
 	public final Function3<IterableInterval<I>, Converter<? super I, ? super O>, O, IterableInterval<O>> generalConverterII = (
 			inputII, converter, type) -> net.imglib2.converter.Converters.convert(inputII, converter, type);
 

@@ -64,14 +64,14 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "isolevel")
 @Parameter(key = "interpolatorClass")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Function3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
-	// @Parameter(type = ItemIO.INPUT, required = false)
+	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private double isolevel;
 	//
-	// @Parameter(type = ItemIO.INPUT, required = false)
+	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private VertexInterpolator interpolatorClass;
 
 	@SuppressWarnings({ "unchecked" })
@@ -558,7 +558,7 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 
 @Plugin(type = Op.class, name = "geom.marchingCubes")
 @Parameter(key = "input")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	

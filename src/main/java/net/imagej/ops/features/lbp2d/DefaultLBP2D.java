@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "distance")
 @Parameter(key = "histogramSize")
-@Parameter(key = "output", type = ItemIO.OUTPUT)
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultLBP2D<I extends RealType<I>>
 		implements Function3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
 

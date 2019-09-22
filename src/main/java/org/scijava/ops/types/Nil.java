@@ -96,6 +96,18 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	}
 
 	/**
+	 * Creates a {@code Nil} wrapping the given raw {@link Class}.
+	 * <p>
+	 * This method is intentionally private; use {@link Nil#of(Class)} to create
+	 * such a {@code Nil} from calling code.
+	 * </p>
+	 */
+	private Nil(final Class<T> rawType) {
+		typeToken = TypeToken.of(rawType);
+		callbacks = this;
+	}
+
+	/**
 	 * Creates a {@code Nil} wrapping the given generic {@link Type}.
 	 * <p>
 	 * This method is intentionally private; use {@link Nil#of(Type)} to create
@@ -121,6 +133,10 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	}
 
 	// -- Static utility methods --
+
+	public static <T> Nil<T> of(final Class<T> rawType) {
+		return new Nil<T>(rawType) {};
+	}
 
 	/**
 	 * Creates a {@code Nil} of the given generic {@link Type}, with no extra

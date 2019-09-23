@@ -38,10 +38,9 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
-import org.scijava.ops.util.Functions;
 import org.scijava.ops.util.Maps;
 
 public class LiftTest extends AbstractTestEnvironment {
@@ -54,13 +53,13 @@ public class LiftTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testliftFunction(){
-		Function<Double, Double> powFunction = Functions.unary(ops, "test.liftFunction", nilDouble, nilDouble);
+		Function<Double, Double> powFunction = Functions.match(ops, "test.liftFunction", nilDouble, nilDouble);
 
-		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.Functions.Iterables.liftBoth(powFunction);
+		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.FunctionMaps.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
 		Assert.assertTrue(arrayEquals(toArray(res2), 2.0, 3.0, 4.0, 5.0));
 
-		Function<Double[], Double[]> liftedToArray = Maps.Functions.Arrays.liftBoth(powFunction, Double.class);
+		Function<Double[], Double[]> liftedToArray = Maps.FunctionMaps.Arrays.liftBoth(powFunction, Double.class);
 		Double[] res3 = liftedToArray.apply(new Double[] { 1.0, 2.0, 3.0, 4.0 });
 		Assert.assertTrue(arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 2.0, 3.0, 4.0, 5.0));
 	}
@@ -72,9 +71,9 @@ public class LiftTest extends AbstractTestEnvironment {
 	@Test
 	public void testliftComputer() {
 
-		Computer<double[], double[]> powComputer = Computers.unary(ops, "test.liftComputer", nilDoubleArray, nilDoubleArray);
+		Computers.Arity1<double[], double[]> powComputer = Computers.match(ops, "test.liftComputer", nilDoubleArray, nilDoubleArray);
 
-		Computer<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.Computers.Iterables
+		Computers.Arity1<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.ComputerMaps.Iterables
 				.liftBoth(powComputer);
 		Iterable<double[]> res = wrap(new double[4]);
 		liftedToIterable.compute(wrap(new double[] { 1.0, 2.0, 3.0, 4.0 }), res);

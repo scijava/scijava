@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.scijava.core.Priority;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.function.Source;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Producer;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -69,7 +69,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	// LiftFunctionToArrayTransformer is the first transformer which is asked for
 	// source refs. This transformer doesn't support Any and would fail.
 	@Test
-	public void testRunAnyBiFunctionFromBiComputer() {
+	public void testRunAnyFunction1FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
 		final Object out = ops.run("test.integerAndLongAndNotAnyComputer", in1, in2);
@@ -102,7 +102,7 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 @Parameter(key = "input1")
 @Parameter(key = "input2")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-class IntegerAndLongAndNotAnyComputer implements BiComputer<Integer, Long, MutableNotAny> {
+class IntegerAndLongAndNotAnyComputer implements Computers.Arity2<Integer, Long, MutableNotAny> {
 
 	@Override
 	public void compute(Integer in1, Long in2, @Mutable MutableNotAny out) {
@@ -125,7 +125,7 @@ class MutableNotAny {
 
 @Plugin(type = Op.class, name = "create, create.mutableNotAny")
 @Parameter(key = "mutableNotAny", itemIO = ItemIO.OUTPUT)
-class MutableNotAnyCreator implements Source<MutableNotAny> {
+class MutableNotAnyCreator implements Producer<MutableNotAny> {
 
 	@Override
 	public MutableNotAny create() {

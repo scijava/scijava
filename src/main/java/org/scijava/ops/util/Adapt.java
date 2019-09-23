@@ -12,23 +12,10 @@ import java.util.function.Function;
 
 import org.scijava.ops.core.OneToOneCommand;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.NullaryComputer;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
-import org.scijava.ops.core.function.Source;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
-import org.scijava.ops.core.inplace.BiInplaceSecond;
-import org.scijava.ops.core.inplace.Inplace;
-import org.scijava.ops.core.inplace.Inplace3First;
-import org.scijava.ops.core.inplace.Inplace3Second;
-import org.scijava.ops.core.inplace.Inplace4First;
-import org.scijava.ops.core.inplace.Inplace5First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Producer;
 
 /**
  * Utility providing adaptation between {@link Op} types.
@@ -42,25 +29,26 @@ public class Adapt {
 	/**
 	 * Adapters from Functions to Computers
 	 */
-	public static class Functions {
-		private Functions() {}
+	public static class FunctionAdapt {
+		private FunctionAdapt() {}
 
-		public static <I, O> Computer<I, O> asComputer(final Function<I, O> function, final Computer<O, O> copy) {
+		public static <I, O> Computers.Arity1<I, O> asComputer(final Function<I, O> function, final Computers.Arity1<O, O> copy) {
 			return (in, out) -> {
 				final O tmp = function.apply(in);
 				copy.accept(tmp, out);
 			};
 		}
 
-		public static <I1, I2, O> BiComputer<I1, I2, O> asBiComputer(final BiFunction<I1, I2, O> biFunction,
-				final Computer<O, O> copy) {
+		public static <I1, I2, O> Computers.Arity2<I1, I2, O> asComputer2(
+			final BiFunction<I1, I2, O> biFunction, final Computers.Arity1<O, O> copy)
+		{
 			return (in1, in2, out) -> {
 				final O tmp = biFunction.apply(in1, in2);
 				copy.accept(tmp, out);
 			};
 		}
 
-		public static <I, O> Callable<O> asNullaryFunction(final Function<I, O> function, I input) {
+		public static <I, O> Callable<O> asCallable(final Function<I, O> function, I input) {
 			return () -> function.apply(input);
 		}
 
@@ -87,44 +75,29 @@ public class Adapt {
 			};
 		}
 
-		public static <I1, I2, I3, O> Function<I1, O> asFunction(final Function3<I1, I2, I3, O> function3, I2 in2,
+		public static <I1, I2, I3, O> Function<I1, O> asFunction(final Functions.Arity3<I1, I2, I3, O> function3, I2 in2,
 				I3 in3) {
 			return (in1) -> {
 				return function3.apply(in1, in2, in3);
 			};
 		}
 
-		public static <I1, I2, I3, O> BiFunction<I1, I2, O> asBiFunction(final Function3<I1, I2, I3, O> function3,
+		public static <I1, I2, I3, O> BiFunction<I1, I2, O> asBiFunction(final Functions.Arity3<I1, I2, I3, O> function3,
 				I3 in3) {
 			return (in1, in2) -> {
 				return function3.apply(in1, in2, in3);
 			};
 		}
-
-		public static <I1, I2, I3, I4, O> Function3<I1, I2, I3, O> asFunction3(
-				final Function4<I1, I2, I3, I4, O> function4, I4 in4) {
-			return (in1, in2, in3) -> {
-				return function4.apply(in1, in2, in3, in4);
-			};
-		}
-
-		public static <I1, I2, I3, I4, O> BiFunction<I1, I2, O> asBiFunction(
-				final Function4<I1, I2, I3, I4, O> function4, I3 in3, I4 in4) {
-			return (in1, in2) -> {
-				return function4.apply(in1, in2, in3, in4);
-			};
-		}
-
 	}
 
 	/**
 	 * Adapters from Computers to Functions
 	 */
-	public static class Computers {
-		private Computers() {}
+	public static class ComputerAdapt {
+		private ComputerAdapt() {}
 		
-		public static <O> Source<O> asFunction(final NullaryComputer<O> computer,
-				final Source<O> inputAwareSource) {
+		public static <O> Producer<O> asFunction(final Computers.Arity0<O> computer,
+				final Producer<O> inputAwareSource) {
 			return () -> {
 				O out = inputAwareSource.get();
 				computer.compute(out);
@@ -132,7 +105,7 @@ public class Adapt {
 			};
 		}
 
-		public static <I, O> Function<I, O> asFunction(final Computer<I, O> computer,
+		public static <I, O> Function<I, O> asFunction(final Computers.Arity1<I, O> computer,
 				final Function<I, O> inputAwareSource) {
 			return (in) -> {
 				O out = inputAwareSource.apply(in);
@@ -141,12 +114,12 @@ public class Adapt {
 			};
 		}
 
-		public static <I, O> Callable<O> asNullaryFunction(final Computer<I, O> computer, final I input,
+		public static <I, O> Callable<O> asNullaryFunction(final Computers.Arity1<I, O> computer, final I input,
 				final Function<I, O> inputAwareSource) {
-			return Functions.asNullaryFunction(asFunction(computer, inputAwareSource), input);
+			return FunctionAdapt.asCallable(asFunction(computer, inputAwareSource), input);
 		}
 
-		public static <I1, I2, O> BiFunction<I1, I2, O> asBiFunction(final BiComputer<I1, I2, O> computer,
+		public static <I1, I2, O> BiFunction<I1, I2, O> asBiFunction(final Computers.Arity2<I1, I2, O> computer,
 				final Function<I1, O> inputAwareSource) {
 			return (in1, in2) -> {
 				O out = inputAwareSource.apply(in1);
@@ -155,7 +128,7 @@ public class Adapt {
 			};
 		}
 
-		public static <I1, I2, I3, O> Function3<I1, I2, I3, O> asFunction3(Computer3<I1, I2, I3, O> computer,
+		public static <I1, I2, I3, O> Functions.Arity3<I1, I2, I3, O> asFunction3(Computers.Arity3<I1, I2, I3, O> computer,
 				Function<I1, O> inputAwareSource) {
 			return (in1, in2, in3) -> {
 				O out = inputAwareSource.apply(in1);
@@ -164,25 +137,7 @@ public class Adapt {
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> Function4<I1, I2, I3, I4, O> asFunction4(
-				Computer4<I1, I2, I3, I4, O> computer, Function<I1, O> inputAwareSource) {
-			return (in1, in2, in3, in4) -> {
-				O out = inputAwareSource.apply(in1);
-				computer.compute(in1, in2, in3, in4, out);
-				return out;
-			};
-		}
-
-		public static <I1, I2, I3, I4, I5, O> Function5<I1, I2, I3, I4, I5, O> asFunction5(
-				Computer5<I1, I2, I3, I4, I5, O> computer, Function<I1, O> inputAwareSource) {
-			return (in1, in2, in3, in4, in5) -> {
-				O out = inputAwareSource.apply(in1);
-				computer.compute(in1, in2, in3, in4, in5, out);
-				return out;
-			};
-		}
-
-		public static <I, O> OneToOneCommand<I, O> asCommand(final Computer<I, O> computer, I input, O output) {
+		public static <I, O> OneToOneCommand<I, O> asCommand(final Computers.Arity1<I, O> computer, I input, O output) {
 			OneToOneCommand<I, O> command = new OneToOneCommand<I, O>() {
 				@Override
 				public void run() {
@@ -194,96 +149,81 @@ public class Adapt {
 			return command;
 		}
 
-		public static <I1, I2, O> Computer<I1, O> asComputer(final BiComputer<I1, I2, O> computer, I2 in2) {
+		public static <I1, I2, O> Computers.Arity1<I1, O> asComputer(final Computers.Arity2<I1, I2, O> computer, I2 in2) {
 			return (in1, out) -> {
 				computer.compute(in1, in2, out);
 			};
 		}
 
-		public static <I1, I2, I3, O> Computer<I1, O> asComputer(final Computer3<I1, I2, I3, O> computer, I2 in2,
+		public static <I1, I2, I3, O> Computers.Arity1<I1, O> asComputer(final Computers.Arity3<I1, I2, I3, O> computer, I2 in2,
 				I3 in3) {
 			return (in1, out) -> {
 				computer.compute(in1, in2, in3, out);
 			};
 		}
 
-		public static <I1, I2, I3, O> BiComputer<I1, I2, O> asBiComputer(final Computer3<I1, I2, I3, O> computer,
+		public static <I1, I2, I3, O> Computers.Arity2<I1, I2, O> asComputer2(final Computers.Arity3<I1, I2, I3, O> computer,
 				I3 in3) {
 			return (in1, in2, out) -> {
 				computer.compute(in1, in2, in3, out);
 			};
 		}
 
-		public static <I1, I2, I3, I4, O> BiComputer<I1, I2, O> asBiComputer(
-				final Computer4<I1, I2, I3, I4, O> computer, I3 in3, I4 in4) {
-			return (in1, in2, out) -> {
-				computer.compute(in1, in2, in3, in4, out);
-			};
-		}
-
 	}
 
-	public static class Inplaces {
+	// CTR FIXME: These are wrong. It needs to make a copy first!
+	public static class InplaceAdapt {
 
-		public static <IO, I2> Inplace<IO> asInplace(BiInplaceFirst<IO, I2> inplace, I2 in2) {
+		public static <IO, I2> Inplaces.Arity1<IO> asInplace(Inplaces.Arity2_1<IO, I2> inplace, I2 in2) {
 			return (io) -> {
 				inplace.mutate(io, in2);
 			};
 		}
 
-		public static <I1, IO> Inplace<IO> asInplace(BiInplaceSecond<I1, IO> inplace, I1 in1) {
+		public static <I1, IO> Inplaces.Arity1<IO> asInplace(Inplaces.Arity2_2<I1, IO> inplace, I1 in1) {
 			return (io) -> {
 				inplace.mutate(in1, io);
 			};
 		}
 
-		public static <IO> Function<IO, IO> asFunction(Inplace<IO> inplace) {
+		public static <IO> Function<IO, IO> asFunction(Inplaces.Arity1<IO> inplace) {
 			return (io) -> {
 				inplace.mutate(io);
 				return io;
 			};
 		}
 
-		public static <IO, I2> BiFunction<IO, I2, IO> asBiFunction(BiInplaceFirst<IO, I2> inplace) {
+		public static <IO, I2> BiFunction<IO, I2, IO> asBiFunction(Inplaces.Arity2_1<IO, I2> inplace) {
 			return (io, in2) -> {
 				inplace.mutate(io, in2);
 				return io;
 			};
 		}
 
-		public static <I1, IO> BiFunction<I1, IO, IO> asBiFunction(BiInplaceSecond<I1, IO> inplace) {
+		public static <I1, IO> BiFunction<I1, IO, IO> asBiFunction(Inplaces.Arity2_2<I1, IO> inplace) {
 			return (in1, io) -> {
 				inplace.mutate(in1, io);
 				return io;
 			};
 		}
 
-		public static <IO, I2, I3> Function3<IO, I2, I3, IO> asFunction3(Inplace3First<IO, I2, I3> inplace) {
+		public static <IO, I2, I3> Functions.Arity3<IO, I2, I3, IO> asFunction3(Inplaces.Arity3_1<IO, I2, I3> inplace) {
 			return (io, in2, in3) -> {
 				inplace.mutate(io, in2, in3);
 				return io;
 			};
 		}
 
-		public static <I1, IO, I3> Function3<I1, IO, I3, IO> asFunction3(Inplace3Second<I1, IO, I3> inplace) {
+		public static <I1, IO, I3> Functions.Arity3<I1, IO, I3, IO> asFunction3(Inplaces.Arity3_2<I1, IO, I3> inplace) {
 			return (in1, io, in3) -> {
 				inplace.mutate(in1, io, in3);
 				return io;
 			};
 		}
 
-		public static <IO, I2, I3, I4> Function4<IO, I2, I3, I4, IO> asFunction4(
-				Inplace4First<IO, I2, I3, I4> inplace) {
-			return (io, in2, in3, in4) -> {
-				inplace.mutate(io, in2, in3, in4);
-				return io;
-			};
-		}
-
-		public static <IO, I2, I3, I4, I5> Function5<IO, I2, I3, I4, I5, IO> asFunction5(
-				Inplace5First<IO, I2, I3, I4, I5> inplace) {
-			return (io, in2, in3, in4, in5) -> {
-				inplace.mutate(io, in2, in3, in4, in5);
+		public static <I1, I2, IO> Functions.Arity3<I1, I2, IO, IO> asFunction3(Inplaces.Arity3_3<I1, I2, IO> inplace) {
+			return (in1, in2, io) -> {
+				inplace.mutate(in1, in2, io);
 				return io;
 			};
 		}

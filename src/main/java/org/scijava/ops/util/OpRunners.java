@@ -4,31 +4,17 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.NullaryComputer;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
-import org.scijava.ops.core.function.Function6;
-import org.scijava.ops.core.function.Source;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
-import org.scijava.ops.core.inplace.BiInplaceSecond;
-import org.scijava.ops.core.inplace.Inplace;
-import org.scijava.ops.core.inplace.Inplace3First;
-import org.scijava.ops.core.inplace.Inplace3Second;
-import org.scijava.ops.core.inplace.Inplace4First;
-import org.scijava.ops.core.inplace.Inplace5First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Producer;
 import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.types.Nil;
 
 // 1. Implement all of the transformers for all types that need to be runnable
 // 2. Improve the matcher to respect the ops that implement KnowsTypes
 public class OpRunners {
-	public static class Functions {
+	public static class FunctionRunner {
 		
 		public static <O> OpRunner toRunner(Supplier<O> function) {
 			return new OpRunner() {
@@ -43,7 +29,6 @@ public class OpRunners {
 					return new Nil<?>[] {};
 				}
 
-				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
 					return function.get();
@@ -99,7 +84,7 @@ public class OpRunners {
 			};
 		}
 
-		public static <I1, I2, I3, O> OpRunner toRunner(Function3<I1, I2, I3, O> function) {
+		public static <I1, I2, I3, O> OpRunner toRunner(Functions.Arity3<I1, I2, I3, O> function) {
 			return new OpRunner() {
 
 				@Override
@@ -123,91 +108,10 @@ public class OpRunners {
 
 			};
 		}
-
-		public static <I1, I2, I3, I4, O> OpRunner toRunner(Function4<I1, I2, I3, I4, O> function) {
-			return new OpRunner() {
-
-				@Override
-				public Object getAdaptedOp() {
-					return function;
-				}
-				
-				@Override
-				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<I1>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
-					} };
-				}
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public O run(Object[] args) {
-					return function.apply((I1) args[0], (I2) args[1], (I3) args[2], (I4) args[3]);
-				}
-
-			};
-		}
-		
-		public static <I1, I2, I3, I4, I5, O> OpRunner toRunner(Function5<I1, I2, I3, I4, I5, O> function) {
-			return new OpRunner() {
-
-				@Override
-				public Object getAdaptedOp() {
-					return function;
-				}
-				
-				@Override
-				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<I1>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
-					}, new Nil<I5>() {
-					} };
-				}
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public O run(Object[] args) {
-					return function.apply((I1) args[0], (I2) args[1], (I3) args[2], (I4) args[3], (I5) args[4]);
-				}
-
-			};
-		}
-		
-		public static <I1, I2, I3, I4, I5, I6, O> OpRunner toRunner(Function6<I1, I2, I3, I4, I5, I6, O> function) {
-			return new OpRunner() {
-
-				@Override
-				public Object getAdaptedOp() {
-					return function;
-				}
-				
-				@Override
-				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<I1>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
-					}, new Nil<I5>() {
-					}, new Nil<I6>() {
-					} };
-				}
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public O run(Object[] args) {
-					return function.apply((I1) args[0], (I2) args[1], (I3) args[2], (I4) args[3], (I5) args[4], (I6) args[5]);
-				}
-
-			};
-		}
 	}
 
-	public static class Computers {
-		public static <O> OpRunner toRunner(NullaryComputer<O> computer) {
+	public static class ComputerRunner {
+		public static <O> OpRunner toRunner(Computers.Arity0<O> computer) {
 			return new OpRunner() {
 
 				@Override
@@ -223,14 +127,14 @@ public class OpRunners {
 				@SuppressWarnings("unchecked")
 				@Override
 				public O run(Object[] args) {
-					Source<O> source = () -> (O) args[0];
-					return Adapt.Computers.asFunction(computer, source).get();
+					Producer<O> source = () -> (O) args[0];
+					return Adapt.ComputerAdapt.asFunction(computer, source).get();
 				}
 
 			};
 		}
 		
-		public static <I, O> OpRunner toRunner(Computer<I, O> computer) {
+		public static <I, O> OpRunner toRunner(Computers.Arity1<I, O> computer) {
 			return new OpRunner() {
 
 				@Override
@@ -248,13 +152,13 @@ public class OpRunners {
 				@Override
 				public O run(Object[] args) {
 					Function<I, O> source = (in) -> (O) args[1];
-					return Adapt.Computers.asFunction(computer, source).apply((I) args[0]);
+					return Adapt.ComputerAdapt.asFunction(computer, source).apply((I) args[0]);
 				}
 
 			};
 		}
 
-		public static <I1, I2, O> OpRunner toRunner(BiComputer<I1, I2, O> computer) {
+		public static <I1, I2, O> OpRunner toRunner(Computers.Arity2<I1, I2, O> computer) {
 			return new OpRunner() {
 
 				@Override
@@ -273,13 +177,13 @@ public class OpRunners {
 				@Override
 				public O run(Object[] args) {
 					Function<I1, O> source = (in1) -> (O) args[2];
-					return Adapt.Computers.asBiFunction(computer, source).apply((I1) args[0], (I2) args[1]);
+					return Adapt.ComputerAdapt.asBiFunction(computer, source).apply((I1) args[0], (I2) args[1]);
 				}
 
 			};
 		}
 
-		public static <I1, I2, I3, O> OpRunner toRunner(Computer3<I1, I2, I3, O> computer) {
+		public static <I1, I2, I3, O> OpRunner toRunner(Computers.Arity3<I1, I2, I3, O> computer) {
 			return new OpRunner() {
 
 				@Override
@@ -299,65 +203,8 @@ public class OpRunners {
 				@Override
 				public O run(Object[] args) {
 					Function<I1, O> source = (in1) -> (O) args[3];
-					return Adapt.Computers.asFunction3(computer, source).apply((I1) args[0], (I2) args[1],
+					return Adapt.ComputerAdapt.asFunction3(computer, source).apply((I1) args[0], (I2) args[1],
 							(I3) args[2]);
-				}
-
-			};
-		}
-
-		public static <I1, I2, I3, I4, O> OpRunner toRunner(Computer4<I1, I2, I3, I4, O> computer) {
-			return new OpRunner() {
-
-				@Override
-				public Object getAdaptedOp() {
-					return computer;
-				}
-				
-				@Override
-				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<I1>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
-					} };
-				}
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public O run(Object[] args) {
-					Function<I1, O> source = (in1) -> (O) args[4];
-					return Adapt.Computers.asFunction4(computer, source).apply((I1) args[0], (I2) args[1],
-							(I3) args[2], (I4) args[3]);
-				}
-
-			};
-		}
-		
-		public static <I1, I2, I3, I4, I5, O> OpRunner toRunner(Computer5<I1, I2, I3, I4, I5, O> computer) {
-			return new OpRunner() {
-
-				@Override
-				public Object getAdaptedOp() {
-					return computer;
-				}
-				
-				@Override
-				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<I1>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
-					}, new Nil<I5>() {
-					} };
-				}
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public O run(Object[] args) {
-					Function<I1, O> source = (in1) -> (O) args[5];
-					return Adapt.Computers.asFunction5(computer, source).apply((I1) args[0], (I2) args[1],
-							(I3) args[2], (I4) args[3], (I5) args[4]);
 				}
 
 			};
@@ -366,8 +213,8 @@ public class OpRunners {
 
 	// INPLACES
 
-	public static class Inplaces {
-		public static <IO> OpRunner toRunner(Inplace<IO> inplace) {
+	public static class InplaceRunner {
+		public static <IO> OpRunner toRunner(Inplaces.Arity1<IO> inplace) {
 			return new OpRunner() {
 				
 				@Override
@@ -383,13 +230,13 @@ public class OpRunners {
 
 				@Override
 				public IO run(Object[] args) {
-					return Adapt.Inplaces.asFunction(inplace).apply((IO) args[0]);
+					return Adapt.InplaceAdapt.asFunction(inplace).apply((IO) args[0]);
 				}
 
 			};
 		}
 
-		public static <IO, I2> OpRunner toRunner(BiInplaceFirst<IO, I2> inplace) {
+		public static <IO, I2> OpRunner toRunner(Inplaces.Arity2_1<IO, I2> inplace) {
 			return new OpRunner() {
 				
 				@Override
@@ -406,13 +253,13 @@ public class OpRunners {
 
 				@Override
 				public IO run(Object[] args) {
-					return Adapt.Inplaces.asBiFunction(inplace).apply((IO) args[0], (I2) args[1]);
+					return Adapt.InplaceAdapt.asBiFunction(inplace).apply((IO) args[0], (I2) args[1]);
 				}
 
 			};
 		}
 
-		public static <I1, IO> OpRunner toRunner(BiInplaceSecond<I1, IO> inplace) {
+		public static <I1, IO> OpRunner toRunner(Inplaces.Arity2_2<I1, IO> inplace) {
 			return new OpRunner() {
 				
 				@Override
@@ -429,13 +276,13 @@ public class OpRunners {
 
 				@Override
 				public IO run(Object[] args) {
-					return Adapt.Inplaces.asBiFunction(inplace).apply((I1) args[0], (IO) args[1]);
+					return Adapt.InplaceAdapt.asBiFunction(inplace).apply((I1) args[0], (IO) args[1]);
 				}
 
 			};
 		}
 		
-		public static <IO, I2, I3> OpRunner toRunner(Inplace3First<IO, I2, I3> inplace) {
+		public static <IO, I2, I3> OpRunner toRunner(Inplaces.Arity3_1<IO, I2, I3> inplace) {
 			return new OpRunner() {
 				
 				@Override
@@ -453,13 +300,13 @@ public class OpRunners {
 
 				@Override
 				public IO run(Object[] args) {
-					return Adapt.Inplaces.asFunction3(inplace).apply((IO) args[0], (I2) args[1], (I3) args[2]);
+					return Adapt.InplaceAdapt.asFunction3(inplace).apply((IO) args[0], (I2) args[1], (I3) args[2]);
 				}
 
 			};
 		}
 		
-		public static <I1, IO, I3> OpRunner toRunner(Inplace3Second<I1, IO, I3> inplace) {
+		public static <I1, IO, I3> OpRunner toRunner(Inplaces.Arity3_2<I1, IO, I3> inplace) {
 			return new OpRunner() {
 				
 				@Override
@@ -477,13 +324,13 @@ public class OpRunners {
 
 				@Override
 				public IO run(Object[] args) {
-					return Adapt.Inplaces.asFunction3(inplace).apply((I1) args[0], (IO) args[1], (I3) args[2]);
+					return Adapt.InplaceAdapt.asFunction3(inplace).apply((I1) args[0], (IO) args[1], (I3) args[2]);
 				}
 
 			};
 		}
-
-		public static <IO, I2, I3, I4> OpRunner toRunner(Inplace4First<IO, I2, I3, I4> inplace) {
+		
+		public static <I1, I2, IO> OpRunner toRunner(Inplaces.Arity3_3<I1, I2, IO> inplace) {
 			return new OpRunner() {
 				
 				@Override
@@ -493,42 +340,15 @@ public class OpRunners {
 				
 				@Override
 				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<IO>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
+					return new Nil<?>[] { new Nil<I1>() {
+					}, new Nil<I1>() {
+					}, new Nil<IO>() {
 					} };
 				}
 
 				@Override
 				public IO run(Object[] args) {
-					return Adapt.Inplaces.asFunction4(inplace).apply((IO) args[0], (I2) args[1], (I3) args[2], (I4) args[3]);
-				}
-
-			};
-		}
-
-		public static <IO, I2, I3, I4, I5> OpRunner toRunner(Inplace5First<IO, I2, I3, I4, I5> inplace) {
-			return new OpRunner() {
-				
-				@Override
-				public Object getAdaptedOp() {
-					return inplace;
-				}
-				
-				@Override
-				public Nil<?>[] inTypes() {
-					return new Nil<?>[] { new Nil<IO>() {
-					}, new Nil<I2>() {
-					}, new Nil<I3>() {
-					}, new Nil<I4>() {
-					}, new Nil<I5>() {
-					} };
-				}
-
-				@Override
-				public IO run(Object[] args) {
-					return Adapt.Inplaces.asFunction5(inplace).apply((IO) args[0], (I2) args[1], (I3) args[2], (I4) args[3], (I5) args[4]);
+					return Adapt.InplaceAdapt.asFunction3(inplace).apply((I1) args[0], (I2) args[1], (IO) args[2]);
 				}
 
 			};

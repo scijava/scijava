@@ -41,7 +41,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.transform.TypeModUtils;
 import org.scijava.ops.types.Nil;
 
@@ -80,8 +80,8 @@ public class TypeModUtilsTest {
 				new Type[] { n1.getType(), n2.getType(), n3.getType(), n4.getType(), n5.getType(), n6.getType() }));
 
 		types = new Type[] { n1.getType(), n2.getType(), n3.getType(), n4.getType(), n5.getType(), n6.getType() };
-		assertTrue(TypeModUtils.replaceRawTypes(types, Function.class, Computer.class));
-		Nil<Computer<Double, String>> y2 = new Nil<Computer<Double, String>>() {
+		assertTrue(TypeModUtils.replaceRawTypes(types, Function.class, Computers.Arity1.class));
+		Nil<Computers.Arity1<Double, String>> y2 = new Nil<Computers.Arity1<Double, String>>() {
 		};
 		assertTrue(Arrays.deepEquals(types,
 				new Type[] { n1.getType(), y2.getType(), n3.getType(), n4.getType(), n5.getType(), n6.getType() }));
@@ -108,13 +108,13 @@ public class TypeModUtilsTest {
 
 	@Test
 	public <A, B, C> void unliftParameterized() {
-		Nil<Computer<A, B[]>> n1 = new Nil<Computer<A, B[]>>() {
+		Nil<Computers.Arity1<A, B[]>> n1 = new Nil<Computers.Arity1<A, B[]>>() {
 		};
 		Nil<Function<Double, String[]>> n2 = new Nil<Function<Double, String[]>>() {
 		};
 		Nil<Function<C[], Iterable<String>>> n3 = new Nil<Function<C[], Iterable<String>>>() {
 		};
-		Nil<Computer<C[], Function<String, Integer>>> n4 = new Nil<Computer<C[], Function<String, Integer>>>() {
+		Nil<Computers.Arity1<C[], Function<String, Integer>>> n4 = new Nil<Computers.Arity1<C[], Function<String, Integer>>>() {
 		};
 		
 		Nil<Function<Double, String>> y2 = new Nil<Function<Double, String>>() {
@@ -125,11 +125,11 @@ public class TypeModUtilsTest {
 		};
 
 		Type[] types = new Type[] { n1.getType(), n2.getType(), n3.getType() };
-		assertFalse(TypeModUtils.unliftParameterizedTypes(types, Computer.class, Iterable.class));
+		assertFalse(TypeModUtils.unliftParameterizedTypes(types, Computers.Arity1.class, Iterable.class));
 		assertTrue(Arrays.deepEquals(types, new Type[] { n1.getType(), n2.getType(), n3.getType() }));
 		
 		types = new Type[] { n1.getType(), n2.getType(), n4.getType() };
-		assertFalse(TypeModUtils.unliftParameterizedTypes(types, Computer.class, Function.class));
+		assertFalse(TypeModUtils.unliftParameterizedTypes(types, Computers.Arity1.class, Function.class));
 		assertTrue(Arrays.deepEquals(types, new Type[] { n1.getType(), n2.getType(), n4.getType() }));
 		
 		types = new Type[] { n1.getType(), n2.getType(), n3.getType() };

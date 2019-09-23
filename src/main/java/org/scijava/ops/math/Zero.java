@@ -4,7 +4,7 @@ import java.util.stream.IntStream;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.NullaryComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -18,7 +18,7 @@ public class Zero {
 
 	@OpField(names = NAMES)
 	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
-	public static final NullaryComputer<double[]> MathParallelPointwiseZeroDoubleArrayComputer = (out) -> {
+	public static final Computers.Arity0<double[]> MathParallelPointwiseZeroDoubleArrayComputer = out -> {
 		IntStream.range(0, out.length).parallel().forEach(i -> {
 			out[i] = 0.0;
 		});

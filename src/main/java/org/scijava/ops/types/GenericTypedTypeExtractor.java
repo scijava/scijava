@@ -31,6 +31,7 @@ package org.scijava.ops.types;
 
 import java.lang.reflect.ParameterizedType;
 
+import org.scijava.Priority;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -43,7 +44,7 @@ import org.scijava.plugin.Plugin;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class)
+@Plugin(type = TypeExtractor.class, priority = Priority.HIGH)
 public class GenericTypedTypeExtractor implements TypeExtractor<GenericTyped> {
 
 	@Parameter

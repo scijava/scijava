@@ -34,7 +34,7 @@ public class LiftFunctionToIterableTransformer<I, O> implements
 	public Function<Iterable<I>, Iterable<O>> transformTypesafe(final OpService opService, final Function<I, O> src,
 		final OpRef targetRef)
 	{
-		return Maps.Functions.Iterables.liftBoth(src);
+		return Maps.FunctionMaps.Iterables.liftBoth(src);
 	}
 
 	@Override

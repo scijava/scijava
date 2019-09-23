@@ -3,7 +3,7 @@ package org.scijava.ops.copy;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -14,7 +14,7 @@ public class CopyOpCollection {
 	@OpField(names = "cp, copy", priority = Priority.LOW)
 	@Parameter(key = "array")
 	@Parameter(key = "arrayCopy", itemIO = ItemIO.BOTH)
-	public static final Computer<double[], double[]> copyPrimitiveDoubleArray = (from, to) -> {
+	public static final Computers.Arity1<double[], double[]> copyPrimitiveDoubleArray = (from, to) -> {
 		for (int i = 0; i < to.length; i++) {
 			to[i] = from[i];
 		}
@@ -23,7 +23,7 @@ public class CopyOpCollection {
 	@OpField(names = "cp, copy", priority = Priority.LOW)
 	@Parameter(key = "array")
 	@Parameter(key = "arrayCopy", itemIO = ItemIO.BOTH)
-	public static final Computer<Double[], Double[]> copyDoubleArray = (from, to) -> {
+	public static final Computers.Arity1<Double[], Double[]> copyDoubleArray = (from, to) -> {
 		for (int i = 0; i < to.length; i++) {
 			to[i] = from[i];
 		}

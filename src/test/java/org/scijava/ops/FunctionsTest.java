@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 
 public class FunctionsTest extends AbstractTestEnvironment {
@@ -43,19 +43,19 @@ public class FunctionsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryFunctions() {
-		Function<Double, Double> sqrtFunction = Functions.unary(ops, "math.sqrt", nilDouble, nilDouble);
+		Function<Double, Double> sqrtFunction = Functions.match(ops, "math.sqrt", nilDouble, nilDouble);
 		double answer = sqrtFunction.apply(16.0);
 		assert 4.0 == answer;
 	}
 
 	@Test
 	public void testBinaryFunctions() {
-		BiFunction<Double, Double, Double> addFunction = Functions.binary(ops, "math.add", nilDouble, nilDouble,
+		BiFunction<Double, Double, Double> addFunction = Functions.match(ops, "math.add", nilDouble, nilDouble,
 				nilDouble);
 		double answer = addFunction.apply(16.0, 14.0);
 		assert 30.0 == answer;
 
-		BiFunction<Double, Double, Double> powerFunction = Functions.binary(ops, "math.pow", nilDouble,
+		BiFunction<Double, Double, Double> powerFunction = Functions.match(ops, "math.pow", nilDouble,
 				nilDouble, nilDouble);
 		answer = powerFunction.apply(2.0, 10.0);
 		assert 1024.0 == answer;

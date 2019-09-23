@@ -7,8 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 public class Maps {
 
@@ -16,7 +15,7 @@ public class Maps {
 		// NB: Prevent instantiation of utility class.
 	}
 		
-	public interface Functions {
+	public interface FunctionMaps {
 		
 		public interface Iterables {
 			
@@ -43,11 +42,11 @@ public class Maps {
 		}
 	}
 
-	public interface Computers {
+	public interface ComputerMaps {
 		
 		public interface Iterables {
 			
-			public static <I, O> Computer<Iterable<I>, Iterable<O>> liftBoth(final Computer<I, O> computer) {
+			public static <I, O> Computers.Arity1<Iterable<I>, Iterable<O>> liftBoth(final Computers.Arity1<I, O> computer) {
 				return (iter1, iter2) -> {
 					Iterator<I> i1 = iter1.iterator();
 					Iterator<O> i2 = iter2.iterator();

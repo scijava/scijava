@@ -48,49 +48,22 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.ComputerOps.BiComputerOp;
-import org.scijava.ops.core.computer.ComputerOps.Computer3Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer4Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer5Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer6Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer7Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer8Op;
-import org.scijava.ops.core.computer.ComputerOps.ComputerOp;
-import org.scijava.ops.core.function.FunctionOps.BiFunctionOp;
-import org.scijava.ops.core.function.FunctionOps.Function3Op;
-import org.scijava.ops.core.function.FunctionOps.Function4Op;
-import org.scijava.ops.core.function.FunctionOps.Function5Op;
-import org.scijava.ops.core.function.FunctionOps.Function6Op;
-import org.scijava.ops.core.function.FunctionOps.Function7Op;
-import org.scijava.ops.core.function.FunctionOps.Function8Op;
-import org.scijava.ops.core.function.FunctionOps.Function9Op;
-import org.scijava.ops.core.function.FunctionOps.FunctionOp;
-import org.scijava.ops.core.function.SourceOp;
-import org.scijava.ops.core.inplace.InplaceOps.BiInplaceFirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.BiInplaceSecondOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace3FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace3SecondOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace3ThirdOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace4FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace5FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace6FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace7SecondOp;
-import org.scijava.ops.core.inplace.InplaceOps.InplaceOp;
+import org.scijava.ops.function.GenericTypedOp;
 import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.transform.DefaultOpTransformationMatcher;
 import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
-import org.scijava.ops.types.Any;
 import org.scijava.ops.transform.OpTransformationMatcher;
 import org.scijava.ops.transform.OpTransformer;
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.param.FunctionalMethodType;
@@ -146,34 +119,20 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private static Map<Class<?>, Class<?>> wrappers() {
 		final Map<Class<?>, Class<?>> result = new HashMap<>();
 		final Class<?>[] wrapperClasses = { //
-				FunctionOp.class, //
-				BiFunctionOp.class, //
-				Function3Op.class, //
-				Function4Op.class, //
-				Function5Op.class, //
-				Function6Op.class, //
-				Function7Op.class, //
-				Function8Op.class, //
-				Function9Op.class, //
-				ComputerOp.class, //
-				BiComputerOp.class, //
-				Computer3Op.class, //
-				Computer4Op.class, //
-				Computer5Op.class, //
-				Computer6Op.class, //
-				Computer7Op.class, //
-				Computer8Op.class, //
-				InplaceOp.class, //
-				BiInplaceFirstOp.class, //
-				BiInplaceSecondOp.class, //
-				Inplace3FirstOp.class, //
-				Inplace3SecondOp.class, //
-				Inplace3ThirdOp.class, //
-				Inplace4FirstOp.class, //
-				Inplace5FirstOp.class, //
-				Inplace6FirstOp.class, //
-				Inplace7SecondOp.class, //
-				SourceOp.class
+			GenericTypedOp.P.class, //
+			GenericTypedOp.F1.class, //
+			GenericTypedOp.F2.class, //
+			GenericTypedOp.F3.class, //
+			GenericTypedOp.C0.class, //
+			GenericTypedOp.C1.class, //
+			GenericTypedOp.C2.class, //
+			GenericTypedOp.C3.class, //
+			GenericTypedOp.IP1.class, //
+			GenericTypedOp.IP2_1.class, //
+			GenericTypedOp.IP2_2.class, //
+			GenericTypedOp.IP3_1.class, //
+			GenericTypedOp.IP3_2.class, //
+			GenericTypedOp.IP3_3.class //
 		};
 		for (final Class<?> c : wrapperClasses) {
 			result.put(c.getInterfaces()[0], c);
@@ -409,7 +368,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 						"Matched op Type " + type.getClass() + " matches multiple Op types: " + wrappers.toString());
 			// get the wrapper and wrap up the Op
 			Class<?> wrapper = wrappers.get(suitableWrappers[0]);
-			return wrapper.getConstructors()[0].newInstance(op, type, opInfo);
+			// CTR FIXME: Instead of using reflection, register constructors
+			// as BiFunction<OP, OpInfo, GenericOp<OP>> via ::new syntax.
+			return wrapper.getConstructors()[0].newInstance(op, opInfo);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());

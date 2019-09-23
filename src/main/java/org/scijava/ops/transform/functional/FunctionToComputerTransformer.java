@@ -37,22 +37,20 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.transform.TypeModUtils;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Adapt;
-import org.scijava.ops.util.Computers;
-import org.scijava.ops.util.Functions;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Plugin;
 
 /**
  * Transforms functions into computers using the corresponding adapters in
- * {@link org.scijava.ops.util.Adapt.Functions}.
+ * {@link org.scijava.ops.util.Adapt.FunctionAdapt}.
  *
  * @author David Kolb
  * @author Marcel Wiedenmann
@@ -69,7 +67,7 @@ public class FunctionToComputerTransformer implements FunctionalTypeTransformer 
 		final Class<?> targetFunctionalRawType = OpUtils.findFirstImplementedFunctionalInterface(targetRef);
 		checkCanTransform(src, targetRef, targetFunctionalRawType);
 		final Type targetOutputParamType = targetRef.getOutType();
-		Computer<?, ?> copy;
+		Computers.Arity1<?, ?> copy;
 		try {
 			copy = findCopy(opService, targetOutputParamType);
 		}
@@ -114,18 +112,18 @@ public class FunctionToComputerTransformer implements FunctionalTypeTransformer 
 		}
 	}
 
-	private static Computer<?, ?> findCopy(final OpService opService, final Type outputParamType) {
-		return Computers.unary(opService, COPY_OP_NAME, Nil.of(outputParamType), Nil.of(outputParamType));
+	private static Computers.Arity1<?, ?> findCopy(final OpService opService, final Type outputParamType) {
+		return Computers.match(opService, COPY_OP_NAME, Nil.of(outputParamType), Nil.of(outputParamType));
 	}
 
-	private static <I, O> Computer<I, O> functionToComputer(final Function<I, O> src, final Computer<?, ?> copy) {
-		return Adapt.Functions.asComputer(src, (Computer<O, O>) copy);
+	private static <I, O> Computers.Arity1<I, O> functionToComputer(final Function<I, O> src, final Computers.Arity1<?, ?> copy) {
+		return Adapt.FunctionAdapt.asComputer(src, (Computers.Arity1<O, O>) copy);
 	}
 
-	private static <I1, I2, O> BiComputer<I1, I2, O> functionToComputer(final BiFunction<I1, I2, O> src,
-		final Computer<?, ?> copy)
+	private static <I1, I2, O> Computers.Arity2<I1, I2, O> functionToComputer(final BiFunction<I1, I2, O> src,
+		final Computers.Arity1<?, ?> copy)
 	{
-		return Adapt.Functions.asBiComputer(src, (Computer<O, O>) copy);
+		return Adapt.FunctionAdapt.asComputer2(src, (Computers.Arity1<O, O>) copy);
 	}
 
 	@Override

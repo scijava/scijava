@@ -36,7 +36,7 @@ public class LiftFunctionToArrayTransformer<I, O> implements OpMapper<Function<I
 		final OpRef targetRef) throws OpTransformationException
 	{
 		final Class<O> outRaw = (Class<O>) Types.raw(getRefTransformingTo(targetRef).getOutType());
-		return Maps.Functions.Arrays.liftBoth(src, outRaw);
+		return Maps.FunctionMaps.Arrays.liftBoth(src, outRaw);
 	}
 
 	@Override

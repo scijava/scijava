@@ -36,27 +36,19 @@ import java.util.List;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
-import org.scijava.ops.core.inplace.BiInplaceSecond;
-import org.scijava.ops.core.inplace.Inplace;
-import org.scijava.ops.core.inplace.Inplace3First;
-import org.scijava.ops.core.inplace.Inplace3Second;
-import org.scijava.ops.core.inplace.Inplace4First;
-import org.scijava.ops.core.inplace.Inplace5First;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.util.Adapt;
-import org.scijava.ops.util.Functions;
-import org.scijava.ops.util.Inplaces;
-import org.scijava.ops.util.Inplaces.InplaceInfo;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Plugin;
 import org.scijava.util.Types;
 
 /**
  * Transforms inplaces into functions using the corresponding adapters in
- * {@link org.scijava.ops.util.Adapt.Inplaces}.
+ * {@link org.scijava.ops.util.Adapt.InplaceAdapt}.
  *
  * @author Marcel Wiedenmann
  */
@@ -69,13 +61,12 @@ public class InplaceToFunctionTransformer implements FunctionalTypeTransformer {
 	{
 		final Class<?> targetFunctionalRawType = OpUtils.findFirstImplementedFunctionalInterface(targetRef);
 		checkCanTransform(src, targetRef, targetFunctionalRawType);
-		if (src instanceof Inplace) return Adapt.Inplaces.asFunction((Inplace<?>) src);
-		if (src instanceof BiInplaceFirst) return Adapt.Inplaces.asBiFunction((BiInplaceFirst<?, ?>) src);
-		if (src instanceof BiInplaceSecond) return Adapt.Inplaces.asBiFunction((BiInplaceSecond<?, ?>) src);
-		if (src instanceof Inplace3First) return Adapt.Inplaces.asFunction3((Inplace3First<?, ?, ?>) src);
-		if (src instanceof Inplace3Second) return Adapt.Inplaces.asFunction3((Inplace3Second<?, ?, ?>) src);
-		if (src instanceof Inplace4First) return Adapt.Inplaces.asFunction4((Inplace4First<?, ?, ?, ?>) src);
-		if (src instanceof Inplace5First) return Adapt.Inplaces.asFunction5((Inplace5First<?, ?, ?, ?, ?>) src);
+		if (src instanceof Inplaces.Arity1) return Adapt.InplaceAdapt.asFunction((Inplaces.Arity1<?>) src);
+		if (src instanceof Inplaces.Arity2_1) return Adapt.InplaceAdapt.asBiFunction((Inplaces.Arity2_1<?, ?>) src);
+		if (src instanceof Inplaces.Arity2_2) return Adapt.InplaceAdapt.asBiFunction((Inplaces.Arity2_2<?, ?>) src);
+		if (src instanceof Inplaces.Arity3_1) return Adapt.InplaceAdapt.asFunction3((Inplaces.Arity3_1<?, ?, ?>) src);
+		if (src instanceof Inplaces.Arity3_2) return Adapt.InplaceAdapt.asFunction3((Inplaces.Arity3_2<?, ?, ?>) src);
+		if (src instanceof Inplaces.Arity3_3) return Adapt.InplaceAdapt.asFunction3((Inplaces.Arity3_2<?, ?, ?>) src);
 		throw createCannotTransformException(src, targetRef, "Source does not implement a supported inplace interface.",
 			null);
 	}
@@ -92,7 +83,7 @@ public class InplaceToFunctionTransformer implements FunctionalTypeTransformer {
 			problem = "Target does not implement a functional interface.";
 		}
 		else {
-			final InplaceInfo srcInfo = Inplaces.ALL_INPLACES.get(srcFunctionalRawType);
+			final Inplaces.InplaceInfo srcInfo = Inplaces.ALL_INPLACES.get(srcFunctionalRawType);
 			if (srcInfo == null) {
 				problem = "Source does not implement a known inplace interface.";
 			}

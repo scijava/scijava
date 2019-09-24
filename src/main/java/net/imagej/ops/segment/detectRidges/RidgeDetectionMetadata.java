@@ -32,9 +32,9 @@ package net.imagej.ops.segment.detectRidges;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import net.imagej.ops.OpService;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
+import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -42,7 +42,6 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
-import org.scijava.Context;
 import org.scijava.ops.core.computer.Computer;
 import org.scijava.ops.core.computer.Computer3;
 
@@ -80,10 +79,6 @@ public class RidgeDetectionMetadata {
 		final Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp,
 		final Computer3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp)
 	{
-		// create op service for metadata generation
-		final Context context = new Context();
-		final OpService opService = context.getService(OpService.class);
-
 		// convert input to doubleType
 		final RandomAccessibleInterval<DoubleType> converted = createOp.apply(input, new DoubleType()); 
 		convertOp.compute(input, converted);
@@ -96,11 +91,11 @@ public class RidgeDetectionMetadata {
 		valuesArr[valuesArr.length - 1] = 2;
 
 		// create metadata images and randomAccesses
-		pValues = opService.create().img(valuesArr);
+		pValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr), new DoubleType());
 		final RandomAccess<DoubleType> pRA = pValues.randomAccess();
-		nValues = opService.create().img(valuesArr);
+		nValues = (Img<DoubleType>) createOp.apply(new FinalDimensions(valuesArr), new DoubleType());
 		final RandomAccess<DoubleType> nRA = nValues.randomAccess();
-		gradients = opService.create().img(input, new DoubleType());
+		gradients = (Img<DoubleType>) createOp.apply(input, new DoubleType());
 		final RandomAccess<DoubleType> gradientsRA = gradients.randomAccess();
 
 		// create a cursor of the input to direct all of the randomAccesses.

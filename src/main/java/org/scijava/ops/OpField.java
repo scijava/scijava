@@ -15,6 +15,10 @@ public @interface OpField {
 
 	String names();
 
+	// the names of the parameters (inputs and outputs) that will appear in a call
+	// to help().
+	String[] params();
+
 	double priority() default Priority.NORMAL;
 
 }

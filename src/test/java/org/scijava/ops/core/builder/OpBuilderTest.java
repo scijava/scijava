@@ -82,7 +82,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Matches a nullary function in a vacuum. */
 	@Test
 	public void testArity0_OU_match() {
-		final Producer<?> op = name("test.helloWorld").input().op();
+		final Producer<?> op = name("test.helloWorld").input().producer();
 		final Object result = op.create();
 		assertEquals("Hello, world!", result);
 	}
@@ -102,7 +102,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] result = new double[10];
 		Arrays.fill(result, 12345);
 		final Computers.Arity0<double[]> op = //
-			name("math.zero").input().output(result).op();
+			name("math.zero").input().output(result).computer();
 		op.compute(result);
 		assertTrue(Arrays.stream(result).allMatch(v -> v == 0));
 	}
@@ -136,7 +136,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	@Test
 	public void testArity1_IT_OU_match() {
 		final Function<Double, ?> op = //
-			name("math.sqrt").inType(Double.class).op();
+			name("math.sqrt").inType(Double.class).function();
 		final Object result = op.apply(16.);
 		assertEquals(4., result);
 	}
@@ -164,7 +164,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	@Test
 	public void testArity1_IV_OU_match() {
 		final Function<Double, ?> op = //
-			name("math.sqrt").input(36.).op();
+			name("math.sqrt").input(36.).function();
 		final Object result = op.apply(49.);
 		assertEquals(7., result);
 	}
@@ -173,7 +173,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	@Test
 	public void testArity1_IV_OT_match() {
 		final Function<Double, Double> op = //
-			name("math.sqrt").input(64.).outType(Double.class).op();
+			name("math.sqrt").input(64.).outType(Double.class).function();
 		final double result = op.apply(81.);
 		assertEquals(9., result, 0.);
 	}
@@ -183,7 +183,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity1_IV_OV_match() {
 		final int[] result = new int[halves.length];
 		final Computers.Arity1<double[], int[]> op = //
-			name("test.castToInt").input(halves).output(result).op();
+			name("test.castToInt").input(halves).output(result).computer();
 		op.compute(halves, result);
 		for (int i = 0; i < result.length; i++)
 			assertEquals((int) halves[i], result[i]);
@@ -220,7 +220,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	@Test
 	public void testArity2_IT_OU_match() {
 		final BiFunction<Double, Double, ?> op = //
-			name("math.add").inType(Double.class, Double.class).op();
+			name("math.add").inType(Double.class, Double.class).function();
 		final Object result = op.apply(5., 6.);
 		assertEquals(11., result);
 	}
@@ -251,7 +251,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	@Test
 	public void testArity2_IV_OU_match() {
 		final BiFunction<Double, Double, ?> op = //
-			name("math.add").input(9., 10.).op();
+			name("math.add").input(9., 10.).function();
 		final Object result = op.apply(11., 12.);
 		assertEquals(23., result);
 	}
@@ -260,7 +260,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	@Test
 	public void testArity2_IV_OT_match() {
 		final BiFunction<Double, Double, Double> op = //
-			name("math.add").input(13., 14.).outType(Double.class).op();
+			name("math.add").input(13., 14.).outType(Double.class).function();
 		final double result = op.apply(15., 16.);
 		assertEquals(31., result, 0.);
 	}
@@ -271,7 +271,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final String[] s = {"ups", "and", "downs"};
 		final Object[] o = {"ide", "rogynous", "tream"};
 		final String[] result = new String[s.length];
-		Computers.Arity2<String[], Object[], String[]> op = name("test.concat").input(s, o).output(result).op();
+		Computers.Arity2<String[], Object[], String[]> op = name("test.concat").input(s, o).output(result).computer();
 		op.compute(s, o, result);
 		for (int i = 0; i < result.length; i++)
 			assertEquals(s[i] + o[i], result[i]);

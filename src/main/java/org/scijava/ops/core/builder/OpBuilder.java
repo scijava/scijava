@@ -125,7 +125,7 @@ public class OpBuilder {
 			return new Arity0_OT<>(outType);
 		}
 
-		public Producer<?> op() {
+		public Producer<?> producer() {
 			final Nil<Producer<Object>> specialType = new Nil<Producer<Object>>() {
 				@Override
 				public Type getType() {
@@ -136,7 +136,7 @@ public class OpBuilder {
 		}
 
 		public Object create() {
-			return op().create();
+			return producer().create();
 		}
 	}
 
@@ -187,12 +187,12 @@ public class OpBuilder {
 			this.out = new WeakReference<>(out);
 		}
 
-		public Arity0<O> op() {
+		public Arity0<O> computer() {
 			return Computers.match(ops, opName, type(out));
 		}
 
 		public void compute() {
-			op().compute(out.get());
+			computer().compute(out.get());
 		}
 	}
 
@@ -244,7 +244,7 @@ public class OpBuilder {
 			return new Arity1_IT_OT<>(inType, outType);
 		}
 
-		public Function<I, ?> op() {
+		public Function<I, ?> function() {
 			return Functions.match(ops, opName, inType, Nil.of(Object.class));
 		}
 	}
@@ -266,12 +266,12 @@ public class OpBuilder {
 			this.outType = outType;
 		}
 
-		public Function<I, O> op() {
+		public Function<I, O> function() {
 			return Functions.match(ops, opName, type(in), outType);
 		}
 
 		public O apply() {
-			return op().apply(in.get());
+			return function().apply(in.get());
 		}
 	}
 
@@ -301,12 +301,12 @@ public class OpBuilder {
 			return new Arity1_IV_OT<>(in.get(), outType);
 		}
 
-		public Function<I, ?> op() {
+		public Function<I, ?> function() {
 			return Functions.match(ops, opName, type(in), Nil.of(Object.class));
 		}
 
 		public Object apply() {
-			return op().apply(in.get());
+			return function().apply(in.get());
 		}
 	}
 
@@ -326,12 +326,12 @@ public class OpBuilder {
 			this.out = new WeakReference<>(out);
 		}
 
-		public Computers.Arity1<I, O> op() {
+		public Computers.Arity1<I, O> computer() {
 			return Computers.match(ops, opName, type(in), type(out));
 		}
 
 		public void compute() {
-			op().compute(in.get(), out.get());
+			computer().compute(in.get(), out.get());
 		}
 	}
 
@@ -389,7 +389,7 @@ public class OpBuilder {
 			return new Arity2_IT_OT<>(in1Type, in2Type, outType);
 		}
 
-		public BiFunction<I1, I2, ?> op() {
+		public BiFunction<I1, I2, ?> function() {
 			return Functions.match(ops, opName, in1Type, in2Type, Nil.of(Object.class));
 		}
 	}
@@ -414,12 +414,12 @@ public class OpBuilder {
 			this.outType = outType;
 		}
 
-		public BiFunction<I1, I2, O> op() {
+		public BiFunction<I1, I2, O> function() {
 			return Functions.match(ops, opName, type(in1), type(in2), outType);
 		}
 
 		public O apply() {
-			return op().apply(in1.get(), in2.get());
+			return function().apply(in1.get(), in2.get());
 		}
 	}
 
@@ -452,12 +452,12 @@ public class OpBuilder {
 			return new Arity2_IV_OT<>(in1.get(), in2.get(), outType);
 		}
 
-		public BiFunction<I1, I2, ?> op() {
+		public BiFunction<I1, I2, ?> function() {
 			return Functions.match(ops, opName, type(in1), type(in2), Nil.of(Object.class));
 		}
 
 		public Object apply() {
-			return op().apply(in1.get(), in2.get());
+			return function().apply(in1.get(), in2.get());
 		}
 	}
 
@@ -481,12 +481,12 @@ public class OpBuilder {
 			this.out = new WeakReference<>(out);
 		}
 
-		public Computers.Arity2<I1, I2, O> op() {
+		public Computers.Arity2<I1, I2, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(in2), type(out));
 		}
 
 		public void compute() {
-			op().compute(in1.get(), in2.get(), out.get());
+			computer().compute(in1.get(), in2.get(), out.get());
 		}
 	}
 }

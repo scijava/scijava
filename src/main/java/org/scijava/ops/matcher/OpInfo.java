@@ -12,7 +12,7 @@ import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 
 /**
- * Metadata about an op implementation defined as a class.
+ * Metadata about an op implementation.
  * 
  * @author Curtis Rueden
  * @author David Kolb

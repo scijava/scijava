@@ -38,6 +38,7 @@ import org.scijava.ops.OpService;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers.Arity0;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
@@ -167,10 +168,15 @@ public class OpBuilder {
 		public Computers.Arity0<O> computer() {
 			return Computers.match(ops, opName, outType);
 		}
+		
+		public Inplaces.Arity1<O> inplace() {
+			return Inplaces.match(ops, opName, outType);
+		}
 
 		public O create() {
 			return producer().create();
 		}
+		
 	}
 
 	/**
@@ -190,9 +196,17 @@ public class OpBuilder {
 		public Arity0<O> computer() {
 			return Computers.match(ops, opName, type(out));
 		}
-
+		
 		public void compute() {
 			computer().compute(out.get());
+		}
+
+		public Inplaces.Arity1<O> inplace(){
+			return Inplaces.match(ops, opName, type(out));
+		}
+		
+		public void mutate() {
+			inplace().mutate(out.get());
 		}
 	}
 
@@ -220,6 +234,15 @@ public class OpBuilder {
 		public Computers.Arity1<I, O> computer() {
 			return Computers.match(ops, opName, inType, outType);
 		}
+		
+		public Inplaces.Arity2<I, O> inplace1(){
+			return Inplaces.match1(ops, opName, inType, outType);
+		}
+
+		public Inplaces.Arity2<I, O> inplace2(){
+			return Inplaces.match2(ops, opName, inType, outType);
+		}
+		
 	}
 
 	/**
@@ -268,6 +291,18 @@ public class OpBuilder {
 
 		public Function<I, O> function() {
 			return Functions.match(ops, opName, type(in), outType);
+		}
+		
+		public Computers.Arity1<I, O> computer() {
+			return Computers.match(ops, opName, type(in), outType);
+		}
+		
+		public Inplaces.Arity2<I, O> inplace1(){
+			return Inplaces.match1(ops, opName, type(in), outType);
+		}
+
+		public Inplaces.Arity2<I, O> inplace2(){
+			return Inplaces.match2(ops, opName, type(in), outType);
 		}
 
 		public O apply() {
@@ -329,9 +364,25 @@ public class OpBuilder {
 		public Computers.Arity1<I, O> computer() {
 			return Computers.match(ops, opName, type(in), type(out));
 		}
+		
+		public Inplaces.Arity2<I, O> inplace1(){
+			return Inplaces.match1(ops, opName, type(in), type(out));
+		}
+
+		public Inplaces.Arity2<I, O> inplace2(){
+			return Inplaces.match2(ops, opName, type(in), type(out));
+		}
 
 		public void compute() {
 			computer().compute(in.get(), out.get());
+		}
+		
+		public void mutate1() {
+			inplace1().mutate(in.get(), out.get());
+		}
+
+		public void mutate2() {
+			inplace2().mutate(in.get(), out.get());
 		}
 	}
 
@@ -361,6 +412,18 @@ public class OpBuilder {
 
 		public Computers.Arity2<I1, I2, O> computer() {
 			return Computers.match(ops, opName, in1Type, in2Type, outType);
+		}
+		
+		public Inplaces.Arity3_1<I1, I2, O> inplace1() {
+			return Inplaces.match1(ops, opName, in1Type, in2Type, outType);
+		}
+
+		public Inplaces.Arity3_2<I1, I2, O> inplace2() {
+			return Inplaces.match2(ops, opName, in1Type, in2Type, outType);
+		}
+
+		public Inplaces.Arity3_3<I1, I2, O> inplace3() {
+			return Inplaces.match3(ops, opName, in1Type, in2Type, outType);
 		}
 	}
 
@@ -416,6 +479,22 @@ public class OpBuilder {
 
 		public BiFunction<I1, I2, O> function() {
 			return Functions.match(ops, opName, type(in1), type(in2), outType);
+		}
+		
+		public Computers.Arity2<I1, I2, O> computer() {
+			return Computers.match(ops, opName, type(in1), type(in2), outType);
+		}
+		
+		public Inplaces.Arity3_1<I1, I2, O> inplace1() {
+			return Inplaces.match1(ops, opName, type(in1), type(in2), outType);
+		}
+
+		public Inplaces.Arity3_2<I1, I2, O> inplace2() {
+			return Inplaces.match2(ops, opName, type(in1), type(in2), outType);
+		}
+
+		public Inplaces.Arity3_3<I1, I2, O> inplace3() {
+			return Inplaces.match3(ops, opName, type(in1), type(in2), outType);
 		}
 
 		public O apply() {
@@ -484,9 +563,33 @@ public class OpBuilder {
 		public Computers.Arity2<I1, I2, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(in2), type(out));
 		}
+		
+		public Inplaces.Arity3_1<I1, I2, O> inplace1() {
+			return Inplaces.match1(ops, opName, type(in1), type(in2), type(out));
+		}
+
+		public Inplaces.Arity3_2<I1, I2, O> inplace2() {
+			return Inplaces.match2(ops, opName, type(in1), type(in2), type(out));
+		}
+
+		public Inplaces.Arity3_3<I1, I2, O> inplace3() {
+			return Inplaces.match3(ops, opName, type(in1), type(in2), type(out));
+		}
 
 		public void compute() {
 			computer().compute(in1.get(), in2.get(), out.get());
+		}
+
+		public void mutate1() {
+			inplace1().mutate(in1.get(), in2.get(), out.get());
+		}
+
+		public void mutate2() {
+			inplace2().mutate(in1.get(), in2.get(), out.get());
+		}
+
+		public void mutate3() {
+			inplace3().mutate(in1.get(), in2.get(), out.get());
 		}
 	}
 }

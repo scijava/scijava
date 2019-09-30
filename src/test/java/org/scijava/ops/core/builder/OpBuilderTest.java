@@ -39,6 +39,7 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 
 /**
@@ -72,29 +73,61 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 
 	/** Runs a nullary computer with a given output value. */
 	@Test
-	public void testArity0_OV_run() {
+	public void testArity0_OV_runC() {
 		final double[] result = new double[halves.length];
 		Arrays.fill(result, 12345);
 		name("math.zero").input().output(result).compute();
 		assertTrue(Arrays.stream(result).allMatch(v -> v == 0));
 	}
 
+	/** Runs a inplace with a given output value. */
+	@Test
+	public void testArity0_OV_runI() {
+		final double[] actual = {1, 4, 9};
+		final double[] expected = {1, 2, 3};
+		name("math.sqrt").input().output(actual).mutate();
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
 	/** Matches a nullary function in a vacuum. */
 	@Test
-	public void testArity0_OU_match() {
+	public void testArity0_OU_matchF() {
 		final Producer<?> op = name("test.helloWorld").input().producer();
 		final Object result = op.create();
 		assertEquals("Hello, world!", result);
 	}
-
+	
 	/** Matches a nullary computer or function with a given output type. */
 	@Test
-	public void testArity0_OT_match() {
+	public void testArity0_OT_matchF() {
 		final Producer<String> op = //
 			name("test.helloWorld").input().outType(String.class).producer();
 		final String result = op.create();
 		assertEquals("Hello, world!", result);
 	}
+	
+	/** Matches a nullary computer or function with a given output type. */
+	@Test
+	public void testArity0_OT_matchC() {
+		final double[] result = new double[halves.length];
+		Arrays.fill(result, 12345);
+		final Computers.Arity0<double[]> op = //
+			name("math.zero").input().outType(double[].class).computer();
+		op.compute(result);
+		assertTrue(Arrays.stream(result).allMatch(v -> v == 0));
+	}
+
+	/** Matches a nullary computer or function with a given output type. */
+	@Test
+	public void testArity0_OT_matchI() {
+		final double[] actual = {1, 4, 9};
+		final double[] expected = {1, 2, 3};
+		final Inplaces.Arity1<double[]> op = //
+			name("math.sqrt").input().outType(double[].class).inplace();
+		op.mutate(actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
 
 	/** Matches a nullary computer with a given output value. */
 	@Test

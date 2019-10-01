@@ -1,0 +1,58 @@
+[Computers.java]
+arities = (0..3).collect()
+consumerArity = ```
+{ arity ->
+  arity == 0 ? 'Consumer' :
+  arity == 1 ? 'BiConsumer' :
+  "Consumers.Arity${arity+1}"
+}
+```
+generics = ```
+{ arity ->
+  arity == 0 ? '<O>' :
+  arity == 1 ? '<I, O>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', O>'
+}
+```
+matchParams = ```
+{ arity ->
+  arity == 0 ? 'final Nil<O> outType' :
+  arity == 1 ? 'final Nil<I> inType, final Nil<O> outType' :
+  String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect()) + ', final Nil<O> outType'
+}
+```
+typeArgs = ```
+{ arity ->
+  arity == 0 ? 'outType.getType()' :
+  arity == 1 ? 'inType.getType(), outType.getType()' :
+  String.join(', ', (1..arity).stream().map{a -> "in${a}Type.getType()"}.collect()) + ', outType.getType()'
+}
+```
+nilArgs = ```
+{ arity ->
+  arity == 0 ? 'outType' :
+  arity == 1 ? 'inType, outType' :
+  String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect()) + ', outType'
+}
+```
+computeParams = ```
+{ arity ->
+  arity == 0 ? '@Mutable O out' :
+  arity == 1 ? 'I in, @Mutable O out' :
+  String.join(', ', (1..arity).stream().map{a -> "I$a in$a"}.collect()) + ', @Mutable O out'
+}
+```
+acceptParams = ```
+{ arity ->
+  arity == 0 ? 'final O out' :
+  arity == 1 ? 'final I in, final O out' :
+  String.join(', ', (1..arity).stream().map{a -> "final I$a in$a"}.collect()) + ', final O out'
+}
+```
+computeArgs = ```
+{ arity ->
+  arity == 0 ? 'out' :
+  arity == 1 ? 'in, out' :
+  String.join(', ', (1..arity).stream().map{a -> "in$a"}.collect()) + ', out'
+}
+```

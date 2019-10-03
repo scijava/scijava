@@ -1,6 +1,9 @@
 
 package org.scijava.param;
 
+import io.leangen.geantyref.AnnotationFormatException;
+import io.leangen.geantyref.TypeFactory;
+
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -28,9 +31,6 @@ import org.scijava.struct.StructInstance;
 import org.scijava.util.AnnotationUtils;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
-
-import io.leangen.geantyref.AnnotationFormatException;
-import io.leangen.geantyref.TypeFactory;
 
 /**
  * Utility functions for working with {@link org.scijava.param} classes.
@@ -453,7 +453,7 @@ public final class ParameterStructs {
 			// NB: The BOTH type signifies that the parameter will be changed
 			// in-place somehow. But immutable parameters cannot be changed in
 			// such a manner, so it makes no sense to label them as BOTH.
-			final String error = "Immutable BOTH parameter: " + name;
+			final String error = "Immutable BOTH parameter: " + name + " (" + type.getName() + " is immutable)";
 			problems.add(new ValidityProblem(error));
 			valid = false;
 		}

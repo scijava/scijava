@@ -29,6 +29,11 @@
  * #L%
  */
 
+debug = System.getenv('DEBUG')
+def debug(msg) {
+	if (debug) System.err.println("[DEBUG] $msg")
+}
+
 @Grab('org.apache.velocity:velocity:1.7')
 import org.apache.velocity.app.VelocityEngine
 
@@ -48,6 +53,8 @@ def timestamp(dir, file) {
 
 /* Processes a template using Apache Velocity. */
 def processTemplate(engine, context, templateFile, outFilename) {
+	debug("processTemplate('$engine', '$context', '$templateFile', '$outFilename')")
+
 	if (outFilename == null) return; // nothing to do
 
 	// create output directory if it does not already exist
@@ -89,6 +96,8 @@ def parseValue(sh, translationsFile, key, expression) {
  * ...
  */
 def translate(templateSubdirectory, templateFile, translationsFile) {
+	debug("translate('$templateSubdirectory', '$templateFile', '$translationsFile')")
+
 	// initialize the Velocity engine
 	engine = new org.apache.velocity.app.VelocityEngine();
 	p = new java.util.Properties();
@@ -181,6 +190,8 @@ def translate(templateSubdirectory, templateFile, translationsFile) {
 
 /* Recursively translates all templates in the given directory. */
 def translateDirectory(templateSubdirectory) {
+	debug("translateDirectory('$templateSubdirectory')")
+
 	for (file in new java.io.File(templateSubdirectory).listFiles()) {
 		if (file.isDirectory()) {
 			// process subdirectories recursively

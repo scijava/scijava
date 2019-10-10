@@ -196,22 +196,8 @@ def translateDirectory(templateSubdirectory) {
 	}
 }
 
-def cleanStaleFiles(directory) {
-	list = directory == null ? null : directory.listFiles();
-	if (list == null) return;
-
-	for (File file : list) {
-		if (file.isDirectory()) {
-			cleanStaleFiles(file);
-		} else if (file.isFile() && !knownFiles.contains(file)) {
-			file.delete();
-		}
-	}
-}
-
 try {
 	translateDirectory(templateDirectory);
-	cleanStaleFiles(new File(outputDirectory));
 }
 catch (Throwable t) {
 	t.printStackTrace(System.err);

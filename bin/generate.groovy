@@ -84,6 +84,84 @@ def parseValue(sh, translationsFile, key, expression) {
 	}
 }
 
+/* Reads a translations File */
+def readTranslation(engine, globalContext, reader, templateSubdirectory, templateFile, translationsFile, isInclude){
+	sh = new groovy.lang.GroovyShell();
+	for (;;) {
+		// read the line
+		line = reader.readLine();
+
+		if (line == null) break;
+		// check if the line starts a new section
+		if (line.startsWith("[") && line.endsWith("]")) {
+			// if we are parsing a .include file, return when we hit any sections
+			if(isInclude){
+				println("[WARNING] $translationsFile: Section definition in .include file. Ending processing of $translationsFile");
+				return context; 
+			}
+			// write out the previous file
+			processTemplate(engine, context, templateFile, outputFilename);
+
+			// start a new file
+			outputFilename = line.substring(1, line.length() - 1);
+			if (!templateDirectory.equals(templateSubdirectory)) {
+				subPath = templateSubdirectory.substring(templateDirectory.length() + 1);
+				outputFilename = "$subPath/$outputFilename";
+			}
+			context = new org.apache.velocity.VelocityContext(globalContext);
+			continue;
+		}
+
+		// ignore blank lines
+		trimmedLine = line.trim();
+		if (trimmedLine.isEmpty()) continue;
+
+		// ignore comments
+		if (trimmedLine.startsWith("#")) continue;
+
+		// include any global files
+		if (trimmedLine.startsWith(".include")){
+			includeFile = line.substring(9);
+			globalReader = new java.io.BufferedReader(new java.io.FileReader("$templateSubdirectory/$includeFile"));
+			encapsulatedContext = new org.apache.velocity.VelocityContext(context)
+			context = readTranslation(engine, encapsulatedContext, globalReader, templateSubdirectory, templateFile, includeFile, true) 
+			continue;
+		}
+		
+		if (!line.contains('=')) {
+			print("[WARNING] $translationsFile: Ignoring spurious line: $line");
+			continue;
+		}
+
+		int idx = line.indexOf('=');
+		key = line.substring(0, idx).trim();
+		value = line.substring(idx + 1);
+
+		if (value.trim().equals('```')) {
+			// multi-line value
+			builder = new StringBuilder();
+			for (;;) {
+				line = reader.readLine();
+				if (line == null) {
+					throw new RuntimeException("Unfinished value: " + builder.toString());
+				}
+				if (line.equals('```')) {
+					break;
+				}
+				if (builder.length() > 0) {
+					builder.append("\n");
+				}
+				builder.append(line);
+			}
+			value = builder.toString();
+		}
+
+		context.put(key, parseValue(sh, translationsFile, key, value));
+	}
+	
+	return context;
+}
+
 /*
  * Translates a template into many files in the outputDirectory,
  * given a translations file in INI style; e.g.:
@@ -117,65 +195,8 @@ def translate(templateSubdirectory, templateFile, translationsFile) {
 	context = globalContext = new org.apache.velocity.VelocityContext();
 	reader = new java.io.BufferedReader(new java.io.FileReader("$templateSubdirectory/$translationsFile"));
 
-	sh = new groovy.lang.GroovyShell();
-	for (;;) {
-		// read the line
-		line = reader.readLine();
+	readTranslation(engine, context, reader, templateSubdirectory, templateFile, translationsFile, false);
 
-		if (line == null) break;
-		// check if the line starts a new section
-		if (line.startsWith("[") && line.endsWith("]")) {
-			// write out the previous file
-			processTemplate(engine, context, templateFile, outputFilename);
-
-			// start a new file
-			outputFilename = line.substring(1, line.length() - 1);
-			if (!templateDirectory.equals(templateSubdirectory)) {
-				subPath = templateSubdirectory.substring(templateDirectory.length() + 1);
-				outputFilename = "$subPath/$outputFilename";
-			}
-			context = new org.apache.velocity.VelocityContext(globalContext);
-			continue;
-		}
-
-		// ignore blank lines
-		trimmedLine = line.trim();
-		if (trimmedLine.isEmpty()) continue;
-
-		// ignore comments
-		if (trimmedLine.startsWith("#")) continue;
-
-		// parse key/value pair lines separate by equals
-		if (!line.contains('=')) {
-			print("[WARNING] $translationsFile: Ignoring spurious line: $line");
-			continue;
-		}
-
-		int idx = line.indexOf('=');
-		key = line.substring(0, idx).trim();
-		value = line.substring(idx + 1);
-
-		if (value.trim().equals('```')) {
-			// multi-line value
-			builder = new StringBuilder();
-			for (;;) {
-				line = reader.readLine();
-				if (line == null) {
-					throw new RuntimeException("Unfinished value: " + builder.toString());
-				}
-				if (line.equals('```')) {
-					break;
-				}
-				if (builder.length() > 0) {
-					builder.append("\n");
-				}
-				builder.append(line);
-			}
-			value = builder.toString();
-		}
-
-		context.put(key, parseValue(sh, translationsFile, key, value));
-	}
 	reader.close();
 
 	// process the template

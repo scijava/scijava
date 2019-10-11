@@ -109,16 +109,15 @@ public class OpBuilder {
 	}
 
 	/** Specifies 3 input by raw type. */
-	public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Class<I1> in1Class, final Class<I2> in2Class,
-			final Class<I3> in3Class) {
+	public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class) {
 		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class));
 	}
 
 	/** Specifies 3 input by generic type. */
-	public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Nil<I1> in1Type, final Nil<I2> in2Type,
-			final Nil<I3> in3Type) {
+	public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type) {
 		return new Arity3_IT_OU<>(in1Type, in2Type, in3Type);
 	}
+
 
 	// -- Helper methods --
 
@@ -127,19 +126,29 @@ public class OpBuilder {
 		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj.get()));
 	}
 
+	
 	/*
 	 * -- HELPER CLASSES --
 	 * 
-	 * For each arity, there are multiple conditions: * Input TYPES are given (IT)
-	 * 1) The output is unspecified (OU): a) matchable: Function, Inplace b)
-	 * runnable: none 2) The output type is given (OT): a) matchable: Function,
-	 * Computer b) runnable: none
-	 * 
-	 * * Input VALUES are given (IV) (N.B. this case applies for Arity0): 1) The
-	 * output is unspecified (OU): a) matchable: Function, Inplace b) runnable:
-	 * apply, mutate 2) The output type is given (OT): a) matchable: Function,
-	 * Computer b) runnable: apply 3) The output value is given (OV): a) matchable:
-	 * Computer b) runnable: compute
+	 * For each arity, there are multiple conditions:
+	 * * Input TYPES are given (IT) 
+	 * 	1) The output is unspecified (OU): 
+	 * 		a) matchable: Function, Inplace
+	 * 		b) runnable: none
+	 * 	2) The output type is given (OT): 
+	 * 		a) matchable: Function, Computer
+	 * 		b) runnable: none
+	 *  
+	 * * Input VALUES are given (IV) (N.B. this case applies for Arity0):
+	 * 	1) The output is unspecified (OU): 
+	 * 		a) matchable: Function, Inplace
+	 * 		b) runnable: apply, mutate
+	 * 	2) The output type is given (OT): 
+	 * 		a) matchable: Function, Computer
+	 * 		b) runnable: apply
+	 * 	3) The output value is given (OV): 
+	 * 		a) matchable: Computer
+	 *  	b) runnable: compute
 	 */
 
 	/**
@@ -262,7 +271,7 @@ public class OpBuilder {
 		public Computers.Arity1<I1, O> computer() {
 			return Computers.match(ops, opName, in1Type, outType);
 		}
-
+		
 		public Inplaces.Arity1<I1> inplace() {
 			return Inplaces.match(ops, opName, in1Type);
 		}
@@ -291,7 +300,7 @@ public class OpBuilder {
 		public <O> Arity1_IT_OT<I1, O> outType(final Nil<O> outType) {
 			return new Arity1_IT_OT<>(in1Type, outType);
 		}
-
+		
 		public Function<I1, ?> function() {
 			return Functions.match(ops, opName, in1Type, Nil.of(Object.class));
 		}
@@ -311,7 +320,7 @@ public class OpBuilder {
 	 *            The type of the output.
 	 */
 	public final class Arity1_IV_OT<I1, O> {
-
+		
 		private final WeakReference<I1> in1;
 		private final Nil<O> outType;
 
@@ -323,11 +332,11 @@ public class OpBuilder {
 		public Function<I1, O> function() {
 			return Functions.match(ops, opName, type(in1), outType);
 		}
-
+		
 		public Computers.Arity1<I1, O> computer() {
 			return Computers.match(ops, opName, type(in1), outType);
 		}
-
+		
 		public O apply() {
 			return function().apply(in1.get());
 		}
@@ -364,7 +373,7 @@ public class OpBuilder {
 			return Functions.match(ops, opName, type(in1), Nil.of(Object.class));
 		}
 
-		public Inplaces.Arity1<I1> inplace() {
+		public Inplaces.Arity1<I1> inplace(){
 			return Inplaces.match(ops, opName, type(in1));
 		}
 
@@ -381,8 +390,7 @@ public class OpBuilder {
 	 * Builder with arity 1, input value given, output value given.
 	 *
 	 * @author Curtis Rueden
-	 * @param <I1>
-	 *            The type of input 1.
+	 * @param <I1> The type of input 1.
 	 */
 	public final class Arity1_IV_OV<I1, O> {
 
@@ -397,12 +405,13 @@ public class OpBuilder {
 		public Computers.Arity1<I1, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(out));
 		}
-
+		
 		public void compute() {
 			computer().compute(in1.get(), out.get());
 		}
-
+		
 	}
+
 
 	/**
 	 * Builder with arity 2, input type given, output type given.
@@ -434,11 +443,10 @@ public class OpBuilder {
 		public Computers.Arity2<I1, I2, O> computer() {
 			return Computers.match(ops, opName, in1Type, in2Type, outType);
 		}
-
+		
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
 			return Inplaces.match1(ops, opName, in1Type, in2Type);
 		}
-
 		public Inplaces.Arity2_2<I1, I2> inplace2() {
 			return Inplaces.match2(ops, opName, in1Type, in2Type);
 		}
@@ -471,7 +479,7 @@ public class OpBuilder {
 		public <O> Arity2_IT_OT<I1, I2, O> outType(final Nil<O> outType) {
 			return new Arity2_IT_OT<>(in1Type, in2Type, outType);
 		}
-
+		
 		public BiFunction<I1, I2, ?> function() {
 			return Functions.match(ops, opName, in1Type, in2Type, Nil.of(Object.class));
 		}
@@ -479,7 +487,6 @@ public class OpBuilder {
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
 			return Inplaces.match1(ops, opName, in1Type, in2Type);
 		}
-
 		public Inplaces.Arity2_2<I1, I2> inplace2() {
 			return Inplaces.match2(ops, opName, in1Type, in2Type);
 		}
@@ -497,7 +504,7 @@ public class OpBuilder {
 	 *            The type of the output.
 	 */
 	public final class Arity2_IV_OT<I1, I2, O> {
-
+		
 		private final WeakReference<I1> in1;
 		private final WeakReference<I2> in2;
 		private final Nil<O> outType;
@@ -511,11 +518,11 @@ public class OpBuilder {
 		public BiFunction<I1, I2, O> function() {
 			return Functions.match(ops, opName, type(in1), type(in2), outType);
 		}
-
+		
 		public Computers.Arity2<I1, I2, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(in2), outType);
 		}
-
+		
 		public O apply() {
 			return function().apply(in1.get(), in2.get());
 		}
@@ -556,11 +563,10 @@ public class OpBuilder {
 			return Functions.match(ops, opName, type(in1), type(in2), Nil.of(Object.class));
 		}
 
-		public Inplaces.Arity2_1<I1, I2> inplace1() {
+		public Inplaces.Arity2_1<I1, I2> inplace1(){
 			return Inplaces.match1(ops, opName, type(in1), type(in2));
 		}
-
-		public Inplaces.Arity2_2<I1, I2> inplace2() {
+		public Inplaces.Arity2_2<I1, I2> inplace2(){
 			return Inplaces.match2(ops, opName, type(in1), type(in2));
 		}
 
@@ -571,7 +577,6 @@ public class OpBuilder {
 		public void mutate1() {
 			inplace1().mutate(in1.get(), in2.get());
 		}
-
 		public void mutate2() {
 			inplace2().mutate(in1.get(), in2.get());
 		}
@@ -581,10 +586,8 @@ public class OpBuilder {
 	 * Builder with arity 2, input value given, output value given.
 	 *
 	 * @author Curtis Rueden
-	 * @param <I1>
-	 *            The type of input 1.
-	 * @param <I2>
-	 *            The type of input 2.
+	 * @param <I1> The type of input 1.
+	 * @param <I2> The type of input 2.
 	 */
 	public final class Arity2_IV_OV<I1, I2, O> {
 
@@ -601,12 +604,13 @@ public class OpBuilder {
 		public Computers.Arity2<I1, I2, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(in2), type(out));
 		}
-
+		
 		public void compute() {
 			computer().compute(in1.get(), in2.get(), out.get());
 		}
-
+		
 	}
+
 
 	/**
 	 * Builder with arity 3, input type given, output type given.
@@ -642,15 +646,13 @@ public class OpBuilder {
 		public Computers.Arity3<I1, I2, I3, O> computer() {
 			return Computers.match(ops, opName, in1Type, in2Type, in3Type, outType);
 		}
-
+		
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
 			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type);
 		}
-
 		public Inplaces.Arity3_2<I1, I2, I3> inplace2() {
 			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type);
 		}
-
 		public Inplaces.Arity3_3<I1, I2, I3> inplace3() {
 			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type);
 		}
@@ -687,7 +689,7 @@ public class OpBuilder {
 		public <O> Arity3_IT_OT<I1, I2, I3, O> outType(final Nil<O> outType) {
 			return new Arity3_IT_OT<>(in1Type, in2Type, in3Type, outType);
 		}
-
+		
 		public Functions.Arity3<I1, I2, I3, ?> function() {
 			return Functions.match(ops, opName, in1Type, in2Type, in3Type, Nil.of(Object.class));
 		}
@@ -695,11 +697,9 @@ public class OpBuilder {
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
 			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type);
 		}
-
 		public Inplaces.Arity3_2<I1, I2, I3> inplace2() {
 			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type);
 		}
-
 		public Inplaces.Arity3_3<I1, I2, I3> inplace3() {
 			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type);
 		}
@@ -719,7 +719,7 @@ public class OpBuilder {
 	 *            The type of the output.
 	 */
 	public final class Arity3_IV_OT<I1, I2, I3, O> {
-
+		
 		private final WeakReference<I1> in1;
 		private final WeakReference<I2> in2;
 		private final WeakReference<I3> in3;
@@ -735,11 +735,11 @@ public class OpBuilder {
 		public Functions.Arity3<I1, I2, I3, O> function() {
 			return Functions.match(ops, opName, type(in1), type(in2), type(in3), outType);
 		}
-
+		
 		public Computers.Arity3<I1, I2, I3, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(in2), type(in3), outType);
 		}
-
+		
 		public O apply() {
 			return function().apply(in1.get(), in2.get(), in3.get());
 		}
@@ -784,15 +784,13 @@ public class OpBuilder {
 			return Functions.match(ops, opName, type(in1), type(in2), type(in3), Nil.of(Object.class));
 		}
 
-		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
+		public Inplaces.Arity3_1<I1, I2, I3> inplace1(){
 			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3));
 		}
-
-		public Inplaces.Arity3_2<I1, I2, I3> inplace2() {
+		public Inplaces.Arity3_2<I1, I2, I3> inplace2(){
 			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3));
 		}
-
-		public Inplaces.Arity3_3<I1, I2, I3> inplace3() {
+		public Inplaces.Arity3_3<I1, I2, I3> inplace3(){
 			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3));
 		}
 
@@ -803,11 +801,9 @@ public class OpBuilder {
 		public void mutate1() {
 			inplace1().mutate(in1.get(), in2.get(), in3.get());
 		}
-
 		public void mutate2() {
 			inplace2().mutate(in1.get(), in2.get(), in3.get());
 		}
-
 		public void mutate3() {
 			inplace3().mutate(in1.get(), in2.get(), in3.get());
 		}
@@ -817,12 +813,9 @@ public class OpBuilder {
 	 * Builder with arity 3, input value given, output value given.
 	 *
 	 * @author Curtis Rueden
-	 * @param <I1>
-	 *            The type of input 1.
-	 * @param <I2>
-	 *            The type of input 2.
-	 * @param <I3>
-	 *            The type of input 3.
+	 * @param <I1> The type of input 1.
+	 * @param <I2> The type of input 2.
+	 * @param <I3> The type of input 3.
 	 */
 	public final class Arity3_IV_OV<I1, I2, I3, O> {
 
@@ -841,11 +834,11 @@ public class OpBuilder {
 		public Computers.Arity3<I1, I2, I3, O> computer() {
 			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(out));
 		}
-
+		
 		public void compute() {
 			computer().compute(in1.get(), in2.get(), in3.get(), out.get());
 		}
-
+		
 	}
 
 }

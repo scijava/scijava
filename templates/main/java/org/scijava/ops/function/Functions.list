@@ -1,0 +1,59 @@
+.include Globals.list
+arities = (3..numFunctions).collect()
+
+[Functions.java]
+arityClassName = ```
+{ arity ->
+  arity == 0 ? 'Producer' :
+  arity == 1 ? 'Function' :
+  arity == 2 ? 'BiFunction' :
+  "Functions.Arity${arity}"
+}
+```
+arityClass = ```
+{ arity ->
+	arityClassName.call(arity) + '.class'
+}
+```
+generics = ```
+{ arity ->
+  '<' + String.join(', ', genericParamTypes(arity)) + '>'
+}
+```
+genericsO2 = ```
+{ arity ->
+  arity == 0 ? '<O2>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', O2>'
+}
+```
+matchParams = ```
+{ arity ->
+  generics = genericParamTypes(arity)
+  names = genericsNamesList(arity)
+  String.join(', ', (0..arity).stream().map{a -> "final Nil<${generics[a]}> ${names[a]}Type"}.collect())
+}
+```
+typeArgs = ```
+{ arity ->
+  String.join(', ', genericsNamesList(arity).stream().map{a -> "${a}Type.getType()"}.collect())
+}
+```
+nilArgs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  String.join(', ', names.subList(0, names.size() - 1).stream().map{a -> "${a}Type"}.collect())
+}
+```
+applyParams = ```
+{ arity ->
+  typeParams = typeParamsList(arity)
+  typeParams.remove(typeParams.size() - 1)
+  String.join(', ', typeParams)
+}
+```
+applyArgs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  String.join(', ', names[0..names.size() - 2])
+}
+```

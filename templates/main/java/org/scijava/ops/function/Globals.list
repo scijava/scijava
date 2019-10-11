@@ -1,0 +1,39 @@
+maxArity = 5
+numConsumers = maxArity+1
+
+consumerArity = ```
+{ arity ->
+  arity == 0 ? 'Consumer' :
+  arity == 1 ? 'BiConsumer' :
+  "Consumers.Arity${arity+1}"
+}
+```
+genericParamTypes = ```
+{ arity ->
+  arity == 0 ? ['O'] :
+  arity == 1 ? ['I', 'O'] :
+  (1..arity).stream().map{a -> "I$a"}.collect() + ['O']
+}
+```
+genericsNamesList = ```
+{ arity ->
+  genericParamTypes(arity).stream().map{a -> 
+    a == 'O' ? "out" :
+    a == 'I' ? "in" :
+    "in${a.charAt(1)}"
+  }.collect()
+}
+```
+nilNames = ```
+{ arity ->
+  genericsNamesList(arity).stream().map{a -> "${a}Type"}.collect()
+}
+```
+typeParamsList = ```
+{ arity ->
+  generics = genericParamTypes(arity)
+  names = genericsNamesList(arity)
+  (0..arity).stream().map{a -> "${generics[a]} ${names[a]}"}.collect()
+}
+```
+

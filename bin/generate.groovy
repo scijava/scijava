@@ -74,7 +74,9 @@ def processTemplate(engine, context, templateFile, outFilename) {
 /* Evaluates a string using Groovy. */
 def parseValue(sh, translationsFile, key, expression) {
 	try {
-		return sh.evaluate(expression);
+		result = sh.evaluate(expression)
+		sh.setVariable(key, result)
+		return result
 	}
 	catch (groovy.lang.GroovyRuntimeException e) {
 		print("[WARNING] $translationsFile: " +
@@ -111,7 +113,8 @@ def translate(templateSubdirectory, templateFile, translationsFile) {
 	engine.init(p);
 
 	// read translation lines
-	context = outputFilename = null;
+	outputFilename = null;
+	context = globalContext = new org.apache.velocity.VelocityContext();
 	reader = new java.io.BufferedReader(new java.io.FileReader("$templateSubdirectory/$translationsFile"));
 
 	sh = new groovy.lang.GroovyShell();
@@ -131,7 +134,7 @@ def translate(templateSubdirectory, templateFile, translationsFile) {
 				subPath = templateSubdirectory.substring(templateDirectory.length() + 1);
 				outputFilename = "$subPath/$outputFilename";
 			}
-			context = new org.apache.velocity.VelocityContext();
+			context = new org.apache.velocity.VelocityContext(globalContext);
 			continue;
 		}
 

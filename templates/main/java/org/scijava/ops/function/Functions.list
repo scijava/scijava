@@ -1,5 +1,5 @@
 .include Globals.list
-arities = (3..numFunctions).collect()
+arities = (3..maxArity).collect()
 
 [Functions.java]
 arityClassName = ```

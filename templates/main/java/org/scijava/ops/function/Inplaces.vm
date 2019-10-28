@@ -140,7 +140,7 @@ public final class Inplaces {
 		}
 	}
 
-#foreach($arity in [2..$numInplaces])
+#foreach($arity in [2..$maxArity])
 #set($cArity = $arity - 1)
 	@FunctionalInterface
 	public interface Arity${arity}$allMutableGenerics.call($arity) extends ${consumerArity.call($cArity)}$allMutableGenerics.call($arity) {

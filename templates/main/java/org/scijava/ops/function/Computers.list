@@ -1,5 +1,5 @@
 .include Globals.list
-arities = (0..numComputers).collect()
+arities = (0..maxArity).collect()
 
 [Computers.java]
 generics = ```

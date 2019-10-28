@@ -51,7 +51,7 @@ public final class Functions {
 
 	static {
 		final Map<Class<?>, Integer> functions = new HashMap<>(10);
-#foreach($arity in [0..$numFunctions])
+#foreach($arity in [0..$maxArity])
 		functions.put($arityClass.call($arity), $arity);
 #end
 		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
@@ -69,7 +69,7 @@ public final class Functions {
 		return ALL_FUNCTIONS.containsKey(Types.raw(type));
 	}
 
-#foreach($arity in [0..$numFunctions])
+#foreach($arity in [0..$maxArity])
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static $generics.call($arity) $arityClassName.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity)) {
 		final Type specialType = Types.parameterize($arityClass.call($arity), //

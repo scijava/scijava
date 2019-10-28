@@ -56,6 +56,7 @@ public final class Functions {
 		functions.put(BiFunction.class, 2);
 		functions.put(Functions.Arity3.class, 3);
 		functions.put(Functions.Arity4.class, 4);
+		functions.put(Functions.Arity5.class, 5);
 		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
 	}
 
@@ -123,6 +124,17 @@ public final class Functions {
 				opName, //
 				Nil.of(specialType), //
 				new Nil[] { in1Type, in2Type, in3Type, in4Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, O> Functions.Arity5<I1, I2, I3, I4, I5, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity5.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), outType.getType() });
+		return (Functions.Arity5) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type }, //
 				outType);
 	}
 
@@ -231,6 +243,65 @@ public final class Functions {
 		default <O2> Arity4<I1, I2, I3, I4, O2> andThen(Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
 			return (I1 in1, I2 in2, I3 in3, I4 in4) -> after.apply(apply(in1, in2, in3, in4));
+		}
+	}
+	
+	/**
+	 * A 5-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity5<I1, I2, I3, I4, I5, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity5<I1, I2, I3, I4, I5, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) -> after.apply(apply(in1, in2, in3, in4, in5));
 		}
 	}
 	

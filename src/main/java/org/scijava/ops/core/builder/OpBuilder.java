@@ -118,6 +118,36 @@ public class OpBuilder {
 		return new Arity3_IT_OU<>(in1Type, in2Type, in3Type);
 	}
 
+	/** Specifies 4 input by value. */
+	public <I1, I2, I3, I4> Arity4_IV_OU<I1, I2, I3, I4> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4) {
+		return new Arity4_IV_OU<>(in1, in2, in3, in4);
+	}
+
+	/** Specifies 4 input by raw type. */
+	public <I1, I2, I3, I4> Arity4_IT_OU<I1, I2, I3, I4> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class) {
+		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class));
+	}
+
+	/** Specifies 4 input by generic type. */
+	public <I1, I2, I3, I4> Arity4_IT_OU<I1, I2, I3, I4> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type) {
+		return new Arity4_IT_OU<>(in1Type, in2Type, in3Type, in4Type);
+	}
+
+	/** Specifies 5 input by value. */
+	public <I1, I2, I3, I4, I5> Arity5_IV_OU<I1, I2, I3, I4, I5> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5) {
+		return new Arity5_IV_OU<>(in1, in2, in3, in4, in5);
+	}
+
+	/** Specifies 5 input by raw type. */
+	public <I1, I2, I3, I4, I5> Arity5_IT_OU<I1, I2, I3, I4, I5> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class) {
+		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class));
+	}
+
+	/** Specifies 5 input by generic type. */
+	public <I1, I2, I3, I4, I5> Arity5_IT_OU<I1, I2, I3, I4, I5> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type) {
+		return new Arity5_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type);
+	}
+
 
 	// -- Helper methods --
 
@@ -837,6 +867,559 @@ public class OpBuilder {
 		
 		public void compute() {
 			computer().compute(in1.get(), in2.get(), in3.get(), out.get());
+		}
+		
+	}
+
+
+	/**
+	 * Builder with arity 4, input type given, output type given.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 * @param <O>
+	 *            The type of the output.
+	 */
+	public final class Arity4_IT_OT<I1, I2, I3, I4, O> {
+
+		private final Nil<I1> in1Type;
+		private final Nil<I2> in2Type;
+		private final Nil<I3> in3Type;
+		private final Nil<I4> in4Type;
+		private final Nil<O> outType;
+
+		public Arity4_IT_OT(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<O> outType) {
+			this.in1Type = in1Type;
+			this.in2Type = in2Type;
+			this.in3Type = in3Type;
+			this.in4Type = in4Type;
+			this.outType = outType;
+		}
+
+		public Functions.Arity4<I1, I2, I3, I4, O> function() {
+			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, outType);
+		}
+
+		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
+			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, outType);
+		}
+		
+		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
+			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+		public Inplaces.Arity4_2<I1, I2, I3, I4> inplace2() {
+			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+		public Inplaces.Arity4_3<I1, I2, I3, I4> inplace3() {
+			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+		public Inplaces.Arity4_4<I1, I2, I3, I4> inplace4() {
+			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 4, input type given, output unspecified.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 */
+	public final class Arity4_IT_OU<I1, I2, I3, I4> {
+
+		private final Nil<I1> in1Type;
+		private final Nil<I2> in2Type;
+		private final Nil<I3> in3Type;
+		private final Nil<I4> in4Type;
+
+		public Arity4_IT_OU(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type) {
+			this.in1Type = in1Type;
+			this.in2Type = in2Type;
+			this.in3Type = in3Type;
+			this.in4Type = in4Type;
+		}
+
+		public <O> Arity4_IT_OT<I1, I2, I3, I4, O> outType(final Class<O> outType) {
+			return outType(Nil.of(outType));
+		}
+
+		public <O> Arity4_IT_OT<I1, I2, I3, I4, O> outType(final Nil<O> outType) {
+			return new Arity4_IT_OT<>(in1Type, in2Type, in3Type, in4Type, outType);
+		}
+		
+		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
+			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class));
+		}
+
+		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
+			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+		public Inplaces.Arity4_2<I1, I2, I3, I4> inplace2() {
+			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+		public Inplaces.Arity4_3<I1, I2, I3, I4> inplace3() {
+			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+		public Inplaces.Arity4_4<I1, I2, I3, I4> inplace4() {
+			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type);
+		}
+	}
+
+	/**
+	 * Builder with arity 4, input value given, output type given.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 * @param <O>
+	 *            The type of the output.
+	 */
+	public final class Arity4_IV_OT<I1, I2, I3, I4, O> {
+		
+		private final WeakReference<I1> in1;
+		private final WeakReference<I2> in2;
+		private final WeakReference<I3> in3;
+		private final WeakReference<I4> in4;
+		private final Nil<O> outType;
+
+		public Arity4_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final Nil<O> outType) {
+			this.in1 = new WeakReference<>(in1);
+			this.in2 = new WeakReference<>(in2);
+			this.in3 = new WeakReference<>(in3);
+			this.in4 = new WeakReference<>(in4);
+			this.outType = outType;
+		}
+
+		public Functions.Arity4<I1, I2, I3, I4, O> function() {
+			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), outType);
+		}
+		
+		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
+			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), outType);
+		}
+		
+		public O apply() {
+			return function().apply(in1.get(), in2.get(), in3.get(), in4.get());
+		}
+	}
+
+	/**
+	 * Builder with arity 4, input value given, output unspecified.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 */
+	public final class Arity4_IV_OU<I1, I2, I3, I4> {
+
+		private final WeakReference<I1> in1;
+		private final WeakReference<I2> in2;
+		private final WeakReference<I3> in3;
+		private final WeakReference<I4> in4;
+
+		public Arity4_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4) {
+			this.in1 = new WeakReference<>(in1);
+			this.in2 = new WeakReference<>(in2);
+			this.in3 = new WeakReference<>(in3);
+			this.in4 = new WeakReference<>(in4);
+		}
+
+		public <O> Arity4_IV_OV<I1, I2, I3, I4, O> output(final O out) {
+			return new Arity4_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), out);
+		}
+
+		public <O> Arity4_IV_OT<I1, I2, I3, I4, O> outType(final Class<O> outType) {
+			return outType(Nil.of(outType));
+		}
+
+		public <O> Arity4_IV_OT<I1, I2, I3, I4, O> outType(final Nil<O> outType) {
+			return new Arity4_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), outType);
+		}
+
+		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
+			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class));
+		}
+
+		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1(){
+			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4));
+		}
+		public Inplaces.Arity4_2<I1, I2, I3, I4> inplace2(){
+			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4));
+		}
+		public Inplaces.Arity4_3<I1, I2, I3, I4> inplace3(){
+			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4));
+		}
+		public Inplaces.Arity4_4<I1, I2, I3, I4> inplace4(){
+			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4));
+		}
+
+		public Object apply() {
+			return function().apply(in1.get(), in2.get(), in3.get(), in4.get());
+		}
+
+		public void mutate1() {
+			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+		}
+		public void mutate2() {
+			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+		}
+		public void mutate3() {
+			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+		}
+		public void mutate4() {
+			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+		}
+	}
+
+	/**
+	 * Builder with arity 4, input value given, output value given.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1> The type of input 1.
+	 * @param <I2> The type of input 2.
+	 * @param <I3> The type of input 3.
+	 * @param <I4> The type of input 4.
+	 */
+	public final class Arity4_IV_OV<I1, I2, I3, I4, O> {
+
+		private final WeakReference<I1> in1;
+		private final WeakReference<I2> in2;
+		private final WeakReference<I3> in3;
+		private final WeakReference<I4> in4;
+		private final WeakReference<O> out;
+
+		public Arity4_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final O out) {
+			this.in1 = new WeakReference<>(in1);
+			this.in2 = new WeakReference<>(in2);
+			this.in3 = new WeakReference<>(in3);
+			this.in4 = new WeakReference<>(in4);
+			this.out = new WeakReference<>(out);
+		}
+
+		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
+			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(out));
+		}
+		
+		public void compute() {
+			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), out.get());
+		}
+		
+	}
+
+
+	/**
+	 * Builder with arity 5, input type given, output type given.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 * @param <I5>
+	 *            The type of input 5.
+	 * @param <O>
+	 *            The type of the output.
+	 */
+	public final class Arity5_IT_OT<I1, I2, I3, I4, I5, O> {
+
+		private final Nil<I1> in1Type;
+		private final Nil<I2> in2Type;
+		private final Nil<I3> in3Type;
+		private final Nil<I4> in4Type;
+		private final Nil<I5> in5Type;
+		private final Nil<O> outType;
+
+		public Arity5_IT_OT(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType) {
+			this.in1Type = in1Type;
+			this.in2Type = in2Type;
+			this.in3Type = in3Type;
+			this.in4Type = in4Type;
+			this.in5Type = in5Type;
+			this.outType = outType;
+		}
+
+		public Functions.Arity5<I1, I2, I3, I4, I5, O> function() {
+			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+		}
+
+		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
+			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+		}
+		
+		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
+			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_2<I1, I2, I3, I4, I5> inplace2() {
+			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_3<I1, I2, I3, I4, I5> inplace3() {
+			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_4<I1, I2, I3, I4, I5> inplace4() {
+			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_5<I1, I2, I3, I4, I5> inplace5() {
+			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 5, input type given, output unspecified.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 * @param <I5>
+	 *            The type of input 5.
+	 */
+	public final class Arity5_IT_OU<I1, I2, I3, I4, I5> {
+
+		private final Nil<I1> in1Type;
+		private final Nil<I2> in2Type;
+		private final Nil<I3> in3Type;
+		private final Nil<I4> in4Type;
+		private final Nil<I5> in5Type;
+
+		public Arity5_IT_OU(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type) {
+			this.in1Type = in1Type;
+			this.in2Type = in2Type;
+			this.in3Type = in3Type;
+			this.in4Type = in4Type;
+			this.in5Type = in5Type;
+		}
+
+		public <O> Arity5_IT_OT<I1, I2, I3, I4, I5, O> outType(final Class<O> outType) {
+			return outType(Nil.of(outType));
+		}
+
+		public <O> Arity5_IT_OT<I1, I2, I3, I4, I5, O> outType(final Nil<O> outType) {
+			return new Arity5_IT_OT<>(in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+		}
+		
+		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
+			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class));
+		}
+
+		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
+			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_2<I1, I2, I3, I4, I5> inplace2() {
+			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_3<I1, I2, I3, I4, I5> inplace3() {
+			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_4<I1, I2, I3, I4, I5> inplace4() {
+			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+		public Inplaces.Arity5_5<I1, I2, I3, I4, I5> inplace5() {
+			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+	}
+
+	/**
+	 * Builder with arity 5, input value given, output type given.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 * @param <I5>
+	 *            The type of input 5.
+	 * @param <O>
+	 *            The type of the output.
+	 */
+	public final class Arity5_IV_OT<I1, I2, I3, I4, I5, O> {
+		
+		private final WeakReference<I1> in1;
+		private final WeakReference<I2> in2;
+		private final WeakReference<I3> in3;
+		private final WeakReference<I4> in4;
+		private final WeakReference<I5> in5;
+		private final Nil<O> outType;
+
+		public Arity5_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final Nil<O> outType) {
+			this.in1 = new WeakReference<>(in1);
+			this.in2 = new WeakReference<>(in2);
+			this.in3 = new WeakReference<>(in3);
+			this.in4 = new WeakReference<>(in4);
+			this.in5 = new WeakReference<>(in5);
+			this.outType = outType;
+		}
+
+		public Functions.Arity5<I1, I2, I3, I4, I5, O> function() {
+			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
+		}
+		
+		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
+			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
+		}
+		
+		public O apply() {
+			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+	}
+
+	/**
+	 * Builder with arity 5, input value given, output unspecified.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1>
+	 *            The type of input 1.
+	 * @param <I2>
+	 *            The type of input 2.
+	 * @param <I3>
+	 *            The type of input 3.
+	 * @param <I4>
+	 *            The type of input 4.
+	 * @param <I5>
+	 *            The type of input 5.
+	 */
+	public final class Arity5_IV_OU<I1, I2, I3, I4, I5> {
+
+		private final WeakReference<I1> in1;
+		private final WeakReference<I2> in2;
+		private final WeakReference<I3> in3;
+		private final WeakReference<I4> in4;
+		private final WeakReference<I5> in5;
+
+		public Arity5_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5) {
+			this.in1 = new WeakReference<>(in1);
+			this.in2 = new WeakReference<>(in2);
+			this.in3 = new WeakReference<>(in3);
+			this.in4 = new WeakReference<>(in4);
+			this.in5 = new WeakReference<>(in5);
+		}
+
+		public <O> Arity5_IV_OV<I1, I2, I3, I4, I5, O> output(final O out) {
+			return new Arity5_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), out);
+		}
+
+		public <O> Arity5_IV_OT<I1, I2, I3, I4, I5, O> outType(final Class<O> outType) {
+			return outType(Nil.of(outType));
+		}
+
+		public <O> Arity5_IV_OT<I1, I2, I3, I4, I5, O> outType(final Nil<O> outType) {
+			return new Arity5_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), outType);
+		}
+
+		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
+			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class));
+		}
+
+		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1(){
+			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+		}
+		public Inplaces.Arity5_2<I1, I2, I3, I4, I5> inplace2(){
+			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+		}
+		public Inplaces.Arity5_3<I1, I2, I3, I4, I5> inplace3(){
+			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+		}
+		public Inplaces.Arity5_4<I1, I2, I3, I4, I5> inplace4(){
+			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+		}
+		public Inplaces.Arity5_5<I1, I2, I3, I4, I5> inplace5(){
+			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+		}
+
+		public Object apply() {
+			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+
+		public void mutate1() {
+			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+		public void mutate2() {
+			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+		public void mutate3() {
+			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+		public void mutate4() {
+			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+		public void mutate5() {
+			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+		}
+	}
+
+	/**
+	 * Builder with arity 5, input value given, output value given.
+	 *
+	 * @author Curtis Rueden
+	 * @param <I1> The type of input 1.
+	 * @param <I2> The type of input 2.
+	 * @param <I3> The type of input 3.
+	 * @param <I4> The type of input 4.
+	 * @param <I5> The type of input 5.
+	 */
+	public final class Arity5_IV_OV<I1, I2, I3, I4, I5, O> {
+
+		private final WeakReference<I1> in1;
+		private final WeakReference<I2> in2;
+		private final WeakReference<I3> in3;
+		private final WeakReference<I4> in4;
+		private final WeakReference<I5> in5;
+		private final WeakReference<O> out;
+
+		public Arity5_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final O out) {
+			this.in1 = new WeakReference<>(in1);
+			this.in2 = new WeakReference<>(in2);
+			this.in3 = new WeakReference<>(in3);
+			this.in4 = new WeakReference<>(in4);
+			this.in5 = new WeakReference<>(in5);
+			this.out = new WeakReference<>(out);
+		}
+
+		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
+			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out));
+		}
+		
+		public void compute() {
+			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), out.get());
 		}
 		
 	}

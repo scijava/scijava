@@ -260,4 +260,73 @@ public final class Consumers {
 		}
 	}
 	
+	/**
+	 * Represents an operation that accepts 6 input arguments and returns no
+	 * result. This is the 6-arity specialization of {@link Consumer}. Unlike
+	 * most other functional interfaces, this interface is expected to operate via
+	 * side-effects.
+	 * <p>
+	 * This is a functional interface whose functional method is
+	 * {@link \#accept(Object, Object, Object, Object, Object, Object)}.
+	 * </p>
+	 *
+	 * @param <I1>
+	 *            the type of argument 1.
+	 * @param <I2>
+	 *            the type of argument 2.
+	 * @param <I3>
+	 *            the type of argument 3.
+	 * @param <I4>
+	 *            the type of argument 4.
+	 * @param <I5>
+	 *            the type of argument 5.
+	 * @param <I6>
+	 *            the type of argument 6.
+	 * @see Consumer
+	 */
+	@FunctionalInterface
+	public interface Arity6<I1, I2, I3, I4, I5, I6>{
+
+		/**
+		 * Performs this operation on the given arguments.
+		 *
+		 * @param in1
+		 *            input argument 1.
+		 * @param in2
+		 *            input argument 2.
+		 * @param in3
+		 *            input argument 3.
+		 * @param in4
+		 *            input argument 4.
+		 * @param in5
+		 *            input argument 5.
+		 * @param in6
+		 *            input argument 6.
+		 */
+		void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6);
+
+		/**
+		 * Returns a composed {@code Consumer.Arity6} that performs, in sequence, this
+		 * operation followed by the {@code after} operation. If performing either
+		 * operation throws an exception, it is relayed to the caller of the composed
+		 * operation. If performing this operation throws an exception, the
+		 * {@code after} operation will not be performed.
+		 *
+		 * @param after
+		 *            the operation to perform after this operation
+		 * @return a composed {@code Consumer.Arity6} that performs in sequence this
+		 *         operation followed by the {@code after} operation
+		 * @throws NullPointerException
+		 *             if {@code after} is null
+		 */
+		default Arity6<I1, I2, I3, I4, I5, I6> andThen(Arity6<? super I1, ? super I2, ? super I3, ? super I4, ? super I5, ? super I6> after) {
+			Objects.requireNonNull(after);
+
+			return (in1, in2, in3, in4, in5, in6) -> {
+				accept(in1, in2, in3, in4, in5, in6);
+				after.accept(in1, in2, in3, in4, in5, in6);
+			};
+		}
+	}
+	
 }

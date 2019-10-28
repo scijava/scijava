@@ -1,5 +1,5 @@
 .include Globals.list
-arities = (1..numInplaces).collect()
+arities = (1..maxArity).collect()
 
 [Inplaces.java]
 simplifiedType = ```

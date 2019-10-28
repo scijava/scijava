@@ -1,3 +1,4 @@
+string = "hello world"
 maxArity = 5
 numConsumers = maxArity+1
 

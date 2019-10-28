@@ -58,6 +58,7 @@ public final class Computers {
 		computers.put(Arity2.class, 2);
 		computers.put(Arity3.class, 3);
 		computers.put(Arity4.class, 4);
+		computers.put(Arity5.class, 5);
 		ALL_COMPUTERS = ImmutableBiMap.copyOf(computers);
 	}
 
@@ -167,6 +168,25 @@ public final class Computers {
 			outType);
 	}
 
+	public static <I1, I2, I3, I4, I5, O> Arity5<I1, I2, I3, I4, I5, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType)
+	{
+		final Nil<Arity5<I1, I2, I3, I4, I5, O>> specialType =
+			new Nil<Arity5<I1, I2, I3, I4, I5, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity5.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, outType }, //
+			outType);
+	}
+
 	// -- END TEMP --
 
 	@FunctionalInterface
@@ -216,6 +236,16 @@ public final class Computers {
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final O out) {
 			compute(in1, in2, in3, in4, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity5<I1, I2, I3, I4, I5, O> extends Consumers.Arity6<I1, I2, I3, I4, I5, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final O out) {
+			compute(in1, in2, in3, in4, in5, out);
 		}
 	}
 }

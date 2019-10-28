@@ -75,6 +75,11 @@ public final class Inplaces {
 		inplaces.put(Inplaces.Arity4_2.class, new InplaceInfo(4, 1));
 		inplaces.put(Inplaces.Arity4_3.class, new InplaceInfo(4, 2));
 		inplaces.put(Inplaces.Arity4_4.class, new InplaceInfo(4, 3));
+		inplaces.put(Inplaces.Arity5_1.class, new InplaceInfo(5, 0));
+		inplaces.put(Inplaces.Arity5_2.class, new InplaceInfo(5, 1));
+		inplaces.put(Inplaces.Arity5_3.class, new InplaceInfo(5, 2));
+		inplaces.put(Inplaces.Arity5_4.class, new InplaceInfo(5, 3));
+		inplaces.put(Inplaces.Arity5_5.class, new InplaceInfo(5, 4));
 		ALL_INPLACES = Collections.unmodifiableMap(inplaces);
 	}
 
@@ -207,6 +212,61 @@ public final class Inplaces {
 				new Nil[] { in1Type, in2Type, in3Type, ioType }, //
 				ioType);
 	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <IO, I2, I3, I4, I5> Arity5_1<IO, I2, I3, I4, I5> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type) {
+
+		Type inplaceType = Types.parameterize(Arity5_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType()});
+
+		return (Arity5_1)ops.findOp( //
+				opName, //
+				Nil.of(inplaceType), //
+				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type }, //
+				ioType);
+	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, IO, I3, I4, I5> Arity5_2<I1, IO, I3, I4, I5> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type) {
+
+		Type inplaceType = Types.parameterize(Arity5_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType()});
+
+		return (Arity5_2)ops.findOp( //
+				opName, //
+				Nil.of(inplaceType), //
+				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type }, //
+				ioType);
+	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, IO, I4, I5> Arity5_3<I1, I2, IO, I4, I5> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type) {
+
+		Type inplaceType = Types.parameterize(Arity5_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType()});
+
+		return (Arity5_3)ops.findOp( //
+				opName, //
+				Nil.of(inplaceType), //
+				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type }, //
+				ioType);
+	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, IO, I5> Arity5_4<I1, I2, I3, IO, I5> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type) {
+
+		Type inplaceType = Types.parameterize(Arity5_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType()});
+
+		return (Arity5_4)ops.findOp( //
+				opName, //
+				Nil.of(inplaceType), //
+				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type }, //
+				ioType);
+	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, IO> Arity5_5<I1, I2, I3, I4, IO> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType) {
+
+		Type inplaceType = Types.parameterize(Arity5_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType()});
+
+		return (Arity5_5)ops.findOp( //
+				opName, //
+				Nil.of(inplaceType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType }, //
+				ioType);
+	}
 
 	public static class InplaceInfo {
 
@@ -327,6 +387,50 @@ public final class Inplaces {
 	public interface Arity4_4<I1, I2, I3, IO> extends Arity4<I1, I2, I3, IO> {
 		@Override
 		void mutate(I1 in1, I2 in2, I3 in3, @Mutable IO io);
+	}
+	
+	@FunctionalInterface
+	public interface Arity5<IO1, IO2, IO3, IO4, IO5> extends Consumers.Arity5<IO1, IO2, IO3, IO4, IO5> {
+		void mutate(@Mutable IO1 io1, @Mutable IO2 io2, @Mutable IO3 io3, @Mutable IO4 io4, @Mutable IO5 io5);
+
+		@Override
+		default void accept(@Mutable IO1 io1, @Mutable IO2 io2, @Mutable IO3 io3, @Mutable IO4 io4, @Mutable IO5 io5) {
+			mutate(io1, io2, io3, io4, io5);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity5_1<IO, I2, I3, I4, I5> extends Arity5<IO, I2, I3, I4, I5> {
+		@Override
+		void mutate(@Mutable IO io, I2 in2, I3 in3, I4 in4, I5 in5);
+	}
+	
+
+	@FunctionalInterface
+	public interface Arity5_2<I1, IO, I3, I4, I5> extends Arity5<I1, IO, I3, I4, I5> {
+		@Override
+		void mutate(I1 in1, @Mutable IO io, I3 in3, I4 in4, I5 in5);
+	}
+	
+
+	@FunctionalInterface
+	public interface Arity5_3<I1, I2, IO, I4, I5> extends Arity5<I1, I2, IO, I4, I5> {
+		@Override
+		void mutate(I1 in1, I2 in2, @Mutable IO io, I4 in4, I5 in5);
+	}
+	
+
+	@FunctionalInterface
+	public interface Arity5_4<I1, I2, I3, IO, I5> extends Arity5<I1, I2, I3, IO, I5> {
+		@Override
+		void mutate(I1 in1, I2 in2, I3 in3, @Mutable IO io, I5 in5);
+	}
+	
+
+	@FunctionalInterface
+	public interface Arity5_5<I1, I2, I3, I4, IO> extends Arity5<I1, I2, I3, I4, IO> {
+		@Override
+		void mutate(I1 in1, I2 in2, I3 in3, I4 in4, @Mutable IO io);
 	}
 	
 }

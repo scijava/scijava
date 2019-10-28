@@ -40,6 +40,7 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 
@@ -142,10 +143,12 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		name("test.addArrays").input().output(result).compute();
 		assertTrue(Arrays.equals(expected, result));
 	}
+	
+
 
 	// -- 1-ary --
 
-	/** Matches a unary function using input types only. */
+	/** Matches a 1-arity function using input types only. */
 	@Test
 	public void testArity1_IT_OU_matchF() {
 		final Double input = 1.;
@@ -156,18 +159,18 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Matches an inplace with a given output type. */
+	/** Matches a 1-arity inplace1 with a given output type. */
 	@Test
-	public void testArity1_IT_OU_matchI() {
-		final double[] actual = { 1, 2, 3 };
-		final double[] expected = { 1, 2, 3 };
+	public void testArity1_IT_OU_matchI1() {
+		final double[] input = { 1, 2, 3 };
+		final double[] expected = { 1.0, 2.0, 3.0 };
 		final Inplaces.Arity1<double[]> op = //
 				name("test.mulArrays").inType(double[].class).inplace();
-		op.mutate(actual);
-		assertTrue(Arrays.equals(actual, expected));
+		op.mutate(input);
+		assertTrue(Arrays.equals(input, expected));
 	}
 
-	/** Matches a unary function using input types + output type. */
+	/** Matches a 1-arity function using input types + output type. */
 	@Test
 	public void testArity1_IT_OT_matchF() {
 		final Double input = 1.;
@@ -178,19 +181,19 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected, 0.);
 	}
 
-	/** Matches a unary computer using input types + output type. */
+	/** Matches a 1-arity computer using input types + output type. */
 	@Test
 	public void testArity1_IT_OT_matchC() {
-		double[] input = { 1, 2, 3 };
+		final double[] input = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 1, 2, 3 };
-		final Computers.Arity1<double[], double[]> castToInt = //
+		final Computers.Arity1<double[], double[]> op = //
 				name("test.addArrays").inType(double[].class).outType(double[].class).computer();
-		castToInt.compute(input, actual);
+		op.compute(input, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
-	/** Matches a unary function using input value only. */
+	/** Matches a 1-arity function using input value only. */
 	@Test
 	public void testArity1_IV_OU_matchF() {
 		final Double input = 1.;
@@ -201,18 +204,18 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Matches a nullary inplace with a given output value. */
+	/** Matches a 1-arity inplace1 with a given output value. */
 	@Test
-	public void testArity1_IV_OU_matchI() {
-		double[] result = { 1, 2, 3 };
-		double[] expected = { 1, 2, 3 };
+	public void testArity1_IV_OU_matchI1() {
+		final double[] input = { 1, 2, 3 };
+		double[] expected = { 1.0, 2.0, 3.0 };
 		final Inplaces.Arity1<double[]> op = //
-				name("test.mulArrays").input(result).inplace();
-		op.mutate(result);
-		assertTrue(Arrays.equals(expected, result));
+				name("test.mulArrays").input(input).inplace();
+		op.mutate(input);
+		assertTrue(Arrays.equals(expected, input));
 	}
 
-	/** Runs a unary function using input value only. */
+	/** Runs a 1-arity function using input value only. */
 	@Test
 	public void testArity1_IV_OU_runF() {
 		final Double input = 1.;
@@ -221,16 +224,16 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Runs a inplace with a given output value. */
+	/** Runs a 1-arity inplace1 with a given output value. */
 	@Test
-	public void testArity1_IV_OU_runI() {
-		final double[] actual = { 1, 2, 3 };
-		final double[] expected = { 1, 2, 3 };
-		name("test.mulArrays").input(actual).mutate();
-		assertTrue(Arrays.equals(actual, expected));
+	public void testArity1_IV_OU_runI1() {
+		final double[] input = { 1, 2, 3 };
+		final double[] expected = { 1.0, 2.0, 3.0 };
+		name("test.mulArrays").input(input).mutate();
+		assertTrue(Arrays.equals(input, expected));
 	}
 
-	/** Matches a unary function using input value + output type. */
+	/** Matches a 1-arity function using input value + output type. */
 	@Test
 	public void testArity1_IV_OT_matchF() {
 		final Double input = 1.;
@@ -247,9 +250,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 1, 2, 3 };
-		final Computers.Arity1<double[], double[]> castToInt = //
+		final Computers.Arity1<double[], double[]> op = //
 				name("test.addArrays").input(input).output(actual).computer();
-		castToInt.compute(input, actual);
+		op.compute(input, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -286,7 +289,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 
 	// -- 2-ary --
 
-	/** Matches a binary function using input types + output type. */
+	/** Matches a 2-arity function using input types only. */
 	@Test
 	public void testArity2_IT_OU_matchF() {
 		final Double input1 = 1.;
@@ -298,33 +301,30 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Matches a binary inplace1 using input types + output type. */
+	/** Matches a 2-arity inplace1 with a given output type. */
 	@Test
 	public void testArity2_IT_OU_matchI1() {
-		final double[] actual1 = { 1, 2, 3 };
-		final double[] actual2 = { 1, 2, 3 };
-		final double[] expected = { 1, 4, 9 };
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_1<double[], double[]> op = //
 				name("test.mulArrays").inType(double[].class, double[].class).inplace1();
-		op.mutate(actual1, actual2);
-		assertTrue(Arrays.equals(actual1, expected));
-		assertFalse(Arrays.equals(actual2, expected));
+		op.mutate(input1, input2);
+		assertTrue(Arrays.equals(input1, expected));
 	}
-
-	/** Matches a binary inplace1 using input types + output type. */
+	/** Matches a 2-arity inplace2 with a given output type. */
 	@Test
 	public void testArity2_IT_OU_matchI2() {
-		final double[] actual1 = { 1, 2, 3 };
-		final double[] actual2 = { 1, 2, 3 };
-		final double[] expected = { 1, 4, 9 };
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_2<double[], double[]> op = //
 				name("test.mulArrays").inType(double[].class, double[].class).inplace2();
-		op.mutate(actual1, actual2);
-		assertTrue(Arrays.equals(actual2, expected));
-		assertFalse(Arrays.equals(actual1, expected));
+		op.mutate(input1, input2);
+		assertTrue(Arrays.equals(input2, expected));
 	}
 
-	/** Matches a binary function using input types + output type. */
+	/** Matches a 2-arity function using input types + output type. */
 	@Test
 	public void testArity2_IT_OT_matchF() {
 		final Double input1 = 1.;
@@ -332,15 +332,15 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double expected = 2.;
 		final BiFunction<Double, Double, Double> op = //
 				name("test.addDoubles").inType(Double.class, Double.class).outType(Double.class).function();
-		final Double actual = op.apply(input1, input2);
-		assertEquals(actual, expected);
+		final double actual = op.apply(input1, input2);
+		assertEquals(actual, expected, 0.);
 	}
 
-	/** Matches a binary computer using input types + output type. */
+	/** Matches a 2-arity computer using input types + output type. */
 	@Test
 	public void testArity2_IT_OT_matchC() {
-		double[] input1 = { 1, 2, 3 };
-		double[] input2 = { 1, 2, 3 };
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
 		final Computers.Arity2<double[], double[], double[]> op = //
@@ -349,7 +349,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
-	/** Matches a binary function using input values only. */
+	/** Matches a 2-arity function using input value only. */
 	@Test
 	public void testArity2_IV_OU_matchF() {
 		final Double input1 = 1.;
@@ -361,33 +361,30 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Matches a binary inplace1 using input types + output type. */
+	/** Matches a 2-arity inplace1 with a given output value. */
 	@Test
 	public void testArity2_IV_OU_matchI1() {
-		final double[] actual1 = { 1, 2, 3 };
-		final double[] actual2 = { 1, 2, 3 };
-		final double[] expected = { 1, 4, 9 };
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_1<double[], double[]> op = //
-				name("test.mulArrays").input(actual1, actual2).inplace1();
-		op.mutate(actual1, actual2);
-		assertTrue(Arrays.equals(actual1, expected));
-		assertFalse(Arrays.equals(actual2, expected));
+				name("test.mulArrays").input(input1, input2).inplace1();
+		op.mutate(input1, input2);
+		assertTrue(Arrays.equals(expected, input1));
 	}
-
-	/** Matches a binary inplace1 using input types + output type. */
+	/** Matches a 2-arity inplace2 with a given output value. */
 	@Test
 	public void testArity2_IV_OU_matchI2() {
-		final double[] actual1 = { 1, 2, 3 };
-		final double[] actual2 = { 1, 2, 3 };
-		final double[] expected = { 1, 4, 9 };
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_2<double[], double[]> op = //
-				name("test.mulArrays").input(actual1, actual2).inplace2();
-		op.mutate(actual1, actual2);
-		assertTrue(Arrays.equals(actual2, expected));
-		assertFalse(Arrays.equals(actual1, expected));
+				name("test.mulArrays").input(input1, input2).inplace2();
+		op.mutate(input1, input2);
+		assertTrue(Arrays.equals(expected, input2));
 	}
 
-	/** Runs a binary function using input values only. */
+	/** Runs a 2-arity function using input value only. */
 	@Test
 	public void testArity2_IV_OU_runF() {
 		final Double input1 = 1.;
@@ -397,29 +394,26 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Matches a binary inplace1 using input types + output type. */
+	/** Runs a 2-arity inplace1 with a given output value. */
 	@Test
 	public void testArity2_IV_OU_runI1() {
-		final double[] actual1 = { 1, 2, 3 };
-		final double[] actual2 = { 1, 2, 3 };
-		final double[] expected = { 1, 4, 9 };
-		name("test.mulArrays").input(actual1, actual2).mutate1();
-		assertTrue(Arrays.equals(actual1, expected));
-		assertFalse(Arrays.equals(actual2, expected));
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 4.0, 9.0 };
+		name("test.mulArrays").input(input1, input2).mutate1();
+		assertTrue(Arrays.equals(input1, expected));
 	}
-
-	/** Matches a binary inplace1 using input types + output type. */
+	/** Runs a 2-arity inplace2 with a given output value. */
 	@Test
 	public void testArity2_IV_OU_runI2() {
-		final double[] actual1 = { 1, 2, 3 };
-		final double[] actual2 = { 1, 2, 3 };
-		final double[] expected = { 1, 4, 9 };
-		name("test.mulArrays").input(actual1, actual2).mutate2();
-		assertTrue(Arrays.equals(actual2, expected));
-		assertFalse(Arrays.equals(actual1, expected));
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 4.0, 9.0 };
+		name("test.mulArrays").input(input1, input2).mutate2();
+		assertTrue(Arrays.equals(input2, expected));
 	}
 
-	/** Matches a binary function using input value + output type. */
+	/** Matches a 2-arity function using input value + output type. */
 	@Test
 	public void testArity2_IV_OT_matchF() {
 		final Double input1 = 1.;
@@ -427,11 +421,11 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double expected = 2.;
 		final BiFunction<Double, Double, Double> op = //
 				name("test.addDoubles").input(input1, input2).outType(Double.class).function();
-		final Double actual = op.apply(input1, input2);
-		assertEquals(actual, expected);
+		final double actual = op.apply(input1, input2);
+		assertEquals(actual, expected, 0.);
 	}
 
-	/** Matches a binary computer using input value + output type. */
+	/** Matches a unary computer using input types + output type. */
 	@Test
 	public void testArity2_IV_OT_matchC() {
 		double[] input1 = { 1, 2, 3 };
@@ -439,12 +433,12 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
 		final Computers.Arity2<double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2).outType(double[].class).computer();
+				name("test.addArrays").input(input1, input2).output(actual).computer();
 		op.compute(input1, input2, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
-	/** Runs a binary function using input values + output type. */
+	/** Runs a unary function using input value + output type. */
 	@Test
 	public void testArity2_IV_OT_runF() {
 		final Double input1 = 1.;
@@ -454,7 +448,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertEquals(actual, expected);
 	}
 
-	/** Matches a binary computer using input value + output value. */
+	/** Matches a unary computer using input value + output value. */
 	@Test
 	public void testArity2_IV_OV_matchC() {
 		double[] input1 = { 1, 2, 3 };
@@ -467,7 +461,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
-	/** Runs a binary computer using input value + output value. */
+	/** Runs a unary computer using input value + output value. */
 	@Test
 	public void testArity2_IV_OV_runC() {
 		double[] input1 = { 1, 2, 3 };
@@ -475,6 +469,885 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
 		name("test.addArrays").input(input1, input2).output(actual).compute();
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	// -- 3-ary --
+
+	/** Matches a 3-arity function using input types only. */
+	@Test
+	public void testArity3_IT_OU_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double expected = 3.;
+		final Functions.Arity3<Double, Double, Double, ?> op = //
+				name("test.addDoubles").inType(Double.class, Double.class, Double.class).function();
+		final Object actual = op.apply(input1, input2, input3);
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a 3-arity inplace1 with a given output type. */
+	@Test
+	public void testArity3_IT_OU_matchI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 8.0, 27.0 };
+		final Inplaces.Arity3_1<double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class).inplace1();
+		op.mutate(input1, input2, input3);
+		assertTrue(Arrays.equals(input1, expected));
+	}
+	/** Matches a 3-arity inplace2 with a given output type. */
+	@Test
+	public void testArity3_IT_OU_matchI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 8.0, 27.0 };
+		final Inplaces.Arity3_2<double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class).inplace2();
+		op.mutate(input1, input2, input3);
+		assertTrue(Arrays.equals(input2, expected));
+	}
+	/** Matches a 3-arity inplace3 with a given output type. */
+	@Test
+	public void testArity3_IT_OU_matchI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 8.0, 27.0 };
+		final Inplaces.Arity3_3<double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class).inplace3();
+		op.mutate(input1, input2, input3);
+		assertTrue(Arrays.equals(input3, expected));
+	}
+
+	/** Matches a 3-arity function using input types + output type. */
+	@Test
+	public void testArity3_IT_OT_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double expected = 3.;
+		final Functions.Arity3<Double, Double, Double, Double> op = //
+				name("test.addDoubles").inType(Double.class, Double.class, Double.class).outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3);
+		assertEquals(actual, expected, 0.);
+	}
+
+	/** Matches a 3-arity computer using input types + output type. */
+	@Test
+	public void testArity3_IT_OT_matchC() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 3, 6, 9 };
+		final Computers.Arity3<double[], double[], double[], double[]> op = //
+				name("test.addArrays").inType(double[].class, double[].class, double[].class).outType(double[].class).computer();
+		op.compute(input1, input2, input3, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Matches a 3-arity function using input value only. */
+	@Test
+	public void testArity3_IV_OU_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double expected = 3.;
+		final Functions.Arity3<Double, Double, Double, ?> op = //
+				name("test.addDoubles").input(input1, input2, input3).function();
+		final Object actual = op.apply(input1, input2, input3);
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a 3-arity inplace1 with a given output value. */
+	@Test
+	public void testArity3_IV_OU_matchI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		double[] expected = { 1.0, 8.0, 27.0 };
+		final Inplaces.Arity3_1<double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3).inplace1();
+		op.mutate(input1, input2, input3);
+		assertTrue(Arrays.equals(expected, input1));
+	}
+	/** Matches a 3-arity inplace2 with a given output value. */
+	@Test
+	public void testArity3_IV_OU_matchI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		double[] expected = { 1.0, 8.0, 27.0 };
+		final Inplaces.Arity3_2<double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3).inplace2();
+		op.mutate(input1, input2, input3);
+		assertTrue(Arrays.equals(expected, input2));
+	}
+	/** Matches a 3-arity inplace3 with a given output value. */
+	@Test
+	public void testArity3_IV_OU_matchI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		double[] expected = { 1.0, 8.0, 27.0 };
+		final Inplaces.Arity3_3<double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3).inplace3();
+		op.mutate(input1, input2, input3);
+		assertTrue(Arrays.equals(expected, input3));
+	}
+
+	/** Runs a 3-arity function using input value only. */
+	@Test
+	public void testArity3_IV_OU_runF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double expected = 3.;
+		final Object actual = name("test.addDoubles").input(input1, input2, input3).apply();
+		assertEquals(actual, expected);
+	}
+
+	/** Runs a 3-arity inplace1 with a given output value. */
+	@Test
+	public void testArity3_IV_OU_runI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 8.0, 27.0 };
+		name("test.mulArrays").input(input1, input2, input3).mutate1();
+		assertTrue(Arrays.equals(input1, expected));
+	}
+	/** Runs a 3-arity inplace2 with a given output value. */
+	@Test
+	public void testArity3_IV_OU_runI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 8.0, 27.0 };
+		name("test.mulArrays").input(input1, input2, input3).mutate2();
+		assertTrue(Arrays.equals(input2, expected));
+	}
+	/** Runs a 3-arity inplace3 with a given output value. */
+	@Test
+	public void testArity3_IV_OU_runI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 8.0, 27.0 };
+		name("test.mulArrays").input(input1, input2, input3).mutate3();
+		assertTrue(Arrays.equals(input3, expected));
+	}
+
+	/** Matches a 3-arity function using input value + output type. */
+	@Test
+	public void testArity3_IV_OT_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double expected = 3.;
+		final Functions.Arity3<Double, Double, Double, Double> op = //
+				name("test.addDoubles").input(input1, input2, input3).outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3);
+		assertEquals(actual, expected, 0.);
+	}
+
+	/** Matches a unary computer using input types + output type. */
+	@Test
+	public void testArity3_IV_OT_matchC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 3, 6, 9 };
+		final Computers.Arity3<double[], double[], double[], double[]> op = //
+				name("test.addArrays").input(input1, input2, input3).output(actual).computer();
+		op.compute(input1, input2, input3, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Runs a unary function using input value + output type. */
+	@Test
+	public void testArity3_IV_OT_runF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double expected = 3.;
+		final Object actual = name("test.addDoubles").input(input1, input2, input3).outType(Double.class).apply();
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a unary computer using input value + output value. */
+	@Test
+	public void testArity3_IV_OV_matchC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 3, 6, 9 };
+		final Computers.Arity3<double[], double[], double[], double[]> op = //
+				name("test.addArrays").input(input1, input2, input3).output(actual).computer();
+		op.compute(input1, input2, input3, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Runs a unary computer using input value + output value. */
+	@Test
+	public void testArity3_IV_OV_runC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 3, 6, 9 };
+		name("test.addArrays").input(input1, input2, input3).output(actual).compute();
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	// -- 4-ary --
+
+	/** Matches a 4-arity function using input types only. */
+	@Test
+	public void testArity4_IT_OU_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double expected = 4.;
+		final Functions.Arity4<Double, Double, Double, Double, ?> op = //
+				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class).function();
+		final Object actual = op.apply(input1, input2, input3, input4);
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a 4-arity inplace1 with a given output type. */
+	@Test
+	public void testArity4_IT_OU_matchI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_1<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class).inplace1();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(input1, expected));
+	}
+	/** Matches a 4-arity inplace2 with a given output type. */
+	@Test
+	public void testArity4_IT_OU_matchI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_2<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class).inplace2();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(input2, expected));
+	}
+	/** Matches a 4-arity inplace3 with a given output type. */
+	@Test
+	public void testArity4_IT_OU_matchI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_3<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class).inplace3();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(input3, expected));
+	}
+	/** Matches a 4-arity inplace4 with a given output type. */
+	@Test
+	public void testArity4_IT_OU_matchI4() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_4<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class).inplace4();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(input4, expected));
+	}
+
+	/** Matches a 4-arity function using input types + output type. */
+	@Test
+	public void testArity4_IT_OT_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double expected = 4.;
+		final Functions.Arity4<Double, Double, Double, Double, Double> op = //
+				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class).outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4);
+		assertEquals(actual, expected, 0.);
+	}
+
+	/** Matches a 4-arity computer using input types + output type. */
+	@Test
+	public void testArity4_IT_OT_matchC() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 4, 8, 12 };
+		final Computers.Arity4<double[], double[], double[], double[], double[]> op = //
+				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class).outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Matches a 4-arity function using input value only. */
+	@Test
+	public void testArity4_IV_OU_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double expected = 4.;
+		final Functions.Arity4<Double, Double, Double, Double, ?> op = //
+				name("test.addDoubles").input(input1, input2, input3, input4).function();
+		final Object actual = op.apply(input1, input2, input3, input4);
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a 4-arity inplace1 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_matchI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_1<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4).inplace1();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(expected, input1));
+	}
+	/** Matches a 4-arity inplace2 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_matchI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_2<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4).inplace2();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(expected, input2));
+	}
+	/** Matches a 4-arity inplace3 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_matchI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_3<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4).inplace3();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(expected, input3));
+	}
+	/** Matches a 4-arity inplace4 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_matchI4() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		double[] expected = { 1.0, 16.0, 81.0 };
+		final Inplaces.Arity4_4<double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4).inplace4();
+		op.mutate(input1, input2, input3, input4);
+		assertTrue(Arrays.equals(expected, input4));
+	}
+
+	/** Runs a 4-arity function using input value only. */
+	@Test
+	public void testArity4_IV_OU_runF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double expected = 4.;
+		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4).apply();
+		assertEquals(actual, expected);
+	}
+
+	/** Runs a 4-arity inplace1 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_runI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4).mutate1();
+		assertTrue(Arrays.equals(input1, expected));
+	}
+	/** Runs a 4-arity inplace2 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_runI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4).mutate2();
+		assertTrue(Arrays.equals(input2, expected));
+	}
+	/** Runs a 4-arity inplace3 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_runI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4).mutate3();
+		assertTrue(Arrays.equals(input3, expected));
+	}
+	/** Runs a 4-arity inplace4 with a given output value. */
+	@Test
+	public void testArity4_IV_OU_runI4() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 16.0, 81.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4).mutate4();
+		assertTrue(Arrays.equals(input4, expected));
+	}
+
+	/** Matches a 4-arity function using input value + output type. */
+	@Test
+	public void testArity4_IV_OT_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double expected = 4.;
+		final Functions.Arity4<Double, Double, Double, Double, Double> op = //
+				name("test.addDoubles").input(input1, input2, input3, input4).outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4);
+		assertEquals(actual, expected, 0.);
+	}
+
+	/** Matches a unary computer using input types + output type. */
+	@Test
+	public void testArity4_IV_OT_matchC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] input4 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 4, 8, 12 };
+		final Computers.Arity4<double[], double[], double[], double[], double[]> op = //
+				name("test.addArrays").input(input1, input2, input3, input4).output(actual).computer();
+		op.compute(input1, input2, input3, input4, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Runs a unary function using input value + output type. */
+	@Test
+	public void testArity4_IV_OT_runF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double expected = 4.;
+		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4).outType(Double.class).apply();
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a unary computer using input value + output value. */
+	@Test
+	public void testArity4_IV_OV_matchC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] input4 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 4, 8, 12 };
+		final Computers.Arity4<double[], double[], double[], double[], double[]> op = //
+				name("test.addArrays").input(input1, input2, input3, input4).output(actual).computer();
+		op.compute(input1, input2, input3, input4, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Runs a unary computer using input value + output value. */
+	@Test
+	public void testArity4_IV_OV_runC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] input4 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 4, 8, 12 };
+		name("test.addArrays").input(input1, input2, input3, input4).output(actual).compute();
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	// -- 5-ary --
+
+	/** Matches a 5-arity function using input types only. */
+	@Test
+	public void testArity5_IT_OU_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double input5 = 1.;
+		final Double expected = 5.;
+		final Functions.Arity5<Double, Double, Double, Double, Double, ?> op = //
+				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class).function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5);
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a 5-arity inplace1 with a given output type. */
+	@Test
+	public void testArity5_IT_OU_matchI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_1<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class, double[].class).inplace1();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(input1, expected));
+	}
+	/** Matches a 5-arity inplace2 with a given output type. */
+	@Test
+	public void testArity5_IT_OU_matchI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_2<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class, double[].class).inplace2();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(input2, expected));
+	}
+	/** Matches a 5-arity inplace3 with a given output type. */
+	@Test
+	public void testArity5_IT_OU_matchI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_3<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class, double[].class).inplace3();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(input3, expected));
+	}
+	/** Matches a 5-arity inplace4 with a given output type. */
+	@Test
+	public void testArity5_IT_OU_matchI4() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_4<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class, double[].class).inplace4();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(input4, expected));
+	}
+	/** Matches a 5-arity inplace5 with a given output type. */
+	@Test
+	public void testArity5_IT_OU_matchI5() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_5<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class, double[].class).inplace5();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(input5, expected));
+	}
+
+	/** Matches a 5-arity function using input types + output type. */
+	@Test
+	public void testArity5_IT_OT_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double input5 = 1.;
+		final Double expected = 5.;
+		final Functions.Arity5<Double, Double, Double, Double, Double, Double> op = //
+				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class).outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5);
+		assertEquals(actual, expected, 0.);
+	}
+
+	/** Matches a 5-arity computer using input types + output type. */
+	@Test
+	public void testArity5_IT_OT_matchC() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 5, 10, 15 };
+		final Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
+				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class, double[].class).outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, input5, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Matches a 5-arity function using input value only. */
+	@Test
+	public void testArity5_IV_OU_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double input5 = 1.;
+		final Double expected = 5.;
+		final Functions.Arity5<Double, Double, Double, Double, Double, ?> op = //
+				name("test.addDoubles").input(input1, input2, input3, input4, input5).function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5);
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a 5-arity inplace1 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_matchI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_1<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace1();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(expected, input1));
+	}
+	/** Matches a 5-arity inplace2 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_matchI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_2<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace2();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(expected, input2));
+	}
+	/** Matches a 5-arity inplace3 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_matchI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_3<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace3();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(expected, input3));
+	}
+	/** Matches a 5-arity inplace4 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_matchI4() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_4<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace4();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(expected, input4));
+	}
+	/** Matches a 5-arity inplace5 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_matchI5() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		double[] expected = { 1.0, 32.0, 243.0 };
+		final Inplaces.Arity5_5<double[], double[], double[], double[], double[]> op = //
+				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace5();
+		op.mutate(input1, input2, input3, input4, input5);
+		assertTrue(Arrays.equals(expected, input5));
+	}
+
+	/** Runs a 5-arity function using input value only. */
+	@Test
+	public void testArity5_IV_OU_runF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double input5 = 1.;
+		final Double expected = 5.;
+		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5).apply();
+		assertEquals(actual, expected);
+	}
+
+	/** Runs a 5-arity inplace1 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_runI1() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate1();
+		assertTrue(Arrays.equals(input1, expected));
+	}
+	/** Runs a 5-arity inplace2 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_runI2() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate2();
+		assertTrue(Arrays.equals(input2, expected));
+	}
+	/** Runs a 5-arity inplace3 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_runI3() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate3();
+		assertTrue(Arrays.equals(input3, expected));
+	}
+	/** Runs a 5-arity inplace4 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_runI4() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate4();
+		assertTrue(Arrays.equals(input4, expected));
+	}
+	/** Runs a 5-arity inplace5 with a given output value. */
+	@Test
+	public void testArity5_IV_OU_runI5() {
+		final double[] input1 = { 1, 2, 3 };
+		final double[] input2 = { 1, 2, 3 };
+		final double[] input3 = { 1, 2, 3 };
+		final double[] input4 = { 1, 2, 3 };
+		final double[] input5 = { 1, 2, 3 };
+		final double[] expected = { 1.0, 32.0, 243.0 };
+		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate5();
+		assertTrue(Arrays.equals(input5, expected));
+	}
+
+	/** Matches a 5-arity function using input value + output type. */
+	@Test
+	public void testArity5_IV_OT_matchF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double input5 = 1.;
+		final Double expected = 5.;
+		final Functions.Arity5<Double, Double, Double, Double, Double, Double> op = //
+				name("test.addDoubles").input(input1, input2, input3, input4, input5).outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5);
+		assertEquals(actual, expected, 0.);
+	}
+
+	/** Matches a unary computer using input types + output type. */
+	@Test
+	public void testArity5_IV_OT_matchC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] input4 = { 1, 2, 3 };
+		double[] input5 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 5, 10, 15 };
+		final Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
+				name("test.addArrays").input(input1, input2, input3, input4, input5).output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Runs a unary function using input value + output type. */
+	@Test
+	public void testArity5_IV_OT_runF() {
+		final Double input1 = 1.;
+		final Double input2 = 1.;
+		final Double input3 = 1.;
+		final Double input4 = 1.;
+		final Double input5 = 1.;
+		final Double expected = 5.;
+		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5).outType(Double.class).apply();
+		assertEquals(actual, expected);
+	}
+
+	/** Matches a unary computer using input value + output value. */
+	@Test
+	public void testArity5_IV_OV_matchC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] input4 = { 1, 2, 3 };
+		double[] input5 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 5, 10, 15 };
+		final Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
+				name("test.addArrays").input(input1, input2, input3, input4, input5).output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, actual);
+		assertTrue(Arrays.equals(actual, expected));
+	}
+
+	/** Runs a unary computer using input value + output value. */
+	@Test
+	public void testArity5_IV_OV_runC() {
+		double[] input1 = { 1, 2, 3 };
+		double[] input2 = { 1, 2, 3 };
+		double[] input3 = { 1, 2, 3 };
+		double[] input4 = { 1, 2, 3 };
+		double[] input5 = { 1, 2, 3 };
+		double[] actual = { 0, 0, 0 };
+		double[] expected = { 5, 10, 15 };
+		name("test.addArrays").input(input1, input2, input3, input4, input5).output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 

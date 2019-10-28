@@ -2,20 +2,9 @@
 arities = (1..maxArity).collect()
 
 [Inplaces.java]
-simplifiedType = ```
-{ arity, num ->
-  arity == 1 ? "Arity1" :
-  "Arity${arity}_${num}"
-}
-```
-inplaceType = ```
-{ arity, num ->
-  "Inplaces." + simplifiedType(arity,num)
-}
-```
 simplifiedClass = ```
 { arity, num ->
-  simplifiedType(arity, num) + '.class'
+  simplifiedInplace(arity, num) + '.class'
 }
 ```
 inplaceClass = ```

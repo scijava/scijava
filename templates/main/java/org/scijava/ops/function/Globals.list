@@ -2,11 +2,35 @@ string = "hello world"
 maxArity = 5
 numConsumers = maxArity+1
 
+simplifiedInplace = ```
+{ arity, num ->
+  arity == 1 ? "Arity1" :
+  "Arity${arity}_${num}"
+}
+```
+inplaceType = ```
+{ arity, num ->
+  "Inplaces." + simplifiedInplace(arity,num)
+}
+```
+computerArity = ```
+{ arity ->
+  "Computers.Arity${arity}"
+}
+```
 consumerArity = ```
 { arity ->
   arity == 0 ? 'Consumer' :
   arity == 1 ? 'BiConsumer' :
   "Consumers.Arity${arity+1}"
+}
+```
+functionArity = ```
+{ arity ->
+  arity == 0 ? 'Producer' :
+  arity == 1 ? 'Function' :
+  arity == 2 ? 'BiFunction' :
+  "Functions.Arity${arity}"
 }
 ```
 genericParamTypes = ```

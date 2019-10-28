@@ -2,13 +2,6 @@
 arities = (1..maxArity).collect()
 
 [OpBuilder.java]
-functionArity = ```
-{ arity ->
-  arity == 1 ? 'Function' :
-  arity == 2 ? 'BiFunction' :
-  "Functions.Arity${arity}"
-}
-```
 inplaceArityNumber = ```
 { arity, num ->
   arity == 1 ? '1' :

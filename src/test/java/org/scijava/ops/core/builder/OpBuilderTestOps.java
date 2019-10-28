@@ -54,22 +54,31 @@ public class OpBuilderTestOps {
 	 * The general procedure for these Ops: Given a set of inputs in1, in2, ...,
 	 * inN, The output will be sum(in1, in2, ..., inN).
 	 */
-
-	// ARITY ZERO
+	
+	// ARITY 0
 	@OpField(names = "test.addDoubles")
 	public final Producer<Double> addDoubles0 = () -> 0.;
-
+	
 	// ARITY 1
 	@OpField(names = "test.addDoubles")
-	public final Function<Double, Double> addDoubles1 = (in1) -> in1;
-
+	public final Function<Double, Double> addDoubles1 = (input) -> input;
+	
 	// ARITY 2
 	@OpField(names = "test.addDoubles")
-	public final BiFunction<Double, Double, Double> addDoubles2 = (in1, in2) -> in1 + in2;
-
-	// ARITY 3+ (CODE GENERATE THESE)
+	public final BiFunction<Double, Double, Double> addDoubles2 = (input1, input2) -> input1 + input2;
+	
+	// ARITY 3
 	@OpField(names = "test.addDoubles")
-	public final Functions.Arity3<Double, Double, Double, Double> addDoubles3 = (in1, in2, in3) -> in1 + in2 + in3;
+	public final Functions.Arity3<Double, Double, Double, Double> addDoubles3 = (input1, input2, input3) -> input1 + input2 + input3;
+	
+	// ARITY 4
+	@OpField(names = "test.addDoubles")
+	public final Functions.Arity4<Double, Double, Double, Double, Double> addDoubles4 = (input1, input2, input3, input4) -> input1 + input2 + input3 + input4;
+	
+	// ARITY 5
+	@OpField(names = "test.addDoubles")
+	public final Functions.Arity5<Double, Double, Double, Double, Double, Double> addDoubles5 = (input1, input2, input3, input4, input5) -> input1 + input2 + input3 + input4 + input5;
+	
 
 	/*
 	 * -- INPLACES --
@@ -78,55 +87,151 @@ public class OpBuilderTestOps {
 	 * io, ..., inN, the output will be io = in1 * in2 * ... * io * ... * inN.
 	 * N.B. We do this in arrays since the doubles themselves are immutable. 
 	 */
-
-	// ARITY ONE
+	// ARITY 1
 	@OpField(names = "test.mulArrays")
-	public final Inplaces.Arity1<double[]> powDoubles1 = (io) -> {};
-
-	// ARITY TWO
+	public final Inplaces.Arity1<double[]> powDoubles1_1 = (io) -> {
+			for(int i = 0; i < io.length; i++) {
+			}
+		};
+		
+	// ARITY 2
 	@OpField(names = "test.mulArrays")
-	public final Inplaces.Arity2_1<double[], double[]> powDoubles2_1 = (io,
-			in2) -> {
-				for(int i = 0; i < io.length; i++) {
-					io[i] *= in2[i];
-				}
-			};
-
+	public final Inplaces.Arity2_1<double[], double[]> powDoubles2_1 = (io, in2) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in2[i];
+			}
+		};
+		
+	// ARITY 2
 	@OpField(names = "test.mulArrays")
-	public final Inplaces.Arity2_2<double[], double[]> powDoubles2_2 = (in1,
-			io) -> {
-				for(int i = 0; i < io.length; i++) {
-					io[i] *= in1[i];
-				}
-			};
-
-	// ARITY THREES
+	public final Inplaces.Arity2_2<double[], double[]> powDoubles2_2 = (in1, io) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+			}
+		};
+		
+	// ARITY 3
 	@OpField(names = "test.mulArrays")
-	public final Inplaces.Arity3_1<double[], double[], double[]> powDoubles3_1 = (io, in2,
-			in3) -> {
-				for(int i = 0; i < io.length; i++) {
-					io[i] *= in2[i];
-					io[i] *= in3[i];
-				}
-			};
-
+	public final Inplaces.Arity3_1<double[], double[], double[]> powDoubles3_1 = (io, in2, in3) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in2[i];
+				io[i] *= in3[i];
+			}
+		};
+		
+	// ARITY 3
 	@OpField(names = "test.mulArrays")
-	public final Inplaces.Arity3_2<double[], double[], double[]> powDoubles3_2 = (in1, io,
-			in3) -> {
-				for(int i = 0; i < io.length; i++) {
-					io[i] *= in1[i];
-					io[i] *= in3[i];
-				}
-			};
-
+	public final Inplaces.Arity3_2<double[], double[], double[]> powDoubles3_2 = (in1, io, in3) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in3[i];
+			}
+		};
+		
+	// ARITY 3
 	@OpField(names = "test.mulArrays")
-	public final Inplaces.Arity3_3<double[], double[], double[]> powDoubles3_3 = (in1, in2,
-			io) -> {
-				for(int i = 0; i < io.length; i++) {
-					io[i] *= in1[i];
-					io[i] *= in2[i];
-				}
-			};
+	public final Inplaces.Arity3_3<double[], double[], double[]> powDoubles3_3 = (in1, in2, io) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in2[i];
+			}
+		};
+		
+	// ARITY 4
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity4_1<double[], double[], double[], double[]> powDoubles4_1 = (io, in2, in3, in4) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in2[i];
+				io[i] *= in3[i];
+				io[i] *= in4[i];
+			}
+		};
+		
+	// ARITY 4
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity4_2<double[], double[], double[], double[]> powDoubles4_2 = (in1, io, in3, in4) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in3[i];
+				io[i] *= in4[i];
+			}
+		};
+		
+	// ARITY 4
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity4_3<double[], double[], double[], double[]> powDoubles4_3 = (in1, in2, io, in4) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in2[i];
+				io[i] *= in4[i];
+			}
+		};
+		
+	// ARITY 4
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity4_4<double[], double[], double[], double[]> powDoubles4_4 = (in1, in2, in3, io) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in2[i];
+				io[i] *= in3[i];
+			}
+		};
+		
+	// ARITY 5
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity5_1<double[], double[], double[], double[], double[]> powDoubles5_1 = (io, in2, in3, in4, in5) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in2[i];
+				io[i] *= in3[i];
+				io[i] *= in4[i];
+				io[i] *= in5[i];
+			}
+		};
+		
+	// ARITY 5
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity5_2<double[], double[], double[], double[], double[]> powDoubles5_2 = (in1, io, in3, in4, in5) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in3[i];
+				io[i] *= in4[i];
+				io[i] *= in5[i];
+			}
+		};
+		
+	// ARITY 5
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity5_3<double[], double[], double[], double[], double[]> powDoubles5_3 = (in1, in2, io, in4, in5) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in2[i];
+				io[i] *= in4[i];
+				io[i] *= in5[i];
+			}
+		};
+		
+	// ARITY 5
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity5_4<double[], double[], double[], double[], double[]> powDoubles5_4 = (in1, in2, in3, io, in5) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in2[i];
+				io[i] *= in3[i];
+				io[i] *= in5[i];
+			}
+		};
+		
+	// ARITY 5
+	@OpField(names = "test.mulArrays")
+	public final Inplaces.Arity5_5<double[], double[], double[], double[], double[]> powDoubles5_5 = (in1, in2, in3, in4, io) -> {
+			for(int i = 0; i < io.length; i++) {
+				io[i] *= in1[i];
+				io[i] *= in2[i];
+				io[i] *= in3[i];
+				io[i] *= in4[i];
+			}
+		};
+		
 
 	/*
 	 * -- COMPUTERS --
@@ -138,49 +243,65 @@ public class OpBuilderTestOps {
 
 	// ARITY 0
 	@OpField(names = "test.addArrays")
-	public final Computers.Arity0<double[]> mulStrings0 = (out) -> {
-		for (int i = 0; i < out.length; i++)
-			out[i] = 0;
+	public final Computers.Arity0<double[]> mulStrings0 = (output) -> {
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0;
+		}
 	};
 
 	// ARITY 1
 	@OpField(names = "test.addArrays")
-	public final Computers.Arity1<double[], double[]> mulStrings1 = (in,
-			out) -> {
-				for(int i = 0; i < out.length; i++) {
-					out[i] = in[i];
-				}
-			};
+	public final Computers.Arity1<double[], double[]> mulStrings1 = (input, output) -> {
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0;
+			output[i] += input[i];
+		}
+	};
 
 	// ARITY 2
 	@OpField(names = "test.addArrays")
-	public final Computers.Arity2<double[], double[], double[]> mulStrings2 = (in1, in2, 
-			out) -> {
-				for(int i = 0; i < out.length; i++) {
-					out[i] = in1[i] + in2[i];
-				}
-			};
+	public final Computers.Arity2<double[], double[], double[]> mulStrings2 = (input1, input2, output) -> {
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0;
+			output[i] += input1[i];
+			output[i] += input2[i];
+		}
+	};
 
 	// ARITY 3
 	@OpField(names = "test.addArrays")
-	public final Computers.Arity3<double[], double[], double[], double[]> mulStrings3 = (in1, in2, in3,
-			out) -> {
-				for(int i = 0; i < out.length; i++) {
-					out[i] = in1[i] + in2[i] + in3[i];
-				}
-			};
-
-	// TODO: delete
-
-	@OpField(names = "test.castToInt")
-	public final Computers.Arity1<double[], int[]> castToInt = (src, dest) -> {
-		for (int i = 0; i < dest.length; i++)
-			dest[i] = (int) src[i];
+	public final Computers.Arity3<double[], double[], double[], double[]> mulStrings3 = (input1, input2, input3, output) -> {
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0;
+			output[i] += input1[i];
+			output[i] += input2[i];
+			output[i] += input3[i];
+		}
 	};
 
-	@OpField(names = "test.concat")
-	public final Computers.Arity2<String[], Object[], String[]> concat = (s, o, out) -> {
-		for (int i = 0; i < out.length; i++)
-			out[i] = s[i] + o[i];
+	// ARITY 4
+	@OpField(names = "test.addArrays")
+	public final Computers.Arity4<double[], double[], double[], double[], double[]> mulStrings4 = (input1, input2, input3, input4, output) -> {
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0;
+			output[i] += input1[i];
+			output[i] += input2[i];
+			output[i] += input3[i];
+			output[i] += input4[i];
+		}
 	};
+
+	// ARITY 5
+	@OpField(names = "test.addArrays")
+	public final Computers.Arity5<double[], double[], double[], double[], double[], double[]> mulStrings5 = (input1, input2, input3, input4, input5, output) -> {
+		for (int i = 0; i < output.length; i++) {
+			output[i] = 0;
+			output[i] += input1[i];
+			output[i] += input2[i];
+			output[i] += input3[i];
+			output[i] += input4[i];
+			output[i] += input5[i];
+		}
+	};
+
 }

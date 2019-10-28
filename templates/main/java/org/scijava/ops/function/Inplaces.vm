@@ -96,11 +96,11 @@ public final class Inplaces {
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static $generics.call($arity, $a) $simplifiedType.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpService ops, final String opName, $matchParams.call($arity, $a)) {
+	public static $generics.call($arity, $a) $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpService ops, final String opName, $matchParams.call($arity, $a)) {
 
 		Type inplaceType = Types.parameterize($simplifiedClass.call($arity, $a), new Type[] { $typeArgs.call($arity, $a)});
 
-		return (${simplifiedType.call($arity, $a)})ops.findOp( //
+		return (${simplifiedInplace.call($arity, $a)})ops.findOp( //
 				opName, //
 				Nil.of(inplaceType), //
 				new Nil[] { $basicParams.call($arity, $a) }, //
@@ -154,7 +154,7 @@ public final class Inplaces {
 #foreach($a in [1..$arity])
 
 	@FunctionalInterface
-	public interface $simplifiedType.call($arity, $a)$generics.call($arity, $a) extends Arity${arity}$generics.call($arity, $a) {
+	public interface $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) extends Arity${arity}$generics.call($arity, $a) {
 		@Override
 		void mutate($mutateArgs.call($arity, $a));
 	}

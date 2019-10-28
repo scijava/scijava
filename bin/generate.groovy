@@ -122,7 +122,14 @@ def readTranslation(engine, globalContext, reader, templateSubdirectory, templat
 		// include any global files
 		if (trimmedLine.startsWith(".include")){
 			includeFile = line.substring(9);
-			globalReader = new java.io.BufferedReader(new java.io.FileReader("$templateSubdirectory/$includeFile"));
+			if(includeFile.startsWith("templates")){
+				includeSubdirectory = includeFile.substring(0, includeFile.lastIndexOf("/"))
+				includeFile = includeFile.substring(includeFile.lastIndexOf("/"))
+			}
+			else{
+			includeSubdirectory = templateSubdirectory
+			}
+			globalReader = new java.io.BufferedReader(new java.io.FileReader("$includeSubdirectory/$includeFile"));
 			encapsulatedContext = new org.apache.velocity.VelocityContext(context)
 			context = readTranslation(engine, encapsulatedContext, globalReader, templateSubdirectory, templateFile, includeFile, true) 
 			continue;

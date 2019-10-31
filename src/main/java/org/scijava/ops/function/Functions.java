@@ -57,6 +57,17 @@ public final class Functions {
 		functions.put(Functions.Arity3.class, 3);
 		functions.put(Functions.Arity4.class, 4);
 		functions.put(Functions.Arity5.class, 5);
+		functions.put(Functions.Arity6.class, 6);
+		functions.put(Functions.Arity7.class, 7);
+		functions.put(Functions.Arity8.class, 8);
+		functions.put(Functions.Arity9.class, 9);
+		functions.put(Functions.Arity10.class, 10);
+		functions.put(Functions.Arity11.class, 11);
+		functions.put(Functions.Arity12.class, 12);
+		functions.put(Functions.Arity13.class, 13);
+		functions.put(Functions.Arity14.class, 14);
+		functions.put(Functions.Arity15.class, 15);
+		functions.put(Functions.Arity16.class, 16);
 		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
 	}
 
@@ -135,6 +146,127 @@ public final class Functions {
 				opName, //
 				Nil.of(specialType), //
 				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, O> Functions.Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity6.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), outType.getType() });
+		return (Functions.Arity6) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, O> Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity7.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), outType.getType() });
+		return (Functions.Arity7) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity8.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), outType.getType() });
+		return (Functions.Arity8) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity9.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), outType.getType() });
+		return (Functions.Arity9) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity10.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), outType.getType() });
+		return (Functions.Arity10) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity11.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), outType.getType() });
+		return (Functions.Arity11) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity12.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), outType.getType() });
+		return (Functions.Arity12) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity13.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), outType.getType() });
+		return (Functions.Arity13) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity14.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), outType.getType() });
+		return (Functions.Arity14) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity15.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), outType.getType() });
+		return (Functions.Arity15) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
+				outType);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType) {
+		final Type specialType = Types.parameterize(Functions.Arity16.class, //
+			new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType(), outType.getType() });
+		return (Functions.Arity16) ops.findOp( //
+				opName, //
+				Nil.of(specialType), //
+				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
 				outType);
 	}
 
@@ -302,6 +434,919 @@ public final class Functions {
 		default <O2> Arity5<I1, I2, I3, I4, I5, O2> andThen(Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) -> after.apply(apply(in1, in2, in3, in4, in5));
+		}
+	}
+	
+	/**
+	 * A 6-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity6<I1, I2, I3, I4, I5, I6, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity6<I1, I2, I3, I4, I5, I6, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> after.apply(apply(in1, in2, in3, in4, in5, in6));
+		}
+	}
+	
+	/**
+	 * A 7-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity7<I1, I2, I3, I4, I5, I6, I7, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity7<I1, I2, I3, I4, I5, I6, I7, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7));
+		}
+	}
+	
+	/**
+	 * A 8-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8));
+		}
+	}
+	
+	/**
+	 * A 9-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9));
+		}
+	}
+	
+	/**
+	 * A 10-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10));
+		}
+	}
+	
+	/**
+	 * A 11-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <I11>
+	 *            the type of argument 11 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @param in11
+		 *            function argument 11
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11));
+		}
+	}
+	
+	/**
+	 * A 12-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <I11>
+	 *            the type of argument 11 to the function
+	 * @param <I12>
+	 *            the type of argument 12 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @param in11
+		 *            function argument 11
+		 * @param in12
+		 *            function argument 12
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12));
+		}
+	}
+	
+	/**
+	 * A 13-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <I11>
+	 *            the type of argument 11 to the function
+	 * @param <I12>
+	 *            the type of argument 12 to the function
+	 * @param <I13>
+	 *            the type of argument 13 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @param in11
+		 *            function argument 11
+		 * @param in12
+		 *            function argument 12
+		 * @param in13
+		 *            function argument 13
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13));
+		}
+	}
+	
+	/**
+	 * A 14-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <I11>
+	 *            the type of argument 11 to the function
+	 * @param <I12>
+	 *            the type of argument 12 to the function
+	 * @param <I13>
+	 *            the type of argument 13 to the function
+	 * @param <I14>
+	 *            the type of argument 14 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @param in11
+		 *            function argument 11
+		 * @param in12
+		 *            function argument 12
+		 * @param in13
+		 *            function argument 13
+		 * @param in14
+		 *            function argument 14
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14));
+		}
+	}
+	
+	/**
+	 * A 15-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <I11>
+	 *            the type of argument 11 to the function
+	 * @param <I12>
+	 *            the type of argument 12 to the function
+	 * @param <I13>
+	 *            the type of argument 13 to the function
+	 * @param <I14>
+	 *            the type of argument 14 to the function
+	 * @param <I15>
+	 *            the type of argument 15 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @param in11
+		 *            function argument 11
+		 * @param in12
+		 *            function argument 12
+		 * @param in13
+		 *            function argument 13
+		 * @param in14
+		 *            function argument 14
+		 * @param in15
+		 *            function argument 15
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15));
+		}
+	}
+	
+	/**
+	 * A 16-arity specialization of {@link Function}.
+	 *
+	 * @param <I1>
+	 *            the type of argument 1 to the function
+	 * @param <I2>
+	 *            the type of argument 2 to the function
+	 * @param <I3>
+	 *            the type of argument 3 to the function
+	 * @param <I4>
+	 *            the type of argument 4 to the function
+	 * @param <I5>
+	 *            the type of argument 5 to the function
+	 * @param <I6>
+	 *            the type of argument 6 to the function
+	 * @param <I7>
+	 *            the type of argument 7 to the function
+	 * @param <I8>
+	 *            the type of argument 8 to the function
+	 * @param <I9>
+	 *            the type of argument 9 to the function
+	 * @param <I10>
+	 *            the type of argument 10 to the function
+	 * @param <I11>
+	 *            the type of argument 11 to the function
+	 * @param <I12>
+	 *            the type of argument 12 to the function
+	 * @param <I13>
+	 *            the type of argument 13 to the function
+	 * @param <I14>
+	 *            the type of argument 14 to the function
+	 * @param <I15>
+	 *            the type of argument 15 to the function
+	 * @param <I16>
+	 *            the type of argument 16 to the function
+	 * @param <O>
+	 *            the type of the output of the function
+	 * @see Function
+	 */
+	@FunctionalInterface
+	public interface Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+
+		/**
+		 * Applies this function to the given arguments.
+		 *
+		 * @param in1
+		 *            function argument 1
+		 * @param in2
+		 *            function argument 2
+		 * @param in3
+		 *            function argument 3
+		 * @param in4
+		 *            function argument 4
+		 * @param in5
+		 *            function argument 5
+		 * @param in6
+		 *            function argument 6
+		 * @param in7
+		 *            function argument 7
+		 * @param in8
+		 *            function argument 8
+		 * @param in9
+		 *            function argument 9
+		 * @param in10
+		 *            function argument 10
+		 * @param in11
+		 *            function argument 11
+		 * @param in12
+		 *            function argument 12
+		 * @param in13
+		 *            function argument 13
+		 * @param in14
+		 *            function argument 14
+		 * @param in15
+		 *            function argument 15
+		 * @param in16
+		 *            function argument 16
+		 * @return the function output
+		 */
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16);
+
+		/**
+		 * Returns a composed function that first applies this function to its input,
+		 * and then applies the {@code after} function to the result. If evaluation of
+		 * either function throws an exception, it is relayed to the caller of the
+		 * composed function.
+		 *
+		 * @param <O2>
+		 *            the type of output of the {@code after} function, and of the
+		 *            composed function
+		 * @param after
+		 *            the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then applies
+		 *         the {@code after} function
+		 * @throws NullPointerException
+		 *             if after is null
+		 */
+		default <O2> Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O2> andThen(Function<? super O, ? extends O2> after) {
+			Objects.requireNonNull(after);
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16));
 		}
 	}
 	

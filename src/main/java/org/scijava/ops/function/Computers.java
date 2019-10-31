@@ -59,6 +59,17 @@ public final class Computers {
 		computers.put(Arity3.class, 3);
 		computers.put(Arity4.class, 4);
 		computers.put(Arity5.class, 5);
+		computers.put(Arity6.class, 6);
+		computers.put(Arity7.class, 7);
+		computers.put(Arity8.class, 8);
+		computers.put(Arity9.class, 9);
+		computers.put(Arity10.class, 10);
+		computers.put(Arity11.class, 11);
+		computers.put(Arity12.class, 12);
+		computers.put(Arity13.class, 13);
+		computers.put(Arity14.class, 14);
+		computers.put(Arity15.class, 15);
+		computers.put(Arity16.class, 16);
 		ALL_COMPUTERS = ImmutableBiMap.copyOf(computers);
 	}
 
@@ -187,6 +198,215 @@ public final class Computers {
 			outType);
 	}
 
+	public static <I1, I2, I3, I4, I5, I6, O> Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType)
+	{
+		final Nil<Arity6<I1, I2, I3, I4, I5, I6, O>> specialType =
+			new Nil<Arity6<I1, I2, I3, I4, I5, I6, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity6.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, O> Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<O> outType)
+	{
+		final Nil<Arity7<I1, I2, I3, I4, I5, I6, I7, O>> specialType =
+			new Nil<Arity7<I1, I2, I3, I4, I5, I6, I7, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity7.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType)
+	{
+		final Nil<Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> specialType =
+			new Nil<Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity8.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType)
+	{
+		final Nil<Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> specialType =
+			new Nil<Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity9.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<O> outType)
+	{
+		final Nil<Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> specialType =
+			new Nil<Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity10.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<O> outType)
+	{
+		final Nil<Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> specialType =
+			new Nil<Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity11.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType)
+	{
+		final Nil<Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> specialType =
+			new Nil<Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity12.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType)
+	{
+		final Nil<Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> specialType =
+			new Nil<Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity13.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<O> outType)
+	{
+		final Nil<Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> specialType =
+			new Nil<Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity14.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<O> outType)
+	{
+		final Nil<Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> specialType =
+			new Nil<Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity15.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType }, //
+			outType);
+	}
+
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpService ops, final String opName,
+		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType)
+	{
+		final Nil<Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> specialType =
+			new Nil<Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>()
+		{
+			@Override
+			public Type getType() {
+				return Types.parameterize(Arity16.class, //
+					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType(), outType.getType() });
+			}
+		};
+		return ops.findOp( //
+			opName, //
+			specialType, //
+			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType }, //
+			outType);
+	}
+
 	// -- END TEMP --
 
 	@FunctionalInterface
@@ -246,6 +466,116 @@ public final class Computers {
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final O out) {
 			compute(in1, in2, in3, in4, in5, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity6<I1, I2, I3, I4, I5, I6, O> extends Consumers.Arity7<I1, I2, I3, I4, I5, I6, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity7<I1, I2, I3, I4, I5, I6, I7, O> extends Consumers.Arity8<I1, I2, I3, I4, I5, I6, I7, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> extends Consumers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> extends Consumers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> extends Consumers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> extends Consumers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> extends Consumers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> extends Consumers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> extends Consumers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> extends Consumers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+		}
+	}
+
+	@FunctionalInterface
+	public interface Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> extends Consumers.Arity17<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Mutable O out);
+
+		@Override
+		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16, final O out) {
+			compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
 		}
 	}
 }

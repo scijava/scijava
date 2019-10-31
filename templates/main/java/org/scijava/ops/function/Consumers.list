@@ -8,7 +8,7 @@ genericsList = ```
 ```
 genericsNamesList = ```
 { arity ->
-  genericsList(arity).stream().map{a -> "in${a.charAt(1)}"}.collect()
+  genericsList(arity).stream().map{a -> "in${a.substring(1)}"}.collect()
 }
 ```
 nilNames = ```

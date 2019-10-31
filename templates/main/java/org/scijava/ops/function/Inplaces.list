@@ -58,7 +58,7 @@ matchParams = ```
   String.join(', ', genericsList(arity, io).stream().map{a -> 
     a.charAt(1) == 'O'? 
 	"final Nil<$a> ${a.toLowerCase()}Type"  :
-	"final Nil<$a> in${a.charAt(1)}Type"}.collect())
+	"final Nil<$a> in${a.substring(1)}Type"}.collect())
 }
 ```
 typeArgs = ```
@@ -78,6 +78,6 @@ allMutableMutateArgs = ```
 ```
 mutateArgs = ```
 { arity, io ->
-  String.join(', ', genericsList(arity, io).stream().map{a -> a.charAt(1) == 'O' ? "@Mutable IO io" : "$a in${a.charAt(1)}"}.collect())
+  String.join(', ', genericsList(arity, io).stream().map{a -> a.substring(1) == 'O' ? "@Mutable IO io" : "$a in${a.substring(1)}"}.collect())
   }
 ```

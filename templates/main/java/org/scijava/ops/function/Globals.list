@@ -1,5 +1,4 @@
-string = "hello world"
-maxArity = 5
+maxArity = 16
 numConsumers = maxArity+1
 
 inplaceSuffix = ```
@@ -56,7 +55,7 @@ genericsNamesList = ```
   genericParamTypes(arity).stream().map{a -> 
     a == 'O' ? "out" :
     a == 'I' ? "in" :
-    "in${a.charAt(1)}"
+    "in${a.substring(1)}"
   }.collect()
 }
 ```

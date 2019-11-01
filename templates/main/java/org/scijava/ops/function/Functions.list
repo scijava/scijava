@@ -41,7 +41,9 @@ typeArgs = ```
 nilArgs = ```
 { arity ->
   names = genericsNamesList(arity)
-  String.join(', ', names.subList(0, names.size() - 1).stream().map{a -> "${a}Type"}.collect())
+  out = names.remove(names.size() - 1)
+  names.add(0, out)
+  String.join(', ', names.stream().map{a -> "${a}Type"}.collect())
 }
 ```
 applyParams = ```

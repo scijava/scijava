@@ -83,328 +83,102 @@ public final class Computers {
 	public static boolean isComputer(Type type) {
 		return ALL_COMPUTERS.containsKey(Types.raw(type));
 	}
-
-	public static <O> Arity0<O> match(final OpService ops, final String opName,
-		final Nil<O> outType)
-	{
-		final Nil<Arity0<O>> specialType =
-			new Nil<Arity0<O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity0.class, //
-					new Type[] { outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { outType }, //
-			outType);
+	
+	@SuppressWarnings("unchecked")
+	public static <O> Computers.Arity0<O> match(final OpService ops, final String opName, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity0.class, outType);
 	}
 
-	public static <I, O> Arity1<I, O> match(final OpService ops, final String opName,
-		final Nil<I> inType, final Nil<O> outType)
-	{
-		final Nil<Arity1<I, O>> specialType =
-			new Nil<Arity1<I, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity1.class, //
-					new Type[] { inType.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { inType, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I, O> Computers.Arity1<I, O> match(final OpService ops, final String opName, final Nil<I> inType, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity1.class, outType, inType);
 	}
 
-	public static <I1, I2, O> Arity2<I1, I2, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<O> outType)
-	{
-		final Nil<Arity2<I1, I2, O>> specialType =
-			new Nil<Arity2<I1, I2, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity2.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, O> Computers.Arity2<I1, I2, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity2.class, outType, in2Type, in1Type);
 	}
 
-	public static <I1, I2, I3, O> Arity3<I1, I2, I3, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<O> outType)
-	{
-		final Nil<Arity3<I1, I2, I3, O>> specialType =
-			new Nil<Arity3<I1, I2, I3, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity3.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, O> Computers.Arity3<I1, I2, I3, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity3.class, outType, in2Type, in3Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, O> Arity4<I1, I2, I3, I4, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<O> outType)
-	{
-		final Nil<Arity4<I1, I2, I3, I4, O>> specialType =
-			new Nil<Arity4<I1, I2, I3, I4, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity4.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, O> Computers.Arity4<I1, I2, I3, I4, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity4.class, outType, in2Type, in3Type, in4Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, O> Arity5<I1, I2, I3, I4, I5, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType)
-	{
-		final Nil<Arity5<I1, I2, I3, I4, I5, O>> specialType =
-			new Nil<Arity5<I1, I2, I3, I4, I5, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity5.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, O> Computers.Arity5<I1, I2, I3, I4, I5, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity5.class, outType, in2Type, in3Type, in4Type, in5Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, O> Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType)
-	{
-		final Nil<Arity6<I1, I2, I3, I4, I5, I6, O>> specialType =
-			new Nil<Arity6<I1, I2, I3, I4, I5, I6, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity6.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, O> Computers.Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity6.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, O> Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<O> outType)
-	{
-		final Nil<Arity7<I1, I2, I3, I4, I5, I6, I7, O>> specialType =
-			new Nil<Arity7<I1, I2, I3, I4, I5, I6, I7, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity7.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, O> Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity7.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType)
-	{
-		final Nil<Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> specialType =
-			new Nil<Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity8.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity8.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType)
-	{
-		final Nil<Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> specialType =
-			new Nil<Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity9.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity9.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<O> outType)
-	{
-		final Nil<Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> specialType =
-			new Nil<Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity10.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity10.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<O> outType)
-	{
-		final Nil<Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> specialType =
-			new Nil<Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity11.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity11.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType)
-	{
-		final Nil<Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> specialType =
-			new Nil<Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity12.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity12.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType)
-	{
-		final Nil<Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> specialType =
-			new Nil<Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity13.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity13.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<O> outType)
-	{
-		final Nil<Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> specialType =
-			new Nil<Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity14.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity14.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<O> outType)
-	{
-		final Nil<Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> specialType =
-			new Nil<Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity15.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity15.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in1Type);
 	}
 
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpService ops, final String opName,
-		final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType)
-	{
-		final Nil<Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> specialType =
-			new Nil<Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>()
-		{
-			@Override
-			public Type getType() {
-				return Types.parameterize(Arity16.class, //
-					new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType(), outType.getType() });
-			}
-		};
-		return ops.findOp( //
-			opName, //
-			specialType, //
-			new Nil<?>[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType }, //
-			outType);
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Computers.Arity16.class, outType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, in1Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+		final Type[] types = new Type[inTypes.length + 1];
+		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		types[types.length - 1] = outType.getType();
+		final Type specialType = Types.parameterize(opClass, types);
+		final Nil<?>[] nils = new Nil[inTypes.length + 1];
+		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
+		nils[nils.length - 1] = outType;
+		return (T) ops.findOp(opName, Nil.of(specialType), nils, outType);
 	}
 
 	// -- END TEMP --

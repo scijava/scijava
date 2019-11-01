@@ -222,1502 +222,557 @@ public final class Inplaces {
 				.map(Entry<Class<?>, InplaceInfo>::getKey) //
 				.collect(Collectors.toList());
 	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO> Arity1<IO> match(final OpService ops, final String opName, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity1.class, new Type[] { ioType.getType()});
-
-		return (Arity1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity1.class, ioType, new Nil[] {ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2> Arity2_1<IO, I2> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type) {
-
-		Type inplaceType = Types.parameterize(Arity2_1.class, new Type[] { ioType.getType(), in2Type.getType()});
-
-		return (Arity2_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity2_1.class, ioType, new Nil[] {ioType, in2Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO> Arity2_2<I1, IO> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity2_2.class, new Type[] { in1Type.getType(), ioType.getType()});
-
-		return (Arity2_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity2_2.class, ioType, new Nil[] {in1Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3> Arity3_1<IO, I2, I3> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type) {
-
-		Type inplaceType = Types.parameterize(Arity3_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType()});
-
-		return (Arity3_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity3_1.class, ioType, new Nil[] {ioType, in2Type, in3Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3> Arity3_2<I1, IO, I3> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type) {
-
-		Type inplaceType = Types.parameterize(Arity3_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType()});
-
-		return (Arity3_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity3_2.class, ioType, new Nil[] {in1Type, ioType, in3Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO> Arity3_3<I1, I2, IO> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity3_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType()});
-
-		return (Arity3_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity3_3.class, ioType, new Nil[] {in1Type, in2Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4> Arity4_1<IO, I2, I3, I4> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type) {
-
-		Type inplaceType = Types.parameterize(Arity4_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType()});
-
-		return (Arity4_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity4_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4> Arity4_2<I1, IO, I3, I4> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type) {
-
-		Type inplaceType = Types.parameterize(Arity4_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType()});
-
-		return (Arity4_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity4_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4> Arity4_3<I1, I2, IO, I4> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type) {
-
-		Type inplaceType = Types.parameterize(Arity4_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType()});
-
-		return (Arity4_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity4_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO> Arity4_4<I1, I2, I3, IO> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity4_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType()});
-
-		return (Arity4_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity4_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5> Arity5_1<IO, I2, I3, I4, I5> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type) {
-
-		Type inplaceType = Types.parameterize(Arity5_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType()});
-
-		return (Arity5_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity5_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5> Arity5_2<I1, IO, I3, I4, I5> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type) {
-
-		Type inplaceType = Types.parameterize(Arity5_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType()});
-
-		return (Arity5_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity5_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5> Arity5_3<I1, I2, IO, I4, I5> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type) {
-
-		Type inplaceType = Types.parameterize(Arity5_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType()});
-
-		return (Arity5_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity5_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5> Arity5_4<I1, I2, I3, IO, I5> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type) {
-
-		Type inplaceType = Types.parameterize(Arity5_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType()});
-
-		return (Arity5_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity5_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO> Arity5_5<I1, I2, I3, I4, IO> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity5_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType()});
-
-		return (Arity5_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity5_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6> Arity6_1<IO, I2, I3, I4, I5, I6> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type) {
-
-		Type inplaceType = Types.parameterize(Arity6_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType()});
-
-		return (Arity6_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity6_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6> Arity6_2<I1, IO, I3, I4, I5, I6> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type) {
-
-		Type inplaceType = Types.parameterize(Arity6_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType()});
-
-		return (Arity6_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity6_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6> Arity6_3<I1, I2, IO, I4, I5, I6> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type) {
-
-		Type inplaceType = Types.parameterize(Arity6_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType()});
-
-		return (Arity6_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity6_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6> Arity6_4<I1, I2, I3, IO, I5, I6> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type) {
-
-		Type inplaceType = Types.parameterize(Arity6_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType()});
-
-		return (Arity6_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity6_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6> Arity6_5<I1, I2, I3, I4, IO, I6> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type) {
-
-		Type inplaceType = Types.parameterize(Arity6_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType()});
-
-		return (Arity6_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity6_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO> Arity6_6<I1, I2, I3, I4, I5, IO> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity6_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType()});
-
-		return (Arity6_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity6_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7> Arity7_1<IO, I2, I3, I4, I5, I6, I7> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type) {
-
-		Type inplaceType = Types.parameterize(Arity7_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType()});
-
-		return (Arity7_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7> Arity7_2<I1, IO, I3, I4, I5, I6, I7> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type) {
-
-		Type inplaceType = Types.parameterize(Arity7_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType()});
-
-		return (Arity7_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7> Arity7_3<I1, I2, IO, I4, I5, I6, I7> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type) {
-
-		Type inplaceType = Types.parameterize(Arity7_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType()});
-
-		return (Arity7_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7> Arity7_4<I1, I2, I3, IO, I5, I6, I7> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type) {
-
-		Type inplaceType = Types.parameterize(Arity7_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType()});
-
-		return (Arity7_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7> Arity7_5<I1, I2, I3, I4, IO, I6, I7> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type) {
-
-		Type inplaceType = Types.parameterize(Arity7_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType()});
-
-		return (Arity7_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7> Arity7_6<I1, I2, I3, I4, I5, IO, I7> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type) {
-
-		Type inplaceType = Types.parameterize(Arity7_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType()});
-
-		return (Arity7_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO> Arity7_7<I1, I2, I3, I4, I5, I6, IO> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity7_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType()});
-
-		return (Arity7_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity7_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8> Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType()});
-
-		return (Arity8_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8> Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType()});
-
-		return (Arity8_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8> Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType()});
-
-		return (Arity8_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8> Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType()});
-
-		return (Arity8_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8> Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType()});
-
-		return (Arity8_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8> Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType()});
-
-		return (Arity8_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8> Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type) {
-
-		Type inplaceType = Types.parameterize(Arity8_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType()});
-
-		return (Arity8_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO> Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity8_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType()});
-
-		return (Arity8_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity8_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9> Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9> Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9> Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9> Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9> Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9> Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType()});
-
-		return (Arity9_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9> Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type) {
-
-		Type inplaceType = Types.parameterize(Arity9_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType()});
-
-		return (Arity9_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO> Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity9_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType()});
-
-		return (Arity9_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity9_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType()});
-
-		return (Arity10_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type) {
-
-		Type inplaceType = Types.parameterize(Arity10_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType()});
-
-		return (Arity10_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity10_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType()});
-
-		return (Arity10_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity10_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType(), in11Type.getType()});
-
-		return (Arity11_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type) {
-
-		Type inplaceType = Types.parameterize(Arity11_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType(), in11Type.getType()});
-
-		return (Arity11_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity11_11.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), ioType.getType()});
-
-		return (Arity11_11)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity11_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType(), in11Type.getType(), in12Type.getType()});
-
-		return (Arity12_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type) {
-
-		Type inplaceType = Types.parameterize(Arity12_11.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), ioType.getType(), in12Type.getType()});
-
-		return (Arity12_11)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity12_12.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), ioType.getType()});
-
-		return (Arity12_12)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity12_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_11.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), ioType.getType(), in12Type.getType(), in13Type.getType()});
-
-		return (Arity13_11)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type) {
-
-		Type inplaceType = Types.parameterize(Arity13_12.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), ioType.getType(), in13Type.getType()});
-
-		return (Arity13_12)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity13_13.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), ioType.getType()});
-
-		return (Arity13_13)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity13_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_11.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), ioType.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_11)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_12.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), ioType.getType(), in13Type.getType(), in14Type.getType()});
-
-		return (Arity14_12)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type) {
-
-		Type inplaceType = Types.parameterize(Arity14_13.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), ioType.getType(), in14Type.getType()});
-
-		return (Arity14_13)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> match14(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity14_14.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), ioType.getType()});
-
-		return (Arity14_14)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity14_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_11.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), ioType.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_11)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_12.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), ioType.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_12)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_13.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), ioType.getType(), in14Type.getType(), in15Type.getType()});
-
-		return (Arity15_13)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> match14(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType, final Nil<I15> in15Type) {
-
-		Type inplaceType = Types.parameterize(Arity15_14.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), ioType.getType(), in15Type.getType()});
-
-		return (Arity15_14)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> match15(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<IO> ioType) {
-
-		Type inplaceType = Types.parameterize(Arity15_15.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), ioType.getType()});
-
-		return (Arity15_15)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType }, //
-				ioType);
+		return matchHelper(ops, opName, Arity15_15.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_1.class, new Type[] { ioType.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_1)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_2.class, new Type[] { in1Type.getType(), ioType.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_2)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_3.class, new Type[] { in1Type.getType(), in2Type.getType(), ioType.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_3)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_4.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), ioType.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_4)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_5.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), ioType.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_5)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_6.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), ioType.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_6)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_7.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), ioType.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_7)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_8.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), ioType.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_8)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_9.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), ioType.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_9)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_10.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), ioType.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_10)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_11.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), ioType.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_11)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_12.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), ioType.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_12)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_13.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), ioType.getType(), in14Type.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_13)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> match14(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType, final Nil<I15> in15Type, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_14.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), ioType.getType(), in15Type.getType(), in16Type.getType()});
-
-		return (Arity16_14)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> match15(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<IO> ioType, final Nil<I16> in16Type) {
-
-		Type inplaceType = Types.parameterize(Arity16_15.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), ioType.getType(), in16Type.getType()});
-
-		return (Arity16_15)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type }, //
-				ioType);
+		return matchHelper(ops, opName, Arity16_15.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type});
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> match16(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<IO> ioType) {
+		return matchHelper(ops, opName, Arity16_16.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType});
+	}
 
-		Type inplaceType = Types.parameterize(Arity16_16.class, new Type[] { in1Type.getType(), in2Type.getType(), in3Type.getType(), in4Type.getType(), in5Type.getType(), in6Type.getType(), in7Type.getType(), in8Type.getType(), in9Type.getType(), in10Type.getType(), in11Type.getType(), in12Type.getType(), in13Type.getType(), in14Type.getType(), in15Type.getType(), ioType.getType()});
-
-		return (Arity16_16)ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType }, //
-				ioType);
+	@SuppressWarnings({ "unchecked" })
+	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+		final Type[] types = new Type[inTypes.length];
+		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		final Type specialType = Types.parameterize(opClass, types);
+		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
 	}
 
 	public static class InplaceInfo {

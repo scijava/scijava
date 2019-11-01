@@ -68,20 +68,23 @@ public final class Functions {
 	public static boolean isFunction(Type type) {
 		return ALL_FUNCTIONS.containsKey(Types.raw(type));
 	}
-
+	
 #foreach($arity in [0..$maxArity])
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $arityClassName.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity)) {
-		final Type specialType = Types.parameterize($arityClass.call($arity), //
-			new Type[] { $typeArgs.call($arity) });
-		return ($arityClassName.call($arity)) ops.findOp( //
-				opName, //
-				Nil.of(specialType), //
-				new Nil[] { $nilArgs.call($arity) }, //
-				outType);
+		return matchHelper(ops, opName, ${arityClassName.call($arity)}.class, $nilArgs.call($arity));
 	}
-
+	
 #end
+
+	@SuppressWarnings({ "unchecked" })
+	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+		final Type[] types = new Type[inTypes.length + 1];
+		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		types[types.length - 1] = outType.getType();
+		final Type specialType = Types.parameterize(opClass, types);
+		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
+	}
 
 
 #foreach($arity in $arities)

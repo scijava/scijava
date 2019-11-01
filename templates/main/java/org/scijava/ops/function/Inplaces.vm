@@ -92,22 +92,22 @@ public final class Inplaces {
 				.map(Entry<Class<?>, InplaceInfo>::getKey) //
 				.collect(Collectors.toList());
 	}
-
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity, $a) $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpService ops, final String opName, $matchParams.call($arity, $a)) {
-
-		Type inplaceType = Types.parameterize($simplifiedClass.call($arity, $a), new Type[] { $typeArgs.call($arity, $a)});
-
-		return (${simplifiedInplace.call($arity, $a)})ops.findOp( //
-				opName, //
-				Nil.of(inplaceType), //
-				new Nil[] { $basicParams.call($arity, $a) }, //
-				ioType);
+		return matchHelper(ops, opName, ${simplifiedInplace.call($arity, $a)}.class, ioType, new Nil[] {${basicParams.call($arity, $a)}});
 	}
 #end
 #end
+
+	@SuppressWarnings({ "unchecked" })
+	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+		final Type[] types = new Type[inTypes.length];
+		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		final Type specialType = Types.parameterize(opClass, types);
+		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
+	}
 
 	public static class InplaceInfo {
 

@@ -2,10 +2,16 @@ string = "hello world"
 maxArity = 5
 numConsumers = maxArity+1
 
+inplaceSuffix = ```
+{ arity, num ->
+  arity == 1 ? '1' :
+  arity + "_" + num
+}
+```
 simplifiedInplace = ```
 { arity, num ->
   arity == 1 ? "Arity1" :
-  "Arity${arity}_${num}"
+  "Arity" + inplaceSuffix(arity, num)
 }
 ```
 inplaceType = ```
@@ -40,6 +46,11 @@ genericParamTypes = ```
   (1..arity).stream().map{a -> "I$a"}.collect() + ['O']
 }
 ```
+generics = ```
+{ arity ->
+  '<' + String.join(', ', genericParamTypes(arity)) + '>'
+}
+```
 genericsNamesList = ```
 { arity ->
   genericParamTypes(arity).stream().map{a -> 
@@ -56,9 +67,16 @@ nilNames = ```
 ```
 typeParamsList = ```
 { arity ->
-  generics = genericParamTypes(arity)
+  gpt = genericParamTypes(arity)
   names = genericsNamesList(arity)
-  (0..arity).stream().map{a -> "${generics[a]} ${names[a]}"}.collect()
+  (0..arity).stream().map{a -> "${gpt[a]} ${names[a]}"}.collect()
+}
+```
+typeParamsListWithoutOutput = ```
+{ arity ->
+  gpt = genericParamTypes(arity)
+  names = genericsNamesList(arity)
+  (0..arity-1).stream().map{a -> "${gpt[a]} ${names[a]}"}.collect()
 }
 ```
 

@@ -1,0 +1,119 @@
+.include Globals.list
+arities = (0..maxArity).collect()
+
+[OpWrappers.java]
+inplaceTypeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+inplaceGenericsList = ```
+{ arity, io ->
+  inplaceTypeVarNums(arity, io).stream().map{a -> "I$a"}.collect()
+}
+```
+inplaceTypeParams = ```
+{ arity, io ->
+  '<' + String.join(', ', inplaceGenericsList(arity, io)) + '>'
+}
+```
+nilArgs = ```
+{ arity ->
+  String.join(', ', nilNames(arity))
+}
+```
+genericFunctionGenerics = ```
+{ arity ->
+  arity == 0 ? 'GenericTypedProducer<O>' :
+    'GenericTypedFunction' + arity + generics(arity)
+}
+```
+genericComputerGenerics = ```
+{ arity ->
+  'GenericTypedComputer' + arity +'<' + String.join(', ', genericParamTypes(arity)) + '>'
+}
+```
+genericInplaceGenerics = ```
+{ arity, io ->
+  'GenericTypedInplace' + arity + '<' + String.join(', ', inplaceGenericsList(arity, io)) + '>'
+}
+```
+functionGenerics = ```
+{ arity ->
+  functionArity(arity) +'<' + String.join(', ', genericParamTypes(arity)) + '>'
+}
+```
+computerGenerics = ```
+{ arity ->
+  computerArity(arity) +'<' + String.join(', ', genericParamTypes(arity)) + '>'
+}
+```
+inplaceGenerics = ```
+{ arity, io->
+  inplaceType(arity, io) +'<' + String.join(', ', inplaceGenericsList(arity, io)) + '>'
+}
+```
+matchParams = ```
+{ arity ->
+  // contains "I1, I2, ..., IN, O"
+  gpt = genericParamTypes(arity)
+  // contains "in1, in2, ..., inN, out"
+  names = nilNames(arity)
+  // constructing strings of the term "final Nil<I1> in1"
+  nilArgs = (0..arity).stream().map{a -> "final Nil<${gpt[a]}> ${names[a]}"}.collect()
+  String.join(', ', nilArgs)
+}
+```
+typeArgs = ```
+{ arity ->
+  String.join(', ', nilNames(arity).stream().map{a -> "${a}.getType()"}.collect())
+}
+```
+applyParams = ```
+{ arity ->
+  typeParams = typeParamsList(arity)
+  typeParams.remove(typeParams.size() - 1);
+  String.join(', ', typeParams)
+}
+```
+applyArgs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  names.remove(names.size() - 1)
+  String.join(', ', names)
+}
+```
+computeParams = ```
+{ arity ->
+  typeParams = typeParamsList(arity)
+  typeParams.set(arity, "@Mutable " + typeParams.get(arity))
+  String.join(', ', typeParams)
+}
+```
+acceptParams = ```
+{ arity ->
+  String.join(', ', typeParamsList(arity).stream().map{a -> "final " + a}.collect())
+}
+```
+computeArgs = ```
+{ arity ->
+  String.join(', ', genericsNamesList(arity))
+}
+```
+mutateArgsList = ```
+{ arity, io -> 
+  inplaceTypeVarNums(arity, io).stream().map{a -> a == 'O' ? "ioType" : "in${a}Type"}.collect()
+}
+```
+mutateParams = ```
+{ arity, io ->
+  args = mutateArgsList(arity, io)
+  types = inplaceGenericsList(arity, io)
+  String.join(', ', (0..arity - 1).stream().map{a -> types[a] + " " + args[a]}.collect())
+}
+```
+mutateArgs = ```
+{ arity, io ->
+  String.join(', ', mutateArgsList(arity, io))
+}
+```

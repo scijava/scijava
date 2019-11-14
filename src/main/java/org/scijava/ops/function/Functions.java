@@ -17,7 +17,6 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.types.Nil;
-import org.scijava.param.Mutable;
 import org.scijava.util.Types;
 
 /**
@@ -82,102 +81,163 @@ public final class Functions {
 	public static boolean isFunction(Type type) {
 		return ALL_FUNCTIONS.containsKey(Types.raw(type));
 	}
-	
+
 	@SuppressWarnings({ "unchecked" })
 	public static <O> Producer<O> match(final OpService ops, final String opName, final Nil<O> outType) {
 		return matchHelper(ops, opName, Producer.class, outType);
 	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I, O> Function<I, O> match(final OpService ops, final String opName, final Nil<I> inType, final Nil<O> outType) {
-		return matchHelper(ops, opName, Function.class, outType, inType);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, O> BiFunction<I1, I2, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, BiFunction.class, outType, in1Type, in2Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, O> Functions.Arity3<I1, I2, I3, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity3.class, outType, in1Type, in2Type, in3Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, O> Functions.Arity4<I1, I2, I3, I4, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity4.class, outType, in1Type, in2Type, in3Type, in4Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, O> Functions.Arity5<I1, I2, I3, I4, I5, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity5.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, O> Functions.Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity6.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, O> Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity7.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity8.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity9.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity10.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity11.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity12.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity13.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity14.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity15.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
-	}
-	
-	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType) {
-		return matchHelper(ops, opName, Functions.Arity16.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
-	}
-	
 
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+	public static <I, O> Function<I, O> match(final OpService ops, final String opName, final Nil<I> inType,
+			final Nil<O> outType) {
+		return matchHelper(ops, opName, Function.class, outType, inType);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, O> BiFunction<I1, I2, O> match(final OpService ops, final String opName,
+			final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, BiFunction.class, outType, in1Type, in2Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, O> Functions.Arity3<I1, I2, I3, O> match(final OpService ops, final String opName,
+			final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity3.class, outType, in1Type, in2Type, in3Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, O> Functions.Arity4<I1, I2, I3, I4, O> match(final OpService ops,
+			final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type,
+			final Nil<I4> in4Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity4.class, outType, in1Type, in2Type, in3Type, in4Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, O> Functions.Arity5<I1, I2, I3, I4, I5, O> match(final OpService ops,
+			final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type,
+			final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity5.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, O> Functions.Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpService ops,
+			final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type,
+			final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity6.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, O> Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity7.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity8.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity9.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity10.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<I11> in11Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity11.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity12.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity13.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type,
+			final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity14.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type,
+			final Nil<I15> in15Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity15.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(
+			final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type,
+			final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type,
+			final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type,
+			final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type,
+			final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType) {
+		return matchHelper(ops, opName, Functions.Arity16.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type,
+				in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type,
+				in16Type);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass,
+			final Nil<?> outType, final Nil<?>... inTypes) {
 		final Type[] types = new Type[inTypes.length + 1];
-		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		for (int i = 0; i < inTypes.length; i++)
+			types[i] = inTypes[i].getType();
 		types[types.length - 1] = outType.getType();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
 	}
-
 
 	/**
 	 * A 3-arity specialization of {@link Function}.
@@ -229,7 +289,7 @@ public final class Functions {
 			return (I1 in1, I2 in2, I3 in3) -> after.apply(apply(in1, in2, in3));
 		}
 	}
-	
+
 	/**
 	 * A 4-arity specialization of {@link Function}.
 	 *
@@ -284,7 +344,7 @@ public final class Functions {
 			return (I1 in1, I2 in2, I3 in3, I4 in4) -> after.apply(apply(in1, in2, in3, in4));
 		}
 	}
-	
+
 	/**
 	 * A 5-arity specialization of {@link Function}.
 	 *
@@ -343,7 +403,7 @@ public final class Functions {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) -> after.apply(apply(in1, in2, in3, in4, in5));
 		}
 	}
-	
+
 	/**
 	 * A 6-arity specialization of {@link Function}.
 	 *
@@ -406,7 +466,7 @@ public final class Functions {
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> after.apply(apply(in1, in2, in3, in4, in5, in6));
 		}
 	}
-	
+
 	/**
 	 * A 7-arity specialization of {@link Function}.
 	 *
@@ -470,10 +530,11 @@ public final class Functions {
 		 */
 		default <O2> Arity7<I1, I2, I3, I4, I5, I6, I7, O2> andThen(Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> after
+					.apply(apply(in1, in2, in3, in4, in5, in6, in7));
 		}
 	}
-	
+
 	/**
 	 * A 8-arity specialization of {@link Function}.
 	 *
@@ -541,10 +602,11 @@ public final class Functions {
 		 */
 		default <O2> Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O2> andThen(Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> after
+					.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8));
 		}
 	}
-	
+
 	/**
 	 * A 9-arity specialization of {@link Function}.
 	 *
@@ -616,10 +678,11 @@ public final class Functions {
 		 */
 		default <O2> Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O2> andThen(Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> after
+					.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9));
 		}
 	}
-	
+
 	/**
 	 * A 10-arity specialization of {@link Function}.
 	 *
@@ -693,12 +756,14 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> after
+					.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10));
 		}
 	}
-	
+
 	/**
 	 * A 11-arity specialization of {@link Function}.
 	 *
@@ -776,12 +841,14 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> after
+					.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11));
 		}
 	}
-	
+
 	/**
 	 * A 12-arity specialization of {@link Function}.
 	 *
@@ -863,12 +930,14 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11,
+					I12 in12) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12));
 		}
 	}
-	
+
 	/**
 	 * A 13-arity specialization of {@link Function}.
 	 *
@@ -936,7 +1005,8 @@ public final class Functions {
 		 *            function argument 13
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12,
+				I13 in13);
 
 		/**
 		 * Returns a composed function that first applies this function to its input,
@@ -954,12 +1024,15 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11,
+					I12 in12, I13 in13) -> after
+							.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13));
 		}
 	}
-	
+
 	/**
 	 * A 14-arity specialization of {@link Function}.
 	 *
@@ -1031,7 +1104,8 @@ public final class Functions {
 		 *            function argument 14
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12,
+				I13 in13, I14 in14);
 
 		/**
 		 * Returns a composed function that first applies this function to its input,
@@ -1049,12 +1123,15 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11,
+					I12 in12, I13 in13, I14 in14) -> after
+							.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14));
 		}
 	}
-	
+
 	/**
 	 * A 15-arity specialization of {@link Function}.
 	 *
@@ -1130,7 +1207,8 @@ public final class Functions {
 		 *            function argument 15
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12,
+				I13 in13, I14 in14, I15 in15);
 
 		/**
 		 * Returns a composed function that first applies this function to its input,
@@ -1148,12 +1226,15 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11,
+					I12 in12, I13 in13, I14 in14, I15 in15) -> after.apply(
+							apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15));
 		}
 	}
-	
+
 	/**
 	 * A 16-arity specialization of {@link Function}.
 	 *
@@ -1233,7 +1314,8 @@ public final class Functions {
 		 *            function argument 16
 		 * @return the function output
 		 */
-		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16);
+		O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12,
+				I13 in13, I14 in14, I15 in15, I16 in16);
 
 		/**
 		 * Returns a composed function that first applies this function to its input,
@@ -1251,10 +1333,13 @@ public final class Functions {
 		 * @throws NullPointerException
 		 *             if after is null
 		 */
-		default <O2> Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O2> andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O2> andThen(
+				Function<? super O, ? extends O2> after) {
 			Objects.requireNonNull(after);
-			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16));
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11,
+					I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> after.apply(apply(in1, in2, in3, in4, in5, in6,
+							in7, in8, in9, in10, in11, in12, in13, in14, in15, in16));
 		}
 	}
-	
+
 }

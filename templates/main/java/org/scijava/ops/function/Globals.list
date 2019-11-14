@@ -64,6 +64,11 @@ nilNames = ```
   genericsNamesList(arity).stream().map{a -> "${a}Type"}.collect()
 }
 ```
+typeArgs = ```
+{ arity ->
+  String.join(', ', nilNames(arity).stream().map{a -> "${a}.getType()"}.collect())
+}
+```
 typeParamsList = ```
 { arity ->
   gpt = genericParamTypes(arity)
@@ -76,6 +81,41 @@ typeParamsListWithoutOutput = ```
   gpt = genericParamTypes(arity)
   names = genericsNamesList(arity)
   (0..arity-1).stream().map{a -> "${gpt[a]} ${names[a]}"}.collect()
+}
+```
+applyParams = ```
+{ arity ->
+  typeParams = typeParamsList(arity)
+  typeParams.remove(typeParams.size() - 1)
+  String.join(', ', typeParams)
+}
+```
+applyArgs = ```
+{ arity ->
+  names = genericsNamesList(arity)
+  String.join(', ', names[0..names.size() - 2])
+}
+```
+computeParams = ```
+{ arity ->
+  typeParams = typeParamsList(arity)
+  typeParams.set(arity, "@Mutable " + typeParams.get(arity))
+  String.join(', ', typeParams)
+}
+```
+acceptParams = ```
+{ arity ->
+  String.join(', ', typeParamsList(arity).stream().map{a -> "final " + a}.collect())
+}
+```
+computeArgs = ```
+{ arity ->
+  String.join(', ', genericsNamesList(arity))
+}
+```
+acceptArgs = ```
+{ arity ->
+  computeArgs(arity)
 }
 ```
 

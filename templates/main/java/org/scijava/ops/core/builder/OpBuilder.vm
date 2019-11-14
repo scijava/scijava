@@ -252,7 +252,7 @@ public class OpBuilder {
 		}
 		
 #foreach($a in [1..$arity])
-		public Inplaces.Arity$inplaceArityNumber.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
+		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypes.call($arity));
 		}
 #end
@@ -293,7 +293,7 @@ public class OpBuilder {
 		}
 
 #foreach($a in [1..$arity])
-		public Inplaces.Arity$inplaceArityNumber.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
+		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypes.call($arity));
 		}
 #end
@@ -375,7 +375,7 @@ public class OpBuilder {
 		}
 
 #foreach($a in [1..$arity])
-		public Inplaces.Arity$inplaceArityNumber.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(){
+		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(){
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypesFromArgs.call($arity));
 		}
 #end

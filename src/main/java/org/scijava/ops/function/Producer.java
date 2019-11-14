@@ -15,7 +15,8 @@ import java.util.function.Supplier;
  * </p>
  *
  * @author Curtis Rueden
- * @param <O> The type of objects produced.
+ * @param <O>
+ *            The type of objects produced.
  */
 public interface Producer<O> extends Supplier<O> {
 	O create();

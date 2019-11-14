@@ -2,12 +2,6 @@
 arities = (1..maxArity).collect()
 
 [OpBuilder.java]
-inplaceArityNumber = ```
-{ arity, num ->
-  arity == 1 ? '1' :
-  "${arity}_${num}"
-}
-```
 inplaceMatchNumber = ```
 { arity, num ->
   arity == 1 ? '' :

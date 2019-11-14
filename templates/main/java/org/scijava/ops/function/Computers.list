@@ -2,11 +2,6 @@
 arities = (0..maxArity).collect()
 
 [Computers.java]
-generics = ```
-{ arity ->
-  '<' + String.join(', ', genericParamTypes(arity)) + '>'
-}
-```
 nilArgs = ```
 { arity ->
   names = nilNames(arity)
@@ -25,25 +20,4 @@ matchParams = ```
   String.join(', ', nilArgs)
 }
 ```
-typeArgs = ```
-{ arity ->
-  String.join(', ', nilNames(arity).stream().map{a -> "${a}.getType()"}.collect())
-}
-```
-computeParams = ```
-{ arity ->
-  typeParams = typeParamsList(arity)
-  typeParams.set(arity, "@Mutable " + typeParams.get(arity))
-  String.join(', ', typeParams)
-}
-```
-acceptParams = ```
-{ arity ->
-  String.join(', ', typeParamsList(arity).stream().map{a -> "final " + a}.collect())
-}
-```
-computeArgs = ```
-{ arity ->
-  String.join(', ', genericsNamesList(arity))
-}
-```
+

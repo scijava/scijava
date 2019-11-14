@@ -64,42 +64,6 @@ matchParams = ```
   String.join(', ', nilArgs)
 }
 ```
-typeArgs = ```
-{ arity ->
-  String.join(', ', nilNames(arity).stream().map{a -> "${a}.getType()"}.collect())
-}
-```
-applyParams = ```
-{ arity ->
-  typeParams = typeParamsList(arity)
-  typeParams.remove(typeParams.size() - 1);
-  String.join(', ', typeParams)
-}
-```
-applyArgs = ```
-{ arity ->
-  names = genericsNamesList(arity)
-  names.remove(names.size() - 1)
-  String.join(', ', names)
-}
-```
-computeParams = ```
-{ arity ->
-  typeParams = typeParamsList(arity)
-  typeParams.set(arity, "@Mutable " + typeParams.get(arity))
-  String.join(', ', typeParams)
-}
-```
-acceptParams = ```
-{ arity ->
-  String.join(', ', typeParamsList(arity).stream().map{a -> "final " + a}.collect())
-}
-```
-computeArgs = ```
-{ arity ->
-  String.join(', ', genericsNamesList(arity))
-}
-```
 mutateArgsList = ```
 { arity, io -> 
   inplaceTypeVarNums(arity, io).stream().map{a -> a == 'O' ? "ioType" : "in${a}Type"}.collect()

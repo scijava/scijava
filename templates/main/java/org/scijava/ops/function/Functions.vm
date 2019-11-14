@@ -52,7 +52,7 @@ public final class Functions {
 	static {
 		final Map<Class<?>, Integer> functions = new HashMap<>(10);
 #foreach($arity in [0..$maxArity])
-		functions.put($arityClass.call($arity), $arity);
+		functions.put(${functionArity.call($arity)}.class, $arity);
 #end
 		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
 	}
@@ -71,8 +71,8 @@ public final class Functions {
 	
 #foreach($arity in [0..$maxArity])
 	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $arityClassName.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity)) {
-		return matchHelper(ops, opName, ${arityClassName.call($arity)}.class, $nilArgs.call($arity));
+	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity)) {
+		return matchHelper(ops, opName, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
 	}
 	
 #end

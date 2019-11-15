@@ -29,7 +29,6 @@
 package org.scijava.ops;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -48,51 +47,24 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.ComputerOps.BiComputerOp;
-import org.scijava.ops.core.computer.ComputerOps.Computer3Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer4Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer5Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer6Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer7Op;
-import org.scijava.ops.core.computer.ComputerOps.Computer8Op;
-import org.scijava.ops.core.computer.ComputerOps.ComputerOp;
-import org.scijava.ops.core.function.FunctionOps.BiFunctionOp;
-import org.scijava.ops.core.function.FunctionOps.Function3Op;
-import org.scijava.ops.core.function.FunctionOps.Function4Op;
-import org.scijava.ops.core.function.FunctionOps.Function5Op;
-import org.scijava.ops.core.function.FunctionOps.Function6Op;
-import org.scijava.ops.core.function.FunctionOps.Function7Op;
-import org.scijava.ops.core.function.FunctionOps.Function8Op;
-import org.scijava.ops.core.function.FunctionOps.Function9Op;
-import org.scijava.ops.core.function.FunctionOps.FunctionOp;
-import org.scijava.ops.core.function.SourceOp;
-import org.scijava.ops.core.inplace.InplaceOps.BiInplaceFirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.BiInplaceSecondOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace3FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace3SecondOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace3ThirdOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace4FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace5FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace6FirstOp;
-import org.scijava.ops.core.inplace.InplaceOps.Inplace7SecondOp;
-import org.scijava.ops.core.inplace.InplaceOps.InplaceOp;
 import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.transform.DefaultOpTransformationMatcher;
 import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
-import org.scijava.ops.types.Any;
 import org.scijava.ops.transform.OpTransformationMatcher;
 import org.scijava.ops.transform.OpTransformer;
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
+import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.FunctionalMethodType;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Parameter;
@@ -131,7 +103,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	/**
 	 * Prefix tree to cache and quickly find {@link OpInfo}s.
 	 */
-//	private PrefixTree<OpInfo> opCache;
+	// private PrefixTree<OpInfo> opCache;
 
 	/**
 	 * Map to collect all aliases for a specific op. All aliases will map to one
@@ -141,47 +113,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	private List<OpTransformer> transformerIndex;
 
-	private static Map<Class<?>, Class<?>> wrappers = wrappers();
+	private Map<Class<?>, OpWrapper<?>> wrappers;
 
-	private static Map<Class<?>, Class<?>> wrappers() {
-		final Map<Class<?>, Class<?>> result = new HashMap<>();
-		final Class<?>[] wrapperClasses = { //
-				FunctionOp.class, //
-				BiFunctionOp.class, //
-				Function3Op.class, //
-				Function4Op.class, //
-				Function5Op.class, //
-				Function6Op.class, //
-				Function7Op.class, //
-				Function8Op.class, //
-				Function9Op.class, //
-				ComputerOp.class, //
-				BiComputerOp.class, //
-				Computer3Op.class, //
-				Computer4Op.class, //
-				Computer5Op.class, //
-				Computer6Op.class, //
-				Computer7Op.class, //
-				Computer8Op.class, //
-				InplaceOp.class, //
-				BiInplaceFirstOp.class, //
-				BiInplaceSecondOp.class, //
-				Inplace3FirstOp.class, //
-				Inplace3SecondOp.class, //
-				Inplace3ThirdOp.class, //
-				Inplace4FirstOp.class, //
-				Inplace5FirstOp.class, //
-				Inplace6FirstOp.class, //
-				Inplace7SecondOp.class, //
-				SourceOp.class
-		};
-		for (final Class<?> c : wrapperClasses) {
-			result.put(c.getInterfaces()[0], c);
-		}
-		return result;
-	}
-
-	public void initOpCache() {
+	private void initOpCache() {
 		opCache = new HashMap<>();
 
 		// Add regular Ops
@@ -199,7 +133,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			try {
 				Class<? extends OpCollection> c = pluginInfo.loadClass();
 				final List<Field> fields = ClassUtils.getAnnotatedFields(c, OpField.class);
-				Object instance = null; 
+				Object instance = null;
 				for (Field field : fields) {
 					final boolean isStatic = Modifier.isStatic(field.getModifiers());
 					if (!isStatic && instance == null) {
@@ -214,6 +148,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 	}
 
+	private void initWrappers() {
+		wrappers = new HashMap<>();
+		for (OpWrapper<?> wrapper : pluginService.createInstancesOfType(OpWrapper.class)) {
+			wrappers.put(wrapper.type(), wrapper);
+		}
+	}
+
 	private void addToOpIndex(final OpInfo opInfo, final String opNames) {
 		String[] parsedOpNames = OpUtils.parseOpNames(opNames);
 		if (parsedOpNames == null || parsedOpNames.length == 0) {
@@ -225,7 +166,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 					+ opInfo.getValidityException().getMessage());
 			return;
 		}
-		for(String opName: parsedOpNames) {
+		for (String opName : parsedOpNames) {
 			if (!opCache.containsKey(opName))
 				opCache.put(opName, new ArrayList<>());
 			opCache.get(opName).add(opInfo);
@@ -241,9 +182,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		if (opCache == null) {
 			initOpCache();
 		}
-        return opCache.values().stream()
-        		.flatMap(list -> list.stream())
-        		.collect(Collectors.toList());
+		return opCache.values().stream().flatMap(list -> list.stream()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -292,30 +231,23 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 *             matching the functional type and the name could not be found, if
 	 *             an exception occurs during injection
 	 */
-	private List<Object> resolveOpDependencies(OpCandidate op)
-		throws OpMatchingException
-	{
+	private List<Object> resolveOpDependencies(OpCandidate op) throws OpMatchingException {
 		final List<OpDependencyMember<?>> dependencies = op.opInfo().dependencies();
-		final List<Object> resolvedDependencies = new ArrayList<>(dependencies
-			.size());
+		final List<Object> resolvedDependencies = new ArrayList<>(dependencies.size());
 		for (final OpDependencyMember<?> dependency : dependencies) {
 			final String dependencyName = dependency.getDependencyName();
-			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
-				dependency.getType() }, op.typeVarAssigns())[0];
-			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
-				op.typeVarAssigns());
+			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] { dependency.getType() },
+					op.typeVarAssigns())[0];
+			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName, op.typeVarAssigns());
 			if (inferredRef == null) {
-				throw new OpMatchingException("Could not infer functional " +
-					"method inputs and outputs of Op dependency field: " + dependency
-						.getKey());
+				throw new OpMatchingException("Could not infer functional "
+						+ "method inputs and outputs of Op dependency field: " + dependency.getKey());
 			}
 			try {
 				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef));
-			}
-			catch (final Exception e) {
-				throw new OpMatchingException(
-					"Could not find Op that matches requested Op dependency:" +
-						"\nOp class: " + op.opInfo().implementationName() + //
+			} catch (final Exception e) {
+				throw new OpMatchingException("Could not find Op that matches requested Op dependency:" + "\nOp class: "
+						+ op.opInfo().implementationName() + //
 						"\nDependency identifier: " + dependency.getKey() + //
 						"\n\n Attempted request:\n" + inferredRef, e);
 			}
@@ -326,8 +258,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	@SuppressWarnings("unchecked")
 	public <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType) {
-		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), outType != null ? outType.getType() : null, toTypes(
-			inTypes));
+		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), outType != null ? outType.getType() : null,
+				toTypes(inTypes));
 		return (T) findOpInstance(opName, ref);
 	}
 
@@ -355,8 +287,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			// If we found one, try to do transformation and return transformed op
 			log.debug("Matching Op transformation found:\n" + transformation + "\n");
 			try {
-				final List<Object> dependencies = resolveOpDependencies(transformation
-					.getSourceOp());
+				final List<Object> dependencies = resolveOpDependencies(transformation.getSourceOp());
 				op = transformation.exceute(this, dependencies);
 			} catch (OpMatchingException | OpTransformationException e1) {
 				throw new IllegalArgumentException("Execution of Op transformatioon failed:\n" + e1);
@@ -390,8 +321,12 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * @return an {@link Op} wrapping of op.
 	 */
 	private Object wrapOp(Object op, OpCandidate match, OpTransformationCandidate transformation) {
+		if (wrappers == null)
+			initWrappers();
+
 		// TODO: we don't want to wrap OpRunners, do we? What is the point?
-		if(OpRunner.class.isInstance(op)) return op;
+		if (OpRunner.class.isInstance(op))
+			return op;
 
 		OpInfo opInfo = match == null ? transformation.getSourceOp().opInfo() : match.opInfo();
 		// FIXME: this type is not necessarily Computer, Function, etc. but often
@@ -408,16 +343,20 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				throw new IllegalArgumentException(
 						"Matched op Type " + type.getClass() + " matches multiple Op types: " + wrappers.toString());
 			// get the wrapper and wrap up the Op
-			Class<?> wrapper = wrappers.get(suitableWrappers[0]);
-			return wrapper.getConstructors()[0].newInstance(op, type, opInfo);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| SecurityException exc) {
+			return wrap(suitableWrappers[0], op, opInfo);
+		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;
 		} catch (NullPointerException e) {
 			log.error("No wrapper exists for " + Types.raw(type).toString() + ".");
 			return op;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T wrap(Class<T> opType, Object op, OpInfo info) {
+		OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(opType);
+		return wrapper.wrap((T) op, info);
 	}
 
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
@@ -431,9 +370,14 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	public Object run(final String opName, final Object... args) {
 
 		Nil<?>[] inTypes = Arrays.stream(args).map(arg -> Nil.of(typeService.reify(arg))).toArray(Nil[]::new);
-		Nil<?> outType = new Nil<Any>() { @Override public Type getType() {return new Any();}};
+		Nil<?> outType = new Nil<Any>() {
+			@Override
+			public Type getType() {
+				return new Any();
+			}
+		};
 
-		OpRunner op = findOpInstance(opName, new Nil<OpRunner>(){}, inTypes, outType);
+		OpRunner op = findOpInstance(opName, new Nil<OpRunner>() {}, inTypes, outType);
 		return op.run(args);
 	}
 
@@ -452,6 +396,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * InputTypes:  [Double[], Double[]]
 	 * OutputTypes: [Double[]]
 	 * </pre>
+	 * 
 	 * Input and output types will be inferred by looking at the signature of the
 	 * functional method of the specified type. Also see
 	 * {@link ParameterStructs#findFunctionalMethodTypes(Type)}.
@@ -461,8 +406,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * @return null if the specified type has no functional method
 	 */
 	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns)
-		throws OpMatchingException
-	{
+			throws OpMatchingException {
 		List<FunctionalMethodType> fmts = ParameterStructs.findFunctionalMethodTypes(type);
 		if (fmts == null)
 			return null;
@@ -483,8 +427,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		if (numOutputs != 1) {
 			String error = "Op '" + name + "' of type " + type + " specifies ";
 			error += numOutputs == 0 //
-				? "no outputs" //
-				: "multiple outputs: " + Arrays.toString(outputs);
+					? "no outputs" //
+					: "multiple outputs: " + Arrays.toString(outputs);
 			error += ". This is not supported.";
 			throw new OpMatchingException(error);
 		}
@@ -778,8 +722,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			for (T t : node.data) {
 				sb.append(getIndent(level) + "\t" + t.getClass().getSimpleName() + "\n");
 			}
-			if (!node.data.isEmpty()) {
-			} else {
+			if (!node.data.isEmpty()) {} else {
 				sb.delete(sb.length() - 1, sb.length());
 				sb.append(" <empty>\n");
 			}
@@ -790,8 +733,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				String sub = nodeToString(e.getValue(), e.getKey(), new StringBuilder(), level + 1);
 				sb.append(sub + "\n");
 			}
-			if (!node.children.isEmpty()) {
-			} else {
+			if (!node.children.isEmpty()) {} else {
 				sb.delete(sb.length() - 1, sb.length());
 				sb.append(" <empty>\n");
 			}

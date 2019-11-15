@@ -53,7 +53,7 @@ public class FunctionToComputerTransformTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testBiFunctionToBiComputer() {
+	public void testBiFunctionToComputer2() {
 		BiFunction<double[], double[], double[]> addArrayFunction = ops.findOp( //
 			"math.add", new Nil<BiFunction<double[], double[], double[]>>()
 			{}, //

@@ -1,0 +1,78 @@
+.include templates/main/java/org/scijava/ops/function/Globals.list
+arities = (1..maxArity).collect()
+
+[OpBuilder.java]
+inplaceMatchNumber = ```
+{ arity, num ->
+  arity == 1 ? '' :
+  "$num"
+}
+```
+generics = ```
+{ arity ->
+  arity == 0 ? '<O>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', O>'
+}
+```
+genericsWithoutOutput = ```
+{ arity ->
+  arity == 1 ? '<I1>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + '>'
+}
+```
+genericsWildcardFunction = ```
+{ arity ->
+  arity == 0 ? '<?>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', ?>'
+}
+```
+inputObjectsArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "final I$a in$a"}.collect())
+}
+```
+inputObjects = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "in$a"}.collect())
+}
+```
+inputClassesArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "final Class<I$a> in${a}Class"}.collect())
+}
+```
+inputClassesToTypes = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "Nil.of(in${a}Class)"}.collect())
+}
+```
+inputTypesArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect())
+}
+```
+inputTypesFromArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "type(in$a)"}.collect())
+}
+```
+inputTypesArgsWithOutput = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect()) + ', final Nil<O> outType'
+}
+```
+inputTypes = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect())
+}
+```
+inputArgsFromReferences = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "in${a}.get()"}.collect())
+}
+```
+inputTypesWithOutput = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect()) + ', outType'
+}
+```

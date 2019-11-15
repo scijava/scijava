@@ -33,11 +33,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.NullaryComputer;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
-import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.types.Nil;
 
 public class OpsTest extends AbstractTestEnvironment {
@@ -75,8 +72,8 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void nullaryComputer() {
-		NullaryComputer<double[]> sqrtComputer = ops.findOp( //
-				"math.zero", new Nil<NullaryComputer<double[]>>() {
+		Computers.Arity0<double[]> sqrtComputer = ops.findOp( //
+				"math.zero", new Nil<Computers.Arity0<double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray }, //
 				nilDoubleArray//
@@ -88,8 +85,8 @@ public class OpsTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void unaryComputer() {
-		Computer<double[], double[]> sqrtComputer = ops.findOp( //
-				"math.sqrt", new Nil<Computer<double[], double[]>>() {
+		Computers.Arity1<double[], double[]> sqrtComputer = ops.findOp( //
+				"math.sqrt", new Nil<Computers.Arity1<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -101,8 +98,8 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void binaryComputer() {
-		BiComputer<double[], double[], double[]> computer = ops.findOp( //
-				"math.add", new Nil<BiComputer<double[], double[], double[]>>() {
+		Computers.Arity2<double[], double[], double[]> computer = ops.findOp( //
+				"math.add", new Nil<Computers.Arity2<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -116,8 +113,8 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void unaryInplace() {
-		Inplace<double[]> inplaceSqrt = ops.findOp( //
-				"math.sqrt", new Nil<Inplace<double[]>>() {
+		Inplaces.Arity1<double[]> inplaceSqrt = ops.findOp( //
+				"math.sqrt", new Nil<Inplaces.Arity1<double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray }, //
 				nilDoubleArray//
@@ -129,8 +126,8 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void binaryInplace() {
-		BiInplaceFirst<double[], double[]> inplaceAdd = ops.findOp( //
-				"math.add", new Nil<BiInplaceFirst<double[], double[]>>() {
+		Inplaces.Arity2_1<double[], double[]> inplaceAdd = ops.findOp( //
+				"math.add", new Nil<Inplaces.Arity2_1<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//

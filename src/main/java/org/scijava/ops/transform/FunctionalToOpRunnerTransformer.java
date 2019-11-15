@@ -41,27 +41,10 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.NullaryComputer;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
-import org.scijava.ops.core.function.Function6;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
-import org.scijava.ops.core.inplace.BiInplaceSecond;
-import org.scijava.ops.core.inplace.Inplace;
-import org.scijava.ops.core.inplace.Inplace3First;
-import org.scijava.ops.core.inplace.Inplace3Second;
-import org.scijava.ops.core.inplace.Inplace4First;
-import org.scijava.ops.core.inplace.Inplace5First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.util.Computers;
-import org.scijava.ops.util.Functions;
-import org.scijava.ops.util.Inplaces;
 import org.scijava.ops.util.OpRunners;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Plugin;
@@ -126,12 +109,10 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 	private static OpRunner computerToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
-		if (src instanceof NullaryComputer) return OpRunners.Computers.toRunner((NullaryComputer<?>) src); 
-		if (src instanceof Computer) return OpRunners.Computers.toRunner((Computer<?, ?>) src);
-		if (src instanceof BiComputer) return OpRunners.Computers.toRunner((BiComputer<?, ?, ?>) src);
-		if (src instanceof Computer3) return OpRunners.Computers.toRunner((Computer3<?, ?, ?, ?>) src);
-		if (src instanceof Computer4) return OpRunners.Computers.toRunner((Computer4<?, ?, ?, ?, ?>) src);
-		if (src instanceof Computer5) return OpRunners.Computers.toRunner((Computer5<?, ?, ?, ?, ?, ?>) src);
+		if (src instanceof Computers.Arity0) return OpRunners.ComputerRunner.toRunner((Computers.Arity0<?>) src); 
+		if (src instanceof Computers.Arity1) return OpRunners.ComputerRunner.toRunner((Computers.Arity1<?, ?>) src);
+		if (src instanceof Computers.Arity2) return OpRunners.ComputerRunner.toRunner((Computers.Arity2<?, ?, ?>) src);
+		if (src instanceof Computers.Arity3) return OpRunners.ComputerRunner.toRunner((Computers.Arity3<?, ?, ?, ?>) src);
 		throw createInvalidSourceOpException(src,
 			"could not be transformed. The implemented computer type (%s) is not supported by this transformer.",
 			srcFunctionalRawType.getName());
@@ -140,13 +121,10 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 	private static OpRunner functionToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
-		if (src instanceof Supplier) return OpRunners.Functions.toRunner((Supplier<?>) src);
-		if (src instanceof Function) return OpRunners.Functions.toRunner((Function<?, ?>) src);
-		if (src instanceof BiFunction) return OpRunners.Functions.toRunner((BiFunction<?, ?, ?>) src);
-		if (src instanceof Function3) return OpRunners.Functions.toRunner((Function3<?, ?, ?, ?>) src);
-		if (src instanceof Function4) return OpRunners.Functions.toRunner((Function4<?, ?, ?, ?, ?>) src);
-		if (src instanceof Function5) return OpRunners.Functions.toRunner((Function5<?, ?, ?, ?, ?, ?>) src);
-		if (src instanceof Function6) return OpRunners.Functions.toRunner((Function6<?, ?, ?, ?, ?, ?, ?>) src);
+		if (src instanceof Supplier) return OpRunners.FunctionRunner.toRunner((Supplier<?>) src);
+		if (src instanceof Function) return OpRunners.FunctionRunner.toRunner((Function<?, ?>) src);
+		if (src instanceof BiFunction) return OpRunners.FunctionRunner.toRunner((BiFunction<?, ?, ?>) src);
+		if (src instanceof Functions.Arity3) return OpRunners.FunctionRunner.toRunner((Functions.Arity3<?, ?, ?, ?>) src);
 		throw createInvalidSourceOpException(src,
 			"could not be transformed. The implemented function type (%s) is not supported by this transformer.",
 			srcFunctionalRawType.getName());
@@ -155,13 +133,12 @@ public class FunctionalToOpRunnerTransformer implements OpTransformer {
 	private static OpRunner inplaceToRunner(final Object src, final Class<?> srcFunctionalRawType)
 		throws OpTransformationException
 	{
-		if (src instanceof Inplace) return OpRunners.Inplaces.toRunner((Inplace<?>) src);
-		if (src instanceof BiInplaceFirst) return OpRunners.Inplaces.toRunner((BiInplaceFirst<?, ?>) src);
-		if (src instanceof BiInplaceSecond) return OpRunners.Inplaces.toRunner((BiInplaceSecond<?, ?>) src);
-		if (src instanceof Inplace3First) return OpRunners.Inplaces.toRunner((Inplace3First<?, ?, ?>) src);
-		if (src instanceof Inplace3Second) return OpRunners.Inplaces.toRunner((Inplace3Second<?, ?, ?>) src);
-		if (src instanceof Inplace4First) return OpRunners.Inplaces.toRunner((Inplace4First<?, ?, ?, ?>) src);
-		if (src instanceof Inplace5First) return OpRunners.Inplaces.toRunner((Inplace5First<?, ?, ?, ?, ?>) src);
+		if (src instanceof Inplaces.Arity1) return OpRunners.InplaceRunner.toRunner((Inplaces.Arity1<?>) src);
+		if (src instanceof Inplaces.Arity2_1) return OpRunners.InplaceRunner.toRunner((Inplaces.Arity2_1<?, ?>) src);
+		if (src instanceof Inplaces.Arity2_2) return OpRunners.InplaceRunner.toRunner((Inplaces.Arity2_2<?, ?>) src);
+		if (src instanceof Inplaces.Arity3_1) return OpRunners.InplaceRunner.toRunner((Inplaces.Arity3_1<?, ?, ?>) src);
+		if (src instanceof Inplaces.Arity3_2) return OpRunners.InplaceRunner.toRunner((Inplaces.Arity3_2<?, ?, ?>) src);
+		if (src instanceof Inplaces.Arity3_3) return OpRunners.InplaceRunner.toRunner((Inplaces.Arity3_3<?, ?, ?>) src);
 		throw createInvalidSourceOpException(src,
 			"could not be transformed. The implemented inplace type (%s) is not supported by this transformer.",
 			srcFunctionalRawType.getName());

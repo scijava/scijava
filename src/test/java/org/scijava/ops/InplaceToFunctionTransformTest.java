@@ -37,11 +37,8 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
 
 /**
  * @author Marcel Wiedenmann
@@ -61,9 +58,9 @@ public class InplaceToFunctionTransformTest extends AbstractTestEnvironment {
 	private static final String hello = "hello";
 
 	@Test
-	public void testInplaceToFunction() {
-		final Function<AtomicReference<String>, AtomicReference<String>> f = Functions.unary(ops,
-			"test.inplaceToFunctionTestOp", atomicStringNil, atomicStringNil);
+	public void testInplace1ToFunction1() {
+		final Function<AtomicReference<String>, AtomicReference<String>> f = Functions.match(ops,
+			"test.inplace1ToFunction1TestOp", atomicStringNil, atomicStringNil);
 		final AtomicReference<String> io = new AtomicReference<>(hello);
 		final AtomicReference<String> out = f.apply(io);
 		assert io == out;
@@ -71,9 +68,9 @@ public class InplaceToFunctionTransformTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testBiInplaceFirstToBiFunction() {
-		final BiFunction<AtomicReference<String>, Byte, AtomicReference<String>> f = Functions.binary(ops,
-			"test.biInplaceFirstToBiFunctionTestOp", atomicStringNil, byteNil, atomicStringNil);
+	public void testInplace2_1ToFunction2() {
+		final BiFunction<AtomicReference<String>, Byte, AtomicReference<String>> f = Functions.match(ops,
+			"test.inplace2_1ToFunction2TestOp", atomicStringNil, byteNil, atomicStringNil);
 		final AtomicReference<String> io = new AtomicReference<>(hello);
 		final byte in2 = 22;
 		final AtomicReference<String> out = f.apply(io, in2);
@@ -82,9 +79,9 @@ public class InplaceToFunctionTransformTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testBiInplaceSecondToBiFunction() {
-		final BiFunction<Byte, AtomicReference<String>, AtomicReference<String>> f = Functions.binary(ops,
-			"test.biInplaceSecondToBiFunctionTestOp", byteNil, atomicStringNil, atomicStringNil);
+	public void testInplace2_2ToFunction2() {
+		final BiFunction<Byte, AtomicReference<String>, AtomicReference<String>> f = Functions.match(ops,
+			"test.inplace2_2ToFunction2TestOp", byteNil, atomicStringNil, atomicStringNil);
 		final byte in1 = 11;
 		final AtomicReference<String> io = new AtomicReference<>(hello);
 		final AtomicReference<String> out = f.apply(in1, io);
@@ -93,9 +90,9 @@ public class InplaceToFunctionTransformTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testInplace3FirstToFunction3() {
-		final Function3<AtomicReference<String>, Byte, Double, AtomicReference<String>> f = Functions.ternary(ops,
-			"test.inplace3FirstToFunction3TestOp", atomicStringNil, byteNil, doubleNil, atomicStringNil);
+	public void testInplace3_1ToFunction3() {
+		final Functions.Arity3<AtomicReference<String>, Byte, Double, AtomicReference<String>> f = Functions.match(ops,
+			"test.inplace3_1ToFunction3TestOp", atomicStringNil, byteNil, doubleNil, atomicStringNil);
 		final AtomicReference<String> io = new AtomicReference<>(hello);
 		final byte in2 = 22;
 		final double in3 = 3.33;
@@ -105,43 +102,15 @@ public class InplaceToFunctionTransformTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testInplace3SecondToFunction3() {
-		final Function3<Byte, AtomicReference<String>, Double, AtomicReference<String>> f = Functions.ternary(ops,
-			"test.inplace3SecondToFunction3TestOp", byteNil, atomicStringNil, doubleNil, atomicStringNil);
+	public void testInplace3_2ToFunction3() {
+		final Functions.Arity3<Byte, AtomicReference<String>, Double, AtomicReference<String>> f = Functions.match(ops,
+			"test.inplace3_2ToFunction3TestOp", byteNil, atomicStringNil, doubleNil, atomicStringNil);
 		final byte in1 = 111;
 		final AtomicReference<String> io = new AtomicReference<>(hello);
 		final double in3 = 3.33;
 		final AtomicReference<String> out = f.apply(in1, io, in3);
 		assert io == out;
 		assertOutEquals(argsToString(in1, hello, in3), out);
-	}
-
-	@Test
-	public void testInplace4FirstToFunction4() {
-		final Function4<AtomicReference<String>, Byte, Double, Float, AtomicReference<String>> f = Functions.quaternary(ops,
-			"test.inplace4FirstToFunction4TestOp", atomicStringNil, byteNil, doubleNil, floatNil, atomicStringNil);
-		final AtomicReference<String> io = new AtomicReference<>(hello);
-		final byte in2 = 22;
-		final double in3 = 3.33;
-		final float in4 = 44f;
-		final AtomicReference<String> out = f.apply(io, in2, in3, in4);
-		assert io == out;
-		assertOutEquals(argsToString(hello, in2, in3, in4), out);
-	}
-
-	@Test
-	public void testInplace5FirstToFunction5() {
-		final Function5<AtomicReference<String>, Byte, Double, Float, Integer, AtomicReference<String>> f = Functions
-			.quinary(ops, "test.inplace5FirstToFunction5TestOp", atomicStringNil, byteNil, doubleNil, floatNil, integerNil,
-				atomicStringNil);
-		final AtomicReference<String> io = new AtomicReference<>(hello);
-		final byte in2 = 22;
-		final double in3 = 3.33;
-		final float in4 = 44f;
-		final int in5 = 555555;
-		final AtomicReference<String> out = f.apply(io, in2, in3, in4, in5);
-		assert io == out;
-		assertOutEquals(argsToString(hello, in2, in3, in4, in5), out);
 	}
 
 	private static void assertOutEquals(final String expected, final AtomicReference<String> actual) {

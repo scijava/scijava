@@ -10,6 +10,7 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -53,7 +54,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing = Functions.binary(ops,
+		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing = Functions.match(ops,
 				"test.parameter.op", new Nil<List<Number>>() {
 				}, new Nil<Function<Number, Double>>() {
 				}, new Nil<List<Double>>() {
@@ -71,7 +72,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		Function<Number, Double> funcClass = Functions.unary(ops, "test.parameter.class", new Nil<Number>() {
+		Function<Number, Double> funcClass = Functions.match(ops, "test.parameter.class", new Nil<Number>() {
 		}, new Nil<Double>() {
 		});
 

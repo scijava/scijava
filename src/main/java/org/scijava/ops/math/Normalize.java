@@ -3,7 +3,7 @@ package org.scijava.ops.math;
 import java.util.Arrays;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -17,7 +17,7 @@ public class Normalize {
 	@Parameter(key = "newMin")
 	@Parameter(key = "newMax")
 	@Parameter(key = "normalized", itemIO = ItemIO.OUTPUT)
-	public static class MathMinMaxNormalizeFunction implements Function3<double[], Double, Double, double[]> {
+	public static class MathMinMaxNormalizeFunction implements Functions.Arity3<double[], Double, Double, double[]> {
 
 		@Override
 		public double[] apply(double[] t, Double newMin, Double newMax) {

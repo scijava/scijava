@@ -33,7 +33,7 @@ public class LiftFunctionToListTransformer<I, O> implements OpMapper<Function<I,
 	public Function<List<I>, List<O>> transformTypesafe(final OpService opService, final Function<I, O> src,
 		final OpRef targetRef)
 	{
-		return Maps.Functions.Lists.liftBoth(src);
+		return Maps.FunctionMaps.Lists.liftBoth(src);
 	}
 
 	@Override

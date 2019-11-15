@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
@@ -68,7 +68,7 @@ interface FunctionalTypeTransformer extends OpTransformer {
 	/**
 	 * @return The arity of the given functional interface of the target category
 	 *         (e.g., {@code 1} for {@link Function} or {@code 3} for
-	 *         {@link Computer3}), or {@code null} if the functional interface is
+	 *         {@link Computers.Arity3}), or {@code null} if the functional interface is
 	 *         invalid or unknown.
 	 */
 	Integer getTargetArity(Class<?> targetFunctionalRawType);

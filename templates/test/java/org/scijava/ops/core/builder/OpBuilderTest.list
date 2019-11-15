@@ -1,0 +1,86 @@
+.include templates/main/java/org/scijava/ops/function/Globals.list
+arities = (0..maxArity).collect()
+
+inputDoubles = ```
+{ arity ->
+  (0..(arity)).stream().map{a -> "Double"}.collect()
+}
+```
+genericDoubles = ```
+{ arity ->
+  '<' + String.join(', ', inputDoubles(arity)) + '>'
+}
+```
+args = ```
+{arity ->
+  arity == 0 ? '' :
+  arity == 1 ? 'input' :
+  String.join(', ',(1..arity).stream().map{a -> 'input' + a}.collect())
+}
+```
+inputArrays = ```
+{ arity ->
+  (0..(arity - 1)).stream().map{a -> "double[]"}.collect()
+}
+```
+arrayGenerics = ```
+{ arity ->
+  '<' + String.join(', ', inputArrays(arity)) + '>'
+}
+```
+computerArrayGenerics = ```
+{ arity ->
+  arrayGenerics(arity + 1)
+}
+```
+
+[OpBuilderTest.java]
+wildcardOutputDoubles = ```
+{ arity ->
+  '<' + String.join(', ', inputDoubles(arity-1)) + ', ?>'
+}
+```
+doubleClassString = ```
+{ arity ->
+  String.join(', ', inputDoubles(arity-1).stream().map{a -> a + '.class'}.collect())
+}
+```
+arrayClassString = ```
+{ arity ->
+  String.join(', ', inputArrays(arity).stream().map{a -> a + '.class'}.collect())
+}
+```
+functionInputName = ```
+{ arity, num ->
+  arity == 1 ? 'input' :
+  'input'+num
+}
+```
+inplaceExpectedArray = ```
+{ arity ->
+  '{ ' + String.join(', ', (1..3).stream().map{a -> "" + Math.pow(a, arity)}.collect()) + " }"
+}
+```
+computerExpectedArray = ```
+{ arity ->
+  '{ ' + String.join(', ', (1..3).stream().map{a -> "" + arity * a}.collect()) + " }"
+}
+```
+inplaceActualArg=```
+{ arity, i ->
+  arity == 1 ? "input" :
+  "input" + i
+}
+```
+inplaceMethod=```
+{ arity, i -> 
+  arity == 1 ? "inplace" :
+  "inplace" + i
+}
+```
+mutateMethod=```
+{ arity, i -> 
+  arity == 1 ? "mutate" :
+  "mutate" + i
+}
+```

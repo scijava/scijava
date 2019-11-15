@@ -2,23 +2,23 @@ package org.scijava.ops;
 
 import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.scijava.Context;
 
 public abstract class AbstractTestEnvironment {
 
-	protected Context context;
-	protected OpService ops;
+	protected static Context context;
+	protected static OpService ops;
 
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		context = new Context(OpService.class);
 		ops = context.service(OpService.class);
 	}
 
-	@After
-	public void tearDown() {
+	@AfterClass
+	public static void tearDown() {
 		context.dispose();
 		context = null;
 		ops = null;

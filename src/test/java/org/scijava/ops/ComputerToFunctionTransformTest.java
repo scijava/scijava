@@ -37,11 +37,8 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
 
 /**
  * @author Marcel Wiedenmann
@@ -61,8 +58,8 @@ public class ComputerToFunctionTransformTest extends AbstractTestEnvironment {
 	private static final Nil<AtomicReference<String>> atomicStringNil = new Nil<AtomicReference<String>>() {};
 
 	@Test
-	public void testComputerToFunction() {
-		final Function<Byte, AtomicReference<String>> f = Functions.unary(ops, "test.computerToFunctionTestOp", byteNil,
+	public void testComputer1ToFunction1() {
+		final Function<Byte, AtomicReference<String>> f = Functions.match(ops, "test.computer1ToFunction1TestOp", byteNil,
 			atomicStringNil);
 		final byte in = 11;
 		final AtomicReference<String> out = f.apply(in);
@@ -70,9 +67,9 @@ public class ComputerToFunctionTransformTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testBiComputerToBiFunction() {
-		final BiFunction<Byte, Double, AtomicReference<String>> f = Functions.binary(ops,
-			"test.biComputerToBiFunctionTestOp", byteNil, doubleNil, atomicStringNil);
+	public void testComputer2ToFunction2() {
+		final BiFunction<Byte, Double, AtomicReference<String>> f = Functions.match(ops,
+			"test.computer2ToFunction2TestOp", byteNil, doubleNil, atomicStringNil);
 		final byte in1 = 111;
 		final double in2 = 22.22;
 		final AtomicReference<String> out = f.apply(in1, in2);
@@ -81,38 +78,13 @@ public class ComputerToFunctionTransformTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testComputer3ToFunction3() {
-		final Function3<Byte, Double, Float, AtomicReference<String>> f = Functions.ternary(ops,
+		final Functions.Arity3<Byte, Double, Float, AtomicReference<String>> f = Functions.match(ops,
 			"test.computer3ToFunction3TestOp", byteNil, doubleNil, floatNil, atomicStringNil);
 		final byte in1 = 1;
 		final double in2 = 2.2;
 		final float in3 = 33.3f;
 		final AtomicReference<String> out = f.apply(in1, in2, in3);
 		assertOutEquals(argsToString(in1, in2, in3), out);
-	}
-
-	@Test
-	public void testComputer4ToFunction4() {
-		final Function4<Byte, Double, Float, Integer, AtomicReference<String>> f = Functions.quaternary(ops,
-			"test.computer4ToFunction4TestOp", byteNil, doubleNil, floatNil, integerNil, atomicStringNil);
-		final byte in1 = 111;
-		final double in2 = .2;
-		final float in3 = 3.33f;
-		final int in4 = 44444;
-		final AtomicReference<String> out = f.apply(in1, in2, in3, in4);
-		assertOutEquals(argsToString(in1, in2, in3, in4), out);
-	}
-
-	@Test
-	public void testComputer5ToFunction5() {
-		final Function5<Byte, Double, Float, Integer, Long, AtomicReference<String>> f = Functions.quinary(ops,
-			"test.computer5ToFunction5TestOp", byteNil, doubleNil, floatNil, integerNil, longNil, atomicStringNil);
-		final byte in1 = 1;
-		final double in2 = .222;
-		final float in3 = 333.3f;
-		final int in4 = 4;
-		final long in5 = 55555l;
-		final AtomicReference<String> out = f.apply(in1, in2, in3, in4, in5);
-		assertOutEquals(argsToString(in1, in2, in3, in4, in5), out);
 	}
 
 	private static void assertOutEquals(final String expected, final AtomicReference<String> actual) {

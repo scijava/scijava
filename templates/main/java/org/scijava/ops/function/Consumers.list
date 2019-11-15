@@ -1,0 +1,52 @@
+.include Globals.list
+arities = (3..numConsumers).collect()
+
+genericsList = ```
+{ arity ->
+  (1..arity).stream().map{a -> "I$a"}.collect()
+}
+```
+genericsNamesList = ```
+{ arity ->
+  genericsList(arity).stream().map{a -> "in${a.substring(1)}"}.collect()
+}
+```
+nilNames = ```
+{ arity ->
+  genericsNamesList(arity).stream().map{a -> "${a}Type"}.collect()
+}
+```
+typeParamsList = ```
+{ arity ->
+  generics = genericsList(arity)
+  names = genericsNamesList(arity)
+  (0..arity - 1).stream().map{a -> "${generics[a]} ${names[a]}"}.collect()
+}
+```
+
+[Consumers.java]
+objectString =```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "Object"}.collect())
+}
+```
+generics = ```
+{ arity -> 
+    '<' + String.join(', ', genericsList(arity)) + '>'
+}
+```
+superGenerics = ```
+{ arity -> 
+    '<' + String.join(', ', genericsList(arity).stream().map{a -> "? super ${a}"}.collect()) + '>'
+}
+```
+genericName = ```
+{ arity, num ->
+	genericsNamesList(arity)[num-1]
+}
+```
+generic = ```
+{ arity, num ->
+	genericsList(arity)[num-1]
+}
+```

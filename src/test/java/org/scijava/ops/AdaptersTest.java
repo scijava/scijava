@@ -32,7 +32,7 @@ package org.scijava.ops;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.util.Adapt;
 
@@ -46,14 +46,14 @@ public class AdaptersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testComputerAsFunction() {
-		final BiComputer<double[], double[], double[]> computer = ops.findOp( //
-				"test.adapters", new Nil<BiComputer<double[], double[], double[]>>() {
+		final Computers.Arity2<double[], double[], double[]> computer = ops.findOp( //
+				"test.adapters", new Nil<Computers.Arity2<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
 		);
 
-		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.Computers.asBiFunction(computer,
+		BiFunction<double[], double[], double[]> computerAsFunction = Adapt.ComputerAdapt.asBiFunction(computer,
 				(arr1) -> {
 					return new double[arr1.length];
 				});
@@ -74,7 +74,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 				nilDoubleArray//
 		);
 
-		BiComputer<double[], double[], double[]> functionAsComputer = Adapt.Functions.asBiComputer(function,
+		Computers.Arity2<double[], double[], double[]> functionAsComputer = Adapt.FunctionAdapt.asComputer2(function,
 				(from, to) -> {
 					for (int i = 0; i < from.length; i++) {
 						to[i] = from[i];

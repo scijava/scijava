@@ -33,7 +33,7 @@ import java.util.Map;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "vars")
 @Parameter(key = "opService")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
-public class DefaultEval implements Function3<String, Map<String, Object>, OpService, Object>
+public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpService, Object>
 {
 
 	@Override

@@ -39,8 +39,8 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,14 +56,14 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "structElement")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class FillHoles<T extends BooleanType<T>> implements
-	BiComputer<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
+	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
 
 //	@Parameter(required = false)
 //	private Shape structElement = new RectangleShape(1, false);
 
 	@OpDependency(name = "morphology.floodFill")
-	private Computer3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> floodFillComp;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> floodFillComp;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> op,

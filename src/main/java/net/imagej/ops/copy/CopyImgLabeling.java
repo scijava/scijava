@@ -39,7 +39,7 @@ import net.imglib2.util.Util;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,12 +54,12 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
-		implements Computer<ImgLabeling<L, T>, ImgLabeling<L, T>> {
+		implements Computers.Arity1<ImgLabeling<L, T>, ImgLabeling<L, T>> {
 
 	@OpDependency(name = "copy.rai")
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> raiCopyOp;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> raiCopyOp;
 	@OpDependency(name = "copy.labelingMapping")
-	private Computer<LabelingMapping<L>, LabelingMapping<L>> mappingCopyOp;
+	private Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> mappingCopyOp;
 
 	@Override
 	public void compute(final ImgLabeling<L, T> input, final ImgLabeling<L, T> output) {

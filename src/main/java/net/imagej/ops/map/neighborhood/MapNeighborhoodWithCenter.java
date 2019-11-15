@@ -38,8 +38,8 @@ import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,12 +61,12 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "shape")
 @Parameter(key = "op")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class MapNeighborhoodWithCenter<I, O> implements Computer3<RandomAccessibleInterval<I>, Shape, BiComputer<Iterable<I>, I, O>, IterableInterval<O>>
+public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, IterableInterval<O>>
 {
 
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final BiComputer<Iterable<I>, I, O> centerAwareOp, final IterableInterval<O> out)
+		final Computers.Arity2<Iterable<I>, I, O> centerAwareOp, final IterableInterval<O> out)
 	{
 		// TODO can we do this through a mapper?
 		RandomAccess<I> inRA = in1.randomAccess();

@@ -58,9 +58,9 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -93,7 +93,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 			}
 
 			// create img
-			final Function<Interval, Img<?>> createFunc = Functions.unary(ops, "create.img", new Nil<Interval>() {
+			final Function<Interval, Img<?>> createFunc = Functions.match(ops, "create.img", new Nil<Interval>() {
 			}, new Nil<Img<?>>() {
 			});
 			final Img<?> img = createFunc.apply(new FinalInterval(min, max));
@@ -119,7 +119,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 			}
 
 			// create img
-			BiFunction<Dimensions, DoubleType, Img<DoubleType>> createFunc = Functions.binary(ops, "create.img",
+			BiFunction<Dimensions, DoubleType, Img<DoubleType>> createFunc = Functions.match(ops, "create.img",
 					new Nil<Dimensions>() {
 					}, new Nil<DoubleType>() {
 					}, new Nil<Img<DoubleType>>() {
@@ -134,13 +134,13 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	@Test
 	public void testImgFromImg() {
 		// create img
-		BiFunction<Dimensions, ByteType, Img<ByteType>> createFuncDimsType = Functions.binary(ops, "create.img",
+		BiFunction<Dimensions, ByteType, Img<ByteType>> createFuncDimsType = Functions.match(ops, "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ByteType>() {
 				}, new Nil<Img<ByteType>>() {
 				});
 		final Img<ByteType> img = createFuncDimsType.apply(new FinalDimensions(1), new ByteType());
-		Function<Img<ByteType>, Img<ByteType>> createFuncImg = Functions.unary(ops, "create.img",
+		Function<Img<ByteType>, Img<ByteType>> createFuncImg = Functions.match(ops, "create.img",
 				new Nil<Img<ByteType>>() {
 				}, new Nil<Img<ByteType>>() {
 				});
@@ -155,7 +155,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	public void testImageFactory() {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
-		Function3<Dimensions, DoubleType, ImgFactory<DoubleType>, Img<DoubleType>> createFunc = Functions.ternary(ops,
+		Functions.Arity3<Dimensions, DoubleType, ImgFactory<DoubleType>, Img<DoubleType>> createFunc = Functions.match(ops,
 				"create.img", new Nil<Dimensions>() {
 				}, new Nil<DoubleType>() {
 				}, new Nil<ImgFactory<DoubleType>>() {
@@ -178,7 +178,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	public void testImageType() {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 		
-		BiFunction<Dimensions, T, Img<T>> createFunc = Functions.binary(ops, "create.img", new Nil<Dimensions>() {}, new Nil<T>() {}, new Nil<Img<T>>() {});
+		BiFunction<Dimensions, T, Img<T>> createFunc = Functions.match(ops, "create.img", new Nil<Dimensions>() {}, new Nil<T>() {}, new Nil<Img<T>>() {});
 
 		assertEquals("Image Type: ", BitType.class,
 				((Img<?>) createFunc.apply(dim, (T) new BitType())).firstElement().getClass());
@@ -202,7 +202,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	@Test
 	public void testCreateFromImgSameType() {
 		final Img<ByteType> input = PlanarImgs.bytes(10, 10, 10);
-		BiFunction<Dimensions, ByteType, Img<ByteType>> createFunc = Functions.binary(ops, "create.img",
+		BiFunction<Dimensions, ByteType, Img<ByteType>> createFunc = Functions.match(ops, "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ByteType>() {
 				}, new Nil<Img<ByteType>>() {
@@ -218,7 +218,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	@Test
 	public void testCreateFromImgDifferentType() {
 		final Img<ByteType> input = PlanarImgs.bytes(10, 10, 10);
-		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = Functions.binary(ops, "create.img",
+		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = Functions.match(ops, "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ShortType>() {
 				}, new Nil<Img<ShortType>>() {
@@ -236,7 +236,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 		final IntervalView<ByteType> input = Views.interval(PlanarImgs.bytes(10, 10, 10),
 				new FinalInterval(new long[] { 10, 10, 1 }));
 
-		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = Functions.binary(ops, "create.img",
+		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = Functions.match(ops, "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ShortType>() {
 				}, new Nil<Img<ShortType>>() {
@@ -260,7 +260,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	public void testCreateFromIntegerArray() {
 		final Integer[] dims = new Integer[] { 25, 25, 10 };
 
-		Function<Integer[], Img<?>> createFunc = Functions.unary(ops, "create.img", new Nil<Integer[]>() {
+		Function<Integer[], Img<?>> createFunc = Functions.match(ops, "create.img", new Nil<Integer[]>() {
 		}, new Nil<Img<?>>() {
 		});
 		final Img<?> res = createFunc.apply(dims);
@@ -278,7 +278,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractTestEnvironmen
 	public void testCreateFromLongArray() {
 		final Long[] dims = new Long[] { 25l, 25l, 10l };
 
-		Function<Long[], Img<?>> createFunc = Functions.unary(ops, "create.img", new Nil<Long[]>() {
+		Function<Long[], Img<?>> createFunc = Functions.match(ops, "create.img", new Nil<Long[]>() {
 		}, new Nil<Img<?>>() {
 		});
 		final Img<?> res = createFunc.apply(dims);

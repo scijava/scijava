@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,7 +61,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "radius", description = "defines size of the square of pixels considered at each iteration.")
 @Parameter(key = "outputRAI", itemIO = ItemIO.BOTH)
 public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
-		implements Computer4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>> {
+		implements Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>> {
 
 	public final static int MIN_DIMS = 2;
 

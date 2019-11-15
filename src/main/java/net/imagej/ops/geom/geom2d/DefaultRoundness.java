@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.roundness", label = "Geometric (2D): Roundness")
 @Parameter(key = "input")
 @Parameter(key = "roundness", itemIO = ItemIO.BOTH)
-public class DefaultRoundness implements Computer<Polygon2D, DoubleType> {
+public class DefaultRoundness implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")
 	private Function<Polygon2D, DoubleType> areaFunc;

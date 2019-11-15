@@ -38,9 +38,9 @@
 //
 //import org.scijava.ops.OpDependency;
 //import org.scijava.ops.core.Op;
-//import org.scijava.ops.core.computer.BiComputer;
-//import org.scijava.ops.core.computer.Computer;
-//import org.scijava.ops.core.computer.Computer3;
+//import org.scijava.ops.function.Computers;
+//import org.scijava.ops.function.Computers;
+//import org.scijava.ops.function.Computers;
 //import org.scijava.param.Parameter;
 //import org.scijava.plugin.Plugin;
 //import org.scijava.struct.ItemIO;
@@ -55,11 +55,11 @@
 //@Parameter(key = "max")
 //@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
 //public class InvertII<T extends RealType<T>> implements
-//	Computer3<IterableInterval<T>, T, T, IterableInterval<T>> 
+//	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> 
 //{
 //
 //	@OpDependency(name = "map")
-//	private BiComputer<IterableInterval<T>, Computer<T, T>, IterableInterval<T>> mapper;
+//	private Computers.Arity2<IterableInterval<T>, Computers.Arity1<T, T>, IterableInterval<T>> mapper;
 //
 //	@Override
 //	public void compute(final IterableInterval<T> input, final T min, final T max,
@@ -71,7 +71,7 @@
 //			final double maxValue = max == null ? input.firstElement().getMaxValue() : //
 //				max.getRealDouble();
 //			final double minMax = maxValue + minValue;
-//			final Computer<T, T> inverter = (in, out) -> {
+//			final Computers.Arity1<T, T> inverter = (in, out) -> {
 //				if ((minMax - in.getRealDouble()) <= out.getMinValue()) {
 //					out.setReal(out.getMinValue());
 //				}

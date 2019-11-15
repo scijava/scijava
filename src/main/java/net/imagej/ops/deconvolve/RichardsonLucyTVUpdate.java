@@ -46,7 +46,7 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -68,7 +68,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "variation")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I extends RandomAccessibleInterval<T>>
-	implements Computer3<I, Float, RandomAccessibleInterval<T>, I> 
+	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I> 
 {
 
 	@OpDependency(name = "create.img")

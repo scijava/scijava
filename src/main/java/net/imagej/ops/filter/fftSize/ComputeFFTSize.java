@@ -37,7 +37,7 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "forward")
 @Parameter(key = "fast")
 @Parameter(key = "outputs", itemIO = ItemIO.OUTPUT)
-public class ComputeFFTSize implements Function5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>> {
+public class ComputeFFTSize implements Functions.Arity5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>> {
 
 	@Override
 	public Pair<long[], long[]> apply(Dimensions inputDimensions, long[] paddedSize, long[] fftSize, Boolean forward,

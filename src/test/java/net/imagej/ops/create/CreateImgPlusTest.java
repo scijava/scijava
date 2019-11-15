@@ -43,7 +43,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests several ways to create an image
@@ -56,8 +56,8 @@ public class CreateImgPlusTest extends AbstractTestEnvironment {
 
 	@Test
 	public void createImgPlusTest() {
-		BiFunction<Dimensions, DoubleType, Img<DoubleType>> createImgFunc = Functions.binary(ops, "create.img", new Nil<Dimensions>() {}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
-		Function<Img<DoubleType>, ImgPlus<DoubleType>> imgPlusFunction = Functions.unary(ops, "create.imgPlus", new Nil<Img<DoubleType>>() {}, new Nil<ImgPlus<DoubleType>>() {});
+		BiFunction<Dimensions, DoubleType, Img<DoubleType>> createImgFunc = Functions.match(ops, "create.img", new Nil<Dimensions>() {}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
+		Function<Img<DoubleType>, ImgPlus<DoubleType>> imgPlusFunction = Functions.match(ops, "create.imgPlus", new Nil<Img<DoubleType>>() {}, new Nil<ImgPlus<DoubleType>>() {});
 		assertEquals(imgPlusFunction.apply(createImgFunc.apply(new FinalDimensions(new long[] { 10, 9, 8 }), new DoubleType())).getClass(), ImgPlus.class);
 	}
 }

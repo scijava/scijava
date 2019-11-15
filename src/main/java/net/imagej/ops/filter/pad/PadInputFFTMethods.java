@@ -38,7 +38,7 @@ import net.imglib2.type.numeric.ComplexType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -62,7 +62,7 @@ public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccess
 		extends PadInputFFT<T, I, O> {
 	
 	@OpDependency(name = "filter.fftSize")
-	private Function3<Dimensions, Boolean, Boolean, long[][]> fftSizeOp;
+	private Functions.Arity3<Dimensions, Boolean, Boolean, long[][]> fftSizeOp;
 	
 	@Override
 	protected Function<Dimensions, long[][]> getFFTSizeOp(boolean fast) {

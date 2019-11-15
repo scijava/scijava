@@ -46,9 +46,9 @@ import net.imglib2.util.Intervals;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -69,7 +69,7 @@ public class CreateLabelingTest extends AbstractTestEnvironment {
 		final MersenneTwisterFast randomGenerator = new MersenneTwisterFast(SEED);
 
 		// TODO can we keep this?
-		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = Functions.binary(ops,
+		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = Functions.match(ops,
 				"create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgLabeling<String, IntType>>() {
@@ -99,7 +99,7 @@ public class CreateLabelingTest extends AbstractTestEnvironment {
 
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
-		Function3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = Functions
+		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = Functions
 				.ternary(ops, "create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgFactory<IntType>>() {
@@ -131,7 +131,7 @@ public class CreateLabelingTest extends AbstractTestEnvironment {
 	@SuppressWarnings("unchecked")
 	private <I> ImgLabeling<I, ?> createLabelingWithType(final I type) {
 
-		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = Functions.binary(ops,
+		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = Functions.match(ops,
 				"create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgLabeling<I, IntType>>() {

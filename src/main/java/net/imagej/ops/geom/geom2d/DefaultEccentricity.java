@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.eccentricity", label = "Geometric (2D): Eccentricity")
 @Parameter(key = "input")
 @Parameter(key = "eccentricity", itemIO = ItemIO.BOTH)
-public class DefaultEccentricity implements Computer<Polygon2D, DoubleType> {
+public class DefaultEccentricity implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minorAxis")
 	private Function<Polygon2D, DoubleType> minorAxisFunc;

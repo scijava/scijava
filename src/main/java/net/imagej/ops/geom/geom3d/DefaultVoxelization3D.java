@@ -45,7 +45,7 @@ import net.imglib2.type.logic.BitType;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -69,7 +69,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "depth", required = false)
 @Parameter(key = "voxelizedImage", itemIO = ItemIO.OUTPUT)
 public class DefaultVoxelization3D
-		implements Function4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
+		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 
 	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	// private int width = 10;

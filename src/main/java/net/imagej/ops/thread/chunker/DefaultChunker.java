@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "chunk", itemIO = ItemIO.BOTH)
 @Parameter(key = "numberOfElements")
 @Parameter(key = "executorService")
-public class DefaultChunker implements Inplace3First<Chunk, Long, ExecutorService> {
+public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorService> {
 
 	private final int STEP_SIZE = 1;
 

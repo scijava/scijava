@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
-		implements BiComputer<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
+		implements Computers.Arity2<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "copy.rai")
 	private Function<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> copyOp;

@@ -43,7 +43,7 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
 
 /**
  * Abstract Op used to pad the image by extending the borders optionally using
@@ -55,7 +55,7 @@ import org.scijava.ops.core.function.Function4;
  * @param <O>
  */
 public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
-		implements Function4<I, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
+		implements Functions.Arity4<I, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 
 //	/**
 //	 * The OutOfBoundsFactory used to extend the image

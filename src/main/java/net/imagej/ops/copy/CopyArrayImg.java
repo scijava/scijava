@@ -40,7 +40,7 @@ import net.imglib2.util.Intervals;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "copy", itemIO = ItemIO.BOTH)
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
-		implements Computer<ArrayImg<T, A>, ArrayImg<T, A>> {
+		implements Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> {
 	@Override
 	public void compute(final ArrayImg<T, A> input, final ArrayImg<T, A> output) {
 
@@ -75,7 +75,7 @@ class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>
 		implements Function<ArrayImg<T, A>, ArrayImg<T, A>> {
 
 	@OpDependency(name = "copy.img")
-	private Computer<ArrayImg<T, A>, ArrayImg<T, A>> copyOp;
+	private Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> copyOp;
 
 	@Override
 	public ArrayImg<T, A> apply(ArrayImg<T, A> input) {

@@ -36,7 +36,7 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * @author Curtis Rueden
@@ -53,12 +53,12 @@ public abstract class AbstractApplyThresholdImg<T extends RealType<T>> extends
 	protected T computeThreshold(final Iterable<T> input) {
 		final Histogram1d<T> inputHistogram = createHistogramOp.apply(input);
 		final T threshold = input.iterator().next().createVariable();
-		final Computer<Histogram1d<T>, T> computeThresholdOp =
+		final Computers.Arity1<Histogram1d<T>, T> computeThresholdOp =
 			getComputeThresholdOp();
 		computeThresholdOp.compute(inputHistogram, threshold);
 		return threshold;
 	}
 
-	protected abstract Computer<Histogram1d<T>, T> getComputeThresholdOp();
+	protected abstract Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp();
 
 }

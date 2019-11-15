@@ -35,7 +35,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,10 +50,10 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.rai", priority = 1.0)
 @Parameter(key = "input")
 @Parameter(key = "copy", itemIO = ItemIO.BOTH)
-public class CopyRAI<T> implements Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
+public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "copy.type")
-	private Computer<Iterable<T>, Iterable<T>> mapComputer;
+	private Computers.Arity1<Iterable<T>, Iterable<T>> mapComputer;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final RandomAccessibleInterval<T> output) {

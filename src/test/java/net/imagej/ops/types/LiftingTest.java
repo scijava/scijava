@@ -10,7 +10,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.Test;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -21,7 +21,7 @@ public class LiftingTest <I extends RealType<I>, O extends RealType<O>> extends 
 	@OpField(names = "test.liftImg")
 	@Parameter(key = "input")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer<I, O> testOp = (in, out) -> out.setReal(10.);
+	public final Computers.Arity1<I, O> testOp = (in, out) -> out.setReal(10.);
 	
 	@Test
 	public void testLiftToImg() {

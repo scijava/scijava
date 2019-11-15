@@ -43,14 +43,14 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.Computer6;
-import org.scijava.ops.core.function.Function5;
-import org.scijava.ops.core.function.Function6;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -99,21 +99,21 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>> implements
-		Computer6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
+		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
 	// @SuppressWarnings("rawtypes")
 	// private UnaryFunctionOp<Interval, ImgLabeling> createOp;
 
 	@OpDependency(name = "image.distanceTransform")
-	private BiComputer<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<FloatType>> distanceTransformer;
+	private Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<FloatType>> distanceTransformer;
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, FloatType, RandomAccessibleInterval<FloatType>> imgCreator;
 	@OpDependency(name = "image.invert")
-	private Computer<IterableInterval<FloatType>, IterableInterval<FloatType>> imgInverter;
+	private Computers.Arity1<IterableInterval<FloatType>, IterableInterval<FloatType>> imgInverter;
 	@OpDependency(name = "filter.gauss")
-	private Computer3<RandomAccessibleInterval<FloatType>, ExecutorService, double[], RandomAccessibleInterval<FloatType>> gaussOp;
+	private Computers.Arity3<RandomAccessibleInterval<FloatType>, ExecutorService, double[], RandomAccessibleInterval<FloatType>> gaussOp;
 	@OpDependency(name = "image.watershed")
-	private Computer4<RandomAccessibleInterval<FloatType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity4<RandomAccessibleInterval<FloatType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> in, final Boolean useEightConnectivity,
@@ -155,10 +155,10 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 @Parameter(key = "executorService")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>> implements
-		Computer5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
-	private Computer6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
@@ -177,10 +177,10 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 @Parameter(key = "executorService")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>> implements
-		Function6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
+		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
-	private Computer6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
@@ -201,10 +201,10 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 @Parameter(key = "executorService")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends BooleanType<B>>
-		implements Function5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
+		implements Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
-	private Computer5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 

@@ -46,8 +46,8 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -65,7 +65,7 @@ import org.scijava.struct.ItemIO;
 	priority = Priority.NORMAL)
 @Parameter(key = "io", itemIO = ItemIO.BOTH)
 public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
-	Inplace<RandomAccessibleInterval<T>> 
+	Inplaces.Arity1<RandomAccessibleInterval<T>> 
 {
 
 	Img<T> xkm1_previous = null;
@@ -76,7 +76,7 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	Img<T> gkm1;
 
 	@OpDependency(name = "create.img")
-	private Function3<Dimensions, T, ImgFactory<T>, Img<T>> create;
+	private Functions.Arity3<Dimensions, T, ImgFactory<T>, Img<T>> create;
 	
 	private Function<Dimensions, Img<T>> createReduced;
 

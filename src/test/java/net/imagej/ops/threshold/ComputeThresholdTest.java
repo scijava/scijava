@@ -34,9 +34,9 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
+import org.scijava.ops.function.Computers;
 
 /**
  * Tests {@link ComputeThresholdHistogram} implementations.
@@ -172,17 +172,17 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	private void testComputeThresholdOp(final int expectedOutput,
 		final String name)
 	{
-		final Computer<Histogram1d<UnsignedShortType>, UnsignedShortType> opToTest =
+		final Computers.Arity1<Histogram1d<UnsignedShortType>, UnsignedShortType> opToTest =
 			getComputeThresholdOp(name);
 		final UnsignedShortType actualOutput = new UnsignedShortType();
 		opToTest.compute(histogram(), actualOutput);
 		assertThreshold(expectedOutput, actualOutput);
 	}
 
-	private Computer<Histogram1d<UnsignedShortType>, UnsignedShortType>
+	private Computers.Arity1<Histogram1d<UnsignedShortType>, UnsignedShortType>
 		getComputeThresholdOp(final String name)
 	{
-		return Computers.unary(ops, name,
+		return Computers.match(ops, name,
 			new Nil<Histogram1d<UnsignedShortType>>()
 			{}, new Nil<UnsignedShortType>() {});
 	}

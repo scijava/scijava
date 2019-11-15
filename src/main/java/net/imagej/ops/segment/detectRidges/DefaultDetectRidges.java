@@ -49,9 +49,9 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -69,7 +69,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "ridgeLengthMin")
 @Parameter(key = "ridges", itemIO = ItemIO.OUTPUT)
 public class DefaultDetectRidges<T extends RealType<T>> implements
-		Function5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<? extends WritablePolyline>> {
+		Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<? extends WritablePolyline>> {
 
 	/**
 	 * The diameter of the lines to search for.
@@ -100,13 +100,13 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	private BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> createOp;
 	
 	@OpDependency(name = "convert.float64")
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> convertOp;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> convertOp;
 	
 	@OpDependency(name = "copy.rai")
 	private Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp;
 	
 	@OpDependency(name = "filter.derivativeGauss")
-	private Computer3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp;
+	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp;
 
 	/**
 	 * Recursively determines the next line point and adds it to the running list of

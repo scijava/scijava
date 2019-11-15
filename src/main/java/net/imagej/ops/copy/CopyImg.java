@@ -36,7 +36,7 @@ import net.imglib2.type.NativeType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -51,10 +51,10 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.img")
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class CopyImg<T extends NativeType<T>> implements Computer<Img<T>, Img<T>> {
+public class CopyImg<T extends NativeType<T>> implements Computers.Arity1<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.iterableInterval")
-	private Computer<Iterable<T>, Iterable<T>> copyComputer;
+	private Computers.Arity1<Iterable<T>, Iterable<T>> copyComputer;
 
 	@Override
 	public void compute(final Img<T> input, final Img<T> output) {
@@ -70,7 +70,7 @@ public class CopyImg<T extends NativeType<T>> implements Computer<Img<T>, Img<T>
 class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.img")
-	private Computer<Img<T>, Img<T>> copyComputer;
+	private Computers.Arity1<Img<T>, Img<T>> copyComputer;
 
 	@OpDependency(name = "create.img")
 	private Function<Img<T>, Img<T>> createFunc;

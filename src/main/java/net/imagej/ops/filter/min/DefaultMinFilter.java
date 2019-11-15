@@ -37,8 +37,8 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,13 +56,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultMinFilter<T, V> implements
-		Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<V>> {
+		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<V>> {
 
 	@OpDependency(name = "stats.min")
-	private Computer<Iterable<T>, V> statsOp;
+	private Computers.Arity1<Iterable<T>, V> statsOp;
 
 	@OpDependency(name = "map.neighborhood")
-	private Computer3<RandomAccessibleInterval<T>, Shape, Computer<Iterable<T>, V>, IterableInterval<V>> mapper;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity1<Iterable<T>, V>, IterableInterval<V>> mapper;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,

@@ -36,9 +36,9 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Maps;
 import org.scijava.param.Parameter;
@@ -58,17 +58,17 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "comparator")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ApplyConstantThreshold<T extends RealType<T>>
-		implements Computer3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> {
+		implements Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> {
 
 	@OpDependency(name = "threshold.apply")
-	Computer3<T, T, Comparator<? super T>, BitType> applyThreshold;
+	Computers.Arity3<T, T, Comparator<? super T>, BitType> applyThreshold;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
 	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Comparator<T> comparator,
 			final Iterable<BitType> output) {
-		Computer<T, BitType> thresholdComputer = Adapt.Computers.asComputer(applyThreshold, input2, comparator);
-		Computer<Iterable<T>, Iterable<BitType>> liftedThreshold = Maps.Computers.Iterables.liftBoth(thresholdComputer);
+		Computers.Arity1<T, BitType> thresholdComputer = Adapt.Computers.asComputer(applyThreshold, input2, comparator);
+		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = Maps.Computers.Iterables.liftBoth(thresholdComputer);
 		liftedThreshold.accept(input1, output);
 	}
 
@@ -83,10 +83,10 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 @Parameter(key = "input")
 @Parameter(key = "threshold")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-class ApplyConstantThresholdSimple<T extends RealType<T>> implements BiComputer<Iterable<T>, T, Iterable<BitType>> {
+class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.Arity2<Iterable<T>, T, Iterable<BitType>> {
 
 	@OpDependency(name = "threshold.apply")
-	Computer3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> applyThreshold;
+	Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> applyThreshold;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
 	@Override

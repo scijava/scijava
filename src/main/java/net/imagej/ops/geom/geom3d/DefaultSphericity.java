@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.sphericity", label = "Geometric (3D): Sphericity", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "sphericity", itemIO = ItemIO.BOTH)
-public class DefaultSphericity implements Computer<Mesh, DoubleType> {
+public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> volumeFunc;

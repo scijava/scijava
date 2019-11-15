@@ -43,7 +43,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Thinning Operation
@@ -52,7 +52,7 @@ import org.scijava.ops.core.computer.Computer;
  * @author Kyle Harrington, Beth Israel Deaconess Medical Center
  */
 public abstract class AbstractThin implements
-	Computer<RandomAccessibleInterval<BitType>, RandomAccessibleInterval<BitType>>
+	Computers.Arity1<RandomAccessibleInterval<BitType>, RandomAccessibleInterval<BitType>>
 {
 
 	protected ThinningStrategy m_strategy;

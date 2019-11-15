@@ -34,7 +34,7 @@ import java.util.Comparator;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "threshold")
 @Parameter(key = "comparator")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class ApplyThresholdComparator<T> implements Computer3<T, T, Comparator<? super T>, BitType>
+public class ApplyThresholdComparator<T> implements Computers.Arity3<T, T, Comparator<? super T>, BitType>
 {
 
 	@Override

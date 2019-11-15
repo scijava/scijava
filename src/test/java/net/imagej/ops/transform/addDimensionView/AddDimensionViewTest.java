@@ -43,7 +43,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 
 /**
@@ -90,10 +90,10 @@ public class AddDimensionViewTest extends AbstractTestEnvironment {
 
 		IntervalView<DoubleType> il2 = Views.addDimension(img, min, max);
 
-		Function3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>> addDimFunc = ops
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>> addDimFunc = ops
 				.findOp(
 				"transform.addDimensionView",
-						new Nil<Function3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>>>() {
+						new Nil<Functions.Arity3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>>>() {
 						}, new Nil[] { new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Long>() {
 				}, new Nil<Long>() {

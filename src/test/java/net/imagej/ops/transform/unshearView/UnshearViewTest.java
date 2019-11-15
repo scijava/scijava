@@ -44,10 +44,10 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Transform.UnshearView} ops.
@@ -63,7 +63,7 @@ public class UnshearViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultUnshearTest() {
 
-		Function3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> unshearFunc = Functions
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> unshearFunc = Functions
 				.ternary(ops, "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -93,7 +93,7 @@ public class UnshearViewTest extends AbstractTestEnvironment {
 	@Test
 	public void UnshearIntervalTest() {
 
-		Function4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> unshearFunc = Functions
+		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> unshearFunc = Functions
 				.quaternary(ops, "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<Integer>() {

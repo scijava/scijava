@@ -48,8 +48,8 @@ import net.imglib2.view.Views;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -81,7 +81,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer3<RandomAccessible<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRA = (input,
+	public final Computers.Arity3<RandomAccessible<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRA = (input,
 			es, sigmas, output) -> {
 		try {
 			SeparableSymmetricConvolution.convolve(Gauss3.halfkernels(sigmas), input, output,
@@ -106,7 +106,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "sigmas")
 	@Parameter(key = "outOfBoundsFactory")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer4<RandomAccessibleInterval<T>, ExecutorService, double[], //
+	public final Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> defaultGaussRAI = (input,
 					es, sigmas, outOfBounds, output) -> {
 
@@ -138,7 +138,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer3<RandomAccessibleInterval<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRAISimple = (
+	public final Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRAISimple = (
 			input, es, sigmas, output) -> defaultGaussRAI.compute(input, es, sigmas,
 					new OutOfBoundsMirrorFactory<>(Boundary.SINGLE), output);
 
@@ -157,7 +157,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "sigma")
 	@Parameter(key = "outOfBoundsFactory")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer4<RandomAccessibleInterval<T>, ExecutorService, Double, //
+	public final Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> //
 	gaussRAISingleSigma = (input, es, sigma, outOfBounds, output) -> { //
 		final double[] sigmas = new double[input.numDimensions()];
@@ -179,7 +179,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigma")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer3<RandomAccessibleInterval<T>, ExecutorService, Double, RandomAccessibleInterval<T>> gaussRAISingleSigmaSimple = (
+	public final Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, RandomAccessibleInterval<T>> gaussRAISingleSigmaSimple = (
 			input, es, sigma, output) -> gaussRAISingleSigma.compute(input, es, sigma,
 					new OutOfBoundsMirrorFactory<>(Boundary.SINGLE), output);
 }

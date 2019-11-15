@@ -46,9 +46,9 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.Computer7;
-import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -73,7 +73,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<O>, C extends ComplexType<C>>
 	implements
-	Computer5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>
+	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>
 {
 
 	/** fft of reblurred (will be computed) **/
@@ -90,7 +90,7 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 
 	//TODO is this allowed (to divide an O by an I)? Should it be?
 //	@OpDependency(name = "math.divide") TODO: allow the matcher to fix this
-	private Inplace3First<IterableInterval<O>, RandomAccessibleInterval<I>, Double> divide = (io, in2, in3) -> {
+	private Inplaces.Arity3_1<IterableInterval<O>, RandomAccessibleInterval<I>, Double> divide = (io, in2, in3) -> {
 		Cursor<O> ioCursor = io.cursor();
 		RandomAccess<I> inRA = in2.randomAccess();
 		
@@ -105,7 +105,7 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 	};
 
 	@OpDependency(name = "filter.correlate")
-	private Computer7<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, //
+	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>, //
 		RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 		Boolean, ExecutorService, RandomAccessibleInterval<O>> correlateOp;
 

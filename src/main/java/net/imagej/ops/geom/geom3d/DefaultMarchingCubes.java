@@ -46,7 +46,7 @@ import net.imglib2.view.Views;
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -66,7 +66,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "interpolatorClass")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultMarchingCubes<T extends BooleanType<T>>
-		implements Function3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
+		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
 	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private double isolevel;
@@ -563,7 +563,7 @@ class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	
 	@OpDependency(name = "geom.marchingCubes")
-	private Function3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
+	private Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
 
 	@Override
 	public Mesh apply(RandomAccessibleInterval<T> t) {

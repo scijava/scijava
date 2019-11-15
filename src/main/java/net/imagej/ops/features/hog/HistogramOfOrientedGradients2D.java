@@ -58,9 +58,9 @@ import net.imglib2.view.composite.GenericComposite;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -86,13 +86,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
-		Computer4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
+		Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, FloatType, RandomAccessibleInterval<FloatType>> createImgOp;
 
 	@OpDependency(name = "thread.chunker")
-	private Inplace3First<Chunk, Long, ExecutorService> chunkerOp;
+	private Inplaces.Arity3_1<Chunk, Long, ExecutorService> chunkerOp;
 
 	private Converter<T, FloatType> converterToFloat;
 
@@ -280,13 +280,13 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
-		Function4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
+		Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, RandomAccessibleInterval<T>> outputCreator;
 
 	@OpDependency(name = "features.hog")
-	private Computer4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> hogOp;
+	private Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> hogOp;
 
 	@Override
 	public RandomAccessibleInterval<T> apply(final RandomAccessibleInterval<T> input, final Integer numOrientations,

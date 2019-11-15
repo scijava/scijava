@@ -43,8 +43,8 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,10 +61,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "derivatives", description = "the value at each index indicates the derivative to take in each dimension of the image.")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultDerivativeGauss<T extends RealType<T>>
-		implements Computer3<RandomAccessibleInterval<T>, double[], int[], RandomAccessibleInterval<DoubleType>> {
+		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], int[], RandomAccessibleInterval<DoubleType>> {
 	
 	@OpDependency(name = "copy.rai")
-	private Computer<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp;
+	private Computers.Arity1<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp;
 	
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> createOp;

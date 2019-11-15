@@ -50,9 +50,9 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.Computer7;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -75,7 +75,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
-		Computer7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
+		Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2,
@@ -203,10 +203,10 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U>> implements
-		Computer5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> {
+		Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> {
 	
 	@OpDependency(name = "coloc.pValue")
-	private Computer7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> pValueOp;
+	private Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> pValueOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
@@ -225,10 +225,10 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
-		Computer4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>,  ExecutorService, PValueResult> {
+		Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>,  ExecutorService, PValueResult> {
 	
 	@OpDependency(name = "coloc.pValue")
-	private Computer5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> pValueOp;
+	private Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> pValueOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,

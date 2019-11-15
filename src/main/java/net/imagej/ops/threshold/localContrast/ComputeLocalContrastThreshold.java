@@ -37,7 +37,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
-	BiComputer<Iterable<T>, T, BitType>
+	Computers.Arity2<Iterable<T>, T, BitType>
 {
 
 	@OpDependency(name = "stats.minMax")

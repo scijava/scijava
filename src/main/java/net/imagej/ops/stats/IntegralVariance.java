@@ -39,7 +39,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.composite.Composite;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "integralVariance", itemIO = ItemIO.BOTH)
 public class IntegralVariance<I extends RealType<I>>
-		implements Computer<RectangleNeighborhood<Composite<I>>, DoubleType> {
+		implements Computers.Arity1<RectangleNeighborhood<Composite<I>>, DoubleType> {
 
 	@Override
 	public void compute(final RectangleNeighborhood<Composite<I>> input, final DoubleType output) {

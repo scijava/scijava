@@ -32,7 +32,7 @@ package net.imagej.ops.stats;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "size", itemIO = ItemIO.BOTH)
 public class DefaultSize<I extends RealType<I>, O extends RealType<O>> 
-	implements Computer<Iterable<I>, O>
+	implements Computers.Arity1<Iterable<I>, O>
 {
 
 	@Override

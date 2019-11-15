@@ -34,7 +34,7 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "repetition")
 @Parameter(key = "zernikeMoment", itemIO = ItemIO.OUTPUT)
 public class ZernikeComputer<T extends RealType<T>>
-		implements Function3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
+		implements Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
 
 	@Override
 	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order, final Integer repetition) {

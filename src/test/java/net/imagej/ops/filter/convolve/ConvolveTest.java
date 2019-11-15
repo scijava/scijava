@@ -149,19 +149,19 @@
 //
 //		// Op used to pad the input
 //		final BinaryFunctionOp<RandomAccessibleInterval<FloatType>, Dimensions, RandomAccessibleInterval<FloatType>> padOp =
-//			(BinaryFunctionOp) Functions.binary(ops, PadInputFFTMethods.class,
+//			(BinaryFunctionOp) Functions.match(ops, PadInputFFTMethods.class,
 //				RandomAccessibleInterval.class, RandomAccessibleInterval.class,
 //				Dimensions.class, true);
 //
 //		// Op used to pad the kernel
 //		final BinaryFunctionOp<RandomAccessibleInterval<FloatType>, Dimensions, RandomAccessibleInterval<FloatType>> padKernelOp =
-//			(BinaryFunctionOp) Functions.binary(ops, PadShiftKernelFFTMethods.class,
+//			(BinaryFunctionOp) Functions.match(ops, PadShiftKernelFFTMethods.class,
 //				RandomAccessibleInterval.class, RandomAccessibleInterval.class,
 //				Dimensions.class, true);
 //
 //		// Op used to create the complex FFTs
 //		UnaryFunctionOp<Dimensions, RandomAccessibleInterval<ComplexFloatType>> createOp =
-//			(UnaryFunctionOp) Functions.unary(ops, CreateOutputFFTMethods.class,
+//			(UnaryFunctionOp) Functions.match(ops, CreateOutputFFTMethods.class,
 //				RandomAccessibleInterval.class, Dimensions.class,
 //				new ComplexFloatType(), true);
 //

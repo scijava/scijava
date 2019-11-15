@@ -37,7 +37,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.minorAxis", label = "Geometric (2D): Minor Axis")
 @Parameter(key = "input")
 @Parameter(key = "minorAxis", itemIO = ItemIO.BOTH)
-public class DefaultMinorAxis implements Computer<Polygon2D, DoubleType> {
+public class DefaultMinorAxis implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Polygon2D, Pair<DoubleType, DoubleType>> minorMajorAxisFunc;

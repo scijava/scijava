@@ -33,7 +33,7 @@ import net.imglib2.Dimensions;
 import net.imglib2.algorithm.fft2.FFTMethods;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "forward")
 @Parameter(key = "fast")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
-public class ComputeFFTMethodsSize implements Function3<Dimensions, Boolean, Boolean, long[][]> {
+public class ComputeFFTMethodsSize implements Functions.Arity3<Dimensions, Boolean, Boolean, long[][]> {
 
 	@Override
 	public long[][] apply(Dimensions inputDimensions, Boolean forward, Boolean fast) {

@@ -45,9 +45,9 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Transform.OffsetView} ops.
@@ -108,7 +108,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultOffsetStartEndTest() {
 
-		Function3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc = Functions
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc = Functions
 				.ternary(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {

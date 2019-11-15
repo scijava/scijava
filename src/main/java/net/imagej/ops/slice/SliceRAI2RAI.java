@@ -34,8 +34,8 @@ import net.imglib2.RandomAccessibleInterval;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,11 +59,11 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "dropSingleDimensions")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class SliceRAI2RAI<I, O> implements
-		Computer4<RandomAccessibleInterval<I>, Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>, int[], Boolean, RandomAccessibleInterval<O>> {
+		Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>, int[], Boolean, RandomAccessibleInterval<O>> {
 
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input,
-			final Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> op, final int[] axisIndices,
+			final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> op, final int[] axisIndices,
 			final Boolean dropSingleDimensions, final RandomAccessibleInterval<O> output) {
 		SlicesII<I> slicedInput = new SlicesII<>(input, axisIndices, dropSingleDimensions);
 		SlicesII<O> slicedOutput = new SlicesII<>(output, axisIndices, dropSingleDimensions);

@@ -40,7 +40,7 @@ import net.imglib2.view.composite.RealComposite;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,7 +61,7 @@ public class HessianRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 
 	@OpDependency(name = "filter.partialDerivative")
-	private BiComputer<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> derivativeComputer;
+	private Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> derivativeComputer;
 
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> createRAI;

@@ -38,7 +38,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -63,7 +63,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "targetMax")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
-		implements Computer5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
+		implements Computers.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
 
 	private NormalizeRealTypeComputer<I, O> normalizer;
 

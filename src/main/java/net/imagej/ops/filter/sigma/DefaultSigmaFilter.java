@@ -40,11 +40,11 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -64,13 +64,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "minPixelFraction")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
-		Computer5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, IterableInterval<V>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, IterableInterval<V>> {
 
 	@OpDependency(name = "stats.variance")
-	private Computer<Iterable<T>, DoubleType> varianceOp;
+	private Computers.Arity1<Iterable<T>, DoubleType> varianceOp;
 
 	@OpDependency(name = "map.neighborhood")
-	private Computer3<RandomAccessibleInterval<T>, Shape, BiComputer<Iterable<T>, T, V>, IterableInterval<V>> mapper;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity2<Iterable<T>, T, V>, IterableInterval<V>> mapper;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
@@ -78,11 +78,11 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 			final Double minPixelFraction, final IterableInterval<V> output) {
 		if (range <= 0)
 			throw new IllegalArgumentException("range must be positive!");
-		BiComputer<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op.compute(in1, in2, range, minPixelFraction, out);
+		Computers.Arity2<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op.compute(in1, in2, range, minPixelFraction, out);
 		mapper.compute(RAIs.extend(input, outOfBoundsFactory), inputNeighborhoodShape, mappedOp, output);
 	}
 
-	final Computer4<Iterable<T>, T, Double, Double, V> op = new Computer4<Iterable<T>, T, Double, Double, V>() {
+	final Computers.Arity4<Iterable<T>, T, Double, Double, V> op = new Computers.Arity4<Iterable<T>, T, Double, Double, V>() {
 
 		@Override
 		public void compute(final Iterable<T> neighborhood, final T center, final Double range,

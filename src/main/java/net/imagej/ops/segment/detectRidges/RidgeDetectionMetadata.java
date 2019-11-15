@@ -42,8 +42,8 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
@@ -74,10 +74,10 @@ public class RidgeDetectionMetadata {
 	public <T extends RealType<T>> RidgeDetectionMetadata(
 		final RandomAccessibleInterval<T> input, final double sigma,
 		final double smallMax, final double bigMax,
-		final Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> convertOp,
+		final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> convertOp,
 		final BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> createOp,
 		final Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp,
-		final Computer3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp)
+		final Computers.Arity3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp)
 	{
 		// convert input to doubleType
 		final RandomAccessibleInterval<DoubleType> converted = createOp.apply(input, new DoubleType()); 

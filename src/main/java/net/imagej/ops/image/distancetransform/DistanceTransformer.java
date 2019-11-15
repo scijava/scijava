@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
-		implements BiComputer<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
+		implements Computers.Arity2<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@Override
 	public void compute(RandomAccessibleInterval<B> in, ExecutorService es, RandomAccessibleInterval<T> out) {

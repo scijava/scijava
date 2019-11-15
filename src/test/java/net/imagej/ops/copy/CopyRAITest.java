@@ -51,10 +51,10 @@ import net.imglib2.view.Views;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -93,7 +93,7 @@ public class CopyRAITest extends AbstractOpTest {
 		final long[] end = new long[] { 47, 47, 47 };
 
 		// create an input with a cube at the center TODO can we use ops.run() here?
-		BiFunction<Dimensions, UnsignedByteType, Img<UnsignedByteType>> imgOp = Functions.binary(ops, "create.img",
+		BiFunction<Dimensions, UnsignedByteType, Img<UnsignedByteType>> imgOp = Functions.match(ops, "create.img",
 				new Nil<Dimensions>() {}, new Nil<UnsignedByteType>() {}, new Nil<Img<UnsignedByteType>>() {});
 		input2 = imgOp.apply(new FinalDimensions(size1), new UnsignedByteType());
 
@@ -154,7 +154,7 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIDifferentSizeTest() {
 
 		// create a copy op
-		final Computer<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = Computers.unary(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
+		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = Computers.match(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
 
 		assertNotNull(copy);
 

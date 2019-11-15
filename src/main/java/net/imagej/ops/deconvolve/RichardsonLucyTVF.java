@@ -47,15 +47,15 @@ import net.imglib2.util.Util;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer13;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.function.Function12;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.inplace.Inplace;
-import org.scijava.ops.core.inplace.Inplace6First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -88,43 +88,43 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-	implements Function12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, Float, ExecutorService, RandomAccessibleInterval<O>> {
+	implements Functions.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, Float, ExecutorService, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "deconvolve.richardsonLucyUpdate")
-	private Computer3<RandomAccessibleInterval<O>, Float, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp;
+	private Computers.Arity3<RandomAccessibleInterval<O>, Float, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp;
 	
 	private float regularizationFactor;
 	
-	private Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp = getComputeEstimateOp();
+	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp = getComputeEstimateOp();
 
 	@OpDependency(name = "deconvolve.normalizationFactor")
-	private Inplace6First<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService> normalizer;
+	private Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService> normalizer;
 
 	@OpDependency(name = "deconvolve.firstGuess")
-	private Function3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>> firstGuess;
+	private Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>> firstGuess;
 
 	@OpDependency(name = "deconvolve.accelerate")
-	private Inplace<RandomAccessibleInterval<O>> accelerator;
+	private Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator;
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> outputCreator;
 
 	@OpDependency(name = "filter.pad")
-	private Function4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
+	private Functions.Arity4<RandomAccessibleInterval<I>, Dimensions, Boolean, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> padOp;
 
 	@OpDependency(name = "filter.padShiftFFTKernel")
 	private BiFunction<RandomAccessibleInterval<K>, Dimensions, RandomAccessibleInterval<K>> padKernelOp;
 
 	@OpDependency(name = "filter.createFFTOutput")
-	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
+	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "deconvolve.richardsonLucy")
-	private Computer13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
+	private Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
-			Boolean, C, Integer, Inplace<RandomAccessibleInterval<O>>, //
-			Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
-			RandomAccessibleInterval<O>, List<Inplace<RandomAccessibleInterval<O>>>, //
+			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
+			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
+			RandomAccessibleInterval<O>, List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
 			ExecutorService, RandomAccessibleInterval<O>> richardsonLucyOp;
 
 	private Boolean nonCirculant;
@@ -134,7 +134,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	/**
 	 * create a richardson lucy filter
 	 */
-	public BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
+	public Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
 			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
 			RandomAccessibleInterval<O> output) {
@@ -145,12 +145,12 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 		if (nonCirculant) {
 			// TODO should this be input and kernel instead of raiExtendedInput and
 			// raiExtendedKernel?
-			Inplace<RandomAccessibleInterval<O>> normalizerSimplified = (io) -> {
+			Inplaces.Arity1<RandomAccessibleInterval<O>> normalizerSimplified = (io) -> {
 				normalizer.mutate(io, raiExtendedInput, raiExtendedKernel, fftImg, fftKernel, es);
 
 			};
 
-			ArrayList<Inplace<RandomAccessibleInterval<O>>> list = new ArrayList<>();
+			ArrayList<Inplaces.Arity1<RandomAccessibleInterval<O>>> list = new ArrayList<>();
 
 			list.add(normalizerSimplified);
 
@@ -186,7 +186,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 		// 'initialize' as we don't know the size yet, thus we can't create
 		// memory
 		// for the FFTs
-		BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter = createFilterComputer(
+		Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter = createFilterComputer(
 				input, kernel, fftInput, fftKernel, es, output);
 
 		filter.compute(input, kernel, output);
@@ -235,7 +235,7 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputeEstimateOp()
+	protected Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputeEstimateOp()
 	{
 		// create Richardson Lucy TV update op, this will override the base RL
 		// Update.

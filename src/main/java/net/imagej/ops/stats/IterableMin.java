@@ -33,7 +33,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.min", priority = Priority.VERY_HIGH)
 @Parameter(key = "iterableInput")
 @Parameter(key = "min", itemIO = ItemIO.BOTH)
-public class IterableMin<T extends RealType<T>> implements Computer<Iterable<T>, T> {
+public class IterableMin<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
 
 	@Override
 	public void compute(final Iterable<T> input, final T output) {

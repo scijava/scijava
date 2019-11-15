@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -60,7 +60,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
-		implements Computer3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
+		implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
 
 	@Override
 	public void compute(final RandomAccessibleInterval<B> in, final double[] calibration, final ExecutorService es,

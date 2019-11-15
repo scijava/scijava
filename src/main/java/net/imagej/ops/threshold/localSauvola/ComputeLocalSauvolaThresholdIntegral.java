@@ -41,8 +41,8 @@ import net.imglib2.view.composite.Composite;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -73,17 +73,17 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	implements
-	Computer4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>
+	Computers.Arity4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>
 {
 
 	public static final double DEFAULT_K = 0.5;
 	public static final double DEFAULT_R = 0.5;
 
 	@OpDependency(name = "stats.integralMean")
-	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
+	private Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
 
 	@OpDependency(name = "stats.integralVariance")
-	private Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp;
+	private Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp;
 
 	@Override
 	public void compute(
@@ -98,8 +98,8 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	public static <T extends RealType<T>> void compute(
 		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
 		final T inputCenterPixel, Double k, Double r,
-		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp,
-		final Computer<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp,
+		final Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp,
+		final Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp,
 		@Mutable final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;

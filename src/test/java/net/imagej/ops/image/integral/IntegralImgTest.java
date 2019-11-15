@@ -47,9 +47,9 @@ import net.imglib2.view.Views;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
+import org.scijava.ops.function.Computers;
 
 /**
  * @author Stefan Helfrich (University of Konstanz)
@@ -78,7 +78,7 @@ public class IntegralImgTest extends AbstractOpTest {
 	@Test
 	public void testIntegralImageSimilarity() {
 		// should match DefaultIntegralImg
-		Computer<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = Computers
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = Computers
 				.unary(ops, "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

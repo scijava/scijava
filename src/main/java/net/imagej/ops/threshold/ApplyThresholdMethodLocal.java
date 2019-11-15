@@ -43,9 +43,9 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -68,10 +68,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.huang")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -82,10 +82,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.ij1")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -96,10 +96,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.intermodes")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -110,10 +110,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.isoData")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -124,10 +124,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.li")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -138,10 +138,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.maxEntropy")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -152,10 +152,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.maxLikelihood")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -166,10 +166,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.mean")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -180,10 +180,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.minError")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -194,10 +194,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.minimum")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -208,10 +208,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.moments")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -222,10 +222,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.otsu")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -236,10 +236,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.percentile")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -250,10 +250,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.renyiEntropy")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -264,10 +264,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.rosin")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -278,10 +278,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.shanbhag")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -292,10 +292,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.triangle")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -306,10 +306,10 @@ public final class ApplyThresholdMethodLocal {
 	{
 
 		@OpDependency(name = "threshold.yen")
-		private Computer<Histogram1d<T>, T> computeThresholdOp;
+		private Computers.Arity1<Histogram1d<T>, T> computeThresholdOp;
 
 		@Override
-		protected Computer<Histogram1d<T>, T> getComputeThresholdOp() {
+		protected Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp() {
 			return computeThresholdOp;
 		}
 	}
@@ -320,7 +320,7 @@ public final class ApplyThresholdMethodLocal {
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	private abstract static class AbstractApplyLocalHistogramBasedThreshold<T extends RealType<T>>
 		implements
-		Computer3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 				IterableInterval<BitType>> {
 
 		// TODO: Once optional primary parameters are supported by the matching
@@ -329,11 +329,11 @@ public final class ApplyThresholdMethodLocal {
 		@OpDependency(name = "image.histogram")
 		private BiFunction<Iterable<T>, Integer, Histogram1d<T>> createHistogramOp;
 
-		// TODO: Would be cool if BiComputer<T, T, BitType> would be matched.
+		// TODO: Would be cool if Computers.Arity2<T, T, BitType> would be matched.
 		@OpDependency(name = "threshold.apply")
-		private BiComputer<Comparable<? super T>, T, BitType> applyThresholdOp;
+		private Computers.Arity2<Comparable<? super T>, T, BitType> applyThresholdOp;
 
-		private BiComputer<Iterable<T>, T, BitType> thresholdOp;
+		private Computers.Arity2<Iterable<T>, T, BitType> thresholdOp;
 
 		@Override
 		public void compute(final RandomAccessibleInterval<T> input,
@@ -346,10 +346,10 @@ public final class ApplyThresholdMethodLocal {
 				inputNeighborhoodShape, outOfBoundsFactory, thresholdOp, output);
 		}
 
-		private BiComputer<Iterable<T>, T, BitType> getThresholdOp() {
-			final Computer<Histogram1d<T>, T> computeThresholdOp =
+		private Computers.Arity2<Iterable<T>, T, BitType> getThresholdOp() {
+			final Computers.Arity1<Histogram1d<T>, T> computeThresholdOp =
 				getComputeThresholdOp();
-			return new BiComputer<Iterable<T>, T, BitType>() {
+			return new Computers.Arity2<Iterable<T>, T, BitType>() {
 
 				@Override
 				public void compute(final Iterable<T> inputNeighborhood,
@@ -365,7 +365,7 @@ public final class ApplyThresholdMethodLocal {
 			};
 		}
 
-		protected abstract Computer<Histogram1d<T>, T> getComputeThresholdOp();
+		protected abstract Computers.Arity1<Histogram1d<T>, T> getComputeThresholdOp();
 	}
 
 }

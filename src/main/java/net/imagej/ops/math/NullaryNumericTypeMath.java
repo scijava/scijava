@@ -34,8 +34,7 @@ import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.NullaryComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -55,13 +54,13 @@ public class NullaryNumericTypeMath <T extends Type<T>, N extends NumericType<N>
 	@OpField(names = "math.assign")
 	@Parameter(key = "constant")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer<T, T> assigner = (constant, output) -> output.set(constant);
+	public final Computers.Arity1<T, T> assigner = (constant, output) -> output.set(constant);
 
 	/**
 	 * Sets the output to zero.
 	 */
 	@OpField(names = "math.zero")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final NullaryComputer<N> zeroer = (output) -> output.setZero();
+	public final Computers.Arity0<N> zeroer = (output) -> output.setZero();
 
 }

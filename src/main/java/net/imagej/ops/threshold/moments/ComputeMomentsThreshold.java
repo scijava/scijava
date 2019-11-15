@@ -62,7 +62,7 @@ public class ComputeMomentsThreshold<T extends RealType<T>> extends
 	}
 
 	/**
-	 * W. Tsai, "Moment-preserving thresholding: a new approach," Computer<br>
+	 * W. Tsai, "Moment-preserving thresholding: a new approach," Computers.Arity1<br>
 	 * Vision, Graphics, and Image Processing, vol. 29, pp. 377-393, 1985.<br>
 	 * Ported to ImageJ plugin by G.Landini from the the open source project<br>
 	 * FOURIER 0.8 by M. Emre Celebi , Department of Computer Science,<br>

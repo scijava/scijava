@@ -50,7 +50,7 @@ import net.imglib2.view.Views;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -197,7 +197,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 
 	}
 
-	public Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> test = (input, output) -> {
+	public Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> test = (input, output) -> {
 		final Iterator<I> itA = Views.iterable(input).iterator();
 		final Iterator<O> itB = Views.iterable(output).iterator();
 

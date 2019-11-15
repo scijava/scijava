@@ -37,10 +37,10 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -80,7 +80,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@Parameter(key = "rangeStdDev")
 	@Parameter(key = "seed")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer5<IterableInterval<I>, Double, Double, Double, Long, IterableInterval<O>> addNoiseInterval = (
+	public final Computers.Arity5<IterableInterval<I>, Double, Double, Double, Long, IterableInterval<O>> addNoiseInterval = (
 			input, rangeMin, rangeMax, rangeStdDev, seed, output) -> {
 		addNoise(input, output, rangeMin, rangeMax, rangeStdDev, new Random(seed));
 	};
@@ -95,7 +95,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@Parameter(key = "rangeMax")
 	@Parameter(key = "rangeStdDev")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer4<IterableInterval<I>, Double, Double, Double, IterableInterval<O>> addNoiseIntervalSeedless = (
+	public final Computers.Arity4<IterableInterval<I>, Double, Double, Double, IterableInterval<O>> addNoiseIntervalSeedless = (
 			input, rangeMin, rangeMax, rangeStdDev,
 			output) -> addNoiseInterval.compute(input, rangeMin, rangeMax, rangeStdDev, 0xabcdef1234567890L, output);
 
@@ -160,7 +160,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@Parameter(key = "input")
 	@Parameter(key = "seed")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final BiComputer<IterableInterval<I>, Long, IterableInterval<O>> addPoissonNoiseInterval = (input, seed,
+	public final Computers.Arity2<IterableInterval<I>, Long, IterableInterval<O>> addPoissonNoiseInterval = (input, seed,
 			output) -> addPoissonNoise(input, new Random(seed), output);
 
 	/**
@@ -170,7 +170,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	@OpField(names = "filter.addPoissonNoise")
 	@Parameter(key = "input")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
-	public final Computer<IterableInterval<I>, IterableInterval<O>> addPoissonNoiseIntervalSeedless = (input,
+	public final Computers.Arity1<IterableInterval<I>, IterableInterval<O>> addPoissonNoiseIntervalSeedless = (input,
 			output) -> addPoissonNoise(input, new Random(0xabcdef1234567890L), output);
 
 	// -- Static utility methods --

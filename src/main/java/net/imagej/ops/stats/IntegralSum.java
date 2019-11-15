@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.integralSum")
 @Parameter(key = "iterableInput")
 @Parameter(key = "integralSum", itemIO = ItemIO.BOTH)
-public class IntegralSum<I extends RealType<I>> implements Computer<RectangleNeighborhood<I>, DoubleType> {
+public class IntegralSum<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<I>, DoubleType> {
 
 	@Override
 	public void compute(final RectangleNeighborhood<I> input, final DoubleType output) {

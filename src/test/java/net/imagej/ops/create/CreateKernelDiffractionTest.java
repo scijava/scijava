@@ -40,7 +40,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function9;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 
 /**
@@ -63,9 +63,9 @@ public class CreateKernelDiffractionTest extends AbstractTestEnvironment {
 		final double pZ = 2000E-9D; // position of particle
 		final DoubleType type = new DoubleType(); // pixel type of created kernel
 
-		Function9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
+		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
 				.findOp("create.kernelDiffraction",
-						new Nil<Function9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
+						new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
 						}, new Nil[] { new Nil<Dimensions>() {
 						}, new Nil<Double>() {
 						}, new Nil<Double>() {
@@ -146,9 +146,9 @@ public class CreateKernelDiffractionTest extends AbstractTestEnvironment {
 		final double resAxial = 250E-9; // axial pixel size
 		final DoubleType type = new DoubleType(); // pixel type of created kernel
 		
-		Function9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
+		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
 				.findOp("create.kernelDiffraction",
-						new Nil<Function9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
+						new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
 						}, new Nil[] { new Nil<Dimensions>() {
 						}, new Nil<Double>() {
 						}, new Nil<Double>() {

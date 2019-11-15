@@ -46,7 +46,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -64,7 +64,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "histogramSize")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealType<O>>
-	implements BiComputer<RandomAccessibleInterval<I>, Integer, O> {
+	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
 
 	@OpDependency(name = "image.histogram")
 	private BiFunction<Iterable<DoubleType>, Integer, Histogram1d<DoubleType>> histOp;

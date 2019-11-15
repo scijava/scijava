@@ -37,9 +37,9 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer7;
-import org.scijava.ops.core.computer.Computer8;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -63,17 +63,17 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computer7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
+		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "math.complexConjugateMultiply")
-	private BiComputer<RandomAccessibleInterval<C>, //
+	private Computers.Arity2<RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> complexConjugateMul;
 
 	@OpDependency(name = "filter.linearFilter")
-	private Computer8<RandomAccessibleInterval<I>, //
+	private Computers.Arity8<RandomAccessibleInterval<I>, //
 			RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, //
-			BiComputer<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
+			Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
 					RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> linearFilter;
 
 	/**

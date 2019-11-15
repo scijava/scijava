@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric (2D): Size", priority = Priority.VERY_HIGH - 1)
 @Parameter(key = "input")
 @Parameter(key = "size", itemIO = ItemIO.BOTH)
-public class DefaultSizePolygon implements Computer<Polygon2D, DoubleType> {
+public class DefaultSizePolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@Override
 	public void compute(Polygon2D input, DoubleType output) {

@@ -34,8 +34,8 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -57,10 +57,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "repetition")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultMagnitudeFeature<T extends RealType<T>, O extends RealType<O>>
-		implements Computer3<IterableInterval<T>, Integer, Integer, O> {
+		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, O> {
 
 	@OpDependency(name = "features.zernike.computer")
-	private Function3<IterableInterval<T>, Integer, Integer, ZernikeMoment> zernikeOp;
+	private Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> zernikeOp;
 
 	@Override
 	public void compute(IterableInterval<T> input, Integer order, Integer repetition, O output) {

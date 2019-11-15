@@ -38,7 +38,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,7 +61,7 @@ public class DefaultICM1<T extends RealType<T>> extends AbstractHaralickFeature<
 	@OpDependency(name = "features.haralick.coocHXY")
 	private Function<double[][], double[]> coocHXYFunc;
 	@OpDependency(name = "features.haralick.entropy")
-	private Function4<IterableInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> entropy;
+	private Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> entropy;
 
 	@Override
 	public DoubleType apply(final IterableInterval<T> input, final Integer numGreyLevels, final Integer distance,

@@ -34,7 +34,7 @@ import java.util.function.Function;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Generic implementation of {@link net.imagej.ops.Ops.Geometric.Boxivity}.
@@ -44,7 +44,7 @@ import org.scijava.ops.core.computer.Computer;
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
-public abstract class AbstractBoxivity<I> implements Computer<I, DoubleType> {
+public abstract class AbstractBoxivity<I> implements Computers.Arity1<I, DoubleType> {
 
 	@OpDependency(name = "geom.size")
 	private Function<I, DoubleType> areaFunc;

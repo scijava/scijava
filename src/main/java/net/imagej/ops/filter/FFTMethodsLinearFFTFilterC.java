@@ -40,9 +40,9 @@ import net.imglib2.util.Util;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer8;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -67,19 +67,19 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "frequencyOp")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computer8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, BiComputer<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> {
+		implements Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "filter.fft")
-	private BiComputer<RandomAccessibleInterval<I>, ExecutorService, RandomAccessibleInterval<C>> fftInOp;
+	private Computers.Arity2<RandomAccessibleInterval<I>, ExecutorService, RandomAccessibleInterval<C>> fftInOp;
 
 	@OpDependency(name = "filter.fft")
-	private BiComputer<RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<C>> fftKernelOp;
+	private Computers.Arity2<RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<C>> fftKernelOp;
 
 	@OpDependency(name = "filter.ifft")
-	private BiComputer<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>> ifftOp;
+	private Computers.Arity2<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>> ifftOp;
 	
 	@OpDependency(name = "filter.createFFTOutput")
-	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
+	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	/**
 	 * Perform convolution by multiplying the FFTs in the frequency domain
@@ -88,7 +88,7 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
 			final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel,
 			final Boolean performInputFFT, final Boolean performKernelFFT, final ExecutorService es,
-			final BiComputer<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
+			final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
 			final RandomAccessibleInterval<O> out) {
 		final C fftType = Util.getTypeFromInterval(fftInput);
 

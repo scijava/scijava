@@ -33,7 +33,7 @@ import net.imglib2.type.numeric.ComplexType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -42,7 +42,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input1")
 @Parameter(key = "input2")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements BiComputer<T, T, T> {
+public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements Computers.Arity2<T, T, T> {
 
 	// TODO: extend common abstract base class which implements Contingent
 	// for dimensionality checking.

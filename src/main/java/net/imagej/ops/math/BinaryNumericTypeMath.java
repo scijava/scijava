@@ -35,8 +35,8 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,7 +59,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "sum", itemIO = ItemIO.BOTH)
-	public final BiComputer<T, T, T> adder = (input1, input2, output) -> {
+	public final Computers.Arity2<T, T, T> adder = (input1, input2, output) -> {
 		output.set(input1);
 		output.add(input2);
 	};
@@ -73,7 +73,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@Parameter(key = "input2")
 	@Parameter(key = "divideByZeroValue")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final Computer3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
+	public final Computers.Arity3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
 		try {
 			output.set(input1);
 			output.div(input2);
@@ -90,7 +90,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<T, T, T> multiplier = (input1, input2, output) -> {
+	public final Computers.Arity2<T, T, T> multiplier = (input1, input2, output) -> {
 		output.set(input1);
 		output.mul(input2);
 	};
@@ -103,7 +103,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<T, T, T> subtracter = (input1, input2, output) -> {
+	public final Computers.Arity2<T, T, T> subtracter = (input1, input2, output) -> {
 		output.set(input1);
 		output.sub(input2);
 	};

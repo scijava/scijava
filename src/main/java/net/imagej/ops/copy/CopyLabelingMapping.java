@@ -37,7 +37,7 @@ import net.imglib2.roi.labeling.LabelingMapping.SerialisationAccess;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.labelingMapping", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class CopyLabelingMapping<L> implements Computer<LabelingMapping<L>, LabelingMapping<L>> {
+public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> {
 
 	@Override
 	public void compute(final LabelingMapping<L> input, final LabelingMapping<L> output) {
@@ -68,7 +68,7 @@ public class CopyLabelingMapping<L> implements Computer<LabelingMapping<L>, Labe
 //class CopyLabelingMappingFunction<L> implements Function<LabelingMapping<L>, LabelingMapping<L>> {
 //
 //	@OpDependency(name = "copy.labelingMapping")
-//	Computer<LabelingMapping<L>, LabelingMapping<L>> copyOp;
+//	Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> copyOp;
 //	@OpDependency(name = "create.labelingMapping")
 //	private Function<Integer, LabelingMapping<L>> outputCreator;
 //

@@ -38,10 +38,10 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.core.computer.GenericComputers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
+import org.scijava.ops.function.Computers;
 
 public class ProjectTest extends AbstractOpTest {
 
@@ -50,8 +50,8 @@ public class ProjectTest extends AbstractOpTest {
 	private Img<UnsignedByteType> in;
 	private Img<UnsignedByteType> out1;
 	private Img<UnsignedByteType> out2;
-	private Computer<Iterable<UnsignedByteType>, UnsignedByteType> op;
-	private Computer<Iterable<UnsignedByteType>, UnsignedByteType> genericOp;
+	private Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType> op;
+	private Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType> genericOp;
 
 	@Before
 	public void initImg() {
@@ -72,10 +72,10 @@ public class ProjectTest extends AbstractOpTest {
 		out1 = generateUnsignedByteArrayTestImg(false, 10, 10);
 		out2 = generateUnsignedByteArrayTestImg(false, 10, 10);
 
-		op = Computers.unary(ops, "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
+		op = Computers.match(ops, "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
 				new Nil<UnsignedByteType>() {});
 		genericOp = GenericComputers.Computers.generic(op,
-				new Nil<Computer<Iterable<UnsignedByteType>, UnsignedByteType>>() {}.getType());
+				new Nil<Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType>>() {}.getType());
 	}
 
 	@Test

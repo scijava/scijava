@@ -44,7 +44,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,7 +61,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "histogramSize")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultLBP2D<I extends RealType<I>>
-		implements Function3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
+		implements Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
 
 	@OpDependency(name = "image.histogram")
 	private BiFunction<ArrayList<LongType>, Integer, Histogram1d<LongType>> histOp;

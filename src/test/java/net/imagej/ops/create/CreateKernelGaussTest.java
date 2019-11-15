@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link CreateKernelGaussDoubleType} and
@@ -58,12 +58,12 @@ public class CreateKernelGaussTest extends AbstractTestEnvironment {
 		final double sigma = 5.0;
 		final double[] sigmas = {sigma, sigma};
 		
-		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> createFunc = Functions.binary(ops, "create.kernelGauss", new Nil<Double>() {}, new Nil<Integer>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
+		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> createFunc = Functions.match(ops, "create.kernelGauss", new Nil<Double>() {}, new Nil<Integer>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 
 		final RandomAccessibleInterval<DoubleType> gaussianKernel = //
 			createFunc.apply(sigma, sigmas.length);
 
-		Function<double[], RandomAccessibleInterval<DoubleType>> createFunc2 = Functions.unary(ops, "create.kernelGauss", new Nil<double[]>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
+		Function<double[], RandomAccessibleInterval<DoubleType>> createFunc2 = Functions.match(ops, "create.kernelGauss", new Nil<double[]>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 				
 		
 		final RandomAccessibleInterval<DoubleType> gaussianKernel2 = //

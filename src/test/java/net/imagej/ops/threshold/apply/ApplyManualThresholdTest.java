@@ -38,9 +38,9 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
+import org.scijava.ops.function.Computers;
 
 /**
  * Tests {@link ApplyManualThreshold}.
@@ -51,7 +51,7 @@ public class ApplyManualThresholdTest extends AbstractThresholdTest {
 
 	@Test
 	public void testApplyThreshold() throws IncompatibleTypeException {
-		Computer3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>,Iterable<BitType>> createFunc = Computers.ternary(ops,
+		Computers.Arity3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>,Iterable<BitType>> createFunc = Computers.match(ops,
 				"threshold.apply", new Nil<Img<UnsignedShortType>>() {
 				}, new Nil<UnsignedShortType>() {
 				}, new Nil<Comparator<UnsignedShortType>>() {

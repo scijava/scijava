@@ -43,9 +43,9 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link DefaultCreateKernelGabor} and its derivates.
@@ -61,7 +61,7 @@ public class CreateKernelGaborTest extends AbstractTestEnvironment {
 		final double[] period = { 4.0, 1.0 };
 
 		// define functions used in the test
-		Function3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = Functions.ternary(ops,
+		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = Functions.match(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<C>() {
@@ -72,17 +72,17 @@ public class CreateKernelGaborTest extends AbstractTestEnvironment {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = Functions.binary(ops,
+		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = Functions.match(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = Functions.binary(ops,
+		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = Functions.match(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<FloatType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = Functions.binary(ops,
+		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = Functions.match(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {

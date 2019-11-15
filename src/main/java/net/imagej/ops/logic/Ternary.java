@@ -33,7 +33,7 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.Type;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "ifTrueVal")
 @Parameter(key = "ifFalseVal")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computer3<I, O, O, O>
+public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computers.Arity3<I, O, O, O>
 
 {
 

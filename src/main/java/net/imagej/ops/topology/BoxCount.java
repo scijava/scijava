@@ -48,7 +48,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -288,7 +288,7 @@ public class BoxCount {
 @Parameter(key = "gridMoves")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class DefaultBoxCount<B extends BooleanType<B>> implements
-		Function5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>> {
+		Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>> {
 
 	@Override
 	public List<ValuePair<DoubleType, DoubleType>> apply(RandomAccessibleInterval<B> input, Long maxSize, Long minSize,

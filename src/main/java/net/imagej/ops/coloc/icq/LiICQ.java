@@ -38,8 +38,8 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,12 +59,12 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "mean2")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
-		implements Function4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
+		implements Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
 
 	@OpDependency(name = "stats.mean")
-	private Computer<Iterable<T>, DoubleType> meanTOp;
+	private Computers.Arity1<Iterable<T>, DoubleType> meanTOp;
 	@OpDependency(name = "stats.mean")
-	private Computer<Iterable<U>, DoubleType> meanUOp;
+	private Computers.Arity1<Iterable<U>, DoubleType> meanUOp;
 
 	@Override
 	public Double apply(final Iterable<T> image1, final Iterable<U> image2, final DoubleType mean1, final DoubleType mean2) {
@@ -127,7 +127,7 @@ class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealTy
 		implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 	
 	@OpDependency(name = "coloc.icq")
-	private Function4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> colocOp;
+	private Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> colocOp;
 	
 	@Override
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {

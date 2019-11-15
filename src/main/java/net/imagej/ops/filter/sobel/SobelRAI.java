@@ -35,8 +35,8 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,22 +54,22 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class SobelRAI<T extends RealType<T>>
-		implements Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
+		implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 	
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> createRAI;
 
 	@OpDependency(name = "math.sqr")
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> squareMapOp;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> squareMapOp;
 
 	@OpDependency(name = "math.sqrt")
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> sqrtMapOp;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> sqrtMapOp;
 
 	@OpDependency(name = "math.add")
-	private BiComputer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> addOp;
+	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> addOp;
 
 	@OpDependency(name = "filter.partialDerivative")
-	private BiComputer<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> derivativeComputer;
+	private Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> derivativeComputer;
 	
 	@Override
 	public void compute(RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output) {

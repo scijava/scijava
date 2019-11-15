@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -49,7 +49,7 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = OpCollection.class)
 public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealType<O>>
-		implements Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
+		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
 
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<O> output) {
@@ -79,13 +79,13 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 	 * Implements the row-wise addition required for computations of integral
 	 * images.
 	 */
-	public abstract Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(int dimension);
+	public abstract Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(int dimension);
 
 	/*
 	 * Computers used in the row-wise addition
 	 */
 
-	public final Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeAdd = (input, output) -> {
+	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeAdd = (input, output) -> {
 
 		final Cursor<O> inputCursor = Views.iterable(input).cursor();
 		final Cursor<O> outputCursor = Views.iterable(output).cursor();
@@ -102,7 +102,7 @@ public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealT
 		}
 	};
 
-	public final Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeSquareAndAdd = (input,
+	public final Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeSquareAndAdd = (input,
 			output) -> {
 
 		final Cursor<O> inputCursor = Views.iterable(input).cursor();

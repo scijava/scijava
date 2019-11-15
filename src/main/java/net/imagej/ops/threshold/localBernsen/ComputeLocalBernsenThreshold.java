@@ -38,7 +38,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -61,7 +61,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "halfMaxValue")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
-	Computer4<Iterable<T>, T, Double, Double, BitType>
+	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
 
 	@OpDependency(name = "stats.minMax")

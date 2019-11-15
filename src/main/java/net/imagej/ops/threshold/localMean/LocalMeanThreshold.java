@@ -49,9 +49,9 @@ import net.imglib2.view.composite.Composite;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -74,16 +74,16 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalMeanThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T> implements
-	Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			IterableInterval<BitType>> {
 
 	private static final int INTEGRAL_IMAGE_ORDER = 1;
 
 	@OpDependency(name = "threshold.localMean")
-	private Computer3<Iterable<T>, T, Double, BitType> computeThresholdNonIntegralOp;
+	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdNonIntegralOp;
 
 	@OpDependency(name = "threshold.localMean")
-	private Computer3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType> computeThresholdIntegralOp;
+	private Computers.Arity3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType> computeThresholdIntegralOp;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
@@ -109,10 +109,10 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 		final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp,
+		final Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp,
 		@Mutable final IterableInterval<BitType> output)
 	{
-		final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
 		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
 			inputNeighborhoodShape, outOfBoundsFactory,
@@ -124,10 +124,10 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final RectangleShape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> integralImageOp,
-		final Computer3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType> computeThresholdOp,
+		final Computers.Arity3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType> computeThresholdOp,
 		@Mutable final IterableInterval<BitType> output)
 	{
-		final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
 		ApplyLocalThresholdIntegral.compute(input, inputNeighborhoodShape,
 			outOfBoundsFactory, Arrays.asList(integralImageOp),

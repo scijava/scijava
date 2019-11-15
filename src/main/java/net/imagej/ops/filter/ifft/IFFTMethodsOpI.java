@@ -36,7 +36,7 @@ import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input", itemIO = ItemIO.BOTH)
 @Parameter(key = "executorService")
 public class IFFTMethodsOpI<C extends ComplexType<C>>
-		implements BiInplaceFirst<RandomAccessibleInterval<C>, ExecutorService> {
+		implements Inplaces.Arity2_1<RandomAccessibleInterval<C>, ExecutorService> {
 
 	/**
 	 * Compute an ND inverse FFT

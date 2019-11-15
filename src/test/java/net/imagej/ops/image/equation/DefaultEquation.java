@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpExecutionException;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptLanguage;
@@ -68,7 +68,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "scriptService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultEquation<T extends RealType<T>> implements
-	BiComputer<String, ScriptService, IterableInterval<T>> 
+	Computers.Arity2<String, ScriptService, IterableInterval<T>> 
 {
 
 	@Override

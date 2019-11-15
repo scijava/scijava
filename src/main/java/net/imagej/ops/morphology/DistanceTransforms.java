@@ -11,14 +11,14 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.ExceptionUtils;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.inplace.BiInplaceFirst;
-import org.scijava.ops.core.inplace.Inplace3First;
-import org.scijava.ops.core.inplace.Inplace4First;
-import org.scijava.ops.core.inplace.Inplace5First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -30,7 +30,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distanceType")
 	@Parameter(key = "weights")
-	public final Inplace3First<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[]> transformInplace = DistanceTransform::transform;
+	public final Inplaces.Arity3_1<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[]> transformInplace = DistanceTransform::transform;
 
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
@@ -38,7 +38,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
 	@Parameter(key = "weights")
-	public final Inplace5First<RandomAccessibleInterval<T>, DISTANCE_TYPE, ExecutorService, Integer, double[]> transformExServiceInplace = (
+	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, DISTANCE_TYPE, ExecutorService, Integer, double[]> transformExServiceInplace = (
 			source, distanceType, executorService, numTasks, weights) -> ExceptionUtils.execute(
 					() -> DistanceTransform.transform(source, distanceType, executorService, numTasks, weights));
 
@@ -47,7 +47,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "distanceType")
 	@Parameter(key = "weights")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer3<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[], RandomAccessibleInterval<T>> transformComputer = (
+	public final Computers.Arity3<RandomAccessibleInterval<T>, DISTANCE_TYPE, double[], RandomAccessibleInterval<T>> transformComputer = (
 			in1, in2, in3, out) -> DistanceTransform.transform(in1, out, in2, in3);
 
 	@OpField(names = "morphology.distanceTransform")
@@ -57,7 +57,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "numTasks")
 	@Parameter(key = "weights")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer5<RandomAccessibleInterval<T>, DISTANCE_TYPE, ExecutorService, Integer, double[], RandomAccessibleInterval<U>> transformExServiceComputer = (
+	public final Computers.Arity5<RandomAccessibleInterval<T>, DISTANCE_TYPE, ExecutorService, Integer, double[], RandomAccessibleInterval<U>> transformExServiceComputer = (
 			source, distanceType, executorService, numTasks, weights,
 			target) -> ExceptionUtils.execute(() -> DistanceTransform.transform(source, target, distanceType,
 					executorService, numTasks, weights));
@@ -65,14 +65,14 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distance")
-	public final BiInplaceFirst<RandomAccessibleInterval<T>, Distance> transformInplaceDistance = DistanceTransform::transform;
+	public final Inplaces.Arity2_1<RandomAccessibleInterval<T>, Distance> transformInplaceDistance = DistanceTransform::transform;
 
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "distance")
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
-	public final Inplace4First<RandomAccessibleInterval<T>, Distance, ExecutorService, Integer> transformInplaceExServiceDistance = (
+	public final Inplaces.Arity4_1<RandomAccessibleInterval<T>, Distance, ExecutorService, Integer> transformInplaceExServiceDistance = (
 			source, distance, executorService, numTasks) -> ExceptionUtils
 					.execute(() -> DistanceTransform.transform(source, distance, executorService, numTasks));
 			
@@ -80,7 +80,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "source")
 	@Parameter(key = "distance")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final BiComputer<RandomAccessibleInterval<T>, Distance, RandomAccessibleInterval<T>> transformComputerDistance = (in1, in2, out) -> DistanceTransform.transform(in1, out, in2);
+	public final Computers.Arity2<RandomAccessibleInterval<T>, Distance, RandomAccessibleInterval<T>> transformComputerDistance = (in1, in2, out) -> DistanceTransform.transform(in1, out, in2);
 	
 	@OpField(names = "morphology.distanceTransform")
 	@Parameter(key = "source")
@@ -88,7 +88,7 @@ public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 	@Parameter(key = "executorService")
 	@Parameter(key = "numTasks")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer4<RandomAccessibleInterval<T>, Distance, ExecutorService, Integer, RandomAccessibleInterval<T>> transformComputerExServiceDistance = (
+	public final Computers.Arity4<RandomAccessibleInterval<T>, Distance, ExecutorService, Integer, RandomAccessibleInterval<T>> transformComputerExServiceDistance = (
 			source, distance, executorService, numTasks, target) -> ExceptionUtils
 				.execute(() -> DistanceTransform.transform(source, target, distance, executorService, numTasks));
 }

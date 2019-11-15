@@ -8,7 +8,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -28,7 +28,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "matrixOrientation")
 @Parameter(key = "cooccurrenceMatrix", itemIO = ItemIO.OUTPUT)
 public class CooccurrenceMatrix<T extends RealType<T>>
-		implements Function4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
+		implements Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 
 	@OpDependency(name = "stats.minMax")
 	private Function<IterableInterval<T>, Pair<T, T>> minmax;

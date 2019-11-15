@@ -7,7 +7,7 @@ import net.imglib2.type.Type;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -20,7 +20,7 @@ public class Converters<I, O extends Type<O>> {
 	@Parameter(key = "converter")
 	@Parameter(key = "outputType")
 	@Parameter(key = "outputII", itemIO = ItemIO.OUTPUT)
-	public final Function3<RandomAccessible<I>, Converter<? super I, ? super O>, O, RandomAccessible<O>> generalConverterRA = (
+	public final Functions.Arity3<RandomAccessible<I>, Converter<? super I, ? super O>, O, RandomAccessible<O>> generalConverterRA = (
 			inputRA, converter, type) -> net.imglib2.converter.Converters.convert(inputRA, converter, type);
 
 	@OpField(names = "convert")
@@ -28,7 +28,7 @@ public class Converters<I, O extends Type<O>> {
 	@Parameter(key = "converter")
 	@Parameter(key = "outputType")
 	@Parameter(key = "outputII", itemIO = ItemIO.OUTPUT)
-	public final Function3<IterableInterval<I>, Converter<? super I, ? super O>, O, IterableInterval<O>> generalConverterII = (
+	public final Functions.Arity3<IterableInterval<I>, Converter<? super I, ? super O>, O, IterableInterval<O>> generalConverterII = (
 			inputII, converter, type) -> net.imglib2.converter.Converters.convert(inputII, converter, type);
 
 }

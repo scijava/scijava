@@ -40,9 +40,9 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,18 +61,18 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "gauss2")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
-		Computer3<RandomAccessibleInterval<T>, Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
+		Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> tmpCreator;
 	
 	@OpDependency(name = "math.subtract")
-	private BiComputer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> subtractor;
+	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> subtractor;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-			final Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1,
-			final Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2,
+			final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1,
+			final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2,
 			final RandomAccessibleInterval<T> output) {
 		// input may potentially be translated
 		final long[] translation = new long[input.numDimensions()];

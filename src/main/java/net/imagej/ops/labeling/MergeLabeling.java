@@ -48,7 +48,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -65,7 +65,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "mask")
 @Parameter(key = "combinedLabeling", itemIO = ItemIO.OUTPUT)
 public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>>
-		implements Function3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
+		implements Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
 
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, I, ImgLabeling<L, I>> imgLabelingCreator;
@@ -114,7 +114,7 @@ class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B
 		implements BiFunction<ImgLabeling<L, I>, ImgLabeling<L, I>, ImgLabeling<L, I>> {
 
 	@OpDependency(name = "labeling.merge")
-	private Function3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> mergeOp;
+	private Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> mergeOp;
 
 	@Override
 	public ImgLabeling<L, I> apply(ImgLabeling<L, I> t, ImgLabeling<L, I> u) {

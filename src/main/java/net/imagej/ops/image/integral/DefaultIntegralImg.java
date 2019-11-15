@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -58,7 +58,7 @@ import org.scijava.struct.ItemIO;
 public class DefaultIntegralImg<I extends RealType<I>, O extends RealType<O>> extends AbstractIntegralImg<I, O> {
 
 	@Override
-	public Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(final int dimension) {
+	public Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(final int dimension) {
 		return computeAdd;
 	}
 	

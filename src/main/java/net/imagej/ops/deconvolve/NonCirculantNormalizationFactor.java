@@ -50,9 +50,9 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer7;
-import org.scijava.ops.core.inplace.Inplace6First;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -78,7 +78,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "fftKernel")
 @Parameter(key = "executorService")
 public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-	implements Inplace6First<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService>
+	implements Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService>
 {
 
 	/**
@@ -109,10 +109,10 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	private Function<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy;
 
 	@OpDependency(name = "filter.correlate")
-	private Computer7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlater;
+	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlater;
 
 //	@OpDependency(name = "math.divide") TODO: allow the matcher to fix this
-	private Computer3<Iterable<O>, Iterable<O>, Double, Iterable<O>> divide = (in1, in2, in3, out) -> {
+	private Computers.Arity3<Iterable<O>, Iterable<O>, Double, Iterable<O>> divide = (in1, in2, in3, out) -> {
 		Iterator<O> itr1 = in1.iterator();
 		Iterator<O> itr2 = in2.iterator();
 		Iterator<O> itrout = out.iterator();

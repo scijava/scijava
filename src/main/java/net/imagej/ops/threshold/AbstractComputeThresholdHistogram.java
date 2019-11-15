@@ -32,7 +32,7 @@ package net.imagej.ops.threshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Abstract superclass of {@link ComputeThresholdHistogram} implementations.
@@ -40,7 +40,7 @@ import org.scijava.ops.core.computer.Computer;
  * @author Curtis Rueden
  */
 public abstract class AbstractComputeThresholdHistogram<T extends RealType<T>>
-	implements Computer<Histogram1d<T>, T>
+	implements Computers.Arity1<Histogram1d<T>, T>
 {
 
 	@Override

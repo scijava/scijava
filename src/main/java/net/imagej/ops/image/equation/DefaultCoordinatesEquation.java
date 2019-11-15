@@ -36,7 +36,7 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "op")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
-		implements Computer<Function<long[], N>, IterableInterval<T>> {
+		implements Computers.Arity1<Function<long[], N>, IterableInterval<T>> {
 
 	@Override
 	public void compute(final Function<long[], N> op, final IterableInterval<T> output) {

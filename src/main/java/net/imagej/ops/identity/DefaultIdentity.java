@@ -30,7 +30,7 @@
 package net.imagej.ops.identity;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -42,7 +42,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "identity")
 @Parameter(key = "io", itemIO = ItemIO.BOTH)
-public class DefaultIdentity<A> implements Inplace<A>
+public class DefaultIdentity<A> implements Inplaces.Arity1<A>
 {
 
 	@Override

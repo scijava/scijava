@@ -33,8 +33,8 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,10 +54,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "median", itemIO = ItemIO.BOTH)
 public class DefaultMedian<I extends RealType<I>, O extends RealType<O>> 
-		implements Computer<Iterable<I>, O> {
+		implements Computers.Arity1<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.quantile")
-	private BiComputer<Iterable<I>, Double, O> quantileOp;
+	private Computers.Arity2<Iterable<I>, Double, O> quantileOp;
 
 	@Override
 	public void compute(final Iterable<I> input, final O output) {

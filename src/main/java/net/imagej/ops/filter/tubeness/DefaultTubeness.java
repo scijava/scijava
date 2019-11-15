@@ -51,9 +51,9 @@ import net.imglib2.view.Views;
 import org.scijava.Cancelable;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -105,7 +105,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "calibration")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultTubeness<T extends RealType<T>> implements
-		Computer4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
+		Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
 		Cancelable {
 
 	/** Reason for cancelation, or null if not canceled. */
@@ -116,7 +116,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	
 	//TODO: make sure this works
 	@OpDependency(name = "project")
-	private Computer3<RandomAccessibleInterval<DoubleType>, Computer<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
+	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, ExecutorService es, final Double sigma,
@@ -169,7 +169,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 			if (isCanceled())
 				return;
 
-			final Computer<Iterable<DoubleType>, DoubleType> method;
+			final Computers.Arity1<Iterable<DoubleType>, DoubleType> method;
 			switch (numDimensions) {
 			case 2:
 				method = new Tubeness2D(sigma);
@@ -190,7 +190,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		}
 	}
 
-	private static final class Tubeness2D implements Computer<Iterable<DoubleType>, DoubleType> {
+	private static final class Tubeness2D implements Computers.Arity1<Iterable<DoubleType>, DoubleType> {
 
 		private final double sigma;
 
@@ -212,7 +212,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 		}
 	}
 
-	private static final class Tubeness3D implements Computer<Iterable<DoubleType>, DoubleType> {
+	private static final class Tubeness3D implements Computers.Arity1<Iterable<DoubleType>, DoubleType> {
 
 		private final double sigma;
 
@@ -261,10 +261,10 @@ public class DefaultTubeness<T extends RealType<T>> implements
 @Parameter(key = "sigma")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
-		Computer3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
+		Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
 
 	@OpDependency(name = "filter.tubeness")
-	Computer4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>> tubenessOp;
+	Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, ExecutorService in2, Double in3,

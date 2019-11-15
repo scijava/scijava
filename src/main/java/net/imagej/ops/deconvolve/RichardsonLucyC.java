@@ -45,12 +45,12 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer13;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.computer.Computer7;
-import org.scijava.ops.core.inplace.Inplace;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -83,10 +83,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computer13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
-			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplace<RandomAccessibleInterval<O>>, //
-			Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, RandomAccessibleInterval<O>, //
-			List<Inplace<RandomAccessibleInterval<O>>>, ExecutorService, RandomAccessibleInterval<O>> {
+		implements Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
+			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
+			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, RandomAccessibleInterval<O>, //
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, ExecutorService, RandomAccessibleInterval<O>> {
 
 	// /**
 	// * Op that computes Richardson Lucy update, can be overridden to implement
@@ -115,7 +115,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	// private BinaryComputerOp<RandomAccessibleInterval<I>,
 	// RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> rlCorrectionOp;
 	@OpDependency(name = "deconvolve.richardsonLucyCorrection")
-	private Computer5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, //
+	private Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, //
 	RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, //
 	RandomAccessibleInterval<O>> rlCorrectionOp;
 
@@ -125,18 +125,18 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	@OpDependency(name = "filter.fft")
 	// private UnaryComputerOp<RandomAccessibleInterval<K>,
 	// RandomAccessibleInterval<C>> fftKernelOp;
-	private BiComputer<RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<C>> fftKernelOp;
+	private Computers.Arity2<RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<C>> fftKernelOp;
 
 	@OpDependency(name = "filter.convolve")
-	private Computer7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, //
+	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, //
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, //
 			ExecutorService, RandomAccessibleInterval<O>> convolverOp;
 
 	@OpDependency(name = "copy.rai")
-	private Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> copyOp;
+	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> copyOp;
 
 	@OpDependency(name = "copy.rai")
-	private Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy2Op;
+	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy2Op;
 
 	private RandomAccessibleInterval<O> raiExtendedReblurred;
 
@@ -144,10 +144,10 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, C complexType, Integer maxIterations,
-			Inplace<RandomAccessibleInterval<O>> accelerator,
-			Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp,
+			Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator,
+			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp,
 			RandomAccessibleInterval<O> raiExtendedEstimate,
-			List<Inplace<RandomAccessibleInterval<O>>> iterativePostProcessingOps, ExecutorService es,
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps, ExecutorService es,
 			RandomAccessibleInterval<O> out) {
 
 		// TODO: can these be deleted?
@@ -195,7 +195,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 			// apply post processing
 			if (iterativePostProcessingOps != null) {
-				for (Inplace<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
+				for (Inplaces.Arity1<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
 					pp.mutate(raiExtendedEstimate);
 				}
 			}

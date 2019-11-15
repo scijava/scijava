@@ -56,7 +56,7 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpExecutionException;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Apply a local thresholding method to an image using integral images for speed
@@ -104,7 +104,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 		RectangleShape inputNeighborhoodShape,
 		OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>>> integralImageOps,
-		final BiComputer<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> thresholdOp,
+		final Computers.Arity2<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> thresholdOp,
 		final IterableInterval<BitType> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
@@ -136,7 +136,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 			inputNeighborhoodShape.neighborhoodsSafe(extendedCompositeRAI);
 
 		// TODO: Typing
-		map(neighborhoods, input, (BiComputer) thresholdOp, output);
+		map(neighborhoods, input, (Computers.Arity2) thresholdOp, output);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 	private static <I1, I2, O> void map(
 		final IterableInterval<? extends I1> inputNeighborhoods,
 		final RandomAccessibleInterval<I2> inputCenterPixels,
-		final BiComputer<I1, I2, O> filterOp, final IterableInterval<O> output)
+		final Computers.Arity2<I1, I2, O> filterOp, final IterableInterval<O> output)
 	{
 		// TODO: This used to be done via a net.imagej.ops.Ops.Map meta op. We may
 		// want to revert to that approach if this proves to be too inflexible.

@@ -45,7 +45,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -61,7 +61,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "excludeEdges")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class Outline<B extends BooleanType<B>>
-		implements BiComputer<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
+		implements Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
 
 	/**
 	 * Copies the outlines of the objects in the input interval into the output

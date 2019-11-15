@@ -41,9 +41,9 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Transform.HyperSliceView} ops.
@@ -73,7 +73,7 @@ public class HyperSliceViewTest extends AbstractTestEnvironment {
 
 	@Test
 	public void defaultHyperSliceTest() {
-		Function3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc = Functions
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc = Functions
 				.ternary(ops, "transform.hyperSliceView", raNil, integerNil, longNil,
 						new Nil<MixedTransformView<DoubleType>>() {
 				});
@@ -94,7 +94,7 @@ public class HyperSliceViewTest extends AbstractTestEnvironment {
 	@Test
 	public void IntervalHyperSliceTest() {
 
-		Function3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc = Functions
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc = Functions
 				.ternary(ops, "transform.hyperSliceView", raiNil, integerNil, longNil,
 						new Nil<IntervalView<DoubleType>>() {
 						});

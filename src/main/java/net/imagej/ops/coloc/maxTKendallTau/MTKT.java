@@ -49,8 +49,8 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -73,7 +73,7 @@ import org.scijava.util.IntArray;
 @Parameter(key = "seed")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class MTKT<T extends RealType<T>, U extends RealType<U>>
-	implements Function3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
+	implements Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
 {
 
 	@OpDependency(name = "image.histogram")
@@ -82,9 +82,9 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	private Function<Iterable<U>, Histogram1d<U>> histogramOpU;
 	
 	@OpDependency(name = "threshold.otsu")
-	private Computer<Histogram1d<T>, T> thresholdOpT;
+	private Computers.Arity1<Histogram1d<T>, T> thresholdOpT;
 	@OpDependency(name = "threshold.otsu")
-	private Computer<Histogram1d<U>, U> thresholdOpU;
+	private Computers.Arity1<Histogram1d<U>, U> thresholdOpU;
 
 	@Override
 	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, final Long seed) {
@@ -256,7 +256,7 @@ class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 {
 	
 	@OpDependency(name = "coloc.maxTKendallTau")
-	private Function3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> colocOp;
+	private Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> colocOp;
 	
 	private long seed = 0x89302341;
 

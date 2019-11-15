@@ -38,7 +38,7 @@ import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 
 public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
@@ -60,7 +60,7 @@ public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 	public static <I, O> void compute(final RandomAccessibleInterval<I> input,
 		final Shape inputNeighborhoodShape,
 		OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory,
-		final BiComputer<Iterable<I>, I, O> filterOp,
+		final Computers.Arity2<Iterable<I>, I, O> filterOp,
 		@Mutable final IterableInterval<O> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
@@ -75,7 +75,7 @@ public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 	private static <I1, I2, O> void map(
 		final IterableInterval<? extends I1> inputNeighborhoods,
 		final RandomAccessibleInterval<I2> inputCenterPixels,
-		final BiComputer<I1, I2, O> filterOp, final IterableInterval<O> output)
+		final Computers.Arity2<I1, I2, O> filterOp, final IterableInterval<O> output)
 	{
 		// TODO: This used to be done via a net.imagej.ops.Ops.Map meta op. We may
 		// want to revert to that approach if this proves to be too inflexible.

@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -74,7 +74,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class EulerCorrection<B extends BooleanType<B>>
-        implements Computer<RandomAccessibleInterval<B>, DoubleType> {
+        implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
 
     @Override
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {

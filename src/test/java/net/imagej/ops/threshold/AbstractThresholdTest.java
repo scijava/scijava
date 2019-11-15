@@ -47,7 +47,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 import org.junit.Before;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.util.ListUtils;
 
 /**
@@ -84,7 +84,7 @@ public class AbstractThresholdTest extends AbstractTestEnvironment {
 			}
 		}
 		
-		createFunc = Functions.binary(ops, "image.histogram", new Nil<Img<UnsignedShortType>>() {}, new Nil<Integer>() {}, new Nil<Histogram1d<UnsignedShortType>>() {});
+		createFunc = Functions.match(ops, "image.histogram", new Nil<Img<UnsignedShortType>>() {}, new Nil<Integer>() {}, new Nil<Histogram1d<UnsignedShortType>>() {});
 	}
 
 	protected Histogram1d<UnsignedShortType> histogram() {

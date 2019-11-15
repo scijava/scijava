@@ -41,10 +41,10 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -66,16 +66,16 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
-		Function5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
+		Functions.Arity5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
 
 	@OpDependency(name = "filter.padInputFFTMethods")
-	private Function4<RandomAccessibleInterval<T>, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> padOp;
+	private Functions.Arity4<RandomAccessibleInterval<T>, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> padOp;
 
 	@OpDependency(name = "filter.createFFTOutput")
-	private Function3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
+	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "filter.fft")
-	private BiComputer<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>> fftMethodsOp;
+	private Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>> fftMethodsOp;
 
 	/**
 	 * Note that if fast is true the input will be extended to the next fast FFT

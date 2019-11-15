@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -64,7 +64,7 @@ import Jama.Matrix;
 @Parameter(key = "scale", description = "size of vessels to search for")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
-		implements Computer3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
+		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
 
 	private double[] spacing;
 	private int scale;

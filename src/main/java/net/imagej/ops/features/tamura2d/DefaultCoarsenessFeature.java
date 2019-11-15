@@ -49,8 +49,8 @@ import net.imglib2.util.Intervals;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -68,10 +68,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<O>>
-		implements Computer<RandomAccessibleInterval<I>, O> {
+		implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "filter.mean")
-	private Computer3<RandomAccessibleInterval<I>, Shape, //
+	private Computers.Arity3<RandomAccessibleInterval<I>, Shape, //
 			OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, IterableInterval<I>> meanOp;
 
 	@SuppressWarnings("unchecked")

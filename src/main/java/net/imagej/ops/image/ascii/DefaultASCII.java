@@ -38,7 +38,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "min")
 @Parameter(key = "max")
 @Parameter(key = "ASCIIArt", itemIO = ItemIO.OUTPUT)
-public class DefaultASCII<T extends RealType<T>> implements Function3<IterableInterval<T>, T, T, String>
+public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<IterableInterval<T>, T, T, String>
 {
 
 	private static final String CHARS = "#O*o+-,. ";

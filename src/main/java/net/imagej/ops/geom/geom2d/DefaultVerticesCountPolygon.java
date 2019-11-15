@@ -34,7 +34,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -45,7 +45,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric (2D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "verticesCount", itemIO = ItemIO.BOTH)
-public class DefaultVerticesCountPolygon implements Computer<Polygon2D, DoubleType> {
+public class DefaultVerticesCountPolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@Override
 	public void compute(Polygon2D input, DoubleType output) {

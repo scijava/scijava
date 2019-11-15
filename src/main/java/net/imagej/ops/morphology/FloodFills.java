@@ -15,9 +15,9 @@ import net.imglib2.view.Views;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -31,7 +31,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "fillLabel")
 	@Parameter(key = "shape")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer4<RandomAccessible<T>, Localizable, U, Shape, RandomAccessible<U>> fill = (source, seed,
+	public final Computers.Arity4<RandomAccessible<T>, Localizable, U, Shape, RandomAccessible<U>> fill = (source, seed,
 			fillLabel, shape, target) -> FloodFill.fill(source, target, seed, fillLabel, shape);
 
 	@OpField(names = "morphology.floodFill")
@@ -41,7 +41,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "shape")
 	@Parameter(key = "filter")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer5<RandomAccessible<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessible<U>> fillWithPredicate = (
+	public final Computers.Arity5<RandomAccessible<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessible<U>> fillWithPredicate = (
 			source, seed, fillLabel, shape, filter,
 			target) -> FloodFill.fill(source, target, seed, fillLabel, shape, filter);
 
@@ -52,7 +52,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "filter")
 	@Parameter(key = "writer")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer5<RandomAccessible<T>, Localizable, Shape, BiPredicate<T, U>, Consumer<U>, RandomAccessible<U>> fillWithPredicateAndConsumer = (
+	public final Computers.Arity5<RandomAccessible<T>, Localizable, Shape, BiPredicate<T, U>, Consumer<U>, RandomAccessible<U>> fillWithPredicateAndConsumer = (
 			source, seed, shape, filter, writer, target) -> FloodFill.fill(source, target, seed, shape, filter, writer);
 
 	@OpField(names = "morphology.floodFill")
@@ -60,7 +60,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer3<RandomAccessible<T>, Localizable, Shape, RandomAccessible<T>> fillSimple = (source, seed,
+	public final Computers.Arity3<RandomAccessible<T>, Localizable, Shape, RandomAccessible<T>> fillSimple = (source, seed,
 			shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
 		sourceRA.setPosition(seed);
@@ -74,7 +74,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "fillLabel")
 	@Parameter(key = "shape")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer4<RandomAccessibleInterval<T>, Localizable, U, Shape, RandomAccessibleInterval<U>> fillRAI = (
+	public final Computers.Arity4<RandomAccessibleInterval<T>, Localizable, U, Shape, RandomAccessibleInterval<U>> fillRAI = (
 			source, seed, fillLabel, shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
 		sourceRA.setPosition(seed);
@@ -89,7 +89,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "shape")
 	@Parameter(key = "filter")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer5<RandomAccessibleInterval<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessibleInterval<U>> fillWithPredicateRAI = (
+	public final Computers.Arity5<RandomAccessibleInterval<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessibleInterval<U>> fillWithPredicateRAI = (
 			source, seed, fillLabel, shape, filter, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
 		sourceRA.setPosition(seed);
@@ -102,7 +102,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
-	public final Computer3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> fillSimpleRAI = (
+	public final Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> fillSimpleRAI = (
 			source, seed, shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
 		sourceRA.setPosition(seed);

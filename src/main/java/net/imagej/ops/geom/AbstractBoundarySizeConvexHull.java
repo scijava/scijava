@@ -34,7 +34,7 @@ import java.util.function.Function;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Generic implementation of
@@ -42,7 +42,7 @@ import org.scijava.ops.core.computer.Computer;
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
-public abstract class AbstractBoundarySizeConvexHull<I> implements Computer<I, DoubleType> {
+public abstract class AbstractBoundarySizeConvexHull<I> implements Computers.Arity1<I, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<I, I> convexHullFunc;

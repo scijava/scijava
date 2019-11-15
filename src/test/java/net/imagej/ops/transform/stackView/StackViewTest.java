@@ -45,7 +45,7 @@ import net.imglib2.view.Views;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Transform.StackView} ops.
@@ -61,7 +61,7 @@ public class StackViewTest extends AbstractTestEnvironment {
 
 	@Test
 	public void defaultStackTest() {
-		Function<List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc = Functions.unary(ops,
+		Function<List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc = Functions.match(ops,
 				"transform.stackView", new Nil<List<Img<DoubleType>>>() {
 		}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 		});

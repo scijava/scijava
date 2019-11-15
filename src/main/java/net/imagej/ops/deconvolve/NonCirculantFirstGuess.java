@@ -41,8 +41,8 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -66,7 +66,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
-	Function3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>
+	Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>
 {
 
 
@@ -74,7 +74,7 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	BiFunction<Dimensions, O, Img<O>> create;
 
 	@OpDependency(name = "stats.sum")
-	Computer<Iterable<I>, O> sum;
+	Computers.Arity1<Iterable<I>, O> sum;
 
 	/**
 	 * k is the size of the measurement window. That is the size of the acquired

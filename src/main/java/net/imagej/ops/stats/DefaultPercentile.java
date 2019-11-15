@@ -33,7 +33,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,10 +54,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "percent", min="0", max="100")
 @Parameter(key = "percentile", itemIO = ItemIO.BOTH)
 public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
-		implements BiComputer<Iterable<I>, Double, O> {
+		implements Computers.Arity2<Iterable<I>, Double, O> {
 
 	@OpDependency(name = "stats.quantile")
-	private BiComputer<Iterable<I>, Double, O> op;
+	private Computers.Arity2<Iterable<I>, Double, O> op;
 
 	@Override
 	public void compute(final Iterable<I> input, final Double percent, final O output) {

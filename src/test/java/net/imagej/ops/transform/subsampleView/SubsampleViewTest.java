@@ -49,7 +49,7 @@ import net.imglib2.view.Views;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -69,7 +69,7 @@ public class SubsampleViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultSubsampleTest() {
 
-		BiFunction<Img<DoubleType>, Long, SubsampleView<DoubleType>> subsampleFunc = Functions.binary(ops,
+		BiFunction<Img<DoubleType>, Long, SubsampleView<DoubleType>> subsampleFunc = Functions.match(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 		}, new Nil<Long>() {
 		}, new Nil<SubsampleView<DoubleType>>() {
@@ -97,7 +97,7 @@ public class SubsampleViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultSubsampleStepsTest() {
 
-		BiFunction<Img<DoubleType>, long[], SubsampleView<DoubleType>> subsampleFunc = Functions.binary(ops,
+		BiFunction<Img<DoubleType>, long[], SubsampleView<DoubleType>> subsampleFunc = Functions.match(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 		}, new Nil<long[]>() {
 		}, new Nil<SubsampleView<DoubleType>>() {
@@ -125,7 +125,7 @@ public class SubsampleViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalSubsample() {
 
-		BiFunction<Img<DoubleType>, Long, SubsampleIntervalView<DoubleType>> subsampleFunc = Functions.binary(ops,
+		BiFunction<Img<DoubleType>, Long, SubsampleIntervalView<DoubleType>> subsampleFunc = Functions.match(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 		}, new Nil<Long>() {
 		}, new Nil<SubsampleIntervalView<DoubleType>>() {
@@ -155,7 +155,7 @@ public class SubsampleViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalSubsampleSteps() {
 
-		BiFunction<Img<DoubleType>, long[], SubsampleIntervalView<DoubleType>> subsampleFunc = Functions.binary(ops,
+		BiFunction<Img<DoubleType>, long[], SubsampleIntervalView<DoubleType>> subsampleFunc = Functions.match(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<SubsampleIntervalView<DoubleType>>() {

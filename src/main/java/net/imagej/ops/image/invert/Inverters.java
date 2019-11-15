@@ -12,8 +12,8 @@ import net.imglib2.type.numeric.integer.UnsignedLongType;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -27,7 +27,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	@Parameter(key = "min")
 	@Parameter(key = "max")
 	@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
-	public final Computer3<IterableInterval<T>, T, T, IterableInterval<T>> delegatorInvert = (input, min, max,
+	public final Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> delegatorInvert = (input, min, max,
 			output) -> {
 
 		// HACK: Some types are small enough that they can run the faster, double math
@@ -59,7 +59,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	@OpField(names = "image.invert")
 	@Parameter(key = "input")
 	@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
-	public final Computer<IterableInterval<T>, IterableInterval<T>> simpleInvert = (input, output) -> delegatorInvert
+	public final Computers.Arity1<IterableInterval<T>, IterableInterval<T>> simpleInvert = (input, output) -> delegatorInvert
 			.compute(input, minValue(input.firstElement()), maxValue(input.firstElement()), output);
 
 	public void computeII(final IterableInterval<T> input, final T min, final T max, final IterableInterval<T> output) {

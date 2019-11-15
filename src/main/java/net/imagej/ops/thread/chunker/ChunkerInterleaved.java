@@ -35,7 +35,7 @@ import java.util.concurrent.Future;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.inplace.Inplace3First;
+import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "chunk", itemIO = ItemIO.BOTH)
 @Parameter(key = "numberOfElements")
 @Parameter(key = "executorService")
-public class ChunkerInterleaved implements Inplace3First<Chunk, Long, ExecutorService>{
+public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, ExecutorService>{
 
 	private String cancellationMsg;
 

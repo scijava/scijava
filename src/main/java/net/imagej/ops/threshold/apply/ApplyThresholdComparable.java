@@ -32,7 +32,7 @@ package net.imagej.ops.threshold.apply;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "threshold")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ApplyThresholdComparable<T> implements
-	BiComputer<Comparable<? super T>, T, BitType>
+	Computers.Arity2<Comparable<? super T>, T, BitType>
 {
 
 	@Override

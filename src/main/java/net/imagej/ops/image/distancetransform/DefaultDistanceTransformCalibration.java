@@ -42,7 +42,7 @@ import net.imglib2.util.IntervalIndexer;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -313,7 +313,7 @@ class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
 @Parameter(key = "calibration")
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computer3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>>{
+class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>>{
 
 	@Override
 	public void compute(RandomAccessibleInterval<B> in, double[] calibration, ExecutorService es,

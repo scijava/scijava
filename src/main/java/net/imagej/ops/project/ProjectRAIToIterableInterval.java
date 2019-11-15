@@ -38,8 +38,8 @@ import net.imglib2.RandomAccessibleInterval;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,10 +50,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "dim")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ProjectRAIToIterableInterval<T, V>
-		implements Computer3<RandomAccessibleInterval<T>, Computer<Iterable<T>, V>, Integer, IterableInterval<V>> {
+		implements Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>> {
 
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Computer<Iterable<T>, V> method,
+	public void compute(final RandomAccessibleInterval<T> input, final Computers.Arity1<Iterable<T>, V> method,
 			final Integer dim, final IterableInterval<V> output) {
 		if (input.numDimensions() != output.numDimensions() + 1)
 			throw new IllegalArgumentException("Input must have one more dimension than output!");

@@ -4,7 +4,7 @@ import net.imagej.ops.types.transform.util.Maps;
 import net.imglib2.RandomAccessibleInterval;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpMapper;
 import org.scijava.ops.transform.OpRefTransformUtils;
@@ -16,23 +16,23 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = OpTransformer.class)
 public class LiftComputerToRAITransformer<I, O> implements
-	OpMapper<Computer<I, O>, Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>>
+	OpMapper<Computers.Arity1<I, O>, Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>>
 {
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Class<Computer<I, O>> srcClass() {
+	public Class<Computers.Arity1<I, O>> srcClass() {
 		return (Class) Computer.class;
 	}
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Class<Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>> targetClass() {
+	public Class<Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>> targetClass() {
 		return (Class) Computer.class;
 	}
 
 	@Override
-	public Computer<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> transformTypesafe(final OpService opService, final Computer<I, O> src,
+	public Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> transformTypesafe(final OpService opService, final Computers.Arity1<I, O> src,
 		final OpRef targetRef)
 	{
 		return Maps.Computers.RAIs.liftBoth(src);

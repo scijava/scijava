@@ -39,7 +39,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "kernel")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
-		implements BiComputer<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
+		implements Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
 	// TODO: should this be binary so we can use different kernels?? Not sure.. what
 	// if someone tried to re-use
 	// with a big kernel that should be matched with ConvolveFFT

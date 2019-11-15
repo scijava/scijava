@@ -43,8 +43,8 @@ import net.imglib2.type.numeric.integer.IntType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "labelGenerator")
 @Parameter(key = "labeling", itemIO = ItemIO.OUTPUT)
 public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
-		Function4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
+		Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<L, IntType>> imgLabelingCreator;
@@ -85,9 +85,9 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 @Parameter(key = "structuringElement")
 @Parameter(key = "labeling", itemIO = ItemIO.OUTPUT)
 class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
-		Function3<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, ImgLabeling<Integer, IntType>> {
+		Functions.Arity3<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, ImgLabeling<Integer, IntType>> {
 	@OpDependency(name = "labeling.cca")
-	private Function4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
+	private Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
 
 	@SuppressWarnings("unchecked")
 	@Override

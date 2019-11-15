@@ -47,7 +47,7 @@ import net.imglib2.view.Views;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Transform.TranslateView} ops.
@@ -70,7 +70,7 @@ public class TranslateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultTranslateTest() {
 
-		BiFunction<Img<DoubleType>, long[], MixedTransformView<DoubleType>> translateFunc = Functions.binary(ops,
+		BiFunction<Img<DoubleType>, long[], MixedTransformView<DoubleType>> translateFunc = Functions.match(ops,
 				"transform.translateView", new Nil<Img<DoubleType>>() {
 		}, new Nil<long[]>() {
 		}, new Nil<MixedTransformView<DoubleType>>() {
@@ -92,7 +92,7 @@ public class TranslateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void testIntervalTranslate() {
 
-		BiFunction<Img<DoubleType>, long[], IntervalView<DoubleType>> translateFunc = Functions.binary(ops,
+		BiFunction<Img<DoubleType>, long[], IntervalView<DoubleType>> translateFunc = Functions.match(ops,
 				"transform.translateView", new Nil<Img<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

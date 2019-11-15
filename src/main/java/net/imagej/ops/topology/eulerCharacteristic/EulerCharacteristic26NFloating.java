@@ -33,7 +33,7 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -74,7 +74,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "interval")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class EulerCharacteristic26NFloating
-        <B extends BooleanType<B>> implements Computer<RandomAccessibleInterval<B>, DoubleType> {
+        <B extends BooleanType<B>> implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */
     private static final int[] EULER_LUT = new int[256];
 

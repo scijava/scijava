@@ -43,7 +43,7 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory", description = "The OutOfBoundsFactory used to extend the image")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
-		implements Function3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
+		implements Functions.Arity3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 
 	@OpDependency(name = "filter.padIntervalCentered")
 	private BiFunction<I, Dimensions, O> paddingIntervalCentered;

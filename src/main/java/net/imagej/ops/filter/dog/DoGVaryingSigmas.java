@@ -38,10 +38,10 @@ import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -62,15 +62,15 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
-		Computer5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "filter.gauss")
-	public Computer4<RandomAccessibleInterval<T>, ExecutorService, double[], //
+	public Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> defaultGaussRA;
 
 	@OpDependency(name = "filter.DoG")
-	private Computer3<RandomAccessibleInterval<T>, Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, //
-			Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, //
+			Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 
 	//TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
 	@Override
@@ -80,9 +80,9 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 		if (sigmas1.length != sigmas2.length || sigmas1.length != t.numDimensions())
 			throw new IllegalArgumentException("Do not have enough sigmas to apply to each dimension of the input!");
 
-		Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1 = (in, out) -> defaultGaussRA
+		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1 = (in, out) -> defaultGaussRA
 				.compute(in, es, sigmas1, fac, out);
-		Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2 = (in, out) -> defaultGaussRA
+		Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2 = (in, out) -> defaultGaussRA
 				.compute(in, es, sigmas2, fac, out);
 
 		dogOp.compute(t, gauss1, gauss2, output);
@@ -98,10 +98,10 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
-		Computer5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "filter.DoG")
-	private Computer5<RandomAccessibleInterval<T>, double[], double[], //
+	private Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> dogOp;
 
 	@Override

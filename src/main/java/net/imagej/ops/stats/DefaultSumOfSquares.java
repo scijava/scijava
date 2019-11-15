@@ -32,7 +32,7 @@ package net.imagej.ops.stats;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.sumOfSquares")
 @Parameter(key = "iterableInput")
 @Parameter(key = "sumOfSquares", itemIO = ItemIO.BOTH)
-public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>> implements Computer<Iterable<I>, O> {
+public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	@Override
 	public void compute(final Iterable<I> input, final O output) {

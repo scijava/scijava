@@ -76,11 +76,11 @@ import net.imglib2.util.Pair;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Computers;
+import org.scijava.ops.function.Computers;
 
 /**
  * Test for {@link LocalThreshold} and various {@link LocalThresholdMethod}s.
@@ -264,9 +264,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalBernsenThreshold() {
-		final Computer5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
+		final Computers.Arity5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.quinary(ops, "threshold.localBernsen", //
+					Computers.match(ops, "threshold.localBernsen", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -293,9 +293,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalContrastThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.localContrast", //
+					Computers.match(ops, "threshold.localContrast", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -317,9 +317,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalHuangThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.huang", //
+					Computers.match(ops, "threshold.huang", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -341,9 +341,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalIJ1Threshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.ij1", //
+					Computers.match(ops, "threshold.ij1", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -365,9 +365,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalIntermodesThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.intermodes", //
+					Computers.match(ops, "threshold.intermodes", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -390,9 +390,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	@Test
 	public void testLocalIsoDataThreshold() {
 		// NB: Test fails for RectangleShapes of span 1
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.isoData", //
+					Computers.match(ops, "threshold.isoData", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -414,9 +414,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalLiThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.li", //
+					Computers.match(ops, "threshold.li", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -438,9 +438,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalMaxEntropyThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.maxEntropy", //
+					Computers.match(ops, "threshold.maxEntropy", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -463,9 +463,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	@Test
 	public void testLocalMaxLikelihoodThreshold() {
 		// NB: Test fails for RectangleShapes of up to span==2
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.maxLikelihood", //
+					Computers.match(ops, "threshold.maxLikelihood", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -487,9 +487,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalThresholdMean() {
-		final Computer4<RandomAccessibleInterval<ByteType>, Shape, Double, //
+		final Computers.Arity4<RandomAccessibleInterval<ByteType>, Shape, Double, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.quaternary(ops, "threshold.localMean", //
+					Computers.match(ops, "threshold.localMean", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -555,9 +555,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalMedianThreshold() {
-		final Computer4<RandomAccessibleInterval<ByteType>, Shape, Double, //
+		final Computers.Arity4<RandomAccessibleInterval<ByteType>, Shape, Double, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.quaternary(ops, "threshold.localMedian", //
+					Computers.match(ops, "threshold.localMedian", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -581,9 +581,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalMidGreyThreshold() {
-		final Computer4<RandomAccessibleInterval<ByteType>, Shape, Double, //
+		final Computers.Arity4<RandomAccessibleInterval<ByteType>, Shape, Double, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.quaternary(ops, "threshold.localMidGrey", //
+					Computers.match(ops, "threshold.localMidGrey", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -607,9 +607,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalMinErrorThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.minError", //
+					Computers.match(ops, "threshold.minError", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -631,9 +631,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalMinimumThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.minimum", //
+					Computers.match(ops, "threshold.minimum", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -655,9 +655,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalMomentsThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.moments", //
+					Computers.match(ops, "threshold.moments", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -679,9 +679,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalNiblackThreshold() {
-		final Computer5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
+		final Computers.Arity5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.quinary(ops, "threshold.localNiblack", //
+					Computers.match(ops, "threshold.localNiblack", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -749,9 +749,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalOtsuThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.otsu", //
+					Computers.match(ops, "threshold.otsu", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -773,9 +773,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalPercentileThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.percentile", //
+					Computers.match(ops, "threshold.percentile", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -797,9 +797,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalPhansalkar() {
-		final Computer5<RandomAccessibleInterval<DoubleType>, Shape, Double, Double, //
+		final Computers.Arity5<RandomAccessibleInterval<DoubleType>, Shape, Double, Double, //
 				OutOfBoundsFactory<DoubleType, RandomAccessibleInterval<DoubleType>>, IterableInterval<BitType>> opToTest =
-					Computers.quinary(ops, "threshold.localPhansalkar", //
+					Computers.match(ops, "threshold.localPhansalkar", //
 						new Nil<RandomAccessibleInterval<DoubleType>>()
 						{}, //
 						new Nil<Shape>()
@@ -869,9 +869,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalRenyiEntropyThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.renyiEntropy", //
+					Computers.match(ops, "threshold.renyiEntropy", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -893,9 +893,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalSauvola() {
-		final Computer5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
+		final Computers.Arity5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.quinary(ops, "threshold.localSauvola", //
+					Computers.match(ops, "threshold.localSauvola", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -963,9 +963,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalShanbhagThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.shanbhag", //
+					Computers.match(ops, "threshold.shanbhag", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -987,9 +987,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalTriangleThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.triangle", //
+					Computers.match(ops, "threshold.triangle", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -1011,9 +1011,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalYenThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.yen", //
+					Computers.match(ops, "threshold.yen", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()
@@ -1035,9 +1035,9 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalRosinThreshold() {
-		final Computer3<RandomAccessibleInterval<ByteType>, Shape, //
+		final Computers.Arity3<RandomAccessibleInterval<ByteType>, Shape, //
 				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, IterableInterval<BitType>> opToTest =
-					Computers.ternary(ops, "threshold.rosin", //
+					Computers.match(ops, "threshold.rosin", //
 						new Nil<RandomAccessibleInterval<ByteType>>()
 						{}, //
 						new Nil<Shape>()

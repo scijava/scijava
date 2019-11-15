@@ -34,7 +34,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.feretsDiameter", label = "Geometric (2D): Ferets Diameter")
 @Parameter(key = "points")
 @Parameter(key = "feretsDiameter", itemIO = ItemIO.BOTH)
-public class DefaultFeretsDiameter implements Computer<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
+public class DefaultFeretsDiameter implements Computers.Arity1<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
 
 	@Override
 	public void compute(final Pair<RealLocalizable, RealLocalizable> input, final DoubleType output) {

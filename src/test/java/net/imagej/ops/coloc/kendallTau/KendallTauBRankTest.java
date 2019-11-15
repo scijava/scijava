@@ -51,7 +51,7 @@ import net.imglib2.util.Pair;
 import org.junit.Test;
 import org.scijava.ops.core.function.GenericFunctions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -125,7 +125,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.binary(ops,
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops,
 				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = GenericFunctions.Functions.generic(
 				op,

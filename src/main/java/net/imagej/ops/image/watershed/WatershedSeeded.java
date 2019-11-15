@@ -66,10 +66,10 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.function.Function4;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -112,7 +112,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "mask")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> implements
-		Computer5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
 	// @SuppressWarnings("rawtypes")
 	// private UnaryFunctionOp<Interval, ImgLabeling> createOp;
@@ -397,10 +397,10 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
 class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
-		Computer4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
+		Computers.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
-	private Computer5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, ImgLabeling<Integer, IntType> seeds,
@@ -418,10 +418,10 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanType<B>> implements
-		Function4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
+		Functions.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
-	private Computer4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> watershedOp;
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
@@ -442,10 +442,10 @@ class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanTy
 @Parameter(key = "mask")
 @Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
 class WatershedSeededFunction<T extends RealType<T>, B extends BooleanType<B>> implements
-		Function5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
+		Functions.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
-	private Computer5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
+	private Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 

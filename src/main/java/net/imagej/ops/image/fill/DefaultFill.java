@@ -35,7 +35,7 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.Type;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "constant")
 @Parameter(key = "iterableOutput", itemIO = ItemIO.BOTH)
 public class DefaultFill<T extends Type<T>> implements
-	Computer<T, Iterable<T>> 
+	Computers.Arity1<T, Iterable<T>> 
 {
 
 	//TODO can we find a way to parallelize this (or use lift?)

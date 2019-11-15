@@ -38,7 +38,7 @@ import net.imglib2.util.Pair;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -58,7 +58,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "c")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
-	Computer3<Iterable<T>, T, Double, BitType>
+	Computers.Arity3<Iterable<T>, T, Double, BitType>
 {
 
 	@OpDependency(name = "stats.minMax")

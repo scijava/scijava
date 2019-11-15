@@ -37,7 +37,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -45,7 +45,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.minimumFeretsDiameter")
 @Parameter(key = "input")
 @Parameter(key = "minFeretDiameter", itemIO = ItemIO.BOTH)
-public class DefaultMinimumFeretDiameter implements Computer<Polygon2D, DoubleType> {
+public class DefaultMinimumFeretDiameter implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minimumFeret")
 	private Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> minFeret;

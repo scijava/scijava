@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.function.Function4;
+import org.scijava.ops.function.Functions;
 
 /**
  * Abstract class for HaralickFeatures.
@@ -45,10 +45,10 @@ import org.scijava.ops.core.function.Function4;
  * @param <T>
  */
 public abstract class AbstractHaralickFeature<T extends RealType<T>>
-		implements Function4<IterableInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> {
+		implements Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> {
 
 	@OpDependency(name = "image.cooccurrenceMatrix")
-	private Function4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> coocFunc;
+	private Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> coocFunc;
 
 	/**
 	 * Creates {@link CooccurrenceMatrix2D} from {@link IterableInterval} on demand,

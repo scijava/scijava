@@ -37,8 +37,8 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer5;
-import org.scijava.ops.core.function.Function5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,13 +59,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "targetMax")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
-		implements Function5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
+		implements Functions.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, IterableInterval<O>> imgCreator;
 
 	@OpDependency(name = "image.normalize")
-	private Computer5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizer;
+	private Computers.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizer;
 
 	@Override
 	public IterableInterval<O> apply(final IterableInterval<I> input, final I sourceMin, final I sourceMax,

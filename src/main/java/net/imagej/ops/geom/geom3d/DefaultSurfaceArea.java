@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (3D): Surface Area", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "boundarySize", itemIO = ItemIO.BOTH)
-public class DefaultSurfaceArea implements Computer<Mesh, DoubleType> {
+public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 
 	@Override
 	public void compute(final Mesh input, final DoubleType output) {

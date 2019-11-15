@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Test for {@link DefaultMapNeighborhood} and {@link MapNeighborhoodWithCenter}.
@@ -118,7 +118,7 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	 * @author Jonathan Hale
 	 */
 	private static class CountNeighbors implements
-		Computer<Iterable<ByteType>, ByteType>
+		Computers.Arity1<Iterable<ByteType>, ByteType>
 	{
 
 		@Override

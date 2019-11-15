@@ -49,7 +49,7 @@ import net.imglib2.view.Views;
 import org.junit.Test;
 import org.scijava.ops.core.function.GenericFunctions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -209,7 +209,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		//TODO: remove once there is a PValue Op that can take the above function.
 		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedOp = (in1, in2) -> {
 			if (!(in1 instanceof RandomAccessibleInterval))
@@ -241,7 +241,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		//TODO: remove once there is a PValue Op that can take the above function.
 		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedOp = (in1, in2) -> {
 			if (!(in1 instanceof RandomAccessibleInterval))
@@ -271,7 +271,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		
 		//TODO: remove once there is a PValue Op that can take the above function.
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = (in1, in2) -> {
@@ -299,7 +299,7 @@ public class MTKTTest extends ColocalisationTest {
 		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		BiFunction<RandomAccessibleInterval<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>, Double> op =
-			Functions.binary(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
+			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
 		final int[] blockSize = new int[cropCh1.numDimensions()];
 		for (int d = 0; d < blockSize.length; d++) {
 			final long size = (long) Math.floor(Math.sqrt(cropCh1.dimension(d)));

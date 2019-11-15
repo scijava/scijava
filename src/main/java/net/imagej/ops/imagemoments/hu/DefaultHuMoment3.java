@@ -35,7 +35,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,16 +56,16 @@ import org.scijava.struct.ItemIO;
 public class DefaultHuMoment3<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment30")
-	private Computer<IterableInterval<I>, O> normalizedCentralMoment30Func;
+	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment30Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment12")
-	private Computer<IterableInterval<I>, O> normalizedCentralMoment12Func;
+	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment12Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment21")
-	private Computer<IterableInterval<I>, O> normalizedCentralMoment21Func;
+	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment21Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment03")
-	private Computer<IterableInterval<I>, O> normalizedCentralMoment03Func;
+	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment03Func;
 
 	@Override
 	public void computeMoment(final IterableInterval<I> input, final O output) {

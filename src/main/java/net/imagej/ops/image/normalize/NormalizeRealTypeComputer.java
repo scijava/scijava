@@ -29,10 +29,11 @@
 
 package net.imagej.ops.image.normalize;
 
+import net.imagej.ops.special.computer.UnaryComputerOp;
 import net.imglib2.converter.Converter;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Simple {@link UnaryComputerOp} and {@link Converter} to perform a
@@ -41,7 +42,7 @@ import org.scijava.ops.core.computer.Computer;
  * @author Christian Dietz (University of Konstanz)
  * @author Leon Yang
  */
-class NormalizeRealTypeComputer<I extends RealType<I>, O extends RealType<O>> implements Computer<I, O>, Converter<I, O> {
+class NormalizeRealTypeComputer<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<I, O>, Converter<I, O> {
 
 	//TODO: should this become an Op?
 	private double targetMin, targetMax, sourceMin, factor;

@@ -42,8 +42,8 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "dimension")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class PartialDerivativeRAI<T extends RealType<T>>
-		implements BiComputer<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> {
+		implements Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, Img<T>> createRAI;
@@ -71,14 +71,14 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 	private Function<long[], Img<DoubleType>> createImg;
 
 	@OpDependency(name = "math.add")
-	private BiComputer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> addOp;
+	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> addOp;
 
 	@OpDependency(name = "filter.convolve")
-	private BiComputer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> convolveOp;
+	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> convolveOp;
 
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> kernelBConvolveOp;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> kernelBConvolveOp;
 
-	private Computer<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>[] kernelAConvolveOps;
+	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>[] kernelAConvolveOps;
 
 	@OpDependency(name = "create.kernelSobel")
 	private Function<T, RandomAccessibleInterval<T>> sobelKernelCreator;

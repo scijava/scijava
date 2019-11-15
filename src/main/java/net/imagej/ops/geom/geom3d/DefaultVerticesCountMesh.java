@@ -34,7 +34,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric3D: Surface Vertices Count", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "verticesCountMesh", itemIO = ItemIO.BOTH)
-public class DefaultVerticesCountMesh implements Computer<Mesh, DoubleType> {
+public class DefaultVerticesCountMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@Override
 	public void compute(final Mesh input, final DoubleType output) {

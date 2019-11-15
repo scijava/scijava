@@ -66,7 +66,7 @@ public class RAIToMeshConverter extends
 	@Override
 	public <T> T convert(Object src, Class<T> dest) {
 		if (marchingCubesFunc == null) {
-			marchingCubesFunc = Functions.unary(ops,
+			marchingCubesFunc = Functions.match(ops,
 				Ops.Geometric.MarchingCubes.class, Mesh.class,
 				(RandomAccessibleInterval) src);
 		}

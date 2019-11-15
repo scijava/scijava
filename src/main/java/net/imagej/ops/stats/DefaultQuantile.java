@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -57,7 +57,7 @@ import org.scijava.util.DoubleArray;
 @Parameter(key = "quantile", min = "0.0", max = "1.0")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
-implements BiComputer<Iterable<I>, Double, O>
+implements Computers.Arity2<Iterable<I>, Double, O>
 {
 
 //	@Parameter(min = "0.0", max = "1.0")

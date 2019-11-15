@@ -33,7 +33,7 @@ import net.imagej.ops.OpService;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 
 /**
  * Abstract {@link ImageMomentOp}. Provides {@link OpService} and create the
@@ -47,7 +47,7 @@ import org.scijava.ops.core.computer.Computer;
  *            output type
  */
 public interface AbstractImageMomentOp<I extends RealType<I>, O extends RealType<O>>
-		extends Computer<IterableInterval<I>, O> {
+		extends Computers.Arity1<IterableInterval<I>, O> {
 	
 	public void computeMoment(IterableInterval<I> input, O output);
 

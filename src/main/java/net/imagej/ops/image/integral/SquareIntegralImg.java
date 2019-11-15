@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -60,7 +60,7 @@ public class SquareIntegralImg<I extends RealType<I>, O extends RealType<O>> ext
 {
 
 	@Override
-	public Computer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(final int dimension) {
+	public Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> getComputer(final int dimension) {
 		if (dimension == 0) {
 			return computeSquareAndAdd;
 		}

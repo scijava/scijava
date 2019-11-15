@@ -39,7 +39,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.medianElongation", label = "Geometric (3D): Median Elongation", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
 @Parameter(key = "medianElongation", itemIO = ItemIO.BOTH)
-public class DefaultMedianElongation implements Computer<Mesh, DoubleType> {
+public class DefaultMedianElongation implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Mesh, RealMatrix> inertiaTensor;

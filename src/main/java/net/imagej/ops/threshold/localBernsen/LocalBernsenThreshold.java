@@ -40,9 +40,9 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer4;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -61,11 +61,11 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory", required = false)
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalBernsenThreshold<T extends RealType<T>> implements
-	Computer5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			IterableInterval<BitType>> {
 
 	@OpDependency(name = "threshold.localBernsen")
-	private Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
+	private Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
@@ -82,10 +82,10 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 		final Double contrastThreshold, final Double halfMaxValue,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Computer4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
+		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
 		@Mutable final IterableInterval<BitType> output)
 	{
-		final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, contrastThreshold,
 				halfMaxValue, o);
 		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,

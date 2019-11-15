@@ -44,7 +44,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import org.junit.Test;
 import org.scijava.ops.core.function.GenericFunctions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -103,7 +103,7 @@ public class LiICQTest extends ColocalisationTest {
 				0x01234567);
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.binary(ops, "coloc.icq",
+		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops, "coloc.icq",
 				new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> genericOp = GenericFunctions.Functions.generic(op,
 				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());

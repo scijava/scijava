@@ -38,7 +38,7 @@ import net.imagej.ops.AbstractOpTest;
 
 import org.junit.Test;
 import org.scijava.ops.OpService;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 
 /**
@@ -57,8 +57,8 @@ public class EvalTest extends AbstractOpTest {
 		final OpService opService = context.getService(OpService.class);
 
 		// TODO: can we use ops.run here?
-		Function3<String, Map<String, Object>, OpService, Object> evaluator = ops.findOp("eval",
-				new Nil<Function3<String, Map<String, Object>, OpService, Object>>() {},
+		Functions.Arity3<String, Map<String, Object>, OpService, Object> evaluator = ops.findOp("eval",
+				new Nil<Functions.Arity3<String, Map<String, Object>, OpService, Object>>() {},
 				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpService>() {} },
 				new Nil<Object>() {});
 

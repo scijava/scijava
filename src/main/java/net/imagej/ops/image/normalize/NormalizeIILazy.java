@@ -37,8 +37,8 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer5;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -59,13 +59,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
-		implements Computer<IterableInterval<I>, IterableInterval<O>> {
+		implements Computers.Arity1<IterableInterval<I>, IterableInterval<O>> {
 
 	@OpDependency(name = "stats.minMax")
 	private Function<IterableInterval<I>, Pair<I, I>> minMaxFunc;
 
 	@OpDependency(name = "image.normalize")
-	private Computer5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizerFunc;
+	private Computers.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizerFunc;
 
 	@Override
 	public void compute(IterableInterval<I> img, @Mutable IterableInterval<O> output) {

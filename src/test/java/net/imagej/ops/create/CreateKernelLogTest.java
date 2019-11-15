@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.util.Functions;
+import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link CreateKernelLogDoubleType} and
@@ -58,7 +58,7 @@ public class CreateKernelLogTest extends AbstractTestEnvironment {
 		final double sigma = 5.0;
 		final double[] sigmas = { sigma, sigma };
 
-		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = Functions.binary(ops,
+		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = Functions.match(ops,
 				"create.kernelLog", new Nil<Double>() {
 				}, new Nil<Integer>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
@@ -67,7 +67,7 @@ public class CreateKernelLogTest extends AbstractTestEnvironment {
 		final RandomAccessibleInterval<DoubleType> logKernel = //
 				func1.apply(sigma, sigmas.length);
 
-		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = Functions.unary(ops, "create.kernelLog",
+		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = Functions.match(ops, "create.kernelLog",
 				new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

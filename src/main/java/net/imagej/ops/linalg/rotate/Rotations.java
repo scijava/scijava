@@ -38,7 +38,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.BiComputer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,7 +56,7 @@ public class Rotations {
 	@Parameter(key = "inVector")
 	@Parameter(key = "quaternion")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
-	public final BiComputer<Vector3d, Quaterniondc, Vector3d> rotate3d = (v, q, vDot) -> {
+	public final Computers.Arity2<Vector3d, Quaterniondc, Vector3d> rotate3d = (v, q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
@@ -65,14 +65,14 @@ public class Rotations {
 	@Parameter(key = "inVector")
 	@Parameter(key = "axisAngle")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
-	public final BiComputer<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle = (v, aa, vDot) -> rotate3d.compute(v,
+	public final Computers.Arity2<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle = (v, aa, vDot) -> rotate3d.compute(v,
 			new Quaterniond(aa), vDot);
 
 	@OpField(names = "linalg.rotate")
 	@Parameter(key = "inVector")
 	@Parameter(key = "quaternion")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
-	public final BiComputer<Vector3f, Quaternionfc, Vector3f> rotate3f = (v, q, vDot) -> {
+	public final Computers.Arity2<Vector3f, Quaternionfc, Vector3f> rotate3f = (v, q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
@@ -81,7 +81,7 @@ public class Rotations {
 	@Parameter(key = "inVector")
 	@Parameter(key = "axisAngle")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
-	public final BiComputer<Vector3f, AxisAngle4f, Vector3f> rotate3fAxisAngle = (v, aa, vDot) -> rotate3f.compute(v,
+	public final Computers.Arity2<Vector3f, AxisAngle4f, Vector3f> rotate3fAxisAngle = (v, aa, vDot) -> rotate3f.compute(v,
 			new Quaternionf(aa), vDot);
 
 }

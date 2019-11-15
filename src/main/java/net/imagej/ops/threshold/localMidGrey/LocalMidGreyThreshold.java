@@ -41,9 +41,9 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
-import org.scijava.ops.core.computer.Computer4;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -61,11 +61,11 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory", required = false)
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalMidGreyThreshold<T extends RealType<T>> implements
-	Computer4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
+	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			IterableInterval<BitType>> {
 
 	@OpDependency(name = "threshold.localMidGrey")
-	private Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp;
+	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
@@ -81,10 +81,10 @@ public class LocalMidGreyThreshold<T extends RealType<T>> implements
 		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 		final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Computer3<Iterable<T>, T, Double, BitType> computeThresholdOp,
+		final Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp,
 		@Mutable final IterableInterval<BitType> output)
 	{
-		final BiComputer<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
 		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
 			inputNeighborhoodShape, outOfBoundsFactory,

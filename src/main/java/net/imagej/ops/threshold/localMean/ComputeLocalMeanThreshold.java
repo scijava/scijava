@@ -36,8 +36,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -56,11 +56,11 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "c")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalMeanThreshold<T extends RealType<T>> implements
-	Computer3<Iterable<T>, T, Double, BitType>
+	Computers.Arity3<Iterable<T>, T, Double, BitType>
 {
 
 	@OpDependency(name = "stats.mean")
-	private Computer<Iterable<T>, DoubleType> meanOp;
+	private Computers.Arity1<Iterable<T>, DoubleType> meanOp;
 
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
@@ -71,7 +71,7 @@ public class ComputeLocalMeanThreshold<T extends RealType<T>> implements
 
 	public static <T extends RealType<T>> void compute(
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
-		final Double c, final Computer<Iterable<T>, DoubleType> meanOp,
+		final Double c, final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
 		@Mutable final BitType output)
 	{
 		final DoubleType m = new DoubleType();

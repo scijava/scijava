@@ -36,7 +36,7 @@ import net.imglib2.img.Img;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.function.Function3;
+import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outType")
 @Parameter(key = "fast")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
-public class CreateOutputFFTMethods<T> implements Function3<Dimensions, T, Boolean, Img<T>> {
+public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T, Boolean, Img<T>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, Img<T>> create;
@@ -74,7 +74,7 @@ public class CreateOutputFFTMethods<T> implements Function3<Dimensions, T, Boole
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
 	@OpDependency(name = "filter.createFFTOutput")
-	private Function3<Dimensions, T, Boolean, Img<T>> create;
+	private Functions.Arity3<Dimensions, T, Boolean, Img<T>> create;
 
 	@Override
 	public Img<T> apply(Dimensions paddedDimensions, T outType) {

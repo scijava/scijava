@@ -32,7 +32,7 @@ package net.imagej.ops.copy;
 import net.imglib2.type.Type;
 
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -46,7 +46,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.type")
 @Parameter(key = "input")
 @Parameter(key = "copy", itemIO = ItemIO.BOTH)
-public class CopyType<T extends Type<T>> implements Computer<T, T> {
+public class CopyType<T extends Type<T>> implements Computers.Arity1<T, T> {
 
 	@Override
 	public void compute(final T input, final T output) {

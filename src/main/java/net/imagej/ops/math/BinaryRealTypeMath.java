@@ -33,8 +33,8 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.computer.BiComputer;
-import org.scijava.ops.core.computer.Computer3;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -57,7 +57,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "sum", itemIO = ItemIO.BOTH)
-	public final BiComputer<I1, I2, O> adder = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> adder = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() + input2.getRealDouble());
 
 	/**
@@ -68,7 +68,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<I1, I2, O> ander = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> ander = (input1, input2, output) -> 
 			output.setReal((long) input1.getRealDouble() & (long) input2
 				.getRealDouble());
 
@@ -81,7 +81,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input2")
 	@Parameter(key = "divideByZeroValue")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final Computer3<I1, I2, Double, O> divider = (input1, input2, dbzVal, output) -> { 
+	public final Computers.Arity3<I1, I2, Double, O> divider = (input1, input2, dbzVal, output) -> { 
 			if (input2.getRealDouble() == 0) {
 				output.setReal(dbzVal);
 			}
@@ -98,7 +98,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<I1, I2, O> multiplier = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> multiplier = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() * input2.getRealDouble());
 
 	/**
@@ -109,7 +109,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<I1, I2, O> orer = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> orer = (input1, input2, output) -> 
 			output.setReal((long) input1.getRealDouble() | (long) input2
 				.getRealDouble());
 
@@ -121,7 +121,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<I1, I2, O> subtracter = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> subtracter = (input1, input2, output) -> 
 			output.setReal(input1.getRealDouble() - input2.getRealDouble());
 
 	/**
@@ -132,7 +132,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
-	public final BiComputer<I1, I2, O> xorer = (input1, input2, output) -> 
+	public final Computers.Arity2<I1, I2, O> xorer = (input1, input2, output) -> 
 			output.setReal((long) input1.getRealDouble() ^ (long) input2
 				.getRealDouble());
 

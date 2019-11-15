@@ -37,7 +37,7 @@ import net.imglib2.IterableInterval;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.util.Maps;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -52,18 +52,18 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class CopyII<T> implements Computer<IterableInterval<T>, IterableInterval<T>> {
+public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, IterableInterval<T>> {
 
 	// used internally
 	//TODO: make sure that the matcher autoLifts the type copying Op
 	@OpDependency(name = "copy.type")
-	private Computer<T, T> copyOp;
+	private Computers.Arity1<T, T> copyOp;
 
 	@Override
 	public void compute(final IterableInterval<T> input, final IterableInterval<T> output) {
 		if (!input.iterationOrder().equals(output.iterationOrder()))
 			throw new IllegalArgumentException("input and output must be of the same dimensions!");
-		Computer<Iterable<T>, Iterable<T>> mapped = Maps.Computers.Iterables.liftBoth(copyOp);
+		Computers.Arity1<Iterable<T>, Iterable<T>> mapped = Maps.Computers.Iterables.liftBoth(copyOp);
 		mapped.compute(input, output);
 	}
 }
@@ -76,7 +76,7 @@ class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterva
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, IterableInterval<T>> imgCreator;
 	@OpDependency(name = "copy.iterableInterval")
-	private Computer<IterableInterval<T>, IterableInterval<T>> copyOp;
+	private Computers.Arity1<IterableInterval<T>, IterableInterval<T>> copyOp;
 
 	@Override
 	public IterableInterval<T> apply(IterableInterval<T> input) {

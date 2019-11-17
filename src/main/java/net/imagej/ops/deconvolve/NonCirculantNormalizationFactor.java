@@ -29,10 +29,9 @@
 
 package net.imagej.ops.deconvolve;
 
-import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
@@ -42,6 +41,7 @@ import net.imglib2.Interval;
 import net.imglib2.Point;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
@@ -50,7 +50,6 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.computer.Computer3;
 import org.scijava.ops.core.computer.Computer7;
 import org.scijava.ops.core.inplace.Inplace6First;
 import org.scijava.param.Parameter;
@@ -94,9 +93,9 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	 */
 	private Dimensions l;
 
-	RandomAccessibleInterval<C> fftInput;
+	private RandomAccessibleInterval<C> fftInput;
 
-	RandomAccessibleInterval<C> fftKernel;
+	private RandomAccessibleInterval<C> fftKernel;
 
 	// Normalization factor for edge handling (see
 	// http://bigwww.epfl.ch/deconvolution/challenge2013/index.html?p=doc_math_rl)
@@ -104,23 +103,21 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, Img<O>> create;
-	
-	@OpDependency(name = "copy.rai")
-	private Function<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy;
 
 	@OpDependency(name = "filter.correlate")
 	private Computer7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlater;
 
-//	@OpDependency(name = "math.divide") TODO: allow the matcher to fix this
-	private Computer3<Iterable<O>, Iterable<O>, Double, Iterable<O>> divide = (in1, in2, in3, out) -> {
-		Iterator<O> itr1 = in1.iterator();
-		Iterator<O> itr2 = in2.iterator();
-		Iterator<O> itrout = out.iterator();
-		
-		while(itr1.hasNext() && itr2.hasNext() && itrout.hasNext()) {
-			Double val2 = itr2.next().getRealDouble();
-			itrout.next().setReal(val2 == 0 ? in3 : itr1.next().getRealDouble() / val2);
-		}
+//	@OpDependency(name = "math.divide") TODO: match an op here?
+	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> divide = (numerResult, denom) -> {
+		final O tmp = Util.getTypeFromInterval(numerResult).createVariable();
+		LoopBuilder.setImages(numerResult, denom).forEachPixel((n, d) -> {
+			if (n.getRealFloat() > 0) {
+				tmp.set(n);
+				tmp.div(d);
+				n.set(tmp);
+			}
+			else n.setZero();
+		});
 	};
 
 	/**
@@ -139,10 +136,9 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 			this.createNormalizationImageSemiNonCirculant(arg, Util.getTypeFromInterval(arg), es);
 		}
 		
-		RandomAccessibleInterval<O> copyArg = copy.apply(arg);
-
 		// normalize for non-circulant deconvolution
-		divide.accept(Views.iterable(copyArg), normalization, 0., Views.iterable(arg));
+		// arg = arg / normalization
+		divide.accept(arg, normalization);
 	}
 
 	protected void createNormalizationImageSemiNonCirculant(Interval fastFFTInterval, O type, ExecutorService es) {
@@ -220,10 +216,14 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 		final Img<O> tempImg = create.apply(fd, type);
 
+		RichardsonLucyC.dump(normalization, "normalization-preCorrelate");
+
 		// 3. correlate psf with the output of step 2.
 		correlater.compute(normalization, null, fftInput, fftKernel, true, false, es, tempImg);
 
 		normalization = tempImg;
+
+		RichardsonLucyC.dump(normalization, "normalization-postCorrelate");
 
 		final Cursor<O> cursorN = normalization.cursor();
 
@@ -235,5 +235,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 			}
 		}
+
+		RichardsonLucyC.dump(normalization, "normalization-final");
 	}
 }

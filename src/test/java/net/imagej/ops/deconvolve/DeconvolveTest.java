@@ -54,7 +54,7 @@ import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
- * Tests involving convolvers.
+ * Tests {@code filter.deconvolve} ops.
  */
 public class DeconvolveTest extends AbstractOpTest {
 
@@ -106,15 +106,12 @@ public class DeconvolveTest extends AbstractOpTest {
 								new Nil<RandomAccessibleInterval<FloatType>>() {});
 
 		// deconvolve with standard Richardson Lucy F
-		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<FloatType> deconvolved = deconvolveOp.apply(convolved, kernel, null,
 				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()),
 				null, new FloatType(),
-//				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()), new FloatType(),
 				new ComplexFloatType(), 10, false, false, es);
 
 		// deconvolve with accelerated non-circulant Richardson Lucy F
-		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<FloatType> deconvolved2 = deconvolveOp.apply(convolved, kernel, null,
 				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()),
 				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(kernel).createVariable()),

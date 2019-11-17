@@ -129,39 +129,33 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	/**
 	 * create a richardson lucy filter
 	 */
-	public BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
+	private BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
+			RandomAccessibleInterval<I> unpaddedInput, RandomAccessibleInterval<K> unpaddedKernel,
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
-			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
-			RandomAccessibleInterval<O> output) {
+			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, boolean accelerate,
+			ExecutorService es, RandomAccessibleInterval<O> output) {
 		C complexType = Util.getTypeFromInterval(fftImg).createVariable();
 		
 		// if non-circulant mode, set up the richardson-lucy computer in
 		// non-circulant mode and return it
 		if (nonCirculant) {
-			// TODO should this be input and kernel instead of raiExtendedInput and
-			// raiExtendedKernel?
 			Inplace<RandomAccessibleInterval<O>> normalizerSimplified = (io) -> {
-				normalizer.mutate(io, raiExtendedInput, raiExtendedKernel, fftImg, fftKernel, es);
-
+				normalizer.mutate(io, unpaddedInput, unpaddedKernel, fftImg, fftKernel, es);
 			};
 
 			ArrayList<Inplace<RandomAccessibleInterval<O>>> list = new ArrayList<>();
 
 			list.add(normalizerSimplified);
 
-			// TODO: should it be input instead of raiExtendedInput?
-			Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> fg = (in) -> firstGuess.apply(in,
-					Util.getTypeFromInterval(output), raiExtendedInput);
-
 			return (input, kernel, out) -> {
-				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerator,
-						computeEstimateOp, fg.apply(raiExtendedInput), list, es, out);
+				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerate ? accelerator : null,
+						computeEstimateOp, firstGuess.apply(raiExtendedInput, Util.getTypeFromInterval(out), out), list, es, out);
 			};
 		}
 
 		// return a richardson lucy computer
 		return (input, kernel, out) -> {
-			richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerator,
+			richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerate ? accelerator : null,
 					computeEstimateOp, null, null, es, out);
 		};
 	}
@@ -184,8 +178,13 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	/**
 	 * create FFT memory, create FFT filter and run it
 	 */
-	public void computeFilter(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType, ExecutorService es) {
+	private void computeFilter(final RandomAccessibleInterval<I> input,
+		final RandomAccessibleInterval<K> kernel,
+		final RandomAccessibleInterval<I> paddedInput,
+		final RandomAccessibleInterval<K> paddedKernel,
+		RandomAccessibleInterval<O> output, long[] paddedSize, C complexType,
+		boolean accelerate, ExecutorService es)
+	{
 
 		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(paddedSize), complexType, true);
 
@@ -196,9 +195,9 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 		// memory
 		// for the FFTs
 		BiComputer<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter = createFilterComputer(
-				input, kernel, fftInput, fftKernel, es, output);
+				input, kernel, paddedInput, paddedKernel, fftInput, fftKernel, accelerate, es, output);
 
-		filter.compute(input, kernel, output);
+		filter.compute(paddedInput, paddedKernel, output);
 	}
 
 	@Override
@@ -237,7 +236,7 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
-		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType, es);
+		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize, complexType, accelerate, es);
 
 		return output;
 	}

@@ -216,14 +216,10 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 		final Img<O> tempImg = create.apply(fd, type);
 
-		RichardsonLucyC.dump(normalization, "normalization-preCorrelate");
-
 		// 3. correlate psf with the output of step 2.
 		correlater.compute(normalization, null, fftInput, fftKernel, true, false, es, tempImg);
 
 		normalization = tempImg;
-
-		RichardsonLucyC.dump(normalization, "normalization-postCorrelate");
 
 		final Cursor<O> cursorN = normalization.cursor();
 
@@ -235,7 +231,5 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 
 			}
 		}
-
-		RichardsonLucyC.dump(normalization, "normalization-final");
 	}
 }

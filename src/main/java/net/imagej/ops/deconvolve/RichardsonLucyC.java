@@ -29,7 +29,6 @@
 
 package net.imagej.ops.deconvolve;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
@@ -160,8 +159,6 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		// setFFTKernel(getCreateOp().calculate(in));
 		// }
 
-		dump(Views.flatIterable(in), "initial");
-
 		// if a starting point for the estimate was not passed in then create
 		// estimate Img and use the input as the starting point
 		if (raiExtendedEstimate == null) {
@@ -169,10 +166,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			raiExtendedEstimate = createOp.apply(in, Util.getTypeFromInterval(out));
 
 			copyOp.compute(in, raiExtendedEstimate);
-
-			dump(Views.flatIterable(raiExtendedEstimate), "postCopy");
 		}
-		dump(Views.flatIterable(raiExtendedEstimate), "initialEE");
 
 		// create image for the reblurred
 		RandomAccessibleInterval<O> raiExtendedReblurred = createOp.apply(in, Util.getTypeFromInterval(out));
@@ -180,13 +174,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		// perform fft of psf
 		fftKernelOp.compute(kernel, es, fftKernel);
 
-		dump(Views.flatIterable(fftKernel), "fftKernel");
-
 		// -- perform iterations --
 
 		for (int i = 0; i < maxIterations; i++) {
-
-			dump(Views.flatIterable(raiExtendedEstimate), i + "-preConvolve");
 
 			// create reblurred by convolving kernel with estimate
 			// NOTE: the FFT of the PSF of the kernel has been passed in as a
@@ -195,34 +185,24 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			convolverOp.compute(raiExtendedEstimate, null, fftInput, fftKernel, true, false, es,
 				raiExtendedReblurred);
 
-			dump(Views.flatIterable(raiExtendedReblurred), i + "-preCorrection");
-
 			// compute correction factor
 			rlCorrectionOp.compute(in, raiExtendedReblurred, fftInput, fftKernel, es, raiExtendedReblurred);
 
-			dump(Views.flatIterable(raiExtendedReblurred), i + "-preUpdate");
-
 			// perform update to calculate new estimate
 			updateOp.compute(raiExtendedReblurred, raiExtendedEstimate);
-
-			dump(Views.flatIterable(raiExtendedEstimate), i + "-postUpdate");
 
 			// apply post processing
 			if (iterativePostProcessingOps != null) {
 				for (Inplace<RandomAccessibleInterval<O>> pp : iterativePostProcessingOps) {
 					pp.mutate(raiExtendedEstimate);
 				}
-				dump(Views.flatIterable(raiExtendedEstimate), i + "-postPostProc");
 			}
 
 			// accelerate the algorithm by taking a larger step
 			// TODO: do we need the nullcheck?
 			if (accelerator != null) {
 				accelerator.mutate(raiExtendedEstimate);
-				dump(Views.flatIterable(raiExtendedEstimate), i + "-postAccel");
 			}
-
-			dump(Views.flatIterable(raiExtendedEstimate), i + "-final");
 		}
 
 		// -- copy crop padded back to original size
@@ -236,25 +216,5 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		}
 
 		copy2Op.compute(Views.interval(raiExtendedEstimate, new FinalInterval(start, end)), out);
-	}
-
-	public static void dump(Iterable<?> image, String fileName) {
-		java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-		java.io.PrintWriter pout = new java.io.PrintWriter(baos);
-		int count = 0;
-		for (Object item : image) {
-			count++;
-			pout.println(count + ": " + item);
-		}
-		pout.println("--END--");
-		pout.flush();
-		byte[] sjBytes = baos.toByteArray();
-		try {
-			org.scijava.util.FileUtils.writeFile(new java.io.File("/Users/curtis/sj-" + fileName + ".txt"), sjBytes);
-			final byte[] ijBytes = org.scijava.util.FileUtils.readFile(new java.io.File("/Users/curtis/ij-" + fileName + ".txt"));
-			final boolean same = Arrays.equals(sjBytes, ijBytes);
-			System.out.println(fileName + " WRITTEN" + (same ? "" : " --> DIVERGED"));
-		}
-		catch (java.io.IOException exc) { exc.printStackTrace(); }
 	}
 }

@@ -87,8 +87,6 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 
 		final Img<O> firstGuess = create.apply(in, outType);
 
-		RichardsonLucyC.dump(firstGuess, "firstGuess-initial");
-
 		// set first guess to be a constant = to the average value
 
 		// so first compute the sum...
@@ -110,7 +108,6 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 			type.setReal(average);
 		}
 
-		RichardsonLucyC.dump(firstGuess, "firstGuess-result");
 		return firstGuess;
 	}
 }

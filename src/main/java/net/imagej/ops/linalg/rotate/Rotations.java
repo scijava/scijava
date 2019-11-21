@@ -52,35 +52,23 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Rotations {
 
-	@OpField(names = "linalg.rotate", params = "x")
-	@Parameter(key = "inVector")
-	@Parameter(key = "quaternion")
-	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
+	@OpField(names = "linalg.rotate", params = "inVector, quaternion, vDot")
 	public final Computers.Arity2<Vector3d, Quaterniondc, Vector3d> rotate3d = (v, q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
 
-	@OpField(names = "linalg.rotate", params = "x")
-	@Parameter(key = "inVector")
-	@Parameter(key = "axisAngle")
-	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
+	@OpField(names = "linalg.rotate", params = "inVector, axisAngle, vDot")
 	public final Computers.Arity2<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle = (v, aa, vDot) -> rotate3d.compute(v,
 			new Quaterniond(aa), vDot);
 
-	@OpField(names = "linalg.rotate", params = "x")
-	@Parameter(key = "inVector")
-	@Parameter(key = "quaternion")
-	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
+	@OpField(names = "linalg.rotate", params = "inVector, quaternion, vDot")
 	public final Computers.Arity2<Vector3f, Quaternionfc, Vector3f> rotate3f = (v, q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
 	
-	@OpField(names = "linalg.rotate", params = "x")
-	@Parameter(key = "inVector")
-	@Parameter(key = "axisAngle")
-	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
+	@OpField(names = "linalg.rotate", params = "inVector, axisAngle, vDot")
 	public final Computers.Arity2<Vector3f, AxisAngle4f, Vector3f> rotate3fAxisAngle = (v, aa, vDot) -> rotate3f.compute(v,
 			new Quaternionf(aa), vDot);
 

@@ -14,16 +14,10 @@ public class Power {
 
 	public static final String NAMES = MathOps.POW;
 
-	@OpField(names = NAMES, params = "x")
-	@Parameter(key = "number")
-	@Parameter(key = "exponent")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = NAMES, params = "number, exponent, result")
 	public static final BiFunction<Double, Double, Double> MathPowerDoubleFunction = (base, exp) -> Math.pow(base, exp);
 
-	@OpField(names = NAMES, params = "x")
-	@Parameter(key = "array")
-	@Parameter(key = "power")
-	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
+	@OpField(names = NAMES, params = "array, power, resultArray")
 	public static final Computers.Arity2<double[], Double, double[]> MathPointwisePowerDoubleArrayComputer = (in, pow, out) -> {
 		for (int i = 0; i < in.length; i++)
 			out[i] = Math.pow(in[i], pow);

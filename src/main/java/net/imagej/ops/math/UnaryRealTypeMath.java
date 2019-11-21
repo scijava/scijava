@@ -57,27 +57,21 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the absolute value of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.abs", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.abs", params = "input, output")
 	public final Computers.Arity1<I, O> absoluteValue = (input, output) -> output.setReal(Math.abs(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the inverse cosine of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.arccos", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arccos", params = "input, output")
 	public final Computers.Arity1<I, O> arccos = (input, output) -> output.setReal(Math.acos(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the inverse hyperbolic
 	 * cosine of the real component of an input real number.
 	 */
-	@OpField(names = "math.arccosh", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arccosh", params = "input, output")
 	public final Computers.Arity1<I, O> arccosh = (input, output) -> {
 		final double xt = input.getRealDouble();
 		double delta = Math.sqrt(xt * xt - 1);
@@ -90,9 +84,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse cotangent of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.arccot", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arccot", params = "input, output")
 	public final Computers.Arity1<I, O> arccot = (input, output) -> {
 		double value = Math.atan(1.0 / input.getRealDouble());
 		if (input.getRealDouble() < 0)
@@ -104,9 +96,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse hyperbolic
 	 * cotangent of the real component of an input real number.
 	 */
-	@OpField(names = "math.arccoth", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arccoth", params = "input, output")
 	public final Computers.Arity1<I, O> arccoth = (input, output) -> {
 		final double xt = input.getRealDouble();
 		output.setReal(0.5 * Math.log((xt + 1) / (xt - 1)));
@@ -116,9 +106,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse cosecant of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.arccsc", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arccsc", params = "input, output")
 	public final Computers.Arity1<I, O> arccsc = (input, output) -> {
 		final double xt = input.getRealDouble();
 		if (xt > -1 && xt < 1)
@@ -140,9 +128,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse hyperbolic
 	 * cosecant of the real component of an input real number.
 	 */
-	@OpField(names = "math.arccsch", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arccsch", params = "input, output")
 	public final Computers.Arity1<I, O> arccsch = (input, output) -> {
 		final double xt = input.getRealDouble();
 		final double delta = Math.sqrt(1 + 1 / (xt * xt));
@@ -153,9 +139,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse secant of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.arcsec", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arcsec", params = "input, output")
 	public final Computers.Arity1<I, O> arcsec = (input, output) -> {
 		final double xt = input.getRealDouble();
 		if (xt > -1 && xt < 1)
@@ -180,9 +164,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse hyperbolic
 	 * secant of the real component of an input real number.
 	 */
-	@OpField(names = "math.arcsech", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arcsech", params = "input, output")
 	public final Computers.Arity1<I, O> arcsech = (input, output) -> {
 		final double xt = input.getRealDouble();
 		final double numer = 1 + Math.sqrt(1 - xt * xt);
@@ -193,18 +175,14 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse sine of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.arcsin", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arcsin", params = "input, output")
 	public final Computers.Arity1<I, O> arcsin = (input, output) -> output.setReal(Math.asin(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the inverse hyperbolic
 	 * sine of the real component of an input real number.
 	 */
-	@OpField(names = "math.arcsinh", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arcsinh", params = "input, output")
 	public final Computers.Arity1<I, O> arcsinh = (input, output) -> {
 		final double xt = input.getRealDouble();
 		final double delta = Math.sqrt(xt * xt + 1);
@@ -215,18 +193,14 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inverse tangent of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.arctan", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arctan", params = "input, output")
 	public final Computers.Arity1<I, O> arctan = (input, output) -> output.setReal(Math.atan(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the inverse hyperbolic
 	 * tangent of the real component of an input real number.
 	 */
-	@OpField(names = "math.arctanh", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.arctanh", params = "input, output")
 	public final Computers.Arity1<I, O> arctanh = (input, output) -> {
 		final double xt = input.getRealDouble();
 		output.setReal(0.5 * Math.log((1 + xt) / (1 - xt)));
@@ -236,109 +210,84 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the ceiling of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.ceil", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.ceil", params = "input, output")
 	public final Computers.Arity1<I, O> ceil = (input, output) -> output.setReal(Math.ceil(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the cosine of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.cos", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.cos", params = "input, output")
 	public final Computers.Arity1<I, O> cos = (input, output) -> output.setReal(Math.cos(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the hyperbolic cosine of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.cosh", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.cosh", params = "input, output")
 	public final Computers.Arity1<I, O> cosh = (input, output) -> output.setReal(Math.cosh(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the cotangent of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.cot", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.cot", params = "input, output")
 	public final Computers.Arity1<I, O> cot = (input, output) -> output.setReal(1.0 / Math.tan(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the hyperbolic cotangent
 	 * of the real component of an input real number.
 	 */
-	@OpField(names = "math.coth", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.coth", params = "input, output")
 	public final Computers.Arity1<I, O> coth = (input, output) -> output.setReal(1.0 / Math.tanh(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the cosecant of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.csc", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.csc", params = "input, output")
 	public final Computers.Arity1<I, O> csc = (input, output) -> output.setReal(1.0 / Math.sin(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the hyperbolic cosecant
 	 * of the real component of an input real number.
 	 */
-	@OpField(names = "math.csch", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.csch", params = "input, output")
 	public final Computers.Arity1<I, O> csch = (input, output) -> output.setReal(1.0 / Math.sinh(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the cube root of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.cubeRoot", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.cubeRoot", params = "input, output")
 	public final Computers.Arity1<I, O> cubeRoot = (input, output) -> output.setReal(Math.cbrt(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the exponentiation of the
 	 * real component of an input real number. (e raised to a power)
 	 */
-	@OpField(names = "math.exp", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.exp", params = "input, output")
 	public final Computers.Arity1<I, O> exp = (input, output) -> output.setReal(Math.exp(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to e^x - 1. x is the input
 	 * argument to the operation.
 	 */
-	@OpField(names = "math.expMinusOne", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.expMinusOne", params = "input, output")
 	public final Computers.Arity1<I, O> expMinusOne = (input, output) -> output.setReal(Math.exp(input.getRealDouble()) - 1);
 
 	/**
 	 * Sets the real component of an output real number to the floor of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.floor", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.floor", params = "input, output")
 	public final Computers.Arity1<I, O> floor = (input, output) -> output.setReal(Math.floor(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the gamma value of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.gamma", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "constant")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.gamma", params = "input, constant, output")
 	public final Computers.Arity2<I, Double, O> gamma = (input, constant, output) -> {
 		final double inputVal = input.getRealDouble();
 		if (inputVal <= 0)
@@ -352,11 +301,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the inversion of the real
 	 * component of an input real number about a range.
 	 */
-	@OpField(names = "math.invert", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "specifiedMin")
-	@Parameter(key = "specifiedMax")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.invert", params = "input, specifiedMin, specifiedMax, output")
 	public final Computers.Arity3<I, Double, Double, O> invert = (input, specifiedMin, specifiedMax, output) -> output
 			.setReal(specifiedMax - (input.getRealDouble() - specifiedMin));
 
@@ -364,27 +309,21 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the natural log of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.log", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.log", params = "input, output")
 	public final Computers.Arity1<I, O> log = (input, output) -> output.setReal(Math.log(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the 10-based log of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.log10", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.log10", params = "input, output")
 	public final Computers.Arity1<I, O> log10 = (input, output) -> output.setReal(Math.log10(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the base 2 log of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.log2", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.log2", params = "input, output")
 	public final Computers.Arity1<I, O> log2 = (input, output) -> output.setReal(Math.log(input.getRealDouble()) / Math.log(2));
 
 	/**
@@ -392,9 +331,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * the sum of the argument and 1. This calculation is more accurate than
 	 * explicitly calling log(1.0 + x).
 	 */
-	@OpField(names = "math.logOnePlusX", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.logOnePlusX", params = "input, output")
 	public final Computers.Arity1<I, O> logOnePlusX = (input, output) -> output.setReal(Math.log1p(input.getRealDouble()));
 
 	/**
@@ -402,10 +339,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * input real number unless it exceeds a maximum value. If it exceeds the
 	 * maximum value then it sets the output real component to that maximum value.
 	 */
-	@OpField(names = "math.max", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "constant")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.max", params = "input, constant, output")
 	public final Computers.Arity2<I, Double, O> max = (input, constant, output) -> {
 		final double value = input.getRealDouble();
 		if (value < constant)
@@ -420,10 +354,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * the minimum value then it sets the output real component to that minimum
 	 * value.
 	 */
-	@OpField(names = "math.min", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "constant")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.min", params = "input, constant, output")
 	public final Computers.Arity2<I, Double, O> min = (input, constant, output) -> {
 		final double value = input.getRealDouble();
 		if (value > constant)
@@ -436,28 +367,21 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the nearest integral
 	 * value of the real component of an input real number.
 	 */
-	@OpField(names = "math.nearestInt", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.nearestInt", params = "input, output")
 	public final Computers.Arity1<I, O> nearestInt = (input, output) -> output.setReal(Math.rint(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the negation of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.negate", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.negate", params = "input, output")
 	public final Computers.Arity1<I, O> negate = (input, output) -> output.setReal(-input.getRealDouble());
 
 	/**
 	 * Sets the real component of an output real number to the raising of the real
 	 * component of an input real number to a constant value.
 	 */
-	@OpField(names = "math.power", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "constant")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.power", params = "input, constant, output")
 	public final Computers.Arity2<I, Double, O> power = (input, constant, output) -> output
 			.setReal(Math.pow(input.getRealDouble(), constant));
 
@@ -467,10 +391,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * of the desired distribution and must be positive. The output value has mean
 	 * value 0.
 	 */
-	@OpField(names = "math.randomGaussian", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "random")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.randomGaussian", params = "input, random, output")
 	public final Computers.Arity2<I, Random, O> randomGaussian = (input, random, output) -> output
 			.setReal(random.nextGaussian() * Math.abs(input.getRealDouble()));
 
@@ -479,9 +400,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * should make a Random object and call the above method if using more than
 	 * once)
 	 */
-	@OpField(names = "math.randomGaussian", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.randomGaussian", params = "input, output")
 	public final Computers.Arity1<I, O> randomGaussianWithoutRandom = (input, output) -> randomGaussian.accept(input,
 			new Random(), output);
 
@@ -490,10 +409,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * efficiency the user should make a Random object and call the above method if
 	 * using more than once)
 	 */
-	@OpField(names = "math.randomGaussian", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "seed")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.randomGaussian", params = "input, seed, output")
 	public final Computers.Arity2<I, Long, O> randomGaussianWithSeed = (input, seed, output) -> randomGaussian.accept(input,
 			new Random(seed), output);
 
@@ -501,10 +417,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to a random value between 0
 	 * and (input real number).
 	 */
-	@OpField(names = "math.randomUniform", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "random")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.randomUniform", params = "input, random, output")
 	public final Computers.Arity2<I, Random, O> randomUniform = (input, random, output) -> output
 			.setReal(random.nextDouble() * Math.abs(input.getRealDouble()));
 
@@ -513,9 +426,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * should make a Random object and call the above method if using more than
 	 * once)
 	 */
-	@OpField(names = "math.randomUniform", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.randomUniform", params = "input, output")
 	public final Computers.Arity1<I, O> randomUniformWithoutRandom = (input, output) -> randomUniform.accept(input,
 			new Random(), output);
 
@@ -524,10 +435,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * efficiency the user should make a Random object and call the above method if
 	 * using more than once)
 	 */
-	@OpField(names = "math.randomUniform", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "seed")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.randomUniform", params = "input, seed, output")
 	public final Computers.Arity2<I, Long, O> randomUniformWithSeed = (input, seed, output) -> randomUniform.accept(input,
 			new Random(seed), output);
 
@@ -535,10 +443,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the reciprocal of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.reciprocal", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "divideByZeroValue")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.reciprocal", params = "input, divideByZeroValue, output")
 	public final Computers.Arity2<I, Double, O> reciprocal = (input, dbzVal, output) -> {
 		final double inputVal = input.getRealDouble();
 		if (inputVal == 0)
@@ -551,27 +456,21 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the rounding of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.round", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.round", params = "input, output")
 	public final Computers.Arity1<I, O> round = (input, output) -> output.setReal((double) Math.round(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the secant of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.sec", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sec", params = "input, output")
 	public final Computers.Arity1<I, O> sec = (input, output) -> output.setReal(1.0 / Math.cos(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the hyperbolic secant of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.sech", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sech", params = "input, output")
 	public final Computers.Arity1<I, O> sech = (input, output) -> output.setReal(1.0 / Math.cosh(input.getRealDouble()));
 
 	/**
@@ -580,18 +479,14 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * than 0, it equals 1 if the input number is greater than 0, and it equals 0 if
 	 * the input number equals 0.
 	 */
-	@OpField(names = "math.signum", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.signum", params = "input, output")
 	public final Computers.Arity1<I, O> signum = (input, output) -> output.setReal(Math.signum(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the sine of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.sin", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sin", params = "input, output")
 	public final Computers.Arity1<I, O> sin = (input, output) -> output.setReal(Math.sin(input.getRealDouble()));
 
 	/**
@@ -599,9 +494,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * real component of an input real number. The sinc function is defined as
 	 * sin(x) / x.
 	 */
-	@OpField(names = "math.sinc", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sinc", params = "input, output")
 	public final Computers.Arity1<I, O> sinc = (input, output) -> {
 		final double x = input.getRealDouble();
 		double value;
@@ -617,9 +510,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * the real component of an input real number. The pi version of sinc is defined
 	 * as sin(x*pi) / (x*pi).
 	 */
-	@OpField(names = "math.sincPi", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sincPi", params = "input, output")
 	public final Computers.Arity1<I, O> sincPi = (input, output) -> {
 		final double x = input.getRealDouble();
 		double value;
@@ -634,18 +525,14 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the hyperbolic sine of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.sinh", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sinh", params = "input, output")
 	public final Computers.Arity1<I, O> sinh = (input, output) -> output.setReal(Math.sinh(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the square of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.sqr", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sqr", params = "input, output")
 	public final Computers.Arity1<I, O> square = (input, output) -> output
 			.setReal(input.getRealDouble() * input.getRealDouble());
 
@@ -653,9 +540,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the square root of the
 	 * real component of an input real number.
 	 */
-	@OpField(names = "math.sqrt", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.sqrt", params = "input, output")
 	public final Computers.Arity1<I, O> sqrt = (input, output) -> output.setReal(Math.sqrt(input.getRealDouble()));
 
 	/**
@@ -664,9 +549,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * similar to Mathematica's unitstep function. It is a Heaviside step function
 	 * with h(0) = 1 rather than 0.5.
 	 */
-	@OpField(names = "math.step", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.step", params = "input, output")
 	public final Computers.Arity1<I, O> step = (input, output) -> {
 		if (input.getRealDouble() < 0)
 			output.setZero();
@@ -678,18 +561,14 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * Sets the real component of an output real number to the tangent of the real
 	 * component of an input real number.
 	 */
-	@OpField(names = "math.tan", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.tan", params = "input, output")
 	public final Computers.Arity1<I, O> tan = (input, output) -> output.setReal(Math.tan(input.getRealDouble()));
 
 	/**
 	 * Sets the real component of an output real number to the hyperbolic tangent of
 	 * the real component of an input real number.
 	 */
-	@OpField(names = "math.tanh", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.tanh", params = "input, output")
 	public final Computers.Arity1<I, O> tanh = (input, output) -> output.setReal(Math.tanh(input.getRealDouble()));
 
 	/**
@@ -698,9 +577,7 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	 * between an input floating-point value and the floating point value next
 	 * larger in magnitude. Note that for non-NaN x, ulp(-x) == ulp(x).
 	 */
-	@OpField(names = "math.ulp", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.ulp", params = "input, output")
 	public final Computers.Arity1<I, O> ulp = (input, output) -> output.setReal(Math.ulp(input.getRealDouble()));
 
 }

@@ -73,13 +73,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * Op it ensures that given the same seed and input data the output will always
 	 * be the same.
 	 */
-	@OpField(names = "filter.addNoise", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "rangeMin")
-	@Parameter(key = "rangeMax")
-	@Parameter(key = "rangeStdDev")
-	@Parameter(key = "seed")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "filter.addNoise", params = "input, rangeMin, rangeMax, rangeStdDev, seed, output")
 	public final Computers.Arity5<IterableInterval<I>, Double, Double, Double, Long, IterableInterval<O>> addNoiseInterval = (
 			input, rangeMin, rangeMax, rangeStdDev, seed, output) -> {
 		addNoise(input, output, rangeMin, rangeMax, rangeStdDev, new Random(seed));
@@ -89,12 +83,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * Convenience Op for when the user does not pass through a seed (default seed
 	 * taken from past implementation).
 	 */
-	@OpField(names = "filter.addNoise", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "rangeMin")
-	@Parameter(key = "rangeMax")
-	@Parameter(key = "rangeStdDev")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "filter.addNoise", params = "input, rangeMin, rangeMax, rangeStdDev, output")
 	public final Computers.Arity4<IterableInterval<I>, Double, Double, Double, IterableInterval<O>> addNoiseIntervalSeedless = (
 			input, rangeMin, rangeMax, rangeStdDev,
 			output) -> addNoiseInterval.compute(input, rangeMin, rangeMax, rangeStdDev, 0xabcdef1234567890L, output);
@@ -156,10 +145,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 *         given the same seed and input data the output will always be the
 	 *         same.
 	 */
-	@OpField(names = "filter.addPoissonNoise", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "seed")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "filter.addPoissonNoise", params = "input, seed, output")
 	public final Computers.Arity2<IterableInterval<I>, Long, IterableInterval<O>> addPoissonNoiseInterval = (input, seed,
 			output) -> addPoissonNoise(input, new Random(seed), output);
 
@@ -167,9 +153,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * Convenience Op for when the user does not pass through a seed (default seed
 	 * taken from past implementation).
 	 */
-	@OpField(names = "filter.addPoissonNoise", params = "x")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "filter.addPoissonNoise", params = "input, output")
 	public final Computers.Arity1<IterableInterval<I>, IterableInterval<O>> addPoissonNoiseIntervalSeedless = (input,
 			output) -> addPoissonNoise(input, new Random(0xabcdef1234567890L), output);
 

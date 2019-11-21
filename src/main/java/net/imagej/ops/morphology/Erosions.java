@@ -26,123 +26,51 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Erosions<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strels")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strels, numThreads, result")
 	public final Functions.Arity3<Img<R>, List<Shape>, Integer, Img<R>> erodeImgList = Erosion::erode;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strel")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strel, numThreads, result")
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> erodeImgSingle = Erosion::erode;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strels")
-	@Parameter(key = "minValue")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strels, minValue, numThreads, result")
 	public final Functions.Arity4<Img<T>, List<Shape>, T, Integer, Img<T>> erodeImgListMinValue = Erosion::erode;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strel")
-	@Parameter(key = "minValue")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strel, minValue, numThreads, result")
 	public final Functions.Arity4<Img<T>, Shape, T, Integer, Img<T>> erodeImgSingleMinValue = Erosion::erode;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strels")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.erode", params = "source, strels, numThreads, target")
 	public final Computers.Arity3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> erodeImgListComputer = (in1, in2, in3, out) -> Erosion.erode(in1, out, in2, in3);
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strels")
-	@Parameter(key = "minVal")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.erode", params = "source, strels, minVal, numThreads, target")
 	public final Computers.Arity4<RandomAccessible<T>, List<Shape>, T, Integer, IterableInterval<T>> erodeImgListMinValComputer = (in1, in2, in3, in4, out) -> Erosion.erode(in1, out, in2, in3, in4);
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strel")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.erode", params = "source, strel, numThreads, target")
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> erodeImgComputer = (in1, in2, in3, out) -> Erosion.erode(in1, out, in2, in3);
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strel")
-	@Parameter(key = "minVal")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.erode", params = "source, strel, minVal, numThreads, target")
 	public final Computers.Arity4<RandomAccessible<T>, Shape, T, Integer, IterableInterval<T>> erodeImgMinValComputer = (in1, in2, in3, in4, out) -> Erosion.erode(in1, out, in2, in3, in4);
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strels")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strels, numThreads, result")
 	public final Functions.Arity3<Img<R>, List<Shape>, Integer, Img<R>> erodeFullImgList = Erosion::erodeFull;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strel")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strel, numThreads, result")
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> erodeFullImgSingle = Erosion::erodeFull;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strels")
-	@Parameter(key = "minValue")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strels, minValue, numThreads, result")
 	public final Functions.Arity4<Img<T>, List<Shape>, T, Integer, Img<T>> erodeFullImgListMinValue = Erosion::erodeFull;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "strel")
-	@Parameter(key = "minValue")
-	@Parameter(key = "numThreads")
-	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "morphology.erode", params = "source, strel, minValue, numThreads, result")
 	public final Functions.Arity4<Img<T>, Shape, T, Integer, Img<T>> erodeFullImgSingleMinValue = Erosion::erodeFull;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source", itemIO = ItemIO.BOTH)
-	@Parameter(key = "interval")
-	@Parameter(key = "strels")
-	@Parameter(key = "numThreads")
+	@OpField(names = "morphology.erode", params = "source, interval, strels, numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> erodeImgListInPlace = Erosion::erodeInPlace;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source", itemIO = ItemIO.BOTH)
-	@Parameter(key = "interval")
-	@Parameter(key = "strels")
-	@Parameter(key = "minVal")
-	@Parameter(key = "numThreads")
+	@OpField(names = "morphology.erode", params = "source, interval, strels, minVal, numThreads")
 	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, Interval, List<Shape>, T, Integer> erodeImgListMinValInplace = Erosion::erodeInPlace;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source", itemIO = ItemIO.BOTH)
-	@Parameter(key = "interval")
-	@Parameter(key = "strel")
-	@Parameter(key = "numThreads")
+	@OpField(names = "morphology.erode", params = "source, interval, strel, numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> erodeImgSingleInPlace = Erosion::erodeInPlace;
 
-	@OpField(names = "morphology.erode", params = "x")
-	@Parameter(key = "source", itemIO = ItemIO.BOTH)
-	@Parameter(key = "interval")
-	@Parameter(key = "strel")
-	@Parameter(key = "minVal")
-	@Parameter(key = "numThreads")
+	@OpField(names = "morphology.erode", params = "source, interval, strel, minVal, numThreads")
 	public final Inplaces.Arity5_1<RandomAccessibleInterval<T>, Interval, Shape, T, Integer> erodeImgSingleMinValInplace = Erosion::erodeInPlace;
 }

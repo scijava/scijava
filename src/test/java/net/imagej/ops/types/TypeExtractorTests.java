@@ -29,9 +29,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class TypeExtractorTests extends AbstractOpTest {
 
-	@OpField(names = "test.oobcvfTypeExtractor", params = "x")
-	@Parameter(key = "oobf")
-	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "test.oobcvfTypeExtractor", params = "oobf, output")
 	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func = (
 			oobf) -> "oobcvf";
 
@@ -47,23 +45,5 @@ public class TypeExtractorTests extends AbstractOpTest {
 	}
 
 	// Test Op returns a string different from the one above
-	@OpField(names = "test.oobrvfTypeExtractor", params = "x")
-	@Parameter(key = "oobf")
-	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
-	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = (
-			oobf, rai) -> "oobrvf";
-
-	@Test
-	public void testOutOfBoundsRandomValueFactoryTypeExtractors() {
-		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsRandomValueFactory<>(
-				new UnsignedByteType(7), 7, 7);
-
-		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 });
-		String output = (String) ops.run("test.oobrvfTypeExtractor", oobf, img);
-		// make sure that output matches the return from the Op above, specific to the
-		// type of OOBF we passed through.
-		assert output.equals("oobrvf");
-	}
-
-}
+	@OpField(names = "test.oobrvfTypeExtractor", params = "oobf, input, output")
+	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = ( oobf, rai) -> "oobrvf"; @Test public void testOutOfBoundsRandomValueFactoryTypeExtractors() { OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsRandomValueFactory<>( new UnsignedByteType(7), 7, 7); Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 }); String output = (String) ops.run("test.oobrvfTypeExtractor", oobf, img); // make sure that output matches the return from the Op above, specific to the // type of OOBF we passed through. assert output.equals("oobrvf"); } }

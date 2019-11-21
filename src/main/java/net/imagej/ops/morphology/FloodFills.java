@@ -25,41 +25,20 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class FloodFills<T extends Type<T>, U extends Type<U>> {
 
-	@OpField(names = "morphology.floodFill", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "fillLabel")
-	@Parameter(key = "shape")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", params = "source, seed, fillLabel, shape, target")
 	public final Computers.Arity4<RandomAccessible<T>, Localizable, U, Shape, RandomAccessible<U>> fill = (source, seed,
 			fillLabel, shape, target) -> FloodFill.fill(source, target, seed, fillLabel, shape);
 
-	@OpField(names = "morphology.floodFill", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "fillLabel")
-	@Parameter(key = "shape")
-	@Parameter(key = "filter")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", params = "source, seed, fillLabel, shape, filter, target")
 	public final Computers.Arity5<RandomAccessible<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessible<U>> fillWithPredicate = (
 			source, seed, fillLabel, shape, filter,
 			target) -> FloodFill.fill(source, target, seed, fillLabel, shape, filter);
 
-	@OpField(names = "morphology.floodFill", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "shape")
-	@Parameter(key = "filter")
-	@Parameter(key = "writer")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", params = "source, seed, shape, filter, writer, target")
 	public final Computers.Arity5<RandomAccessible<T>, Localizable, Shape, BiPredicate<T, U>, Consumer<U>, RandomAccessible<U>> fillWithPredicateAndConsumer = (
 			source, seed, shape, filter, writer, target) -> FloodFill.fill(source, target, seed, shape, filter, writer);
 
-	@OpField(names = "morphology.floodFill", params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "shape")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", params = "source, seed, shape, target")
 	public final Computers.Arity3<RandomAccessible<T>, Localizable, Shape, RandomAccessible<T>> fillSimple = (source, seed,
 			shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
@@ -68,12 +47,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 		FloodFill.fill(source, target, seed, fillLabel, shape);
 	};
 
-	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "fillLabel")
-	@Parameter(key = "shape")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "source, seed, fillLabel, shape, target")
 	public final Computers.Arity4<RandomAccessibleInterval<T>, Localizable, U, Shape, RandomAccessibleInterval<U>> fillRAI = (
 			source, seed, fillLabel, shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
@@ -82,13 +56,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 				shape);
 	};
 
-	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "fillLabel")
-	@Parameter(key = "shape")
-	@Parameter(key = "filter")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "source, seed, fillLabel, shape, filter, target")
 	public final Computers.Arity5<RandomAccessibleInterval<T>, Localizable, U, Shape, BiPredicate<T, U>, RandomAccessibleInterval<U>> fillWithPredicateRAI = (
 			source, seed, fillLabel, shape, filter, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();
@@ -97,11 +65,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	};
 
 
-	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "x")
-	@Parameter(key = "source")
-	@Parameter(key = "seed")
-	@Parameter(key = "shape")
-	@Parameter(key = "target", itemIO = ItemIO.BOTH)
+	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "source, seed, shape, target")
 	public final Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> fillSimpleRAI = (
 			source, seed, shape, target) -> {
 		RandomAccess<T> sourceRA = source.randomAccess();

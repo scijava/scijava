@@ -15,19 +15,11 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Converters<I, O extends Type<O>> {
 
-	@OpField(names = "convert", params = "x")
-	@Parameter(key = "inputII")
-	@Parameter(key = "converter")
-	@Parameter(key = "outputType")
-	@Parameter(key = "outputII", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "convert", params = "inputII, converter, outputType, outputII")
 	public final Functions.Arity3<RandomAccessible<I>, Converter<? super I, ? super O>, O, RandomAccessible<O>> generalConverterRA = (
 			inputRA, converter, type) -> net.imglib2.converter.Converters.convert(inputRA, converter, type);
 
-	@OpField(names = "convert", params = "x")
-	@Parameter(key = "inputII")
-	@Parameter(key = "converter")
-	@Parameter(key = "outputType")
-	@Parameter(key = "outputII", itemIO = ItemIO.OUTPUT)
+	@OpField(names = "convert", params = "inputII, converter, outputType, outputII")
 	public final Functions.Arity3<IterableInterval<I>, Converter<? super I, ? super O>, O, IterableInterval<O>> generalConverterII = (
 			inputII, converter, type) -> net.imglib2.converter.Converters.convert(inputII, converter, type);
 

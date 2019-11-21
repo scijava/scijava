@@ -51,16 +51,13 @@ public class NullaryNumericTypeMath <T extends Type<T>, N extends NumericType<N>
 	/**
 	 * Sets the output to a constant.
 	 */
-	@OpField(names = "math.assign", params = "x")
-	@Parameter(key = "constant")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.assign", params = "constant, output")
 	public final Computers.Arity1<T, T> assigner = (constant, output) -> output.set(constant);
 
 	/**
 	 * Sets the output to zero.
 	 */
-	@OpField(names = "math.zero", params = "x")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@OpField(names = "math.zero", params = "output")
 	public final Computers.Arity0<N> zeroer = (output) -> output.setZero();
 
 }

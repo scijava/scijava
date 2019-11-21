@@ -17,7 +17,8 @@ public @interface OpField {
 
 	// the names of the parameters (inputs and outputs) that will appear in a call
 	// to help().
-	String[] params();
+	//TODO: add default names support in OpFieldInfo
+	String[] params() default "";
 
 	double priority() default Priority.NORMAL;
 

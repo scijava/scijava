@@ -29,7 +29,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class TypeExtractorTests extends AbstractOpTest {
 
-	@OpField(names = "test.oobcvfTypeExtractor")
+	@OpField(names = "test.oobcvfTypeExtractor", params = "x")
 	@Parameter(key = "oobf")
 	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func = (
@@ -47,7 +47,7 @@ public class TypeExtractorTests extends AbstractOpTest {
 	}
 
 	// Test Op returns a string different from the one above
-	@OpField(names = "test.oobrvfTypeExtractor")
+	@OpField(names = "test.oobrvfTypeExtractor", params = "x")
 	@Parameter(key = "oobf")
 	@Parameter(key = "input")
 	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)

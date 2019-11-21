@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
 public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>> {
 
 	/** Performs logical and ({@literal &&}) between two {@link BooleanType}s. */
-	@OpField(names = "logic.and")
+	@OpField(names = "logic.and", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
@@ -57,32 +57,32 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		out.and(in2);
 	};
 
-	@OpField(names = "logic.greaterThan")
+	@OpField(names = "logic.greaterThan", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<C, C, B> greaterThan = (in1, in2, out) -> out.set(in1.compareTo(in2) > 0);
 
-	@OpField(names = "logic.greaterThanOrEqual")
+	@OpField(names = "logic.greaterThanOrEqual", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<C, C, B> greaterThanOrEqual = (in1, in2, out) -> out.set(in1.compareTo(in2) >= 0);
 
-	@OpField(names = "logic.lessThan")
+	@OpField(names = "logic.lessThan", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<C, C, B> lessThan = (in1, in2, out) -> out.set(in1.compareTo(in2) < 0);
 
 
-	@OpField(names = "logic.lessThanOrEqual")
+	@OpField(names = "logic.lessThanOrEqual", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<C, C, B> lessThanOrEqual = (in1, in2, out) -> out.set(in1.compareTo(in2) <= 0);
 
-	@OpField(names = "logic.not")
+	@OpField(names = "logic.not", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<B, B> not = (in, out) -> {
@@ -90,19 +90,19 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		out.not();
 	};
 
-	@OpField(names = "logic.equal")
+	@OpField(names = "logic.equal", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<C, C, B> equals = (in1, in2, out) -> out.set(in1.equals(in2));
 
-	@OpField(names = "logic.notEqual")
+	@OpField(names = "logic.notEqual", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<C, C, B> notEquals = (in1, in2, out) -> out.set(!in1.equals(in2));
 
-	@OpField(names = "logic.or")
+	@OpField(names = "logic.or", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
@@ -111,7 +111,7 @@ public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>>
 		out.or(in2);
 	};
 
-	@OpField(names = "logic.xor")
+	@OpField(names = "logic.xor", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)

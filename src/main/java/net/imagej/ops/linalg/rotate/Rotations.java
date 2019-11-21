@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Rotations {
 
-	@OpField(names = "linalg.rotate")
+	@OpField(names = "linalg.rotate", params = "x")
 	@Parameter(key = "inVector")
 	@Parameter(key = "quaternion")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
@@ -61,14 +61,14 @@ public class Rotations {
 		vDot.rotate(q);
 	};
 
-	@OpField(names = "linalg.rotate")
+	@OpField(names = "linalg.rotate", params = "x")
 	@Parameter(key = "inVector")
 	@Parameter(key = "axisAngle")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
 	public final Computers.Arity2<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle = (v, aa, vDot) -> rotate3d.compute(v,
 			new Quaterniond(aa), vDot);
 
-	@OpField(names = "linalg.rotate")
+	@OpField(names = "linalg.rotate", params = "x")
 	@Parameter(key = "inVector")
 	@Parameter(key = "quaternion")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)
@@ -77,7 +77,7 @@ public class Rotations {
 		vDot.rotate(q);
 	};
 	
-	@OpField(names = "linalg.rotate")
+	@OpField(names = "linalg.rotate", params = "x")
 	@Parameter(key = "inVector")
 	@Parameter(key = "axisAngle")
 	@Parameter(key = "vDot", itemIO = ItemIO.BOTH)

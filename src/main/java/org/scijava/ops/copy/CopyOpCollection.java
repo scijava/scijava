@@ -11,7 +11,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class CopyOpCollection {
 
-	@OpField(names = "cp, copy", priority = Priority.LOW)
+	@OpField(names = "cp, copy", priority = Priority.LOW, params = "x")
 	@Parameter(key = "array")
 	@Parameter(key = "arrayCopy", itemIO = ItemIO.BOTH)
 	public static final Computers.Arity1<double[], double[]> copyPrimitiveDoubleArray = (from, to) -> {
@@ -20,7 +20,7 @@ public class CopyOpCollection {
 		}
 	};
 	
-	@OpField(names = "cp, copy", priority = Priority.LOW)
+	@OpField(names = "cp, copy", priority = Priority.LOW, params = "x")
 	@Parameter(key = "array")
 	@Parameter(key = "arrayCopy", itemIO = ItemIO.BOTH)
 	public static final Computers.Arity1<Double[], Double[]> copyDoubleArray = (from, to) -> {

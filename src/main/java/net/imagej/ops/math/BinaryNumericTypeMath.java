@@ -55,7 +55,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * Sets the real component of an output real number to the addition of the
 	 * real components of two input real numbers.
 	 */
-	@OpField(names = "math.add", priority = Priority.HIGH)
+	@OpField(names = "math.add", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "sum", itemIO = ItemIO.BOTH)
@@ -68,7 +68,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * Sets the real component of an output real number to the division of the
 	 * real component of two input real numbers.
 	 */
-	@OpField(names = "math.divide", priority = Priority.HIGH)
+	@OpField(names = "math.divide", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "divideByZeroValue")
@@ -86,7 +86,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * Sets the real component of an output real number to the multiplication of
 	 * the real component of two input real numbers.
 	 */
-	@OpField(names = "math.multiply", priority = Priority.HIGH)
+	@OpField(names = "math.multiply", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
@@ -99,7 +99,7 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	 * Sets the real component of an output real number to the subtraction between
 	 * the real component of two input real numbers.
 	 */
-	@OpField(names = "math.subtract", priority = Priority.HIGH)
+	@OpField(names = "math.subtract", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)

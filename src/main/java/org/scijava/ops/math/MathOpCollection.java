@@ -13,23 +13,23 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class MathOpCollection {
 
-	@OpField(names = MathOps.ADD, priority = Priority.LOW)
+	@OpField(names = MathOps.ADD, priority = Priority.LOW, params = "x")
 	public static final BiFunction<Number, Number, Double> addDoublesFunction = (x, y) -> x.doubleValue() + y.doubleValue();
 
-	@OpField(names = MathOps.ADD, priority = Priority.EXTREMELY_HIGH)
+	@OpField(names = MathOps.ADD, priority = Priority.EXTREMELY_HIGH, params = "x")
 	public static final BinaryOperator<Double> addDoublesOperator = (x, y) -> x + y;
 
-	@OpField(names = MathOps.SUB)
+	@OpField(names = MathOps.SUB, params = "x")
 	public static final BiFunction<Number, Number, Double> subDoublesFunction = (t, u) -> t.doubleValue() - u.doubleValue();
 
-	@OpField(names = MathOps.MUL)
+	@OpField(names = MathOps.MUL, params = "x")
 	public static final BiFunction<Number, Number, Double> mulDoublesFunction = (t, u) -> t.doubleValue() * u.doubleValue();
 
-	@OpField(names = MathOps.DIV)
+	@OpField(names = MathOps.DIV, params = "x")
 	public static final BiFunction<Number, Number, Double> divDoublesFunction = (t, u) -> t.doubleValue() / u.doubleValue();
 	
 	
-	@OpField(names = MathOps.MOD)
+	@OpField(names = MathOps.MOD, params = "x")
 	public static final BiFunction<Number, Number, Double> remainderDoublesFunction = (t, u) -> t.doubleValue() % u.doubleValue();
 
 }

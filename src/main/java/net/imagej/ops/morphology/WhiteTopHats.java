@@ -26,21 +26,21 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class WhiteTopHats<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity3<Img<R>, List<Shape>, Integer, Img<R>> topHatImgList = TopHat::topHat;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> topHatImgSingle = TopHat::topHat;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "minValue")
@@ -49,7 +49,7 @@ public class WhiteTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity5<Img<T>, List<Shape>, T, T, Integer, Img<T>> topHatImgListMinMax = TopHat::topHat;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "minValue")
@@ -58,14 +58,14 @@ public class WhiteTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity5<Img<T>, Shape, T, T, Integer, Img<T>> topHatImgSingleMinMax = TopHat::topHat;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> topHatImgListComputer = (in1, in2, in3, out) -> TopHat.topHat(in1, out, in2, in3);
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
@@ -74,14 +74,14 @@ public class WhiteTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity5<RandomAccessible<T>, List<Shape>, T, T, Integer, IterableInterval<T>> topHatImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> TopHat.topHat(in1, out, in2, in3, in4, in5);
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> topHatImgComputer = (in1, in2, in3, out) -> TopHat.topHat(in1, out, in2, in3);
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")
@@ -90,14 +90,14 @@ public class WhiteTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> topHatImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> TopHat.topHat(in1, out, in2, in3, in4, in5);
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> topHatImgListInPlace = TopHat::topHatInPlace;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
@@ -106,14 +106,14 @@ public class WhiteTopHats<T extends RealType<T> & Comparable<T>, R extends RealT
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, List<Shape>, T, T, Integer> topHatImgListMinMaxInplace = TopHat::topHatInPlace;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> topHatImgSingleInPlace = TopHat::topHatInPlace;
 
-	@OpField(names = "morphology.topHat")
+	@OpField(names = "morphology.topHat", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")

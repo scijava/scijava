@@ -14,13 +14,13 @@ public class Power {
 
 	public static final String NAMES = MathOps.POW;
 
-	@OpField(names = NAMES)
+	@OpField(names = NAMES, params = "x")
 	@Parameter(key = "number")
 	@Parameter(key = "exponent")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public static final BiFunction<Double, Double, Double> MathPowerDoubleFunction = (base, exp) -> Math.pow(base, exp);
 
-	@OpField(names = NAMES)
+	@OpField(names = NAMES, params = "x")
 	@Parameter(key = "array")
 	@Parameter(key = "power")
 	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)

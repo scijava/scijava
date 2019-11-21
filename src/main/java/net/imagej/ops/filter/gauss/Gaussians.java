@@ -76,7 +76,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @param <T>
 	 *            type of input and output
 	 */
-	@OpField(names = "filter.gauss", priority = Priority.LOW)
+	@OpField(names = "filter.gauss", priority = Priority.LOW, params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
@@ -100,7 +100,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 *            type of input and output
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@OpField(names = "filter.gauss")
+	@OpField(names = "filter.gauss", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
@@ -133,7 +133,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 *            type of input
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@OpField(names = "filter.gauss")
+	@OpField(names = "filter.gauss", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigmas")
@@ -151,7 +151,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @param <T>
 	 *            type of input
 	 */
-	@OpField(names = "filter.gauss")
+	@OpField(names = "filter.gauss", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigma")
@@ -174,7 +174,7 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @param <T>
 	 *            type of input
 	 */
-	@OpField(names = "filter.gauss")
+	@OpField(names = "filter.gauss", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "executorService")
 	@Parameter(key = "sigma")

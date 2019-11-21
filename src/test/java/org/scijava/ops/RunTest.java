@@ -16,7 +16,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	// FUNCTIONS
 
-	@OpField(names = "test.function1")
+	@OpField(names = "test.function1", params = "x")
 	public static final Function<Double, Double> f1 = num1 -> num1 + 1;
 
 	@Test
@@ -25,7 +25,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertEquals(2.0, answer, 0);
 	}
 
-	@OpField(names = "test.function2")
+	@OpField(names = "test.function2", params = "x")
 	public static final BiFunction<Double, Double, Double> f2 = //
 		(num1, num2) -> num1 + num2;
 
@@ -35,7 +35,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertEquals(2.0, answer, 0);
 	}
 
-	@OpField(names = "test.function3")
+	@OpField(names = "test.function3", params = "x")
 	public static final Functions.Arity3<Double, Double, Double, Double> f3 = //
 		(num1, num2, num3) -> num1 + num2 + num3;
 
@@ -47,7 +47,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	// COMPUTERS
 
-	@OpField(names = "test.computer1")
+	@OpField(names = "test.computer1", params = "x")
 	public static final Computers.Arity1<double[], double[]> c1 = (arr1, out) -> {
 		for (int i = 0; i < arr1.length; i++)
 			out[i] = arr1[i] * 2;
@@ -61,7 +61,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, out, 0);
 	}
 
-	@OpField(names = "test.computer2")
+	@OpField(names = "test.computer2", params = "x")
 	public static final Computers.Arity2<double[], double[], double[]> testComputer2 = (arr1, arr2, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
 			out[i] = arr1[i] + arr2[i];
@@ -77,7 +77,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, out, 0);
 	}
 
-	@OpField(names = "test.computer3")
+	@OpField(names = "test.computer3", params = "x")
 	public static final Computers.Arity3<double[], double[], double[], double[]> testComputer3 = (arr1, arr2, arr3, out) -> {
 		for (int i = 0; i < arr1.length; i++) {
 			out[i] = arr1[i] + arr2[i] + arr3[i];
@@ -96,7 +96,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	// INPLACES
 
-	@OpField(names = "test.inplace1")
+	@OpField(names = "test.inplace1", params = "x")
 	public static final Inplaces.Arity1<double[]> testInplace = io -> {
 		for (int i = 0; i < io.length; i++)
 			io[i] *= 2;
@@ -109,7 +109,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, io, 0);
 	}
 
-	@OpField(names = "test.inplace2_1")
+	@OpField(names = "test.inplace2_1", params = "x")
 	public static final Inplaces.Arity2_1<double[], double[]> testInplace2_1 = (io, in2) -> {
 		for (int i = 0; i < io.length; i++)
 			io[i] += in2[i];
@@ -123,7 +123,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, io, 0);
 	}
 
-	@OpField(names = "test.inplace2_2")
+	@OpField(names = "test.inplace2_2", params = "x")
 	public static final Inplaces.Arity2_2<double[], double[]> testInplace2_2 = (in1, io) -> {
 		for (int i = 0; i < io.length; i++)
 			io[i] *= in1[i];
@@ -137,7 +137,7 @@ public class RunTest extends AbstractTestEnvironment {
 		Assert.assertArrayEquals(new double[] { 1, 4, 9 }, io, 0);
 	}
 
-	@OpField(names = "test.inplace3_1")
+	@OpField(names = "test.inplace3_1", params = "x")
 	public static final Inplaces.Arity3_1<double[], double[], double[]> testInplace3_1 = (io, in2, in3) -> {
 		for (int i = 0; i < io.length; i++) {
 			io[i] += in2[i];

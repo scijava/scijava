@@ -40,132 +40,132 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Table2Ds<B extends BooleanType<B>> {
 
-	@OpField(names = "morphology.branchpoints")
+	@OpField(names = "morphology.branchpoints", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> branchPointsFunc = Branchpoints::branchpoints;
 
-	@OpField(names = "morphology.branchpoints")
+	@OpField(names = "morphology.branchpoints", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> branchPointsComputer = Branchpoints::branchpoints;
 
-	@OpField(names = "morphology.bridge")
+	@OpField(names = "morphology.bridge", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> bridgeFunc = Bridge::bridge;
 
-	@OpField(names = "morphology.bridge")
+	@OpField(names = "morphology.bridge", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> bridgeComputer = Bridge::bridge;
 
-	@OpField(names = "morphology.clean")
+	@OpField(names = "morphology.clean", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> cleanFunc = Clean::clean;
 
-	@OpField(names = "morphology.clean")
+	@OpField(names = "morphology.clean", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> cleanComputer = Clean::clean;
 
-	@OpField(names = "morphology.endpoints")
+	@OpField(names = "morphology.endpoints", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> endpointsFunc = Endpoints::endpoints;
 
-	@OpField(names = "morphology.endpoints")
+	@OpField(names = "morphology.endpoints", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> endpointsComputer = Endpoints::endpoints;
 
-	@OpField(names = "morphology.fill")
+	@OpField(names = "morphology.fill", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> fillFunc = Fill::fill;
 
-	@OpField(names = "morphology.fill")
+	@OpField(names = "morphology.fill", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> fillComputer = Fill::fill;
 
-	@OpField(names = "morphology.hbreak")
+	@OpField(names = "morphology.hbreak", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> hbreakFunc = Hbreak::hbreak;
 
-	@OpField(names = "morphology.hbreak")
+	@OpField(names = "morphology.hbreak", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> hbreakComputer = Hbreak::hbreak;
 
-	@OpField(names = "morphology.life")
+	@OpField(names = "morphology.life", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> lifeFunc = Life::life;
 
-	@OpField(names = "morphology.life")
+	@OpField(names = "morphology.life", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> lifeComputer = Life::life;
 
-	@OpField(names = "morphology.majority")
+	@OpField(names = "morphology.majority", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> majorityFunc = Majority::majority;
 
-	@OpField(names = "morphology.majority")
+	@OpField(names = "morphology.majority", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> majorityComputer = Majority::majority;
 
-	@OpField(names = "morphology.remove")
+	@OpField(names = "morphology.remove", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> removeFunc = Remove::remove;
 
-	@OpField(names = "morphology.remove")
+	@OpField(names = "morphology.remove", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> removeComputer = Remove::remove;
 
-	@OpField(names = "morphology.spur")
+	@OpField(names = "morphology.spur", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> spurFunc = Spur::spur;
 
-	@OpField(names = "morphology.spur")
+	@OpField(names = "morphology.spur", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> spurComputer = Spur::spur;
 
-	@OpField(names = "morphology.thicken")
+	@OpField(names = "morphology.thicken", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> thickenFunc = Thicken::thicken;
 
-	@OpField(names = "morphology.thicken")
+	@OpField(names = "morphology.thicken", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thickenComputer = Thicken::thicken;
 
-	@OpField(names = "morphology.thin")
+	@OpField(names = "morphology.thin", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> thinFunc = Thin::thin;
 
-	@OpField(names = "morphology.thin")
+	@OpField(names = "morphology.thin", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> thinComputer = Thin::thin;
 
-	@OpField(names = "morphology.vbreak")
+	@OpField(names = "morphology.vbreak", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Function<Img<B>, Img<B>> vbreakFunc = Vbreak::vbreak;
 
-	@OpField(names = "morphology.vbreak")
+	@OpField(names = "morphology.vbreak", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<RandomAccessible<B>, IterableInterval<B>> vbreakComputer = Vbreak::vbreak;

@@ -20,12 +20,12 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class OpsAsParametersTest extends AbstractTestEnvironment {
 
-	@OpField(names = "test.parameter.computer")
+	@OpField(names = "test.parameter.computer", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 	public final Function<Number, Double> func = (x) -> x.doubleValue();
 
-	@OpField(names = "test.parameter.op")
+	@OpField(names = "test.parameter.op", params = "x")
 	@Parameter(key = "inputList")
 	@Parameter(key = "op")
 	@Parameter(key = "outputList", itemIO = ItemIO.OUTPUT)

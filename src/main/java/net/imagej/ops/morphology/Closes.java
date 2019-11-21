@@ -26,21 +26,21 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity3<Img<R>, List<Shape>, Integer, Img<R>> closeImgList = Closing::close;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> closeImgSingle = Closing::close;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "minValue")
@@ -49,7 +49,7 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity5<Img<T>, List<Shape>, T, T, Integer, Img<T>> closeImgListMinMax = Closing::close;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "minValue")
@@ -58,14 +58,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity5<Img<T>, Shape, T, T, Integer, Img<T>> closeImgSingleMinMax = Closing::close;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> closeImgListComputer = (in1, in2, in3, out) -> Closing.close(in1, out, in2, in3);
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
@@ -74,14 +74,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity5<RandomAccessible<T>, List<Shape>, T, T, Integer, IterableInterval<T>> closeImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Closing.close(in1, out, in2, in3, in4, in5);
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> closeImgComputer = (in1, in2, in3, out) -> Closing.close(in1, out, in2, in3);
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")
@@ -90,14 +90,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> closeImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Closing.close(in1, out, in2, in3, in4, in5);
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> closeImgListInPlace = Closing::closeInPlace;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
@@ -106,14 +106,14 @@ public class Closes<T extends RealType<T> & Comparable<T>, R extends RealType<R>
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, List<Shape>, T, T, Integer> closeImgListMinMaxInplace = Closing::closeInPlace;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> closeImgSingleInPlace = Closing::closeInPlace;
 
-	@OpField(names = "morphology.close")
+	@OpField(names = "morphology.close", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")

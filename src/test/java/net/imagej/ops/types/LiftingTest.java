@@ -18,7 +18,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class LiftingTest <I extends RealType<I>, O extends RealType<O>> extends AbstractOpTest{
 
-	@OpField(names = "test.liftImg")
+	@OpField(names = "test.liftImg", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "output", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<I, O> testOp = (in, out) -> out.setReal(10.);

@@ -16,7 +16,7 @@ public class Zero {
 
 	// --------- Computers ---------
 
-	@OpField(names = NAMES)
+	@OpField(names = NAMES, params = "x")
 	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
 	public static final Computers.Arity0<double[]> MathParallelPointwiseZeroDoubleArrayComputer = out -> {
 		IntStream.range(0, out.length).parallel().forEach(i -> {

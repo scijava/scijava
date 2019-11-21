@@ -14,12 +14,12 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class CreateOpCollection {
 
-	@OpField(names = "create, src, source", priority = Priority.LOW)
+	@OpField(names = "create, src, source", priority = Priority.LOW, params = "x")
 	@Parameter(key = "array")
 	@Parameter(key = "arrayLike", itemIO = ItemIO.OUTPUT)
 	public static final Function<double[], double[]> createDoubleArrayInputAware = from -> new double[from.length];
 	
-	@OpField(names = "create, src, source", priority = Priority.LOW)
+	@OpField(names = "create, src, source", priority = Priority.LOW, params = "x")
 	@Parameter(key = "array1")
 	@Parameter(key = "array2")
 	@Parameter(key = "arrayLike", itemIO = ItemIO.OUTPUT)

@@ -26,21 +26,21 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity3<Img<R>, List<Shape>, Integer, Img<R>> openImgList = Opening::open;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> openImgSingle = Opening::open;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "minValue")
@@ -49,7 +49,7 @@ public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>>
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity5<Img<T>, List<Shape>, T, T, Integer, Img<T>> openImgListMinMax = Opening::open;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "minValue")
@@ -58,14 +58,14 @@ public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>>
 	@Parameter(key = "result", itemIO = ItemIO.OUTPUT)
 	public final Functions.Arity5<Img<T>, Shape, T, T, Integer, Img<T>> openImgSingleMinMax = Opening::open;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> openImgListComputer = (in1, in2, in3, out) -> Opening.open(in1, out, in2, in3);
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strels")
 	@Parameter(key = "minVal")
@@ -74,14 +74,14 @@ public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>>
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity5<RandomAccessible<T>, List<Shape>, T, T, Integer, IterableInterval<T>> openImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Opening.open(in1, out, in2, in3, in4, in5);
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> openImgComputer = (in1, in2, in3, out) -> Opening.open(in1, out, in2, in3);
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "strel")
 	@Parameter(key = "minVal")
@@ -90,14 +90,14 @@ public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>>
 	@Parameter(key = "target", itemIO = ItemIO.BOTH)
 	public final Computers.Arity5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> openImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Opening.open(in1, out, in2, in3, in4, in5);
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> openImgListInPlace = Opening::openInPlace;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strels")
@@ -106,14 +106,14 @@ public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>>
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, List<Shape>, T, T, Integer> openImgListMinMaxInplace = Opening::openInPlace;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")
 	@Parameter(key = "numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> openImgSingleInPlace = Opening::openInPlace;
 
-	@OpField(names = "morphology.open")
+	@OpField(names = "morphology.open", params = "x")
 	@Parameter(key = "source", itemIO = ItemIO.BOTH)
 	@Parameter(key = "interval")
 	@Parameter(key = "strel")

@@ -22,7 +22,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 
-	@OpField(names = "image.invert")
+	@OpField(names = "image.invert", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "min")
 	@Parameter(key = "max")
@@ -56,7 +56,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 		}
 	};
 
-	@OpField(names = "image.invert")
+	@OpField(names = "image.invert", params = "x")
 	@Parameter(key = "input")
 	@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
 	public final Computers.Arity1<IterableInterval<T>, IterableInterval<T>> simpleInvert = (input, output) -> delegatorInvert

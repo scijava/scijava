@@ -25,7 +25,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = OpCollection.class)
 public class FloodFills<T extends Type<T>, U extends Type<U>> {
 
-	@OpField(names = "morphology.floodFill")
+	@OpField(names = "morphology.floodFill", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "fillLabel")
@@ -34,7 +34,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	public final Computers.Arity4<RandomAccessible<T>, Localizable, U, Shape, RandomAccessible<U>> fill = (source, seed,
 			fillLabel, shape, target) -> FloodFill.fill(source, target, seed, fillLabel, shape);
 
-	@OpField(names = "morphology.floodFill")
+	@OpField(names = "morphology.floodFill", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "fillLabel")
@@ -45,7 +45,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 			source, seed, fillLabel, shape, filter,
 			target) -> FloodFill.fill(source, target, seed, fillLabel, shape, filter);
 
-	@OpField(names = "morphology.floodFill")
+	@OpField(names = "morphology.floodFill", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")
@@ -55,7 +55,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	public final Computers.Arity5<RandomAccessible<T>, Localizable, Shape, BiPredicate<T, U>, Consumer<U>, RandomAccessible<U>> fillWithPredicateAndConsumer = (
 			source, seed, shape, filter, writer, target) -> FloodFill.fill(source, target, seed, shape, filter, writer);
 
-	@OpField(names = "morphology.floodFill")
+	@OpField(names = "morphology.floodFill", params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")
@@ -68,7 +68,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 		FloodFill.fill(source, target, seed, fillLabel, shape);
 	};
 
-	@OpField(names = "morphology.floodFill", priority = Priority.HIGH)
+	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "fillLabel")
@@ -82,7 +82,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 				shape);
 	};
 
-	@OpField(names = "morphology.floodFill", priority = Priority.HIGH)
+	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "fillLabel")
@@ -97,7 +97,7 @@ public class FloodFills<T extends Type<T>, U extends Type<U>> {
 	};
 
 
-	@OpField(names = "morphology.floodFill", priority = Priority.HIGH)
+	@OpField(names = "morphology.floodFill", priority = Priority.HIGH, params = "x")
 	@Parameter(key = "source")
 	@Parameter(key = "seed")
 	@Parameter(key = "shape")

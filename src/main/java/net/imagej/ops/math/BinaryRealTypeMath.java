@@ -53,7 +53,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the addition of the
 	 * real components of two input real numbers.
 	 */
-	@OpField(names = "math.add")
+	@OpField(names = "math.add", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "sum", itemIO = ItemIO.BOTH)
@@ -64,7 +64,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the logical AND of the
 	 * real component of two input real numbers.
 	 */
-	@OpField(names = "math.and")
+	@OpField(names = "math.and", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
@@ -76,7 +76,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the division of the
 	 * real component of two input real numbers.
 	 */
-	@OpField(names = "math.divide")
+	@OpField(names = "math.divide", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "divideByZeroValue")
@@ -94,7 +94,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the multiplication of
 	 * the real component of two input real numbers.
 	 */
-	@OpField(names = "math.multiply")
+	@OpField(names = "math.multiply", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
@@ -105,7 +105,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the logical OR of the
 	 * real component of two input real numbers.
 	 */
-	@OpField(names = "math.or")
+	@OpField(names = "math.or", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
@@ -117,7 +117,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the subtraction between
 	 * the real component of two input real numbers.
 	 */
-	@OpField(names = "math.subtract")
+	@OpField(names = "math.subtract", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)
@@ -128,7 +128,7 @@ public class BinaryRealTypeMath <I1 extends RealType<I1>, I2 extends RealType<I2
 	 * Sets the real component of an output real number to the logical XOR of the
 	 * real component of two input real numbers.
 	 */
-	@OpField(names = "math.xor")
+	@OpField(names = "math.xor", params = "x")
 	@Parameter(key = "input1")
 	@Parameter(key = "input2")
 	@Parameter(key = "result", itemIO = ItemIO.BOTH)

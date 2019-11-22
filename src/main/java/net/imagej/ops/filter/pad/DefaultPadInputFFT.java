@@ -66,7 +66,7 @@ public class DefaultPadInputFFT<T extends ComplexType<T>, I extends RandomAccess
 
 	@Override
 	protected Function<Dimensions, long[][]> getFFTSizeOp(boolean fast) {
-		return Adapt.Functions.asFunction(fftSizeOp, fast);
+		return Adapt.FunctionAdapt.asFunction(fftSizeOp, fast);
 	}
 
 }

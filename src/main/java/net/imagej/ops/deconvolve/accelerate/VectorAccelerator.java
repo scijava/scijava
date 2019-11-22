@@ -88,7 +88,7 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	public void mutate(RandomAccessibleInterval<T> yk_iterated) {
 		T type = Util.getTypeFromInterval(yk_iterated);
 		factory = new ArrayImgFactory<>(type);
-		createReduced = Adapt.Functions.asFunction(create, type, factory);
+		createReduced = Adapt.FunctionAdapt.asFunction(create, type, factory);
 		accelerate(yk_iterated);
 	}
 

@@ -43,7 +43,6 @@ import net.imglib2.view.Views;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -84,6 +83,7 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 	private Function<T, RandomAccessibleInterval<T>> sobelKernelCreator;
 
 	// TODO: is there any way to speed this up?
+	@SuppressWarnings("unchecked")
 	public void setupConvolves(RandomAccessibleInterval<T> input, Integer dimension) {
 		RandomAccessibleInterval<T> kernel = sobelKernelCreator.apply(Util.getTypeFromInterval(input));
 
@@ -140,7 +140,7 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 		dims = null;
 
 		// rotate kernel A to all other dimensions
-		kernelAConvolveOps = new Computer[input.numDimensions()];
+		kernelAConvolveOps = new Computers.Arity1[input.numDimensions()];
 		if (dimension != 0) {
 			// HACK needs to be final so that the compiler can encapsulate it.
 			final RandomAccessibleInterval<T> finalKernelA = kernelA;

@@ -39,9 +39,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.core.computer.GenericComputers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.function.Computers;
 
 public class ProjectTest extends AbstractOpTest {
 
@@ -51,7 +49,6 @@ public class ProjectTest extends AbstractOpTest {
 	private Img<UnsignedByteType> out1;
 	private Img<UnsignedByteType> out2;
 	private Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType> op;
-	private Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType> genericOp;
 
 	@Before
 	public void initImg() {
@@ -74,8 +71,6 @@ public class ProjectTest extends AbstractOpTest {
 
 		op = Computers.match(ops, "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
 				new Nil<UnsignedByteType>() {});
-		genericOp = GenericComputers.Computers.generic(op,
-				new Nil<Computers.Arity1<Iterable<UnsignedByteType>, UnsignedByteType>>() {}.getType());
 	}
 
 	@Test
@@ -85,8 +80,8 @@ public class ProjectTest extends AbstractOpTest {
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		ops.run("project", in, genericOp, PROJECTION_DIM, out1);
-		ops.run("project", in, genericOp, PROJECTION_DIM, out2);
+		ops.run("project", in, op, PROJECTION_DIM, out1);
+		ops.run("project", in, op, PROJECTION_DIM, out2);
 		testEquality(out1, out2);
 	}
 

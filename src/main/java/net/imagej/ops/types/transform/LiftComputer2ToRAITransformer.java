@@ -35,7 +35,7 @@ public class LiftComputer2ToRAITransformer<I1, I2, O> implements
 	public Computers.Arity2<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<O>> transformTypesafe(final OpService opService, final Computers.Arity2<I1, I2, O> src,
 		final OpRef targetRef)
 	{
-		return Maps.Computers.RAIs.liftBoth(src);
+		return Maps.ComputerMaps.RAIs.liftBoth(src);
 	}
 
 	@Override

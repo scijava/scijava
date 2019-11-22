@@ -65,7 +65,7 @@ public class InterpolateViewTest extends AbstractTestEnvironment {
 	public void defaultInterpolateTest() {
 
 		BiFunction<RandomAccessible<DoubleType>, FloorInterpolatorFactory<DoubleType>, RealRandomAccessible<DoubleType>> interpolateFunc = Functions
-				.binary(ops, "transform.interpolateView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops, "transform.interpolateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<FloorInterpolatorFactory<DoubleType>>() {
 				}, new Nil<RealRandomAccessible<DoubleType>>() {
 				});

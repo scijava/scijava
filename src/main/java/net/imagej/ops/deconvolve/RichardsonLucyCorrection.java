@@ -47,7 +47,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -98,7 +97,6 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 			Double val1 = ioCursor.next().getRealDouble();
 			inRA.setPosition(ioCursor);
 			Double val2 = inRA.get().getRealDouble();
-			if(val2 != 0) System.out.println(val2);
 			if(val1 == 0) ioCursor.next().setReal(in3);
 			else ioCursor.next().setReal(val2 / val1);
 		}

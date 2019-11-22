@@ -63,7 +63,7 @@ public class ExtendBorderViewTest extends AbstractTestEnvironment {
 	@Test
 	public void extendBorderTest() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = Functions
-				.unary(ops, "transform.extendBorderView", raiNil,
+				.match(ops, "transform.extendBorderView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

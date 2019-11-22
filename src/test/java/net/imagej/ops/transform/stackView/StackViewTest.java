@@ -82,7 +82,7 @@ public class StackViewTest extends AbstractTestEnvironment {
 	public void stackWithAccessModeTest() {
 
 		BiFunction<StackAccessMode, List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc = Functions
-				.binary(ops, "transform.stackView", new Nil<StackAccessMode>() {
+				.match(ops, "transform.stackView", new Nil<StackAccessMode>() {
 				}, new Nil<List<Img<DoubleType>>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

@@ -63,7 +63,7 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 	public void compute(final IterableInterval<T> input, final IterableInterval<T> output) {
 		if (!input.iterationOrder().equals(output.iterationOrder()))
 			throw new IllegalArgumentException("input and output must be of the same dimensions!");
-		Computers.Arity1<Iterable<T>, Iterable<T>> mapped = Maps.Computers.Iterables.liftBoth(copyOp);
+		Computers.Arity1<Iterable<T>, Iterable<T>> mapped = Maps.ComputerMaps.Iterables.liftBoth(copyOp);
 		mapped.compute(input, output);
 	}
 }

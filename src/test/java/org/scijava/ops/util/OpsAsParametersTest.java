@@ -76,7 +76,9 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 
 }
 
-@Plugin(type = Op.class, name = "test.parameter.class, input, output")
+@Plugin(type = Op.class, name = "test.parameter.class")
+@Parameter(key = "input")
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class FuncClass implements Function<Number, Double> {
 
 	@Override

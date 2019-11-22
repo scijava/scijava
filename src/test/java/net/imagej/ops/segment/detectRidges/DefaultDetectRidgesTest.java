@@ -35,7 +35,6 @@ import java.util.List;
 
 import net.imagej.ops.AbstractOpTest;
 import net.imagej.ops.OpMatchingService;
-import net.imagej.ops.OpService;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.roi.geom.real.DefaultWritablePolyline;
@@ -46,6 +45,7 @@ import org.junit.Test;
 import org.scijava.Context;
 import org.scijava.app.StatusService;
 import org.scijava.cache.CacheService;
+import org.scijava.ops.OpService;
 import org.scijava.ui.UIService;
 
 /**

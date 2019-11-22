@@ -65,7 +65,7 @@ public class ExtendViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultExtendTest() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, OutOfBoundsFactory<DoubleType, ? super RandomAccessibleInterval<DoubleType>>, RandomAccessible<DoubleType>> extendFunc = Functions
-				.binary(ops, "transform.extendView", raiNil,
+				.match(ops, "transform.extendView", raiNil,
 						new Nil<OutOfBoundsFactory<DoubleType, ? super RandomAccessibleInterval<DoubleType>>>() {
 				},
 						new Nil<RandomAccessible<DoubleType>>() {

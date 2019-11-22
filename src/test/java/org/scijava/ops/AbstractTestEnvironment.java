@@ -3,7 +3,7 @@ package org.scijava.ops;
 import java.util.Arrays;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.scijava.Context;
 
 public abstract class AbstractTestEnvironment {
@@ -11,10 +11,20 @@ public abstract class AbstractTestEnvironment {
 	protected static Context context;
 	protected static OpService ops;
 
-	@BeforeClass
-	public static void setUp() {
-		context = new Context(OpService.class);
-		ops = context.service(OpService.class);
+	@Before
+	public void setUp() {
+		if(context == null) setUpSafe();
+	}
+	
+	private synchronized void setUpSafe() {
+		if(context != null) return; 
+		Context ctx = createContext();
+		ops = ctx.service(OpService.class);
+		context = ctx;
+	}
+	
+	protected Context createContext() {
+		return new Context(OpService.class);
 	}
 
 	@AfterClass

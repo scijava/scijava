@@ -49,9 +49,9 @@ public class ConditionalTest extends AbstractOpTest {
 		final ByteType ifTrueVal = new ByteType((byte) 10);
 		final ByteType ifFalseVal = new ByteType((byte) 100);
 		final ByteType outVal = new ByteType();
-		ops.run("logic.ternary", new BoolType(true), ifTrueVal, ifFalseVal, outVal);
+		ops.run("logic.match", new BoolType(true), ifTrueVal, ifFalseVal, outVal);
 		assertEquals(10, outVal.get());
-		ops.run("logic.ternary", new BoolType(false), ifTrueVal, ifFalseVal, outVal);
+		ops.run("logic.match", new BoolType(false), ifTrueVal, ifFalseVal, outVal);
 		assertEquals(100, outVal.get());
 	}
 

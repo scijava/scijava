@@ -65,7 +65,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 	public void defaultOffsetTest() {
 
 		BiFunction<RandomAccessible<DoubleType>, long[], MixedTransformView<DoubleType>> offsetFunc = Functions
-				.binary(ops, "transform.offsetView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops, "transform.offsetView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
 				});
@@ -87,7 +87,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 	public void defaultOffsetIntervalTest() {
 
 		BiFunction<RandomAccessibleInterval<DoubleType>, Interval, IntervalView<DoubleType>> offsetFunc = Functions
-				.binary(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
@@ -109,7 +109,7 @@ public class OffsetViewTest extends AbstractTestEnvironment {
 	public void defaultOffsetStartEndTest() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc = Functions
-				.ternary(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops, "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

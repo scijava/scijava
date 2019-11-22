@@ -29,6 +29,8 @@
 
 package org.scijava.ops;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.function.BiFunction;
 
 import org.junit.Test;
@@ -61,7 +63,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };
 		double[] result = computerAsFunction.apply(a1, a2);
-		assert arrayEquals(result, 5.0, 9.0, 16.0);
+		assertTrue(arrayEquals(result, 5.0, 9.0, 16.0));
 	}
 
 	@Test

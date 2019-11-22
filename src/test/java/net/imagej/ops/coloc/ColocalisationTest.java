@@ -38,8 +38,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import net.imagej.ops.AbstractOpTest;
-import net.imagej.ops.OpMatchingService;
-import net.imagej.ops.OpService;
 import net.imglib2.Interval;
 import net.imglib2.Localizable;
 import net.imglib2.Point;
@@ -60,6 +58,7 @@ import org.junit.Before;
 import org.scijava.Context;
 import org.scijava.app.StatusService;
 import org.scijava.cache.CacheService;
+import org.scijava.ops.OpService;
 import org.scijava.thread.ThreadService;
 
 /** Abstract base class for coloc op unit tests. */
@@ -67,7 +66,7 @@ public abstract class ColocalisationTest extends AbstractOpTest {
 
 	@Override
 	protected Context createContext() {
-		return new Context(OpService.class, OpMatchingService.class,
+		return new Context(OpService.class,
 			CacheService.class, StatusService.class, SCIFIOService.class, FormatService.class, ThreadService.class);
 	}
 

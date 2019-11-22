@@ -67,7 +67,7 @@ public class IntervalViewTest extends AbstractTestEnvironment {
 	public void defaultIntervalTest() {
 
 		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc = Functions
-				.binary(ops, "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops, "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
@@ -94,7 +94,7 @@ public class IntervalViewTest extends AbstractTestEnvironment {
 	public void intervalMinMaxTest() {
 
 		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = Functions
-				.ternary(ops, "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops, "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

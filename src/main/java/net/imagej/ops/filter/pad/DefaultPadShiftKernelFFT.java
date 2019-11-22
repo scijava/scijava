@@ -65,7 +65,7 @@ public class DefaultPadShiftKernelFFT<T extends ComplexType<T>, I extends Random
 
 	@Override
 	protected Function<Dimensions, long[][]> getFFTSizeOp() {
-		return Adapt.Functions.asFunction(fftSizeOp, true);
+		return Adapt.FunctionAdapt.asFunction(fftSizeOp, true);
 	}
 
 

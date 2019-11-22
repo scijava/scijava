@@ -42,9 +42,8 @@ import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
-import org.scijava.ops.core.function.GenericFunctions;
-import org.scijava.ops.types.Nil;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -105,10 +104,8 @@ public class LiICQTest extends ColocalisationTest {
 				0x98765432);
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops, "coloc.icq",
 				new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> genericOp = GenericFunctions.Functions.generic(op,
-				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, genericOp, es, value);
+		ops.run("coloc.pValue", ch1, ch2, op, es, value);
 		assertEquals(0.72, value.getPValue(), 0.0);
 	}
 

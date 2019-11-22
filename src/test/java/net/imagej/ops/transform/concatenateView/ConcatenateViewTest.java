@@ -109,7 +109,7 @@ public class ConcatenateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void defaultConcatenateTest() {
 		BiFunction<Integer, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = Functions
-				.binary(ops, "transform.concatenateView", new Nil<Integer>() {
+				.match(ops, "transform.concatenateView", new Nil<Integer>() {
 				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {
 				}, new Nil<RandomAccessibleInterval<ByteType>>() {
 				});
@@ -124,7 +124,7 @@ public class ConcatenateViewTest extends AbstractTestEnvironment {
 	@Test
 	public void concatenateWithAccessModeTest() {
 		Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = Functions
-				.ternary(ops, "transform.concatenateView", new Nil<Integer>() {
+				.match(ops, "transform.concatenateView", new Nil<Integer>() {
 				}, new Nil<StackAccessMode>() {
 				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {
 				}, new Nil<RandomAccessibleInterval<ByteType>>() {

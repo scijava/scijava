@@ -63,7 +63,7 @@ public class ExtendValueViewTest extends AbstractTestEnvironment {
 	@Test
 	public void extendValueTest() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessible<DoubleType>> extendFunc = Functions
-				.binary(ops, "transform.extendValueView", raiNil, new Nil<DoubleType>() {
+				.match(ops, "transform.extendValueView", raiNil, new Nil<DoubleType>() {
 				}, new Nil<RandomAccessible<DoubleType>>() {
 				});
 

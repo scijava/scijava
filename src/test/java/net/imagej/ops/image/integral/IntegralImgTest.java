@@ -79,7 +79,7 @@ public class IntegralImgTest extends AbstractOpTest {
 	public void testIntegralImageSimilarity() {
 		// should match DefaultIntegralImg
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = Computers
-				.unary(ops, "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
+				.match(ops, "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
 		defaultOp.compute(in, out1);

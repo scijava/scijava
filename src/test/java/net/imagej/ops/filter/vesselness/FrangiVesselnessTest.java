@@ -33,7 +33,6 @@ import static org.junit.Assert.assertEquals;
 
 import net.imagej.ops.AbstractOpTest;
 import net.imagej.ops.OpMatchingService;
-import net.imagej.ops.OpService;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
@@ -45,6 +44,7 @@ import net.imglib2.view.Views;
 import org.junit.Test;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
+import org.scijava.ops.OpService;
 import org.scijava.script.ScriptService;
 
 /**

@@ -67,7 +67,7 @@ public class PadShiftKernelFFTMethods<T extends ComplexType<T>, I extends Random
 
 	@Override
 	protected Function<Dimensions, long[][]> getFFTSizeOp(){
-		return Adapt.Functions.asFunction(fftSizeOp, true, true);
+		return Adapt.FunctionAdapt.asFunction(fftSizeOp, true, true);
 	}
 
 }

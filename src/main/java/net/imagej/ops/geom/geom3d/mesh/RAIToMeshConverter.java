@@ -30,19 +30,20 @@
 package net.imagej.ops.geom.geom3d.mesh;
 
 import java.lang.reflect.Type;
+import java.util.function.Function;
 
 import net.imagej.mesh.Mesh;
-import net.imagej.ops.OpService;
-import net.imagej.ops.Ops;
-import net.imagej.ops.special.function.Functions;
-import net.imagej.ops.special.function.UnaryFunctionOp;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.type.BooleanType;
 
 import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
 import org.scijava.convert.Converter;
+import org.scijava.ops.OpService;
+import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -53,25 +54,24 @@ import org.scijava.plugin.Plugin;
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = Converter.class, priority = Priority.VERY_HIGH)
-public class RAIToMeshConverter extends
-	AbstractConverter<RandomAccessibleInterval, Mesh>
+public class RAIToMeshConverter <B extends BooleanType<B>> extends
+	AbstractConverter<RandomAccessibleInterval<B>, Mesh>
 {
 
 	@Parameter(required = false)
 	private OpService ops;
 
-	private UnaryFunctionOp<RandomAccessibleInterval, Mesh> marchingCubesFunc;
+	private Function<RandomAccessibleInterval<B>, Mesh> marchingCubesFunc;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T convert(Object src, Class<T> dest) {
 		if (marchingCubesFunc == null) {
-			marchingCubesFunc = Functions.match(ops,
-				Ops.Geometric.MarchingCubes.class, Mesh.class,
-				(RandomAccessibleInterval) src);
+			marchingCubesFunc = Functions.match(ops, "geom.marchingCubes", new Nil<RandomAccessibleInterval<B>>() {},
+					new Nil<Mesh>() {});
 		}
 		if (src instanceof IterableInterval<?>) {
-			return (T) marchingCubesFunc.calculate((RandomAccessibleInterval) src);
+			return (T) marchingCubesFunc.apply((RandomAccessibleInterval) src);
 		}
 		return null;
 	}
@@ -81,9 +81,10 @@ public class RAIToMeshConverter extends
 		return Mesh.class;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Class<RandomAccessibleInterval> getInputType() {
-		return RandomAccessibleInterval.class;
+	public Class<RandomAccessibleInterval<B>> getInputType() {
+		return (Class) RandomAccessibleInterval.class;
 	}
 
 	@Override

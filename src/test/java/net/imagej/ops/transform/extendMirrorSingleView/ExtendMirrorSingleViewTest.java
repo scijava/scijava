@@ -63,7 +63,7 @@ public class ExtendMirrorSingleViewTest extends AbstractTestEnvironment {
 	@Test
 	public void extendMirrorSingleTest() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = Functions
-				.unary(ops, "transform.extendMirrorSingleView", raiNil,
+				.match(ops, "transform.extendMirrorSingleView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

@@ -66,7 +66,7 @@ public class ShearViewTest extends AbstractTestEnvironment {
 	public void defaultShearTest() {
 
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> shearFunc = Functions
-				.ternary(ops, "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops, "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<TransformView<DoubleType>>() {
@@ -97,7 +97,7 @@ public class ShearViewTest extends AbstractTestEnvironment {
 	public void ShearIntervalTest() {
 
 		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> shearFunc = Functions
-				.quaternary(ops, "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops, "transform.shearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {

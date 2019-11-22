@@ -16,9 +16,7 @@ import org.junit.Test;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.types.TypeExtractor;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Tests various {@link TypeExtractor}s.
@@ -46,4 +44,12 @@ public class TypeExtractorTests extends AbstractOpTest {
 
 	// Test Op returns a string different from the one above
 	@OpField(names = "test.oobrvfTypeExtractor", params = "oobf, input, output")
-	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = ( oobf, rai) -> "oobrvf"; @Test public void testOutOfBoundsRandomValueFactoryTypeExtractors() { OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsRandomValueFactory<>( new UnsignedByteType(7), 7, 7); Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 }); String output = (String) ops.run("test.oobrvfTypeExtractor", oobf, img); // make sure that output matches the return from the Op above, specific to the // type of OOBF we passed through. assert output.equals("oobrvf"); } }
+	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = ( oobf, rai) -> "oobrvf"; 
+	
+	@Test public void testOutOfBoundsRandomValueFactoryTypeExtractors() { 
+		OutOfBoundsFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>> oobf = new OutOfBoundsRandomValueFactory<>( 
+				new UnsignedByteType(7), 7, 7);
+		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(new long[] { 10, 10 }); 
+		String output = (String) ops.run("test.oobrvfTypeExtractor", oobf, img); // make sure that output matches the return from the Op above, specific to the // type of OOBF we passed through. 
+		assert output.equals("oobrvf"); } 
+	}

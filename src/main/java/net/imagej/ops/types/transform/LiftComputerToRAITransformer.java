@@ -22,25 +22,25 @@ public class LiftComputerToRAITransformer<I, O> implements
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Class<Computers.Arity1<I, O>> srcClass() {
-		return (Class) Computer.class;
+		return (Class) Computers.Arity1.class;
 	}
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Class<Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>> targetClass() {
-		return (Class) Computer.class;
+		return (Class) Computers.Arity1.class;
 	}
 
 	@Override
 	public Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> transformTypesafe(final OpService opService, final Computers.Arity1<I, O> src,
 		final OpRef targetRef)
 	{
-		return Maps.Computers.RAIs.liftBoth(src);
+		return Maps.ComputerMaps.RAIs.liftBoth(src);
 	}
 
 	@Override
 	public OpRef getRefTransformingTo(final OpRef targetRef) {
-		return OpRefTransformUtils.unliftTransform(targetRef, Computer.class, RandomAccessibleInterval.class, new Integer[] {0, 1},
+		return OpRefTransformUtils.unliftTransform(targetRef, Computers.Arity1.class, RandomAccessibleInterval.class, new Integer[] {0, 1},
 			new Integer[] { 0, 1 }, new Integer[] { 0 });
 	}
 }

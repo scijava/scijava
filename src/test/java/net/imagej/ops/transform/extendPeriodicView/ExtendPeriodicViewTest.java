@@ -63,7 +63,7 @@ public class ExtendPeriodicViewTest extends AbstractTestEnvironment {
 	@Test
 	public void extendPeriodicTest() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = Functions
-				.unary(ops, "transform.extendPeriodicView", raiNil,
+				.match(ops, "transform.extendPeriodicView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

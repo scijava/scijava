@@ -12,13 +12,14 @@ import net.imglib2.type.Type;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
+//TODO: reconcile with the Maps class in the scijava-ops package.
 public class Maps {
 
 	private Maps() {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	public interface Functions {
+	public interface FunctionMaps {
 
 		public interface RAIs {
 
@@ -54,7 +55,7 @@ public class Maps {
 	}
 
 	//TODO: rename
-	public interface Computers {
+	public interface ComputerMaps {
 
 		public interface RAIs {
 

@@ -42,7 +42,6 @@ import java.util.Random;
 import net.imagej.mesh.Mesh;
 import net.imagej.mesh.naive.NaiveDoubleMesh;
 import net.imagej.ops.AbstractOpTest;
-import net.imagej.ops.OpService;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
@@ -70,6 +69,7 @@ import net.imglib2.view.RandomAccessibleIntervalCursor;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.junit.Before;
 import org.scijava.Context;
+import org.scijava.ops.OpService;
 import org.scijava.util.LongArray;
 
 /**

@@ -64,7 +64,7 @@ public class CollapseNumericViewTest extends AbstractTestEnvironment {
 	public void defaultCollapseNumericTest() {
 
 		Function<RandomAccessibleInterval<NativeARGBDoubleType>, CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFunc = Functions
-				.unary(ops, "transform.collapseNumericView",
+				.match(ops, "transform.collapseNumericView",
 						new Nil<RandomAccessibleInterval<NativeARGBDoubleType>>() {
 				},
 						new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {
@@ -80,7 +80,7 @@ public class CollapseNumericViewTest extends AbstractTestEnvironment {
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
 		BiFunction<RandomAccessible<NativeARGBDoubleType>, Integer, CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFuncRA = Functions
-				.binary(ops, "transform.collapseNumericView",
+				.match(ops, "transform.collapseNumericView",
 						new Nil<RandomAccessible<NativeARGBDoubleType>>() {
 				}, new Nil<Integer>() {
 				},

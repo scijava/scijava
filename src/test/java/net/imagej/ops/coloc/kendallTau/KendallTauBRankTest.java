@@ -49,9 +49,8 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.junit.Test;
-import org.scijava.ops.core.function.GenericFunctions;
-import org.scijava.ops.types.Nil;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -127,11 +126,8 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops,
 				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = GenericFunctions.Functions.generic(
-				op,
-				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, wrappedOp, es, value);
+		ops.run("coloc.pValue", ch1, ch2, op, es, value);
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 

@@ -47,9 +47,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
-import org.scijava.ops.core.function.GenericFunctions;
-import org.scijava.ops.types.Nil;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -210,20 +209,8 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
-		//TODO: remove once there is a PValue Op that can take the above function.
-		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedOp = (in1, in2) -> {
-			if (!(in1 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in1 not a RAI");
-			if (!(in2 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in2 not a RAI");
-			return op.apply((RandomAccessibleInterval<DoubleType>) in1, (RandomAccessibleInterval<DoubleType>) in2);
-		};
-		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedGenericOp = GenericFunctions.Functions
-				.generic(wrappedOp,
-						new Nil<BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double>>() {}
-								.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", vImage1, vImage2, wrappedGenericOp, 5, es, value);
+		ops.run("coloc.pValue", vImage1, vImage2, op, 5, es, value);
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -242,20 +229,8 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
-		//TODO: remove once there is a PValue Op that can take the above function.
-		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedOp = (in1, in2) -> {
-			if (!(in1 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in1 not a RAI");
-			if (!(in2 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in2 not a RAI");
-			return op.apply((RandomAccessibleInterval<DoubleType>) in1, (RandomAccessibleInterval<DoubleType>) in2);
-		};
-		BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double> wrappedGenericOp = GenericFunctions.Functions
-				.generic(wrappedOp,
-						new Nil<BiFunction<Iterable<DoubleType>, Iterable<DoubleType>, Double>>() {}
-								.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", vImage1, vImage2, wrappedGenericOp, 5, es, value);
+		ops.run("coloc.pValue", vImage1, vImage2, op, 5, es, value);
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -272,21 +247,8 @@ public class MTKTTest extends ColocalisationTest {
 				0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
-		
-		//TODO: remove once there is a PValue Op that can take the above function.
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedOp = (in1, in2) -> {
-			if (!(in1 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in1 not a RAI");
-			if (!(in2 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in2 not a RAI");
-			return op.apply((RandomAccessibleInterval<FloatType>) in1, (RandomAccessibleInterval<FloatType>) in2);
-		};
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> wrappedGenericOp = GenericFunctions.Functions
-				.generic(wrappedOp,
-						new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}
-								.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, wrappedGenericOp, 10, es, value);
+		ops.run("coloc.pValue", ch1, ch2, op, 10, es, value);
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 
@@ -307,20 +269,8 @@ public class MTKTTest extends ColocalisationTest {
 		}
 		RandomAccessibleInterval<UnsignedByteType> ch1 = ShuffledView.cropAtMin(cropCh1, blockSize);
 		RandomAccessibleInterval<UnsignedByteType> ch2 = ShuffledView.cropAtMin(cropCh2, blockSize);
-		//TODO: remove once there is a PValue Op that can take the above function.
-		BiFunction<Iterable<UnsignedByteType>, Iterable<UnsignedByteType>, Double> wrappedOp = (in1, in2) -> {
-			if (!(in1 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in1 not a RAI");
-			if (!(in2 instanceof RandomAccessibleInterval))
-				throw new RuntimeException("in2 not a RAI");
-			return op.apply((RandomAccessibleInterval<UnsignedByteType>) in1, (RandomAccessibleInterval<UnsignedByteType>) in2);
-		};
-		BiFunction<Iterable<UnsignedByteType>, Iterable<UnsignedByteType>, Double> wrappedGenericOp = GenericFunctions.Functions
-				.generic(wrappedOp,
-						new Nil<BiFunction<Iterable<UnsignedByteType>, Iterable<UnsignedByteType>, Double>>() {}
-								.getType());
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, wrappedGenericOp, 5, es, value);
+		ops.run("coloc.pValue", ch1, ch2, op, 5, es, value);
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 }

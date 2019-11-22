@@ -45,7 +45,6 @@ import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link DefaultCreateKernelGabor} and its derivates.
@@ -68,7 +67,7 @@ public class CreateKernelGaborTest extends AbstractTestEnvironment {
 				}, new Nil<RandomAccessibleInterval<C>>() {
 				});
 		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma = Functions
-				.binary(ops, "create.kernelGabor", new Nil<Double>() {
+				.match(ops, "create.kernelGabor", new Nil<Double>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

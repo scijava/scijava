@@ -37,8 +37,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Maps;
 import org.scijava.param.Parameter;
@@ -67,8 +65,8 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Comparator<T> comparator,
 			final Iterable<BitType> output) {
-		Computers.Arity1<T, BitType> thresholdComputer = Adapt.Computers.asComputer(applyThreshold, input2, comparator);
-		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = Maps.Computers.Iterables.liftBoth(thresholdComputer);
+		Computers.Arity1<T, BitType> thresholdComputer = Adapt.ComputerAdapt.asComputer(applyThreshold, input2, comparator);
+		Computers.Arity1<Iterable<T>, Iterable<BitType>> liftedThreshold = Maps.ComputerMaps.Iterables.liftBoth(thresholdComputer);
 		liftedThreshold.accept(input1, output);
 	}
 

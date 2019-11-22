@@ -54,7 +54,7 @@ public class CreateNativeTypeTest extends AbstractTestEnvironment {
 	@Test
 	public <T extends NativeType<T>> void testCreateNativeType() {
 
-		Source<NativeType> typeSource = ops.findOp("create.nativeType", new Nil<Source<NativeType>>() {
+		Producer<NativeType> typeSource = ops.findOp("create.nativeType", new Nil<Producer<NativeType>>() {
 		}, new Nil[] {}, new Nil<NativeType>() {
 		});
 

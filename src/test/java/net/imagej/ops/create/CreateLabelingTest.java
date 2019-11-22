@@ -100,7 +100,7 @@ public class CreateLabelingTest extends AbstractTestEnvironment {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
 		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = Functions
-				.ternary(ops, "create.imgLabeling", new Nil<Dimensions>() {
+				.match(ops, "create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgFactory<IntType>>() {
 				}, new Nil<ImgLabeling<String, IntType>>() {

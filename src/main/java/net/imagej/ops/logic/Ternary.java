@@ -45,7 +45,7 @@ import org.scijava.struct.ItemIO;
  * 
  * @author Leon Yang
  */
-@Plugin(type = Op.class, name = "logic.ternary")
+@Plugin(type = Op.class, name = "logic.match")
 @Parameter(key = "input")
 @Parameter(key = "ifTrueVal")
 @Parameter(key = "ifFalseVal")

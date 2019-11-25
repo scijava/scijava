@@ -99,7 +99,7 @@ public class DefaultPValueTest extends ColocalisationTest {
 //				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
 
 		PValueResult output = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, op, result.length - 1, es, output);
+		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, result.length - 1, es, output).apply();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

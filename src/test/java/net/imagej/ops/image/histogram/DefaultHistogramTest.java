@@ -31,7 +31,7 @@ public class DefaultHistogramTest extends AbstractOpTest {
 	public void testRegression() {
 		Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(data, 8, 8);
 		Histogram1d<UnsignedByteType> histogram =
-			(Histogram1d<UnsignedByteType>) ops.run("image.histogram", img, 10);
+			(Histogram1d<UnsignedByteType>) new OpBuilder(ops, "image.histogram").input(img, 10).apply();
 
 		Assert.assertEquals(false, histogram.hasTails());
 		Assert.assertEquals(0.078125, histogram.relativeFrequency(5, false),

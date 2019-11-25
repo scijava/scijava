@@ -80,8 +80,8 @@ public class ProjectTest extends AbstractOpTest {
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		ops.run("project", in, op, PROJECTION_DIM, out1);
-		ops.run("project", in, op, PROJECTION_DIM, out2);
+		new OpBuilder(ops, "project").input(in, op, PROJECTION_DIM, out1).apply();
+		new OpBuilder(ops, "project").input(in, op, PROJECTION_DIM, out2).apply();
 		testEquality(out1, out2);
 	}
 

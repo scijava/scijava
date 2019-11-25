@@ -50,7 +50,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
     public void testConforms() throws Exception {
         final Img<BitType> img = ArrayImgs.bits(3, 3);
 
-        ops.run("topology.eulerCorrection", img);
+        new OpBuilder(ops, "topology.eulerCorrection").input(img).apply();
     }
 
     @Test
@@ -77,7 +77,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
         assertEquals("Number intersections is incorrect", 0, voxelEdgeFaceIntersections);
 
         DoubleType result = new DoubleType();
-        ops.run("topology.eulerCorrection", cube, result);
+        new OpBuilder(ops, "topology.eulerCorrection").input(cube, result).apply();
 
         assertEquals("Euler correction is incorrect", 0, result.get(), 1e-12);
     }
@@ -115,7 +115,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
         assertEquals("Number intersections is incorrect", 108, voxelEdgeFaceIntersections);
 
         DoubleType result = new DoubleType();
-        ops.run("topology.eulerCorrection", cube, result);
+        new OpBuilder(ops, "topology.eulerCorrection").input(cube, result).apply();
         assertEquals("Euler contribution is incorrect", 1, result.get(), 1e-12);
     }
 }

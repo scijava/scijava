@@ -46,71 +46,71 @@ public class BooleanTypeLogicTest extends AbstractOpTest {
 
 	@Test
 	public void testAnd() {
-		assertTrue(((BitType) ops.run("logic.and", new BitType(true), new BitType(true))).get());
-		assertFalse(((BitType) ops.run("logic.and", new BitType(true), new BitType(false))).get());
-		assertFalse(((BitType) ops.run("logic.and", new BitType(false), new BitType(true))).get());
-		assertFalse(((BitType) ops.run("logic.and", new BitType(false), new BitType(false))).get());
+		assertTrue(((BitType) new OpBuilder(ops, "logic.and").input(new BitType(true), new BitType(true))).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.and").input(new BitType(true), new BitType(false))).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.and").input(new BitType(false), new BitType(true))).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.and").input(new BitType(false), new BitType(false))).get()).apply();
 	}
 
 	@Test
 	public void testComparableGreaterThan() {
-		assertTrue(((BitType) ops.run("logic.greaterThan", 5.0, 3.0)).get());
-		assertFalse(((BitType) ops.run("logic.greaterThan", 5.0, 6.0)).get());
+		assertTrue(((BitType) new OpBuilder(ops, "logic.greaterThan").input(5.0, 3.0)).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.greaterThan").input(5.0, 6.0)).get()).apply();
 	}
 
 	@Test
 	public void testComparableGreaterThanOrEqual() {
-		assertTrue(((BitType) ops.run("logic.greaterThanOrEqual", 5.0, 3.0)).get());
-		assertTrue(((BitType) ops.run("logic.greaterThanOrEqual", 5.0, 5.0)).get());
-		assertFalse(((BitType) ops.run("logic.greaterThanOrEqual", 5.0, 6.0)).get());
+		assertTrue(((BitType) new OpBuilder(ops, "logic.greaterThanOrEqual").input(5.0, 3.0)).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.greaterThanOrEqual").input(5.0, 5.0)).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.greaterThanOrEqual").input(5.0, 6.0)).get()).apply();
 	}
 
 	@Test
 	public void testComparableLessThan() {
-		assertFalse(((BitType) ops.run("logic.lessThan", 5.0, 3.0)).get());
-		assertTrue(((BitType) ops.run("logic.lessThan", 5.0, 6.0)).get());
+		assertFalse(((BitType) new OpBuilder(ops, "logic.lessThan").input(5.0, 3.0)).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.lessThan").input(5.0, 6.0)).get()).apply();
 	}
 
 	@Test
 	public void testComparableLessThanOrEqual() {
-		assertFalse(((BitType) ops.run("logic.lessThanOrEqual", 5.0, 3.0)).get());
-		assertTrue(((BitType) ops.run("logic.lessThanOrEqual", 5.0, 6.0)).get());
-		assertTrue(((BitType) ops.run("logic.lessThanOrEqual", 5.0, 5.0)).get());
+		assertFalse(((BitType) new OpBuilder(ops, "logic.lessThanOrEqual").input(5.0, 3.0)).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.lessThanOrEqual").input(5.0, 6.0)).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.lessThanOrEqual").input(5.0, 5.0)).get()).apply();
 	}
 
 	@Test
 	public void testObjectsEqual() {
-		assertFalse(((BitType) ops.run("logic.equal", 2, 1)).get());
-		assertTrue(((BitType) ops.run("logic.equal", 2, 2)).get());
-		assertFalse(((BitType) ops.run("logic.equal", 2, 3)).get());
+		assertFalse(((BitType) new OpBuilder(ops, "logic.equal").input(2, 1)).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.equal").input(2, 2)).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.equal").input(2, 3)).get()).apply();
 	}
 
 	@Test
 	public void testObjectsNotEqual() {
-		assertTrue(((BitType) ops.run("logic.notEqual", 2, 1)).get());
-		assertFalse(((BitType) ops.run("logic.notEqual", 2, 2)).get());
-		assertTrue(((BitType) ops.run("logic.notEqual", 2, 3)).get());
+		assertTrue(((BitType) new OpBuilder(ops, "logic.notEqual").input(2, 1)).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.notEqual").input(2, 2)).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.notEqual").input(2, 3)).get()).apply();
 	}
 
 	@Test
 	public void testNot() {
-		assertFalse(((BitType) ops.run("logic.not", new BitType(true))).get());
-		assertTrue(((BitType) ops.run("logic.not", new BitType(false))).get());
+		assertFalse(((BitType) new OpBuilder(ops, "logic.not").input(new BitType(true))).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.not").input(new BitType(false))).get()).apply();
 	}
 
 	@Test
 	public void testOr() {
-		assertTrue(((BitType) ops.run("logic.or", new BitType(true), new BitType(true))).get());
-		assertTrue(((BitType) ops.run("logic.or", new BitType(true), new BitType(false))).get());
-		assertTrue(((BitType) ops.run("logic.or", new BitType(false), new BitType(true))).get());
-		assertFalse(((BitType) ops.run("logic.or", new BitType(false), new BitType(false))).get());
+		assertTrue(((BitType) new OpBuilder(ops, "logic.or").input(new BitType(true), new BitType(true))).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.or").input(new BitType(true), new BitType(false))).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.or").input(new BitType(false), new BitType(true))).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.or").input(new BitType(false), new BitType(false))).get()).apply();
 	}
 
 	@Test
 	public void testXor() {
-		assertFalse(((BitType) ops.run("logic.xor", new BitType(true), new BitType(true))).get());
-		assertTrue(((BitType) ops.run("logic.xor", new BitType(true), new BitType(false))).get());
-		assertTrue(((BitType) ops.run("logic.xor", new BitType(false), new BitType(true))).get());
-		assertFalse(((BitType) ops.run("logic.xor", new BitType(false), new BitType(false))).get());
+		assertFalse(((BitType) new OpBuilder(ops, "logic.xor").input(new BitType(true), new BitType(true))).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.xor").input(new BitType(true), new BitType(false))).get()).apply();
+		assertTrue(((BitType) new OpBuilder(ops, "logic.xor").input(new BitType(false), new BitType(true))).get()).apply();
+		assertFalse(((BitType) new OpBuilder(ops, "logic.xor").input(new BitType(false), new BitType(false))).get()).apply();
 	}
 }

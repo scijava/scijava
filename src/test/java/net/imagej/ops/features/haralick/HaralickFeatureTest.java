@@ -65,111 +65,111 @@ public class HaralickFeatureTest extends AbstractOpTest {
 
 	@Test
 	public void asm() {
-		DoubleType asm = (DoubleType) ops.run("features.haralick.asm", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType asm = (DoubleType) new OpBuilder(ops, "features.haralick.asm").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(0.002728531855956, asm.get(), EPSILON);
 	}
 
 	@Test
 	public void clusterPromenence() {
-		DoubleType clusterPromenence = (DoubleType) ops.run("features.haralick.clusterPromenence", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType clusterPromenence = (DoubleType) new OpBuilder(ops, "features.haralick.clusterPromenence").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(1.913756322645621e+07,
 				clusterPromenence.get(), EPSILON);
 	}
 
 	@Test
 	public void clusterShade() {
-		DoubleType clusterShade = (DoubleType) ops.run("features.haralick.clusterShade", img, 128, 1, MatrixOrientation2D.HORIZONTAL); 
+		DoubleType clusterShade = (DoubleType) new OpBuilder(ops, "features.haralick.clusterShade").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply(); 
 		assertEquals(7.909331564367658e+03,
 				clusterShade.get(), EPSILON);
 	}
 
 	@Test
 	public void contrast() {
-		DoubleType contrast = (DoubleType) ops.run("features.haralick.contrast", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType contrast = (DoubleType) new OpBuilder(ops, "features.haralick.contrast").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(2.829684210526314e+03, contrast.get(),
 				EPSILON);
 	}
 
 	@Test
 	public void correlation() {
-		DoubleType correlation = (DoubleType) ops.run("features.haralick.correlation", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType correlation = (DoubleType) new OpBuilder(ops, "features.haralick.correlation").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(-6.957913328178969e-03,
 				correlation.get(), EPSILON);
 	}
 
 	@Test
 	public void differenceEntropy() {
-		DoubleType entropy = (DoubleType) ops.run("features.haralick.differenceEntropy", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType entropy = (DoubleType) new OpBuilder(ops, "features.haralick.differenceEntropy").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(4.517886362509830,
 				entropy.get(), EPSILON);
 	}
 
 	@Test
 	public void differenceVariance() {
-		DoubleType variance = (DoubleType) ops.run("features.haralick.differenceVariance", img, 128, 1, MatrixOrientation2D.HORIZONTAL); 
+		DoubleType variance = (DoubleType) new OpBuilder(ops, "features.haralick.differenceVariance").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply(); 
 		assertEquals(8.885861218836561e+02,
 				variance.get(), EPSILON);
 	}
 
 	@Test
 	public void entropy() {
-		DoubleType entropy = (DoubleType) ops.run("features.haralick.entropy", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType entropy = (DoubleType) new OpBuilder(ops, "features.haralick.entropy").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(5.914634251331289, entropy.get(),
 				EPSILON);
 	}
 
 	@Test
 	public void ICM1() {
-		DoubleType icm1 = (DoubleType) ops.run("features.haralick.icm1", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType icm1 = (DoubleType) new OpBuilder(ops, "features.haralick.icm1").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(-1.138457766487823, icm1.get(),
 				EPSILON);
 	}
 
 	@Test
 	public void ICM2() {
-		DoubleType icm2 = (DoubleType) ops.run("features.haralick.icm2", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType icm2 = (DoubleType) new OpBuilder(ops, "features.haralick.icm2").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(0.9995136931858095, icm2.get(),
 				EPSILON);
 	}
 
 	@Test
 	public void IFDM() {
-		DoubleType ifdm = (DoubleType) ops.run("features.haralick.ifdm", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType ifdm = (DoubleType) new OpBuilder(ops, "features.haralick.ifdm").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(2.630092221760193e-02, ifdm.get(),
 				EPSILON);
 	}
 
 	@Test
 	public void maxProbability() {
-		DoubleType maxProb = (DoubleType) ops.run("features.haralick.maxProbability", img, 128, 1, MatrixOrientation2D.HORIZONTAL); 
+		DoubleType maxProb = (DoubleType) new OpBuilder(ops, "features.haralick.maxProbability").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply(); 
 		assertEquals(0.005263157894737,
 				maxProb.get(), EPSILON);
 	}
 
 	@Test
 	public void sumAverage() {
-		DoubleType sumAvg = (DoubleType) ops.run("features.haralick.sumAverage", img, 128, 1, MatrixOrientation2D.HORIZONTAL); 
+		DoubleType sumAvg = (DoubleType) new OpBuilder(ops, "features.haralick.sumAverage").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply(); 
 		assertEquals(1.244210526315790e+02,
 				sumAvg.get(), EPSILON);
 	}
 
 	@Test
 	public void sumEntropy() {
-		DoubleType sumEntropy = (DoubleType) ops.run("features.haralick.sumEntropy", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType sumEntropy = (DoubleType) new OpBuilder(ops, "features.haralick.sumEntropy").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(5.007751063919794, sumEntropy.get(),
 				EPSILON);
 	}
 
 	@Test
 	public void sumVariance() {
-		DoubleType sumVariance = (DoubleType) ops.run("features.haralick.sumVariance", img, 128, 1, MatrixOrientation2D.HORIZONTAL); 
+		DoubleType sumVariance = (DoubleType) new OpBuilder(ops, "features.haralick.sumVariance").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply(); 
 		assertEquals(1.705010667439121e+04,
 				sumVariance.get(), EPSILON);
 	}
 
 	@Test
 	public void textureHomogeneity() {
-		DoubleType homogeneity = (DoubleType) ops.run("features.haralick.textureHomogeneity", img, 128, 1, MatrixOrientation2D.HORIZONTAL); 
+		DoubleType homogeneity = (DoubleType) new OpBuilder(ops, "features.haralick.textureHomogeneity").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply(); 
 		assertEquals(0.061929185106950,
 				homogeneity.get(), EPSILON);
 	}
@@ -178,7 +178,7 @@ public class HaralickFeatureTest extends AbstractOpTest {
 	public void variance() {
 		// no reference found in matlab, formula verified
 		// (http://murphylab.web.cmu.edu/publications/boland/boland_node26.html)
-		DoubleType variance = (DoubleType) ops.run("features.haralick.variance", img, 128, 1, MatrixOrientation2D.HORIZONTAL);
+		DoubleType variance = (DoubleType) new OpBuilder(ops, "features.haralick.variance").input(img, 128, 1, MatrixOrientation2D.HORIZONTAL).apply();
 		assertEquals(5176.653047585449, variance.get(),
 				EPSILON);
 	}

@@ -60,12 +60,12 @@ public class GaussTest extends AbstractOpTest {
 
 		final Img<ByteType> in = generateByteArrayTestImg(true, new long[] { 10, 10 });
 		final Img<ByteType> out1 =
-			(Img<ByteType>) ops.run("create.img", in, Util.getTypeFromInterval(in));
+			(Img<ByteType>) new OpBuilder(ops, "create.img").input(in, Util.getTypeFromInterval(in)).apply();
 		final double sigma = 5;
 		final Img<ByteType> out2 =
-			(Img<ByteType>) ops.run("create.img", in, Util.getTypeFromInterval(in));
+			(Img<ByteType>) new OpBuilder(ops, "create.img").input(in, Util.getTypeFromInterval(in)).apply();
 
-		ops.run("filter.gauss", in, es, sigma, out1);
+		new OpBuilder(ops, "filter.gauss").input(in, es, sigma, out1).apply();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
 		}

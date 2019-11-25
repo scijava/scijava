@@ -109,7 +109,7 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = (ImgLabeling<Integer, IntType>) ops.run("image.watershed", in, seeds, true, false);
+		ImgLabeling<Integer, IntType> out = (ImgLabeling<Integer, IntType>) new OpBuilder(ops, "image.watershed").input(in, seeds, true, false).apply();
 
 		assertResults(in, out, seeds, mask, false, false);
 

@@ -76,10 +76,10 @@ public class CoordinateEquationTest extends AbstractOpTest {
 		final Function<long[], Double> op = (coords) -> Math.pow(start[0] + coords[0] * spacing[0], 2)
 				+ Math.pow(start[1] + coords[1] * spacing[1], 2);
 
-		ops.run("image.equation", op, image);
+		new OpBuilder(ops, "image.equation").input(op, image).apply();
 
 		DoubleType sum = new DoubleType();
-		ops.run("stats.sum", image, sum);
+		new OpBuilder(ops, "stats.sum").input(image, sum).apply();
 
 		assertEquals(6801.346801346799, sum.getRealDouble(), 0.00001);
 
@@ -107,7 +107,7 @@ public class CoordinateEquationTest extends AbstractOpTest {
 					return result;
 			};
 
-		ops.run("image.equation", op, image);
+		new OpBuilder(ops, "image.equation").input(op, image).apply();
 
 		final RandomAccess<ShortType> ra = image.randomAccess();
 

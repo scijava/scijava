@@ -68,14 +68,14 @@ public class DistanceTransform3DTest extends AbstractOpTest {
 		/*
 		 * test normal DT
 		 */
-		ops.run("image.distanceTransform", in, ts.getExecutorService(), out);
+		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService(), out).apply();
 		compareResults(out, in, new double[] { 1, 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21 };
-		ops.run("image.distanceTransform", in, calibration, ts.getExecutorService(), out);
+		new OpBuilder(ops, "image.distanceTransform").input(in, calibration, ts.getExecutorService(), out).apply();
 		compareResults(out, in, calibration);
 	}
 

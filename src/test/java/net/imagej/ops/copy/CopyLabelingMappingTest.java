@@ -92,7 +92,7 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 
 		LabelingMapping<String> out = (LabelingMapping<String>) ops.run("create.labelingMapping");
 
-		ops.run("copy.labelingMapping", input, out);
+		new OpBuilder(ops, "copy.labelingMapping").input(input, out).apply();
 
 		Iterator<String> outIt = out.getLabels().iterator();
 

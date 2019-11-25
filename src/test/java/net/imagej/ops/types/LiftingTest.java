@@ -23,10 +23,10 @@ public class LiftingTest <I extends RealType<I>, O extends RealType<O>> extends 
 	
 	@Test
 	public void testLiftToImg() {
-		Img<DoubleType> input = (Img<DoubleType>) ops.run("create.img", new FinalDimensions(10, 10), new DoubleType());
-		Img<DoubleType> output = (Img<DoubleType>) ops.run("create.img", new FinalDimensions(10, 10), new DoubleType());
+		Img<DoubleType> input = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(new FinalDimensions(10, 10), new DoubleType()).apply();
+		Img<DoubleType> output = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(new FinalDimensions(10, 10), new DoubleType()).apply();
 		
-		ops.run("test.liftImg", input, output);
+		new OpBuilder(ops, "test.liftImg").input(input, output).apply();
 
 		Cursor<DoubleType> cursor = output.cursor();
 		while(cursor.hasNext()) {

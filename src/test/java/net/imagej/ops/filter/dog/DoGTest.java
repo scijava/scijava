@@ -66,7 +66,7 @@ public class DoGTest extends AbstractOpTest {
 		final Img<ByteType> out2 = generateByteArrayTestImg(false, dims);
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
-		ops.run("filter.DoG", in, sigmas1, sigmas2, outOfBounds, es, out1);
+		new OpBuilder(ops, "filter.DoG").input(in, sigmas1, sigmas2, outOfBounds, es, out1).apply();
 
 		// test against native imglib2 implementation
 		DifferenceOfGaussian.DoG(sigmas1, sigmas2, Views.extendMirrorSingle(in), out2,

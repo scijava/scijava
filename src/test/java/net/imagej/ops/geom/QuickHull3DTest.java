@@ -60,8 +60,8 @@ public class QuickHull3DTest extends AbstractOpTest {
 	public void quickhull_100_000_Test() {
 		Mesh df = randomPoints(100000, 20150818);
 
-		final Mesh convexHull = (Mesh) ops.run("geom.convexHull", df);
-		final double epsilon = (double) ops.run("geom.convexHullEpsilon", df);
+		final Mesh convexHull = (Mesh) new OpBuilder(ops, "geom.convexHull").input(df).apply();
+		final double epsilon = (double) new OpBuilder(ops, "geom.convexHullEpsilon").input(df).apply();
 		assertEquals(175, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -74,8 +74,8 @@ public class QuickHull3DTest extends AbstractOpTest {
 		df.vertices().add(0, 0, 1);
 		df.vertices().add(0, 1, 0);
 
-		final Mesh convexHull = (Mesh) ops.run("geom.convexHull", df);
-		final double epsilon = (double) ops.run("geom.convexHullEpsilon", df);
+		final Mesh convexHull = (Mesh) new OpBuilder(ops, "geom.convexHull").input(df).apply();
+		final double epsilon = (double) new OpBuilder(ops, "geom.convexHullEpsilon").input(df).apply();
 		assertEquals(4, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -90,8 +90,8 @@ public class QuickHull3DTest extends AbstractOpTest {
 		df.vertices().add(-4.7, 0.4, -4.2);
 		df.vertices().add(-1.9, 2.2, -3.3);
 
-		final Mesh convexHull = (Mesh) ops.run("geom.convexHull", df);
-		final double epsilon = (double) ops.run("geom.convexHullEpsilon", df);
+		final Mesh convexHull = (Mesh) new OpBuilder(ops, "geom.convexHull").input(df).apply();
+		final double epsilon = (double) new OpBuilder(ops, "geom.convexHullEpsilon").input(df).apply();
 		assertEquals(5, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -115,8 +115,8 @@ public class QuickHull3DTest extends AbstractOpTest {
 		v.add(0.3544683273457627, -0.450828987127942, -0.0827870439577727);
 		v.add(0.1667164640191164, 0.003605551555385444, -0.4014989499947977);
 
-		final Mesh convexHull = (Mesh) ops.run("geom.convexHull", df);
-		final double epsilon = (double) ops.run("geom.convexHullEpsilon", df);
+		final Mesh convexHull = (Mesh) new OpBuilder(ops, "geom.convexHull").input(df).apply();
+		final double epsilon = (double) new OpBuilder(ops, "geom.convexHullEpsilon").input(df).apply();
 		assertEquals(12, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}
@@ -167,8 +167,8 @@ public class QuickHull3DTest extends AbstractOpTest {
 		v.add(-0.312260808713977, -0.1674135249735914, 0.2808831662692904);
 		v.add(-0.1966306233747216, 0.2291105671125563, -0.3387042454804333);
 
-		final Mesh convexHull = (Mesh) ops.run("geom.convexHull", df);
-		final double epsilon = (double) ops.run("geom.convexHullEpsilon", df);
+		final Mesh convexHull = (Mesh) new OpBuilder(ops, "geom.convexHull").input(df).apply();
+		final double epsilon = (double) new OpBuilder(ops, "geom.convexHullEpsilon").input(df).apply();
 		assertEquals(20, convexHull.vertices().size());
 		assertConvex(convexHull, epsilon);
 	}

@@ -49,9 +49,9 @@ public class ConditionalTest extends AbstractOpTest {
 		final ByteType ifTrueVal = new ByteType((byte) 10);
 		final ByteType ifFalseVal = new ByteType((byte) 100);
 		final ByteType outVal = new ByteType();
-		ops.run("logic.match", new BoolType(true), ifTrueVal, ifFalseVal, outVal);
+		new OpBuilder(ops, "logic.match").input(new BoolType(true), ifTrueVal, ifFalseVal, outVal).apply();
 		assertEquals(10, outVal.get());
-		ops.run("logic.match", new BoolType(false), ifTrueVal, ifFalseVal, outVal);
+		new OpBuilder(ops, "logic.match").input(new BoolType(false), ifTrueVal, ifFalseVal, outVal).apply();
 		assertEquals(100, outVal.get());
 	}
 
@@ -59,9 +59,9 @@ public class ConditionalTest extends AbstractOpTest {
 	public void testDefault() {
 		final ByteType out = new ByteType((byte) 10);
 		final ByteType defaultVal = new ByteType((byte) 100);
-		ops.run("logic.default", new BoolType(true), defaultVal, out);
+		new OpBuilder(ops, "logic.default").input(new BoolType(true), defaultVal, out).apply();
 		assertEquals(10, out.get());
-		ops.run("logic.default", new BoolType(false), defaultVal, out);
+		new OpBuilder(ops, "logic.default").input(new BoolType(false), defaultVal, out).apply();
 		assertEquals(100, out.get());
 	}
 

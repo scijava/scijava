@@ -50,7 +50,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
     public void testConforms() throws AssertionError {
         final Img<BitType> img = ArrayImgs.bits(3, 3);
 
-        ops.run("topology.eulerCharacteristic26N", img);
+        new OpBuilder(ops, "topology.eulerCharacteristic26N").input(img).apply();
     }
 
     @Test
@@ -87,7 +87,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
         final Img<BitType> img = drawCube(1, 1, 1, 1);
 
         final DoubleType result = new DoubleType();
-        ops.run("topology.eulerCharacteristic26N", img, result);
+        new OpBuilder(ops, "topology.eulerCharacteristic26N").input(img, result).apply();
 
         assertEquals("Euler characteristic (χ) is incorrect", 1.0, result.get(), 1e-12);
     }
@@ -103,7 +103,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
         final Img<BitType> img = drawCube(1, 1, 1, 0);
 
         final DoubleType result = new DoubleType();
-        ops.run("topology.eulerCharacteristic26N", img, result);
+        new OpBuilder(ops, "topology.eulerCharacteristic26N").input(img, result).apply();
 
         assertEquals("Euler characteristic (χ) is incorrect", 0.0, result.get(), 1e-12);
     }
@@ -124,7 +124,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
         access.get().setZero();
 
         final DoubleType result = new DoubleType();
-        ops.run("topology.eulerCharacteristic26N", img, result);
+        new OpBuilder(ops, "topology.eulerCharacteristic26N").input(img, result).apply();
 
         assertEquals("Euler characteristic (χ) is incorrect", 2.0, result.get(), 1e-12);
     }
@@ -155,7 +155,7 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
         access.get().setOne();
 
         final DoubleType result = new DoubleType();
-        ops.run("topology.eulerCharacteristic26N", cube, result);
+        new OpBuilder(ops, "topology.eulerCharacteristic26N").input(cube, result).apply();
 
         assertEquals("Euler characteristic (χ) is incorrect", 0.0, result.get(), 1e-12);
     }

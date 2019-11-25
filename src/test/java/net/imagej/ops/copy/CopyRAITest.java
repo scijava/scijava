@@ -139,7 +139,7 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		ops.run("copy.rai", input, output);
+		new OpBuilder(ops, "copy.rai").input(input, output).apply();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();
@@ -164,7 +164,7 @@ public class CopyRAITest extends AbstractOpTest {
 		// copy view to output and assert that is equal to the mean of the view
 		copy.compute(view, out);
 		DoubleType sum = new DoubleType(); 
-		ops.run("stats.mean", out, sum);
+		new OpBuilder(ops, "stats.mean").input(out, sum).apply();
 		assertEquals(sum.getRealDouble(), 100.0, delta);
 
 		// also try with a planar image
@@ -173,7 +173,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 		copy.compute(viewPlanar, outFromPlanar);
 		DoubleType sumFromPlanar = new DoubleType();
-		ops.run("stats.mean", outFromPlanar, sumFromPlanar);
+		new OpBuilder(ops, "stats.mean").input(outFromPlanar, sumFromPlanar).apply();
 		assertEquals(sumFromPlanar.getRealDouble(), 100.0, delta);
 
 	}

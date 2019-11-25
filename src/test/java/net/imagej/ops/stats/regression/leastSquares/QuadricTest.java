@@ -89,7 +89,7 @@ public class QuadricTest extends AbstractOpTest {
 		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints)
 			.collect(toList());
 
-		ops.run("stats.leastSquares", points);
+		new OpBuilder(ops, "stats.leastSquares").input(points).apply();
 	}
 
 	@Test

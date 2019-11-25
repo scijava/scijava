@@ -57,7 +57,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsZeroCorrTest(){
-		double result = (Double) ops.run("coloc.pearsons", zeroCorrelationImageCh1, zeroCorrelationImageCh2);
+		double result = (Double) new OpBuilder(ops, "coloc.pearsons").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
 		assertEquals(0.0, result, 0.05);
 	}
 	
@@ -67,7 +67,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsPositiveCorrTest() {
-		double result = (Double) ops.run("coloc.pearsons", positiveCorrelationImageCh1, positiveCorrelationImageCh2);
+		double result = (Double) new OpBuilder(ops, "coloc.pearsons").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).apply();
 		assertEquals(0.75, result, 0.01);
 	}
 	
@@ -86,7 +86,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 					512, 512, mean, spread, sigma, 0x01234567);
 			RandomAccessibleInterval<FloatType> ch2 = produceMeanBasedNoiseImage(new FloatType(),
 					512, 512, mean, spread, sigma, 0x98765432);
-			double resultFast = (Double) ops.run("coloc.pearsons", ch1, ch2);
+			double resultFast = (Double) new OpBuilder(ops, "coloc.pearsons").input(ch1, ch2).apply();
 			assertEquals(0.0, resultFast, 0.1);
 
 			/* If the means are the same, it causes a numerical problem in the classic implementation of Pearson's
@@ -109,7 +109,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op =
 			Functions.match(ops, "coloc.pearsons", new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, op, es, value);
+		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, es, value).apply();
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

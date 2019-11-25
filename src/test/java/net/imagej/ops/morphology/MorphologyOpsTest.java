@@ -68,9 +68,9 @@ public class MorphologyOpsTest extends AbstractOpTest {
 		Cursor<FloatType> inputWithHolesCursor = inputWithHoles.cursor();
 		Cursor<FloatType> invertedInputWithFilledHolesCursor = invertedInputWithFilledHoles.cursor();
 
-		imgWithoutHoles = (Img<BitType>) ops.run("create.img", inputWithoutHoles, new BitType());
-		imgWithHoles = (Img<BitType>) ops.run("create.img", inputWithHoles, new BitType());
-		invertedImgWithFilledHoles = (Img<BitType>) ops.run("create.img", invertedInputWithFilledHoles, new BitType());
+		imgWithoutHoles = (Img<BitType>) new OpBuilder(ops, "create.img").input(inputWithoutHoles, new BitType()).apply();
+		imgWithHoles = (Img<BitType>) new OpBuilder(ops, "create.img").input(inputWithHoles, new BitType()).apply();
+		invertedImgWithFilledHoles = (Img<BitType>) new OpBuilder(ops, "create.img").input(invertedInputWithFilledHoles, new BitType()).apply();
 
 		Cursor<BitType> imgWithoutHolesCursor = imgWithoutHoles.cursor();
 		Cursor<BitType> imgWithHolesCursor = imgWithHoles.cursor();
@@ -94,14 +94,14 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testExtractHoles() {
-		assertNotNull("Img Without Holes", ops.run("morphology.extractHoles", imgWithoutHoles, new DiamondShape(1)));
-		assertNotNull("Img With Holes", ops.run("morphology.extractHoles", imgWithHoles, new DiamondShape(1)));
+		assertNotNull("Img Without Holes", new OpBuilder(ops, "morphology.extractHoles").input(imgWithoutHoles, new DiamondShape(1))).apply();
+		assertNotNull("Img With Holes", new OpBuilder(ops, "morphology.extractHoles").input(imgWithHoles, new DiamondShape(1))).apply();
 	}
 
 	@Test
 	public void testFillHoles() {
-		Img<BitType> result = (Img<BitType>) ops.run("create.img", imgWithHoles);
-		ops.run("morphology.fillHoles", imgWithHoles, new DiamondShape(1), result);
+		Img<BitType> result = (Img<BitType>) new OpBuilder(ops, "create.img").input(imgWithHoles).apply();
+		new OpBuilder(ops, "morphology.fillHoles").input(imgWithHoles, new DiamondShape(1), result).apply();
 
 		Cursor<BitType> resultC = result.cursor();
 		final BitType one = new BitType(true);
@@ -112,10 +112,10 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testFillHoles1() {
-		Img<BitType> result = (Img<BitType>) ops.run("create.img", invertedImgWithFilledHoles);
-		Img<BitType> inverted = (Img<BitType>) ops.run("create.img", invertedImgWithFilledHoles);
-		ops.run("image.invert", imgWithHoles, inverted);
-		ops.run("morphology.fillHoles", inverted, new DiamondShape(1), result);
+		Img<BitType> result = (Img<BitType>) new OpBuilder(ops, "create.img").input(invertedImgWithFilledHoles).apply();
+		Img<BitType> inverted = (Img<BitType>) new OpBuilder(ops, "create.img").input(invertedImgWithFilledHoles).apply();
+		new OpBuilder(ops, "image.invert").input(imgWithHoles, inverted).apply();
+		new OpBuilder(ops, "morphology.fillHoles").input(inverted, new DiamondShape(1), result).apply();
 
 		Cursor<BitType> resultC = result.localizingCursor();
 		RandomAccess<BitType> groundTruthRA = invertedImgWithFilledHoles.randomAccess();
@@ -129,7 +129,7 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testFillHoles2() {
-		RandomAccessibleInterval<BitType> result = (RandomAccessibleInterval<BitType>) ops.run("morphology.fillHoles", imgWithoutHoles, new RectangleShape(1, false));
+		RandomAccessibleInterval<BitType> result = (RandomAccessibleInterval<BitType>) new OpBuilder(ops, "morphology.fillHoles").input(imgWithoutHoles, new RectangleShape(1, false)).apply();
 		Cursor<BitType> groundTruthC = imgWithoutHoles.localizingCursor();
 		RandomAccess<BitType> resultRA = result.randomAccess();
 

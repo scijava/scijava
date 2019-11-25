@@ -95,7 +95,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		// selected interval XY
 		final int[] xyAxis = new int[] { 0, 1 };
 
-		ops.run("slice", in, test, xyAxis, true, out);
+		new OpBuilder(ops, "slice").input(in, test, xyAxis, true, out).apply();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -129,7 +129,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		// selected interval XYZ
 		final int[] xyAxis = new int[] { 0, 1, 2 };
 
-		ops.run("slice", inSequence, test, xyAxis, true, outSequence);
+		new OpBuilder(ops, "slice").input(inSequence, test, xyAxis, true, outSequence).apply();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();

@@ -68,19 +68,19 @@ public class WatershedTest extends AbstractOpTest {
 		ExecutorService es = createContext().getService(ThreadService.class).getExecutorService();
 
 		// threshold it
-		RandomAccessibleInterval<BitType> thresholdedImg = (RandomAccessibleInterval<BitType>) ops.run("create.img", watershedTestImg, new BitType());
+		RandomAccessibleInterval<BitType> thresholdedImg = (RandomAccessibleInterval<BitType>) new OpBuilder(ops, "create.img").input(watershedTestImg, new BitType()).apply();
 		ops.run("threshold.apply", Views.flatIterable(watershedTestImg),
 				new FloatType(1), Views.flatIterable(thresholdedImg));
 
 		// compute inverted distance transform and smooth it with gaussian
 		// filtering
 		
-		final RandomAccessibleInterval<FloatType> distMap = (RandomAccessibleInterval<FloatType>) ops.run("create.img", thresholdedImg, new FloatType());
-		ops.run("image.distanceTransform", thresholdedImg, es, distMap);
-		final RandomAccessibleInterval<FloatType> invertedDistMap = (RandomAccessibleInterval<FloatType>) ops.run("create.img", distMap, new FloatType());
-		ops.run("image.invert", Views.iterable(distMap), Views.iterable(invertedDistMap));
-		final RandomAccessibleInterval<FloatType> gauss = (RandomAccessibleInterval<FloatType>) ops.run("create.img", invertedDistMap, new FloatType()); 
-		ops.run("filter.gauss", invertedDistMap, es, new double[] {3, 3}, gauss);
+		final RandomAccessibleInterval<FloatType> distMap = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "create.img").input(thresholdedImg, new FloatType()).apply();
+		new OpBuilder(ops, "image.distanceTransform").input(thresholdedImg, es, distMap).apply();
+		final RandomAccessibleInterval<FloatType> invertedDistMap = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "create.img").input(distMap, new FloatType()).apply();
+		new OpBuilder(ops, "image.invert").input(Views.iterable(distMap), Views.iterable(invertedDistMap)).apply();
+		final RandomAccessibleInterval<FloatType> gauss = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "create.img").input(invertedDistMap, new FloatType()).apply(); 
+		new OpBuilder(ops, "filter.gauss").input(invertedDistMap, es, new double[] {3, 3}, gauss).apply();
 
 		testWithoutMask(gauss);
 

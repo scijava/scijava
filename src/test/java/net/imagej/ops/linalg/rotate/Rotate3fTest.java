@@ -58,7 +58,7 @@ public class Rotate3fTest extends AbstractOpTest {
 			1);
 		final Vector3f expected = xAxis.rotate(new Quaternionf(axisAngle));
 
-		final Vector3f result = (Vector3f) ops.run("linalg.rotate", in, axisAngle);
+		final Vector3f result = (Vector3f) new OpBuilder(ops, "linalg.rotate").input(in, axisAngle).apply();
 
 		assertEquals("Rotation is incorrect", expected, result);
 	}
@@ -68,7 +68,7 @@ public class Rotate3fTest extends AbstractOpTest {
 		final Vector3f xAxis = new Vector3f(1, 0, 0);
 		final Vector3f in = new Vector3f(xAxis);
 
-		final Vector3f result = (Vector3f) ops.run("linalg.rotate", in, IDENTITY);
+		final Vector3f result = (Vector3f) new OpBuilder(ops, "linalg.rotate").input(in, IDENTITY).apply();
 
 		assertNotSame("Op should create a new object for output", in, result);
 		assertEquals("Rotation is incorrect", xAxis, result);
@@ -81,7 +81,7 @@ public class Rotate3fTest extends AbstractOpTest {
 		final Vector3f in = new Vector3f(xAxis);
 		final Vector3f out = new Vector3f(origin);
 
-		final Vector3f result = (Vector3f) ops.run("linalg.rotate", in, IDENTITY, out);
+		final Vector3f result = (Vector3f) new OpBuilder(ops, "linalg.rotate").input(in, IDENTITY, out).apply();
 
 		assertSame("Op should not create a new object for output", out, result);
 		assertEquals("Rotation is incorrect", xAxis, out);

@@ -76,7 +76,7 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 		double[] spacing = { 1, 1 };
 
 		// run the op
-		ops.run("filter.frangiVesselness", inputImg, spacing, scale, actualOutput);
+		new OpBuilder(ops, "filter.frangiVesselness").input(inputImg, spacing, scale, actualOutput).apply();
 
 		// compare the output image data to that stored in the file.
 		Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();

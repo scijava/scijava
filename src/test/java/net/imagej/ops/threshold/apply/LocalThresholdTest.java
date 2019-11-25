@@ -105,7 +105,7 @@ public class LocalThresholdTest extends AbstractOpTest {
 	@Before
 	public void before() throws Exception {
 		in = generateByteArrayTestImg(true, new long[] { 10, 10 });
-		Pair<ByteType, ByteType> minMax = (Pair<ByteType, ByteType>) ops.run("stats.minMax", in);
+		Pair<ByteType, ByteType> minMax = (Pair<ByteType, ByteType>) new OpBuilder(ops, "stats.minMax").input(in).apply();
 		normalizedIn = (Img<DoubleType>) ops.run("image.normalize", in,
 			minMax.getA(), minMax.getB(), new DoubleType(0.0), new DoubleType(1.0));
 

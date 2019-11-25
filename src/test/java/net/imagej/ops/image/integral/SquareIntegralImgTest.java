@@ -65,7 +65,7 @@ public class SquareIntegralImgTest extends AbstractOpTest {
 	@SuppressWarnings({ "unchecked" })
 	@Test
 	public void testSquareIntegralImageCorrectness() {
-		ops.run("image.squareIntegral", generateKnownByteArrayTestImg(), out);
+		new OpBuilder(ops, "image.squareIntegral").input(generateKnownByteArrayTestImg(), out).apply();
 
 		Img<ByteType> bytes = generateKnownSquareIntegralImage();
 

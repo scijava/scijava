@@ -21,7 +21,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction() {
-		Double answer = (Double) ops.run("test.function1", 1.0);
+		Double answer = (Double) new OpBuilder(ops, "test.function1").input(1.0).apply();
 		Assert.assertEquals(2.0, answer, 0);
 	}
 
@@ -31,7 +31,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction2() {
-		Double answer = (Double) ops.run("test.function2", 1.0, 1.0);
+		Double answer = (Double) new OpBuilder(ops, "test.function2").input(1.0, 1.0).apply();
 		Assert.assertEquals(2.0, answer, 0);
 	}
 
@@ -41,7 +41,7 @@ public class RunTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testRunFunction3() {
-		Double answer = (Double) ops.run("test.function3", 1.0, 1.0, 1.0);
+		Double answer = (Double) new OpBuilder(ops, "test.function3").input(1.0, 1.0, 1.0).apply();
 		Assert.assertEquals(3.0, answer, 0);
 	}
 
@@ -57,7 +57,7 @@ public class RunTest extends AbstractTestEnvironment {
 	public void testRunComputer1() {
 		double[] arr1 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops.run("test.computer1", arr1, out);
+		new OpBuilder(ops, "test.computer1").input(arr1, out).apply();
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, out, 0);
 	}
 
@@ -73,7 +73,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] arr1 = { 1, 2, 3 };
 		double[] arr2 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops.run("test.computer2", arr1, arr2, out);
+		new OpBuilder(ops, "test.computer2").input(arr1, arr2, out).apply();
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, out, 0);
 	}
 
@@ -90,7 +90,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] arr2 = { 1, 2, 3 };
 		double[] arr3 = { 1, 2, 3 };
 		double[] out = new double[3];
-		ops.run("test.computer3", arr1, arr2, arr3, out);
+		new OpBuilder(ops, "test.computer3").input(arr1, arr2, arr3, out).apply();
 		Assert.assertArrayEquals(new double[] { 3, 6, 9 }, out, 0);
 	}
 
@@ -105,7 +105,7 @@ public class RunTest extends AbstractTestEnvironment {
 	@Test
 	public void testRunInplace() {
 		double[] io = { 1, 2, 3 };
-		ops.run("test.inplace1", io);
+		new OpBuilder(ops, "test.inplace1").input(io).apply();
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, io, 0);
 	}
 
@@ -119,7 +119,7 @@ public class RunTest extends AbstractTestEnvironment {
 	public void testRunInplace2_1() {
 		double[] io = { 1, 2, 3 };
 		double[] in2 = { 1, 2, 3 };
-		ops.run("test.inplace2_1", io, in2);
+		new OpBuilder(ops, "test.inplace2_1").input(io, in2).apply();
 		Assert.assertArrayEquals(new double[] { 2, 4, 6 }, io, 0);
 	}
 
@@ -133,7 +133,7 @@ public class RunTest extends AbstractTestEnvironment {
 	public void testRunInplace2_2() {
 		double[] in1 = { 1, 2, 3 };
 		double[] io = { 1, 2, 3 };
-		ops.run("test.inplace2_2", in1, io);
+		new OpBuilder(ops, "test.inplace2_2").input(in1, io).apply();
 		Assert.assertArrayEquals(new double[] { 1, 4, 9 }, io, 0);
 	}
 
@@ -150,7 +150,7 @@ public class RunTest extends AbstractTestEnvironment {
 		double[] io = { 1, 2, 3 };
 		double[] in2 = { 1, 2, 3 };
 		double[] in3 = { 1, 2, 3 };
-		ops.run("test.inplace3_1", io, in2, in3);
+		new OpBuilder(ops, "test.inplace3_1").input(io, in2, in3).apply();
 		Assert.assertArrayEquals(new double[] { 3, 6, 9 }, io, 0);
 	}
 }

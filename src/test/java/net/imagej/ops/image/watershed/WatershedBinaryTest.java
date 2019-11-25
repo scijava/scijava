@@ -64,20 +64,20 @@ public class WatershedBinaryTest extends AbstractOpTest {
 		ExecutorService es = createContext().getService(ThreadService.class).getExecutorService();
 
 		// threshold it
-		RandomAccessibleInterval<BitType> thresholdedImg = (RandomAccessibleInterval<BitType>) ops.run("create.img", watershedTestImg, new BitType());
+		RandomAccessibleInterval<BitType> thresholdedImg = (RandomAccessibleInterval<BitType>) new OpBuilder(ops, "create.img").input(watershedTestImg, new BitType()).apply();
 		ops.run("threshold.apply", Views.flatIterable(watershedTestImg),
 				new FloatType(1), Views.flatIterable(thresholdedImg));
 
 		// compute inverted distance transform and smooth it with gaussian
 		// filtering
-		final RandomAccessibleInterval<FloatType> distMap = (RandomAccessibleInterval<FloatType>) ops.run("create.img", thresholdedImg, new FloatType()); 
-		ops.run("image.distanceTransform", thresholdedImg, es, distMap);
-		final RandomAccessibleInterval<FloatType> invertedDistMap = (RandomAccessibleInterval<FloatType>) ops.run("create.img", distMap, new FloatType());
+		final RandomAccessibleInterval<FloatType> distMap = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "create.img").input(thresholdedImg, new FloatType()).apply(); 
+		new OpBuilder(ops, "image.distanceTransform").input(thresholdedImg, es, distMap).apply();
+		final RandomAccessibleInterval<FloatType> invertedDistMap = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "create.img").input(distMap, new FloatType()).apply();
 		double[] sigma = { 3.0, 3.0, 0.0 };
-		ops.run("image.invert", Views.iterable(distMap), Views.iterable(invertedDistMap));
+		new OpBuilder(ops, "image.invert").input(Views.iterable(distMap), Views.iterable(invertedDistMap)).apply();
 
-		final RandomAccessibleInterval<FloatType> gauss = (RandomAccessibleInterval<FloatType>) ops.run("create.img", invertedDistMap, new FloatType()); 
-		ops.run("filter.gauss", invertedDistMap, es, new double[] {sigma[0], sigma[1]}, gauss);
+		final RandomAccessibleInterval<FloatType> gauss = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "create.img").input(invertedDistMap, new FloatType()).apply(); 
+		new OpBuilder(ops, "filter.gauss").input(invertedDistMap, es, new double[] {sigma[0], sigma[1]}, gauss).apply();
 
 		// compute result
 		final ImgLabeling<Integer, IntType> out1 = (ImgLabeling<Integer, IntType>) ops.run("image.watershed",

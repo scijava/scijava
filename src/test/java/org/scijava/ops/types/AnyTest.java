@@ -23,10 +23,10 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = (Double) ops.run("test.nestedAny", nthing);
+		Double e = (Double) new OpBuilder(ops, "test.nestedAny").input(nthing).apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = (Double) ops.run("test.any", thing);
+		Double d = (Double) new OpBuilder(ops, "test.any").input(thing).apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -42,7 +42,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
-		Double d = (Double) ops.run("test.exceptionalAny", ething);
+		Double d = (Double) new OpBuilder(ops, "test.exceptionalAny").input(ething).apply();
 
 	}
 
@@ -72,7 +72,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testRunAnyFunction1FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final Object out = ops.run("test.integerAndLongAndNotAnyComputer", in1, in2);
+		final Object out = new OpBuilder(ops, "test.integerAndLongAndNotAnyComputer").input(in1, in2).apply();
 		assert out instanceof MutableNotAny;
 		assertEquals(Long.toString(in1 + in2), ((MutableNotAny) out).getValue());
 	}
@@ -80,7 +80,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	@Test
 	public void testAnyInjectionIntoFunctionRaws() {
 		final Function<Long, Long> func = (in) -> in / 2;
-		final Long output = (Long) ops.run("test.functionAndLongToLong", func, 20l);
+		final Long output = (Long) new OpBuilder(ops, "test.functionAndLongToLong").input(func, 20l).apply();
 		assert(output == 10);
 	}
 }

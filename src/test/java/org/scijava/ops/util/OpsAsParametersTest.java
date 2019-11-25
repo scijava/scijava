@@ -38,7 +38,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		List<Double> output = (List<Double>) ops.run("test.parameter.op", list, func);
+		List<Double> output = (List<Double>) new OpBuilder(ops, "test.parameter.op").input(list, func).apply();
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		}, new Nil<Double>() {
 		});
 
-		List<Double> output = (List<Double>) ops.run("test.parameter.op", list, funcClass);
+		List<Double> output = (List<Double>) new OpBuilder(ops, "test.parameter.op").input(list, funcClass).apply();
 	}
 
 }

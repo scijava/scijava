@@ -56,7 +56,7 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void boxivityMesh() {
 		try {
-			ops.run("geom.boxivity", mesh);
+			new OpBuilder(ops, "geom.boxivity").input(mesh).apply();
 		} catch (IllegalArgumentException e) {
 			// DefaultSmallestOrientedBoundingBox is not implemented.
 		}
@@ -87,12 +87,12 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	public void mainElongation() {
 		// formula verified and ground truth computed with matlab
 		assertEquals("geom.mainElongation", 0.2079585956045953,
-				((DoubleType) ops.run("geom.mainElongation", mesh)).get(), EPSILON);
+				((DoubleType) new OpBuilder(ops, "geom.mainElongation").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
 	public void marchingCubes() {
-		final Mesh result = (Mesh) ops.run("geom.marchingCubes", ROI, null, null);
+		final Mesh result = (Mesh) new OpBuilder(ops, "geom.marchingCubes").input(ROI, null, null).apply();
 		assertEquals(mesh.triangles().size(), result.triangles().size());
 		final Iterator<Triangle> expectedFacets = mesh.triangles().iterator();
 		final Iterator<Triangle> actualFacets = result.triangles().iterator();
@@ -116,25 +116,25 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	public void medianElongation() {
 		// formula verified and ground truth computed with matlab
 		assertEquals("geom.medianElongation", 0.30059118825775455,
-				((DoubleType) ops.run("geom.medianElongation", mesh)).get(), EPSILON);
+				((DoubleType) new OpBuilder(ops, "geom.medianElongation").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
 	public void sizeConvexHullMesh() {
 		// ground truth computed with matlab
-		assertEquals("geom.sizeConvexHull", 304.5, ((DoubleType) ops.run("geom.sizeConvexHull", mesh)).get(), EPSILON);
+		assertEquals("geom.sizeConvexHull", 304.5, ((DoubleType) new OpBuilder(ops, "geom.sizeConvexHull").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
 	public void sizeMesh() {
 		// ground truth computed with matlab
-		assertEquals("geom.size", 257.5, ((DoubleType) ops.run("geom.size", mesh)).get(), EPSILON);
+		assertEquals("geom.size", 257.5, ((DoubleType) new OpBuilder(ops, "geom.size").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
 	public void solidityMesh() {
 		// formula verified and ground truth computed with matlab
-		assertEquals("geom.solidity", 0.845648604269294, ((DoubleType) ops.run("geom.solidity", mesh)).get(), EPSILON);
+		assertEquals("geom.solidity", 0.845648604269294, ((DoubleType) new OpBuilder(ops, "geom.solidity").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
@@ -162,20 +162,20 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	public void surfaceAreaConvexHull() {
 		// ground truth computed with matlab
 		assertEquals("geom.boundarySizeConvexHull", 231.9508788339317,
-				((DoubleType) ops.run("geom.boundarySizeConvexHull", mesh)).get(), EPSILON);
+				((DoubleType) new OpBuilder(ops, "geom.boundarySizeConvexHull").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
 	public void verticesCountConvexHullMesh() {
 		// verified with matlab
 		assertEquals("geom.verticesCountConvexHull", 57,
-				((DoubleType) ops.run("geom.verticesCountConvexHull", mesh)).get(), EPSILON);
+				((DoubleType) new OpBuilder(ops, "geom.verticesCountConvexHull").input(mesh)).get(), EPSILON).apply();
 	}
 
 	@Test
 	public void verticesCountMesh() {
 		// verified with matlab
-		assertEquals("geom.verticesCount", 184, ((DoubleType) ops.run("geom.verticesCount", mesh)).get(), EPSILON);
+		assertEquals("geom.verticesCount", 184, ((DoubleType) new OpBuilder(ops, "geom.verticesCount").input(mesh)).get(), EPSILON).apply();
 
 	}
 

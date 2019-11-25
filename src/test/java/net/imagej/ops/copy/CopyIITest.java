@@ -88,7 +88,7 @@ public class CopyIITest extends AbstractOpTest {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(new int[] { 120, 100 });
 
 		@SuppressWarnings("unchecked")
-		Img<FloatType> output = (Img<FloatType>) ops.run("copy.iterableInterval", inputFloat);
+		Img<FloatType> output = (Img<FloatType>) new OpBuilder(ops, "copy.iterableInterval").input(inputFloat).apply();
 
 		assertTrue("Should be FloatType.", output.firstElement() instanceof FloatType);
 	}
@@ -97,7 +97,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		Img<DoubleType> output = input.factory().create(input, input.firstElement());
 
-		ops.run("copy.iterableInterval", output, input);
+		new OpBuilder(ops, "copy.iterableInterval").input(output, input).apply();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> outc = output.cursor();

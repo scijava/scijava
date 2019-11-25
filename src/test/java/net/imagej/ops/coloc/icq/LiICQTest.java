@@ -42,6 +42,7 @@ import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -58,10 +59,9 @@ public class LiICQTest extends ColocalisationTest {
 		final Img<ByteType> img1 = generateByteArrayTestImg(true, 10, 15, 20);
 		final Img<ByteType> img2 = generateByteArrayTestImg(true, 10, 15, 20);
 
-		final Object icqValue = ops.run("coloc.icq", img1, img2);
+		final Double icqValue = new OpBuilder(ops, "coloc.icq").input(img1, img2).outType(Double.class).apply();
 
-		assertTrue(icqValue instanceof Double);
-		assertEquals(0.5, (Double) icqValue, 0.0);
+		assertEquals(0.5, icqValue, 0.0);
 	}
 
 	/**
@@ -69,11 +69,8 @@ public class LiICQTest extends ColocalisationTest {
 	 */
 	@Test
 	public void liPositiveCorrTest() {
-		final Object icqValue = ops.run("coloc.icq", positiveCorrelationImageCh1, positiveCorrelationImageCh2);
-
-		assertTrue(icqValue instanceof Double);
-		final double icq = (Double) icqValue;
-		assertTrue(icq > 0.34 && icq < 0.35);
+		final Double icqValue = new OpBuilder(ops, "coloc.icq").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
+		assertTrue(icqValue > 0.34 && icqValue < 0.35);
 	}
 
 	/**
@@ -82,7 +79,7 @@ public class LiICQTest extends ColocalisationTest {
 	 */
 	@Test
 	public void liZeroCorrTest() {
-		final Object icqValue = ops.run("coloc.icq", zeroCorrelationImageCh1, zeroCorrelationImageCh2);
+		final Object icqValue = new OpBuilder(ops, "coloc.icq").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
 
 		assertTrue(icqValue instanceof Double);
 		final double icq = (Double) icqValue;
@@ -105,7 +102,7 @@ public class LiICQTest extends ColocalisationTest {
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops, "coloc.icq",
 				new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		ops.run("coloc.pValue", ch1, ch2, op, es, value);
+		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.72, value.getPValue(), 0.0);
 	}
 

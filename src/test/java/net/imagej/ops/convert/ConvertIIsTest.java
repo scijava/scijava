@@ -57,14 +57,14 @@ public class ConvertIIsTest extends AbstractOpTest {
 	@Before
 	public void createImages() {
 		final FinalDimensions dims = FinalDimensions.wrap(new long[] {10, 10});
-		in = (IterableInterval<ShortType>) ops.run("create.img", dims, new ShortType());
+		in = (IterableInterval<ShortType>) new OpBuilder(ops, "create.img").input(dims, new ShortType()).apply();
 		addNoise(in);
-		out = (Img<ByteType>) ops.run("create.img", dims, new ByteType());
+		out = (Img<ByteType>) new OpBuilder(ops, "create.img").input(dims, new ByteType()).apply();
 	}
 
 	@Test
 	public void testClip() {
-		ops.run("convert.clip", in, out);
+		new OpBuilder(ops, "convert.clip").input(in, out).apply();
 
 		final Cursor<ShortType> c = in.localizingCursor();
 		final RandomAccess<ByteType> ra = out.randomAccess();
@@ -77,7 +77,7 @@ public class ConvertIIsTest extends AbstractOpTest {
 
 	@Test
 	public void testCopy() {
-		ops.run("convert.copy", in, out);
+		new OpBuilder(ops, "convert.copy").input(in, out).apply();
 
 		final Cursor<ShortType> c = in.localizingCursor();
 		final RandomAccess<ByteType> ra = out.randomAccess();
@@ -91,8 +91,8 @@ public class ConvertIIsTest extends AbstractOpTest {
 	// -- Helper methods --
 
 	private void addNoise(final IterableInterval<ShortType> image) {
-		IterableInterval<ShortType> copy = (IterableInterval<ShortType>) ops.run("copy.img", image);
-		ops.run("filter.addNoise", copy, -32768., 32767., 10000., image);
+		IterableInterval<ShortType> copy = (IterableInterval<ShortType>) new OpBuilder(ops, "copy.img").input(image).apply();
+		new OpBuilder(ops, "filter.addNoise").input(copy, -32768., 32767., 10000., image).apply();
 	}
 
 	private byte clip(final short value) {

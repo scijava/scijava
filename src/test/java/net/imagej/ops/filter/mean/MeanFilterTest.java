@@ -16,11 +16,11 @@ public class MeanFilterTest extends AbstractOpTest{
 	@Test
 	public void meanFilterTest() {
 		
-		Img<ByteType> img = (Img<ByteType>) ops.run("create.img", new FinalInterval(5, 5), new ByteType());
+		Img<ByteType> img = (Img<ByteType>) new OpBuilder(ops, "create.img").input(new FinalInterval(5, 5), new ByteType()).apply();
 		RectangleShape shape = new RectangleShape(1, false);
 		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
-		Img<ByteType> output = (Img<ByteType>) ops.run("create.img", img);
-		ops.run("filter.mean", img, shape, oobf, output);
+		Img<ByteType> output = (Img<ByteType>) new OpBuilder(ops, "create.img").input(img).apply();
+		new OpBuilder(ops, "filter.mean").input(img, shape, oobf, output).apply();
 		
 	}
 

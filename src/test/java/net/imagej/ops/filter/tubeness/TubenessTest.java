@@ -67,8 +67,8 @@ public class TubenessTest extends AbstractOpTest {
 		final double sigma = scale / Math.sqrt(2);
 
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
-		Img<DoubleType> actual = (Img<DoubleType>) ops.run("create.img", input, new DoubleType());
-		ops.run("filter.tubeness", input, es, sigma, actual);
+		Img<DoubleType> actual = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(input, new DoubleType()).apply();
+		new OpBuilder(ops, "filter.tubeness").input(input, es, sigma, actual).apply();
 
 		assertIterationsEqual(expected, actual);
 

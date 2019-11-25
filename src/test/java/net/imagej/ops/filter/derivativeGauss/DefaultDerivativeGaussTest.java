@@ -52,11 +52,11 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		final Img<DoubleType> input = (Img<DoubleType>) ops.run("convert.float64",
 			generateFloatArrayTestImg(false, 30, 30, 30));
 
-		final Img<DoubleType> output = (Img<DoubleType>) ops.run("create.img", input);
+		final Img<DoubleType> output = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(input).apply();
 
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 1, 1 };
-		ops.run("filter.derivativeGauss", input, derivatives, sigmas, output);
+		new OpBuilder(ops, "filter.derivativeGauss").input(input, derivatives, sigmas, output).apply();
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		final Img<DoubleType> input = (Img<DoubleType>) ops.run("create.img",
 			new FinalDimensions(width, width), new DoubleType());
 
-		final Img<DoubleType> output = (Img<DoubleType>) ops.run("create.img", input, new DoubleType());
+		final Img<DoubleType> output = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(input, new DoubleType()).apply();
 
 		// Draw a line on the image
 		final RandomAccess<DoubleType> inputRA = input.randomAccess();
@@ -78,7 +78,7 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		// filter the image
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 0.5, 0.5 };
-		ops.run("filter.derivativeGauss", input, sigmas, derivatives, output);
+		new OpBuilder(ops, "filter.derivativeGauss").input(input, sigmas, derivatives, output).apply();
 
 		final Cursor<DoubleType> cursor = output.localizingCursor();
 		int currentPixel = 0;

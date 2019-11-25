@@ -132,8 +132,8 @@
 //		FloatType outSum3 = new FloatType();
 //
 //		// calculate sum of input and kernel
-//		ops.run("stats.sum", in, inSum);
-//		ops.run("stats.sum", kernel, kernelSum);
+//		new OpBuilder(ops, "stats.sum").input(in, inSum).apply();
+//		new OpBuilder(ops, "stats.sum").input(kernel, kernelSum).apply();
 //
 //		// convolve and calculate the sum of output
 //		@SuppressWarnings("unchecked")
@@ -195,9 +195,9 @@
 //		ops.run("filter.convolve", paddedInput, paddedKernel, fftImage,
 //			fftKernel, true, false, es, out3);
 //
-//		ops.run("stats.sum", Views.iterable(out), outSum);
-//		ops.run("stats.sum", out2, outSum2);
-//		ops.run("stats.sum", out3, outSum3);
+//		new OpBuilder(ops, "stats.sum").input(Views.iterable(out), outSum).apply();
+//		new OpBuilder(ops, "stats.sum").input(out2, outSum2).apply();
+//		new OpBuilder(ops, "stats.sum").input(out3, outSum3).apply();
 //
 //		// multiply input sum by kernelSum and assert it is the same as outSum
 //		inSum.mul(kernelSum);
@@ -235,7 +235,7 @@
 //
 //		int[] size = new int[] { xSize, ySize, zSize };
 //
-//		Img<DoubleType> phantom = (Img<DoubleType>) ops.run("create.img", size);
+//		Img<DoubleType> phantom = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(size).apply();
 //
 //		RandomAccess<DoubleType> randomAccess = phantom.randomAccess();
 //
@@ -269,9 +269,9 @@
 //		DoubleType max = new DoubleType();
 //		DoubleType min = new DoubleType();
 //
-//		ops.run("stats.sum", Views.iterable(convolved), sum);
-//		ops.run("stats.max", Views.iterable(convolved), max);
-//		ops.run("stats.min", Views.iterable(convolved), min);
+//		new OpBuilder(ops, "stats.sum").input(Views.iterable(convolved), sum).apply();
+//		new OpBuilder(ops, "stats.max").input(Views.iterable(convolved), max).apply();
+//		new OpBuilder(ops, "stats.min").input(Views.iterable(convolved), min).apply();
 //
 //		assertEquals(sum.getRealDouble(), 8750.00, 0.001);
 //		assertEquals(max.getRealDouble(), 3.155, 0.001);

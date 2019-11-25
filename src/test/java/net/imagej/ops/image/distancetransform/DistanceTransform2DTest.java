@@ -68,7 +68,7 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 		/*
 		 * test normal DT
 		 */
-		ops.run("image.distanceTransform", in, ts.getExecutorService(), out);
+		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService(), out).apply();
 		compareResults(out, in, new double[] { 1, 1 });
 
 		/*

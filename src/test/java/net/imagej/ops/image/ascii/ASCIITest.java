@@ -61,8 +61,8 @@ public class ASCIITest extends AbstractOpTest {
 		}
 		final Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(array, width,
 			len);
-		final Pair<UnsignedByteType, UnsignedByteType> minMax = (Pair<UnsignedByteType, UnsignedByteType>) ops.run("stats.minMax", img);
-		final String ascii = (String) ops.run("image.ascii", img, minMax.getA(), minMax.getB());
+		final Pair<UnsignedByteType, UnsignedByteType> minMax = (Pair<UnsignedByteType, UnsignedByteType>) new OpBuilder(ops, "stats.minMax").input(img).apply();
+		final String ascii = (String) new OpBuilder(ops, "image.ascii").input(img, minMax.getA(), minMax.getB()).apply();
 		for (int i = 0; i < len; i++) {
 			for (int j = 0; j < width; j++) {
 				assertTrue(ascii.charAt(i * (width + 1) + j) == CHARS.charAt(i));

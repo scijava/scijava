@@ -5,7 +5,8 @@ arities = (0..maxArity).collect()
 nilArgs = ```
 { arity ->
   names = nilNames(arity)
-  names.swap(0, names.size() - 1)
+  output = names.remove(names.size() - 1)
+  names.add(0, output)
   String.join(', ', names)
 }
 ```

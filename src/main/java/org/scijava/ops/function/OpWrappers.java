@@ -18,7 +18,7 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final OpInfo opInfo) {
+		public Producer<T> wrap(final Producer<T> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedProducer implements Producer<T>, GenericTyped {
 				@Override
 				public T create() {
@@ -27,7 +27,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedProducer();
@@ -40,7 +40,7 @@ public class OpWrappers {
 	public static class Function1OpWrapper<I, O> implements OpWrapper<Function<I, O>> {
 
 		@Override
-		public Function<I, O> wrap(final Function<I, O> op, final OpInfo opInfo) {
+		public Function<I, O> wrap(final Function<I, O> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction1 implements Function<I, O>, GenericTyped {
 				@Override
 				public O apply(I in) {
@@ -49,7 +49,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction1();
@@ -60,7 +60,8 @@ public class OpWrappers {
 	public static class Function2OpWrapper<I1, I2, O> implements OpWrapper<BiFunction<I1, I2, O>> {
 
 		@Override
-		public BiFunction<I1, I2, O> wrap(final BiFunction<I1, I2, O> op, final OpInfo opInfo) {
+		public BiFunction<I1, I2, O> wrap(final BiFunction<I1, I2, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction2 implements BiFunction<I1, I2, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2) {
@@ -69,7 +70,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction2();
@@ -80,7 +81,8 @@ public class OpWrappers {
 	public static class Function3OpWrapper<I1, I2, I3, O> implements OpWrapper<Functions.Arity3<I1, I2, I3, O>> {
 
 		@Override
-		public Functions.Arity3<I1, I2, I3, O> wrap(final Functions.Arity3<I1, I2, I3, O> op, final OpInfo opInfo) {
+		public Functions.Arity3<I1, I2, I3, O> wrap(final Functions.Arity3<I1, I2, I3, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction3 implements Functions.Arity3<I1, I2, I3, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3) {
@@ -89,7 +91,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction3();
@@ -102,7 +104,7 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity4<I1, I2, I3, I4, O> wrap(final Functions.Arity4<I1, I2, I3, I4, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction4 implements Functions.Arity4<I1, I2, I3, I4, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4) {
@@ -111,7 +113,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction4();
@@ -124,7 +126,7 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> wrap(final Functions.Arity5<I1, I2, I3, I4, I5, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction5 implements Functions.Arity5<I1, I2, I3, I4, I5, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) {
@@ -133,7 +135,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction5();
@@ -146,7 +148,7 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> wrap(final Functions.Arity6<I1, I2, I3, I4, I5, I6, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction6 implements Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) {
@@ -155,7 +157,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction6();
@@ -168,7 +170,8 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> wrap(
-				final Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, final OpInfo opInfo) {
+				final Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction7 implements Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) {
@@ -177,7 +180,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction7();
@@ -190,7 +193,8 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> wrap(
-				final Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, final OpInfo opInfo) {
+				final Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction8 implements Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, GenericTyped {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) {
@@ -199,7 +203,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction8();
@@ -212,7 +216,8 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> wrap(
-				final Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, final OpInfo opInfo) {
+				final Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction9
 					implements Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, GenericTyped {
 				@Override
@@ -222,7 +227,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction9();
@@ -235,7 +240,8 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> wrap(
-				final Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, final OpInfo opInfo) {
+				final Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction10
 					implements Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, GenericTyped {
 				@Override
@@ -245,7 +251,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction10();
@@ -258,7 +264,8 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> wrap(
-				final Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, final OpInfo opInfo) {
+				final Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction11
 					implements Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, GenericTyped {
 				@Override
@@ -269,7 +276,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction11();
@@ -282,7 +289,8 @@ public class OpWrappers {
 
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> wrap(
-				final Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, final OpInfo opInfo) {
+				final Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedFunction12
 					implements Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, GenericTyped {
 				@Override
@@ -293,7 +301,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction12();
@@ -307,7 +315,7 @@ public class OpWrappers {
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> wrap(
 				final Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction13 implements
 					Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, GenericTyped {
 				@Override
@@ -318,7 +326,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction13();
@@ -332,7 +340,7 @@ public class OpWrappers {
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> wrap(
 				final Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction14 implements
 					Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, GenericTyped {
 				@Override
@@ -343,7 +351,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction14();
@@ -358,7 +366,7 @@ public class OpWrappers {
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> wrap(
 				final Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction15
 					implements Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>,
 					GenericTyped {
@@ -370,7 +378,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction15();
@@ -385,7 +393,7 @@ public class OpWrappers {
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> wrap(
 				final Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedFunction16 implements
 					Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>,
 					GenericTyped {
@@ -398,7 +406,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedFunction16();
@@ -411,7 +419,7 @@ public class OpWrappers {
 	public static class Computer0OpWrapper<O> implements OpWrapper<Computers.Arity0<O>> {
 
 		@Override
-		public Computers.Arity0<O> wrap(final Computers.Arity0<O> op, final OpInfo opInfo) {
+		public Computers.Arity0<O> wrap(final Computers.Arity0<O> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer0 implements Computers.Arity0<O>, GenericTyped {
 				@Override
 				public void compute(@Mutable O out) {
@@ -420,7 +428,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer0();
@@ -431,7 +439,8 @@ public class OpWrappers {
 	public static class Computer1OpWrapper<I, O> implements OpWrapper<Computers.Arity1<I, O>> {
 
 		@Override
-		public Computers.Arity1<I, O> wrap(final Computers.Arity1<I, O> op, final OpInfo opInfo) {
+		public Computers.Arity1<I, O> wrap(final Computers.Arity1<I, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer1 implements Computers.Arity1<I, O>, GenericTyped {
 				@Override
 				public void compute(I in, @Mutable O out) {
@@ -440,7 +449,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer1();
@@ -451,7 +460,8 @@ public class OpWrappers {
 	public static class Computer2OpWrapper<I1, I2, O> implements OpWrapper<Computers.Arity2<I1, I2, O>> {
 
 		@Override
-		public Computers.Arity2<I1, I2, O> wrap(final Computers.Arity2<I1, I2, O> op, final OpInfo opInfo) {
+		public Computers.Arity2<I1, I2, O> wrap(final Computers.Arity2<I1, I2, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer2 implements Computers.Arity2<I1, I2, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, @Mutable O out) {
@@ -460,7 +470,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer2();
@@ -471,7 +481,8 @@ public class OpWrappers {
 	public static class Computer3OpWrapper<I1, I2, I3, O> implements OpWrapper<Computers.Arity3<I1, I2, I3, O>> {
 
 		@Override
-		public Computers.Arity3<I1, I2, I3, O> wrap(final Computers.Arity3<I1, I2, I3, O> op, final OpInfo opInfo) {
+		public Computers.Arity3<I1, I2, I3, O> wrap(final Computers.Arity3<I1, I2, I3, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer3 implements Computers.Arity3<I1, I2, I3, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, @Mutable O out) {
@@ -480,7 +491,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer3();
@@ -493,7 +504,7 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity4<I1, I2, I3, I4, O> wrap(final Computers.Arity4<I1, I2, I3, I4, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer4 implements Computers.Arity4<I1, I2, I3, I4, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, @Mutable O out) {
@@ -502,7 +513,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer4();
@@ -515,7 +526,7 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> wrap(final Computers.Arity5<I1, I2, I3, I4, I5, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer5 implements Computers.Arity5<I1, I2, I3, I4, I5, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Mutable O out) {
@@ -524,7 +535,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer5();
@@ -537,7 +548,7 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> wrap(final Computers.Arity6<I1, I2, I3, I4, I5, I6, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer6 implements Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Mutable O out) {
@@ -546,7 +557,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer6();
@@ -559,7 +570,8 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> wrap(
-				final Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, final OpInfo opInfo) {
+				final Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer7 implements Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Mutable O out) {
@@ -568,7 +580,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer7();
@@ -581,7 +593,8 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> wrap(
-				final Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, final OpInfo opInfo) {
+				final Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer8 implements Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, GenericTyped {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Mutable O out) {
@@ -590,7 +603,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer8();
@@ -603,7 +616,8 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> wrap(
-				final Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, final OpInfo opInfo) {
+				final Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer9
 					implements Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, GenericTyped {
 				@Override
@@ -614,7 +628,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer9();
@@ -627,7 +641,8 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> wrap(
-				final Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, final OpInfo opInfo) {
+				final Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer10
 					implements Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, GenericTyped {
 				@Override
@@ -638,7 +653,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer10();
@@ -651,7 +666,8 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> wrap(
-				final Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, final OpInfo opInfo) {
+				final Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer11
 					implements Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, GenericTyped {
 				@Override
@@ -662,7 +678,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer11();
@@ -675,7 +691,8 @@ public class OpWrappers {
 
 		@Override
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> wrap(
-				final Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, final OpInfo opInfo) {
+				final Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedComputer12
 					implements Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, GenericTyped {
 				@Override
@@ -686,7 +703,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer12();
@@ -700,7 +717,7 @@ public class OpWrappers {
 		@Override
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> wrap(
 				final Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer13 implements
 					Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, GenericTyped {
 				@Override
@@ -711,7 +728,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer13();
@@ -725,7 +742,7 @@ public class OpWrappers {
 		@Override
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> wrap(
 				final Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer14 implements
 					Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, GenericTyped {
 				@Override
@@ -736,7 +753,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer14();
@@ -751,7 +768,7 @@ public class OpWrappers {
 		@Override
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> wrap(
 				final Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer15
 					implements Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>,
 					GenericTyped {
@@ -763,7 +780,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer15();
@@ -778,7 +795,7 @@ public class OpWrappers {
 		@Override
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> wrap(
 				final Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedComputer16 implements
 					Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>,
 					GenericTyped {
@@ -791,7 +808,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedComputer16();
@@ -804,7 +821,7 @@ public class OpWrappers {
 	public static class Inplace1OpWrapper<IO> implements OpWrapper<Inplaces.Arity1<IO>> {
 
 		@Override
-		public Inplaces.Arity1<IO> wrap(final Inplaces.Arity1<IO> op, final OpInfo opInfo) {
+		public Inplaces.Arity1<IO> wrap(final Inplaces.Arity1<IO> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace1 implements Inplaces.Arity1<IO>, GenericTyped {
 				@Override
 				public void mutate(IO ioType) {
@@ -813,7 +830,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace1();
@@ -824,7 +841,8 @@ public class OpWrappers {
 	public static class Inplace2_1OpWrapper<IO, I2> implements OpWrapper<Inplaces.Arity2_1<IO, I2>> {
 
 		@Override
-		public Inplaces.Arity2_1<IO, I2> wrap(final Inplaces.Arity2_1<IO, I2> op, final OpInfo opInfo) {
+		public Inplaces.Arity2_1<IO, I2> wrap(final Inplaces.Arity2_1<IO, I2> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace2_1 implements Inplaces.Arity2_1<IO, I2>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type) {
@@ -833,7 +851,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace2_1();
@@ -844,7 +862,8 @@ public class OpWrappers {
 	public static class Inplace2_2OpWrapper<I1, IO> implements OpWrapper<Inplaces.Arity2_2<I1, IO>> {
 
 		@Override
-		public Inplaces.Arity2_2<I1, IO> wrap(final Inplaces.Arity2_2<I1, IO> op, final OpInfo opInfo) {
+		public Inplaces.Arity2_2<I1, IO> wrap(final Inplaces.Arity2_2<I1, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace2_2 implements Inplaces.Arity2_2<I1, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType) {
@@ -853,7 +872,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace2_2();
@@ -864,7 +883,8 @@ public class OpWrappers {
 	public static class Inplace3_1OpWrapper<IO, I2, I3> implements OpWrapper<Inplaces.Arity3_1<IO, I2, I3>> {
 
 		@Override
-		public Inplaces.Arity3_1<IO, I2, I3> wrap(final Inplaces.Arity3_1<IO, I2, I3> op, final OpInfo opInfo) {
+		public Inplaces.Arity3_1<IO, I2, I3> wrap(final Inplaces.Arity3_1<IO, I2, I3> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace3_1 implements Inplaces.Arity3_1<IO, I2, I3>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type) {
@@ -873,7 +893,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace3_1();
@@ -884,7 +904,8 @@ public class OpWrappers {
 	public static class Inplace3_2OpWrapper<I1, IO, I3> implements OpWrapper<Inplaces.Arity3_2<I1, IO, I3>> {
 
 		@Override
-		public Inplaces.Arity3_2<I1, IO, I3> wrap(final Inplaces.Arity3_2<I1, IO, I3> op, final OpInfo opInfo) {
+		public Inplaces.Arity3_2<I1, IO, I3> wrap(final Inplaces.Arity3_2<I1, IO, I3> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace3_2 implements Inplaces.Arity3_2<I1, IO, I3>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type) {
@@ -893,7 +914,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace3_2();
@@ -904,7 +925,8 @@ public class OpWrappers {
 	public static class Inplace3_3OpWrapper<I1, I2, IO> implements OpWrapper<Inplaces.Arity3_3<I1, I2, IO>> {
 
 		@Override
-		public Inplaces.Arity3_3<I1, I2, IO> wrap(final Inplaces.Arity3_3<I1, I2, IO> op, final OpInfo opInfo) {
+		public Inplaces.Arity3_3<I1, I2, IO> wrap(final Inplaces.Arity3_3<I1, I2, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace3_3 implements Inplaces.Arity3_3<I1, I2, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType) {
@@ -913,7 +935,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace3_3();
@@ -924,7 +946,8 @@ public class OpWrappers {
 	public static class Inplace4_1OpWrapper<IO, I2, I3, I4> implements OpWrapper<Inplaces.Arity4_1<IO, I2, I3, I4>> {
 
 		@Override
-		public Inplaces.Arity4_1<IO, I2, I3, I4> wrap(final Inplaces.Arity4_1<IO, I2, I3, I4> op, final OpInfo opInfo) {
+		public Inplaces.Arity4_1<IO, I2, I3, I4> wrap(final Inplaces.Arity4_1<IO, I2, I3, I4> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace4_1 implements Inplaces.Arity4_1<IO, I2, I3, I4>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type) {
@@ -933,7 +956,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace4_1();
@@ -944,7 +967,8 @@ public class OpWrappers {
 	public static class Inplace4_2OpWrapper<I1, IO, I3, I4> implements OpWrapper<Inplaces.Arity4_2<I1, IO, I3, I4>> {
 
 		@Override
-		public Inplaces.Arity4_2<I1, IO, I3, I4> wrap(final Inplaces.Arity4_2<I1, IO, I3, I4> op, final OpInfo opInfo) {
+		public Inplaces.Arity4_2<I1, IO, I3, I4> wrap(final Inplaces.Arity4_2<I1, IO, I3, I4> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace4_2 implements Inplaces.Arity4_2<I1, IO, I3, I4>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type) {
@@ -953,7 +977,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace4_2();
@@ -964,7 +988,8 @@ public class OpWrappers {
 	public static class Inplace4_3OpWrapper<I1, I2, IO, I4> implements OpWrapper<Inplaces.Arity4_3<I1, I2, IO, I4>> {
 
 		@Override
-		public Inplaces.Arity4_3<I1, I2, IO, I4> wrap(final Inplaces.Arity4_3<I1, I2, IO, I4> op, final OpInfo opInfo) {
+		public Inplaces.Arity4_3<I1, I2, IO, I4> wrap(final Inplaces.Arity4_3<I1, I2, IO, I4> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace4_3 implements Inplaces.Arity4_3<I1, I2, IO, I4>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type) {
@@ -973,7 +998,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace4_3();
@@ -984,7 +1009,8 @@ public class OpWrappers {
 	public static class Inplace4_4OpWrapper<I1, I2, I3, IO> implements OpWrapper<Inplaces.Arity4_4<I1, I2, I3, IO>> {
 
 		@Override
-		public Inplaces.Arity4_4<I1, I2, I3, IO> wrap(final Inplaces.Arity4_4<I1, I2, I3, IO> op, final OpInfo opInfo) {
+		public Inplaces.Arity4_4<I1, I2, I3, IO> wrap(final Inplaces.Arity4_4<I1, I2, I3, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace4_4 implements Inplaces.Arity4_4<I1, I2, I3, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType) {
@@ -993,7 +1019,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace4_4();
@@ -1006,7 +1032,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity5_1<IO, I2, I3, I4, I5> wrap(final Inplaces.Arity5_1<IO, I2, I3, I4, I5> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace5_1 implements Inplaces.Arity5_1<IO, I2, I3, I4, I5>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type) {
@@ -1015,7 +1041,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace5_1();
@@ -1028,7 +1054,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity5_2<I1, IO, I3, I4, I5> wrap(final Inplaces.Arity5_2<I1, IO, I3, I4, I5> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace5_2 implements Inplaces.Arity5_2<I1, IO, I3, I4, I5>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type) {
@@ -1037,7 +1063,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace5_2();
@@ -1050,7 +1076,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity5_3<I1, I2, IO, I4, I5> wrap(final Inplaces.Arity5_3<I1, I2, IO, I4, I5> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace5_3 implements Inplaces.Arity5_3<I1, I2, IO, I4, I5>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type) {
@@ -1059,7 +1085,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace5_3();
@@ -1072,7 +1098,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity5_4<I1, I2, I3, IO, I5> wrap(final Inplaces.Arity5_4<I1, I2, I3, IO, I5> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace5_4 implements Inplaces.Arity5_4<I1, I2, I3, IO, I5>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type) {
@@ -1081,7 +1107,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace5_4();
@@ -1094,7 +1120,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity5_5<I1, I2, I3, I4, IO> wrap(final Inplaces.Arity5_5<I1, I2, I3, I4, IO> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace5_5 implements Inplaces.Arity5_5<I1, I2, I3, I4, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType) {
@@ -1103,7 +1129,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace5_5();
@@ -1116,7 +1142,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> wrap(final Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace6_1 implements Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type) {
@@ -1125,7 +1151,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace6_1();
@@ -1138,7 +1164,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> wrap(final Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace6_2 implements Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type) {
@@ -1147,7 +1173,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace6_2();
@@ -1160,7 +1186,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> wrap(final Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace6_3 implements Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type) {
@@ -1169,7 +1195,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace6_3();
@@ -1182,7 +1208,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> wrap(final Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace6_4 implements Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type) {
@@ -1191,7 +1217,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace6_4();
@@ -1204,7 +1230,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> wrap(final Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace6_5 implements Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type) {
@@ -1213,7 +1239,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace6_5();
@@ -1226,7 +1252,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> wrap(final Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace6_6 implements Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType) {
@@ -1235,7 +1261,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace6_6();
@@ -1248,7 +1274,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> wrap(
-				final Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_1 implements Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) {
@@ -1257,7 +1283,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_1();
@@ -1270,7 +1296,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> wrap(
-				final Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_2 implements Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) {
@@ -1279,7 +1305,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_2();
@@ -1292,7 +1318,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> wrap(
-				final Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_3 implements Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) {
@@ -1301,7 +1327,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_3();
@@ -1314,7 +1340,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> wrap(
-				final Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_4 implements Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type) {
@@ -1323,7 +1349,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_4();
@@ -1336,7 +1362,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> wrap(
-				final Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_5 implements Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type) {
@@ -1345,7 +1371,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_5();
@@ -1358,7 +1384,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> wrap(
-				final Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_6 implements Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type) {
@@ -1367,7 +1393,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_6();
@@ -1380,7 +1406,7 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> wrap(
-				final Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> op, final OpInfo opInfo) {
+				final Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace7_7 implements Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType) {
@@ -1389,7 +1415,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace7_7();
@@ -1402,7 +1428,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> wrap(
-				final Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_1 implements Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>, GenericTyped {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type,
@@ -1412,7 +1439,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_1();
@@ -1425,7 +1452,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> wrap(
-				final Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_2 implements Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type,
@@ -1435,7 +1463,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_2();
@@ -1448,7 +1476,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> wrap(
-				final Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_3 implements Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type,
@@ -1458,7 +1487,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_3();
@@ -1471,7 +1500,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> wrap(
-				final Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_4 implements Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type,
@@ -1481,7 +1511,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_4();
@@ -1494,7 +1524,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> wrap(
-				final Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_5 implements Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type,
@@ -1504,7 +1535,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_5();
@@ -1517,7 +1548,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> wrap(
-				final Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_6 implements Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type,
@@ -1527,7 +1559,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_6();
@@ -1540,7 +1572,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> wrap(
-				final Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_7 implements Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType,
@@ -1550,7 +1583,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_7();
@@ -1563,7 +1596,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> wrap(
-				final Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> op, final OpInfo opInfo) {
+				final Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace8_8 implements Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>, GenericTyped {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type,
@@ -1573,7 +1607,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace8_8();
@@ -1586,7 +1620,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> wrap(
-				final Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_1
 					implements Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>, GenericTyped {
 				@Override
@@ -1597,7 +1632,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_1();
@@ -1610,7 +1645,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> wrap(
-				final Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_2
 					implements Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>, GenericTyped {
 				@Override
@@ -1621,7 +1657,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_2();
@@ -1634,7 +1670,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> wrap(
-				final Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_3
 					implements Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>, GenericTyped {
 				@Override
@@ -1645,7 +1682,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_3();
@@ -1658,7 +1695,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> wrap(
-				final Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_4
 					implements Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>, GenericTyped {
 				@Override
@@ -1669,7 +1707,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_4();
@@ -1682,7 +1720,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> wrap(
-				final Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_5
 					implements Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>, GenericTyped {
 				@Override
@@ -1693,7 +1732,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_5();
@@ -1706,7 +1745,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> wrap(
-				final Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_6
 					implements Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>, GenericTyped {
 				@Override
@@ -1717,7 +1757,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_6();
@@ -1730,7 +1770,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> wrap(
-				final Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_7
 					implements Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>, GenericTyped {
 				@Override
@@ -1741,7 +1782,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_7();
@@ -1754,7 +1795,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> wrap(
-				final Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_8
 					implements Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>, GenericTyped {
 				@Override
@@ -1765,7 +1807,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_8();
@@ -1778,7 +1820,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> wrap(
-				final Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> op, final OpInfo opInfo) {
+				final Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace9_9
 					implements Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>, GenericTyped {
 				@Override
@@ -1789,7 +1832,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace9_9();
@@ -1802,7 +1845,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> wrap(
-				final Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_1
 					implements Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1813,7 +1857,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_1();
@@ -1826,7 +1870,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> wrap(
-				final Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_2
 					implements Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1837,7 +1882,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_2();
@@ -1850,7 +1895,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> wrap(
-				final Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_3
 					implements Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1861,7 +1907,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_3();
@@ -1874,7 +1920,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> wrap(
-				final Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_4
 					implements Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1885,7 +1932,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_4();
@@ -1898,7 +1945,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> wrap(
-				final Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_5
 					implements Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1909,7 +1957,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_5();
@@ -1922,7 +1970,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> wrap(
-				final Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_6
 					implements Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1933,7 +1982,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_6();
@@ -1946,7 +1995,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> wrap(
-				final Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_7
 					implements Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>, GenericTyped {
 				@Override
@@ -1957,7 +2007,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_7();
@@ -1970,7 +2020,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> wrap(
-				final Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_8
 					implements Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>, GenericTyped {
 				@Override
@@ -1981,7 +2032,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_8();
@@ -1994,7 +2045,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> wrap(
-				final Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_9
 					implements Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>, GenericTyped {
 				@Override
@@ -2005,7 +2057,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_9();
@@ -2018,7 +2070,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> wrap(
-				final Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> op, final OpInfo opInfo) {
+				final Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace10_10
 					implements Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>, GenericTyped {
 				@Override
@@ -2029,7 +2082,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace10_10();
@@ -2042,7 +2095,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_1
 					implements Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2054,7 +2108,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_1();
@@ -2067,7 +2121,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_2
 					implements Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2079,7 +2134,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_2();
@@ -2092,7 +2147,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_3
 					implements Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2104,7 +2160,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_3();
@@ -2117,7 +2173,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_4
 					implements Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2129,7 +2186,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_4();
@@ -2142,7 +2199,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_5
 					implements Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2154,7 +2212,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_5();
@@ -2167,7 +2225,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_6
 					implements Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2179,7 +2238,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_6();
@@ -2192,7 +2251,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> wrap(
-				final Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_7
 					implements Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2204,7 +2264,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_7();
@@ -2217,7 +2277,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> wrap(
-				final Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_8
 					implements Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>, GenericTyped {
 				@Override
@@ -2229,7 +2290,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_8();
@@ -2242,7 +2303,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> wrap(
-				final Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_9
 					implements Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>, GenericTyped {
 				@Override
@@ -2254,7 +2316,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_9();
@@ -2267,7 +2329,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> wrap(
-				final Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_10
 					implements Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>, GenericTyped {
 				@Override
@@ -2279,7 +2342,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_10();
@@ -2292,7 +2355,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> wrap(
-				final Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> op, final OpInfo opInfo) {
+				final Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace11_11
 					implements Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>, GenericTyped {
 				@Override
@@ -2304,7 +2368,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace11_11();
@@ -2317,7 +2381,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_1
 					implements Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2329,7 +2394,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_1();
@@ -2342,7 +2407,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_2
 					implements Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2354,7 +2420,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_2();
@@ -2367,7 +2433,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_3
 					implements Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2379,7 +2446,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_3();
@@ -2392,7 +2459,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_4
 					implements Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2404,7 +2472,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_4();
@@ -2417,7 +2485,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_5
 					implements Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2429,7 +2498,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_5();
@@ -2442,7 +2511,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_6
 					implements Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2454,7 +2524,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_6();
@@ -2467,7 +2537,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_7
 					implements Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2479,7 +2550,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_7();
@@ -2492,7 +2563,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> wrap(
-				final Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_8
 					implements Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2504,7 +2576,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_8();
@@ -2517,7 +2589,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> wrap(
-				final Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_9
 					implements Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>, GenericTyped {
 				@Override
@@ -2529,7 +2602,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_9();
@@ -2542,7 +2615,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> wrap(
-				final Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_10
 					implements Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>, GenericTyped {
 				@Override
@@ -2554,7 +2628,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_10();
@@ -2567,7 +2641,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> wrap(
-				final Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_11
 					implements Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>, GenericTyped {
 				@Override
@@ -2579,7 +2654,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_11();
@@ -2592,7 +2667,8 @@ public class OpWrappers {
 
 		@Override
 		public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> wrap(
-				final Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> op, final OpInfo opInfo) {
+				final Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> op, final OpInfo opInfo,
+				final Type requestedType) {
 			class GenericTypedInplace12_12
 					implements Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>, GenericTyped {
 				@Override
@@ -2604,7 +2680,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace12_12();
@@ -2618,7 +2694,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_1 implements
 					Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2630,7 +2706,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_1();
@@ -2644,7 +2720,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_2 implements
 					Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2656,7 +2732,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_2();
@@ -2670,7 +2746,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_3 implements
 					Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2682,7 +2758,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_3();
@@ -2696,7 +2772,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_4 implements
 					Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2708,7 +2784,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_4();
@@ -2722,7 +2798,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_5 implements
 					Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2734,7 +2810,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_5();
@@ -2748,7 +2824,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_6 implements
 					Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2760,7 +2836,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_6();
@@ -2774,7 +2850,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_7 implements
 					Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2786,7 +2862,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_7();
@@ -2800,7 +2876,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_8 implements
 					Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2812,7 +2888,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_8();
@@ -2826,7 +2902,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> wrap(
 				final Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_9 implements
 					Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2838,7 +2914,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_9();
@@ -2852,7 +2928,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> wrap(
 				final Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_10 implements
 					Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>, GenericTyped {
 				@Override
@@ -2864,7 +2940,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_10();
@@ -2878,7 +2954,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> wrap(
 				final Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_11 implements
 					Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>, GenericTyped {
 				@Override
@@ -2890,7 +2966,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_11();
@@ -2904,7 +2980,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> wrap(
 				final Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_12 implements
 					Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>, GenericTyped {
 				@Override
@@ -2916,7 +2992,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_12();
@@ -2930,7 +3006,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> wrap(
 				final Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace13_13 implements
 					Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>, GenericTyped {
 				@Override
@@ -2942,7 +3018,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace13_13();
@@ -2956,7 +3032,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_1 implements
 					Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -2968,7 +3044,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_1();
@@ -2982,7 +3058,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_2 implements
 					Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -2994,7 +3070,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_2();
@@ -3008,7 +3084,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_3 implements
 					Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3020,7 +3096,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_3();
@@ -3034,7 +3110,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_4 implements
 					Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3046,7 +3122,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_4();
@@ -3060,7 +3136,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_5 implements
 					Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3072,7 +3148,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_5();
@@ -3086,7 +3162,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_6 implements
 					Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3098,7 +3174,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_6();
@@ -3112,7 +3188,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_7 implements
 					Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3124,7 +3200,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_7();
@@ -3138,7 +3214,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_8 implements
 					Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3150,7 +3226,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_8();
@@ -3164,7 +3240,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_9 implements
 					Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3176,7 +3252,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_9();
@@ -3190,7 +3266,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> wrap(
 				final Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_10 implements
 					Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3202,7 +3278,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_10();
@@ -3216,7 +3292,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> wrap(
 				final Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_11 implements
 					Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>, GenericTyped {
 				@Override
@@ -3228,7 +3304,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_11();
@@ -3242,7 +3318,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> wrap(
 				final Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_12 implements
 					Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>, GenericTyped {
 				@Override
@@ -3254,7 +3330,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_12();
@@ -3268,7 +3344,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> wrap(
 				final Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_13 implements
 					Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>, GenericTyped {
 				@Override
@@ -3280,7 +3356,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_13();
@@ -3294,7 +3370,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> wrap(
 				final Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace14_14 implements
 					Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>, GenericTyped {
 				@Override
@@ -3306,7 +3382,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace14_14();
@@ -3320,7 +3396,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_1 implements
 					Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3333,7 +3409,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_1();
@@ -3347,7 +3423,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_2 implements
 					Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3360,7 +3436,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_2();
@@ -3374,7 +3450,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_3 implements
 					Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3387,7 +3463,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_3();
@@ -3401,7 +3477,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_4 implements
 					Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3414,7 +3490,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_4();
@@ -3428,7 +3504,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_5 implements
 					Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3441,7 +3517,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_5();
@@ -3455,7 +3531,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_6 implements
 					Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3468,7 +3544,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_6();
@@ -3482,7 +3558,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_7 implements
 					Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3495,7 +3571,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_7();
@@ -3509,7 +3585,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_8 implements
 					Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3522,7 +3598,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_8();
@@ -3536,7 +3612,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_9 implements
 					Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3549,7 +3625,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_9();
@@ -3563,7 +3639,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_10 implements
 					Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3576,7 +3652,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_10();
@@ -3590,7 +3666,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> wrap(
 				final Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_11 implements
 					Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3603,7 +3679,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_11();
@@ -3617,7 +3693,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> wrap(
 				final Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_12 implements
 					Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>, GenericTyped {
 				@Override
@@ -3630,7 +3706,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_12();
@@ -3644,7 +3720,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> wrap(
 				final Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_13 implements
 					Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>, GenericTyped {
 				@Override
@@ -3657,7 +3733,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_13();
@@ -3671,7 +3747,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> wrap(
 				final Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_14 implements
 					Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>, GenericTyped {
 				@Override
@@ -3684,7 +3760,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_14();
@@ -3698,7 +3774,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> wrap(
 				final Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace15_15 implements
 					Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>, GenericTyped {
 				@Override
@@ -3711,7 +3787,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace15_15();
@@ -3726,7 +3802,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_1 implements
 					Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3740,7 +3816,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_1();
@@ -3755,7 +3831,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_2 implements
 					Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3769,7 +3845,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_2();
@@ -3784,7 +3860,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_3 implements
 					Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3798,7 +3874,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_3();
@@ -3813,7 +3889,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_4 implements
 					Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3827,7 +3903,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_4();
@@ -3842,7 +3918,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_5 implements
 					Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3856,7 +3932,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_5();
@@ -3871,7 +3947,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_6 implements
 					Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3885,7 +3961,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_6();
@@ -3900,7 +3976,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_7 implements
 					Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3914,7 +3990,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_7();
@@ -3929,7 +4005,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_8 implements
 					Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3943,7 +4019,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_8();
@@ -3958,7 +4034,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_9 implements
 					Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -3972,7 +4048,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_9();
@@ -3987,7 +4063,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_10 implements
 					Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -4001,7 +4077,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_10();
@@ -4016,7 +4092,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_11 implements
 					Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>,
 					GenericTyped {
@@ -4030,7 +4106,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_11();
@@ -4045,7 +4121,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> wrap(
 				final Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_12 implements
 					Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>,
 					GenericTyped {
@@ -4059,7 +4135,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_12();
@@ -4074,7 +4150,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> wrap(
 				final Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_13 implements
 					Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>,
 					GenericTyped {
@@ -4088,7 +4164,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_13();
@@ -4103,7 +4179,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> wrap(
 				final Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_14 implements
 					Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>,
 					GenericTyped {
@@ -4117,7 +4193,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_14();
@@ -4132,7 +4208,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> wrap(
 				final Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_15 implements
 					Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>,
 					GenericTyped {
@@ -4146,7 +4222,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_15();
@@ -4161,7 +4237,7 @@ public class OpWrappers {
 		@Override
 		public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> wrap(
 				final Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> op,
-				final OpInfo opInfo) {
+				final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedInplace16_16 implements
 					Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>,
 					GenericTyped {
@@ -4175,7 +4251,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return requestedType;
 				}
 			}
 			return new GenericTypedInplace16_16();

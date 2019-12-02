@@ -43,6 +43,7 @@ import net.imglib2.type.numeric.integer.ShortType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests {@link ConvertIIs} + {@link RealTypeConverter} ops.

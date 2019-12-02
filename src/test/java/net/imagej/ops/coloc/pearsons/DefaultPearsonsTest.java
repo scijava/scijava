@@ -40,6 +40,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -57,7 +58,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsZeroCorrTest(){
-		double result = (Double) new OpBuilder(ops, "coloc.pearsons").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
+		double result = new OpBuilder(ops, "coloc.pearsons").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).outType(Double.class).apply();
 		assertEquals(0.0, result, 0.05);
 	}
 	
@@ -67,7 +68,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsPositiveCorrTest() {
-		double result = (Double) new OpBuilder(ops, "coloc.pearsons").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).apply();
+		double result = new OpBuilder(ops, "coloc.pearsons").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
 		assertEquals(0.75, result, 0.01);
 	}
 	
@@ -86,7 +87,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 					512, 512, mean, spread, sigma, 0x01234567);
 			RandomAccessibleInterval<FloatType> ch2 = produceMeanBasedNoiseImage(new FloatType(),
 					512, 512, mean, spread, sigma, 0x98765432);
-			double resultFast = (Double) new OpBuilder(ops, "coloc.pearsons").input(ch1, ch2).apply();
+			double resultFast =  new OpBuilder(ops, "coloc.pearsons").input(ch1, ch2).outType(Double.class).apply();
 			assertEquals(0.0, resultFast, 0.1);
 
 			/* If the means are the same, it causes a numerical problem in the classic implementation of Pearson's

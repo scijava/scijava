@@ -34,6 +34,7 @@ import static org.junit.Assert.assertSame;
 import net.imagej.ops.AbstractOpTest;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests {@link IdentityOp}.

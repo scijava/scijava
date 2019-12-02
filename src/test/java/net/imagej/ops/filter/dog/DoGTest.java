@@ -44,6 +44,8 @@ import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -66,7 +68,7 @@ public class DoGTest extends AbstractOpTest {
 		final Img<ByteType> out2 = generateByteArrayTestImg(false, dims);
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 
-		new OpBuilder(ops, "filter.DoG").input(in, sigmas1, sigmas2, outOfBounds, es, out1).apply();
+		new OpBuilder(ops, "filter.DoG").input(in, sigmas1, sigmas2, outOfBounds, es).output(out1).compute();
 
 		// test against native imglib2 implementation
 		DifferenceOfGaussian.DoG(sigmas1, sigmas2, Views.extendMirrorSingle(in), out2,
@@ -84,9 +86,9 @@ public class DoGTest extends AbstractOpTest {
 	public void dogRAISingleSigmasTest() {
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
-		@SuppressWarnings("unchecked")
-		final RandomAccessibleInterval<ByteType> res = (RandomAccessibleInterval<ByteType>) ops.run("filter.DoG",
-				generateByteArrayTestImg(true, new long[] { 10, 10 }), 1., 2., outOfBounds, es);
+		final RandomAccessibleInterval<ByteType> res = new OpBuilder(ops, "filter.DoG")
+				.input(generateByteArrayTestImg(true, new long[] { 10, 10 }), 1., 2., outOfBounds, es)
+				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
 
 		org.junit.Assert.assertNotNull(res);
 	}

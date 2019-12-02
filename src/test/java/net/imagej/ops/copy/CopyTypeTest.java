@@ -36,6 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Test {@link CopyType}.
@@ -67,7 +68,7 @@ public class CopyTypeTest extends AbstractOpTest {
 	@Test
 	public void copyTypeWithOutputTest() {
 		DoubleType out = new DoubleType();
-		new OpBuilder(ops, "copy.type").input(out, dt).apply();
+		new OpBuilder(ops, "copy.type").input(out).output(dt).compute();
 
 		assertEquals(dt.get(), out.get(), 0.0);
 

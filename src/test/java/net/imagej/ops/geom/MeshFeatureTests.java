@@ -41,6 +41,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 public class MeshFeatureTests extends AbstractFeatureTest {
 	private static final double EPSILON = 10e-12;
@@ -87,7 +88,8 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	public void mainElongation() {
 		// formula verified and ground truth computed with matlab
 		assertEquals("geom.mainElongation", 0.2079585956045953,
-				((DoubleType) new OpBuilder(ops, "geom.mainElongation").input(mesh)).get(), EPSILON).apply();
+				(new OpBuilder(ops, "geom.mainElongation").input(mesh).outType(DoubleType.class).apply()).get(),
+				EPSILON);
 	}
 
 	@Test
@@ -116,66 +118,73 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	public void medianElongation() {
 		// formula verified and ground truth computed with matlab
 		assertEquals("geom.medianElongation", 0.30059118825775455,
-				((DoubleType) new OpBuilder(ops, "geom.medianElongation").input(mesh)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.medianElongation").input(mesh).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void sizeConvexHullMesh() {
 		// ground truth computed with matlab
-		assertEquals("geom.sizeConvexHull", 304.5, ((DoubleType) new OpBuilder(ops, "geom.sizeConvexHull").input(mesh)).get(), EPSILON).apply();
+		assertEquals("geom.sizeConvexHull", 304.5,
+				new OpBuilder(ops, "geom.sizeConvexHull").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void sizeMesh() {
 		// ground truth computed with matlab
-		assertEquals("geom.size", 257.5, ((DoubleType) new OpBuilder(ops, "geom.size").input(mesh)).get(), EPSILON).apply();
+		assertEquals("geom.size", 257.5,
+				new OpBuilder(ops, "geom.size").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void solidityMesh() {
 		// formula verified and ground truth computed with matlab
-		assertEquals("geom.solidity", 0.845648604269294, ((DoubleType) new OpBuilder(ops, "geom.solidity").input(mesh)).get(), EPSILON).apply();
+		assertEquals("geom.solidity", 0.845648604269294,
+				new OpBuilder(ops, "geom.solidity").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void spareness() {
 		// formula verified
-		assertEquals("geom.spareness", 0.7884710437076516, ((DoubleType) ops.run("geom.spareness", mesh)).get(),
-				EPSILON);
+		assertEquals("geom.spareness", 0.7884710437076516,
+				new OpBuilder(ops, "geom.spareness").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void sphericity() {
 		// formula verified and ground truth computed with matlab
-		assertEquals("geom.sphericity", 0.830304411183464, ((DoubleType) ops.run("geom.sphericity", mesh)).get(),
-				EPSILON);
+		assertEquals("geom.sphericity", 0.830304411183464,
+				new OpBuilder(ops, "geom.sphericity").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void surfaceArea() {
 		// ground truth computed with matlab
-		assertEquals("geom.boundarySize", 235.7390893402464, ((DoubleType) ops.run("geom.boundarySize", mesh)).get(),
-				EPSILON);
+		assertEquals("geom.boundarySize", 235.7390893402464,
+				new OpBuilder(ops, "geom.boundarySize").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void surfaceAreaConvexHull() {
 		// ground truth computed with matlab
 		assertEquals("geom.boundarySizeConvexHull", 231.9508788339317,
-				((DoubleType) new OpBuilder(ops, "geom.boundarySizeConvexHull").input(mesh)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.boundarySizeConvexHull").input(mesh).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void verticesCountConvexHullMesh() {
 		// verified with matlab
 		assertEquals("geom.verticesCountConvexHull", 57,
-				((DoubleType) new OpBuilder(ops, "geom.verticesCountConvexHull").input(mesh)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.verticesCountConvexHull").input(mesh).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void verticesCountMesh() {
 		// verified with matlab
-		assertEquals("geom.verticesCount", 184, ((DoubleType) new OpBuilder(ops, "geom.verticesCount").input(mesh)).get(), EPSILON).apply();
+		assertEquals("geom.verticesCount", 184,
+				new OpBuilder(ops, "geom.verticesCount").input(mesh).outType(DoubleType.class).apply().get(), EPSILON);
 
 	}
 

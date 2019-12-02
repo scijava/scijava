@@ -39,6 +39,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Haralick features tested against matlab implementations and all formulas

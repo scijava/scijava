@@ -42,6 +42,8 @@ import org.junit.Test;
 import org.scijava.Context;
 import org.scijava.app.StatusService;
 import org.scijava.cache.CacheService;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -53,22 +55,22 @@ public class TubenessTest extends AbstractOpTest {
 
 	@Override
 	protected Context createContext() {
-		return new Context(OpService.class, OpMatchingService.class,
-			CacheService.class, StatusService.class, ThreadService.class);
+		return new Context(OpService.class, OpMatchingService.class, CacheService.class, StatusService.class,
+				ThreadService.class);
 	}
 
 	@Test
 	public void testTubeness() {
-		Img<UnsignedByteType> input = openUnsignedByteType(DefaultTubeness.class,
-			"TubesInput.png");
+		Img<UnsignedByteType> input = openUnsignedByteType(DefaultTubeness.class, "TubesInput.png");
 		Img<DoubleType> expected = openDoubleImg("tube.tif");
 
 		final double scale = 5;
 		final double sigma = scale / Math.sqrt(2);
 
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
-		Img<DoubleType> actual = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(input, new DoubleType()).apply();
-		new OpBuilder(ops, "filter.tubeness").input(input, es, sigma, actual).apply();
+		Img<DoubleType> actual = new OpBuilder(ops, "create.img").input(input, new DoubleType())
+				.outType(new Nil<Img<DoubleType>>() {}).apply();
+		new OpBuilder(ops, "filter.tubeness").input(input, es, sigma).output(actual).compute();
 
 		assertIterationsEqual(expected, actual);
 

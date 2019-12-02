@@ -41,6 +41,8 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -59,17 +61,16 @@ public class GaussTest extends AbstractOpTest {
 		ExecutorService es = createContext().getService(ThreadService.class).getExecutorService();
 
 		final Img<ByteType> in = generateByteArrayTestImg(true, new long[] { 10, 10 });
-		final Img<ByteType> out1 =
-			(Img<ByteType>) new OpBuilder(ops, "create.img").input(in, Util.getTypeFromInterval(in)).apply();
+		final Img<ByteType> out1 = new OpBuilder(ops, "create.img").input(in, Util.getTypeFromInterval(in))
+				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final double sigma = 5;
-		final Img<ByteType> out2 =
-			(Img<ByteType>) new OpBuilder(ops, "create.img").input(in, Util.getTypeFromInterval(in)).apply();
+		final Img<ByteType> out2 = new OpBuilder(ops, "create.img").input(in, Util.getTypeFromInterval(in))
+				.outType(new Nil<Img<ByteType>>() {}).apply();
 
 		new OpBuilder(ops, "filter.gauss").input(in, es, sigma, out1).apply();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
-		}
-		catch (IncompatibleTypeException e) {
+		} catch (IncompatibleTypeException e) {
 			throw new RuntimeException(e);
 		}
 
@@ -78,30 +79,30 @@ public class GaussTest extends AbstractOpTest {
 		final Cursor<ByteType> c2 = out2.cursor();
 
 		while (c1.hasNext()) {
-			org.junit.Assert.assertEquals(c1.next().getRealDouble(), c2.next()
-				.getRealDouble(), 0);
+			org.junit.Assert.assertEquals(c1.next().getRealDouble(), c2.next().getRealDouble(), 0);
 		}
 	}
-//
-//	/** Tests the Gaussian matching. */
-//	@Test
-//	public void gaussMatchingTest() {
-//
-//		Gauss defaultGaussRAI = ops.op(Ops.Filter.Gauss.class, ArrayImgs.bytes(1, 2), new double[] {1, 2});
-//		assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
-//
-//		defaultGaussRAI = ops.op(
-//				Ops.Filter.Gauss.class,
-//				ArrayImgs.bytes(1, 2),
-//				ArrayImgs.bytes(1, 2),
-//				new double[] {1, 2});
-//		assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
-//
-//		Gauss defaultGaussRA = ops.op(
-//				Ops.Filter.Gauss.class,
-//				ArrayImgs.bytes(1, 2),
-//				Views.extendMirrorSingle(ArrayImgs.bytes(1, 2)),
-//				new double[] {1, 2});
-//		assertTrue(defaultGaussRA instanceof DefaultGaussRA);
-//	}
+	//
+	// /** Tests the Gaussian matching. */
+	// @Test
+	// public void gaussMatchingTest() {
+	//
+	// Gauss defaultGaussRAI = ops.op(Ops.Filter.Gauss.class, ArrayImgs.bytes(1, 2),
+	// new double[] {1, 2});
+	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
+	//
+	// defaultGaussRAI = ops.op(
+	// Ops.Filter.Gauss.class,
+	// ArrayImgs.bytes(1, 2),
+	// ArrayImgs.bytes(1, 2),
+	// new double[] {1, 2});
+	// assertTrue(defaultGaussRAI instanceof DefaultGaussRAI);
+	//
+	// Gauss defaultGaussRA = ops.op(
+	// Ops.Filter.Gauss.class,
+	// ArrayImgs.bytes(1, 2),
+	// Views.extendMirrorSingle(ArrayImgs.bytes(1, 2)),
+	// new double[] {1, 2});
+	// assertTrue(defaultGaussRA instanceof DefaultGaussRA);
+	// }
 }

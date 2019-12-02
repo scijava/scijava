@@ -10,17 +10,19 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 public class MeanFilterTest extends AbstractOpTest{
 	
 	@Test
 	public void meanFilterTest() {
 		
-		Img<ByteType> img = (Img<ByteType>) new OpBuilder(ops, "create.img").input(new FinalInterval(5, 5), new ByteType()).apply();
+		Img<ByteType> img = new OpBuilder(ops, "create.img").input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
 		RectangleShape shape = new RectangleShape(1, false);
 		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
-		Img<ByteType> output = (Img<ByteType>) new OpBuilder(ops, "create.img").input(img).apply();
-		new OpBuilder(ops, "filter.mean").input(img, shape, oobf, output).apply();
+		Img<ByteType> output = new OpBuilder(ops, "create.img").input(img).outType(new Nil<Img<ByteType>>() {}).apply();
+		new OpBuilder(ops, "filter.mean").input(img, shape, oobf).output(output).compute();
 		
 	}
 

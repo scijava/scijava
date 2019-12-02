@@ -38,6 +38,8 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Pair;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Image.ASCII}.
@@ -59,10 +61,11 @@ public class ASCIITest extends AbstractOpTest {
 				array[i * width + j] = (byte) (offset + i * width + j);
 			}
 		}
-		final Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(array, width,
-			len);
-		final Pair<UnsignedByteType, UnsignedByteType> minMax = (Pair<UnsignedByteType, UnsignedByteType>) new OpBuilder(ops, "stats.minMax").input(img).apply();
-		final String ascii = (String) new OpBuilder(ops, "image.ascii").input(img, minMax.getA(), minMax.getB()).apply();
+		final Img<UnsignedByteType> img = ArrayImgs.unsignedBytes(array, width, len);
+		final Pair<UnsignedByteType, UnsignedByteType> minMax = new OpBuilder(ops, "stats.minMax").input(img)
+				.outType(new Nil<Pair<UnsignedByteType, UnsignedByteType>>() {}).apply();
+		final String ascii = new OpBuilder(ops, "image.ascii").input(img, minMax.getA(), minMax.getB())
+				.outType(String.class).apply();
 		for (int i = 0; i < len; i++) {
 			for (int j = 0; j < width; j++) {
 				assertTrue(ascii.charAt(i * (width + 1) + j) == CHARS.charAt(i));

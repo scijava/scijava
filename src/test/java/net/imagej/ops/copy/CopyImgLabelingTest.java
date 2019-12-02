@@ -40,6 +40,7 @@ import net.imglib2.type.numeric.integer.IntType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Test {@link CopyImgLabeling}
@@ -74,7 +75,7 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void copyImgLabeling() {
-		new OpBuilder(ops, "copy.imgLabeling").input(input, copy).apply();
+		new OpBuilder(ops, "copy.imgLabeling").input(input).output(copy).compute();
 		assertNotNull(copy);
 
 		Cursor<LabelingType<String>> inCursor = input.cursor();

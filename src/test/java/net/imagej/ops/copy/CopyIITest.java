@@ -43,6 +43,8 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -69,9 +71,8 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Test
 	public void copyRAINoOutputTest() {
-		@SuppressWarnings("unchecked")
-		RandomAccessibleInterval<DoubleType> output = (RandomAccessibleInterval<DoubleType>) ops
-				.run("copy.iterableInterval", input);
+		RandomAccessibleInterval<DoubleType> output = new OpBuilder(ops, "copy.iterableInterval").input(input)
+				.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		Cursor<DoubleType> inc = input.localizingCursor();
 		RandomAccess<DoubleType> outRA = output.randomAccess();
@@ -87,8 +88,8 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyTypeTest() {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(new int[] { 120, 100 });
 
-		@SuppressWarnings("unchecked")
-		Img<FloatType> output = (Img<FloatType>) new OpBuilder(ops, "copy.iterableInterval").input(inputFloat).apply();
+		Img<FloatType> output = new OpBuilder(ops, "copy.iterableInterval").input(inputFloat)
+				.outType(new Nil<Img<FloatType>>() {}).apply();
 
 		assertTrue("Should be FloatType.", output.firstElement() instanceof FloatType);
 	}
@@ -97,7 +98,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		Img<DoubleType> output = input.factory().create(input, input.firstElement());
 
-		new OpBuilder(ops, "copy.iterableInterval").input(output, input).apply();
+		new OpBuilder(ops, "copy.iterableInterval").input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> outc = output.cursor();

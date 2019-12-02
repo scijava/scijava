@@ -38,6 +38,8 @@ import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests {@link DefaultCreateKernel2ndDerivBiGauss} and its derivates.
@@ -49,78 +51,76 @@ public class CreateKernel2ndDerivBiGaussTest extends AbstractOpTest {
 	@Test
 	public void testKernel2ndDerivBiGauss() {
 		final double sigma = 3.0;
-		final double[] sigmas = {sigma, 0.5*sigma};
+		final double[] sigmas = { sigma, 0.5 * sigma };
 
-		//test the main convenience function:
-		RandomAccessibleInterval<DoubleType> kernelD
-			= (RandomAccessibleInterval<DoubleType>) new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 2, new DoubleType()).apply();
+		// test the main convenience function:
+		RandomAccessibleInterval<DoubleType> kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss")
+				.input(sigmas, 2, new DoubleType()).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
-		//sizes are okay?
+		// sizes are okay?
 		assertEquals(19, kernelD.dimension(0));
 		assertEquals(19, kernelD.dimension(1));
 
-		//is value at the centre the expected one?
-		final long[] position = {kernelD.dimension(0)/2, kernelD.dimension(1)/2};
+		// is value at the centre the expected one?
+		final long[] position = { kernelD.dimension(0) / 2, kernelD.dimension(1) / 2 };
 		RandomAccess<DoubleType> samplerD = kernelD.randomAccess();
 		samplerD.setPosition(position);
 		assertEquals(-0.01477, samplerD.get().getRealDouble(), 0.00005);
 
-		//is value at the centre local minimum?
+		// is value at the centre local minimum?
 		final double[] values = new double[5];
 		values[0] = samplerD.get().getRealDouble();
-		samplerD.move(1,0);
+		samplerD.move(1, 0);
 		values[1] = samplerD.get().getRealDouble();
-		samplerD.move(-2,0);
+		samplerD.move(-2, 0);
 		values[2] = samplerD.get().getRealDouble();
-		samplerD.move(1,0);
-		samplerD.move(1,1);
+		samplerD.move(1, 0);
+		samplerD.move(1, 1);
 		values[3] = samplerD.get().getRealDouble();
-		samplerD.move(-2,1);
+		samplerD.move(-2, 1);
 		values[4] = samplerD.get().getRealDouble();
-		assertEquals(1.0,values[1]-values[0],0.999);
-		assertEquals(1.0,values[2]-values[0],0.999);
-		assertEquals(1.0,values[3]-values[0],0.999);
-		assertEquals(1.0,values[4]-values[0],0.999);
+		assertEquals(1.0, values[1] - values[0], 0.999);
+		assertEquals(1.0, values[2] - values[0], 0.999);
+		assertEquals(1.0, values[3] - values[0], 0.999);
+		assertEquals(1.0, values[4] - values[0], 0.999);
 
-		//is consistency checking okay?
+		// is consistency checking okay?
 		int wasCaught = 0;
 		try {
-			final double[] shortSigmas = {2.0*sigma};
-			kernelD = (RandomAccessibleInterval<DoubleType>) new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(shortSigmas, 2, new DoubleType()).apply();
-		}
-		catch (IllegalArgumentException e)
-		{
+			final double[] shortSigmas = { 2.0 * sigma };
+			kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(shortSigmas, 2, new DoubleType())
+					.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+		} catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		try {
-			final double[] negativeSigmas = {-1.0, 0.0};
-			kernelD = (RandomAccessibleInterval<DoubleType>) new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(negativeSigmas, 2, new DoubleType()).apply();
-		}
-		catch (IllegalArgumentException e)
-		{
+			final double[] negativeSigmas = { -1.0, 0.0 };
+			kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(negativeSigmas, 2, new DoubleType())
+					.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+		} catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		try {
-			//wrong dimensionality
-			kernelD = (RandomAccessibleInterval<DoubleType>) new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 0, new DoubleType()).apply();
-		}
-		catch (IllegalArgumentException e)
-		{
+			// wrong dimensionality
+			kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 0, new DoubleType())
+					.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+		} catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		assertEquals(3, wasCaught);
 
-		//does the general kernel calculation work?
-		//(should be pure real kernel)
-		RandomAccessibleInterval<ComplexDoubleType> kernelCD
-			= (RandomAccessibleInterval<ComplexDoubleType>) new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 2, new ComplexDoubleType()).apply();
+		// does the general kernel calculation work?
+		// (should be pure real kernel)
+		RandomAccessibleInterval<ComplexDoubleType> kernelCD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss")
+				.input(sigmas, 2, new ComplexDoubleType())
+				.outType(new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {}).apply();
 		RandomAccess<ComplexDoubleType> samplerCD = kernelCD.randomAccess();
 		samplerCD.setPosition(position);
 		assertEquals(0.0, samplerCD.get().getImaginaryDouble(), 0.00001);
 
-		//general plugin system works?
-		//@SuppressWarnings("unchecked")
-		kernelCD = (RandomAccessibleInterval<ComplexDoubleType>)
-			new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 3, new ComplexDoubleType()).apply();
+		// general plugin system works?
+		// @SuppressWarnings("unchecked")
+		kernelCD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 3, new ComplexDoubleType())
+				.outType(new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {}).apply();
 	}
 }

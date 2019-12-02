@@ -41,6 +41,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -71,9 +73,8 @@ public class CopyImgTest extends AbstractOpTest {
 			.firstElement());
 		copy(input, inputCopy);
 
-		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<DoubleType> output =
-			(RandomAccessibleInterval<DoubleType>) new OpBuilder(ops, "copy.img").input(input).apply();
+			new OpBuilder(ops, "copy.img").input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		final Cursor<DoubleType> inc = input.localizingCursor();
 		final RandomAccess<DoubleType> inCopyRA = inputCopy.randomAccess();
@@ -97,7 +98,7 @@ public class CopyImgTest extends AbstractOpTest {
 		final Img<DoubleType> output = input.factory().create(input, input
 			.firstElement());
 
-		new OpBuilder(ops, "copy.img").input(input, output).apply();
+		new OpBuilder(ops, "copy.img").input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> inCopyc = inputCopy.cursor();

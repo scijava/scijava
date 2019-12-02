@@ -47,6 +47,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -147,7 +148,7 @@ public class MTKTTest extends ColocalisationTest {
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = (Double) new OpBuilder(ops, "coloc.maxTKendallTau").input(vImage1, vImage2).apply();
+		double result = new OpBuilder(ops, "coloc.maxTKendallTau").input(vImage1, vImage2).outType(Double.class).apply();
 		assertEquals(4.9E-324, result, 0.0);
 	}
 

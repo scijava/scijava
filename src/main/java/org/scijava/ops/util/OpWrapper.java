@@ -8,7 +8,7 @@ import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.util.Types;
 
 public interface OpWrapper<T> extends SciJavaPlugin {
-	T wrap(T op, OpInfo info);
+	T wrap(T op, OpInfo info, Type requestedType);
 	default Class<?> type() {
 		Type wrapperType = getClass().getGenericInterfaces()[0];
 		if (wrapperType instanceof ParameterizedType) {

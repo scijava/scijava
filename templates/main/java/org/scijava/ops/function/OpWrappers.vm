@@ -23,18 +23,10 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final OpInfo opInfo) {
+		public Producer<T> wrap(final Producer<T> op, final OpInfo opInfo, final Type requestedType) {
 			class GenericTypedProducer implements Producer<T>, GenericTyped {
-
-				@Override
-				public T create() {
-					return op.create();
-				}
-
-				@Override
-				public Type getType() {
-					return opInfo.opType();
-				}
+				@Override public T create() { return op.create(); }
+				@Override public Type getType() { return requestedType; }
 			}
 			return new GenericTypedProducer();
 		}
@@ -51,25 +43,10 @@ public class OpWrappers {
 	{
 
 		@Override
-		public $fg wrap( //
-			final $fg op, //
-			final OpInfo opInfo)
-		{
-			class GenericTypedFunction${arity} implements //
-				$fg, //
-				GenericTyped //
-			{
-
-				@Override
-				public O apply($applyParams.call($arity)) //
-				{
-					return op.apply($applyArgs.call($arity));
-				}
-
-				@Override
-				public Type getType() {
-					return opInfo.opType();
-				}
+		public $fg wrap(final $fg op, final OpInfo opInfo, final Type requestedType) {
+			class GenericTypedFunction${arity} implements $fg, GenericTyped {
+				@Override public O apply($applyParams.call($arity)) { return op.apply($applyArgs.call($arity)); }
+				@Override public Type getType() { return requestedType; }
 			}
 			return new GenericTypedFunction${arity}();
 		}
@@ -87,25 +64,10 @@ public class OpWrappers {
 	{
 
 		@Override
-		public $cg wrap( //
-			final $cg op, //
-			final OpInfo opInfo)
-		{
-			class GenericTypedComputer${arity} implements //
-				$cg, //
-				GenericTyped
-			{
-
-				@Override
-				public void compute($computeParams.call($arity)) //
-				{
-					op.compute($computeArgs.call($arity));
-				}
-
-				@Override
-				public Type getType() {
-					return opInfo.opType();
-				}
+		public $cg wrap(final $cg op, final OpInfo opInfo, final Type requestedType) {
+			class GenericTypedComputer${arity} implements $cg, GenericTyped {
+				@Override public void compute($computeParams.call($arity)) { op.compute($computeArgs.call($arity)); }
+				@Override public Type getType() { return requestedType; }
 			}
 			return new GenericTypedComputer${arity}();
 		}
@@ -124,25 +86,10 @@ public class OpWrappers {
 	{
 
 		@Override
-		public $ig wrap( //
-			final $ig op, //
-			final OpInfo opInfo)
-		{
-			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
-				implements $ig, //
-				GenericTyped
-			{
-
-				@Override
-				public void mutate($mutateParams.call($arity, $a)) //
-				{
-					op.mutate($mutateArgs.call($arity, $a));
-				}
-
-				@Override
-				public Type getType() {
-					return opInfo.opType();
-				}
+		public $ig wrap(final $ig op, final OpInfo opInfo, final Type requestedType) {
+			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} implements $ig, GenericTyped {
+				@Override public void mutate($mutateParams.call($arity, $a)) { op.mutate($mutateArgs.call($arity, $a)); }
+				@Override public Type getType() { return requestedType; }
 			}
 			return new GenericTypedInplace${inplaceSuffix.call($arity, $a)}();
 		}

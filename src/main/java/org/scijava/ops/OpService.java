@@ -391,7 +391,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				throw new IllegalArgumentException(
 						"Matched op Type " + type.getClass() + " matches multiple Op types: " + wrappers.toString());
 			// get the wrapper and wrap up the Op
-			return wrap(suitableWrappers[0], op, opInfo);
+			return wrap(suitableWrappers[0], op, opInfo, match.getRef().getTypes());
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;
@@ -402,9 +402,10 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T wrap(Class<T> opType, Object op, OpInfo info) {
+	private <T> T wrap(Class<T> opType, Object op, OpInfo info, Type[] requestedTypes) {
 		OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(opType);
-		return wrapper.wrap((T) op, info);
+		//TODO is there a better way to reconcile multiple requested types?
+		return wrapper.wrap((T) op, info, requestedTypes[0]);
 	}
 
 	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {

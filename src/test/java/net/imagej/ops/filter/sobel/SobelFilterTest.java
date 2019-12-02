@@ -39,6 +39,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Util;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Test for sobel op using separated kernel.
@@ -74,7 +76,8 @@ public class SobelFilterTest extends AbstractOpTest {
 				counterY = 0;
 			}
 		}
-		RandomAccessibleInterval<FloatType> out = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "filter.sobel").input(img).apply();
+		RandomAccessibleInterval<FloatType> out = new OpBuilder(ops, "filter.sobel").input(img)
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		RandomAccess<FloatType> outRA = out.randomAccess();
 		outRA.setPosition(new int[] { 0, 8 });

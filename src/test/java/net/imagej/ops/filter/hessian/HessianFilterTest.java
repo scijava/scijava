@@ -41,6 +41,8 @@ import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.RealComposite;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Test for Hessian matrice op.
@@ -76,18 +78,18 @@ public class HessianFilterTest extends AbstractOpTest {
 			}
 		}
 
-		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = (CompositeIntervalView<FloatType, RealComposite<FloatType>>) new OpBuilder(ops, "filter.hessian").input(img).apply();
-		
-		
+		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = new OpBuilder(ops, "filter.hessian").input(img)
+				.outType(new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>() {}).apply();
+
 		Cursor<RealComposite<FloatType>> outCursor = Views.iterable(out).cursor();
-		
+
 		while (outCursor.hasNext()) {
 			RealComposite<FloatType> values = outCursor.next();
 			assertEquals(values.get(1), values.get(2));
 		}
 
 		CompositeView<FloatType, RealComposite<FloatType>>.CompositeRandomAccess outRA = out.randomAccess();
-		
+
 		// two numbers represent a coordinate: 20|0 ; 21|0 ...
 		int[] positions = new int[] { 20, 0, 21, 0, 19, 31, 19, 30 };
 		float[] valuesXX = new float[] { 16.0f, -16.0f, 15.0f, 11.0f };

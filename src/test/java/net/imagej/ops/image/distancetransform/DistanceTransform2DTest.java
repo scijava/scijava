@@ -39,6 +39,8 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
 import org.scijava.Context;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -57,26 +59,27 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 		ThreadService ts = context.getService(ThreadService.class);
 
 		// create 2D image
-		final RandomAccessibleInterval<BitType> in = (RandomAccessibleInterval<BitType>) ops.run("create.img",
-				new FinalInterval(20, 20), new BitType());
+		final RandomAccessibleInterval<BitType> in = new OpBuilder(ops, "create.img")
+				.input(new FinalInterval(20, 20), new BitType())
+				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 		generate2DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = (RandomAccessibleInterval<FloatType>) ops.run("create.img",
-				in, new FloatType());
+		RandomAccessibleInterval<FloatType> out = new OpBuilder(ops, "create.img").input(in, new FloatType())
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		/*
 		 * test normal DT
 		 */
-		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService(), out).apply();
+		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService()).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 2.54, 1.77 };
-		ops.run("image.distanceTransform", in,
-				calibration, ts.getExecutorService(), out);
+		new OpBuilder(ops, "image.distanceTransform").input(in, calibration, ts.getExecutorService()).output(out)
+				.compute();
 		compareResults(out, in, calibration);
 	}
 

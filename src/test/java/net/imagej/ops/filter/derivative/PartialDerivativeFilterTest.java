@@ -42,6 +42,8 @@ import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.RealComposite;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Test for partial derivative op.
@@ -77,7 +79,8 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 			}
 		}
 
-		RandomAccessibleInterval<FloatType> out = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "filter.partialDerivative").input(img, 0).apply();
+		RandomAccessibleInterval<FloatType> out = new OpBuilder(ops, "filter.partialDerivative").input(img, 0)
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		FloatType type = Util.getTypeFromInterval(out).createVariable();
 		type.set(4.0f);
@@ -157,7 +160,8 @@ public class PartialDerivativeFilterTest extends AbstractOpTest {
 			}
 		}
 
-		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = (CompositeIntervalView<FloatType, RealComposite<FloatType>>) new OpBuilder(ops, "filter.partialDerivative").input(img).apply();
+		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = new OpBuilder(ops, "filter.partialDerivative")
+				.input(img).outType(new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>() {}).apply();
 
 		CompositeView<FloatType, RealComposite<FloatType>>.CompositeRandomAccess outRA = out.randomAccess();
 

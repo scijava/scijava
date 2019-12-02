@@ -41,6 +41,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -68,8 +69,8 @@ public class CopyArrayImgTest extends AbstractOpTest {
 	@Test
 	public void copyArrayImgNoOutputTest() {
 		@SuppressWarnings("unchecked")
-		final RandomAccessibleInterval<UnsignedByteType> output = (RandomAccessibleInterval<UnsignedByteType>) ops
-				.run("copy.img", input);
+		final RandomAccessibleInterval<UnsignedByteType> output = (RandomAccessibleInterval<UnsignedByteType>) new OpBuilder(
+				ops, "copy.img").input(input).apply();
 
 		final Cursor<UnsignedByteType> inc = input.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -83,10 +84,9 @@ public class CopyArrayImgTest extends AbstractOpTest {
 
 	@Test
 	public void copyArrayImgWithOutputTest() {
-		final Img<UnsignedByteType> output = input.factory().create(input,
-				input.firstElement());
+		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		new OpBuilder(ops, "copy.img").input(input, output).apply();
+		new OpBuilder(ops, "copy.img").input(input).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();

@@ -39,6 +39,8 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Contains tests for {@link DefaultDerivativeGauss}.
@@ -49,23 +51,26 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testImgParamDimensionsMismatch() {
-		final Img<DoubleType> input = (Img<DoubleType>) ops.run("convert.float64",
-			generateFloatArrayTestImg(false, 30, 30, 30));
+		final Img<DoubleType> input = new OpBuilder(ops, "convert.float64")
+				.input(generateFloatArrayTestImg(false, 30, 30, 30)).outType(new Nil<Img<DoubleType>>() {}).apply();
 
-		final Img<DoubleType> output = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(input).apply();
+		final Img<DoubleType> output = new OpBuilder(ops, "create.img").input(input)
+				.outType(new Nil<Img<DoubleType>>() {}).apply();
 
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 1, 1 };
-		new OpBuilder(ops, "filter.derivativeGauss").input(input, derivatives, sigmas, output).apply();
+		new OpBuilder(ops, "filter.derivativeGauss").input(input, derivatives, sigmas).output(output).compute();
 	}
 
 	@Test
 	public void regressionTest() {
 		final int width = 10;
-		final Img<DoubleType> input = (Img<DoubleType>) ops.run("create.img",
-			new FinalDimensions(width, width), new DoubleType());
+		final Img<DoubleType> input = new OpBuilder(ops, "create.img")
+				.input(new FinalDimensions(width, width), new DoubleType()).outType(new Nil<Img<DoubleType>>() {})
+				.apply();
 
-		final Img<DoubleType> output = (Img<DoubleType>) new OpBuilder(ops, "create.img").input(input, new DoubleType()).apply();
+		final Img<DoubleType> output = new OpBuilder(ops, "create.img").input(input, new DoubleType())
+				.outType(new Nil<Img<DoubleType>>() {}).apply();
 
 		// Draw a line on the image
 		final RandomAccess<DoubleType> inputRA = input.randomAccess();
@@ -78,20 +83,18 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		// filter the image
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 0.5, 0.5 };
-		new OpBuilder(ops, "filter.derivativeGauss").input(input, sigmas, derivatives, output).apply();
+		new OpBuilder(ops, "filter.derivativeGauss").input(input, sigmas, derivatives).output(output).compute();
 
 		final Cursor<DoubleType> cursor = output.localizingCursor();
 		int currentPixel = 0;
 		while (cursor.hasNext()) {
 			cursor.fwd();
-			assertEquals(cursor.get().getRealDouble(),
-				regressionRowValues[currentPixel % width], 0);
+			assertEquals(cursor.get().getRealDouble(), regressionRowValues[currentPixel % width], 0);
 			currentPixel++;
 		}
 	}
 
-	double[] regressionRowValues = { 0.0, 0.0, 0.0, 2.1876502452391353,
-		117.25400606437196, 0.0, -117.25400606437196, -2.1876502452391353, 0.0,
-		0.0 };
+	double[] regressionRowValues = { 0.0, 0.0, 0.0, 2.1876502452391353, 117.25400606437196, 0.0, -117.25400606437196,
+			-2.1876502452391353, 0.0, 0.0 };
 
 }

@@ -38,7 +38,8 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
-import org.scijava.Context;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -50,32 +51,32 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 	private static final double EPSILON = 0.0001;
 	private static final long SEED = 0x12345678;
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
-		Context context = createContext();
 		ThreadService ts = context.getService(ThreadService.class);
 
 		// create 4D image
-		final RandomAccessibleInterval<BitType> in = (RandomAccessibleInterval<BitType>) ops.run("create.img",
-				new FinalInterval(20, 20, 5, 3), new BitType());
+		final RandomAccessibleInterval<BitType> in = new OpBuilder(ops, "create.img")
+				.input(new FinalInterval(20, 20, 5, 3), new BitType())
+				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 		generate4DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = (RandomAccessibleInterval<FloatType>) ops.run("create.img",
-				in, new FloatType());
+		RandomAccessibleInterval<FloatType> out = new OpBuilder(ops, "create.img").input(in, new FloatType())
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		/*
 		 * test normal DT
 		 */
-		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService(), out).apply();
+		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService()).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1, 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21, 2.21 };
-		new OpBuilder(ops, "image.distanceTransform").input(in, calibration, ts.getExecutorService(), out).apply();
+		new OpBuilder(ops, "image.distanceTransform").input(in, calibration, ts.getExecutorService()).output(out)
+				.compute();
 		compareResults(out, in, calibration);
 	}
 

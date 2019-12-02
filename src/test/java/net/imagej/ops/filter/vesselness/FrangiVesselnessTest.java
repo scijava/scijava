@@ -45,6 +45,7 @@ import org.junit.Test;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.script.ScriptService;
 
 /**
@@ -59,8 +60,9 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 
 		// load in input image and expected output image.
 		Img<DoubleType> inputImg = ArrayImgs.doubles(256, 256);
-		ops.run("image.equation", "Math.tan(0.3*p[0]) + Math.tan(0.1*p[1])",
-				context.getService(ScriptService.class), inputImg);
+		new OpBuilder(ops, "image.equation")
+				.input("Math.tan(0.3*p[0]) + Math.tan(0.1*p[1])", context.getService(ScriptService.class))
+				.output(inputImg).compute();
 		Img<FloatType> expectedOutput = ((Img<FloatType>) openFloatImg("Result.tif"));
 
 		// create ouput image
@@ -76,7 +78,7 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 		double[] spacing = { 1, 1 };
 
 		// run the op
-		new OpBuilder(ops, "filter.frangiVesselness").input(inputImg, spacing, scale, actualOutput).apply();
+		new OpBuilder(ops, "filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
 
 		// compare the output image data to that stored in the file.
 		Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();

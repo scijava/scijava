@@ -41,6 +41,7 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -99,7 +100,7 @@ public class DefaultPValueTest extends ColocalisationTest {
 //				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
 
 		PValueResult output = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, result.length - 1, es, output).apply();
+		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, result.length - 1, es).output(output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

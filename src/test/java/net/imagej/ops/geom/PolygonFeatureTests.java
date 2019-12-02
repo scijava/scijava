@@ -42,6 +42,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests for polygon features.
@@ -66,15 +67,15 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void boundarySizeConvexHull() {
 		// ground truth computed with matlab
-		assertEquals("geom.boundarySizeConvexHull", 272.1520849298494,
-				((DoubleType) new OpBuilder(ops, "geom.boundarySizeConvexHull").input(contour)).get(), EPSILON).apply();
+		assertEquals("geom.boundarySizeConvexHull", 272.1520849298494, new OpBuilder(ops, "geom.boundarySizeConvexHull")
+				.input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void boundingBox() {
 		// ground truth verified with matlab
-		final List<? extends RealLocalizable> received = GeomUtils.vertices(
-			((Polygon2D) new OpBuilder(ops, "geom.boundingBox").input(contour))).apply();
+		final List<? extends RealLocalizable> received = GeomUtils
+				.vertices((new OpBuilder(ops, "geom.boundingBox").input(contour).outType(Polygon2D.class).apply()));
 		final RealPoint[] expected = new RealPoint[] { new RealPoint(1, 6), new RealPoint(1, 109),
 				new RealPoint(78, 109), new RealPoint(78, 6) };
 		assertEquals("Number of polygon points differs.", expected.length, received.size());
@@ -90,7 +91,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	public void boxivity() {
 		// ground truth computed with matlab
 		assertEquals("geom.boxivity", 0.6045142846804,
-				((DoubleType) new OpBuilder(ops, "geom.boxivity").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.boxivity").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
@@ -98,7 +99,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 		// ground truth computed with matlab (according to this formula:
 		// circularity = 4pi(area/perimeter^2))
 		assertEquals("geom.circularity", 0.3566312416783,
-				((DoubleType) new OpBuilder(ops, "geom.circularity").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.circularity").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	// TODO: this test checks LabelRegionToPolygonConverter, which is a Scijava
@@ -107,7 +108,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void contour() {
 		// ground truth computed with matlab
-		final Polygon2D test = (Polygon2D) new OpBuilder(ops, "geom.contour").input(ROI, true).apply();
+		final Polygon2D test = new OpBuilder(ops, "geom.contour").input(ROI, true).outType(Polygon2D.class).apply();
 		final List<? extends RealLocalizable> expected = GeomUtils.vertices(contour);
 		final List<? extends RealLocalizable> received = GeomUtils.vertices(test);
 		assertEquals("Number of polygon points differs.", expected.size(), received.size());
@@ -122,7 +123,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void convexHull2D() {
 		// ground truth computed with matlab
-		final Polygon2D test = (Polygon2D) new OpBuilder(ops, "geom.convexHull").input(contour).apply();
+		final Polygon2D test = new OpBuilder(ops, "geom.convexHull").input(contour).outType(Polygon2D.class).apply();
 		final List<? extends RealLocalizable> received = GeomUtils.vertices(test);
 		final RealPoint[] expected = new RealPoint[] { new RealPoint(1, 30), new RealPoint(2, 29), new RealPoint(26, 6),
 				new RealPoint(31, 6), new RealPoint(42, 9), new RealPoint(49, 22), new RealPoint(72, 65),
@@ -141,7 +142,7 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	public void convexity() {
 		// formula verified and value computed with matlab
 		assertEquals("geom.convexity", 0.7735853919277,
-				((DoubleType) new OpBuilder(ops, "geom.convexity").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.convexity").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
@@ -149,21 +150,23 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 		// formula is verified, result depends on major- and minor-axis
 		// implementation
 		assertEquals("geom.eccentricity", 0.863668314823,
-				((DoubleType) new OpBuilder(ops, "geom.eccentricity").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.eccentricity").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void elongation() {
 		// formula verified and result computed with matlab
 		assertEquals("geom.mainElongation", 0.401789429879,
-				((DoubleType) new OpBuilder(ops, "geom.mainElongation").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.mainElongation").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void feretsDiameterForAngle() {
 		// ground truth based on minimum ferets diameter and angle
-		assertEquals("geom.feretsDiameter", 58.5849810104945,
-				((DoubleType) new OpBuilder(ops, "geom.feretsDiameter").input(contour, 153.434948822922)).get(), EPSILON).apply();
+		assertEquals("geom.feretsDiameter", 58.5849810104945, new OpBuilder(ops, "geom.feretsDiameter")
+				.input(contour, 153.434948822922).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
@@ -173,35 +176,39 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 		// and fitting ellipse is available in imglib2, this version will be
 		// replaced and the numbers will change.
 		assertEquals("geom.majorAxis", 94.1937028134837,
-				((DoubleType) new OpBuilder(ops, "geom.majorAxis").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.majorAxis").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void maximumFeretsAngle() {
 		// ground truth computed with matlab
 		assertEquals("geom.maximumFeretsAngle", 81.170255332091,
-				((DoubleType) new OpBuilder(ops, "geom.maximumFeretsAngle").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.maximumFeretsAngle").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void minimumFeretsDiameter() {
 		// ground truth computed with matlab
-		assertEquals("geom.minimumFeretsDiameter",  58.5849810104945,
-				((DoubleType) new OpBuilder(ops, "geom.minimumFeretsDiameter").input(contour)).get(), EPSILON).apply();
+		assertEquals("geom.minimumFeretsDiameter", 58.5849810104945,
+				new OpBuilder(ops, "geom.minimumFeretsDiameter").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void minimumFeretsAngle() {
 		// ground truth computed with matlab
 		assertEquals("geom.minimumFeretAngle", 153.434948822922,
-				((DoubleType) new OpBuilder(ops, "geom.minimumFeretsAngle").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.minimumFeretsAngle").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void maximumFeretsDiameter() {
 		// ground truth computed with matlab
 		assertEquals("geom.maximumFeretsDiameter", 104.2353107157071,
-				((DoubleType) new OpBuilder(ops, "geom.maximumFeretsDiameter").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.maximumFeretsDiameter").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
@@ -211,37 +218,38 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 		// and fitting ellipse is available in imglib2, this version will be
 		// replaced and the numbers will change.
 		assertEquals("geom.minorAxis", 47.4793300114545,
-				((DoubleType) new OpBuilder(ops, "geom.minorAxis").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.minorAxis").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void perimeterLength() {
 		// ground truth computed with matlab
 		assertEquals("geom.boundarySize", 351.8061325481604,
-				((DoubleType) new OpBuilder(ops, "geom.boundarySize").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.boundarySize").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void roundness() {
 		// formula is verified, ground truth is verified with matlab
 		assertEquals("roundness", 0.504060553872,
-				((DoubleType) new OpBuilder(ops, "geom.roundness").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.roundness").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void size() {
 		// ground truth computed with matlab
-		assertEquals("geom.size", 3512.5, ((DoubleType) ops.run("geom.size", contour)).get(),
-				EPSILON);
+		assertEquals("geom.size", 3512.5,
+				new OpBuilder(ops, "geom.size").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 
 	}
 
 	@Test
 	public void smallesEnclosingRectangle() {
 		// ground truth verified with matlab
-		final List<? extends RealLocalizable> received = GeomUtils.vertices(
-			((Polygon2D) ops.run("geom.smallestEnclosingBoundingBox",
-				contour)));
+		final List<? extends RealLocalizable> received = GeomUtils
+				.vertices((new OpBuilder(ops, "geom.smallestEnclosingBoundingBox").input(contour)
+						.outType(Polygon2D.class).apply()));
 		final RealPoint[] expected = new RealPoint[] { new RealPoint(37.229184188393, -0.006307821699),
 				new RealPoint(-14.757779646762, 27.800672834315), new RealPoint(31.725820016821, 114.704793944491),
 				new RealPoint(83.712783851976, 86.897813288478) };
@@ -257,28 +265,30 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void sizeConvexHullPolygon() {
 		assertEquals("geom.sizeConvexHull", 4731,
-				((DoubleType) new OpBuilder(ops, "geom.sizeConvexHull").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.sizeConvexHull").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	@Test
 	public void solidity2D() {
 		// formula is verified, ground truth computed with matlab
 		assertEquals("geom.solidity", 0.742443458043,
-				((DoubleType) new OpBuilder(ops, "geom.solidity").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.solidity").input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void verticesCountConvexHull() {
 		// verified with matlab
-		assertEquals("geom.verticesCountConvexHull", 14,
-				((DoubleType) new OpBuilder(ops, "geom.verticesCountConvexHull").input(contour)).get(), EPSILON).apply();
+		assertEquals("geom.verticesCountConvexHull", 14, new OpBuilder(ops, "geom.verticesCountConvexHull")
+				.input(contour).outType(DoubleType.class).apply().get(), EPSILON);
 	}
 
 	@Test
 	public void verticesCount() {
 		// verified with matlab
 		assertEquals("geom.verticesCount", 305,
-				((DoubleType) new OpBuilder(ops, "geom.verticesCount").input(contour)).get(), EPSILON).apply();
+				new OpBuilder(ops, "geom.verticesCount").input(contour).outType(DoubleType.class).apply().get(),
+				EPSILON);
 	}
 
 	// TODO: Fails due to isAssignable being unable to confirm that a LabelRegion is

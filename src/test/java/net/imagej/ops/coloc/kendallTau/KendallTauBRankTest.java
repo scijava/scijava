@@ -49,6 +49,7 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -104,7 +105,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 			//final PairIterator<DoubleType> iter = pairIterator(values1, values2);
 			final Iterable<Pair<IntType, IntType>> iter = new IterablePair<>(ArrayImgs.ints(values1, n), ArrayImgs.ints(values2, n));
 			double kendallValue1 = calculateNaive(iter.iterator());
-			double kendallValue2 = (Double) new OpBuilder(ops, "coloc.kendallTau").input(values1, values2).apply();
+			double kendallValue2 = new OpBuilder(ops, "coloc.kendallTau").input(values1, values2).outType(Double.class).apply();
 			if (Double.isNaN(kendallValue1)) {
 				assertTrue("i: " + i + ", value2: " + kendallValue2, Double.isInfinite(kendallValue2) || Double.isNaN(kendallValue2));
 			} else {
@@ -127,7 +128,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops,
 				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, es, value).apply();
+		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 

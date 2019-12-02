@@ -51,10 +51,10 @@ import net.imglib2.view.Views;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.types.Nil;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -98,8 +98,10 @@ public class CopyRAITest extends AbstractOpTest {
 		input2 = imgOp.apply(new FinalDimensions(size1), new UnsignedByteType());
 
 		// create the same input but force it to be a planar image
-		inputPlanar = (Img<UnsignedByteType>) ops.run("create.img", new FinalDimensions(size1),
-				new UnsignedByteType(), new PlanarImgFactory<>(new UnsignedByteType()));
+		inputPlanar = new OpBuilder(ops, "create.img")
+				.input(new FinalDimensions(size1), new UnsignedByteType(),
+						new PlanarImgFactory<>(new UnsignedByteType()))
+				.outType(new Nil<Img<UnsignedByteType>>() {}).apply();
 
 		// get centered views
 		view = Views.interval(input2, new FinalInterval(start, end));
@@ -121,9 +123,8 @@ public class CopyRAITest extends AbstractOpTest {
 	@Test
 	public void copyRAINoOutputTest() {
 		@SuppressWarnings("unchecked")
-		final RandomAccessibleInterval<UnsignedByteType> output =
-			(RandomAccessibleInterval<UnsignedByteType>) ops.run("copy.rai",
-				input);
+		final RandomAccessibleInterval<UnsignedByteType> output = (RandomAccessibleInterval<UnsignedByteType>) ops
+				.run("copy.rai", input);
 
 		final Cursor<UnsignedByteType> inc = input.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -154,26 +155,30 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIDifferentSizeTest() {
 
 		// create a copy op
-		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = Computers.match(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
+		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = Computers
+				.match(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {},
+						new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
 
 		assertNotNull(copy);
 
-		final Img<UnsignedByteType> out = (Img<UnsignedByteType>) ops.run("create.img", new FinalDimensions(
-			size2), new UnsignedByteType());
+		final Img<UnsignedByteType> out = new OpBuilder(ops, "create.img")
+				.input(new FinalDimensions(size2), new UnsignedByteType()) //
+				.outType(new Nil<Img<UnsignedByteType>>() {}) //
+				.apply();
 
 		// copy view to output and assert that is equal to the mean of the view
 		copy.compute(view, out);
-		DoubleType sum = new DoubleType(); 
-		new OpBuilder(ops, "stats.mean").input(out, sum).apply();
+		DoubleType sum = new DoubleType();
+		new OpBuilder(ops, "stats.mean").input(out).output(sum).compute();
 		assertEquals(sum.getRealDouble(), 100.0, delta);
 
 		// also try with a planar image
-		final Img<UnsignedByteType> outFromPlanar = (Img<UnsignedByteType>) ops.run( "create.img",
-			new FinalDimensions(size2), new UnsignedByteType());
+		final Img<UnsignedByteType> outFromPlanar = (Img<UnsignedByteType>) ops.run("create.img",
+				new FinalDimensions(size2), new UnsignedByteType());
 
 		copy.compute(viewPlanar, outFromPlanar);
 		DoubleType sumFromPlanar = new DoubleType();
-		new OpBuilder(ops, "stats.mean").input(outFromPlanar, sumFromPlanar).apply();
+		new OpBuilder(ops, "stats.mean").input(outFromPlanar).output(sumFromPlanar).compute();
 		assertEquals(sumFromPlanar.getRealDouble(), 100.0, delta);
 
 	}

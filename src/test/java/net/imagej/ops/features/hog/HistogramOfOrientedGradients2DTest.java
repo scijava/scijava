@@ -39,6 +39,8 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -60,8 +62,8 @@ public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
 		Img<FloatType> hogInputImg = openFloatImg("HoG2DInput.png");
 
 		// use numOrientations = 9 and spanOfNeighborhood = 2 for test
-		@SuppressWarnings("unchecked")
-		RandomAccessibleInterval<FloatType> hogOp = (RandomAccessibleInterval<FloatType>) new OpBuilder(ops, "features.hog").input(hogInputImg, 9, 2, es).apply();
+		RandomAccessibleInterval<FloatType> hogOp = new OpBuilder(ops, "features.hog").input(hogInputImg, 9, 2, es)
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		RandomAccess<FloatType> raOp = hogOp.randomAccess();
 		RandomAccess<FloatType> raTest = hogTestImg.randomAccess();
@@ -78,8 +80,8 @@ public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
 				for (int k = 0; k < hogTestImg.dimension(2); k++) {
 					raTest.setPosition(new long[] { i, j, k });
 					raOp.setPosition(new long[] { i, j, k });
-					assertEquals("i=" + i + ", j=" + j + ", k=" + k,
-						raTest.get().getRealFloat(), raOp.get().getRealFloat(), EPSILON);
+					assertEquals("i=" + i + ", j=" + j + ", k=" + k, raTest.get().getRealFloat(),
+							raOp.get().getRealFloat(), EPSILON);
 				}
 			}
 		}

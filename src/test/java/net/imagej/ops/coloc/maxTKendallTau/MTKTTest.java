@@ -47,7 +47,6 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -148,7 +147,7 @@ public class MTKTTest extends ColocalisationTest {
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = new OpBuilder(ops, "coloc.maxTKendallTau").input(vImage1, vImage2).outType(Double.class).apply();
+		double result = op("coloc.maxTKendallTau").input(vImage1, vImage2).outType(Double.class).apply();
 		assertEquals(4.9E-324, result, 0.0);
 	}
 
@@ -164,7 +163,7 @@ public class MTKTTest extends ColocalisationTest {
 		}
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
-		double result = (Double) new OpBuilder(ops, "coloc.maxTKendallTau").input(vImage1, vImage2).apply();
+		double result = (Double) op("coloc.maxTKendallTau").input(vImage1, vImage2).apply();
 		assertEquals(1.0, result, 0.0);
 	}
 
@@ -178,7 +177,7 @@ public class MTKTTest extends ColocalisationTest {
 				0x01234567);
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
-		double result = (Double) new OpBuilder(ops, "coloc.maxTKendallTau").input(ch1, ch2).apply();
+		double result = (Double) op("coloc.maxTKendallTau").input(ch1, ch2).apply();
 		assertEquals(2.710687382741972, result, 0.0);
 	}
 
@@ -189,7 +188,7 @@ public class MTKTTest extends ColocalisationTest {
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		double result = (Double) new OpBuilder(ops, "coloc.maxTKendallTau").input(cropCh1, cropCh2).apply();
+		double result = (Double) op("coloc.maxTKendallTau").input(cropCh1, cropCh2).apply();
 		assertEquals(2.562373279563565, result, 0.0);
 	}
 
@@ -211,7 +210,7 @@ public class MTKTTest extends ColocalisationTest {
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(vImage1, vImage2, op, 5, es, value).apply();
+		op("coloc.pValue").input(vImage1, vImage2, op, 5, es, value).apply();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -231,7 +230,7 @@ public class MTKTTest extends ColocalisationTest {
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(vImage1, vImage2, op, 5, es, value).apply();
+		op("coloc.pValue").input(vImage1, vImage2, op, 5, es, value).apply();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -249,7 +248,7 @@ public class MTKTTest extends ColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, 10, es, value).apply();
+		op("coloc.pValue").input(ch1, ch2, op, 10, es, value).apply();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 
@@ -271,7 +270,7 @@ public class MTKTTest extends ColocalisationTest {
 		RandomAccessibleInterval<UnsignedByteType> ch1 = ShuffledView.cropAtMin(cropCh1, blockSize);
 		RandomAccessibleInterval<UnsignedByteType> ch2 = ShuffledView.cropAtMin(cropCh2, blockSize);
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, 5, es, value).apply();
+		op("coloc.pValue").input(ch1, ch2, op, 5, es).output(value).compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 }

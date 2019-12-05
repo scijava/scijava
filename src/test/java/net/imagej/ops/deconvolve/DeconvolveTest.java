@@ -49,6 +49,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -80,8 +81,8 @@ public class DeconvolveTest extends AbstractOpTest {
 
 		// convolve FFTF
 		@SuppressWarnings("unchecked")
-		final Img<FloatType> convolved = (Img<FloatType>) ops.run("filter.convolve", // 
-				incropped, kernel, es);
+		final Img<FloatType> convolved = op("filter.convolve").input(// 
+				incropped, kernel, es).outType(new Nil<Img<FloatType>>() {}).apply();
 
 		// find a RichardsonLucyF op
 		Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //

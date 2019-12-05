@@ -59,26 +59,26 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 		ThreadService ts = context.getService(ThreadService.class);
 
 		// create 2D image
-		final RandomAccessibleInterval<BitType> in = new OpBuilder(ops, "create.img")
+		final RandomAccessibleInterval<BitType> in = op("create.img")
 				.input(new FinalInterval(20, 20), new BitType())
 				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 		generate2DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = new OpBuilder(ops, "create.img").input(in, new FloatType())
+		RandomAccessibleInterval<FloatType> out = op("create.img").input(in, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		/*
 		 * test normal DT
 		 */
-		new OpBuilder(ops, "image.distanceTransform").input(in, ts.getExecutorService()).output(out).compute();
+		op("image.distanceTransform").input(in, ts.getExecutorService()).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 2.54, 1.77 };
-		new OpBuilder(ops, "image.distanceTransform").input(in, calibration, ts.getExecutorService()).output(out)
+		op("image.distanceTransform").input(in, calibration, ts.getExecutorService()).output(out)
 				.compute();
 		compareResults(out, in, calibration);
 	}

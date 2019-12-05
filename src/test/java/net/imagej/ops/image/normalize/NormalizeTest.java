@@ -39,6 +39,8 @@ import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.util.Pair;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * @author Martin Horn (University of Konstanz)
@@ -47,16 +49,19 @@ public class NormalizeTest extends AbstractOpTest {
 
 	@Test
 	public void testNormalize() {
-		
-		//TODO these method calls are not right - need lazy normalization parameters Ops
+
+		// TODO these method calls are not right - need lazy normalization parameters
+		// Ops
 
 		Img<ByteType> in = generateByteArrayTestImg(true, 5, 5);
 		Img<ByteType> out = in.factory().create(in, new ByteType());
 
-		new OpBuilder(ops, "image.normalize").input(in, out).apply();
+		op("image.normalize").input(in).output(out).compute();
 
-		final Pair<ByteType, ByteType> minMax = (Pair<ByteType, ByteType>) new OpBuilder(ops, "stats.minMax").input(in).apply();
-		final Pair<ByteType, ByteType> minMax2 = (Pair<ByteType, ByteType>) new OpBuilder(ops, "stats.minMax").input(out).apply();
+		final Pair<ByteType, ByteType> minMax = op("stats.minMax").input(in)
+				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
+		final Pair<ByteType, ByteType> minMax2 = op("stats.minMax").input(out)
+				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
 
 		assertEquals(minMax2.getA().get(), Byte.MIN_VALUE);
 		assertEquals(minMax2.getB().get(), Byte.MAX_VALUE);
@@ -64,9 +69,11 @@ public class NormalizeTest extends AbstractOpTest {
 		final ByteType min = new ByteType((byte) in.firstElement().getMinValue());
 		final ByteType max = new ByteType((byte) in.firstElement().getMaxValue());
 
-		final IterableInterval<ByteType> lazyOut = (IterableInterval<ByteType>) new OpBuilder(ops, "image.normalize").input(in).apply();
-		final IterableInterval<ByteType> notLazyOut = (IterableInterval<ByteType>) ops.run("image.normalize", in, minMax.getA(),
-				minMax.getB(), min, max);
+		final IterableInterval<ByteType> lazyOut = op("image.normalize").input(in)
+				.outType(new Nil<IterableInterval<ByteType>>() {}).apply();
+		final IterableInterval<ByteType> notLazyOut = op("image.normalize")
+				.input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<IterableInterval<ByteType>>() {})
+				.apply();
 
 		final Cursor<ByteType> outCursor = out.cursor();
 		final Cursor<ByteType> lazyCursor = lazyOut.cursor();

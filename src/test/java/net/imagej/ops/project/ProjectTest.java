@@ -75,13 +75,13 @@ public class ProjectTest extends AbstractOpTest {
 
 	@Test
 	public void testProjector() {
-		//TODO: uncomment when this Op is ported (assuming it will be?)
+		// TODO: uncomment when this Op is ported (assuming it will be?)
 		// ops.run(DefaultProjectParallel.class, out1, in, op, PROJECTION_DIM);
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		new OpBuilder(ops, "project").input(in, op, PROJECTION_DIM, out1).apply();
-		new OpBuilder(ops, "project").input(in, op, PROJECTION_DIM, out2).apply();
+		op("project").input(in, op, PROJECTION_DIM).output(out1).compute();
+		op("project").input(in, op, PROJECTION_DIM).output(out2).compute();
 		testEquality(out1, out2);
 	}
 

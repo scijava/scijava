@@ -34,7 +34,6 @@ import static org.junit.Assert.assertSame;
 import net.imagej.ops.AbstractOpTest;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests {@link IdentityOp}.
@@ -45,16 +44,19 @@ public class IdentityTest extends AbstractOpTest {
 
 	@Test
 	public void testIdentity() {
-		final Byte b = 35;
-		final Object ib = new OpBuilder(ops, "identity").input(b).apply();
+		Byte b = 35;
+		final Object ib = b;
+		op("identity").input(b).mutate();
 		assertSame(b, ib);
 
-		final int i = 23;
-		final Object ii = new OpBuilder(ops, "identity").input(i).apply();
+		int i = 23;
+		final Object ii = i; 
+		op("identity").input(i).mutate();
 		assertSame(i, ii);
 
-		final String s = "hello";
-		final Object is = new OpBuilder(ops, "identity").input(s).apply();
+		String s = "hello";
+		final Object is = s;
+		op("identity").input(s).mutate();
 		assertSame(s, is);
 	}
 

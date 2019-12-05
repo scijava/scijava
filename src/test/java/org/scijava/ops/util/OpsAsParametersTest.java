@@ -10,6 +10,7 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.param.Parameter;
@@ -38,7 +39,8 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		List<Double> output = (List<Double>) new OpBuilder(ops, "test.parameter.op").input(list, func).apply();
+		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, func)
+				.outType(new Nil<List<Double>>() {}).apply();
 	}
 
 	@Test
@@ -50,11 +52,8 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(4.0d);
 
 		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing = Functions.match(ops,
-				"test.parameter.op", new Nil<List<Number>>() {
-				}, new Nil<Function<Number, Double>>() {
-				}, new Nil<List<Double>>() {
-				});
-		
+				"test.parameter.op", new Nil<List<Number>>() {}, new Nil<Function<Number, Double>>() {},
+				new Nil<List<Double>>() {});
 
 		List<Double> output = thing.apply(list, func);
 	}
@@ -67,11 +66,11 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		Function<Number, Double> funcClass = Functions.match(ops, "test.parameter.class", new Nil<Number>() {
-		}, new Nil<Double>() {
-		});
+		Function<Number, Double> funcClass = Functions.match(ops, "test.parameter.class", new Nil<Number>() {},
+				new Nil<Double>() {});
 
-		List<Double> output = (List<Double>) new OpBuilder(ops, "test.parameter.op").input(list, funcClass).apply();
+		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, funcClass)
+				.outType(new Nil<List<Double>>() {}).apply();
 	}
 
 }

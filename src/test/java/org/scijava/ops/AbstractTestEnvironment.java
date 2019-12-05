@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.scijava.Context;
+import org.scijava.ops.core.builder.OpBuilder;
 
 public abstract class AbstractTestEnvironment {
 
@@ -32,6 +33,10 @@ public abstract class AbstractTestEnvironment {
 		context.dispose();
 		context = null;
 		ops = null;
+	}
+	
+	protected static OpBuilder op(String name) {
+		return new OpBuilder(ops, name);
 	}
 	
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {

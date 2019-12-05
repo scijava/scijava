@@ -31,7 +31,6 @@ package net.imagej.ops.linalg.rotate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
 
 import net.imagej.ops.AbstractOpTest;
 
@@ -40,6 +39,7 @@ import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests for {@link Rotate3d}.
@@ -57,7 +57,7 @@ public class Rotate3dTest extends AbstractOpTest {
 		final AxisAngle4d axisAngle = new AxisAngle4d(Math.PI / 2.0, 0, 0, 1);
 		final Vector3d expected = xAxis.rotate(new Quaterniond(axisAngle));
 
-		final Vector3d result = (Vector3d) new OpBuilder(ops, "linalg.rotate").input(in, axisAngle).apply();
+		final Vector3d result = op("linalg.rotate").input(in, axisAngle).outType(Vector3d.class).apply();
 
 		assertEquals("Rotation is incorrect", expected, result);
 	}
@@ -67,23 +67,10 @@ public class Rotate3dTest extends AbstractOpTest {
 		final Vector3d xAxis = new Vector3d(1, 0, 0);
 		final Vector3d in = new Vector3d(xAxis);
 
-		final Vector3d result = (Vector3d) new OpBuilder(ops, "linalg.rotate").input(in, IDENTITY).apply();
+		final Vector3d result = op("linalg.rotate").input(in, IDENTITY).outType(Vector3d.class).apply();
 
 		assertNotSame("Op should create a new object for output", in, result);
 		assertEquals("Rotation is incorrect", xAxis, result);
-	}
-
-	@Test
-	public void testCompute() {
-		final Vector3d origin = new Vector3d();
-		final Vector3d xAxis = new Vector3d(1, 0, 0);
-		final Vector3d in = new Vector3d(xAxis);
-		final Vector3d out = new Vector3d(origin);
-
-		final Vector3d result = (Vector3d) new OpBuilder(ops, "linalg.rotate").input(in, IDENTITY, out).apply();
-
-		assertSame("Op should not create a new object for output", out, result);
-		assertEquals("Rotation is incorrect", xAxis, out);
 	}
 
 	// TODO: X -> Inplace transformers

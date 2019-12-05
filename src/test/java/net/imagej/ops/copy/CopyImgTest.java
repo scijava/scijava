@@ -74,7 +74,7 @@ public class CopyImgTest extends AbstractOpTest {
 		copy(input, inputCopy);
 
 		final RandomAccessibleInterval<DoubleType> output =
-			new OpBuilder(ops, "copy.img").input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+			op("copy.img").input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		final Cursor<DoubleType> inc = input.localizingCursor();
 		final RandomAccess<DoubleType> inCopyRA = inputCopy.randomAccess();
@@ -98,7 +98,7 @@ public class CopyImgTest extends AbstractOpTest {
 		final Img<DoubleType> output = input.factory().create(input, input
 			.firstElement());
 
-		new OpBuilder(ops, "copy.img").input(input).output(output).compute();
+		op("copy.img").input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> inCopyc = inputCopy.cursor();

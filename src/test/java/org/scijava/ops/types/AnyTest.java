@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.scijava.core.Priority;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Producer;
 import org.scijava.param.Mutable;
@@ -23,10 +24,10 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = (Double) new OpBuilder(ops, "test.nestedAny").input(nthing).apply();
+		Double e = new OpBuilder(ops, "test.nestedAny").input(nthing).outType(Double.class).apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = (Double) new OpBuilder(ops, "test.any").input(thing).apply();
+		Double d = new OpBuilder(ops, "test.any").input(thing).outType(Double.class).apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -42,7 +43,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
-		Double d = (Double) new OpBuilder(ops, "test.exceptionalAny").input(ething).apply();
+		Double d = new OpBuilder(ops, "test.exceptionalAny").input(ething).outType(Double.class).apply();
 
 	}
 
@@ -76,12 +77,13 @@ public class AnyTest extends AbstractTestEnvironment {
 		assert out instanceof MutableNotAny;
 		assertEquals(Long.toString(in1 + in2), ((MutableNotAny) out).getValue());
 	}
-	
+
 	@Test
 	public void testAnyInjectionIntoFunctionRaws() {
 		final Function<Long, Long> func = (in) -> in / 2;
-		final Long output = (Long) new OpBuilder(ops, "test.functionAndLongToLong").input(func, 20l).apply();
-		assert(output == 10);
+		final Long output = new OpBuilder(ops, "test.functionAndLongToLong").input(func, 20l).outType(Long.class)
+				.apply();
+		assert (output == 10);
 	}
 }
 
@@ -95,7 +97,7 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 	public Long apply(Function<Long, Long> t, Long u) {
 		return t.apply(u);
 	}
-	
+
 }
 
 @Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")

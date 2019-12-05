@@ -60,7 +60,7 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 
 		// load in input image and expected output image.
 		Img<DoubleType> inputImg = ArrayImgs.doubles(256, 256);
-		new OpBuilder(ops, "image.equation")
+		op("image.equation")
 				.input("Math.tan(0.3*p[0]) + Math.tan(0.1*p[1])", context.getService(ScriptService.class))
 				.output(inputImg).compute();
 		Img<FloatType> expectedOutput = ((Img<FloatType>) openFloatImg("Result.tif"));
@@ -78,7 +78,7 @@ public class FrangiVesselnessTest extends AbstractOpTest {
 		double[] spacing = { 1, 1 };
 
 		// run the op
-		new OpBuilder(ops, "filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
+		op("filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
 
 		// compare the output image data to that stored in the file.
 		Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();

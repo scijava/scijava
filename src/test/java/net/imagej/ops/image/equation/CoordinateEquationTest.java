@@ -43,6 +43,8 @@ import net.imglib2.type.numeric.integer.ShortType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Test XY, and coordinate based equations that is equations of the form f(x,y)
@@ -69,17 +71,17 @@ public class CoordinateEquationTest extends AbstractOpTest {
 	@Test
 	public void testEquation2DOp() {
 
-		final IterableInterval<DoubleType> image = (IterableInterval<DoubleType>) ops.run("create.img", dimensions,
-				new DoubleType());
+		final IterableInterval<DoubleType> image = op("create.img").input(dimensions,
+				new DoubleType()).outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
 
 		// implement x^2+y^2 taking into account the calibration
 		final Function<long[], Double> op = (coords) -> Math.pow(start[0] + coords[0] * spacing[0], 2)
 				+ Math.pow(start[1] + coords[1] * spacing[1], 2);
 
-		new OpBuilder(ops, "image.equation").input(op, image).apply();
+		op("image.equation").input(op).output(image).compute();
 
 		DoubleType sum = new DoubleType();
-		new OpBuilder(ops, "stats.sum").input(image, sum).apply();
+		op("stats.sum").input(image).output(sum).compute();
 
 		assertEquals(6801.346801346799, sum.getRealDouble(), 0.00001);
 
@@ -95,8 +97,8 @@ public class CoordinateEquationTest extends AbstractOpTest {
 
 		final Dimensions dimensions4D = new FinalDimensions(size4D);
 
-		final Img<ShortType> image = (Img<ShortType>) ops.run("create.img", dimensions4D,
-			new ShortType());
+		final Img<ShortType> image = op("create.img").input(dimensions4D,
+			new ShortType()).outType(new Nil<Img<ShortType>>() {}).apply();
 
 		// implement c[0]+10*c[1]+100*c[3]+1000*c[4]
 		final Function<long[], Double> op = (coords) -> {
@@ -107,7 +109,7 @@ public class CoordinateEquationTest extends AbstractOpTest {
 					return result;
 			};
 
-		new OpBuilder(ops, "image.equation").input(op, image).apply();
+		op("image.equation").input(op).output(image).compute();
 
 		final RandomAccess<ShortType> ra = image.randomAccess();
 

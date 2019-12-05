@@ -50,20 +50,17 @@ import org.junit.Test;
 public class QuadricTest extends AbstractOpTest {
 
 	private static final double alpha = Math.cos(Math.PI / 4.0);
-	private static final List<Vector3d> unitSpherePoints = Stream.of(new Vector3d(
-		1, 0, 0), new Vector3d(-1, 0, 0), new Vector3d(0, 1, 0), new Vector3d(0, -1,
-			0), new Vector3d(0, 0, 1), new Vector3d(0, 0, -1), new Vector3d(alpha,
-				alpha, 0), new Vector3d(-alpha, alpha, 0), new Vector3d(alpha, -alpha,
-					0), new Vector3d(-alpha, -alpha, 0), new Vector3d(0, alpha, alpha),
-		new Vector3d(0, -alpha, alpha), new Vector3d(0, alpha, -alpha),
-		new Vector3d(0, -alpha, -alpha), new Vector3d(alpha, 0, alpha),
-		new Vector3d(alpha, 0, -alpha), new Vector3d(-alpha, 0, alpha),
-		new Vector3d(-alpha, 0, -alpha)).collect(toList());
+	private static final List<Vector3d> unitSpherePoints = Stream.of(new Vector3d(1, 0, 0), new Vector3d(-1, 0, 0),
+			new Vector3d(0, 1, 0), new Vector3d(0, -1, 0), new Vector3d(0, 0, 1), new Vector3d(0, 0, -1),
+			new Vector3d(alpha, alpha, 0), new Vector3d(-alpha, alpha, 0), new Vector3d(alpha, -alpha, 0),
+			new Vector3d(-alpha, -alpha, 0), new Vector3d(0, alpha, alpha), new Vector3d(0, -alpha, alpha),
+			new Vector3d(0, alpha, -alpha), new Vector3d(0, -alpha, -alpha), new Vector3d(alpha, 0, alpha),
+			new Vector3d(alpha, 0, -alpha), new Vector3d(-alpha, 0, alpha), new Vector3d(-alpha, 0, -alpha))
+			.collect(toList());
 
 	@Test
 	public void testEquation() {
-		final Matrix4dc solution = (Matrix4dc) ops.run("stats.leastSquares",
-			unitSpherePoints);
+		final Matrix4dc solution = (Matrix4dc) ops.run("stats.leastSquares", unitSpherePoints);
 		final double a = solution.m00();
 		final double b = solution.m11();
 		final double c = solution.m22();
@@ -75,27 +72,23 @@ public class QuadricTest extends AbstractOpTest {
 		final double i = solution.m23();
 
 		for (final Vector3d p : unitSpherePoints) {
-			final double polynomial = a * p.x * p.x + b * p.y * p.y + c * p.z * p.z +
-				2 * d * p.x * p.y + 2 * e * p.x * p.z + 2 * f * p.y * p.z + 2 * g *
-					p.x + 2 * h * p.y + 2 * i * p.z;
-			assertEquals("The matrix does not solve the polynomial equation", 1.0,
-				polynomial, 1e-12);
+			final double polynomial = a * p.x * p.x + b * p.y * p.y + c * p.z * p.z + 2 * d * p.x * p.y
+					+ 2 * e * p.x * p.z + 2 * f * p.y * p.z + 2 * g * p.x + 2 * h * p.y + 2 * i * p.z;
+			assertEquals("The matrix does not solve the polynomial equation", 1.0, polynomial, 1e-12);
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testMatchingFailsIfTooFewPoints() {
 		final int nPoints = Math.max(0, Quadric.MIN_DATA - 1);
-		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints)
-			.collect(toList());
+		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints).collect(toList());
 
-		new OpBuilder(ops, "stats.leastSquares").input(points).apply();
+		op("stats.leastSquares").input(points).outType(Matrix4d.class).apply();
 	}
 
 	@Test
 	public void testMatrixElements() {
-		final Matrix4dc solution = (Matrix4dc) ops.run("stats.leastSquares",
-			unitSpherePoints);
+		final Matrix4dc solution = op("stats.leastSquares").input(unitSpherePoints).outType(Matrix4d.class).apply();
 
 		assertEquals("The matrix element is incorrect", 1.0, solution.m00(), 1e-12);
 		assertEquals("The matrix element is incorrect", 1.0, solution.m11(), 1e-12);
@@ -106,8 +99,7 @@ public class QuadricTest extends AbstractOpTest {
 		assertEquals("The matrix element is incorrect", 0.0, solution.m12(), 1e-12);
 		assertEquals("The matrix element is incorrect", 0.0, solution.m13(), 1e-12);
 		assertEquals("The matrix element is incorrect", 0.0, solution.m23(), 1e-12);
-		assertEquals("The matrix element is incorrect", -1.0, solution.m33(),
-			1e-12);
+		assertEquals("The matrix element is incorrect", -1.0, solution.m33(), 1e-12);
 		final Matrix4d transposed = new Matrix4d();
 		solution.transpose(transposed);
 		assertEquals("Matrix is not symmetric", solution, transposed);

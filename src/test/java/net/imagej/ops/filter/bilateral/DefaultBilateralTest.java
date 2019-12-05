@@ -37,7 +37,6 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 
 public class DefaultBilateralTest extends AbstractOpTest {
 
@@ -48,7 +47,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = generateByteArrayTestImg(false, 6, 6);
 
-		new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
+		op("filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
 
 		final byte[] expected = { 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3, 2, 8, 7, 6, 4, 3,
 				2, 8, 7, 6, 4, 3, 2 };
@@ -65,7 +64,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 		final Img<ByteType> in = ArrayImgs.bytes(data, 2, 2);
 		final Img<ByteType> out = generateByteArrayTestImg(false, 2, 2);
 
-		new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 1).output(out).compute();
+		op("filter.bilateral").input(in, 15.0, 5.0, 1).output(out).compute();
 
 		Cursor<ByteType> cout = out.cursor();
 		final byte[] expected = { 5, 5, 5, 5 };
@@ -85,8 +84,8 @@ public class DefaultBilateralTest extends AbstractOpTest {
 		final Img<ByteType> out = generateByteArrayTestImg(false, 6, 6);
 		final Img<ByteType> cellOut = generateByteTestCellImg(false, 6, 6);
 
-		new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
-		new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2).output(cellOut).compute();
+		op("filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
+		op("filter.bilateral").input(in, 15.0, 5.0, 2).output(cellOut).compute();
 
 		Cursor<ByteType> cout = out.cursor();
 		Cursor<ByteType> cCellOut = cellOut.cursor();
@@ -106,7 +105,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 	// final Img<ByteType> gaussOut = generateByteArrayTestImg(false, 6, 6);
 	// final Img<ByteType> bilateralOut = generateByteTestCellImg(false, 6, 6);
 	//
-	// new OpBuilder(ops, "filter.bilateral").input(bilateralOut, in, 15, 5,
+	// op("filter.bilateral").input(bilateralOut, in, 15, 5,
 	// 2).apply();
 	// final double sigma = 5;
 	// ops.run(GaussRAISingleSigma.class, gaussOut, in, sigma);
@@ -120,7 +119,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = generateByteArrayTestImg(false, 6, 6);
 
-		new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
+		op("filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
 
 		Cursor<ByteType> cout = out.cursor();
 		while (cout.hasNext()) {
@@ -136,7 +135,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 		final Img<ByteType> in = ArrayImgs.bytes(data, 6, 6);
 		final Img<ByteType> out = generateByteArrayTestImg(false, 6, 6);
 
-		new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
+		op("filter.bilateral").input(in, 15.0, 5.0, 2).output(out).compute();
 
 		final byte[] expected = { -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6,
 				-4, -3, -2, -8, -7, -6, -4, -3, -2, -8, -7, -6, -4, -3, -2 };
@@ -156,7 +155,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 	// final Img<ByteType> in = ArrayImgs.bytes(data, 2, 2);
 	// final Img<ByteType> out = generateByteArrayTestImg(false, 2, 2, 2);
 	//
-	// new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2, out).apply();
+	// op("filter.bilateral").input(in, 15.0, 5.0, 2, out).apply();
 	//
 	// final byte[] expected = { 2, 2, 2, 2, 2, 2, 2, 2 };
 	//
@@ -172,7 +171,7 @@ public class DefaultBilateralTest extends AbstractOpTest {
 	// final Img<ByteType> in = ArrayImgs.bytes(data, 2, 3);
 	// final Img<ByteType> out = generateByteArrayTestImg(false, 3, 2);
 	//
-	// new OpBuilder(ops, "filter.bilateral").input(in, 15.0, 5.0, 2, out).apply();
+	// op("filter.bilateral").input(in, 15.0, 5.0, 2, out).apply();
 	//
 	// final byte[] expected = { 1, 1, 1, 1, 1, 1 };
 	// Cursor<ByteType> cout = out.cursor();

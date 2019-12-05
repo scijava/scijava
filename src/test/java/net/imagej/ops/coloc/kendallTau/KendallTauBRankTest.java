@@ -105,7 +105,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 			//final PairIterator<DoubleType> iter = pairIterator(values1, values2);
 			final Iterable<Pair<IntType, IntType>> iter = new IterablePair<>(ArrayImgs.ints(values1, n), ArrayImgs.ints(values2, n));
 			double kendallValue1 = calculateNaive(iter.iterator());
-			double kendallValue2 = new OpBuilder(ops, "coloc.kendallTau").input(values1, values2).outType(Double.class).apply();
+			double kendallValue2 = op("coloc.kendallTau").input(values1, values2).outType(Double.class).apply();
 			if (Double.isNaN(kendallValue1)) {
 				assertTrue("i: " + i + ", value2: " + kendallValue2, Double.isInfinite(kendallValue2) || Double.isNaN(kendallValue2));
 			} else {
@@ -128,7 +128,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops,
 				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 
@@ -140,7 +140,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 	}
 	
 	private <T extends RealType<T>, U extends RealType<U>> void assertTau(final double expected, final Iterable<T> img1, final Iterable<U> img2) {
-		final double kendallValue = (double) new OpBuilder(ops, "coloc.kendallTau").input(img1, img2).apply();
+		final double kendallValue = (double) op("coloc.kendallTau").input(img1, img2).apply();
 		assertEquals(expected, kendallValue, 1e-10);
 	}
 

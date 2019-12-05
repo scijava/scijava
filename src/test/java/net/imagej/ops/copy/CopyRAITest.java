@@ -98,7 +98,7 @@ public class CopyRAITest extends AbstractOpTest {
 		input2 = imgOp.apply(new FinalDimensions(size1), new UnsignedByteType());
 
 		// create the same input but force it to be a planar image
-		inputPlanar = new OpBuilder(ops, "create.img")
+		inputPlanar = op("create.img")
 				.input(new FinalDimensions(size1), new UnsignedByteType(),
 						new PlanarImgFactory<>(new UnsignedByteType()))
 				.outType(new Nil<Img<UnsignedByteType>>() {}).apply();
@@ -140,7 +140,7 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		new OpBuilder(ops, "copy.rai").input(input, output).apply();
+		op("copy.rai").input(input, output).apply();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();
@@ -161,7 +161,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 		assertNotNull(copy);
 
-		final Img<UnsignedByteType> out = new OpBuilder(ops, "create.img")
+		final Img<UnsignedByteType> out = op("create.img")
 				.input(new FinalDimensions(size2), new UnsignedByteType()) //
 				.outType(new Nil<Img<UnsignedByteType>>() {}) //
 				.apply();
@@ -169,7 +169,7 @@ public class CopyRAITest extends AbstractOpTest {
 		// copy view to output and assert that is equal to the mean of the view
 		copy.compute(view, out);
 		DoubleType sum = new DoubleType();
-		new OpBuilder(ops, "stats.mean").input(out).output(sum).compute();
+		op("stats.mean").input(out).output(sum).compute();
 		assertEquals(sum.getRealDouble(), 100.0, delta);
 
 		// also try with a planar image
@@ -178,7 +178,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 		copy.compute(viewPlanar, outFromPlanar);
 		DoubleType sumFromPlanar = new DoubleType();
-		new OpBuilder(ops, "stats.mean").input(outFromPlanar).output(sumFromPlanar).compute();
+		op("stats.mean").input(outFromPlanar).output(sumFromPlanar).compute();
 		assertEquals(sumFromPlanar.getRealDouble(), 100.0, delta);
 
 	}

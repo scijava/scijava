@@ -59,7 +59,7 @@ public class LiICQTest extends ColocalisationTest {
 		final Img<ByteType> img1 = generateByteArrayTestImg(true, 10, 15, 20);
 		final Img<ByteType> img2 = generateByteArrayTestImg(true, 10, 15, 20);
 
-		final Double icqValue = new OpBuilder(ops, "coloc.icq").input(img1, img2).outType(Double.class).apply();
+		final Double icqValue = op("coloc.icq").input(img1, img2).outType(Double.class).apply();
 
 		assertEquals(0.5, icqValue, 0.0);
 	}
@@ -69,7 +69,7 @@ public class LiICQTest extends ColocalisationTest {
 	 */
 	@Test
 	public void liPositiveCorrTest() {
-		final Double icqValue = new OpBuilder(ops, "coloc.icq").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
+		final Double icqValue = op("coloc.icq").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
 		assertTrue(icqValue > 0.34 && icqValue < 0.35);
 	}
 
@@ -79,7 +79,7 @@ public class LiICQTest extends ColocalisationTest {
 	 */
 	@Test
 	public void liZeroCorrTest() {
-		final Object icqValue = new OpBuilder(ops, "coloc.icq").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
+		final Object icqValue = op("coloc.icq").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
 
 		assertTrue(icqValue instanceof Double);
 		final double icq = (Double) icqValue;
@@ -102,7 +102,7 @@ public class LiICQTest extends ColocalisationTest {
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops, "coloc.icq",
 				new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		new OpBuilder(ops, "coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.72, value.getPValue(), 0.0);
 	}
 

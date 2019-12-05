@@ -54,7 +54,7 @@ public class CreateKernel2ndDerivBiGaussTest extends AbstractOpTest {
 		final double[] sigmas = { sigma, 0.5 * sigma };
 
 		// test the main convenience function:
-		RandomAccessibleInterval<DoubleType> kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss")
+		RandomAccessibleInterval<DoubleType> kernelD = op("create.kernel2ndDerivBiGauss")
 				.input(sigmas, 2, new DoubleType()).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		// sizes are okay?
@@ -88,21 +88,21 @@ public class CreateKernel2ndDerivBiGaussTest extends AbstractOpTest {
 		int wasCaught = 0;
 		try {
 			final double[] shortSigmas = { 2.0 * sigma };
-			kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(shortSigmas, 2, new DoubleType())
+			kernelD = op("create.kernel2ndDerivBiGauss").input(shortSigmas, 2, new DoubleType())
 					.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 		} catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		try {
 			final double[] negativeSigmas = { -1.0, 0.0 };
-			kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(negativeSigmas, 2, new DoubleType())
+			kernelD = op("create.kernel2ndDerivBiGauss").input(negativeSigmas, 2, new DoubleType())
 					.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 		} catch (IllegalArgumentException e) {
 			++wasCaught;
 		}
 		try {
 			// wrong dimensionality
-			kernelD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 0, new DoubleType())
+			kernelD = op("create.kernel2ndDerivBiGauss").input(sigmas, 0, new DoubleType())
 					.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 		} catch (IllegalArgumentException e) {
 			++wasCaught;
@@ -111,7 +111,7 @@ public class CreateKernel2ndDerivBiGaussTest extends AbstractOpTest {
 
 		// does the general kernel calculation work?
 		// (should be pure real kernel)
-		RandomAccessibleInterval<ComplexDoubleType> kernelCD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss")
+		RandomAccessibleInterval<ComplexDoubleType> kernelCD = op("create.kernel2ndDerivBiGauss")
 				.input(sigmas, 2, new ComplexDoubleType())
 				.outType(new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {}).apply();
 		RandomAccess<ComplexDoubleType> samplerCD = kernelCD.randomAccess();
@@ -120,7 +120,7 @@ public class CreateKernel2ndDerivBiGaussTest extends AbstractOpTest {
 
 		// general plugin system works?
 		// @SuppressWarnings("unchecked")
-		kernelCD = new OpBuilder(ops, "create.kernel2ndDerivBiGauss").input(sigmas, 3, new ComplexDoubleType())
+		kernelCD = op("create.kernel2ndDerivBiGauss").input(sigmas, 3, new ComplexDoubleType())
 				.outType(new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {}).apply();
 	}
 }

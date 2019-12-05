@@ -48,6 +48,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests for the {@link BoxCount} op
@@ -61,10 +62,9 @@ public class BoxCountTest extends AbstractOpTest {
 	private static final double SCALING = 2.0;
 	private static final long ITERATIONS = 4;
 	private static final long DIMENSIONS = 2;
-	private static final long[] TEST_DIMS = LongStream.generate(() -> MAX_SIZE)
-		.limit(DIMENSIONS).toArray();
-	private static final double[] EXPECTED_SIZES = DoubleStream.iterate(MAX_SIZE,
-		d -> d / SCALING).map(d -> -Math.log(d)).limit(ITERATIONS).toArray();
+	private static final long[] TEST_DIMS = LongStream.generate(() -> MAX_SIZE).limit(DIMENSIONS).toArray();
+	private static final double[] EXPECTED_SIZES = DoubleStream.iterate(MAX_SIZE, d -> d / SCALING)
+			.map(d -> -Math.log(d)).limit(ITERATIONS).toArray();
 
 	@Test
 	public void testAllBackground() throws Exception {
@@ -73,8 +73,9 @@ public class BoxCountTest extends AbstractOpTest {
 		final Img<BitType> img = ArrayImgs.bits(TEST_DIMS);
 
 		// EXECUTE
-		final List<ValuePair<DoubleType, DoubleType>> points = (List<ValuePair<DoubleType, DoubleType>>) ops
-				.run("topology.boxCount", img, MAX_SIZE, MIN_SIZE, SCALING, 0l);
+		final List<ValuePair<DoubleType, DoubleType>> points = op("topology.boxCount")
+				.input(img, MAX_SIZE, MIN_SIZE, SCALING, 0l)
+				.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>() {}).apply();
 
 		// VERIFY
 		assertNotNull(points);
@@ -88,16 +89,17 @@ public class BoxCountTest extends AbstractOpTest {
 	@Test
 	public void testAllForeground() {
 		// SETUP
-		final double scalingPow = DoubleStream.generate(() -> SCALING).limit(
-			DIMENSIONS).reduce((i, j) -> i * j).orElse(0);
-		final double[] expectedCounts = DoubleStream.iterate(1.0, i -> i *
-			scalingPow).map(Math::log).limit(ITERATIONS).toArray();
+		final double scalingPow = DoubleStream.generate(() -> SCALING).limit(DIMENSIONS).reduce((i, j) -> i * j)
+				.orElse(0);
+		final double[] expectedCounts = DoubleStream.iterate(1.0, i -> i * scalingPow).map(Math::log).limit(ITERATIONS)
+				.toArray();
 		final Img<BitType> img = ArrayImgs.bits(TEST_DIMS);
 		img.forEach(BitType::setOne);
 
 		// EXECUTE
-		final List<ValuePair<DoubleType, DoubleType>> points = (List<ValuePair<DoubleType, DoubleType>>) ops
-				.run("topology.boxCount", img, MAX_SIZE, MIN_SIZE, SCALING, 0l);
+		final List<ValuePair<DoubleType, DoubleType>> points = op("topology.boxCount")
+				.input(img, MAX_SIZE, MIN_SIZE, SCALING, 0l)
+				.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>() {}).apply();
 
 		// VERIFY
 		for (int i = 0; i < ITERATIONS; i++) {
@@ -109,18 +111,16 @@ public class BoxCountTest extends AbstractOpTest {
 	@Test
 	public void testHyperCube() {
 		// SETUP
-		final double[] expectedSizes = DoubleStream.of(4, 2, 1).map(i -> -Math.log(
-			i)).toArray();
-		final double[] expectedCounts = DoubleStream.of(1, 16, 16).map(Math::log)
-			.toArray();
+		final double[] expectedSizes = DoubleStream.of(4, 2, 1).map(i -> -Math.log(i)).toArray();
+		final double[] expectedCounts = DoubleStream.of(1, 16, 16).map(Math::log).toArray();
 		final Img<BitType> img = ArrayImgs.bits(4, 4, 4, 4);
-		final IntervalView<BitType> hyperView = Views.offsetInterval(img,
-			new long[] { 1, 1, 1, 1 }, new long[] { 2, 2, 2, 2 });
+		final IntervalView<BitType> hyperView = Views.offsetInterval(img, new long[] { 1, 1, 1, 1 },
+				new long[] { 2, 2, 2, 2 });
 		hyperView.forEach(BitType::setOne);
 
 		// EXECUTE
-		final List<ValuePair<DoubleType, DoubleType>> points = (List<ValuePair<DoubleType, DoubleType>>) ops
-				.run("topology.boxCount", img, 4L, 1L, 2.0, 0L);
+		final List<ValuePair<DoubleType, DoubleType>> points = op("topology.boxCount").input(img, 4L, 1L, 2.0, 0L)
+				.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>() {}).apply();
 
 		// VERIFY
 		for (int i = 0; i < expectedSizes.length; i++) {
@@ -135,18 +135,16 @@ public class BoxCountTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testHyperCubeTranslations() {
-		final double[] expectedSizes = DoubleStream.of(4, 2, 1).map(i -> -Math.log(
-			i)).toArray();
-		final double[] expectedCounts = DoubleStream.of(1, 1, 16).map(Math::log)
-			.toArray();
+		final double[] expectedSizes = DoubleStream.of(4, 2, 1).map(i -> -Math.log(i)).toArray();
+		final double[] expectedCounts = DoubleStream.of(1, 1, 16).map(Math::log).toArray();
 		final Img<BitType> img = ArrayImgs.bits(4, 4, 4, 4);
-		final IntervalView<BitType> hyperView = Views.offsetInterval(img,
-			new long[] { 1, 1, 1, 1 }, new long[] { 2, 2, 2, 2 });
+		final IntervalView<BitType> hyperView = Views.offsetInterval(img, new long[] { 1, 1, 1, 1 },
+				new long[] { 2, 2, 2, 2 });
 		hyperView.forEach(BitType::setOne);
 
 		// EXECUTE
-		final List<ValuePair<DoubleType, DoubleType>> points = (List<ValuePair<DoubleType, DoubleType>>) ops
-				.run("topology.boxCount", img, 4L, 1L, 2.0, 1L);
+		final List<ValuePair<DoubleType, DoubleType>> points = op("topology.boxCount").input(img, 4L, 1L, 2.0, 1L)
+				.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>() {}).apply();
 
 		// VERIFY
 		for (int i = 0; i < expectedSizes.length; i++) {
@@ -158,18 +156,16 @@ public class BoxCountTest extends AbstractOpTest {
 	@Test
 	public void testOneVoxel() {
 		// SETUP
-		final PrimitiveIterator.OfDouble sizes = DoubleStream.of(9, 3, 1).map(
-			i -> -Math.log(i)).iterator();
-		final PrimitiveIterator.OfDouble counts = DoubleStream.of(1, 1, 1).map(
-			Math::log).iterator();
+		final PrimitiveIterator.OfDouble sizes = DoubleStream.of(9, 3, 1).map(i -> -Math.log(i)).iterator();
+		final PrimitiveIterator.OfDouble counts = DoubleStream.of(1, 1, 1).map(Math::log).iterator();
 		final Img<BitType> img = ArrayImgs.bits(9, 9, 9);
 		final RandomAccess<BitType> access = img.randomAccess();
 		access.setPosition(new long[] { 4, 4, 4 });
 		access.get().setOne();
 
 		// EXECUTE
-		final List<ValuePair<DoubleType, DoubleType>> points = (List<ValuePair<DoubleType, DoubleType>>) ops
-				.run("topology.boxCount", img, 9L, 3L, 3.0, 0l);
+		final List<ValuePair<DoubleType, DoubleType>> points = op("topology.boxCount").input(img, 9L, 3L, 3.0, 0l)
+				.outType(new Nil<List<ValuePair<DoubleType, DoubleType>>>() {}).apply();
 
 		// VERIFY
 		points.forEach(p -> {

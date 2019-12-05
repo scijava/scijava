@@ -75,7 +75,7 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void copyImgLabeling() {
-		new OpBuilder(ops, "copy.imgLabeling").input(input).output(copy).compute();
+		op("copy.imgLabeling").input(input).output(copy).compute();
 		assertNotNull(copy);
 
 		Cursor<LabelingType<String>> inCursor = input.cursor();

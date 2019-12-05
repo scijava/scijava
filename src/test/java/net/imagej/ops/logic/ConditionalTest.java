@@ -36,6 +36,7 @@ import net.imglib2.type.logic.BoolType;
 import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests {@link Ternary} and {@link Default}.
@@ -49,9 +50,9 @@ public class ConditionalTest extends AbstractOpTest {
 		final ByteType ifTrueVal = new ByteType((byte) 10);
 		final ByteType ifFalseVal = new ByteType((byte) 100);
 		final ByteType outVal = new ByteType();
-		new OpBuilder(ops, "logic.match").input(new BoolType(true), ifTrueVal, ifFalseVal, outVal).apply();
+		op("logic.match").input(new BoolType(true), ifTrueVal, ifFalseVal).output(outVal).compute();
 		assertEquals(10, outVal.get());
-		new OpBuilder(ops, "logic.match").input(new BoolType(false), ifTrueVal, ifFalseVal, outVal).apply();
+		op("logic.match").input(new BoolType(false), ifTrueVal, ifFalseVal).output(outVal).compute();
 		assertEquals(100, outVal.get());
 	}
 
@@ -59,9 +60,9 @@ public class ConditionalTest extends AbstractOpTest {
 	public void testDefault() {
 		final ByteType out = new ByteType((byte) 10);
 		final ByteType defaultVal = new ByteType((byte) 100);
-		new OpBuilder(ops, "logic.default").input(new BoolType(true), defaultVal, out).apply();
+		op("logic.default").input(new BoolType(true), defaultVal).output(out).compute();
 		assertEquals(10, out.get());
-		new OpBuilder(ops, "logic.default").input(new BoolType(false), defaultVal, out).apply();
+		op("logic.default").input(new BoolType(false), defaultVal).output(out).compute();
 		assertEquals(100, out.get());
 	}
 

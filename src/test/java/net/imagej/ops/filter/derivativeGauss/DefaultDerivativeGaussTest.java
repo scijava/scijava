@@ -51,25 +51,25 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testImgParamDimensionsMismatch() {
-		final Img<DoubleType> input = new OpBuilder(ops, "convert.float64")
+		final Img<DoubleType> input = op("convert.float64")
 				.input(generateFloatArrayTestImg(false, 30, 30, 30)).outType(new Nil<Img<DoubleType>>() {}).apply();
 
-		final Img<DoubleType> output = new OpBuilder(ops, "create.img").input(input)
+		final Img<DoubleType> output = op("create.img").input(input)
 				.outType(new Nil<Img<DoubleType>>() {}).apply();
 
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 1, 1 };
-		new OpBuilder(ops, "filter.derivativeGauss").input(input, derivatives, sigmas).output(output).compute();
+		op("filter.derivativeGauss").input(input, derivatives, sigmas).output(output).compute();
 	}
 
 	@Test
 	public void regressionTest() {
 		final int width = 10;
-		final Img<DoubleType> input = new OpBuilder(ops, "create.img")
+		final Img<DoubleType> input = op("create.img")
 				.input(new FinalDimensions(width, width), new DoubleType()).outType(new Nil<Img<DoubleType>>() {})
 				.apply();
 
-		final Img<DoubleType> output = new OpBuilder(ops, "create.img").input(input, new DoubleType())
+		final Img<DoubleType> output = op("create.img").input(input, new DoubleType())
 				.outType(new Nil<Img<DoubleType>>() {}).apply();
 
 		// Draw a line on the image
@@ -83,7 +83,7 @@ public class DefaultDerivativeGaussTest extends AbstractOpTest {
 		// filter the image
 		final int[] derivatives = new int[] { 1, 0 };
 		final double[] sigmas = new double[] { 0.5, 0.5 };
-		new OpBuilder(ops, "filter.derivativeGauss").input(input, sigmas, derivatives).output(output).compute();
+		op("filter.derivativeGauss").input(input, sigmas, derivatives).output(output).compute();
 
 		final Cursor<DoubleType> cursor = output.localizingCursor();
 		int currentPixel = 0;

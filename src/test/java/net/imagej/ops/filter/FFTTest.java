@@ -48,6 +48,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Test;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -79,9 +80,10 @@ public class FFTTest extends AbstractOpTest {
 			final Img<FloatType> inverse = generateFloatArrayTestImg(false, dimensions);
 
 			@SuppressWarnings("unchecked")
-			final Img<ComplexFloatType> out = (Img<ComplexFloatType>) ops.run("filter.fft", in, null, true,
-					new ComplexFloatType(), es);
-			new OpBuilder(ops, "filter.ifft").input(out, es).output(inverse).compute();
+			final Img<ComplexFloatType> out = op("filter.fft")
+					.input(in, null, true, new ComplexFloatType(), es).outType(new Nil<Img<ComplexFloatType>>() {})
+					.apply();
+			op("filter.ifft").input(out, es).output(inverse).compute();
 
 			assertImagesEqual(in, inverse, .00005f);
 		}
@@ -109,8 +111,9 @@ public class FFTTest extends AbstractOpTest {
 			long[] fftDimensions = new long[3];
 
 			// compute the dimensions that will result in the fastest FFT time
-			Pair<long[], long[]> fftSize = (Pair<long[], long[]>) ops.run("filter.fftSize",
-					new FinalDimensions(originalDimensions), fastDimensions, fftDimensions, true, true);
+			Pair<long[], long[]> fftSize = op("filter.fftSize")
+					.input(new FinalDimensions(originalDimensions), fastDimensions, fftDimensions, true, true)
+					.outType(new Nil<Pair<long[], long[]>>() {}).apply();
 
 			fastDimensions = fftSize.getA();
 			fftDimensions = fftSize.getB();
@@ -156,18 +159,18 @@ public class FFTTest extends AbstractOpTest {
 			final Img<FloatType> inverseFast = generateFloatArrayTestImg(false, fastDimensions);
 
 			// invert the "small" FFT
-			new OpBuilder(ops, "filter.ifft").input(fft1, es, inverseOriginalSmall).apply();
+			op("filter.ifft").input(fft1, es, inverseOriginalSmall).apply();
 
 			// invert the "fast" FFT. The inverse will should be the original
 			// size.
-			new OpBuilder(ops, "filter.ifft").input(fft2, es, inverseOriginalFast).apply();
+			op("filter.ifft").input(fft2, es, inverseOriginalFast).apply();
 
 			// invert the "fast" FFT that was acheived by explicitly using an
 			// image
 			// that had "fast" dimensions. The inverse will be the fast size
 			// this
 			// time.
-			new OpBuilder(ops, "filter.ifft").input(fft3, es, inverseFast).apply();
+			op("filter.ifft").input(fft3, es, inverseFast).apply();
 
 			// assert that the inverse images are equal to the original
 			assertImagesEqual(inverseOriginalSmall, inOriginal, .0001f);
@@ -180,8 +183,9 @@ public class FFTTest extends AbstractOpTest {
 	@SuppressWarnings("unchecked")
 	public void testPadShiftKernel() {
 		long[] dims = new long[] { 1024, 1024 };
-		Img<ComplexDoubleType> test = (Img<ComplexDoubleType>) ops.run("create.img", new FinalDimensions(dims),
-				new ComplexDoubleType());
+		Img<ComplexDoubleType> test = op("create.img")
+				.input(new FinalDimensions(dims), new ComplexDoubleType()).outType(new Nil<Img<ComplexDoubleType>>() {})
+				.apply();
 
 		RandomAccessibleInterval<ComplexDoubleType> shift = (RandomAccessibleInterval<ComplexDoubleType>) ops
 				.run("filter.padShiftKernel", test, new FinalDimensions(dims));

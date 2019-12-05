@@ -41,6 +41,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * @author Stefan Helfrich (University of Konstanz)
@@ -58,14 +59,13 @@ public class SquareIntegralImgTest extends AbstractOpTest {
 	public void before() throws Exception {
 		out = generateDoubleArrayTestImg(true, new long[] { 3, 3 });
 	}
-	
+
 	/**
 	 * @see SquareIntegralImg
 	 */
-	@SuppressWarnings({ "unchecked" })
 	@Test
 	public void testSquareIntegralImageCorrectness() {
-		new OpBuilder(ops, "image.squareIntegral").input(generateKnownByteArrayTestImg(), out).apply();
+		op("image.squareIntegral").input(generateKnownByteArrayTestImg()).output(out).compute();
 
 		Img<ByteType> bytes = generateKnownSquareIntegralImage();
 
@@ -110,5 +110,5 @@ public class SquareIntegralImgTest extends AbstractOpTest {
 
 		return ArrayImgs.bytes(array, dims);
 	}
-	
+
 }

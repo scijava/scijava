@@ -42,6 +42,8 @@ import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests {@link MergeLabeling}.
@@ -58,7 +60,8 @@ public class MergeLabelingTest extends AbstractOpTest {
 	@Before
 	public void setUp() {
 		super.setUp();
-		in1 = (ImgLabeling<Integer, ByteType>) new OpBuilder(ops, "create.imgLabeling").input(new FinalInterval(2, 2), new ByteType()).apply();
+		in1 = op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
+				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		RandomAccess<LabelingType<Integer>> randomAccess = in1.randomAccess();
 		randomAccess.setPosition(new int[] { 0, 0 });
 		randomAccess.get().add(0);
@@ -69,7 +72,8 @@ public class MergeLabelingTest extends AbstractOpTest {
 		randomAccess.setPosition(new int[] { 1, 1 });
 		randomAccess.get().add(3);
 
-		in2 = (ImgLabeling<Integer, ByteType>) new OpBuilder(ops, "create.imgLabeling").input(new FinalInterval(2, 2), new ByteType()).apply();
+		in2 = op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
+				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		randomAccess = in2.randomAccess();
 		randomAccess.setPosition(new int[] { 0, 0 });
 		randomAccess.get().add(10);
@@ -80,14 +84,14 @@ public class MergeLabelingTest extends AbstractOpTest {
 		randomAccess.setPosition(new int[] { 1, 1 });
 		randomAccess.get().add(13);
 
-		out = (ImgLabeling<Integer, ByteType>) new OpBuilder(ops, "create.imgLabeling").input(new FinalInterval(2, 2), new ByteType()).apply();
+		out = op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
+				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 	}
 
 	@Test
 	public void testMerging() {
-		@SuppressWarnings("unchecked")
-		final ImgLabeling<Integer, ByteType> run =
-			(ImgLabeling<Integer, ByteType>) new OpBuilder(ops, "labeling.merge").input(in1, in2).apply();
+		final ImgLabeling<Integer, ByteType> run = op("labeling.merge").input(in1, in2)
+				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		assertTrue(run.firstElement().contains(0));
 		assertTrue(run.firstElement().contains(10));
 		assertTrue(!run.firstElement().contains(3));
@@ -95,13 +99,15 @@ public class MergeLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void testMask() {
-		final Img<BitType> mask = (Img<BitType>) new OpBuilder(ops, "create.img").input(in1, new BitType()).apply();
+		final Img<BitType> mask = op("create.img").input(in1, new BitType())
+				.outType(new Nil<Img<BitType>>() {}).apply();
 		final RandomAccess<BitType> maskRA = mask.randomAccess();
 		maskRA.setPosition(new int[] { 0, 0 });
 		maskRA.get().set(true);
 		maskRA.setPosition(new int[] { 1, 1 });
 		maskRA.get().set(true);
-		out = (ImgLabeling<Integer, ByteType>) new OpBuilder(ops, "labeling.merge").input(in1, in2, mask).apply();
+		out = op("labeling.merge").input(in1, in2, mask)
+				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		final RandomAccess<LabelingType<Integer>> outRA = out.randomAccess();
 		outRA.setPosition(new int[] { 0, 0 });
 		assertTrue(outRA.get().contains(0));

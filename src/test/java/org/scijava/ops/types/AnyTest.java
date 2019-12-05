@@ -77,7 +77,6 @@ public class AnyTest extends AbstractTestEnvironment {
 		final MutableNotAny out = new OpBuilder(ops, "test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(MutableNotAny.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
-	
 }
 
 @Plugin(type = Op.class, name = "test.functionAndLongToLong")
@@ -90,7 +89,7 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 	public Long apply(Function<Long, Long> t, Long u) {
 		return t.apply(u);
 	}
-	
+
 }
 
 @Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")

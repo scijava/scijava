@@ -86,7 +86,7 @@ public class CopyArrayImgTest extends AbstractOpTest {
 	public void copyArrayImgWithOutputTest() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		new OpBuilder(ops, "copy.img").input(input).output(output).compute();
+		op("copy.img").input(input).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();

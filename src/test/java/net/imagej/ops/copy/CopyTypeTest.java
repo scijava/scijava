@@ -55,7 +55,7 @@ public class CopyTypeTest extends AbstractOpTest {
 
 	@Test
 	public void copyTypeNoOutputTest() {
-		Object out = new OpBuilder(ops, "copy.type").input(dt).apply();
+		Object out = op("copy.type").input(dt).apply();
 
 		if (out instanceof DoubleType) {
 			assertEquals(dt.get(), ((DoubleType) out).get(), 0.0);
@@ -68,7 +68,7 @@ public class CopyTypeTest extends AbstractOpTest {
 	@Test
 	public void copyTypeWithOutputTest() {
 		DoubleType out = new DoubleType();
-		new OpBuilder(ops, "copy.type").input(out).output(dt).compute();
+		op("copy.type").input(out).output(dt).compute();
 
 		assertEquals(dt.get(), out.get(), 0.0);
 

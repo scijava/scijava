@@ -37,6 +37,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests for {@link net.imagej.ops.Ops.Morphology} thinning ops.
@@ -51,41 +52,38 @@ public class ThinningTest extends AbstractOpTest {
 	@Before
 	public void initialize() {
 		Img<FloatType> testImg = openFloatImg(AbstractFeatureTest.class, "3d_geometric_features_testlabel.tif");
-		in = (Img<BitType>) new OpBuilder(ops, "create.img").input(testImg, new BitType()).apply();
-		target = (Img<BitType>) new OpBuilder(ops, "create.img").input(in, new BitType()).apply();
-		new OpBuilder(ops, "convert.bit").input(testImg, in).apply();
+		in = op("create.img").input(testImg, new BitType()).outType(new Nil<Img<BitType>>() {}).apply();
+		target = op("create.img").input(in, new BitType()).outType(new Nil<Img<BitType>>() {}).apply();
+		op("convert.bit").input(testImg).output(in).compute();
 
 	}
 
 	@Test
 	public void testThinGuoHall() {
-		@SuppressWarnings("unchecked")
-		final Img<BitType> out = (Img<BitType>) new OpBuilder(ops, "morphology.thinGuoHall").input(in).apply();
-		new OpBuilder(ops, "convert.bit").input(openFloatImg(AbstractThin.class, "result_guoHall.tif"), target).apply();
+		final Img<BitType> out = op("morphology.thinGuoHall").input(in).outType(new Nil<Img<BitType>>() {}).apply();
+		op("convert.bit").input(openFloatImg(AbstractThin.class, "result_guoHall.tif")).output(target).compute();
 		assertIterationsEqual(target, out);
 	}
 
 	@Test
 	public void testThinHilditch() {
-		@SuppressWarnings("unchecked")
-		final Img<BitType> out = (Img<BitType>) new OpBuilder(ops, "morphology.thinHilditch").input(in).apply();
-		new OpBuilder(ops, "convert.bit").input(openFloatImg(AbstractThin.class, "result_hilditch.tif"), target).apply();
+		final Img<BitType> out = op("morphology.thinHilditch").input(in).outType(new Nil<Img<BitType>>() {}).apply();
+		op("convert.bit").input(openFloatImg(AbstractThin.class, "result_hilditch.tif")).output(target).compute();
 		assertIterationsEqual(target, out);
 	}
 
 	@Test
 	public void testMorphological() {
-		@SuppressWarnings("unchecked")
-		final Img<BitType> out = (Img<BitType>) new OpBuilder(ops, "morphology.thinMorphological").input(in).apply();
-		new OpBuilder(ops, "convert.bit").input(openFloatImg(AbstractThin.class, "result_morphological.tif"), target).apply();
+		final Img<BitType> out = op("morphology.thinMorphological").input(in).outType(new Nil<Img<BitType>>() {})
+				.apply();
+		op("convert.bit").input(openFloatImg(AbstractThin.class, "result_morphological.tif")).output(target).compute();
 		assertIterationsEqual(target, out);
 	}
 
 	@Test
 	public void testZhangSuen() {
-		@SuppressWarnings("unchecked")
-		final Img<BitType> out = (Img<BitType>) new OpBuilder(ops, "morphology.thinZhangSuen").input(in).apply();
-		new OpBuilder(ops, "convert.bit").input(openFloatImg(AbstractThin.class, "result_zhangSuen.tif"), target).apply();
+		final Img<BitType> out = op("morphology.thinZhangSuen").input(in).outType(new Nil<Img<BitType>>() {}).apply();
+		op("convert.bit").input(openFloatImg(AbstractThin.class, "result_zhangSuen.tif")).output(target).compute();
 		assertIterationsEqual(target, out);
 	}
 }

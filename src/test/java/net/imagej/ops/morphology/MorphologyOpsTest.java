@@ -44,6 +44,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.types.Nil;
 
 public class MorphologyOpsTest extends AbstractOpTest {
 
@@ -68,9 +69,12 @@ public class MorphologyOpsTest extends AbstractOpTest {
 		Cursor<FloatType> inputWithHolesCursor = inputWithHoles.cursor();
 		Cursor<FloatType> invertedInputWithFilledHolesCursor = invertedInputWithFilledHoles.cursor();
 
-		imgWithoutHoles = (Img<BitType>) new OpBuilder(ops, "create.img").input(inputWithoutHoles, new BitType()).apply();
-		imgWithHoles = (Img<BitType>) new OpBuilder(ops, "create.img").input(inputWithHoles, new BitType()).apply();
-		invertedImgWithFilledHoles = (Img<BitType>) new OpBuilder(ops, "create.img").input(invertedInputWithFilledHoles, new BitType()).apply();
+		imgWithoutHoles = op("create.img").input(inputWithoutHoles, new BitType()).outType(new Nil<Img<BitType>>() {})
+				.apply();
+		imgWithHoles = op("create.img").input(inputWithHoles, new BitType()).outType(new Nil<Img<BitType>>() {})
+				.apply();
+		invertedImgWithFilledHoles = op("create.img").input(invertedInputWithFilledHoles, new BitType())
+				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		Cursor<BitType> imgWithoutHolesCursor = imgWithoutHoles.cursor();
 		Cursor<BitType> imgWithHolesCursor = imgWithHoles.cursor();
@@ -94,14 +98,16 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testExtractHoles() {
-		assertNotNull("Img Without Holes", new OpBuilder(ops, "morphology.extractHoles").input(imgWithoutHoles, new DiamondShape(1))).apply();
-		assertNotNull("Img With Holes", new OpBuilder(ops, "morphology.extractHoles").input(imgWithHoles, new DiamondShape(1))).apply();
+		assertNotNull("Img Without Holes", op("morphology.extractHoles").input(imgWithoutHoles, new DiamondShape(1))
+				.outType(new Nil<Img<BitType>>() {}).apply());
+		assertNotNull("Img With Holes", op("morphology.extractHoles").input(imgWithHoles, new DiamondShape(1))
+				.outType(new Nil<Img<BitType>>() {}).apply());
 	}
 
 	@Test
 	public void testFillHoles() {
-		Img<BitType> result = (Img<BitType>) new OpBuilder(ops, "create.img").input(imgWithHoles).apply();
-		new OpBuilder(ops, "morphology.fillHoles").input(imgWithHoles, new DiamondShape(1), result).apply();
+		Img<BitType> result = op("create.img").input(imgWithHoles).outType(new Nil<Img<BitType>>() {}).apply();
+		op("morphology.fillHoles").input(imgWithHoles, new DiamondShape(1)).output(result).compute();
 
 		Cursor<BitType> resultC = result.cursor();
 		final BitType one = new BitType(true);
@@ -112,10 +118,12 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testFillHoles1() {
-		Img<BitType> result = (Img<BitType>) new OpBuilder(ops, "create.img").input(invertedImgWithFilledHoles).apply();
-		Img<BitType> inverted = (Img<BitType>) new OpBuilder(ops, "create.img").input(invertedImgWithFilledHoles).apply();
-		new OpBuilder(ops, "image.invert").input(imgWithHoles, inverted).apply();
-		new OpBuilder(ops, "morphology.fillHoles").input(inverted, new DiamondShape(1), result).apply();
+		Img<BitType> result = op("create.img").input(invertedImgWithFilledHoles).outType(new Nil<Img<BitType>>() {})
+				.apply();
+		Img<BitType> inverted = op("create.img").input(invertedImgWithFilledHoles).outType(new Nil<Img<BitType>>() {})
+				.apply();
+		op("image.invert").input(imgWithHoles).output(inverted).compute();
+		op("morphology.fillHoles").input(inverted, new DiamondShape(1)).output(result).compute();
 
 		Cursor<BitType> resultC = result.localizingCursor();
 		RandomAccess<BitType> groundTruthRA = invertedImgWithFilledHoles.randomAccess();
@@ -129,7 +137,9 @@ public class MorphologyOpsTest extends AbstractOpTest {
 
 	@Test
 	public void testFillHoles2() {
-		RandomAccessibleInterval<BitType> result = (RandomAccessibleInterval<BitType>) new OpBuilder(ops, "morphology.fillHoles").input(imgWithoutHoles, new RectangleShape(1, false)).apply();
+		RandomAccessibleInterval<BitType> result = op("morphology.fillHoles")
+				.input(imgWithoutHoles, new RectangleShape(1, false))
+				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 		Cursor<BitType> groundTruthC = imgWithoutHoles.localizingCursor();
 		RandomAccess<BitType> resultRA = result.randomAccess();
 

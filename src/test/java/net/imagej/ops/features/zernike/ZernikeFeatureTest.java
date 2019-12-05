@@ -35,6 +35,8 @@ import net.imagej.ops.features.AbstractFeatureTest;
 import net.imglib2.type.numeric.RealType;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * 
@@ -59,8 +61,8 @@ public class ZernikeFeatureTest extends AbstractFeatureTest {
 	@Test 
 	public void testMagnitudeFeature() {
 
-		double v1 = ((RealType<?>) ops.run("features.zernike.magnitude", ellipse,
-			4, 2)).getRealDouble();
+		double v1 = ((RealType<?>) op("features.zernike.magnitude").input(ellipse,
+			4, 2).outType(new Nil<RealType<?>>() {}).apply()).getRealDouble();
 		double v2 = ((RealType<?>) ops.run("features.zernike.magnitude",
 			rotatedEllipse, 4, 2)).getRealDouble();
 	

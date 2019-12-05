@@ -78,7 +78,7 @@ public class HessianFilterTest extends AbstractOpTest {
 			}
 		}
 
-		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = new OpBuilder(ops, "filter.hessian").input(img)
+		CompositeIntervalView<FloatType, RealComposite<FloatType>> out = op("filter.hessian").input(img)
 				.outType(new Nil<CompositeIntervalView<FloatType, RealComposite<FloatType>>>() {}).apply();
 
 		Cursor<RealComposite<FloatType>> outCursor = Views.iterable(out).cursor();

@@ -33,7 +33,6 @@ import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops.AbstractOpTest;
 import net.imagej.ops.OpMatchingService;
-import net.imagej.ops.OpService;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -42,7 +41,7 @@ import org.junit.Test;
 import org.scijava.Context;
 import org.scijava.app.StatusService;
 import org.scijava.cache.CacheService;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpService;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 

@@ -77,7 +77,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
         assertEquals("Number intersections is incorrect", 0, voxelEdgeFaceIntersections);
 
         DoubleType result = new DoubleType();
-        op("topology.eulerCorrection").input(cube, result).apply();
+        op("topology.eulerCorrection").input(cube).output(result).compute();
 
         assertEquals("Euler correction is incorrect", 0, result.get(), 1e-12);
     }
@@ -115,7 +115,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
         assertEquals("Number intersections is incorrect", 108, voxelEdgeFaceIntersections);
 
         DoubleType result = new DoubleType();
-        op("topology.eulerCorrection").input(cube, result).apply();
+        op("topology.eulerCorrection").input(cube).output(result).compute();
         assertEquals("Euler contribution is incorrect", 1, result.get(), 1e-12);
     }
 }

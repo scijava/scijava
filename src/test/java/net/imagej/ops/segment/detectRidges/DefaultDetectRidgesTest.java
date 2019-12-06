@@ -46,6 +46,7 @@ import org.scijava.Context;
 import org.scijava.app.StatusService;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
+import org.scijava.ops.types.Nil;
 import org.scijava.ui.UIService;
 
 /**
@@ -58,34 +59,34 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 
 	@Override
 	protected Context createContext() {
-		return new Context(OpService.class, OpMatchingService.class,
-			CacheService.class, StatusService.class, UIService.class);
+		return new Context(OpService.class, OpMatchingService.class, CacheService.class, StatusService.class,
+				UIService.class);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testTooFewDimensions() {
 		Img<FloatType> input = generateFloatArrayTestImg(false, 30);
-		
+
 		// run the image through ridge detection
 		int ridgeLengthMin = 4;
 		double width = 1, lowerThreshold = 2, higherThreshold = 4;
 
-		List<DefaultWritablePolyline> polylines = (List<DefaultWritablePolyline>) ops.run(
-			"segment.detectRidges", input, width, lowerThreshold,
-			higherThreshold, ridgeLengthMin);
+		List<DefaultWritablePolyline> polylines = op("segment.detectRidges")
+				.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+				.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testTooManyDimensions() {
 		Img<FloatType> input = generateFloatArrayTestImg(false, 30, 30, 30, 30);
-		
+
 		// run the image through ridge detection
 		int ridgeLengthMin = 4;
-		double  width = 1, lowerThreshold = 2, higherThreshold = 4;
+		double width = 1, lowerThreshold = 2, higherThreshold = 4;
 
-		List<DefaultWritablePolyline> polylines = (List<DefaultWritablePolyline>) ops.run(
-			"segment.detectRidges", input, width, lowerThreshold,
-			higherThreshold, ridgeLengthMin);
+		List<DefaultWritablePolyline> polylines = op("segment.detectRidges")
+				.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+				.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
 	}
 
 	@Test
@@ -120,43 +121,34 @@ public class DefaultDetectRidgesTest extends AbstractOpTest {
 		int ridgeLengthMin = 4;
 		double width = 1, lowerThreshold = 2, higherThreshold = 4;
 
-		List<DefaultWritablePolyline> polylines = (List<DefaultWritablePolyline>) ops.run(
-			"segment.detectRidges", input, width, lowerThreshold,
-			higherThreshold, ridgeLengthMin);
+		List<DefaultWritablePolyline> polylines = op("segment.detectRidges")
+				.input(input, width, lowerThreshold, higherThreshold, ridgeLengthMin)
+				.outType(new Nil<List<DefaultWritablePolyline>>() {}).apply();
 
 		int vertexCount = 0;
 		for (DefaultWritablePolyline pline : polylines) {
 			for (int i = 0; i < pline.numVertices(); i++) {
 				RealLocalizableRealPositionable p = pline.vertex(i);
-				assertEquals(p.getDoublePosition(0), plineVertices[vertexCount++],
-					1e-5);
-				assertEquals(p.getDoublePosition(1), plineVertices[vertexCount++],
-					1e-5);
+				assertEquals(p.getDoublePosition(0), plineVertices[vertexCount++], 1e-5);
+				assertEquals(p.getDoublePosition(1), plineVertices[vertexCount++], 1e-5);
 			}
 		}
 
 	}
 
-	double[] plineVertices = { 15.0, 12.0, 15.0, 11.0, 15.0, 10.0, 15.0, 9.0,
-		15.0, 8.0, 15.0, 7.0, 15.0, 6.0, 15.0, 5.0, 15.0, 4.0, 15.0, 3.0, 15.0, 2.0,
-		15.0, 1.0, 1.0, 15.0, 2.0, 15.0, 3.0, 15.0, 4.0, 15.0, 5.0, 15.0, 6.0, 15.0,
-		7.0, 15.0, 8.0, 15.0, 9.0, 15.0, 10.0, 15.0, 11.0, 15.0, 12.0, 15.0,
-		22.99751187109411, 18.020211123079733, 23.91666828802532,
-		18.083331199962224, 24.916668629361407, 19.083331370638593,
-		25.916668800037776, 20.08333171197468, 25.979788876920267,
-		21.00248812890589, 25.999999914664198, 22.0, 25.979788876920267,
-		22.99751187109411, 25.916668800037776, 23.91666828802532,
-		24.916668629361407, 24.916668629361407, 23.91666828802532,
-		25.916668800037776, 22.99751187109411, 25.979788876920267, 22.0,
-		25.999999914664198, 21.00248812890589, 25.979788876920267,
-		20.08333171197468, 25.916668800037776, 19.083331370638593,
-		24.916668629361407, 18.083331199962224, 23.91666828802532,
-		18.020211123079733, 22.99751187109411, 18.000000085335802, 22.0,
-		18.020211123079733, 21.00248812890589, 18.083331199962224,
-		20.08333171197468, 19.083331370638593, 19.083331370638593,
-		20.08333171197468, 18.083331199962224, 21.00248812890589,
-		18.020211123079733, 22.0, 18.000000085335802, 9.999999999999869,
-		9.000000085339167, 9.0, 9.0, 8.0, 8.0, 7.0, 7.0, 6.0, 6.0, 5.0, 5.0, 4.0,
-		4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0, 0.8333387946876465 };
+	double[] plineVertices = { 15.0, 12.0, 15.0, 11.0, 15.0, 10.0, 15.0, 9.0, 15.0, 8.0, 15.0, 7.0, 15.0, 6.0, 15.0,
+			5.0, 15.0, 4.0, 15.0, 3.0, 15.0, 2.0, 15.0, 1.0, 1.0, 15.0, 2.0, 15.0, 3.0, 15.0, 4.0, 15.0, 5.0, 15.0, 6.0,
+			15.0, 7.0, 15.0, 8.0, 15.0, 9.0, 15.0, 10.0, 15.0, 11.0, 15.0, 12.0, 15.0, 22.99751187109411,
+			18.020211123079733, 23.91666828802532, 18.083331199962224, 24.916668629361407, 19.083331370638593,
+			25.916668800037776, 20.08333171197468, 25.979788876920267, 21.00248812890589, 25.999999914664198, 22.0,
+			25.979788876920267, 22.99751187109411, 25.916668800037776, 23.91666828802532, 24.916668629361407,
+			24.916668629361407, 23.91666828802532, 25.916668800037776, 22.99751187109411, 25.979788876920267, 22.0,
+			25.999999914664198, 21.00248812890589, 25.979788876920267, 20.08333171197468, 25.916668800037776,
+			19.083331370638593, 24.916668629361407, 18.083331199962224, 23.91666828802532, 18.020211123079733,
+			22.99751187109411, 18.000000085335802, 22.0, 18.020211123079733, 21.00248812890589, 18.083331199962224,
+			20.08333171197468, 19.083331370638593, 19.083331370638593, 20.08333171197468, 18.083331199962224,
+			21.00248812890589, 18.020211123079733, 22.0, 18.000000085335802, 9.999999999999869, 9.000000085339167, 9.0,
+			9.0, 8.0, 8.0, 7.0, 7.0, 6.0, 6.0, 5.0, 5.0, 4.0, 4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0,
+			0.8333387946876465 };
 
 }

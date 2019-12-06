@@ -66,11 +66,6 @@ inputTypes = ```
   String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect())
 }
 ```
-inputArgsFromReferences = ```
-{ arity ->
-  String.join(', ', (1..arity).stream().map{a -> "in${a}.get()"}.collect())
-}
-```
 inputTypesWithOutput = ```
 { arity ->
   String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect()) + ', outType'

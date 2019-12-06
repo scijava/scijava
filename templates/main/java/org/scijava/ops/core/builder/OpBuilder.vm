@@ -34,7 +34,6 @@
 
 package org.scijava.ops.core.builder;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -94,8 +93,8 @@ public class OpBuilder {
 	// -- Helper methods --
 
 	@SuppressWarnings({ "unchecked" })
-	private <T> Nil<T> type(final WeakReference<T> obj) {
-		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj.get()));
+	private <T> Nil<T> type(final T obj) {
+		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj));
 	}
 
 	
@@ -201,10 +200,10 @@ public class OpBuilder {
 	 */
 	public final class Arity0_OV<O> {
 
-		private final WeakReference<O> out;
+		private final O out;
 
 		public Arity0_OV(final O out) {
-			this.out = new WeakReference<>(out);
+			this.out = out;
 		}
 
 		public Computers.Arity0<O> computer() {
@@ -212,7 +211,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(out.get());
+			computer().compute(out);
 		}
 
 	}
@@ -313,13 +312,13 @@ public class OpBuilder {
 	public final class Arity${arity}_IV_OT$generics.call($arity) {
 
 #foreach($a in [1..$arity])
-		private final WeakReference<I$a> in${a};
+		private final I$a in${a};
 #end
 		private final Nil<O> outType;
 
 		public Arity${arity}_IV_OT($inputObjectsArgs.call($arity), final Nil<O> outType) {
 #foreach($a in [1..$arity])
-			this.in$a = new WeakReference<>(in$a);
+			this.in$a = in$a;
 #end
 			this.outType = outType;
 		}
@@ -333,7 +332,7 @@ public class OpBuilder {
 		}
 		
 		public O apply() {
-			return function().apply($inputArgsFromReferences.call($arity));
+			return function().apply($inputObjects.call($arity));
 		}
 	}
 
@@ -349,17 +348,17 @@ public class OpBuilder {
 	public final class Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) {
 
 #foreach($a in [1..$arity])
-		private final WeakReference<I$a> in$a;
+		private final I$a in$a;
 #end
 
 		public Arity${arity}_IV_OU($inputObjectsArgs.call($arity)) {
 #foreach($a in [1..$arity])
-			this.in$a = new WeakReference<>(in$a);
+			this.in$a = in$a;
 #end
 		}
 
 		public <O> Arity${arity}_IV_OV$generics.call($arity) output(final O out) {
-			return new Arity${arity}_IV_OV<>($inputArgsFromReferences.call($arity), out);
+			return new Arity${arity}_IV_OV<>($inputObjects.call($arity), out);
 		}
 
 		public <O> Arity${arity}_IV_OT$generics.call($arity) outType(final Class<O> outType) {
@@ -367,7 +366,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity${arity}_IV_OT$generics.call($arity) outType(final Nil<O> outType) {
-			return new Arity${arity}_IV_OT<>($inputArgsFromReferences.call($arity), outType);
+			return new Arity${arity}_IV_OT<>($inputObjects.call($arity), outType);
 		}
 
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
@@ -381,12 +380,12 @@ public class OpBuilder {
 #end
 
 		public Object apply() {
-			return function().apply($inputArgsFromReferences.call($arity));
+			return function().apply($inputObjects.call($arity));
 		}
 
 #foreach($a in [1..$arity])
 		public void mutate${inplaceMatchNumber.call($arity, $a)}() {
-			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputArgsFromReferences.call($arity));
+			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputObjects.call($arity));
 		}
 #end
 	}
@@ -403,15 +402,15 @@ public class OpBuilder {
 	public final class Arity${arity}_IV_OV${generics.call($arity)} {
 
 #foreach($a in [1..$arity])
-		private final WeakReference<I$a> in$a;
+		private final I$a in$a;
 #end
-		private final WeakReference<O> out;
+		private final O out;
 
 		public Arity${arity}_IV_OV($inputObjectsArgs.call($arity), final O out) {
 #foreach($a in [1..$arity])
-			this.in$a = new WeakReference<>(in$a);
+			this.in$a = in$a;
 #end
-			this.out = new WeakReference<>(out);
+			this.out = out;
 		}
 
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
@@ -419,7 +418,7 @@ public class OpBuilder {
 		}
 		
 		public void compute() {
-			computer().compute($inputArgsFromReferences.call($arity), out.get());
+			computer().compute($inputObjects.call($arity), out);
 		}
 		
 	}

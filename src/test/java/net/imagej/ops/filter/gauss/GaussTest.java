@@ -41,7 +41,6 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
@@ -67,7 +66,7 @@ public class GaussTest extends AbstractOpTest {
 		final Img<ByteType> out2 = op("create.img").input(in, Util.getTypeFromInterval(in))
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 
-		op("filter.gauss").input(in, es, sigma, out1).apply();
+		op("filter.gauss").input(in, es, sigma).output(out1).compute();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
 		} catch (IncompatibleTypeException e) {

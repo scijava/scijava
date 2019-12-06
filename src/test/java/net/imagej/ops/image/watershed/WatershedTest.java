@@ -81,13 +81,13 @@ public class WatershedTest extends AbstractOpTest {
 
 		final RandomAccessibleInterval<FloatType> distMap = new OpBuilder(ops,
 				"create.img").input(thresholdedImg, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("image.distanceTransform").input(thresholdedImg, es, distMap).apply();
+		op("image.distanceTransform").input(thresholdedImg, es).output(distMap).compute();
 		final RandomAccessibleInterval<FloatType> invertedDistMap = new OpBuilder(
 				ops, "create.img").input(distMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("image.invert").input(Views.iterable(distMap), Views.iterable(invertedDistMap)).apply();
+		op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(invertedDistMap)).compute();
 		final RandomAccessibleInterval<FloatType> gauss = new OpBuilder(ops,
 				"create.img").input(invertedDistMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("filter.gauss").input(invertedDistMap, es, new double[] { 3, 3 }, gauss).apply();
+		op("filter.gauss").input(invertedDistMap, es, new double[] { 3, 3 }).output(gauss).compute();
 
 		testWithoutMask(gauss);
 

@@ -73,7 +73,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testRunAnyFunction1FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final Object out = new OpBuilder(ops, "test.integerAndLongAndNotAnyComputer").input(in1, in2).apply();
+		final Object out = new OpBuilder(ops, "test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(MutableNotAny.class).apply();
 		assert out instanceof MutableNotAny;
 		assertEquals(Long.toString(in1 + in2), ((MutableNotAny) out).getValue());
 	}

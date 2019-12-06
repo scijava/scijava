@@ -43,13 +43,11 @@ import net.imglib2.RealPoint;
 import net.imglib2.img.Img;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.roi.geom.real.DefaultWritablePolyline;
-import net.imglib2.roi.geom.real.WritablePolyline;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
@@ -69,7 +67,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "ridgeLengthMin")
 @Parameter(key = "ridges", itemIO = ItemIO.OUTPUT)
 public class DefaultDetectRidges<T extends RealType<T>> implements
-		Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<? extends WritablePolyline>> {
+		Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<DefaultWritablePolyline>> {
 
 	/**
 	 * The diameter of the lines to search for.
@@ -95,16 +93,16 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	 * threshold.
 	 */
 	double angleThreshold = 100;
-	
+
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> createOp;
-	
+
 	@OpDependency(name = "convert.float64")
 	private Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> convertOp;
-	
+
 	@OpDependency(name = "copy.rai")
 	private Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> copyOp;
-	
+
 	@OpDependency(name = "filter.derivativeGauss")
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, double[], int[], RandomAccessibleInterval<DoubleType>> partialDerivativeOp;
 
@@ -232,9 +230,9 @@ public class DefaultDetectRidges<T extends RealType<T>> implements
 	}
 
 	@Override
-	public List<? extends WritablePolyline> apply(final RandomAccessibleInterval<T> input, final Double width,
+	public List<DefaultWritablePolyline> apply(final RandomAccessibleInterval<T> input, final Double width,
 			final Double lowerThreshold, final Double higherThreshold, final Integer ridgeLengthMin) {
-		
+
 		this.width = width;
 		this.lowerThreshold = lowerThreshold;
 		this.higherThreshold = higherThreshold;

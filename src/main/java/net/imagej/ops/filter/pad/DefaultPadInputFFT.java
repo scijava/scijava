@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  * 
  * @author Brian Northan
  */
-@Plugin(type = Op.class, name = "filter.padInputFFT", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "filter.padInputFFT", priority = Priority.NORMAL)
 @Parameter(key = "input")
 @Parameter(key = "paddedDimensions")
 @Parameter(key = "fast")

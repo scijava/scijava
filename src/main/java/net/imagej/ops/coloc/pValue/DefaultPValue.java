@@ -39,7 +39,6 @@ import java.util.function.BiFunction;
 import net.imagej.ops.coloc.ShuffledView;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -50,8 +49,6 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
@@ -75,23 +72,22 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
-		Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
+		Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2,
-			final BiFunction<Iterable<T>, Iterable<U>, Double> op, final Integer nrRandomizations,
-			final Dimensions psfSize, final Long seed, final ExecutorService es, final PValueResult output) {
+			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op,
+			final Integer nrRandomizations, final Dimensions psfSize, final Long seed, final ExecutorService es,
+			final PValueResult output) {
 		final int[] blockSize = blockSize(image1, psfSize);
 		final RandomAccessibleInterval<T> trimmedImage1 = trim(image1, blockSize);
 		final RandomAccessibleInterval<U> trimmedImage2 = trim(image2, blockSize);
 		final T type1 = Util.getTypeFromInterval(image1);
 
 		final double[] sampleDistribution = new double[nrRandomizations];
-		final IterableInterval<T> iterableImage1 = Views.iterable(trimmedImage1);
-		final IterableInterval<U> iterableImage2 = Views.iterable(trimmedImage2);
 
 		// compute actual coloc value
-		final double value = op.apply(iterableImage1, iterableImage2);
+		final double value = op.apply(trimmedImage1, trimmedImage2);
 
 		// compute shuffled coloc values in parallel
 		int threadCount = Runtime.getRuntime().availableProcessors(); // FIXME: conform to Ops threading strategy...
@@ -123,7 +119,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 					if (i > 0)
 						shuffled.shuffleBlocks(seeds[index]);
 					copy(shuffled, buffer);
-					sampleDistribution[index] = op.apply(buffer, iterableImage2);
+					sampleDistribution[index] = op.apply(buffer, trimmedImage2);
 				}
 			}));
 		}
@@ -203,17 +199,17 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U>> implements
-		Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> {
-	
+		Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, ExecutorService, PValueResult> {
+
 	@OpDependency(name = "coloc.pValue")
-	private Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> pValueOp;
+	private Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> pValueOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
-			BiFunction<Iterable<T>, Iterable<U>, Double> in3, Integer in4, ExecutorService in5,
-			@Mutable PValueResult out) {
+			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, Integer in4,
+			ExecutorService in5, @Mutable PValueResult out) {
 		Long defaultSeed = 0x27372034l;
-		pValueOp.compute(in1, in2, in3, in4, null, defaultSeed,in5, out);
+		pValueOp.compute(in1, in2, in3, in4, null, defaultSeed, in5, out);
 	}
 
 }
@@ -225,17 +221,17 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 @Parameter(key = "executorService")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>,  ExecutorService, PValueResult> {
-	
+		Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, ExecutorService, PValueResult> {
+
 	@OpDependency(name = "coloc.pValue")
-	private Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<Iterable<T>, Iterable<U>, Double>, Integer, ExecutorService, PValueResult> pValueOp;
+	private Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, ExecutorService, PValueResult> pValueOp;
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
-			BiFunction<Iterable<T>, Iterable<U>, Double> in3, ExecutorService in4, @Mutable PValueResult out) {
+			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, ExecutorService in4,
+			@Mutable PValueResult out) {
 		Integer defaultNumberRandomizations = 100;
 		pValueOp.compute(in1, in2, in3, defaultNumberRandomizations, in4, out);
 	}
 
 }
-

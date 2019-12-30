@@ -31,6 +31,7 @@ package net.imagej.ops.features.zernike;
 import net.imagej.ops.features.zernike.helper.ZernikeMoment;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
@@ -48,22 +49,20 @@ import org.scijava.struct.ItemIO;
  *
  * @param <T>
  *            Input Type
- * @param <O>
- *            Output Type
  */
 @Plugin(type = Op.class, name = "features.zernike.magnitude")
 @Parameter(key = "input")
 @Parameter(key = "order")
 @Parameter(key = "repetition")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
-public class DefaultMagnitudeFeature<T extends RealType<T>, O extends RealType<O>>
-		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, O> {
+public class DefaultMagnitudeFeature<T extends RealType<T>>
+		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, DoubleType> {
 
 	@OpDependency(name = "features.zernike.computer")
 	private Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> zernikeOp;
 
 	@Override
-	public void compute(IterableInterval<T> input, Integer order, Integer repetition, O output) {
+	public void compute(IterableInterval<T> input, Integer order, Integer repetition, DoubleType output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional inputs allowed!");
 		output.setReal(zernikeOp.apply(input, order, repetition).getMagnitude());

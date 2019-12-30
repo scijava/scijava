@@ -40,6 +40,7 @@ import java.util.function.BiFunction;
 import net.imagej.ops.AbstractOpTest;
 import net.imagej.ops.coloc.ColocalisationTest;
 import net.imagej.ops.coloc.pValue.PValueResult;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.RealType;
@@ -49,7 +50,6 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -127,8 +127,12 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops,
 				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
+				"transform.raiToIterable").input(op).outType(
+						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
+						.apply();
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		op("coloc.pValue").input(ch1, ch2, raiOp, es).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 

@@ -210,7 +210,7 @@ public class MTKTTest extends ColocalisationTest {
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(vImage1, vImage2, op, 5, es, value).apply();
+		op("coloc.pValue").input(vImage1, vImage2, op, 5, es).output(value).compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -230,7 +230,7 @@ public class MTKTTest extends ColocalisationTest {
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(vImage1, vImage2, op, 5, es, value).apply();
+		op("coloc.pValue").input(vImage1, vImage2, op, 5, es).output(value).compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
 	}
 
@@ -248,7 +248,7 @@ public class MTKTTest extends ColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			Functions.match(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, 10, es, value).apply();
+		op("coloc.pValue").input(ch1, ch2, op, 10, es).output(value).compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
 	}
 

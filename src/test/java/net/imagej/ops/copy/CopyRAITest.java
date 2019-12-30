@@ -32,11 +32,8 @@ package net.imagej.ops.copy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.function.BiFunction;
-
 import net.imagej.ops.AbstractOpTest;
 import net.imglib2.Cursor;
-import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccess;
@@ -51,9 +48,7 @@ import net.imglib2.view.Views;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -92,10 +87,8 @@ public class CopyRAITest extends AbstractOpTest {
 		final long[] start = new long[] { 16, 16, 16 };
 		final long[] end = new long[] { 47, 47, 47 };
 
-		// create an input with a cube at the center TODO can we use ops.run() here?
-		BiFunction<Dimensions, UnsignedByteType, Img<UnsignedByteType>> imgOp = Functions.match(ops, "create.img",
-				new Nil<Dimensions>() {}, new Nil<UnsignedByteType>() {}, new Nil<Img<UnsignedByteType>>() {});
-		input2 = imgOp.apply(new FinalDimensions(size1), new UnsignedByteType());
+		input2 = op("create.img").input(new FinalDimensions(size1), new UnsignedByteType())
+				.outType(new Nil<Img<UnsignedByteType>>() {}).apply();
 
 		// create the same input but force it to be a planar image
 		inputPlanar = op("create.img")
@@ -140,7 +133,7 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		op("copy.rai").input(input, output).apply();
+		op("copy.rai").input(input).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();
@@ -151,7 +144,6 @@ public class CopyRAITest extends AbstractOpTest {
 	}
 
 	@Test
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void copyRAIDifferentSizeTest() {
 
 		// create a copy op
@@ -161,8 +153,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 		assertNotNull(copy);
 
-		final Img<UnsignedByteType> out = op("create.img")
-				.input(new FinalDimensions(size2), new UnsignedByteType()) //
+		final Img<UnsignedByteType> out = op("create.img").input(new FinalDimensions(size2), new UnsignedByteType()) //
 				.outType(new Nil<Img<UnsignedByteType>>() {}) //
 				.apply();
 
@@ -173,8 +164,9 @@ public class CopyRAITest extends AbstractOpTest {
 		assertEquals(sum.getRealDouble(), 100.0, delta);
 
 		// also try with a planar image
-		final Img<UnsignedByteType> outFromPlanar = (Img<UnsignedByteType>) ops.run("create.img",
-				new FinalDimensions(size2), new UnsignedByteType());
+		final Img<UnsignedByteType> outFromPlanar = op("create.img")
+				.input(new FinalDimensions(size2), new UnsignedByteType()).outType(new Nil<Img<UnsignedByteType>>() {})
+				.apply();
 
 		copy.compute(viewPlanar, outFromPlanar);
 		DoubleType sumFromPlanar = new DoubleType();

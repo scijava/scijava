@@ -49,7 +49,6 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -76,12 +75,12 @@ public class DeconvolveTest extends AbstractOpTest {
 
 		incropped = Views.zeroMin(incropped);
 
-		RandomAccessibleInterval<FloatType> kernel = (RandomAccessibleInterval<FloatType>) ops.run("create.kernelGauss",
-				new double[] { 4.0, 4.0 }, new FloatType());
+		RandomAccessibleInterval<FloatType> kernel = op("create.kernelGauss")
+				.input(new double[] { 4.0, 4.0 }, new FloatType())
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// convolve FFTF
-		@SuppressWarnings("unchecked")
-		final Img<FloatType> convolved = op("filter.convolve").input(// 
+		final Img<FloatType> convolved = op("filter.convolve").input(//
 				incropped, kernel, es).outType(new Nil<Img<FloatType>>() {}).apply();
 
 		// find a RichardsonLucyF op
@@ -89,29 +88,30 @@ public class DeconvolveTest extends AbstractOpTest {
 				long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 				OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
 				ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
-				RandomAccessibleInterval<FloatType>> deconvolveOp = ops
-						.findOp("deconvolve.richardsonLucy",
-								new Nil<Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
-										long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
-										OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
-										ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
-										RandomAccessibleInterval<FloatType>>>() {},
-								new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
-										new Nil<RandomAccessibleInterval<FloatType>>() {}, //
-										new Nil<long[]>() {},
-										new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {}, //
-										new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {},
-										new Nil<FloatType>() {}, //
-										new Nil<ComplexFloatType>() {}, new Nil<Integer>() {}, new Nil<Boolean>() {},
-										new Nil<Boolean>() {}, new Nil<ExecutorService>() {} }, //
-								new Nil<RandomAccessibleInterval<FloatType>>() {});
+				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.findOp("deconvolve.richardsonLucy",
+						new Nil<Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+								long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
+								OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
+								ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
+								RandomAccessibleInterval<FloatType>>>() {},
+						new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
+								new Nil<RandomAccessibleInterval<FloatType>>() {}, //
+								new Nil<long[]>() {},
+								new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {}, //
+								new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {},
+								new Nil<FloatType>() {}, //
+								new Nil<ComplexFloatType>() {}, new Nil<Integer>() {}, new Nil<Boolean>() {},
+								new Nil<Boolean>() {}, new Nil<ExecutorService>() {} }, //
+						new Nil<RandomAccessibleInterval<FloatType>>() {});
 
 		// deconvolve with standard Richardson Lucy F
 		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<FloatType> deconvolved = deconvolveOp.apply(convolved, kernel, null,
-				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()),
-				null, new FloatType(),
-//				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()), new FloatType(),
+				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()), null,
+				new FloatType(),
+				// new
+				// OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()),
+				// new FloatType(),
 				new ComplexFloatType(), 10, false, false, es);
 
 		// deconvolve with accelerated non-circulant Richardson Lucy F

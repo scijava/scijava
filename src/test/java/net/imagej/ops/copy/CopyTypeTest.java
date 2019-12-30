@@ -29,14 +29,12 @@
 package net.imagej.ops.copy;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import net.imagej.ops.AbstractOpTest;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Test {@link CopyType}.
@@ -55,14 +53,9 @@ public class CopyTypeTest extends AbstractOpTest {
 
 	@Test
 	public void copyTypeNoOutputTest() {
-		Object out = op("copy.type").input(dt).apply();
+		DoubleType out = op("copy.type").input(dt).outType(DoubleType.class).apply();
 
-		if (out instanceof DoubleType) {
-			assertEquals(dt.get(), ((DoubleType) out).get(), 0.0);
-		} else {
-			assertTrue("Copy is not instance of DoubleType.", false);
-		}
-
+		assertEquals(dt.get(), out.get(), 0.0);
 	}
 
 	@Test

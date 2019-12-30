@@ -42,7 +42,6 @@ import net.imglib2.type.numeric.integer.IntType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 
 /**
@@ -92,9 +91,9 @@ public class CopyLabelingMappingTest extends AbstractOpTest {
 	@Test
 	public void copyLabelingWithOutputTest() {
 
-		LabelingMapping<String> out = (LabelingMapping<String>) ops.run("create.labelingMapping");
+		LabelingMapping<String> out = op("create.labelingMapping").input().outType(new Nil<LabelingMapping<String>>() {}).create();
 
-		op("copy.labelingMapping").input(input, out).apply();
+		op("copy.labelingMapping").input(input).output(out).compute();
 
 		Iterator<String> outIt = out.getLabels().iterator();
 

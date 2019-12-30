@@ -45,6 +45,7 @@ import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests for {@link net.imagej.ops.Ops.Morphology.BlackTopHat}
@@ -64,9 +65,8 @@ public class BlackTopHatTest extends AbstractOpTest {
 	public void testSingleBlackTopHat() {
 		final Shape shape = new DiamondShape(1);
 		final List<Shape> shapes = Arrays.asList(shape);
-		@SuppressWarnings("unchecked")
-		final Img<ByteType> out1 = (Img<ByteType>) ops.run("morphology.BlackTopHat",
-			in, shapes, 1);
+		final Img<ByteType> out1 = op("morphology.BlackTopHat").input(in, shapes, 1)
+				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final Img<ByteType> out2 = BlackTopHat.blackTopHat(in, shape, 1);
 		assertIterationsEqual(out2, out1);
 	}
@@ -78,9 +78,8 @@ public class BlackTopHatTest extends AbstractOpTest {
 		shapes.add(new DiamondShape(1));
 		shapes.add(new RectangleShape(1, false));
 		shapes.add(new HorizontalLineShape(2, 1, false));
-		@SuppressWarnings("unchecked")
-		final IterableInterval<ByteType> out1 = (IterableInterval<ByteType>) ops
-			.run("morphology.BlackTopHat", in, shapes, 1);
+		final IterableInterval<ByteType> out1 = op("morphology.BlackTopHat").input(in, shapes, 1)
+				.outType(new Nil<IterableInterval<ByteType>>() {}).apply();
 		final Img<ByteType> out2 = BlackTopHat.blackTopHat(in, shapes, 1);
 		assertIterationsEqual(out2, out1);
 	}

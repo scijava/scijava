@@ -40,7 +40,7 @@ import net.imglib2.type.numeric.integer.IntType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Test {@link CopyImgLabeling}
@@ -52,13 +52,12 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 	private ImgLabeling<String, IntType> input;
 	private ImgLabeling<String, IntType> copy;
 
-	@SuppressWarnings("unchecked")
 	@Before
 	public void createData() {
-		input = (ImgLabeling<String, IntType>) ops.run(
-			"create.imgLabeling", new FinalDimensions( 10, 10 ), new IntType());
-		copy = (ImgLabeling<String, IntType>) ops.run(
-			"create.imgLabeling", new FinalDimensions( 10, 10 ), new IntType());
+		input = op("create.imgLabeling").input(new FinalDimensions(10, 10), new IntType())
+				.outType(new Nil<ImgLabeling<String, IntType>>() {}).apply();
+		copy = op("create.imgLabeling").input(new FinalDimensions(10, 10), new IntType())
+				.outType(new Nil<ImgLabeling<String, IntType>>() {}).apply();
 
 		final Cursor<LabelingType<String>> inc = input.cursor();
 

@@ -36,6 +36,7 @@ import net.imagej.ops.features.AbstractFeatureTest;
 import net.imglib2.type.numeric.integer.LongType;
 
 import org.junit.Test;
+import org.scijava.ops.types.Nil;
 
 /**
  * 
@@ -48,16 +49,15 @@ public class LBP2dFeatureTest extends AbstractFeatureTest {
 
 	@Test
 	public void testLbp2d() {
-		@SuppressWarnings("unchecked")
-		final ArrayList<LongType> hist = (ArrayList<LongType>) ops.run(
-			"features.lbp2d", random, 1, 4);
-	
+		final ArrayList<LongType> hist = op("features.lbp2d").input(random, 1, 4)
+				.outType(new Nil<ArrayList<LongType>>() {}).apply();
+
 		// Test values proved by calculating small toy example by hand.
 		assertEquals("features.lbp2d", 5412.0, hist.get(0).getRealDouble(), 1e-3);
 		assertEquals("features.lbp2d", 0.0, hist.get(1).getRealDouble(), 1e-3);
 		assertEquals("features.lbp2d", 4251.0, hist.get(2).getRealDouble(), 1e-3);
 		assertEquals("features.lbp2d", 337.0, hist.get(3).getRealDouble(), 1e-3);
-		
+
 	}
-	
+
 }

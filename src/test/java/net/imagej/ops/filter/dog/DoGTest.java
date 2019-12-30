@@ -44,7 +44,6 @@ import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
@@ -86,9 +85,11 @@ public class DoGTest extends AbstractOpTest {
 	public void dogRAISingleSigmasTest() {
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
-		final RandomAccessibleInterval<ByteType> res = op("filter.DoG")
-				.input(generateByteArrayTestImg(true, new long[] { 10, 10 }), 1., 2., outOfBounds, es)
+		final RandomAccessibleInterval<ByteType> res = op("create.img")
+				.input(generateByteArrayTestImg(true, new long[] { 10, 10 }), new ByteType())
 				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
+		op("filter.DoG").input(generateByteArrayTestImg(true, new long[] { 10, 10 }), 1., 2., outOfBounds, es)
+				.output(res).compute();
 
 		org.junit.Assert.assertNotNull(res);
 	}

@@ -40,7 +40,6 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
@@ -109,8 +108,12 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 			mean, spread, sigma, 0x98765432);
 		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op =
 			Functions.match(ops, "coloc.pearsons", new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
+				"transform.raiToIterable").input(op).outType(
+						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
+						.apply();
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, es, value).apply();
+		op("coloc.pValue").input(ch1, ch2, raiOp, es).output(value).compute();
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

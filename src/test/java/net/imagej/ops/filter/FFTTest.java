@@ -47,7 +47,6 @@ import net.imglib2.util.Pair;
 import net.imglib2.view.Views;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
@@ -79,10 +78,9 @@ public class FFTTest extends AbstractOpTest {
 
 			final Img<FloatType> inverse = generateFloatArrayTestImg(false, dimensions);
 
-			@SuppressWarnings("unchecked")
-			final Img<ComplexFloatType> out = op("filter.fft")
-					.input(in, null, true, new ComplexFloatType(), es).outType(new Nil<Img<ComplexFloatType>>() {})
-					.apply();
+			final RandomAccessibleInterval<ComplexFloatType> out = op("filter.fft")
+					.input(in, null, true, new ComplexFloatType(), es)
+					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 			op("filter.ifft").input(out, es).output(inverse).compute();
 
 			assertImagesEqual(in, inverse, .00005f);
@@ -129,21 +127,21 @@ public class FFTTest extends AbstractOpTest {
 			// call FFT passing false for "fast" (in order to pass the optional
 			// parameter we have to pass null for the
 			// output parameter).
-			@SuppressWarnings("unchecked")
-			final RandomAccessibleInterval<ComplexFloatType> fft1 = (RandomAccessibleInterval<ComplexFloatType>) ops
-					.run("filter.fft", inOriginal, null, false, new ComplexFloatType(), es);
+			final RandomAccessibleInterval<ComplexFloatType> fft1 = op("filter.fft")
+					.input(inOriginal, null, false, new ComplexFloatType(), es)
+					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// call FFT passing true for "fast" The FFT op will pad the input to the
 			// fast
 			// size.
-			@SuppressWarnings("unchecked")
-			final RandomAccessibleInterval<ComplexFloatType> fft2 = (RandomAccessibleInterval<ComplexFloatType>) ops
-					.run("filter.fft", inOriginal, null, true, new ComplexFloatType(), es);
+			final RandomAccessibleInterval<ComplexFloatType> fft2 = op("filter.fft")
+					.input(inOriginal, null, true, new ComplexFloatType(), es)
+					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// call fft using the img that was created with the fast size
-			@SuppressWarnings("unchecked")
-			final RandomAccessibleInterval<ComplexFloatType> fft3 = (RandomAccessibleInterval<ComplexFloatType>) ops
-					.run("filter.fft", inFast, null, true, new ComplexFloatType(), es);
+			final RandomAccessibleInterval<ComplexFloatType> fft3 = op("filter.fft")
+					.input(inFast, null, true, new ComplexFloatType(), es)
+					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// create an image to be used for the inverse, using the original
 			// size
@@ -159,18 +157,18 @@ public class FFTTest extends AbstractOpTest {
 			final Img<FloatType> inverseFast = generateFloatArrayTestImg(false, fastDimensions);
 
 			// invert the "small" FFT
-			op("filter.ifft").input(fft1, es, inverseOriginalSmall).apply();
+			op("filter.ifft").input(fft1, es).output(inverseOriginalSmall).compute();
 
 			// invert the "fast" FFT. The inverse will should be the original
 			// size.
-			op("filter.ifft").input(fft2, es, inverseOriginalFast).apply();
+			op("filter.ifft").input(fft2, es).output(inverseOriginalFast).compute();
 
 			// invert the "fast" FFT that was acheived by explicitly using an
 			// image
 			// that had "fast" dimensions. The inverse will be the fast size
 			// this
 			// time.
-			op("filter.ifft").input(fft3, es, inverseFast).apply();
+			op("filter.ifft").input(fft3, es).output(inverseFast).compute();
 
 			// assert that the inverse images are equal to the original
 			assertImagesEqual(inverseOriginalSmall, inOriginal, .0001f);
@@ -180,18 +178,18 @@ public class FFTTest extends AbstractOpTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void testPadShiftKernel() {
 		long[] dims = new long[] { 1024, 1024 };
-		Img<ComplexDoubleType> test = op("create.img")
-				.input(new FinalDimensions(dims), new ComplexDoubleType()).outType(new Nil<Img<ComplexDoubleType>>() {})
-				.apply();
+		Img<ComplexDoubleType> test = op("create.img").input(new FinalDimensions(dims), new ComplexDoubleType())
+				.outType(new Nil<Img<ComplexDoubleType>>() {}).apply();
 
-		RandomAccessibleInterval<ComplexDoubleType> shift = (RandomAccessibleInterval<ComplexDoubleType>) ops
-				.run("filter.padShiftKernel", test, new FinalDimensions(dims));
+		RandomAccessibleInterval<ComplexDoubleType> shift = op("filter.padShiftKernel")
+				.input(test, new FinalDimensions(dims))
+				.outType(new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {}).apply();
 
-		RandomAccessibleInterval<ComplexDoubleType> shift2 = (RandomAccessibleInterval<ComplexDoubleType>) ops
-				.run("filter.padShiftKernelFFTMethods", test, new FinalDimensions(dims));
+		RandomAccessibleInterval<ComplexDoubleType> shift2 = op("filter.padShiftKernelFFTMethods")
+				.input(test, new FinalDimensions(dims))
+				.outType(new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {}).apply();
 
 		// assert there was no additional padding done by PadShiftKernel
 		assertEquals(1024, shift.dimension(0));

@@ -39,6 +39,7 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.geom.real.DefaultWritablePolyline;
 
 import org.junit.Test;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests {@link DefaultDetectJunctions}
@@ -94,9 +95,9 @@ public class DefaultDetectJunctionsTest extends AbstractOpTest {
 		lines.add(new DefaultWritablePolyline(list4));
 
 		List<RealPoint> results;
-		results = (List<RealPoint>) ops.run(
-			"segment.detectJunctions", lines,
-			threshold);
+		results = op(
+			"segment.detectJunctions").input(lines,
+			threshold).outType(new Nil<List<RealPoint>>() {}).apply();
 
 		List<RealPoint> expected = new ArrayList<>();
 		expected.add(new RealPoint(0, 0));

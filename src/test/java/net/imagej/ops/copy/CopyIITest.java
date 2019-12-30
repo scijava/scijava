@@ -33,8 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 import net.imagej.ops.AbstractOpTest;
 import net.imglib2.Cursor;
-import net.imglib2.RandomAccess;
-import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.IterableInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.planar.PlanarImgFactory;
@@ -43,7 +42,6 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -71,16 +69,16 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Test
 	public void copyRAINoOutputTest() {
-		RandomAccessibleInterval<DoubleType> output = op("copy.iterableInterval").input(input)
-				.outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+		IterableInterval<DoubleType> output = op("copy.iterableInterval").input(input)
+				.outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
 
 		Cursor<DoubleType> inc = input.localizingCursor();
-		RandomAccess<DoubleType> outRA = output.randomAccess();
+		Cursor<DoubleType> out = output.cursor();
 
 		while (inc.hasNext()) {
 			inc.fwd();
-			outRA.setPosition(inc);
-			assertEquals(inc.get().get(), outRA.get().get(), 0.0);
+			out.fwd();
+			assertEquals(inc.get().get(), out.get().get(), 0.0);
 		}
 	}
 

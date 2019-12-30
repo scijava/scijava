@@ -60,7 +60,7 @@ public class QuadricTest extends AbstractOpTest {
 
 	@Test
 	public void testEquation() {
-		final Matrix4dc solution = (Matrix4dc) ops.run("stats.leastSquares", unitSpherePoints);
+		final Matrix4dc solution = op("stats.leastSquares").input(unitSpherePoints).outType(Matrix4dc.class).apply();
 		final double a = solution.m00();
 		final double b = solution.m11();
 		final double c = solution.m22();

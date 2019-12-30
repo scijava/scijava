@@ -32,10 +32,9 @@ import static org.junit.Assert.assertEquals;
 
 import net.imagej.ops.Ops;
 import net.imagej.ops.features.AbstractFeatureTest;
-import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 
 /**
@@ -46,28 +45,28 @@ import org.scijava.ops.types.Nil;
  *
  */
 public class ZernikeFeatureTest extends AbstractFeatureTest {
-	
+
 	private static final double EPSILON = 1e-12;
 
 	@Test
 	public void testPhaseFeature() {
 
-		assertEquals(Ops.Zernike.Phase.NAME, 179.92297037263532, ((RealType<?>) ops.run(
-			"features.zernike.phase", ellipse, 4, 2)).getRealDouble(), EPSILON);
-		assertEquals(Ops.Zernike.Phase.NAME, 0.0802239034925816, ((RealType<?>) ops.run(
-			"features.zernike.phase", rotatedEllipse, 4, 2)).getRealDouble(), EPSILON);
+		assertEquals(Ops.Zernike.Phase.NAME, 179.92297037263532,
+				 op("features.zernike.phase").input(ellipse, 4, 2).outType(new Nil<DoubleType>() {}).apply().get(), EPSILON);
+		assertEquals(Ops.Zernike.Phase.NAME, 0.0802239034925816,
+				 op("features.zernike.phase").input(rotatedEllipse, 4, 2).outType(new Nil<DoubleType>() {}).apply().get(), EPSILON);
 	}
-	
-	@Test 
+
+	@Test
 	public void testMagnitudeFeature() {
 
-		double v1 = ((RealType<?>) op("features.zernike.magnitude").input(ellipse,
-			4, 2).outType(new Nil<RealType<?>>() {}).apply()).getRealDouble();
-		double v2 = ((RealType<?>) ops.run("features.zernike.magnitude",
-			rotatedEllipse, 4, 2)).getRealDouble();
-	
+		double v1 = op("features.zernike.magnitude").input(ellipse, 4, 2).outType(new Nil<DoubleType>() {})
+				.apply().get();
+		double v2 = op("features.zernike.magnitude").input(rotatedEllipse, 4, 2).outType(new Nil<DoubleType>() {})
+				.apply().get();
+
 		assertEquals(Ops.Zernike.Magnitude.NAME, 0.10985876611295191, v1, EPSILON);
-		
+
 		// magnitude is the same after rotating the image
 		assertEquals(Ops.Zernike.Magnitude.NAME, v1, v2, 1e-3);
 	}

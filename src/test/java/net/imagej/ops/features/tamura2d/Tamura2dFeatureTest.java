@@ -33,8 +33,8 @@ import static org.junit.Assert.assertEquals;
 import net.imagej.ops.features.AbstractFeatureTest;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.ByteType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
 
@@ -49,28 +49,27 @@ public class Tamura2dFeatureTest extends AbstractFeatureTest {
 
 	@Test
 	public void testContrastFeature() {
-		assertEquals("tamura.contrast", 63.7185, ((RealType<?>) ops.run(
-			"features.tamura.contrast", random)).getRealDouble(), 1e-3);
+		assertEquals("tamura.contrast", 63.7185,
+				op("features.tamura.contrast").input(random).outType(DoubleType.class).apply().get(), 1e-3);
 	}
 
 	@Test
 	public void testDirectionalityFeature() {
-		assertEquals("tamura.directionality", 0.007819, ((RealType<?>) ops
-			.run("features.tamura.directionality", random, 16)).getRealDouble(),
-			1e-3);
+		assertEquals("tamura.directionality", 0.007819,
+				op("features.tamura.directionality").input(random, 16).outType(DoubleType.class).apply().get(), 1e-3);
 	}
 
 	@Test
 	public void testCoarsenessFeature() {
-		assertEquals("tamura.coarseness", 43.614, ((RealType<?>) ops.run(
-			 "features.tamura.coarseness", random)).getRealDouble(), 1e-3);
+		assertEquals("tamura.coarseness", 43.614,
+				op("features.tamura.coarseness").input(random).outType(DoubleType.class).apply().get(), 1e-3);
 
 		// NB: according to the implementation, this 2x2 image should have exactly 0
 		// coarseness.
-		byte[] arr = new byte[] {0, -1, 0, 0};
+		byte[] arr = new byte[] { 0, -1, 0, 0 };
 		Img<ByteType> in = ArrayImgs.bytes(arr, 2, 2);
-		assertEquals("tamura.coarseness", 0.0, ((RealType<?>) ops.run(
-			"features.tamura.coarseness", in)).getRealDouble(), 0.0);
+		assertEquals("tamura.coarseness", 0.0,
+				op("features.tamura.coarseness").input(in).outType(DoubleType.class).apply().get(), 0.0);
 	}
 
 }

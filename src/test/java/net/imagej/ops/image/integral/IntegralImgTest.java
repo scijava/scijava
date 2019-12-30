@@ -49,7 +49,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
-import org.scijava.ops.function.Computers;
 
 /**
  * @author Stefan Helfrich (University of Konstanz)
@@ -85,8 +84,8 @@ public class IntegralImgTest extends AbstractOpTest {
 		defaultOp.compute(in, out1);
 
 		// should match WrappedIntegralImg
-		out2 = (RandomAccessibleInterval<DoubleType>) ops.run("image.integral",
-				in);
+		out2 = op("image.integral").input(
+				in).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		// Remove 0s from integralImg by shifting its interval by +1
 		final long[] min = new long[out2.numDimensions()];

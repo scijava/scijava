@@ -43,7 +43,7 @@ import net.imglib2.type.numeric.integer.ShortType;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests {@link ConvertIIs} + {@link RealTypeConverter} ops.
@@ -58,14 +58,14 @@ public class ConvertIIsTest extends AbstractOpTest {
 	@Before
 	public void createImages() {
 		final FinalDimensions dims = FinalDimensions.wrap(new long[] {10, 10});
-		in = (IterableInterval<ShortType>) op("create.img").input(dims, new ShortType()).apply();
+		in = op("create.img").input(dims, new ShortType()).outType(new Nil<IterableInterval<ShortType>>() {}).apply();
 		addNoise(in);
-		out = (Img<ByteType>) op("create.img").input(dims, new ByteType()).apply();
+		out = op("create.img").input(dims, new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
 	}
 
 	@Test
 	public void testClip() {
-		op("convert.clip").input(in, out).apply();
+		op("convert.clip").input(in).output(out).compute();
 
 		final Cursor<ShortType> c = in.localizingCursor();
 		final RandomAccess<ByteType> ra = out.randomAccess();
@@ -78,7 +78,7 @@ public class ConvertIIsTest extends AbstractOpTest {
 
 	@Test
 	public void testCopy() {
-		op("convert.copy").input(in, out).apply();
+		op("convert.copy").input(in).output(out).compute();
 
 		final Cursor<ShortType> c = in.localizingCursor();
 		final RandomAccess<ByteType> ra = out.randomAccess();
@@ -92,8 +92,8 @@ public class ConvertIIsTest extends AbstractOpTest {
 	// -- Helper methods --
 
 	private void addNoise(final IterableInterval<ShortType> image) {
-		IterableInterval<ShortType> copy = (IterableInterval<ShortType>) op("copy.img").input(image).apply();
-		op("filter.addNoise").input(copy, -32768., 32767., 10000., image).apply();
+		IterableInterval<ShortType> copy = op("copy").input(image).outType(new Nil<IterableInterval<ShortType>>() {}).apply();
+		op("filter.addNoise").input(copy, -32768., 32767., 10000.).output(image).compute();
 	}
 
 	private byte clip(final short value) {

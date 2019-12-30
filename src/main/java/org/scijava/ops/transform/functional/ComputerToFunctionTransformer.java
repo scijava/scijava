@@ -45,6 +45,7 @@ import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.transform.TypeModUtils;
+import org.scijava.ops.types.Any;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.ParameterStructs;
 import org.scijava.plugin.Plugin;
@@ -172,6 +173,7 @@ public class ComputerToFunctionTransformer implements FunctionalTypeTransformer 
 
 	@Override
 	public OpRef substituteAnyInTargetRef(OpRef srcRef, OpRef targetRef) {
+		if(!(targetRef.getOutType() instanceof Any)) return targetRef;
 		final Type[] targetTypes = srcRef.getTypes();
 		TypeModUtils.replaceRawTypes(targetTypes, Types.raw(srcRef.getTypes()[0]), Types.raw(targetRef.getTypes()[0]));
 		return new OpRef(targetRef.getName(), targetTypes, srcRef.getOutType(), targetRef.getArgs());

@@ -12,4 +12,7 @@ public @interface OpDependency {
 	
 	/** The name of the Op to inject. */
 	String name();
+	
+	/** Set to false if the dependency should not be adapted */
+	boolean adaptable() default true;
 }

@@ -242,7 +242,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 						+ "method inputs and outputs of Op dependency field: " + dependency.getKey());
 			}
 			try {
-				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef));
+				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef, dependency.isAdaptable()));
 			} catch (final Exception e) {
 				throw new OpMatchingException("Could not find Op that matches requested Op dependency:" + "\nOp class: "
 						+ op.opInfo().implementationName() + //
@@ -258,10 +258,10 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			final Nil<?> outType) {
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
-		return (T) findOpInstance(opName, ref);
+		return (T) findOpInstance(opName, ref, true);
 	}
 
-	public Object findOpInstance(final String opName, final OpRef ref) {
+	public Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
 		Object op = null;
 		OpCandidate match = null;
 		OpTransformationCandidate transformation = null;
@@ -272,6 +272,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			op = match.createOp(dependencies);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
+			if(adaptable == false) {
+				throw new IllegalArgumentException(opName + " cannot be adapted (adaptation is disabled)");
+			}
 			log.debug("Attempting Op transformation...");
 
 			// If we can't find an op matching the original request, we try to find a

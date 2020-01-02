@@ -137,13 +137,13 @@ public class ComputerToFunctionTransformer implements FunctionalTypeTransformer 
 			Type[]::new);
 		final Type createOpType = Types.parameterize(createOpRawType, paramTypes);
 		final OpRef opRef = OpRef.fromTypes(CREATE_OP_NAME, new Type[] { createOpType }, outputParamType, inputParamTypes);
-		return ops.findOpInstance(CREATE_OP_NAME, opRef);
+		return ops.findOpInstance(CREATE_OP_NAME, opRef, true);
 	}
 
 	private static Producer<?> findCreate(final OpService ops, final Type outputParamType) {
 		final Type createOpType = Types.parameterize(Producer.class, new Type[] { outputParamType });
 		final OpRef opRef = OpRef.fromTypes(CREATE_OP_NAME, new Type[] { createOpType }, outputParamType);
-		return (Producer<?>) ops.findOpInstance(CREATE_OP_NAME, opRef);
+		return (Producer<?>) ops.findOpInstance(CREATE_OP_NAME, opRef, true);
 	}
 
 	private static <I, O> Function<I, O> computerToFunction(final Computers.Arity1<I, O> src, final Object inputAwareCreate,

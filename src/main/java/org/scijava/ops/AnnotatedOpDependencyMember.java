@@ -61,6 +61,11 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	public String getDependencyName() {
 		return annotation.name();
 	}
+	
+	@Override
+	public boolean isAdaptable() {
+		return annotation.adaptable();
+	}
 
 	// -- Member methods --
 

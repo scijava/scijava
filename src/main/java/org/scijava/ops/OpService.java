@@ -34,6 +34,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.InstantiableException;
@@ -55,11 +58,10 @@ import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.transform.DefaultOpTransformationMatcher;
-import org.scijava.ops.transform.OpTransformationCandidate;
-import org.scijava.ops.transform.OpTransformationException;
+import org.scijava.ops.transform.AdaptedOp;
 import org.scijava.ops.transform.OpTransformationMatcher;
 import org.scijava.ops.transform.OpTransformer;
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.ops.util.OpWrapper;
@@ -211,12 +213,12 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return transformerIndex;
 	}
 
-	private OpTransformationMatcher getTransformationMatcher() {
-		if (transformationMatcher == null) {
-			transformationMatcher = new DefaultOpTransformationMatcher(getOpMatcher());
-		}
-		return transformationMatcher;
-	}
+//	private OpTransformationMatcher getTransformationMatcher() {
+//		if (transformationMatcher == null) {
+//			transformationMatcher = new DefaultOpTransformationMatcher(getOpMatcher());
+//		}
+//		return transformationMatcher;
+//	}
 
 	/**
 	 * Attempts to inject {@link OpDependency} annotated fields of the specified
@@ -264,7 +266,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	public Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
 		Object op = null;
 		OpCandidate match = null;
-		OpTransformationCandidate transformation = null;
+		AdaptedOp adaptation = null;
 		try {
 			// Find single match which matches the specified types
 			match = getOpMatcher().findSingleMatch(this, ref);
@@ -272,39 +274,81 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			op = match.createOp(dependencies);
 		} catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
-			if(adaptable == false) {
+			if (adaptable == false) {
 				throw new IllegalArgumentException(opName + " cannot be adapted (adaptation is disabled)");
 			}
-			log.debug("Attempting Op transformation...");
-
-			// If we can't find an op matching the original request, we try to find a
-			// transformation
-			transformation = getTransformationMatcher().findTransformation(this, getTransformerIndex(), ref);
-			if (transformation == null) {
-				log.debug("No matching Op transformation found");
-				throw new IllegalArgumentException(e);
-			}
-
-			// If we found one, try to do transformation and return transformed op
-			log.debug("Matching Op transformation found:\n" + transformation + "\n");
+			log.debug("Attempting Op adaptation...");
 			try {
-				final List<Object> dependencies = resolveOpDependencies(transformation.getSourceOp());
-				op = transformation.exceute(this, dependencies);
-			} catch (OpMatchingException | OpTransformationException e1) {
-				throw new IllegalArgumentException("Execution of Op transformatioon failed:\n" + e1);
+				adaptation = adaptOp(ref);
+				op = adaptation.op();
+			} catch (OpMatchingException e1) {
+				log.debug("No suitable Op adaptation found");
+				throw new IllegalArgumentException(e1);
 			}
+
 		}
 		try {
 			// Try to resolve annotated OpDependency fields
+			// N.B. Adapted Op dependency fields are already matched.
 			if (match != null)
 				resolveOpDependencies(match);
-			else if (transformation != null)
-				resolveOpDependencies(transformation.getSourceOp());
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
-		Object wrappedOp = wrapOp(op, match, transformation);
+		// TODO: THIS IS WRONG! We need the OpInfo of the output of the adaptation!
+		// This gives the OpInfo of the original (unadapted) op!
+		OpInfo adaptedInfo = adaptation == null ? null : adaptation.srcInfo();
+		Object wrappedOp = wrapOp(op, match, adaptedInfo);
 		return wrappedOp;
+	}
+
+	private AdaptedOp adaptOp(OpRef ref) throws OpMatchingException {
+
+		// TODO: support all types of ref
+		// create an OpCandidate list of suitable adaptors
+		Type adaptTo = ref.getTypes()[0];
+		Type adaptFrom = new Any();
+		Type refType = Types.parameterize(Function.class, new Type[] {adaptFrom, adaptTo});
+		OpRef adaptorRef = new OpRef("adapt", new Type[] {refType}, adaptTo, new Type[] {adaptFrom});
+		List<OpCandidate> adaptorCandidates = getOpMatcher().findCandidates(this, adaptorRef);
+		Comparator<OpCandidate> comp = (OpCandidate i1,
+				OpCandidate i2) -> i1.opInfo().priority() < i2.opInfo().priority() ? -1
+						: i1.opInfo().priority() == i2.opInfo().priority() ? 0 : 1;
+		Collections.sort(adaptorCandidates, comp);
+
+		while (adaptorCandidates.size() > 0) {
+			OpCandidate adaptor = adaptorCandidates.remove(0);
+			try {
+				// resolve adaptor dependencies and get the adaptor (as a function) //TODO
+				final List<Object> dependencies = resolveOpDependencies(adaptor);
+				// adaptor.setStatus(StatusCode.MATCH);
+				Object adaptorOp = adaptor.opInfo().createOpInstance(dependencies).object();
+
+				// grab the first type parameter (from the OpCandidate?) and search for an Op
+				// that will then be adapted (this will be the first (only) type in the args of
+				// the adaptor)
+				Type srcOpType = adaptor.opInfo().inputs().get(0).getType();
+				final OpRef srcOpRef;
+					srcOpRef = inferOpRef(srcOpType, ref.getName(), adaptor.typeVarAssigns());
+				// TODO: export this to another function (also done in findOpInstance).
+				// We need this here because we need to grab the OpInfo. 
+				// TODO: is there a better way to do this?
+				final OpCandidate srcCandidate = getOpMatcher().findSingleMatch(this, srcOpRef);
+				final List<Object> srcDependencies = resolveOpDependencies(srcCandidate);
+				final Object fromOp = srcCandidate.opInfo().createOpInstance(srcDependencies).object();
+
+				// get adapted Op by applying adaptor on unadapted Op, then return
+				// TODO: can we make this safer?
+				@SuppressWarnings("unchecked")
+				Object toOp = ((Function<Object, Object>) adaptorOp).apply(fromOp);
+				return new AdaptedOp(toOp, srcCandidate.opInfo(), adaptor.opInfo());
+			} catch (OpMatchingException e1) {
+				continue;
+			}
+
+		}
+		// no adaptors available.
+		throw new OpMatchingException("Op adaptation failed: no adaptable Ops of type " + ref.getName());
 	}
 
 	/**
@@ -321,11 +365,11 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 *            needed.
 	 * @return an {@link Op} wrapping of op.
 	 */
-	private Object wrapOp(Object op, OpCandidate match, OpTransformationCandidate transformation) {
+	private Object wrapOp(Object op, OpCandidate match, OpInfo adaptationSrcInfo) {
 		if (wrappers == null)
 			initWrappers();
 
-		OpInfo opInfo = match == null ? transformation.getSourceOp().opInfo() : match.opInfo();
+		OpInfo opInfo = match == null ? adaptationSrcInfo : match.opInfo();
 		// FIXME: this type is not necessarily Computer, Function, etc. but often
 		// something more specific (like the class of an Op).
 		Type type = opInfo.opType();

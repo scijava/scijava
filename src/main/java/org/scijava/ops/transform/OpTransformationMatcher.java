@@ -25,7 +25,7 @@ public interface OpTransformationMatcher {
 	List<OpTransformation> getTransformationsTo(Iterable<OpTransformer> transformers, OpRef opRef, int currentChainLength);
 
 	/**
-	 * Attempts to find an {@link OpTransformationCandidate}, transforming an
+	 * Attempts to find an {@link AdaptedOp}, transforming an
 	 * existing Op into another Op that matches the specified {@link OpRef}. This
 	 * can be used if no Op matching the specified ref is available, however there
 	 * are Op transformations that are able to transform an existing Op into the
@@ -38,5 +38,5 @@ public interface OpTransformationMatcher {
 	 * @param ref the ref which should be the target of the transformation to look
 	 *          for
 	 */
-	OpTransformationCandidate findTransformation(OpEnvironment opEnv, Iterable<OpTransformer> transformers, OpRef ref);
+	AdaptedOp findTransformation(OpEnvironment opEnv, Iterable<OpTransformer> transformers, OpRef ref);
 }

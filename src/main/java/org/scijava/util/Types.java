@@ -835,7 +835,7 @@ public final class Types {
 			Type param = params[i];
 
 			// if arg is an Any, it must be applicable to param.
-			if(arg instanceof Any) continue;
+			if(Types.isApplicableToRawTypes(arg, Any.class)) continue;
 
 			// First, check raw type assignability.
 			if (!isApplicableToRawTypes(arg, param)) return i;
@@ -1095,6 +1095,12 @@ public final class Types {
 		}
 
 		if (type instanceof ParameterizedType) {
+			Class<?> raw = Types.raw(type);
+			Type[] typeParams = ((ParameterizedType) type).getActualTypeArguments();
+			for(int i = 0; i < typeParams.length; i++) {
+				typeParams[i] = TypeUtils.substituteTypeVariables(typeParams[i], typeVarAssigns);
+			}
+			return Types.parameterize(raw, typeParams);
 		}
 
 		if (type instanceof GenericArrayType) {
@@ -2017,7 +2023,7 @@ public final class Types {
 			}
 			
 			// if type is an Any, do some Any resolution
-			if (type instanceof Any) {
+			if (Types.isApplicableToRawTypes(type, Any.class)) {
 				for(Type typeParameter : toParameterizedType.getActualTypeArguments()) {
 					if (!(typeParameter instanceof TypeVariable<?>)) continue;
 					TypeVariable<?> typeVar = (TypeVariable<?>) typeParameter;

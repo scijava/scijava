@@ -61,7 +61,6 @@ import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformationMatcher;
 import org.scijava.ops.transform.OpTransformer;
-import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.ops.util.OpWrapper;
@@ -365,20 +364,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
-	}
-
-	public Object run(final String opName, final Object... args) {
-
-		Nil<?>[] inTypes = Arrays.stream(args).map(arg -> Nil.of(typeService.reify(arg))).toArray(Nil[]::new);
-		Nil<?> outType = new Nil<Any>() {
-			@Override
-			public Type getType() {
-				return new Any();
-			}
-		};
-
-		OpRunner op = findOpInstance(opName, new Nil<OpRunner>() {}, inTypes, outType);
-		return op.run(args);
 	}
 
 	/**

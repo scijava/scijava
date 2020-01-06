@@ -866,6 +866,7 @@ public final class Types {
 	}
 
 	private static boolean isApplicableToRawTypes(final Type arg, final Type param) {
+		if(arg instanceof Any) return true;
 		final List<Class<?>> srcClasses = Types.raws(arg);
 		final List<Class<?>> destClasses = Types.raws(param);
 		for (final Class<?> destClass : destClasses) {

@@ -30,6 +30,7 @@ package org.scijava.ops;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.DefaultOpMatcher;
+import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
@@ -290,11 +292,14 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 		try {
 			// Try to resolve annotated OpDependency fields
+			// N.B. Adapted Op dependency fields are already matched.
 			if (match != null)
 				resolveOpDependencies(match);
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
+		// TODO: THIS IS WRONG! We need the OpInfo of the output of the adaptation!
+		// This gives the OpInfo of the original (unadapted) op!
 		OpInfo adaptedInfo = adaptation == null ? null : adaptation.srcInfo();
 		Object wrappedOp = wrapOp(op, match, adaptedInfo);
 		return wrappedOp;
@@ -321,8 +326,15 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			Type adaptTo = adaptor.output().getType();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type
-			if (!Types.isAssignable(opType, adaptTo, map))
+			if(opType instanceof ParameterizedType) {
+				try {
+					if(!MatchingUtils.checkGenericAssignability(adaptTo, (ParameterizedType) opType, map, true))
+					continue;
+				} catch(IllegalArgumentException e) {continue; }
+			}
+			else if (!Types.isAssignable(opType, adaptTo, map)) {
 				continue;
+			}
 			// make sure that the adaptor is a Function (so we can cast it later)
 			if (Types.isInstance(adaptor.opType(), Function.class)) {
 				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");

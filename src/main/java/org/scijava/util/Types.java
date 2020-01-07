@@ -2385,6 +2385,9 @@ public final class Types {
 		private static Type substituteTypeVariables(final Type type,
 			final Map<TypeVariable<?>, Type> typeVarAssigns)
 		{
+			if (type instanceof ParameterizedType) {
+				return Types.substituteTypeVariables(type, typeVarAssigns);
+			}
 			if (type instanceof TypeVariable && typeVarAssigns != null) {
 				final Type replacementType = typeVarAssigns.get(type);
 

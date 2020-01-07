@@ -30,11 +30,14 @@
 package org.scijava.ops.types;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.scijava.Priority;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.util.Types;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -54,15 +57,23 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 
 	@Override
 	public Type reify(final Iterable<?> o, final int n) {
-		if (n != 0) throw new IndexOutOfBoundsException();
+		if (n != 0)
+			throw new IndexOutOfBoundsException();
 
 		final Iterator<?> iterator = o.iterator();
-		if (!iterator.hasNext()) return null;
+		if (!iterator.hasNext())
+			return null;
 
 		// Obtain the element type using the TypeService.
-		final Object element = iterator.next();
-		return typeService.reify(element);
+		int typesToCheck = 100;
+		//can we make this more efficient?
+		List<Type> typeList = new ArrayList<>();
+		for (int i = 0; i < typesToCheck; i++) {
+			if(!iterator.hasNext()) break;
+			typeList.add(typeService.reify(iterator.next()));
+		}
 
+		return Types.greatestCommonSuperType(typeList.toArray(new Type[] {}), true);
 		// TODO: Avoid infinite recursion when the list references itself.
 	}
 

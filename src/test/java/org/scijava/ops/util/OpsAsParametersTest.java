@@ -36,8 +36,10 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		return output;
 	};
 
-	@Test
-	public void TestOpWithOpField() {
+	// TODO: find a better way to check that this call fails BECAUSE func cannot be
+	// reified
+	@Test(expected=IllegalArgumentException.class)
+	public void TestOpWithNonReifiableFunction() {
 
 		List<Number> list = new ArrayList<>();
 		list.add(40l);
@@ -77,6 +79,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		}, new Nil<Double>() {
 		});
 
+		@SuppressWarnings("unused")
 		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
 	}
 

@@ -78,13 +78,6 @@ public class AnyTest extends AbstractTestEnvironment {
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 	
-	@SuppressWarnings("cast")
-	@Test
-	public void testAnyInjectionIntoFunctionRaws() {
-		final Function<Long, Long> func = (in) -> in / 2;
-		final Long output = (Long) new OpBuilder(ops, "test.functionAndLongToLong").input(func, 20l).outType(Long.class).apply();
-		assert(output == 10);
-	}
 }
 
 @Plugin(type = Op.class, name = "test.functionAndLongToLong")

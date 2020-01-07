@@ -35,6 +35,7 @@ import java.util.Iterator;
 import org.scijava.Priority;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.util.Types;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -54,15 +55,36 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 
 	@Override
 	public Type reify(final Iterable<?> o, final int n) {
-		if (n != 0) throw new IndexOutOfBoundsException();
+		if (n != 0)
+			throw new IndexOutOfBoundsException();
 
 		final Iterator<?> iterator = o.iterator();
-		if (!iterator.hasNext()) return null;
+		if (!iterator.hasNext())
+			return null;
 
 		// Obtain the element type using the TypeService.
 		final Object element = iterator.next();
-		return typeService.reify(element);
+		Type elementType = typeService.reify(element);
+		for (int i = 0; i < 100; i++) {
+			if(!iterator.hasNext()) break;
+			Type otherType = typeService.reify(iterator.next());
+			if(Types.isAssignable(otherType, elementType)) continue;
+			//TODO: recursive superTypes check
+			Type superClass = Types.raw(elementType).getGenericSuperclass();
+			if(Types.isAssignable(otherType, superClass)) {
+				elementType = superClass;
+				continue;
+			}
+			Type[] superTypes = elementType.getClass().getGenericInterfaces();
+			for(Type superType: superTypes) {
+				if(Types.isAssignable(otherType, superType)) {
+					elementType = superType;
+					continue;
+				}
+			}
+		}
 
+		return elementType;
 		// TODO: Avoid infinite recursion when the list references itself.
 	}
 

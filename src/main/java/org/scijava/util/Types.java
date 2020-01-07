@@ -888,15 +888,10 @@ public final class Types {
 
 		// get an array of the source argument types
 		Type argType = arg;
-		if (arg instanceof Class) {
-			for(int i = 0; i < srcTypes.length; i++)
-				srcTypes[i] = new Any();
-		}
-		else {
-			ParameterizedType parameterizedSuperType = (ParameterizedType) GenericTypeReflector
-					.getExactSuperType(argType, Types.raw(param));
-			srcTypes = parameterizedSuperType.getActualTypeArguments();
-		}
+		Type superType = Types
+				.getExactSuperType(argType, Types.raw(param));
+		if (superType == null || !(superType instanceof ParameterizedType)) return false;
+		srcTypes = ((ParameterizedType)superType).getActualTypeArguments();
 		
 		// List to collect the indices of destination parameters that are type vars
 		// If a type vars is contain within a parameterized type if must not be checked

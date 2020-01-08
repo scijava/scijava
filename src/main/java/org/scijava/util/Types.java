@@ -63,10 +63,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -739,6 +741,167 @@ public final class Types {
 	public static Type param(final Type type, final Class<?> c, final int no) {
 		return GenericTypeReflector.getTypeParameter(type, //
 			c.getTypeParameters()[no]);
+	}
+
+	/**
+	 * Determines the greatest common supertype of all types in the input array
+	 * 
+	 * @param types
+	 *            The array of subtypes, for which the supertype is found.
+	 * @param wildcardSingleIface
+	 *            The default behavior, when the method finds multiple suitable
+	 *            interfaces, is to create a wildcard with all suitable interfaces
+	 *            as upper bounds. If this {@code boolean} is set to true, a
+	 *            wildcard will also be created if only one suitable interface is
+	 *            found. If false, the return will be the interface itself (i.e. not
+	 *            a wildcard).
+	 * @return a {@link Type} that is a supertype of all {@link Type}s in the types array.
+	 */
+	public static Type greatestCommonSuperType(final Type[] types, final boolean wildcardSingleIface) {
+
+		if (types.length == 0)
+			return null;
+		// make sure that all types are supported
+		// TODO: are there any other types that aren't fully supported?
+		for (Type t : types) {
+			if (t instanceof TypeVariable<?>)
+				throw new UnsupportedOperationException("Unsupported type: " + t);
+		}
+
+		// We can effectively find the greatest common super type by assuming that
+		// either:
+		// 1) superType extends a superclass of all types in types (this check is
+		// symmetric)
+		// 2) superType implements an interface implemented by all types in typws (this
+		// check is symmetric)
+
+		Type superType = types[0];
+
+		// 1)
+		// prefer any non-Object superClass over implemented interfaces.
+		while (Types.raw(superType) != Object.class) {
+			// check assignability of superclass with type params
+			Type pType = Types.getExactSuperType(types[0], Types.raw(superType));
+			if (Types.isAssignable(types, pType) == -1)
+				return superType;
+
+			// if we have a parameterizedtype whose rawtype is assignable to all of types,
+			// we just have to resolve each of pType's type variables.
+			if (pType instanceof ParameterizedType && //
+					Types.isAssignable(types, Types.raw(superType)) == -1) {
+				ParameterizedType[] castedTypes = new ParameterizedType[types.length];
+				castedTypes[0] = (ParameterizedType) pType;
+				// generate parameterizedTypes of each type in types w.r.t. supertype
+				for (int i = 1; i < castedTypes.length; i++) {
+					Type t = Types.getExactSuperType(types[i], Types.raw(superType));
+					if (!(t instanceof ParameterizedType))
+						continue;
+					castedTypes[i] = (ParameterizedType) t;
+				}
+				// resolve each of the i type variables of superType using
+				// greatestCommonSupertype
+				Type[] resolvedTypeArgs = new Type[castedTypes[0].getActualTypeArguments().length];
+				for (int i = 0; i < resolvedTypeArgs.length; i++) {
+					Type[] typeVarsI = new Type[types.length];
+					for (int j = 0; j < typeVarsI.length; j++) {
+						typeVarsI[j] = castedTypes[j].getActualTypeArguments()[i];
+					}
+					resolvedTypeArgs[i] = wildcard(new Type[] { greatestCommonSuperType(typeVarsI, true) },
+							new Type[] {});
+				}
+
+				// return supertype parameterized with the resolved type args
+				return Types.parameterize(Types.raw(superType), resolvedTypeArgs);
+			}
+			if (Types.raw(superType).isInterface())
+				break;
+			superType = Types.getExactSuperType(superType, Types.raw(superType).getSuperclass());
+		}
+
+		// 2)
+		List<Type> sharedInterfaces = new ArrayList<>();
+		Queue<Type> superInterfaces = new LinkedList<>();
+		if (Types.raw(types[0]).isInterface())
+			superInterfaces.add(types[0]);
+		else
+			for (Type superT1 : Types.raw(types[0]).getGenericInterfaces())
+				superInterfaces.add(superT1);
+		while (superInterfaces.size() > 0) {
+			Type type = superInterfaces.remove();
+			Type pType = Types.getExactSuperType(types[0], Types.raw(type));
+			if (Types.isAssignable(types, pType) == -1) {
+				sharedInterfaces.add(pType);
+				continue;
+			}
+			// if we have a parameterizedtype whose rawtype is assignable to all of types,
+			// we just have to resolve each of pType's type variables.
+			if (pType instanceof ParameterizedType && //
+					Types.isAssignable(types, Types.raw(pType)) == -1) {
+				ParameterizedType[] castedTypes = new ParameterizedType[types.length];
+				castedTypes[0] = (ParameterizedType) pType;
+				// generate parameterizedTypes of each type in types w.r.t. supertype
+				for (int i = 1; i < castedTypes.length; i++) {
+					Type t = Types.getExactSuperType(types[i], Types.raw(pType));
+					if (!(t instanceof ParameterizedType))
+						continue;
+					castedTypes[i] = (ParameterizedType) t;
+				}
+				// resolve each of the i type variables of pType using greatestCommonSupertype
+				Type[] resolvedTypeArgs = new Type[castedTypes[0].getActualTypeArguments().length];
+				for (int i = 0; i < resolvedTypeArgs.length; i++) {
+					Type[] typeVarsI = new Type[types.length];
+					for (int j = 0; j < typeVarsI.length; j++) {
+						typeVarsI[j] = castedTypes[j].getActualTypeArguments()[i];
+					}
+					// If each of these types implements some recursive interface, e.g. Comparable,
+					// the best we can do is return an unbounded wildcard.
+					if (Arrays.equals(types, typeVarsI))
+						resolvedTypeArgs[i] = wildcard();
+					else
+						resolvedTypeArgs[i] = greatestCommonSuperType(typeVarsI, true);
+				}
+
+				// return supertype parameterized with the resolved type args
+				return Types.parameterize(Types.raw(pType), resolvedTypeArgs);
+			}
+
+			// if this interface is not a supertype of all of types, maybe one of its
+			// inherited interfaces is. N.B. we don't want to keep searching through the
+			// interface hierarchy, however, if we have have found a type that satisfies all
+			// of types. Thus we stop adding to the list if we have found at least one
+			// satisfying interface. Do note, however, that this does not prevent multiple
+			// satisfying interfaces at the same depth from being found.
+			if (sharedInterfaces.size() == 0)
+				for (Type superT1 : Types.raw(type).getGenericInterfaces())
+					superInterfaces.add(superT1);
+		}
+		if (sharedInterfaces.size() == 1 && !wildcardSingleIface) {
+			return sharedInterfaces.get(0);
+		} else if (sharedInterfaces.size() > 0) {
+			return wildcard(sharedInterfaces.toArray(new Type[] {}), new Type[] {});
+		}
+		return Object.class;
+	}
+	
+	/**
+	 * Discerns whether it would be legal to assign a group of references of types
+	 * {@code source} to a reference of type {@code target}.
+	 *
+	 * @param source
+	 *            The types from which assignment is desired.
+	 * @param target
+	 *            The type to which assignment is desired.
+	 * @return the index of the first type not assignable to {@code target}. If all
+	 *         types are assignable, returns {@code -1}
+	 * @throws NullPointerException
+	 *             if {@code target} is null.
+	 * @see Class#isAssignableFrom(Class)
+	 */
+	private static int isAssignable(final Type[] sources, final Type target) {
+		for(int i = 0; i < sources.length; i++) {
+			if(!Types.isAssignable(sources[i], target)) return i;
+		}
+		return -1;
 	}
 
 	/**

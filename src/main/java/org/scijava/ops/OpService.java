@@ -35,6 +35,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -43,8 +44,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -61,10 +60,10 @@ import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.transform.AdaptedOp;
 import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformationMatcher;
 import org.scijava.ops.transform.OpTransformer;
+import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.ops.util.OpWrapper;
@@ -269,7 +268,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	public Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
 		Object op = null;
 		OpCandidate match = null;
-		AdaptedOp adaptation = null;
+		OpAdaptor adaptation = null;
 		try {
 			// Find single match which matches the specified types
 			match = getOpMatcher().findSingleMatch(this, ref);
@@ -282,8 +281,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 			}
 			log.debug("Attempting Op adaptation...");
 			try {
-				adaptation = adaptOp(opName, ref);
-				op = adaptation.op();
+				adaptation = adaptOp(ref);
+				op = adaptation.getAdaptedOp();
 			} catch (OpMatchingException e1) {
 				log.debug("No suitable Op adaptation found");
 				throw new IllegalArgumentException(e1);
@@ -305,82 +304,73 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return wrappedOp;
 	}
 
-	public AdaptedOp adaptOp(String opName, OpRef ref) throws OpMatchingException {
-
+	public OpAdaptor adaptOp(OpRef ref) throws OpMatchingException {
+		
 		// TODO: support all types of ref
 		// TODO: multi-stage adaptations (do we need this if we are not doing OpRunners
 		// anymore?)
 		// TODO: prevent searching for Op types that have already been searched for
 		// TODO: export code to helper method.
-		Type opType = ref.getTypes()[0];
-		List<OpInfo> adaptors = opCache.get("adapt");
-
-		// create a priority queue to store suitable transformations.
-		Comparator<OpAdaptor> comp = (OpAdaptor i1,
-				OpAdaptor i2) -> i1.adaptorInfo().priority() < i2.adaptorInfo().priority() ? -1
-						: i1.adaptorInfo().priority() == i2.adaptorInfo().priority() ? 0 : 1;
-		Queue<OpAdaptor> suitableAdaptors = new PriorityQueue<>(comp);
-
+		
 		// create an OpCandidate list of suitable adaptors
-		for (OpInfo adaptor : adaptors) {
-			Type adaptTo = adaptor.output().getType();
-			Map<TypeVariable<?>, Type> map = new HashMap<>();
-			// make sure that the adaptor outputs the correct type
-			if(opType instanceof ParameterizedType) {
-				try {
-					if(!MatchingUtils.checkGenericAssignability(adaptTo, (ParameterizedType) opType, map, true))
-					continue;
-				} catch(IllegalArgumentException e) {continue; }
-			}
-			else if (!Types.isAssignable(opType, adaptTo, map)) {
-				continue;
-			}
-			// make sure that the adaptor is a Function (so we can cast it later)
-			if (Types.isInstance(adaptor.opType(), Function.class)) {
-				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");
-				continue;
-			}
-			// make an OpCandidate
-			suitableAdaptors.add(new OpAdaptor(ref, adaptor, map, this, log));
-		}
+		Type blahadaptTo = ref.getTypes()[0];
+		Type adaptFrom = new Any();
+		Type refType = Types.parameterize(Function.class, new Type[] {adaptFrom, blahadaptTo});
+		OpRef adaptorRef = new OpRef("adapt", new Type[] {refType}, blahadaptTo, new Type[] {adaptFrom});
+		List<OpCandidate> adaptorCandidates = getOpMatcher().findCandidates(this, adaptorRef);
+		Comparator<OpCandidate> comp = (OpCandidate i1,
+				OpCandidate i2) -> i1.opInfo().priority() < i2.opInfo().priority() ? -1
+						: i1.opInfo().priority() == i2.opInfo().priority() ? 0 : 1;
+		Collections.sort(adaptorCandidates, comp);
+//		Queue<OpAdaptor> suitableAdaptors = new PriorityQueue<>(comp);
 
-		while (suitableAdaptors.size() > 0) {
-			OpAdaptor adaptor = suitableAdaptors.remove();
-			Object adaptorOp;
+//		// create an OpCandidate list of suitable adaptors
+//		for (OpInfo adaptor : adaptors) {
+//			Type adaptTo = adaptor.output().getType();
+//			Map<TypeVariable<?>, Type> map = new HashMap<>();
+//			// make sure that the adaptor outputs the correct type
+//			if(opType instanceof ParameterizedType) {
+//				try {
+//					if(!MatchingUtils.checkGenericAssignability(adaptTo, (ParameterizedType) opType, map, true))
+//					continue;
+//				} catch(IllegalArgumentException e) {continue; }
+//			}
+//			else if (!Types.isAssignable(opType, adaptTo, map)) {
+//				continue;
+//			}
+//			// make sure that the adaptor is a Function (so we can cast it later)
+//			if (Types.isInstance(adaptor.opType(), Function.class)) {
+//				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");
+//				continue;
+//			}
+//			// make an OpCandidate
+//			suitableAdaptors.add(new OpAdaptor(ref, adaptor, map, this, log));
+//		}
+
+		while (adaptorCandidates.size() > 0) {
+
+			OpAdaptor adaptor = new OpAdaptor(ref, suitableAdaptors.remove().opInfo(), ;
 			// attempt to construct the adaptor 
 			// (N.B. we fail here if, for example, the adaptor cannot resolve its OpDependencies).
 			try {
-				adaptorOp = adaptor.constructAdaptor();
+				adaptor.constructAdaptor();
 			} catch (OpMatchingException e) {
 				continue;
 			}
 			try {
-
-				// grab the first type parameter (from the OpCandidate?) and search for an Op
-				// that will then be adapted (this will be the first (only) type in the args of
-				// the adaptor)
-				Type adaptFrom = adaptor.adaptorCandidate().paddedArgs()[0];
-				final OpRef inferredRef = inferOpRef(adaptFrom, opName, adaptor.adaptorCandidate().typeVarAssigns());
-				// TODO: export this to another function (also done in findOpInstance).
-				// We need this here because we need to grab the OpInfo. 
-				// TODO: is there a better way to do this?
-				final OpCandidate srcCandidate = getOpMatcher().findSingleMatch(this, inferredRef);
-				final List<Object> srcDependencies = resolveOpDependencies(srcCandidate);
-				final Object fromOp = srcCandidate.opInfo().createOpInstance(srcDependencies).object();
-
 				// get adapted Op by applying adaptor on unadapted Op, then return
-				// TODO: can we make this safer?
-				@SuppressWarnings("unchecked")
-				Object toOp = ((Function<Object, Object>) adaptorOp).apply(fromOp);
-				return new AdaptedOp(toOp, srcCandidate.opInfo(), adaptor.adaptorCandidate().opInfo());
+				final Object fromOp = adaptor.constructSrcOp(ref.getName(), this);
+				adaptor.executeAdaptation(fromOp);
+				return adaptor;
 			} catch (OpMatchingException e1) {
-				// TODO: chain adaptations
-				continue;
+				//TODO: this should probably be safer.
+				OpRef srcOpRef = adaptor.srcOpRef;
+				
 			}
 
 		}
 		// no adaptors available.
-		throw new OpMatchingException("Op adaptation failed: no adaptable Ops of type " + opName);
+		throw new OpMatchingException("Op adaptation failed: no adaptable Ops of type " + ref.getName());
 	}
 
 	/**
@@ -813,10 +803,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		
 		//TODO: do we actually need all of these things?
 		private Object adaptor;
+		private Object srcOp;
+		private Object adaptedOp;
 		private OpInfo adaptorInfo;
+		private OpInfo srcOpInfo;
 		private OpCandidate adaptorCandidate;
 		private OpRef adaptorRef;
-		private OpRef srcRef;
+		private OpRef srcOpRef;
 		private OpRef targetRef;
 		private OpRef child;
 		private Map<TypeVariable<?>, Type> typeVarAssigns;
@@ -847,15 +840,39 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				return adaptor;
 		}
 		
+		public Object constructSrcOp(String opName, OpService ops) throws OpMatchingException {
+				// grab the first type parameter (from the OpCandidate?) and search for an Op
+				// that will then be adapted (this will be the first (only) type in the args of
+				// the adaptor)
+				Type adaptFrom = adaptorCandidate.paddedArgs()[0];
+				srcOpRef = inferOpRef(adaptFrom, opName, typeVarAssigns);
+				// TODO: export this to another function (also done in findOpInstance).
+				// We need this here because we need to grab the OpInfo. 
+				// TODO: is there a better way to do this?
+				final OpCandidate srcCandidate = getOpMatcher().findSingleMatch(ops, srcOpRef);
+				final List<Object> srcDependencies = resolveOpDependencies(srcCandidate);
+				srcOp = srcCandidate.opInfo().createOpInstance(srcDependencies).object();
+				srcOpInfo = srcCandidate.opInfo();
+				return srcOp;
+		}
+		
 		public OpInfo adaptorInfo() {return adaptorInfo; }
+		
+		public OpInfo srcInfo() {return srcOpInfo; }
+
+		public OpRef srcRef() {return srcOpRef; }
 
 		public OpCandidate adaptorCandidate() {return adaptorCandidate; }
 		
-		public Object executeAdaptation(Object fromOp) {
-			Object toOp = ((Function<Object, Object>) adaptor).apply(fromOp);
+		public void executeAdaptation(Object fromOp) {
+			//TODO: can we make this safer?
+			@SuppressWarnings("unchecked")
+			Object op = ((Function<Object, Object>) adaptor).apply(fromOp);
+			adaptedOp = op;
 			// TODO: child adaptor support.
-			return toOp;
 		}
+		
+		public Object getAdaptedOp() {return adaptedOp; }
 
 	}
 }

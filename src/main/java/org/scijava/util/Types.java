@@ -2238,8 +2238,17 @@ public final class Types {
 				// parameters of the target type.
 				if (fromResolved != null && !fromResolved.equals(toResolved) && !(toResolved instanceof WildcardType
 						&& isAssignable(fromResolved, toResolved, typeVarAssigns))) {
+					// check for anys
 					if (fromResolved instanceof Any || toResolved instanceof Any)
 						continue;
+					if (fromResolved instanceof ParameterizedType && Types.raw(fromResolved) == Types.raw(toResolved)) {
+						Type[] fromTypes = ((ParameterizedType) fromResolved).getActualTypeArguments();
+						Type[] toTypes = ((ParameterizedType) toResolved).getActualTypeArguments();
+						for(int i = 0; i < fromTypes.length; i++) {
+							if(!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any)) return false;
+						}
+						continue;
+					}
 					return false;
 				}
 			}

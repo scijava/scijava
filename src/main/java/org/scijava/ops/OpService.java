@@ -30,11 +30,11 @@ package org.scijava.ops;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -43,6 +43,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -51,6 +53,7 @@ import org.scijava.log.LogService;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.DefaultOpMatcher;
+import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
@@ -61,7 +64,6 @@ import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.AdaptedOp;
 import org.scijava.ops.transform.OpTransformationMatcher;
 import org.scijava.ops.transform.OpTransformer;
-import org.scijava.ops.types.Any;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.ops.util.OpWrapper;
@@ -302,26 +304,24 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return wrappedOp;
 	}
 
+	/**
+	 * Adapts an Op with the name of ref into a type that can be SAFELY cast to ref.
+	 * 
+	 * @param ref
+	 *            - the type of Op that we are looking to adapt to.
+	 * @return {@link AdaptedOp} - an Op that has been adapted to conform the the
+	 *         ref type.
+	 * @throws OpMatchingException
+	 */
 	private AdaptedOp adaptOp(OpRef ref) throws OpMatchingException {
-
 		// TODO: support all types of ref
-		// create an OpCandidate list of suitable adaptors
-		Type adaptTo = ref.getTypes()[0];
-		Type adaptFrom = new Any();
-		Type refType = Types.parameterize(Function.class, new Type[] {adaptFrom, adaptTo});
-		OpRef adaptorRef = new OpRef("adapt", new Type[] {refType}, adaptTo, new Type[] {adaptFrom});
-		List<OpCandidate> adaptorCandidates = getOpMatcher().findCandidates(this, adaptorRef);
-		Comparator<OpCandidate> comp = (OpCandidate i1,
-				OpCandidate i2) -> i1.opInfo().priority() < i2.opInfo().priority() ? -1
-						: i1.opInfo().priority() == i2.opInfo().priority() ? 0 : 1;
-		Collections.sort(adaptorCandidates, comp);
+		Queue<OpCandidate> adaptorCandidates = findAdaptors(ref);
 
 		while (adaptorCandidates.size() > 0) {
-			OpCandidate adaptor = adaptorCandidates.remove(0);
+			OpCandidate adaptor = adaptorCandidates.remove();
 			try {
-				// resolve adaptor dependencies and get the adaptor (as a function) //TODO
+				// resolve adaptor dependencies and get the adaptor (as a function)
 				final List<Object> dependencies = resolveOpDependencies(adaptor);
-				// adaptor.setStatus(StatusCode.MATCH);
 				Object adaptorOp = adaptor.opInfo().createOpInstance(dependencies).object();
 
 				// grab the first type parameter (from the OpCandidate?) and search for an Op
@@ -338,6 +338,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				final Object fromOp = srcCandidate.opInfo().createOpInstance(srcDependencies).object();
 
 				// get adapted Op by applying adaptor on unadapted Op, then return
+				// TODO: create OpInfo for transformed Op (everything the same except
+				// types/param IO status)
 				// TODO: can we make this safer?
 				@SuppressWarnings("unchecked")
 				Object toOp = ((Function<Object, Object>) adaptorOp).apply(fromOp);
@@ -349,6 +351,66 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 		// no adaptors available.
 		throw new OpMatchingException("Op adaptation failed: no adaptable Ops of type " + ref.getName());
+	}
+	
+	/**
+	 * Finds all suitable adaptors that are able to transform an Op into another Op
+	 * that can be safely cast to ref.
+	 * 
+	 * @param ref
+	 *            - the request {@link OpRef} that we will try to adapt to.
+	 * @return the list of suitable adaptors for the given {@link OpRef}
+	 */
+	private Queue<OpCandidate> findAdaptors(OpRef ref) {
+		// TODO: multi-stage adaptations (do we need this if we are not doing OpRunners
+		// anymore?)
+		// TODO: prevent searching for Op types that have already been searched for
+		// TODO: export code to helper method.
+		Type opType = ref.getTypes()[0];
+		List<OpInfo> adaptors = opCache.get("adapt");
+
+		// create a priority queue to store suitable transformations.
+		Comparator<OpCandidate> comp = (OpCandidate i1,
+				OpCandidate i2) -> i1.opInfo().priority() < i2.opInfo().priority() ? 1
+						: i1.opInfo().priority() == i2.opInfo().priority() ? 0 : -1;
+		Queue<OpCandidate> adaptorCandidates = new PriorityQueue<>(comp);
+
+		// create an OpCandidate list of suitable adaptors
+		for (OpInfo adaptor : adaptors) {
+			Type adaptTo = adaptor.output().getType();
+			Map<TypeVariable<?>, Type> map = new HashMap<>();
+			// make sure that the adaptor outputs the correct type
+			if (opType instanceof ParameterizedType) {
+				// TODO: remove try/catch
+				try {
+					if (!MatchingUtils.checkGenericAssignability(adaptTo, (ParameterizedType) opType, map, true))
+						continue;
+				} catch (IllegalArgumentException e) {
+					continue;
+				}
+			} else if (!Types.isAssignable(opType, adaptTo, map)) {
+				continue;
+			}
+			// make sure that the adaptor is a Function (so we can cast it later)
+			if (Types.isInstance(adaptor.opType(), Function.class)) {
+				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");
+				continue;
+			}
+			// build the type of fromOp (we know there must be one input because the adaptor
+			// is a Function)
+			Type adaptFrom = adaptor.inputs().get(0).getType();
+			Type refAdaptTo = Types.substituteTypeVariables(adaptTo, map);
+			Type refAdaptFrom = Types.substituteTypeVariables(adaptFrom, map);
+
+			// build the OpRef of the adaptor.
+			Type refType = Types.parameterize(Function.class, new Type[] { refAdaptFrom, refAdaptTo });
+			OpRef adaptorRef = new OpRef("adapt", new Type[] { refType }, refAdaptTo, new Type[] { refAdaptFrom });
+
+			// make an OpCandidate
+			adaptorCandidates.add(new OpCandidate(this, log, adaptorRef, adaptor, map));
+		}
+
+		return adaptorCandidates;
 	}
 
 	/**

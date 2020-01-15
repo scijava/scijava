@@ -31,6 +31,7 @@ package org.scijava.ops;
 import com.google.common.collect.Streams;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
@@ -77,11 +78,13 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 	public void autoCompToFuncAndLift() {
 		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {
 		};
+		Nil<List<double[]>> l = new Nil<List<double[]>>() {
+		};
 
-		Function<Iterable<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
-				"test.liftSqrt", new Nil<Function<Iterable<double[]>, Iterable<double[]>>>() {
+		Function<List<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
+				"test.liftSqrt", new Nil<Function<List<double[]>, Iterable<double[]>>>() {
 				}, //
-				new Nil[] { n }, //
+				new Nil[] { l }, //
 				n//
 		);
 

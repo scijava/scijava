@@ -46,7 +46,7 @@ public class TestOps {
 
 	// AdaptersTest
 
-	@Plugin(type = Op.class, name = "test.adapters")
+	@Plugin(type = Op.class, name = "test.adaptersC")
 	@Parameter(key = "in1")
 	@Parameter(key = "in2")
 	@Parameter(key = "out", itemIO = ItemIO.BOTH)
@@ -58,7 +58,7 @@ public class TestOps {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "test.adapters")
+	@Plugin(type = Op.class, name = "test.adaptersF")
 	@Parameter(key = "in1")
 	@Parameter(key = "in2")
 	@Parameter(key = "out", itemIO = ItemIO.OUTPUT)

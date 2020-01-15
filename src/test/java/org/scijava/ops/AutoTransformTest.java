@@ -75,7 +75,26 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 //	}
 
 	@Test
-	public void autoCompToFuncAndLift() {
+	public void autoCompToFuncAndLiftIterableToIterable() {
+		// check transformation as a Function<Iterable, Iterable>
+		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {
+		};
+
+		Function<Iterable<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
+				"test.liftSqrt", new Nil<Function<Iterable<double[]>, Iterable<double[]>>>() {
+				}, //
+				new Nil[] { n }, //
+				n//
+		);
+
+		Iterable<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
+		double[] resArray = StreamSupport.stream(res.spliterator(), false).flatMapToDouble(ds -> Arrays.stream(ds)).toArray();
+		arrayEquals(resArray, 2.0, 2.0, 5.0);
+	}
+	
+	@Test
+	public void autoCompToFuncAndLiftListToIterable() {
+		// check transformation as a Function<List, Iterable>
 		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {
 		};
 		Nil<List<double[]>> l = new Nil<List<double[]>>() {
@@ -89,6 +108,23 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		);
 
 		Iterable<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
+		double[] resArray = StreamSupport.stream(res.spliterator(), false).flatMapToDouble(ds -> Arrays.stream(ds)).toArray();
+		arrayEquals(resArray, 2.0, 2.0, 5.0);
+	}
+
+	@Test
+	public void autoCompToFuncAndLiftListToList() {
+		Nil<List<double[]>> l = new Nil<List<double[]>>() {
+		};
+		// check transformation as a Function<List, List>
+		Function<List<double[]>, List<double[]>> sqrtListFunction = ops.findOp( //
+				"test.liftSqrt", new Nil<Function<List<double[]>, List<double[]>>>() {
+				}, //
+				new Nil[] { l }, //
+				l//
+		);
+
+		List<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
 		double[] resArray = StreamSupport.stream(res.spliterator(), false).flatMapToDouble(ds -> Arrays.stream(ds)).toArray();
 		arrayEquals(resArray, 2.0, 2.0, 5.0);
 	}

@@ -34,6 +34,7 @@
 
 package org.scijava.ops.adapt.complexLift;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.core.Priority;
@@ -58,15 +59,15 @@ public class ComputersToFunctionsAndLift {
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
 	public static class Computer1ToFunction1AndLiftViaSource<I, O>
-			implements Function<Computers.Arity1<I, O>, Function<Iterable<I>, Iterable<O>>> {
+			implements Function<Computers.Arity1<I, O>, Function<Iterable<I>, List<O>>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Producer<O> creator;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Function<I, O>, Function<Iterable<I>, Iterable<O>>> lifter;
+		Function<Function<I, O>, Function<Iterable<I>, List<O>>> lifter;
 
 		@Override
-		public Function<Iterable<I>, Iterable<O>> apply(Computers.Arity1<I, O> computer) {
+		public Function<Iterable<I>, List<O>> apply(Computers.Arity1<I, O> computer) {
 			Function<I, O> adapted = (in) -> {
 				O out = creator.create();
 				computer.compute(in, out);
@@ -81,15 +82,15 @@ public class ComputersToFunctionsAndLift {
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
 	public static class Computer1ToFunction1AndLiftViaFunction<I, O>
-			implements Function<Computers.Arity1<I, O>, Function<Iterable<I>, Iterable<O>>> {
+			implements Function<Computers.Arity1<I, O>, Function<Iterable<I>, List<O>>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I, O> creator;
 		@OpDependency(name = "adapt", adaptable = false)
-		Function<Function<I, O>, Function<Iterable<I>, Iterable<O>>> lifter;
+		Function<Function<I, O>, Function<Iterable<I>, List<O>>> lifter;
 
 		@Override
-		public Function<Iterable<I>, Iterable<O>> apply(Computers.Arity1<I, O> computer) {
+		public Function<Iterable<I>, List<O>> apply(Computers.Arity1<I, O> computer) {
 			Function<I, O> adapted = (in) -> {
 				O out = creator.apply(in);
 				computer.compute(in, out);

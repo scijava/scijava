@@ -67,7 +67,7 @@ public class FunctionToIterables$classGenerics.call($maxArity) {
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Function<I, O>, Function<Iterable<I>, Iterable<O>>> liftFunction1 = (function) -> {
+	public final Function<Function<I, O>, Function<Iterable<I>, List<O>>> liftFunction1 = (function) -> {
 		return iter -> Streams.stream(iter).map(function).collect(Collectors.toList());
 	};
 

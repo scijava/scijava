@@ -72,7 +72,7 @@ public class OpBuilderTestOps {
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
 	// ARITY $arity
-	@OpField(names = "test.mulArrays")
+	@OpField(names = "test.mulArrays${arity}_${a}")
 	public final ${inplaceType.call($arity, $a)}${arrayGenerics.call($arity)} powDoubles${arity}_${a} = ($inplaceArgs.call($arity, $a)) -> {
 			for(int i = 0; i < io.length; i++) {
 #foreach($i in $inputOnlyInplaceArgs.call($arity, $a))

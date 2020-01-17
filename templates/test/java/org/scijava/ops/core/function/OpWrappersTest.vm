@@ -54,7 +54,7 @@ public class OpWrappersTest extends AbstractTestEnvironment{
 	@Test
 	public void testWrapInplace$inplaceSuffix.call($arity, $a)() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
-		$inplaceType.call($arity, $a)$doubleArrayTypeParams.call($t) op = Inplaces.$matchName.call($arity, $a)(ops, "test.mulArrays", $nilDoubleList.call($t));
+		$inplaceType.call($arity, $a)$doubleArrayTypeParams.call($t) op = Inplaces.$matchName.call($arity, $a)(ops, "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
 		assert(op instanceof GenericTyped);
 	}
 	

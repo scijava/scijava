@@ -171,7 +171,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		final double[] expected = $inplaceExpectedArray.call($arity);
 		final ${inplaceType.call($arity, $i)}${arrayGenerics.call($arity)} op = //
-				name("test.mulArrays").inType($arrayClassString.call($arity)).${inplaceMethod.call($arity, $i)}();
+				name("test.mulArrays${arity}_${i}").inType($arrayClassString.call($arity)).${inplaceMethod.call($arity, $i)}();
 		op.mutate($args.call($arity));
 		assertTrue(Arrays.equals($inplaceActualArg.call($arity, $i), expected));
 	}
@@ -226,7 +226,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 #end
 		double[] expected = $inplaceExpectedArray.call($arity);
 		final ${inplaceType.call($arity, $i)}${arrayGenerics.call($arity)} op = //
-				name("test.mulArrays").input($args.call($arity)).${inplaceMethod.call($arity, $i)}();
+				name("test.mulArrays${arity}_${i}").input($args.call($arity)).${inplaceMethod.call($arity, $i)}();
 		op.mutate($args.call($arity));
 		assertTrue(Arrays.equals(expected, $functionInputName.call($arity, $i)));
 	}
@@ -251,7 +251,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] $functionInputName.call($arity, $a) = { 1, 2, 3 };
 #end
 		final double[] expected = $inplaceExpectedArray.call($arity);
-		name("test.mulArrays").input($args.call($arity)).${mutateMethod.call($arity, $i)}();
+		name("test.mulArrays${arity}_${i}").input($args.call($arity)).${mutateMethod.call($arity, $i)}();
 		assertTrue(Arrays.equals($functionInputName.call($arity, $i), expected));
 	}
 #end

@@ -297,9 +297,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
-		// TODO: THIS IS WRONG! We need the OpInfo of the output of the adaptation!
-		// This gives the OpInfo of the original (unadapted) op!
-		OpInfo adaptedInfo = adaptation == null ? null : adaptation.srcInfo();
+		OpInfo adaptedInfo = adaptation == null ? null : adaptation.opInfo();
 		Object wrappedOp = wrapOp(op, match, adaptedInfo);
 		return wrappedOp;
 	}
@@ -338,12 +336,13 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				final Object fromOp = srcCandidate.opInfo().createOpInstance(srcDependencies).object();
 
 				// get adapted Op by applying adaptor on unadapted Op, then return
-				// TODO: create OpInfo for transformed Op (everything the same except
-				// types/param IO status)
 				// TODO: can we make this safer?
 				@SuppressWarnings("unchecked")
 				Object toOp = ((Function<Object, Object>) adaptorOp).apply(fromOp);
-				return new AdaptedOp(toOp, srcCandidate.opInfo(), adaptor.opInfo());
+				// construct type of adapted op
+				Type opType = Types.substituteTypeVariables(adaptor.opInfo().output().getType(),
+						srcCandidate.typeVarAssigns());
+				return new AdaptedOp(toOp, opType, srcCandidate.opInfo(), adaptor.opInfo());
 			} catch (OpMatchingException e1) {
 				continue;
 			}

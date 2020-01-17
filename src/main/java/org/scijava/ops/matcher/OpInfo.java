@@ -1,6 +1,7 @@
 
 package org.scijava.ops.matcher;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -52,4 +53,6 @@ public interface OpInfo {
 	// TODO Consider if we really want to keep the following methods.
 	boolean isValid();
 	ValidityException getValidityException();
+	
+	AnnotatedElement getAnnotationBearer();
 }

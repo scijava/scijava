@@ -1,6 +1,9 @@
 
 package org.scijava.ops.transform;
 
+import java.lang.reflect.Type;
+
+import org.scijava.ops.matcher.OpAdaptationInfo;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpInfo;
 
@@ -8,19 +11,24 @@ import org.scijava.ops.matcher.OpInfo;
  * Wrapper class to match a {@link OpTransformation} with a matching
  * {@link OpCandidate}.
  * 
- * @author David Kolb
  * @author Gabriel Selzer
  */
 public class AdaptedOp {
 
-	Object op;
-	OpInfo srcInfo;
-	OpInfo adaptorInfo;
+	private Object op;
+	private Type type;
+	private OpInfo srcInfo;
+	private OpInfo adaptorInfo;
 
-	public AdaptedOp(Object op,  OpInfo srcInfo, OpInfo adaptorInfo) {
+	private OpInfo opInfo;
+
+	public AdaptedOp(Object op, Type type, OpInfo srcInfo, OpInfo adaptorInfo) {
 		this.op = op;
+		this.type = type;
 		this.srcInfo = srcInfo;
 		this.adaptorInfo= adaptorInfo;
+		this.opInfo = new OpAdaptationInfo(srcInfo, this.type);
+
 	}
 	
 	public Object op() {
@@ -33,6 +41,10 @@ public class AdaptedOp {
 
 	public OpInfo adaptorInfo() {
 		return adaptorInfo;
+	}
+	
+	public OpInfo opInfo() {
+		return opInfo;
 	}
 
 	@Override

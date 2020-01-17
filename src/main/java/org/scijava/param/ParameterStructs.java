@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import org.scijava.ops.FieldOpDependencyMember;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
+import org.scijava.ops.matcher.OpInfo;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -80,6 +81,12 @@ public final class ParameterStructs {
 		final List<Member<?>> items = parse(field);
 		return () -> items;
 	}
+	
+	//TODO: Javadoc
+	public static Struct structOf(final OpInfo opInfo, final Type newType) throws ValidityException {
+		final List<Member<?>> items = parse(opInfo, newType);
+		return () -> items;
+	}
 
 	/**
 	 * Parses the specified functional class for @{@link Parameter} annotations. This consists of the following steps:
@@ -113,7 +120,7 @@ public final class ParameterStructs {
 		// Parse class level (i.e., generic) @Parameter annotations.
 		final Class<?> paramsClass = findParametersDeclaration(type);
 		if (paramsClass != null) {
-			parseFunctionalParameters(items, names, problems, paramsClass, type);
+			parseFunctionalParameters(items, names, problems, paramsClass, type, false);
 		}
 
 		// Parse field level @OpDependency annotations.
@@ -145,7 +152,23 @@ public final class ParameterStructs {
 		final Type fieldType = Types.fieldType(field, c);
 
 		checkModifiers(field.toString() + ": ", problems, field.getModifiers(), false, Modifier.FINAL);
-		parseFunctionalParameters(items, names, problems, field, fieldType);
+		parseFunctionalParameters(items, names, problems, field, fieldType, false);
+
+		// Fail if there were any problems.
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
+		}
+
+		return items;
+	}
+
+	//TODO: Javadoc
+	public static List<Member<?>> parse(final OpInfo opInfo, final Type newType) throws ValidityException {
+		final ArrayList<Member<?>> items = new ArrayList<>();
+		final ArrayList<ValidityProblem> problems = new ArrayList<>();
+		final Set<String> names = new HashSet<>();
+
+		parseFunctionalParameters(items, names, problems, opInfo.getAnnotationBearer(), newType, true);
 
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {
@@ -311,7 +334,7 @@ public final class ParameterStructs {
 	}
 	
 	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
-			AnnotatedElement annotationBearer, Type type) {
+			AnnotatedElement annotationBearer, Type type, final boolean synthesizeAnnotations) {
 		//Search for the functional method of 'type' and map its signature to ItemIO
 		List<FunctionalMethodType> fmts = findFunctionalMethodTypes(type);
 		if (fmts == null) {
@@ -322,7 +345,7 @@ public final class ParameterStructs {
 		// Get parameter annotations (may not be present)
 		Parameter[] annotations = AnnotationUtils.parameters(annotationBearer);
 		// 'type' is annotated, resolve ItemIO.AUTO by matching it to the signature of the functional method
-		if (annotations.length > 0) {
+		if (annotations.length > 0 && !synthesizeAnnotations) {
 			if (annotations.length != fmts.size()) {
 				String fmtIOs = Arrays.deepToString(fmts.stream().map(fmt -> fmt.itemIO()).toArray(ItemIO[]::new));
 				problems.add(new ValidityProblem("The number of inferred functional method types does not match "

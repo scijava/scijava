@@ -34,9 +34,10 @@
 
 package org.scijava.ops.adapt.lift;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -50,147 +51,192 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 	public void testFunction1ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(1., 2., 3.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in).outType(new Nil<List<Double>>() {})
-				.apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction2ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(2., 4., 6.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in).outType(new Nil<List<Double>>() {})
-				.apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction3ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(3., 6., 9.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction4ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(4., 8., 12.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction5ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(5., 10., 15.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction6ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(6., 12., 18.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction7ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(7., 14., 21.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction8ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(8., 16., 24.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction9ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(9., 18., 27.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction10ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(10., 20., 30.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction11ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(11., 22., 33.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction12ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(12., 24., 36.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles")
-				.input(in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction13ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(13., 26., 39.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles")
-				.input(in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction14ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(14., 28., 42.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles")
-				.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<List<Double>>() {})
-				.apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction15ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(15., 30., 45.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles")
-				.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<List<Double>>() {})
-				.apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 	@Test
 	public void testFunction16ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = Arrays.asList(16., 32., 48.);
-		List<Double> output = new OpBuilder(ops, "test.addDoubles")
-				.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in)
-				.outType(new Nil<List<Double>>() {}).apply();
-		assertArrayEquals(expected.toArray(), output.toArray());
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterator<Double> itrexp = expected.iterator();
+		Iterator<Double> itrout = output.iterator();
+		while (itrexp.hasNext()) {
+			assertEquals(itrexp.next(), itrout.next(), 0);
+		}
 	}
 
 }

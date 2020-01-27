@@ -41,6 +41,7 @@ import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
 
+//TODO: think about removing this class
 public class AutoTransformTest extends AbstractTestEnvironment {
 
 	private static Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {};
@@ -74,22 +75,6 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		sqrtFunction.compute(Arrays.asList(new double[] {0.0, 4.0, 16.0}), Arrays.asList(new double[] {0.0, 4.0, 16.0}), res);
 		arrayEquals(res.iterator().next(), 0.0, 8.0, 16.0);
 	}
-
-	// TODO: change this to use an Op that didn't take a secondary parameter
-	// @Test
-	// public void autoLiftFuncToArray() {
-	// Function<Double[], Double[]> power3ArraysFunc = ops.findOp( //
-	// "test.secondaryInputsFunction", new Nil<Function<Double[], Double[]>>() {
-	// }, //
-	// new Nil[] { Nil.of(Double[].class), Nil.of(double.class) }, //
-	// Nil.of(Double[].class), //
-	// 3.0//
-	// );
-	//
-	// Double[] result = power3ArraysFunc.apply(new Double[] { 1.0, 2.0, 3.0 });
-	// assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0,
-	// 8.0, 27.0);
-	// }
 
 	@Test
 	public void autoCompToFuncAndLiftIterableToIterable() {
@@ -128,19 +113,4 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		arrayEquals(resArray, 2.0, 2.0, 5.0);
 	}
 
-	@Test
-	public void autoCompToFuncAndLiftListToList() {
-		Nil<List<double[]>> l = new Nil<List<double[]>>() {};
-		// check transformation as a Function<List, List>
-		Function<List<double[]>, List<double[]>> sqrtListFunction = ops.findOp( //
-				"test.liftSqrt", new Nil<Function<List<double[]>, List<double[]>>>() {}, //
-				new Nil[] { l }, //
-				l//
-		);
-
-		List<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
-		double[] resArray = StreamSupport.stream(res.spliterator(), false).flatMapToDouble(ds -> Arrays.stream(ds))
-				.toArray();
-		arrayEquals(resArray, 2.0, 2.0, 5.0);
-	}
 }

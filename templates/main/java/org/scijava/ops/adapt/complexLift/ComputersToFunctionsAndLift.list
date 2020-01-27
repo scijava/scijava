@@ -5,7 +5,7 @@ arities = (1..maxArity).collect()
 
 iterableGenerics = ```
 { arity ->
-  '<' + String.join(', ', genericParamTypes(arity).stream().map{a -> a == 'O' ? 'List<O>' : 'Iterable<' + a + '>'}.collect()) + '>'
+  '<' + String.join(', ', genericParamTypes(arity).stream().map{a -> 'Iterable<' + a + '>'}.collect()) + '>'
 }
 ```
 classGenerics = ```

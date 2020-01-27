@@ -32,32 +32,35 @@
 * corresponding template in templates/ and rerun bin/generate.groovy.
 */
 
-package org.scijava.ops.adapt.lift;
+package org.scijava.ops.adapt.complexLift;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
 
-public class FunctionToIterablesTest extends AbstractTestEnvironment {
+/**
+ * Tests the adaptation of {@link Computers} running on a type into
+ * {@link Computers} running on an {@link Iterable} of that type.
+ * 
+ * @author Gabriel Selzer
+ *
+ */
+public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 
 #foreach($arity in [1..$maxArity])
 	@Test
-	public void testFunction${arity}ToIterables() {
-		List<Double> in = Arrays.asList(1., 2., 3.);
-		List<Double> expected = $inplaceExpectedList.call($arity)
-		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input($inputList.call($arity)).outType(new  Nil<Iterable<Double>>() {}).apply();		
-		Iterator<Double> itrexp = expected.iterator();
-		Iterator<Double> itrout = output.iterator();
-		while (itrexp.hasNext()) {
-			assertEquals(itrexp.next(), itrout.next(), 0);
-		}
+	public void testComputer${arity}ToIterables() {
+		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
+		final List<double[]> expected = Arrays.asList(new double[] $expectedList.call($arity));
+		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input($inputList.call($arity)).outType(new Nil<Iterable<double[]>>(){}).apply();
+		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
 #end

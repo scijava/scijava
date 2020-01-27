@@ -32,33 +32,26 @@
 * corresponding template in templates/ and rerun bin/generate.groovy.
 */
 
-package org.scijava.ops.adapt.lift;
-
-import static org.junit.Assert.assertEquals;
+package org.scijava.ops.adapt.complexLift;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.ops.types.Nil;
 
-public class FunctionToIterablesTest extends AbstractTestEnvironment {
-
+public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 #foreach($arity in [1..$maxArity])
-	@Test
-	public void testFunction${arity}ToIterables() {
-		List<Double> in = Arrays.asList(1., 2., 3.);
-		List<Double> expected = $inplaceExpectedList.call($arity)
-		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input($inputList.call($arity)).outType(new  Nil<Iterable<Double>>() {}).apply();		
-		Iterator<Double> itrexp = expected.iterator();
-		Iterator<Double> itrout = output.iterator();
-		while (itrexp.hasNext()) {
-			assertEquals(itrexp.next(), itrout.next(), 0);
-		}
-	}
 
+	@Test
+	public void testFunction${arity}ToComputer${arity}() {
+		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
+		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
+		new OpBuilder(ops, "test.FtC").input($inList.call($arity)).output(output).compute();
+		Assert.assertArrayEquals(new double[] $expectedValue.call($arity), output.get(0), 0);
+	}
 #end
 }
+

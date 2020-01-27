@@ -34,14 +34,9 @@
 
 package org.scijava.ops.adapt.lift;
 
-import com.google.common.collect.Streams;
-
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
@@ -64,387 +59,247 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 	// NOTE: we cannot convert Producers since there is no way to determine the
 	// length of the output Iterable
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Function<I, O>, Function<Iterable<I>, List<O>>> liftFunction1 = (function) -> {
-		return iter -> Streams.stream(iter).map(function).collect(Collectors.toList());
+	public final Function<Function<I, O>, Function<Iterable<I>, Iterable<O>>> liftFunction1 = (function) -> {
+		return (in1) -> lazyIterable(itrs -> function.apply((I) itrs[0].next()), in1);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<BiFunction<I1, I2, O>, BiFunction<Iterable<I1>, Iterable<I2>, List<O>>> liftFunction2 = (
+	public final Function<BiFunction<I1, I2, O>, BiFunction<Iterable<I1>, Iterable<I2>, Iterable<O>>> liftFunction2 = (
 			function) -> {
-		return (in1, in2) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next()));
-			}
-			return out;
-		};
+		return (in1, in2) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next()), in1, in2);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, List<O>>> liftFunction3 = (
+	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>> liftFunction3 = (
 			function) -> {
-		return (in1, in2, in3) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next()), in1, in2, in3);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, List<O>>> liftFunction4 = (
+	public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>> liftFunction4 = (
 			function) -> {
-		return (in1, in2, in3, in4) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(),
+				(I3) itrs[2].next(), (I4) itrs[3].next()), in1, in2, in3, in4);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, List<O>>> liftFunction5 = (
+	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>> liftFunction5 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(),
+				(I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next()), in1, in2, in3, in4,
+				in5);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, List<O>>> liftFunction6 = (
+	public final Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>> liftFunction6 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5,
+				in6) -> lazyIterable(
+						itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+								(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next()),
+						in1, in2, in3, in4, in5, in6);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, List<O>>> liftFunction7 = (
+	public final Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>> liftFunction7 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next()),
+				in1, in2, in3, in4, in5, in6, in7);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, List<O>>> liftFunction8 = (
+	public final Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>> liftFunction8 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7,
+				in8) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(),
+						(I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(),
+						(I7) itrs[6].next(), (I8) itrs[7].next()), in1, in2, in3, in4, in5, in6, in7, in8);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, List<O>>> liftFunction9 = (
+	public final Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>> liftFunction9 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8,
+				in9) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(),
+						(I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(),
+						(I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next()), in1, in2, in3, in4, in5, in6,
+						in7, in8, in9);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, List<O>>> liftFunction10 = (
+	public final Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>> liftFunction10 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(),
+						(I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next()),
+				in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, List<O>>> liftFunction11 = (
+	public final Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>> liftFunction11 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			Iterator<I11> itr11 = in11.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()
-					&& itr11.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next(), itr11.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(),
+						(I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next()),
+				in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, List<O>>> liftFunction12 = (
+	public final Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>> liftFunction12 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			Iterator<I11> itr11 = in11.iterator();
-			Iterator<I12> itr12 = in12.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()
-					&& itr11.hasNext() && itr12.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next(), itr11.next(), itr12.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11,
+				in12) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(),
+						(I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(),
+						(I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(),
+						(I11) itrs[10].next(), (I12) itrs[11].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9,
+						in10, in11, in12);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, List<O>>> liftFunction13 = (
+	public final Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>> liftFunction13 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			Iterator<I11> itr11 = in11.iterator();
-			Iterator<I12> itr12 = in12.iterator();
-			Iterator<I13> itr13 = in13.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()
-					&& itr11.hasNext() && itr12.hasNext() && itr13.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next(), itr11.next(), itr12.next(), itr13.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(),
+						(I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(),
+						(I12) itrs[11].next(), (I13) itrs[12].next()),
+				in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, List<O>>> liftFunction14 = (
+	public final Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>> liftFunction14 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			Iterator<I11> itr11 = in11.iterator();
-			Iterator<I12> itr12 = in12.iterator();
-			Iterator<I13> itr13 = in13.iterator();
-			Iterator<I14> itr14 = in14.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()
-					&& itr11.hasNext() && itr12.hasNext() && itr13.hasNext() && itr14.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next(), itr11.next(), itr12.next(), itr13.next(),
-						itr14.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(),
+						(I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(),
+						(I12) itrs[11].next(), (I13) itrs[12].next(), (I14) itrs[13].next()),
+				in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, List<O>>> liftFunction15 = (
+	public final Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>> liftFunction15 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			Iterator<I11> itr11 = in11.iterator();
-			Iterator<I12> itr12 = in12.iterator();
-			Iterator<I13> itr13 = in13.iterator();
-			Iterator<I14> itr14 = in14.iterator();
-			Iterator<I15> itr15 = in15.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()
-					&& itr11.hasNext() && itr12.hasNext() && itr13.hasNext() && itr14.hasNext() && itr15.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next(), itr11.next(), itr12.next(), itr13.next(),
-						itr14.next(), itr15.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(),
+						(I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(),
+						(I12) itrs[11].next(), (I13) itrs[12].next(), (I14) itrs[13].next(), (I15) itrs[14].next()),
+				in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 	};
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, List<O>>> liftFunction16 = (
+	public final Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>> liftFunction16 = (
 			function) -> {
-		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
-			Iterator<I1> itr1 = in1.iterator();
-			Iterator<I2> itr2 = in2.iterator();
-			Iterator<I3> itr3 = in3.iterator();
-			Iterator<I4> itr4 = in4.iterator();
-			Iterator<I5> itr5 = in5.iterator();
-			Iterator<I6> itr6 = in6.iterator();
-			Iterator<I7> itr7 = in7.iterator();
-			Iterator<I8> itr8 = in8.iterator();
-			Iterator<I9> itr9 = in9.iterator();
-			Iterator<I10> itr10 = in10.iterator();
-			Iterator<I11> itr11 = in11.iterator();
-			Iterator<I12> itr12 = in12.iterator();
-			Iterator<I13> itr13 = in13.iterator();
-			Iterator<I14> itr14 = in14.iterator();
-			Iterator<I15> itr15 = in15.iterator();
-			Iterator<I16> itr16 = in16.iterator();
-			List<O> out = new ArrayList<>();
-			while (itr1.hasNext() && itr2.hasNext() && itr3.hasNext() && itr4.hasNext() && itr5.hasNext()
-					&& itr6.hasNext() && itr7.hasNext() && itr8.hasNext() && itr9.hasNext() && itr10.hasNext()
-					&& itr11.hasNext() && itr12.hasNext() && itr13.hasNext() && itr14.hasNext() && itr15.hasNext()
-					&& itr16.hasNext()) {
-				out.add(function.apply(itr1.next(), itr2.next(), itr3.next(), itr4.next(), itr5.next(), itr6.next(),
-						itr7.next(), itr8.next(), itr9.next(), itr10.next(), itr11.next(), itr12.next(), itr13.next(),
-						itr14.next(), itr15.next(), itr16.next()));
-			}
-			return out;
-		};
+		return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> lazyIterable(
+				itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(),
+						(I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(),
+						(I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(),
+						(I12) itrs[11].next(), (I13) itrs[12].next(), (I14) itrs[13].next(), (I15) itrs[14].next(),
+						(I16) itrs[15].next()),
+				in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 	};
 
+	/**
+	 * Lazily zips N {@link Iterable}s into one {@link Iterable} through the use of
+	 * {@code nexter}
+	 * 
+	 * @param <E>
+	 *            - the output type of the function wrapped by {@code nexter}
+	 * @param nexter
+	 *            a {@link Function} that wraps some other N-arity {@link Function}.
+	 *            It is assumed that the arity of the wrapped {@link Function} is
+	 *            equal to the length of {@code iterables}. {@code nexter} can,
+	 *            given a list of {@link Iterator}s (these will be iterators on
+	 *            {@code iterables}), call the wrapped function and return the
+	 *            output.
+	 * @param iterables
+	 *            the list of {@link Iterable}s that wil sequentially be iterated
+	 *            over usignd {@code nexter}
+	 * @return {@link Iterable} generated lazily using {@code nexter}.
+	 */
+	static <E> Iterable<E> lazyIterable(final Function<Iterator<?>[], E> nexter, final Iterable<?>... iterables) {
+		return new Iterable<E>() {
+
+			@Override
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					private Iterator<?>[] iterators;
+					{
+						iterators = new Iterator<?>[iterables.length];
+						for (int i = 0; i < iterables.length; i++)
+							iterators[i] = iterables[i].iterator();
+					}
+
+					@Override
+					public boolean hasNext() {
+						for (Iterator<?> itr : iterators)
+							if (!itr.hasNext())
+								return false;
+						return true;
+					}
+
+					@Override
+					public E next() {
+						return nexter.apply(iterators);
+					}
+
+				};
+			}
+		};
+	}
 }

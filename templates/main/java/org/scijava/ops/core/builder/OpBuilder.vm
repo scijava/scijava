@@ -98,6 +98,23 @@ public class OpBuilder {
 		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj.get()));
 	}
 
+	private void checkComputerRefs(Object... objects) {
+		checkRefs(objects.length - 1, "Output", objects);
+	}
+
+	private void checkInplaceRefs(int inplaceNo, Object... objects) {
+		checkRefs(inplaceNo - 1, "Mutable input " + inplaceNo, objects);
+	}
+
+	private void checkRefs(int mutableIndex, String label, Object... objects) {
+		for (int i = 0; i < objects.length; i++) {
+			if (i == mutableIndex) continue;
+			if (objects[mutableIndex] == objects[i]) {
+				throw new IllegalArgumentException(label +
+					" cannot be same reference as input #" + (i + 1));
+			}
+		}
+	}
 	
 	/*
 	 * -- HELPER CLASSES --
@@ -359,6 +376,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity${arity}_IV_OV$generics.call($arity) output(final O out) {
+			checkComputerRefs($inputArgsFromReferences.call($arity), out);
 			return new Arity${arity}_IV_OV<>($inputArgsFromReferences.call($arity), out);
 		}
 
@@ -376,6 +394,7 @@ public class OpBuilder {
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
+			checkInplaceRefs($a, $inputObjects.call($arity));
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypesFromArgs.call($arity));
 		}
 #end

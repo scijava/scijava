@@ -92,3 +92,8 @@ mutateParams = ```
   String.join(', ', genericsList(arity, io).stream().map{a -> a.substring(1) == 'O' ? "io" : "in${a.substring(1)}"}.collect())
   }
 ```
+mutateTempParams = ```
+{ arity, io ->
+  String.join(', ', genericsList(arity, io).stream().map{a -> a.substring(1) == 'O' ? "temp" : "in${a.substring(1)}"}.collect())
+  }
+```

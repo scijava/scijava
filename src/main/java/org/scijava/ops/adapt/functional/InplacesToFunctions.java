@@ -37,8 +37,11 @@ package org.scijava.ops.adapt.functional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpField;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.param.Parameter;
@@ -53,1364 +56,2860 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = OpCollection.class)
 public class InplacesToFunctions<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> {
 
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity1<IO>, Function<IO, IO>> inplace1ToFunction1 = (inplace) -> {
-		return (IO io) -> {
-			inplace.mutate(io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity2_1<IO, I2>, BiFunction<IO, I2, IO>> inplace2_1ToFunction2 = (inplace) -> {
-		return (IO io, I2 in2) -> {
-			inplace.mutate(io, in2);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity2_2<I1, IO>, BiFunction<I1, IO, IO>> inplace2_2ToFunction2 = (inplace) -> {
-		return (I1 in1, IO io) -> {
-			inplace.mutate(in1, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity3_1<IO, I2, I3>, Functions.Arity3<IO, I2, I3, IO>> inplace3_1ToFunction3 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3) -> {
-			inplace.mutate(io, in2, in3);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity3_2<I1, IO, I3>, Functions.Arity3<I1, IO, I3, IO>> inplace3_2ToFunction3 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3) -> {
-			inplace.mutate(in1, io, in3);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity3_3<I1, I2, IO>, Functions.Arity3<I1, I2, IO, IO>> inplace3_3ToFunction3 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io) -> {
-			inplace.mutate(in1, in2, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity4_1<IO, I2, I3, I4>, Functions.Arity4<IO, I2, I3, I4, IO>> inplace4_1ToFunction4 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4) -> {
-			inplace.mutate(io, in2, in3, in4);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity4_2<I1, IO, I3, I4>, Functions.Arity4<I1, IO, I3, I4, IO>> inplace4_2ToFunction4 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4) -> {
-			inplace.mutate(in1, io, in3, in4);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity4_3<I1, I2, IO, I4>, Functions.Arity4<I1, I2, IO, I4, IO>> inplace4_3ToFunction4 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4) -> {
-			inplace.mutate(in1, in2, io, in4);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity4_4<I1, I2, I3, IO>, Functions.Arity4<I1, I2, I3, IO, IO>> inplace4_4ToFunction4 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io) -> {
-			inplace.mutate(in1, in2, in3, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity5_1<IO, I2, I3, I4, I5>, Functions.Arity5<IO, I2, I3, I4, I5, IO>> inplace5_1ToFunction5 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5) -> {
-			inplace.mutate(io, in2, in3, in4, in5);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity5_2<I1, IO, I3, I4, I5>, Functions.Arity5<I1, IO, I3, I4, I5, IO>> inplace5_2ToFunction5 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5) -> {
-			inplace.mutate(in1, io, in3, in4, in5);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity5_3<I1, I2, IO, I4, I5>, Functions.Arity5<I1, I2, IO, I4, I5, IO>> inplace5_3ToFunction5 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5) -> {
-			inplace.mutate(in1, in2, io, in4, in5);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity5_4<I1, I2, I3, IO, I5>, Functions.Arity5<I1, I2, I3, IO, I5, IO>> inplace5_4ToFunction5 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5) -> {
-			inplace.mutate(in1, in2, in3, io, in5);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity5_5<I1, I2, I3, I4, IO>, Functions.Arity5<I1, I2, I3, I4, IO, IO>> inplace5_5ToFunction5 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>, Functions.Arity6<IO, I2, I3, I4, I5, I6, IO>> inplace6_1ToFunction6 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>, Functions.Arity6<I1, IO, I3, I4, I5, I6, IO>> inplace6_2ToFunction6 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>, Functions.Arity6<I1, I2, IO, I4, I5, I6, IO>> inplace6_3ToFunction6 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>, Functions.Arity6<I1, I2, I3, IO, I5, I6, IO>> inplace6_4ToFunction6 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>, Functions.Arity6<I1, I2, I3, I4, IO, I6, IO>> inplace6_5ToFunction6 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>, Functions.Arity6<I1, I2, I3, I4, I5, IO, IO>> inplace6_6ToFunction6 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>, Functions.Arity7<IO, I2, I3, I4, I5, I6, I7, IO>> inplace7_1ToFunction7 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>, Functions.Arity7<I1, IO, I3, I4, I5, I6, I7, IO>> inplace7_2ToFunction7 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>, Functions.Arity7<I1, I2, IO, I4, I5, I6, I7, IO>> inplace7_3ToFunction7 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>, Functions.Arity7<I1, I2, I3, IO, I5, I6, I7, IO>> inplace7_4ToFunction7 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>, Functions.Arity7<I1, I2, I3, I4, IO, I6, I7, IO>> inplace7_5ToFunction7 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>, Functions.Arity7<I1, I2, I3, I4, I5, IO, I7, IO>> inplace7_6ToFunction7 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>, Functions.Arity7<I1, I2, I3, I4, I5, I6, IO, IO>> inplace7_7ToFunction7 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>, Functions.Arity8<IO, I2, I3, I4, I5, I6, I7, I8, IO>> inplace8_1ToFunction8 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>, Functions.Arity8<I1, IO, I3, I4, I5, I6, I7, I8, IO>> inplace8_2ToFunction8 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>, Functions.Arity8<I1, I2, IO, I4, I5, I6, I7, I8, IO>> inplace8_3ToFunction8 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>, Functions.Arity8<I1, I2, I3, IO, I5, I6, I7, I8, IO>> inplace8_4ToFunction8 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>, Functions.Arity8<I1, I2, I3, I4, IO, I6, I7, I8, IO>> inplace8_5ToFunction8 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>, Functions.Arity8<I1, I2, I3, I4, I5, IO, I7, I8, IO>> inplace8_6ToFunction8 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>, Functions.Arity8<I1, I2, I3, I4, I5, I6, IO, I8, IO>> inplace8_7ToFunction8 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>, Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, IO, IO>> inplace8_8ToFunction8 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>, Functions.Arity9<IO, I2, I3, I4, I5, I6, I7, I8, I9, IO>> inplace9_1ToFunction9 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>, Functions.Arity9<I1, IO, I3, I4, I5, I6, I7, I8, I9, IO>> inplace9_2ToFunction9 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>, Functions.Arity9<I1, I2, IO, I4, I5, I6, I7, I8, I9, IO>> inplace9_3ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>, Functions.Arity9<I1, I2, I3, IO, I5, I6, I7, I8, I9, IO>> inplace9_4ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>, Functions.Arity9<I1, I2, I3, I4, IO, I6, I7, I8, I9, IO>> inplace9_5ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>, Functions.Arity9<I1, I2, I3, I4, I5, IO, I7, I8, I9, IO>> inplace9_6ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>, Functions.Arity9<I1, I2, I3, I4, I5, I6, IO, I8, I9, IO>> inplace9_7ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, IO, I9, IO>> inplace9_8ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, IO, IO>> inplace9_9ToFunction9 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>, Functions.Arity10<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> inplace10_1ToFunction10 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>, Functions.Arity10<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, IO>> inplace10_2ToFunction10 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>, Functions.Arity10<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, IO>> inplace10_3ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>, Functions.Arity10<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, IO>> inplace10_4ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>, Functions.Arity10<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, IO>> inplace10_5ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>, Functions.Arity10<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, IO>> inplace10_6ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>, Functions.Arity10<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, IO>> inplace10_7ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, IO>> inplace10_8ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, IO>> inplace10_9ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, IO>> inplace10_10ToFunction10 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> inplace11_1ToFunction11 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> inplace11_2ToFunction11 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, IO>> inplace11_3ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, IO>> inplace11_4ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, IO>> inplace11_5ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, IO>> inplace11_6ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, IO>> inplace11_7ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, IO>> inplace11_8ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, IO>> inplace11_9ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, IO>> inplace11_10ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, IO>> inplace11_11ToFunction11 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> inplace12_1ToFunction12 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> inplace12_2ToFunction12 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> inplace12_3ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, IO>> inplace12_4ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, IO>> inplace12_5ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, IO>> inplace12_6ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, IO>> inplace12_7ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, IO>> inplace12_8ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, IO>> inplace12_9ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, IO>> inplace12_10ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, IO>> inplace12_11ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, IO>> inplace12_12ToFunction12 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> inplace13_1ToFunction13 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> inplace13_2ToFunction13 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> inplace13_3ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> inplace13_4ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, IO>> inplace13_5ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, IO>> inplace13_6ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, IO>> inplace13_7ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, IO>> inplace13_8ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, IO>> inplace13_9ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, IO>> inplace13_10ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, IO>> inplace13_11ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, IO>> inplace13_12ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, IO>> inplace13_13ToFunction13 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_1ToFunction14 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_2ToFunction14 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_3ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_4ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_5ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_6ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, IO>> inplace14_7ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, IO>> inplace14_8ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, IO>> inplace14_9ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, IO>> inplace14_10ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, IO>> inplace14_11ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, IO>> inplace14_12ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, IO>> inplace14_13ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, IO>> inplace14_14ToFunction14 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_1ToFunction15 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_2ToFunction15 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_3ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_4ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_5ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_6ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_7ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, IO>> inplace15_8ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, IO>> inplace15_9ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, IO>> inplace15_10ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, IO>> inplace15_11ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, IO>> inplace15_12ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, IO>> inplace15_13ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, IO>> inplace15_14ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io, I15 in15) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io, in15);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, IO>> inplace15_15ToFunction15 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, io);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_1ToFunction16 = (inplace) -> {
-		return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(io, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_2ToFunction16 = (inplace) -> {
-		return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, io, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_3ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, io, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_4ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, io, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_5ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, io, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_6ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, io, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_7ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, io, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_8ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, io, in9, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16, IO>> inplace16_9ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, io, in10, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16, IO>> inplace16_10ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, io, in11, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16, IO>> inplace16_11ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, io, in12, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16, IO>> inplace16_12ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, io, in13, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16, IO>> inplace16_13ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, io, in14, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16, IO>> inplace16_14ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io, I15 in15, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, io, in15, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16, IO>> inplace16_15ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, IO io, I16 in16) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, io, in16);
-			return io;
-		};
-	};
-
-	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
-	public final Function<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO, IO>> inplace16_16ToFunction16 = (inplace) -> {
-		return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, IO io) -> {
-			inplace.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, io);
-			return io;
-		};
-	};
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace1ToFunction1<IO> implements Function<Inplaces.Arity1<IO>, Function<IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Function<IO, IO> apply(Inplaces.Arity1<IO> t) {
+			return (IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace2_1ToFunction2<IO, I2> implements Function<Inplaces.Arity2_1<IO, I2>, BiFunction<IO, I2, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public BiFunction<IO, I2, IO> apply(Inplaces.Arity2_1<IO, I2> t) {
+			return (IO io, I2 in2) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace2_2ToFunction2<I1, IO> implements Function<Inplaces.Arity2_2<I1, IO>, BiFunction<I1, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public BiFunction<I1, IO, IO> apply(Inplaces.Arity2_2<I1, IO> t) {
+			return (I1 in1, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace3_1ToFunction3<IO, I2, I3> implements Function<Inplaces.Arity3_1<IO, I2, I3>, Functions.Arity3<IO, I2, I3, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity3<IO, I2, I3, IO> apply(Inplaces.Arity3_1<IO, I2, I3> t) {
+			return (IO io, I2 in2, I3 in3) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace3_2ToFunction3<I1, IO, I3> implements Function<Inplaces.Arity3_2<I1, IO, I3>, Functions.Arity3<I1, IO, I3, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity3<I1, IO, I3, IO> apply(Inplaces.Arity3_2<I1, IO, I3> t) {
+			return (I1 in1, IO io, I3 in3) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace3_3ToFunction3<I1, I2, IO> implements Function<Inplaces.Arity3_3<I1, I2, IO>, Functions.Arity3<I1, I2, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity3<I1, I2, IO, IO> apply(Inplaces.Arity3_3<I1, I2, IO> t) {
+			return (I1 in1, I2 in2, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace4_1ToFunction4<IO, I2, I3, I4> implements Function<Inplaces.Arity4_1<IO, I2, I3, I4>, Functions.Arity4<IO, I2, I3, I4, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity4<IO, I2, I3, I4, IO> apply(Inplaces.Arity4_1<IO, I2, I3, I4> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace4_2ToFunction4<I1, IO, I3, I4> implements Function<Inplaces.Arity4_2<I1, IO, I3, I4>, Functions.Arity4<I1, IO, I3, I4, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity4<I1, IO, I3, I4, IO> apply(Inplaces.Arity4_2<I1, IO, I3, I4> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace4_3ToFunction4<I1, I2, IO, I4> implements Function<Inplaces.Arity4_3<I1, I2, IO, I4>, Functions.Arity4<I1, I2, IO, I4, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity4<I1, I2, IO, I4, IO> apply(Inplaces.Arity4_3<I1, I2, IO, I4> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace4_4ToFunction4<I1, I2, I3, IO> implements Function<Inplaces.Arity4_4<I1, I2, I3, IO>, Functions.Arity4<I1, I2, I3, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity4<I1, I2, I3, IO, IO> apply(Inplaces.Arity4_4<I1, I2, I3, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace5_1ToFunction5<IO, I2, I3, I4, I5> implements Function<Inplaces.Arity5_1<IO, I2, I3, I4, I5>, Functions.Arity5<IO, I2, I3, I4, I5, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity5<IO, I2, I3, I4, I5, IO> apply(Inplaces.Arity5_1<IO, I2, I3, I4, I5> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace5_2ToFunction5<I1, IO, I3, I4, I5> implements Function<Inplaces.Arity5_2<I1, IO, I3, I4, I5>, Functions.Arity5<I1, IO, I3, I4, I5, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity5<I1, IO, I3, I4, I5, IO> apply(Inplaces.Arity5_2<I1, IO, I3, I4, I5> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace5_3ToFunction5<I1, I2, IO, I4, I5> implements Function<Inplaces.Arity5_3<I1, I2, IO, I4, I5>, Functions.Arity5<I1, I2, IO, I4, I5, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity5<I1, I2, IO, I4, I5, IO> apply(Inplaces.Arity5_3<I1, I2, IO, I4, I5> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace5_4ToFunction5<I1, I2, I3, IO, I5> implements Function<Inplaces.Arity5_4<I1, I2, I3, IO, I5>, Functions.Arity5<I1, I2, I3, IO, I5, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity5<I1, I2, I3, IO, I5, IO> apply(Inplaces.Arity5_4<I1, I2, I3, IO, I5> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace5_5ToFunction5<I1, I2, I3, I4, IO> implements Function<Inplaces.Arity5_5<I1, I2, I3, I4, IO>, Functions.Arity5<I1, I2, I3, I4, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity5<I1, I2, I3, I4, IO, IO> apply(Inplaces.Arity5_5<I1, I2, I3, I4, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace6_1ToFunction6<IO, I2, I3, I4, I5, I6> implements Function<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>, Functions.Arity6<IO, I2, I3, I4, I5, I6, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity6<IO, I2, I3, I4, I5, I6, IO> apply(Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace6_2ToFunction6<I1, IO, I3, I4, I5, I6> implements Function<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>, Functions.Arity6<I1, IO, I3, I4, I5, I6, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity6<I1, IO, I3, I4, I5, I6, IO> apply(Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace6_3ToFunction6<I1, I2, IO, I4, I5, I6> implements Function<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>, Functions.Arity6<I1, I2, IO, I4, I5, I6, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity6<I1, I2, IO, I4, I5, I6, IO> apply(Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace6_4ToFunction6<I1, I2, I3, IO, I5, I6> implements Function<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>, Functions.Arity6<I1, I2, I3, IO, I5, I6, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity6<I1, I2, I3, IO, I5, I6, IO> apply(Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace6_5ToFunction6<I1, I2, I3, I4, IO, I6> implements Function<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>, Functions.Arity6<I1, I2, I3, I4, IO, I6, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity6<I1, I2, I3, I4, IO, I6, IO> apply(Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace6_6ToFunction6<I1, I2, I3, I4, I5, IO> implements Function<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>, Functions.Arity6<I1, I2, I3, I4, I5, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity6<I1, I2, I3, I4, I5, IO, IO> apply(Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_1ToFunction7<IO, I2, I3, I4, I5, I6, I7> implements Function<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>, Functions.Arity7<IO, I2, I3, I4, I5, I6, I7, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<IO, I2, I3, I4, I5, I6, I7, IO> apply(Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_2ToFunction7<I1, IO, I3, I4, I5, I6, I7> implements Function<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>, Functions.Arity7<I1, IO, I3, I4, I5, I6, I7, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<I1, IO, I3, I4, I5, I6, I7, IO> apply(Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_3ToFunction7<I1, I2, IO, I4, I5, I6, I7> implements Function<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>, Functions.Arity7<I1, I2, IO, I4, I5, I6, I7, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<I1, I2, IO, I4, I5, I6, I7, IO> apply(Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_4ToFunction7<I1, I2, I3, IO, I5, I6, I7> implements Function<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>, Functions.Arity7<I1, I2, I3, IO, I5, I6, I7, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<I1, I2, I3, IO, I5, I6, I7, IO> apply(Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_5ToFunction7<I1, I2, I3, I4, IO, I6, I7> implements Function<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>, Functions.Arity7<I1, I2, I3, I4, IO, I6, I7, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<I1, I2, I3, I4, IO, I6, I7, IO> apply(Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_6ToFunction7<I1, I2, I3, I4, I5, IO, I7> implements Function<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>, Functions.Arity7<I1, I2, I3, I4, I5, IO, I7, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<I1, I2, I3, I4, I5, IO, I7, IO> apply(Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace7_7ToFunction7<I1, I2, I3, I4, I5, I6, IO> implements Function<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>, Functions.Arity7<I1, I2, I3, I4, I5, I6, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity7<I1, I2, I3, I4, I5, I6, IO, IO> apply(Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_1ToFunction8<IO, I2, I3, I4, I5, I6, I7, I8> implements Function<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>, Functions.Arity8<IO, I2, I3, I4, I5, I6, I7, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<IO, I2, I3, I4, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_2ToFunction8<I1, IO, I3, I4, I5, I6, I7, I8> implements Function<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>, Functions.Arity8<I1, IO, I3, I4, I5, I6, I7, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, IO, I3, I4, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_3ToFunction8<I1, I2, IO, I4, I5, I6, I7, I8> implements Function<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>, Functions.Arity8<I1, I2, IO, I4, I5, I6, I7, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, I2, IO, I4, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_4ToFunction8<I1, I2, I3, IO, I5, I6, I7, I8> implements Function<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>, Functions.Arity8<I1, I2, I3, IO, I5, I6, I7, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, I2, I3, IO, I5, I6, I7, I8, IO> apply(Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_5ToFunction8<I1, I2, I3, I4, IO, I6, I7, I8> implements Function<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>, Functions.Arity8<I1, I2, I3, I4, IO, I6, I7, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, I2, I3, I4, IO, I6, I7, I8, IO> apply(Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_6ToFunction8<I1, I2, I3, I4, I5, IO, I7, I8> implements Function<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>, Functions.Arity8<I1, I2, I3, I4, I5, IO, I7, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, I2, I3, I4, I5, IO, I7, I8, IO> apply(Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_7ToFunction8<I1, I2, I3, I4, I5, I6, IO, I8> implements Function<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>, Functions.Arity8<I1, I2, I3, I4, I5, I6, IO, I8, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, I2, I3, I4, I5, I6, IO, I8, IO> apply(Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace8_8ToFunction8<I1, I2, I3, I4, I5, I6, I7, IO> implements Function<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>, Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, IO, IO> apply(Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_1ToFunction9<IO, I2, I3, I4, I5, I6, I7, I8, I9> implements Function<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>, Functions.Arity9<IO, I2, I3, I4, I5, I6, I7, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<IO, I2, I3, I4, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_2ToFunction9<I1, IO, I3, I4, I5, I6, I7, I8, I9> implements Function<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>, Functions.Arity9<I1, IO, I3, I4, I5, I6, I7, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, IO, I3, I4, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_3ToFunction9<I1, I2, IO, I4, I5, I6, I7, I8, I9> implements Function<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>, Functions.Arity9<I1, I2, IO, I4, I5, I6, I7, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, IO, I4, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_4ToFunction9<I1, I2, I3, IO, I5, I6, I7, I8, I9> implements Function<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>, Functions.Arity9<I1, I2, I3, IO, I5, I6, I7, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, I3, IO, I5, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_5ToFunction9<I1, I2, I3, I4, IO, I6, I7, I8, I9> implements Function<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>, Functions.Arity9<I1, I2, I3, I4, IO, I6, I7, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, I3, I4, IO, I6, I7, I8, I9, IO> apply(Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_6ToFunction9<I1, I2, I3, I4, I5, IO, I7, I8, I9> implements Function<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>, Functions.Arity9<I1, I2, I3, I4, I5, IO, I7, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, I3, I4, I5, IO, I7, I8, I9, IO> apply(Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_7ToFunction9<I1, I2, I3, I4, I5, I6, IO, I8, I9> implements Function<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>, Functions.Arity9<I1, I2, I3, I4, I5, I6, IO, I8, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, I3, I4, I5, I6, IO, I8, I9, IO> apply(Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_8ToFunction9<I1, I2, I3, I4, I5, I6, I7, IO, I9> implements Function<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, IO, I9, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, IO, I9, IO> apply(Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace9_9ToFunction9<I1, I2, I3, I4, I5, I6, I7, I8, IO> implements Function<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, IO, IO> apply(Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_1ToFunction10<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> implements Function<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>, Functions.Arity10<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_2ToFunction10<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> implements Function<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>, Functions.Arity10<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_3ToFunction10<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> implements Function<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>, Functions.Arity10<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_4ToFunction10<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> implements Function<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>, Functions.Arity10<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_5ToFunction10<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> implements Function<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>, Functions.Arity10<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_6ToFunction10<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> implements Function<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>, Functions.Arity10<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, IO> apply(Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_7ToFunction10<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> implements Function<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>, Functions.Arity10<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, IO> apply(Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_8ToFunction10<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> implements Function<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, IO> apply(Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_9ToFunction10<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> implements Function<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, IO> apply(Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace10_10ToFunction10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> implements Function<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, IO> apply(Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_1ToFunction11<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> implements Function<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_2ToFunction11<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> implements Function<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_3ToFunction11<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> implements Function<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_4ToFunction11<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> implements Function<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_5ToFunction11<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> implements Function<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_6ToFunction11<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> implements Function<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_7ToFunction11<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> implements Function<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, IO> apply(Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_8ToFunction11<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> implements Function<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, IO> apply(Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_9ToFunction11<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> implements Function<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, IO> apply(Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_10ToFunction11<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> implements Function<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, IO> apply(Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace11_11ToFunction11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> implements Function<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, IO> apply(Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_1ToFunction12<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_2ToFunction12<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_3ToFunction12<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_4ToFunction12<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_5ToFunction12<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_6ToFunction12<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_7ToFunction12<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> implements Function<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_8ToFunction12<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> implements Function<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, IO> apply(Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_9ToFunction12<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> implements Function<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, IO> apply(Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_10ToFunction12<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> implements Function<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, IO> apply(Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_11ToFunction12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> implements Function<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, IO> apply(Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace12_12ToFunction12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> implements Function<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, IO> apply(Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_1ToFunction13<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_2ToFunction13<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_3ToFunction13<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_4ToFunction13<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_5ToFunction13<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_6ToFunction13<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_7ToFunction13<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_8ToFunction13<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> implements Function<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_9ToFunction13<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> implements Function<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, IO> apply(Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_10ToFunction13<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> implements Function<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, IO> apply(Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_11ToFunction13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> implements Function<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, IO> apply(Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_12ToFunction13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> implements Function<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, IO> apply(Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace13_13ToFunction13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> implements Function<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, IO> apply(Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_1ToFunction14<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_2ToFunction14<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_3ToFunction14<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_4ToFunction14<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_5ToFunction14<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_6ToFunction14<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_7ToFunction14<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_8ToFunction14<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_9ToFunction14<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> implements Function<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_10ToFunction14<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> implements Function<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, IO> apply(Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_11ToFunction14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> implements Function<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, IO> apply(Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_12ToFunction14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> implements Function<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, IO> apply(Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_13ToFunction14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> implements Function<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, IO> apply(Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp, in14);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace14_14ToFunction14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> implements Function<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, IO> apply(Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_1ToFunction15<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_2ToFunction15<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_3ToFunction15<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_4ToFunction15<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_5ToFunction15<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_6ToFunction15<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_7ToFunction15<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_8ToFunction15<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_9ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_10ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> implements Function<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_11ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> implements Function<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, IO> apply(Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_12ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> implements Function<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, IO> apply(Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_13ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> implements Function<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, IO> apply(Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp, in14, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_14ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> implements Function<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, IO> apply(Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io, I15 in15) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, temp, in15);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace15_15ToFunction15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> implements Function<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, IO> apply(Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, temp);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_1ToFunction16<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (IO io, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(temp, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_2ToFunction16<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, IO io, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, temp, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_3ToFunction16<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, IO io, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, temp, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_4ToFunction16<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, IO io, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, temp, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_5ToFunction16<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, IO io, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, temp, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_6ToFunction16<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, IO io, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, temp, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_7ToFunction16<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, IO io, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, temp, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_8ToFunction16<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, IO io, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, temp, in9, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_9ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, IO io, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, temp, in10, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_10ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, IO io, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, temp, in11, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_11ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> implements Function<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, IO io, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, temp, in12, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_12ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> implements Function<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16, IO> apply(Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, IO io, I13 in13, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, temp, in13, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_13ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> implements Function<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16, IO> apply(Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, IO io, I14 in14, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, temp, in14, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_14ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> implements Function<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16, IO> apply(Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, IO io, I15 in15, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, temp, in15, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_15ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> implements Function<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16, IO> apply(Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, IO io, I16 in16) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, temp, in16);
+				return temp;
+			};
+		}
+	}
+
+	@Plugin(type = Op.class, name = "adapt")
+	@Parameter(key = "fromOp")
+	@Parameter(key = "toOp")
+	static class Inplace16_16ToFunction16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> implements Function<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO, IO>> {
+		
+		@OpDependency(name = "create", adaptable = false)
+		private Function<IO, IO> createOp;
+		@OpDependency(name = "copy", adaptable = false)
+		private Computers.Arity1<IO, IO> copyOp;
+
+		@Override
+		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO, IO> apply(Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> t) {
+			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, IO io) -> {
+				IO temp = createOp.apply(io);
+				copyOp.accept(io, temp);
+				t.mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, temp);
+				return temp;
+			};
+		}
+	}
 
 }

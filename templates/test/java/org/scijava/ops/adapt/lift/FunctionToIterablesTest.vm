@@ -53,11 +53,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = $inplaceExpectedList.call($arity)
 		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input($inputList.call($arity)).outType(new  Nil<Iterable<Double>>() {}).apply();		
-		Iterator<Double> itrexp = expected.iterator();
-		Iterator<Double> itrout = output.iterator();
-		while (itrexp.hasNext()) {
-			assertEquals(itrexp.next(), itrout.next(), 0);
-		}
+		assertIterationsEqual(expected, output);
 	}
 
 #end

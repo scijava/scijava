@@ -50,7 +50,6 @@ import org.scijava.plugin.Plugin;
  * will stop when one of the {@link Iterable}s runs out of {@link Object}s).
  * 
  * @author Gabriel Selzer
- *
  */
 @Plugin(type = OpCollection.class)
 public class ComputerToIterables$classGenerics.call($maxArity) {
@@ -59,16 +58,17 @@ public class ComputerToIterables$classGenerics.call($maxArity) {
 	@OpField(names = "adapt")
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public final Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> liftComputer$arity = (computer) -> {
-		return ($computeArgs.call($arity)) -> {
+	public final Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> liftComputer$arity = 
+		(computer) -> {
+			return ($computeArgs.call($arity)) -> {
 #foreach($a in $iteratorCtor.call($arity))
-			$a 
+				$a
 #end
-			while($iteratorsHaveNext.call($arity)) {
-				computer.compute($iteratorsNext.call($arity));
-			}
+				while ($iteratorsHaveNext.call($arity)) {
+					computer.compute($iteratorsNext.call($arity));
+				}
+			};
 		};
-	};
 
 #end
 }

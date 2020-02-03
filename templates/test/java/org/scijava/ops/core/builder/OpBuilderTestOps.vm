@@ -54,12 +54,13 @@ public class OpBuilderTestOps {
 	 * The general procedure for these Ops: Given a set of inputs in1, in2, ...,
 	 * inN, The output will be sum(in1, in2, ..., inN).
 	 */
-	
+
 #foreach($arity in [0..$maxArity])
 	// ARITY $arity
 	@OpField(names = "test.addDoubles")
-	public final ${functionArity.call($arity)}${genericDoubles.call($arity)} addDoubles${arity} = ($args.call($arity)) -> ${addDoublesOutput.call($arity)};
-	
+	public final ${functionArity.call($arity)}${genericDoubles.call($arity)} addDoubles${arity} = //
+		($args.call($arity)) -> ${addDoublesOutput.call($arity)};
+
 #end
 
 	/*
@@ -73,14 +74,15 @@ public class OpBuilderTestOps {
 #foreach($a in [1..$arity])
 	// ARITY $arity
 	@OpField(names = "test.mulArrays${arity}_${a}")
-	public final ${inplaceType.call($arity, $a)}${arrayGenerics.call($arity)} powDoubles${arity}_${a} = ($inplaceArgs.call($arity, $a)) -> {
-			for(int i = 0; i < io.length; i++) {
+	public final ${inplaceType.call($arity, $a)}${arrayGenerics.call($arity)} powDoubles${arity}_${a} = //
+		($inplaceArgs.call($arity, $a)) -> {
+			for (int i = 0; i < io.length; i++) { //
 #foreach($i in $inputOnlyInplaceArgs.call($arity, $a))
 				io[i] *= ${i}[i];
 #end
 			}
 		};
-		
+
 #end
 #end
 
@@ -95,14 +97,15 @@ public class OpBuilderTestOps {
 #foreach($arity in [0..$maxArity])
 	// ARITY $arity
 	@OpField(names = "test.addArrays")
-	public final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} addArrays$arity = ($computerArgs.call($arity)) -> {
-		for (int i = 0; i < output.length; i++) {
-			output[i] = 0;
+	public final ${computerArity.call($arity)}${computerArrayGenerics.call($arity)} addArrays$arity = //
+		($computerArgs.call($arity)) -> {
+			for (int i = 0; i < output.length; i++) {
+				output[i] = 0;
 #foreach($i in $argsList.call($arity))
-			output[i] += ${i}[i];
+				output[i] += ${i}[i];
 #end
-		}
-	};
+			}
+		};
 
 #end
 }

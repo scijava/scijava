@@ -34,17 +34,21 @@
 
 package org.scijava.ops.adapt.lift;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 
+/**
+ * Tests the adaptation of {@link Functions} running on a type into
+ * {@link Functions} running on an {@link Iterable} of that type.
+ * 
+ * @author Gabriel Selzer
+ */
 public class FunctionToIterablesTest extends AbstractTestEnvironment {
 
 #foreach($arity in [1..$maxArity])
@@ -52,7 +56,10 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 	public void testFunction${arity}ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = $inplaceExpectedList.call($arity)
-		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles").input($inputList.call($arity)).outType(new  Nil<Iterable<Double>>() {}).apply();		
+		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles") //
+			.input($inputList.call($arity)) //
+			.outType(new Nil<Iterable<Double>>()
+			{}).apply();
 		assertIterationsEqual(expected, output);
 	}
 

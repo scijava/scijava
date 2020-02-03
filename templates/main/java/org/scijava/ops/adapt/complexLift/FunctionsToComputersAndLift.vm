@@ -58,8 +58,9 @@ public class FunctionsToComputersAndLift {
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public static class Function${arity}ToComputer${arity}AndLiftAfter$generics.call($arity)
-			implements Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> {
+	public static class Function${arity}ToComputer${arity}AndLiftAfter$generics.call($arity) implements
+		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>
+	{
 
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$generics.call($arity)> adaptor;
@@ -67,7 +68,9 @@ public class FunctionsToComputersAndLift {
 		Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
 		@Override
-		public $computerArity.call($arity)$iterableGenerics.call($arity) apply($functionArity.call($arity)$generics.call($arity) function) {
+		public $computerArity.call($arity)$iterableGenerics.call($arity) apply(
+			$functionArity.call($arity)$generics.call($arity) function)
+		{
 			return lifter.apply(adaptor.apply(function));
 		}
 
@@ -76,8 +79,9 @@ public class FunctionsToComputersAndLift {
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
 	@Parameter(key = "fromOp")
 	@Parameter(key = "toOp")
-	public static class Function${arity}ToComputer${arity}AndLiftBefore$generics.call($arity)
-			implements Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> {
+	public static class Function${arity}ToComputer${arity}AndLiftBefore$generics.call($arity) implements
+		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>
+	{
 
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<$functionArity.call($arity)$iterableGenerics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> adaptor;
@@ -85,7 +89,9 @@ public class FunctionsToComputersAndLift {
 		Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
 		@Override
-		public $computerArity.call($arity)$iterableGenerics.call($arity) apply($functionArity.call($arity)$generics.call($arity) function) {
+		public $computerArity.call($arity)$iterableGenerics.call($arity) apply(
+			$functionArity.call($arity)$generics.call($arity) function)
+		{
 			return adaptor.apply(lifter.apply(function));
 		}
 

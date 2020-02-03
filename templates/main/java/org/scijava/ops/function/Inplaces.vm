@@ -58,8 +58,8 @@ public final class Inplaces {
 	// -- BEGIN TEMP --
 
 	/**
-	 * All known inplace types and their arities and mutable positions. The entries
-	 * are sorted by arity and mutable position.
+	 * All known inplace types and their arities and mutable positions. The
+	 * entries are sorted by arity and mutable position.
 	 */
 	public static final Map<Class<?>, InplaceInfo> ALL_INPLACES;
 
@@ -79,8 +79,7 @@ public final class Inplaces {
 	 *         inplace type, {@code false} otherwise. <br>
 	 *         Note that only the type itself and not its type hierarchy is
 	 *         considered.
-	 * @throws NullPointerException
-	 *             If {@code type} is {@code null}.
+	 * @throws NullPointerException If {@code type} is {@code null}.
 	 */
 	public static boolean isInplace(Type type) {
 		return ALL_INPLACES.containsKey(Types.raw(type));
@@ -88,23 +87,28 @@ public final class Inplaces {
 
 	public static List<Class<?>> getInplacesOfArity(final int arity) {
 		return Inplaces.ALL_INPLACES.entrySet().stream() //
-				.filter(e -> e.getValue().arity() == arity) //
-				.map(Entry<Class<?>, InplaceInfo>::getKey) //
-				.collect(Collectors.toList());
+			.filter(e -> e.getValue().arity() == arity) //
+			.map(Entry<Class<?>, InplaceInfo>::getKey) //
+			.collect(Collectors.toList());
 	}
+
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity, $a) $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpService ops, final String opName, $matchParams.call($arity, $a)) {
+	public static $generics.call($arity, $a) $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpService ops, final String opName, $matchParams.call($arity, $a))
+	{
 		return matchHelper(ops, opName, ${simplifiedInplace.call($arity, $a)}.class, ioType, new Nil[] {${basicParams.call($arity, $a)}});
 	}
-#end
-#end
 
+#end
+#end
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+	private static <T> T matchHelper(final OpService ops, final String opName,
+		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
+	{
 		final Type[] types = new Type[inTypes.length];
-		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		for (int i = 0; i < inTypes.length; i++)
+			types[i] = inTypes[i].getType();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
 	}
@@ -132,6 +136,7 @@ public final class Inplaces {
 
 	@FunctionalInterface
 	public interface Arity1<IO> extends Consumer<IO> {
+
 		void mutate(@Mutable IO io);
 
 		@Override
@@ -143,22 +148,27 @@ public final class Inplaces {
 #foreach($arity in [2..$maxArity])
 #set($cArity = $arity - 1)
 	@FunctionalInterface
-	public interface Arity${arity}$allMutableGenerics.call($arity) extends ${consumerArity.call($cArity)}$allMutableGenerics.call($arity) {
+	public interface Arity${arity}$allMutableGenerics.call($arity) extends ${consumerArity.call($cArity)}$allMutableGenerics.call($arity)
+	{
+
 		void mutate($allMutableMutateParams.call($arity));
 
 		@Override
-		default void accept($allMutableMutateParams.call($arity)) {
+		default void accept($allMutableMutateParams.call($arity))
+		{
 			mutate($allMutableMutateArgs.call($arity));
 		}
 	}
-#foreach($a in [1..$arity])
 
+#foreach($a in [1..$arity])
 	@FunctionalInterface
-	public interface $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) extends Arity${arity}$generics.call($arity, $a) {
+	public interface $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) extends Arity${arity}$generics.call($arity, $a)
+	{
+
 		@Override
 		void mutate($mutateArgs.call($arity, $a));
 	}
-	
+
 #end
 #end
 }

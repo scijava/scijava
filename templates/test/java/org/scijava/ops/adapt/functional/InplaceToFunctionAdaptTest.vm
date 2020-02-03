@@ -34,7 +34,6 @@
 
 package org.scijava.ops.adapt.functional;
 
-
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -48,20 +47,22 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
-	/** Matches a ${arity}-arity inplace${a} as a function${arity}*/
+	/** Matches a ${arity}-arity inplace${a} as a function${arity} */
 	@Test
 	public void testInplace${arity}_${a}ToFunction${arity}() {
 #foreach($a in [1..$arity])
 		final double[] ${functionInputName.call($arity, $a)} = { 1, 2, 3 };
 #end
 		double[] expected = $inplaceExpectedArray.call($arity);
-		final double[] output = name("test.mulArrays${arity}_${a}").input($args.call($arity)).outType(new Nil<double[]>() {}).apply();
+		final double[] output = name("test.mulArrays${arity}_${a}") //
+			.input($args.call($arity)) //
+			.outType(new Nil<double[]>()
+			{}).apply();
 		assertTrue(Arrays.equals(output, expected));
 	}
-	
-#end
-#end
 
+#end
+#end
 	private OpBuilder name(String opName) {
 		return new OpBuilder(ops, opName);
 	}

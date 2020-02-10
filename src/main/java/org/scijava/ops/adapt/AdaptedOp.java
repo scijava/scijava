@@ -1,15 +1,14 @@
 
-package org.scijava.ops.transform;
+package org.scijava.ops.adapt;
 
 import java.lang.reflect.Type;
 
 import org.scijava.ops.matcher.OpAdaptationInfo;
-import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpInfo;
 
 /**
- * Wrapper class to match a {@link OpTransformation} with a matching
- * {@link OpCandidate}.
+ * Wrapper class combining an adapted Op with its adapted type and associated
+ * {@link OpInfo}s
  * 
  * @author Gabriel Selzer
  */

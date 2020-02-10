@@ -48,6 +48,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
+import org.scijava.ops.adapt.AdaptedOp;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.DefaultOpMatcher;
@@ -59,9 +60,6 @@ import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.transform.AdaptedOp;
-import org.scijava.ops.transform.OpTransformationMatcher;
-import org.scijava.ops.transform.OpTransformer;
 import org.scijava.ops.types.Nil;
 import org.scijava.ops.types.TypeService;
 import org.scijava.ops.util.OpWrapper;
@@ -95,8 +93,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	@Parameter
 	private LogService log;
 
-	private OpTransformationMatcher transformationMatcher;
-
 	@Parameter
 	private TypeService typeService;
 
@@ -110,8 +106,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	 * canonical name of the op which is defined as the first one.
 	 */
 	private Map<String, List<OpInfo>> opCache;
-
-	private List<OpTransformer> transformerIndex;
 
 	private Map<Class<?>, OpWrapper<?>> wrappers;
 
@@ -173,10 +167,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 	}
 
-	public synchronized void initTransformerIndex() {
-		transformerIndex = pluginService.createInstancesOfType(OpTransformer.class);
-	}
-
 	@Override
 	public Iterable<OpInfo> infos() {
 		if (opCache == null) {
@@ -205,20 +195,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		}
 		return opMatcher;
 	}
-
-	private synchronized List<OpTransformer> getTransformerIndex() {
-		if (transformerIndex == null) {
-			initTransformerIndex();
-		}
-		return transformerIndex;
-	}
-
-//	private OpTransformationMatcher getTransformationMatcher() {
-//		if (transformationMatcher == null) {
-//			transformationMatcher = new DefaultOpTransformationMatcher(getOpMatcher());
-//		}
-//		return transformationMatcher;
-//	}
 
 	/**
 	 * Attempts to inject {@link OpDependency} annotated fields of the specified

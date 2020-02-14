@@ -242,11 +242,13 @@ public final class MatchingUtils {
 		Type[] destTypes;
 		Type[] srcTypes;
 
-		if (src instanceof Class || src instanceof ParameterizedType) {
+		if (src instanceof Class  || src instanceof ParameterizedType) {
 			destTypes = dest.getActualTypeArguments();
-			// get type arguments of raw src for common (possible supertype)
-			// dest
-			srcTypes = getParams(Types.raw(src), Types.raw(dest));
+			Type superType = Types.getExactSuperType(src, Types.raw(dest));
+			if (superType instanceof ParameterizedType)
+				srcTypes = ((ParameterizedType) superType).getActualTypeArguments();
+			else
+				srcTypes = getParams(Types.raw(src), Types.raw(dest));
 		} else {
 			return Types.isAssignable(src, dest);
 		}
@@ -444,7 +446,10 @@ public final class MatchingUtils {
 				// Hence, we require them to be exactly the same.
 				Type current = typeAssigns.putIfAbsent(varType, from);
 				if (current != null) {
-					if (!Objects.equal(from, current)) {
+					if (current instanceof Any) {
+						typeAssigns.put(varType, from);
+					}
+					else if (!Objects.equal(from, current)) {
 						throw new TypeInferenceException();
 					}
 				}
@@ -484,7 +489,23 @@ public final class MatchingUtils {
 				if (!(inferFrom[i] instanceof ParameterizedType)) {
 					Type[] fromType = { types[i] };
 					fromType = Types.mapVarToTypes(fromType, typeAssigns);
-					if (!Types.isAssignable(inferFrom[i], fromType[0], typeAssigns)) {
+					if( inferFrom[i] instanceof TypeVariable<?>){
+						// If current type var is absent put it to the map. Otherwise,
+						// we already encountered that var.
+						// Hence, we require them to be exactly the same.
+						if(Types.isAssignable(fromType[0], inferFrom[i], typeAssigns)) {
+							Type current = typeAssigns.putIfAbsent((TypeVariable<?>) inferFrom[i], fromType[0]);
+							if (current != null) {
+								if (current instanceof Any) {
+									typeAssigns.put((TypeVariable<?>) fromType[0], types[i]);
+								}
+								else if (!Objects.equal(types[i], current)) {
+									throw new TypeInferenceException();
+								}
+							}
+						}
+					}
+					else if (!Types.isAssignable(inferFrom[i], fromType[0], typeAssigns)) {
 						throw new TypeInferenceException();
 					}
 				} else {
@@ -496,7 +517,27 @@ public final class MatchingUtils {
 			} else if (types[i] instanceof WildcardType) {
 				// TODO Do we need to specifically handle Wildcards? Or are they
 				// sufficiently handled by Types.satisfies below?
+				
+				
+			} else if (types[i] instanceof Class) {
+				if( inferFrom[i] instanceof TypeVariable<?>){
+					// If current type var is absent put it to the map. Otherwise,
+					// we already encountered that var.
+					// Hence, we require them to be exactly the same.
+					if(Types.isAssignable(types[i], inferFrom[i], typeAssigns)) {
+					Type current = typeAssigns.putIfAbsent((TypeVariable<?>) inferFrom[i], types[i]);
+						if (current != null) {
+							if (current instanceof Any) {
+								typeAssigns.put((TypeVariable<?>) inferFrom[i], types[i]);
+							}
+							else if (!Objects.equal(types[i], current)) {
+								throw new TypeInferenceException();
+							}
+						}
+					}
+				}
 			}
+
 		}
 		// Check if the inferred types satisfy their bounds
 		if (!Types.typesSatisfyVariables(typeAssigns)) {

@@ -47,7 +47,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputerAsFunction() {
 		final Computers.Arity2<double[], double[], double[]> computer = ops.findOp( //
-				"test.adapters", new Nil<Computers.Arity2<double[], double[], double[]>>() {
+				"test.adaptersC", new Nil<Computers.Arity2<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//
@@ -68,7 +68,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	public void testFunctionAsComputer() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
 		BiFunction<double[], double[], double[]> function = ops.findOp( //
-				"test.adapters", new Nil<BiFunction<double[], double[], double[]>>() {
+				"test.adaptersF", new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
 				nilDoubleArray//

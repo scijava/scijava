@@ -17,7 +17,6 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpService;
 import org.scijava.ops.types.Nil;
-import org.scijava.param.Mutable;
 import org.scijava.util.Types;
 
 /**
@@ -44,8 +43,8 @@ public final class Functions {
 	// -- BEGIN TEMP --
 
 	/**
-	 * All known function types and their arities. The entries are sorted by arity,
-	 * i.e., the {@code i}-th entry has an arity of {@code i}.
+	 * All known function types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
 	 */
 	public static final BiMap<Class<?>, Integer> ALL_FUNCTIONS;
 
@@ -62,41 +61,40 @@ public final class Functions {
 	 *         function type, {@code false} otherwise.<br>
 	 *         Note that only the type itself and not its type hierarchy is
 	 *         considered.
-	 * @throws NullPointerException
-	 *             If {@code type} is {@code null}.
+	 * @throws NullPointerException If {@code type} is {@code null}.
 	 */
 	public static boolean isFunction(Type type) {
 		return ALL_FUNCTIONS.containsKey(Types.raw(type));
 	}
-	
+
 #foreach($arity in [0..$maxArity])
 	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity)) {
+	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity))
+	{
 		return matchHelper(ops, opName, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
 	}
-	
-#end
 
+#end
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+	private static <T> T matchHelper(final OpService ops, final String opName,
+		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
+	{
 		final Type[] types = new Type[inTypes.length + 1];
-		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		for (int i = 0; i < inTypes.length; i++)
+			types[i] = inTypes[i].getType();
 		types[types.length - 1] = outType.getType();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
 	}
-
 
 #foreach($arity in $arities)
 	/**
 	 * A ${arity}-arity specialization of {@link Function}.
 	 *
 #foreach($a in [1..$arity])
-	 * @param <I${a}>
-	 *            the type of argument $a to the function
+	 * @param <I${a}> the type of argument $a to the function
 #end
-	 * @param <O>
-	 *            the type of the output of the function
+	 * @param <O> the type of the output of the function
 	 * @see Function
 	 */
 	@FunctionalInterface
@@ -106,34 +104,31 @@ public final class Functions {
 		 * Applies this function to the given arguments.
 		 *
 #foreach($a in [1..$arity])
-		 * @param in$a
-		 *            function argument $a
+		 * @param in$a function argument $a
 #end
 		 * @return the function output
 		 */
 		O apply($applyParams.call($arity));
 
 		/**
-		 * Returns a composed function that first applies this function to its input,
-		 * and then applies the {@code after} function to the result. If evaluation of
-		 * either function throws an exception, it is relayed to the caller of the
-		 * composed function.
+		 * Returns a composed function that first applies this function to its
+		 * input, and then applies the {@code after} function to the result. If
+		 * evaluation of either function throws an exception, it is relayed to the
+		 * caller of the composed function.
 		 *
-		 * @param <O2>
-		 *            the type of output of the {@code after} function, and of the
-		 *            composed function
-		 * @param after
-		 *            the function to apply after this function is applied
-		 * @return a composed function that first applies this function and then applies
-		 *         the {@code after} function
-		 * @throws NullPointerException
-		 *             if after is null
+		 * @param <O2> the type of output of the {@code after} function, and of the
+		 *          composed function
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+		 *         applies the {@code after} function
+		 * @throws NullPointerException if after is null
 		 */
-		default <O2> Arity${arity}$genericsO2.call($arity) andThen(Function<? super O, ? extends O2> after) {
+		default <O2> Arity${arity}$genericsO2.call($arity) andThen(Function<? super O, ? extends O2> after)
+		{
 			Objects.requireNonNull(after);
 			return ($applyParams.call($arity)) -> after.apply(apply($applyArgs.call($arity)));
 		}
 	}
-	
+
 #end
 }

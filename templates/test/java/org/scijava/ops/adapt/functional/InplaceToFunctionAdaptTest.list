@@ -1,0 +1,24 @@
+.include templates/main/java/org/scijava/ops/function/Globals.list
+arities = (1..maxArity).collect()
+
+[InplaceToFunctionAdaptTest.java]
+
+functionInputName = ```
+{ arity, num ->
+  arity == 1 ? 'input' :
+  'input'+num
+}
+```
+
+inplaceExpectedArray = ```
+{ arity ->
+  '{ ' + String.join(', ', (1..3).stream().map{a -> "" + Math.pow(a, arity)}.collect()) + " }"
+}
+```
+args = ```
+{arity ->
+  arity == 0 ? '' :
+  arity == 1 ? 'input' :
+  String.join(', ',(1..arity).stream().map{a -> 'input' + a}.collect())
+}
+```

@@ -29,6 +29,7 @@
 
 package org.scijava.ops.matcher;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -139,6 +140,11 @@ public class OpClassInfo implements OpInfo {
 	@Override
 	public boolean isValid() {
 		return validityException == null;
+	}
+	
+	@Override
+	public AnnotatedElement getAnnotationBearer() {
+		return opClass;
 	}
 	
 	// -- Object methods --

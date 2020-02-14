@@ -28,19 +28,23 @@
  */
 
 package org.scijava.ops;
+
 import com.google.common.collect.Streams;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
 import org.junit.Test;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.function.Computers;
 import org.scijava.ops.types.Nil;
 
+//TODO: think about removing this class
 public class AutoTransformTest extends AbstractTestEnvironment {
 
-	private static Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {
-	};
+	private static Nil<Iterable<Double>> nilIterableDouble = new Nil<Iterable<Double>>() {};
 
 	@Test
 	public void autoLiftFunctionToIterables() {
@@ -48,8 +52,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		// transform
 		// as there is a lifter for Functions to iterables
 		Function<Iterable<Double>, Iterable<Double>> sqrtFunction = ops.findOp( //
-				"math.sqrt", new Nil<Function<Iterable<Double>, Iterable<Double>>>() {
-				}, //
+				"math.sqrt", new Nil<Function<Iterable<Double>, Iterable<Double>>>() {}, //
 				new Nil[] { nilIterableDouble }, //
 				nilIterableDouble//
 		);
@@ -58,35 +61,56 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		arrayEquals(Streams.stream(res).mapToDouble(d -> d).toArray(), 0.0, 2.0, 4.0);
 	}
 
-	//TODO: change this to use an Op that didn't take a secondary parameter
-//	@Test
-//	public void autoLiftFuncToArray() {
-//		Function<Double[], Double[]> power3ArraysFunc = ops.findOp( //
-//				"test.secondaryInputsFunction", new Nil<Function<Double[], Double[]>>() {
-//				}, //
-//				new Nil[] { Nil.of(Double[].class), Nil.of(double.class) }, //
-//				Nil.of(Double[].class), //
-//				3.0//
-//		);
-//
-//		Double[] result = power3ArraysFunc.apply(new Double[] { 1.0, 2.0, 3.0 });
-//		assert arrayEquals(Arrays.stream(result).mapToDouble(d -> d).toArray(), 1.0, 8.0, 27.0);
-//	}
+	@Test
+	public void autoFuncToCompAndLiftTest() {
+		// There is no sqrt computer for iterables in the system (with this name,
+		// however we can auto
+		// transform
+		// as there is a lifter for Functions to iterables
+		Computers.Arity2<Iterable<double[]>, Iterable<double[]>, Iterable<double[]>> sqrtFunction = new OpBuilder(ops,
+				"test.adaptersF").inType(new Nil<Iterable<double[]>>() {}, new Nil<Iterable<double[]>>() {})
+						.outType(new Nil<Iterable<double[]>>() {}).computer();
+
+		Iterable<double[]> res = Arrays.asList(new double[] {1.0, 0.0, 0.0});
+		sqrtFunction.compute(Arrays.asList(new double[] {0.0, 4.0, 16.0}), Arrays.asList(new double[] {0.0, 4.0, 16.0}), res);
+		arrayEquals(res.iterator().next(), 0.0, 8.0, 16.0);
+	}
 
 	@Test
-	public void autoCompToFuncAndLift() {
-		Nil<List<double[]>> n = new Nil<List<double[]>>() {
-		};
+	public void autoCompToFuncAndLiftIterableToIterable() {
+		// check transformation as a Function<Iterable, Iterable>
+		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {};
 
-		Function<List<double[]>, List<double[]>> sqrtListFunction = ops.findOp( //
-				"test.liftSqrt", new Nil<Function<List<double[]>, List<double[]>>>() {
-				}, //
+		Function<Iterable<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
+				"test.liftSqrt", new Nil<Function<Iterable<double[]>, Iterable<double[]>>>() {}, //
 				new Nil[] { n }, //
 				n//
 		);
 
-		List<double[]> res = sqrtListFunction.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
-		double[] resArray = res.stream().flatMapToDouble(ds -> Arrays.stream(ds)).toArray();
+		Iterable<double[]> res = sqrtListFunction
+				.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
+		double[] resArray = StreamSupport.stream(res.spliterator(), false).flatMapToDouble(ds -> Arrays.stream(ds))
+				.toArray();
 		arrayEquals(resArray, 2.0, 2.0, 5.0);
 	}
+
+	@Test
+	public void autoCompToFuncAndLiftListToIterable() {
+		// check transformation as a Function<List, Iterable>
+		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {};
+		Nil<List<double[]>> l = new Nil<List<double[]>>() {};
+
+		Function<List<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
+				"test.liftSqrt", new Nil<Function<List<double[]>, Iterable<double[]>>>() {}, //
+				new Nil[] { l }, //
+				n//
+		);
+
+		Iterable<double[]> res = sqrtListFunction
+				.apply(Arrays.asList(new double[] { 4.0 }, new double[] { 4.0, 25.0 }));
+		double[] resArray = StreamSupport.stream(res.spliterator(), false).flatMapToDouble(ds -> Arrays.stream(ds))
+				.toArray();
+		arrayEquals(resArray, 2.0, 2.0, 5.0);
+	}
+
 }

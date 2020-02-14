@@ -69,18 +69,21 @@ public final class Computers {
 	public static boolean isComputer(Type type) {
 		return ALL_COMPUTERS.containsKey(Types.raw(type));
 	}
-	
+
 #foreach($arity in [0..$maxArity])
 	@SuppressWarnings("unchecked")
-	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity)) {
+	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity))
+	{
 		return matchHelper(ops, opName, ${computerArity.call($arity)}.class, $nilArgs.call($arity));
 	}
 
 #end
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes) {
+	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
+	{
 		final Type[] types = new Type[inTypes.length + 1];
-		for (int i=0; i<inTypes.length; i++) types[i] = inTypes[i].getType();
+		for (int i = 0; i < inTypes.length; i++)
+			types[i] = inTypes[i].getType();
 		types[types.length - 1] = outType.getType();
 		final Type specialType = Types.parameterize(opClass, types);
 		final Nil<?>[] nils = new Nil[inTypes.length + 1];
@@ -96,11 +99,15 @@ public final class Computers {
 #set($gClass = "$rawClass$genericParams")
 
 	@FunctionalInterface
-	public interface $gClass extends $consumerArity.call($arity)$genericParams {
+	public interface $gClass extends
+		$consumerArity.call($arity)$genericParams
+	{
+
 		void compute($computeParams.call($arity));
 
 		@Override
-		default void accept($acceptParams.call($arity)) {
+		default void accept($acceptParams.call($arity))
+		{
 			compute($computeArgs.call($arity));
 		}
 	}

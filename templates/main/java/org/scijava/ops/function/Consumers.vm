@@ -3,7 +3,6 @@
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-
 package org.scijava.ops.function;
 
 import java.util.Objects;
@@ -35,7 +34,8 @@ public final class Consumers {
 	 * most other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
-	 * This is a functional interface whose functional method is {@link \#accept(${objectString.call(0)})}.
+	 * This is a functional interface whose functional method is
+	 * {@link #[[#]]#accept()}.
 	 * </p>
 	 *
 	 * @see Consumer
@@ -54,18 +54,16 @@ public final class Consumers {
 		}
 
 		/**
-		 * Returns a composed {@code Consumer.Arity0} that performs, in sequence, this
-		 * operation followed by the {@code after} operation. If performing either
-		 * operation throws an exception, it is relayed to the caller of the composed
-		 * operation. If performing this operation throws an exception, the
+		 * Returns a composed {@code Consumer.Arity0} that performs, in sequence,
+		 * this operation followed by the {@code after} operation. If performing
+		 * either operation throws an exception, it is relayed to the caller of the
+		 * composed operation. If performing this operation throws an exception, the
 		 * {@code after} operation will not be performed.
 		 *
-		 * @param after
-		 *            the operation to perform after this operation
+		 * @param after the operation to perform after this operation
 		 * @return a composed {@code Consumer.Arity0} that performs in sequence this
 		 *         operation followed by the {@code after} operation
-		 * @throws NullPointerException
-		 *             if {@code after} is null
+		 * @throws NullPointerException if {@code after} is null
 		 */
 		default Arity0 andThen(Arity0 after) {
 			Objects.requireNonNull(after);
@@ -80,48 +78,45 @@ public final class Consumers {
 #foreach($arity in $arities)
 	/**
 	 * Represents an operation that accepts $arity input arguments and returns no
-	 * result. This is the ${arity}-arity specialization of {@link Consumer}. Unlike
-	 * most other functional interfaces, this interface is expected to operate via
+	 * result. This is the ${arity}-arity specialization of {@link Consumer}. Unlike most
+	 * other functional interfaces, this interface is expected to operate via
 	 * side-effects.
 	 * <p>
 	 * This is a functional interface whose functional method is
-	 * {@link \#accept($objectString.call($arity))}.
+	 * {@link #[[#]]#accept($objectString.call($arity))}.
 	 * </p>
 	 *
 #foreach($a in [1..$arity])
-	 * @param <${generic.call($arity, $a)}>
-	 *            the type of argument $a.
+	 * @param <${generic.call($arity, $a)}> the type of argument $a.
 #end
 	 * @see Consumer
 	 */
 	@FunctionalInterface
-	public interface Arity${arity}$generics.call($arity){
+	public interface Arity${arity}$generics.call($arity) {
 
 		/**
 		 * Performs this operation on the given arguments.
 		 *
 #foreach($a in [1..$arity])
-		 * @param ${genericName.call($arity, $a)}
-		 *            input argument ${a}.
+		 * @param ${genericName.call($arity, $a)} input argument ${a}.
 #end
 		 */
 		void accept($acceptParams.call($arity));
 
 		/**
-		 * Returns a composed {@code Consumer.Arity${arity}} that performs, in sequence, this
-		 * operation followed by the {@code after} operation. If performing either
-		 * operation throws an exception, it is relayed to the caller of the composed
-		 * operation. If performing this operation throws an exception, the
+		 * Returns a composed {@code Consumer.Arity${arity}} that performs, in sequence,
+		 * this operation followed by the {@code after} operation. If performing
+		 * either operation throws an exception, it is relayed to the caller of the
+		 * composed operation. If performing this operation throws an exception, the
 		 * {@code after} operation will not be performed.
 		 *
-		 * @param after
-		 *            the operation to perform after this operation
+		 * @param after the operation to perform after this operation
 		 * @return a composed {@code Consumer.Arity${arity}} that performs in sequence this
 		 *         operation followed by the {@code after} operation
-		 * @throws NullPointerException
-		 *             if {@code after} is null
+		 * @throws NullPointerException if {@code after} is null
 		 */
-		default Arity${arity}$generics.call($arity) andThen(Arity${arity}$superGenerics.call($arity) after) {
+		default Arity${arity}$generics.call($arity) andThen(Arity${arity}$superGenerics.call($arity) after)
+		{
 			Objects.requireNonNull(after);
 
 			return ($acceptArgs.call($arity)) -> {
@@ -130,6 +125,6 @@ public final class Consumers {
 			};
 		}
 	}
-	
+
 #end
 }

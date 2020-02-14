@@ -39,6 +39,8 @@ import org.scijava.struct.Member;
 public interface OpDependencyMember<T> extends Member<T> {
 
 	String getDependencyName();
+	
+	boolean isAdaptable();
 
 	// -- Member methods --
 

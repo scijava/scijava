@@ -1,0 +1,4 @@
+.include templates/main/java/org/scijava/ops/function/Globals.list
+arities = (1..maxArity).collect()
+
+[ComputersToFunctionsViaSource.java]

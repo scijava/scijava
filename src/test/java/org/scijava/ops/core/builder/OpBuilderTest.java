@@ -43,23 +43,36 @@ import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 
+// @formatter:off
 /**
  * Tests {@link OpBuilder}.
  * 
- * For each arity, we test the following matches and run the following commands
+ * For each arity, we test the following matches and run the following commands 
  * based on the information scenarios.
  * 
- * * Input TYPES are given (IT) 1) The output is unspecified (OU): a) match:
- * Function, Inplace b) run: none 2) The output type is given (OT): a) match:
- * Function, Computer b) run: none
- * 
- * * Input VALUES are given (IV) (N.B. this case applies for Arity0): 1) The
- * output is unspecified (OU): a) match: Function, Inplace b) run: apply, mutate
- * 2) The output type is given (OT): a) match: Function, Computer b) run: apply
- * 3) The output value is given (OV): a) match: Computer b) run: compute
+ * * Input TYPES are given (IT) 
+ * 	1) The output is unspecified (OU): 
+ * 		a) match: Function, Inplace
+ * 		b) run: none
+ * 	2) The output type is given (OT): 
+ * 		a) match: Function, Computer
+ * 		b) run: none
+ *  
+ * * Input VALUES are given (IV) (N.B. this case applies for Arity0):
+ * 	1) The output is unspecified (OU): 
+ * 		a) match: Function, Inplace
+ * 		b) run: apply, mutate
+ * 	2) The output type is given (OT): 
+ * 		a) match: Function, Computer
+ * 		b) run: apply
+ * 	3) The output value is given (OV): 
+ * 		a) match: Computer
+ *  	b) run: compute
  * 
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
+// @formatter:on
 public class OpBuilderTest extends AbstractTestEnvironment {
 
 	final double[] halves = new double[10];
@@ -90,7 +103,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity0_OT_matchF() {
 		final Double expected = 0.;
 		final Producer<Double> op = //
-				name("test.addDoubles").input().outType(Double.class).producer();
+			name("test.addDoubles").input().outType(Double.class).producer();
 		final Object result = op.create();
 		assertEquals(result, expected);
 	}
@@ -101,7 +114,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] actual = { 1, 2, 3 };
 		final double[] expected = { 0, 0, 0 };
 		final Computers.Arity0<double[]> op = //
-				name("test.addArrays").input().outType(double[].class).computer();
+			name("test.addArrays").input().outType(double[].class).computer();
 		op.compute(actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -109,7 +122,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	/** Runs a nullary function with a given output type. */
 	@Test
 	public void testArity0_OT_runF() {
-		final Double result = name("test.addDoubles").input().outType(Double.class).create();
+		final Double result = name("test.addDoubles").input().outType(Double.class)
+			.create();
 		assert (0. == result);
 	}
 
@@ -119,7 +133,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] result = { 1, 2, 3 };
 		double[] expected = { 0, 0, 0 };
 		final Computers.Arity0<double[]> op = //
-				name("test.addArrays").input().output(result).computer();
+			name("test.addArrays").input().output(result).computer();
 		op.compute(result);
 		assertTrue(Arrays.equals(expected, result));
 	}
@@ -141,7 +155,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input = 1.;
 		final Double expected = 1.;
 		final Function<Double, ?> op = //
-				name("test.addDoubles").inType(Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class) //
+				.function();
 		final Object actual = op.apply(input);
 		assertEquals(actual, expected);
 	}
@@ -152,7 +168,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2.0, 3.0 };
 		final Inplaces.Arity1<double[]> op = //
-				name("test.mulArrays").inType(double[].class).inplace();
+			name("test.mulArrays1_1") //
+				.inType(double[].class) //
+				.inplace();
 		op.mutate(input);
 		assertTrue(Arrays.equals(input, expected));
 	}
@@ -163,7 +181,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input = 1.;
 		final Double expected = 1.;
 		final Function<Double, Double> op = //
-				name("test.addDoubles").inType(Double.class).outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input);
 		assertEquals(actual, expected, 0.);
 	}
@@ -175,7 +194,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 1, 2, 3 };
 		final Computers.Arity1<double[], double[]> op = //
-				name("test.addArrays").inType(double[].class).outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -186,7 +207,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input = 1.;
 		final Double expected = 1.;
 		final Function<Double, ?> op = //
-				name("test.addDoubles").input(input).function();
+			name("test.addDoubles") //
+				.input(input) //
+				.function();
 		final Object actual = op.apply(input);
 		assertEquals(actual, expected);
 	}
@@ -197,7 +220,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input = { 1, 2, 3 };
 		double[] expected = { 1.0, 2.0, 3.0 };
 		final Inplaces.Arity1<double[]> op = //
-				name("test.mulArrays").input(input).inplace();
+			name("test.mulArrays1_1").input(input) //
+				.inplace();
 		op.mutate(input);
 		assertTrue(Arrays.equals(expected, input));
 	}
@@ -207,7 +231,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity1_IV_OU_runF() {
 		final Double input = 1.;
 		final Double expected = 1.;
-		final Object actual = name("test.addDoubles").input(input).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -216,7 +242,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity1_IV_OU_runI1() {
 		final double[] input = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2.0, 3.0 };
-		name("test.mulArrays").input(input).mutate();
+		name("test.mulArrays1_1") //
+			.input(input) //
+			.mutate();
 		assertTrue(Arrays.equals(input, expected));
 	}
 
@@ -226,7 +254,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input = 1.;
 		final Double expected = 1.;
 		final Function<Double, Double> op = //
-				name("test.addDoubles").input(input).outType(Double.class).function();
+			name("test.addDoubles").input(input) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input);
 		assertEquals(actual, expected, 0.);
 	}
@@ -238,7 +267,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 1, 2, 3 };
 		final Computers.Arity1<double[], double[]> op = //
-				name("test.addArrays").input(input).output(actual).computer();
+			name("test.addArrays") //
+				.input(input) //
+				.output(actual).computer();
 		op.compute(input, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -248,7 +279,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	public void testArity1_IV_OT_runF() {
 		final Double input = 1.;
 		final Double expected = 1.;
-		final Object actual = name("test.addDoubles").input(input).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -259,7 +292,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 1, 2, 3 };
 		final Computers.Arity1<double[], double[]> op = //
-				name("test.addArrays").input(input).output(actual).computer();
+			name("test.addArrays") //
+				.input(input) //
+				.output(actual).computer();
 		op.compute(input, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -270,7 +305,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 1, 2, 3 };
-		name("test.addArrays").input(input).output(actual).compute();
+		name("test.addArrays") //
+			.input(input) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -283,7 +320,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input2 = 1.;
 		final Double expected = 2.;
 		final BiFunction<Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2);
 		assertEquals(actual, expected);
 	}
@@ -295,7 +334,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_1<double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class).inplace1();
+			name("test.mulArrays2_1") //
+				.inType(double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -307,7 +348,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_2<double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class).inplace2();
+			name("test.mulArrays2_2") //
+				.inType(double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -319,7 +362,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input2 = 1.;
 		final Double expected = 2.;
 		final BiFunction<Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class).outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2);
 		assertEquals(actual, expected, 0.);
 	}
@@ -332,7 +376,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
 		final Computers.Arity2<double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class).outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -344,7 +390,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input2 = 1.;
 		final Double expected = 2.;
 		final BiFunction<Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2).function();
+			name("test.addDoubles") //
+				.input(input1, input2) //
+				.function();
 		final Object actual = op.apply(input1, input2);
 		assertEquals(actual, expected);
 	}
@@ -356,7 +404,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_1<double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2).inplace1();
+			name("test.mulArrays2_1").input(input1, input2) //
+				.inplace1();
 		op.mutate(input1, input2);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -368,7 +417,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4.0, 9.0 };
 		final Inplaces.Arity2_2<double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2).inplace2();
+			name("test.mulArrays2_2").input(input1, input2) //
+				.inplace2();
 		op.mutate(input1, input2);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -379,7 +429,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input1 = 1.;
 		final Double input2 = 1.;
 		final Double expected = 2.;
-		final Object actual = name("test.addDoubles").input(input1, input2).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -389,7 +441,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input1 = { 1, 2, 3 };
 		final double[] input2 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4.0, 9.0 };
-		name("test.mulArrays").input(input1, input2).mutate1();
+		name("test.mulArrays2_1") //
+			.input(input1, input2) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -399,7 +453,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input1 = { 1, 2, 3 };
 		final double[] input2 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4.0, 9.0 };
-		name("test.mulArrays").input(input1, input2).mutate2();
+		name("test.mulArrays2_2") //
+			.input(input1, input2) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -410,7 +466,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input2 = 1.;
 		final Double expected = 2.;
 		final BiFunction<Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2).outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2);
 		assertEquals(actual, expected, 0.);
 	}
@@ -423,7 +480,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
 		final Computers.Arity2<double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2) //
+				.output(actual).computer();
 		op.compute(input1, input2, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -434,7 +493,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input1 = 1.;
 		final Double input2 = 1.;
 		final Double expected = 2.;
-		final Object actual = name("test.addDoubles").input(input1, input2).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -446,7 +507,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
 		final Computers.Arity2<double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2) //
+				.output(actual).computer();
 		op.compute(input1, input2, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -458,7 +521,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input2 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 2, 4, 6 };
-		name("test.addArrays").input(input1, input2).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -472,7 +537,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input3 = 1.;
 		final Double expected = 3.;
 		final Functions.Arity3<Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3);
 		assertEquals(actual, expected);
 	}
@@ -485,7 +552,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8.0, 27.0 };
 		final Inplaces.Arity3_1<double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class).inplace1();
+			name("test.mulArrays3_1") //
+				.inType(double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -498,7 +567,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8.0, 27.0 };
 		final Inplaces.Arity3_2<double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class).inplace2();
+			name("test.mulArrays3_2") //
+				.inType(double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -511,7 +582,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8.0, 27.0 };
 		final Inplaces.Arity3_3<double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class).inplace3();
+			name("test.mulArrays3_3") //
+				.inType(double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -524,8 +597,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input3 = 1.;
 		final Double expected = 3.;
 		final Functions.Arity3<Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class).outType(Double.class)
-						.function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3);
 		assertEquals(actual, expected, 0.);
 	}
@@ -539,8 +612,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 3, 6, 9 };
 		final Computers.Arity3<double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class).outType(double[].class)
-						.computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -553,7 +627,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input3 = 1.;
 		final Double expected = 3.;
 		final Functions.Arity3<Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3).function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3);
 		assertEquals(actual, expected);
 	}
@@ -566,7 +642,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
 		final Inplaces.Arity3_1<double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3).inplace1();
+			name("test.mulArrays3_1").input(input1, input2, input3) //
+				.inplace1();
 		op.mutate(input1, input2, input3);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -579,7 +656,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
 		final Inplaces.Arity3_2<double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3).inplace2();
+			name("test.mulArrays3_2").input(input1, input2, input3) //
+				.inplace2();
 		op.mutate(input1, input2, input3);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -592,7 +670,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
 		final Inplaces.Arity3_3<double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3).inplace3();
+			name("test.mulArrays3_3").input(input1, input2, input3) //
+				.inplace3();
 		op.mutate(input1, input2, input3);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -604,7 +683,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input2 = 1.;
 		final Double input3 = 1.;
 		final Double expected = 3.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -615,7 +696,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] input3 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8.0, 27.0 };
-		name("test.mulArrays").input(input1, input2, input3).mutate1();
+		name("test.mulArrays3_1") //
+			.input(input1, input2, input3) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -626,7 +709,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] input3 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8.0, 27.0 };
-		name("test.mulArrays").input(input1, input2, input3).mutate2();
+		name("test.mulArrays3_2") //
+			.input(input1, input2, input3) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -637,7 +722,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] input3 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8.0, 27.0 };
-		name("test.mulArrays").input(input1, input2, input3).mutate3();
+		name("test.mulArrays3_3") //
+			.input(input1, input2, input3) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -649,7 +736,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input3 = 1.;
 		final Double expected = 3.;
 		final Functions.Arity3<Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3).outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3);
 		assertEquals(actual, expected, 0.);
 	}
@@ -663,7 +751,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 3, 6, 9 };
 		final Computers.Arity3<double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -675,7 +765,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input2 = 1.;
 		final Double input3 = 1.;
 		final Double expected = 3.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -688,7 +780,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 3, 6, 9 };
 		final Computers.Arity3<double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -701,7 +795,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input3 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 3, 6, 9 };
-		name("test.addArrays").input(input1, input2, input3).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -716,7 +812,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input4 = 1.;
 		final Double expected = 4.;
 		final Functions.Arity4<Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4);
 		assertEquals(actual, expected);
 	}
@@ -730,8 +828,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_1<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class)
-						.inplace1();
+			name("test.mulArrays4_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -745,8 +844,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_2<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class)
-						.inplace2();
+			name("test.mulArrays4_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -760,8 +860,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_3<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class)
-						.inplace3();
+			name("test.mulArrays4_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -775,8 +876,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_4<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class)
-						.inplace4();
+			name("test.mulArrays4_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -790,8 +892,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input4 = 1.;
 		final Double expected = 4.;
 		final Functions.Arity4<Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4);
 		assertEquals(actual, expected, 0.);
 	}
@@ -806,8 +908,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 4, 8, 12 };
 		final Computers.Arity4<double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -821,7 +924,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input4 = 1.;
 		final Double expected = 4.;
 		final Functions.Arity4<Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4).function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4);
 		assertEquals(actual, expected);
 	}
@@ -835,7 +940,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_1<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4).inplace1();
+			name("test.mulArrays4_1").input(input1, input2, input3, input4) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -849,7 +955,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_2<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4).inplace2();
+			name("test.mulArrays4_2").input(input1, input2, input3, input4) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -863,7 +970,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_3<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4).inplace3();
+			name("test.mulArrays4_3").input(input1, input2, input3, input4) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -877,7 +985,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
 		final Inplaces.Arity4_4<double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4).inplace4();
+			name("test.mulArrays4_4").input(input1, input2, input3, input4) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -890,7 +999,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input3 = 1.;
 		final Double input4 = 1.;
 		final Double expected = 4.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -902,7 +1013,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4).mutate1();
+		name("test.mulArrays4_1") //
+			.input(input1, input2, input3, input4) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -914,7 +1027,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4).mutate2();
+		name("test.mulArrays4_2") //
+			.input(input1, input2, input3, input4) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -926,7 +1041,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4).mutate3();
+		name("test.mulArrays4_3") //
+			.input(input1, input2, input3, input4) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -938,7 +1055,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16.0, 81.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4).mutate4();
+		name("test.mulArrays4_4") //
+			.input(input1, input2, input3, input4) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -951,7 +1070,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input4 = 1.;
 		final Double expected = 4.;
 		final Functions.Arity4<Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4).outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3, input4) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4);
 		assertEquals(actual, expected, 0.);
 	}
@@ -966,7 +1086,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 4, 8, 12 };
 		final Computers.Arity4<double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -979,8 +1101,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input3 = 1.;
 		final Double input4 = 1.;
 		final Double expected = 4.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4).outType(Double.class)
-				.apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -994,7 +1117,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 4, 8, 12 };
 		final Computers.Arity4<double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1008,7 +1133,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input4 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 4, 8, 12 };
-		name("test.addArrays").input(input1, input2, input3, input4).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -1024,8 +1151,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input5 = 1.;
 		final Double expected = 5.;
 		final Functions.Arity5<Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class)
-						.function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5);
 		assertEquals(actual, expected);
 	}
@@ -1040,9 +1168,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_1<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace1();
+			name("test.mulArrays5_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -1057,9 +1185,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_2<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace2();
+			name("test.mulArrays5_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -1074,9 +1202,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_3<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace3();
+			name("test.mulArrays5_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -1091,9 +1219,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_4<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace4();
+			name("test.mulArrays5_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -1108,9 +1236,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_5<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace5();
+			name("test.mulArrays5_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -1125,8 +1253,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input5 = 1.;
 		final Double expected = 5.;
 		final Functions.Arity5<Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5);
 		assertEquals(actual, expected, 0.);
 	}
@@ -1142,9 +1270,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 5, 10, 15 };
 		final Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1159,7 +1287,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input5 = 1.;
 		final Double expected = 5.;
 		final Functions.Arity5<Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5).function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5);
 		assertEquals(actual, expected);
 	}
@@ -1174,7 +1304,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_1<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace1();
+			name("test.mulArrays5_1").input(input1, input2, input3, input4, input5) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -1189,7 +1320,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_2<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace2();
+			name("test.mulArrays5_2").input(input1, input2, input3, input4, input5) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -1204,7 +1336,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_3<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace3();
+			name("test.mulArrays5_3").input(input1, input2, input3, input4, input5) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -1219,7 +1352,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_4<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace4();
+			name("test.mulArrays5_4").input(input1, input2, input3, input4, input5) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -1234,7 +1368,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
 		final Inplaces.Arity5_5<double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5).inplace5();
+			name("test.mulArrays5_5").input(input1, input2, input3, input4, input5) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -1248,7 +1383,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input4 = 1.;
 		final Double input5 = 1.;
 		final Double expected = 5.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -1261,7 +1398,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate1();
+		name("test.mulArrays5_1") //
+			.input(input1, input2, input3, input4, input5) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -1274,7 +1413,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate2();
+		name("test.mulArrays5_2") //
+			.input(input1, input2, input3, input4, input5) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -1287,7 +1428,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate3();
+		name("test.mulArrays5_3") //
+			.input(input1, input2, input3, input4, input5) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -1300,7 +1443,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate4();
+		name("test.mulArrays5_4") //
+			.input(input1, input2, input3, input4, input5) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -1313,7 +1458,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32.0, 243.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5).mutate5();
+		name("test.mulArrays5_5") //
+			.input(input1, input2, input3, input4, input5) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -1327,7 +1474,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input5 = 1.;
 		final Double expected = 5.;
 		final Functions.Arity5<Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5).outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3, input4, input5) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5);
 		assertEquals(actual, expected, 0.);
 	}
@@ -1343,7 +1491,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 5, 10, 15 };
 		final Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1357,8 +1507,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input4 = 1.;
 		final Double input5 = 1.;
 		final Double expected = 5.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5)
-				.outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -1373,7 +1524,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 5, 10, 15 };
 		final Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1388,7 +1541,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input5 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 5, 10, 15 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -1405,9 +1560,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input6 = 1.;
 		final Double expected = 6.;
 		final Functions.Arity6<Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class)
-						.function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6);
 		assertEquals(actual, expected);
 	}
@@ -1423,8 +1578,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_1<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace1();
+			name("test.mulArrays6_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -1440,8 +1596,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_2<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace2();
+			name("test.mulArrays6_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -1457,8 +1614,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_3<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace3();
+			name("test.mulArrays6_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -1474,8 +1632,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_4<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace4();
+			name("test.mulArrays6_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -1491,8 +1650,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_5<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace5();
+			name("test.mulArrays6_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -1508,8 +1668,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_6<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace6();
+			name("test.mulArrays6_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -1525,9 +1686,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input6 = 1.;
 		final Double expected = 6.;
 		final Functions.Arity6<Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6);
 		assertEquals(actual, expected, 0.);
 	}
@@ -1544,8 +1704,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 6, 12, 18 };
 		final Computers.Arity6<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1561,7 +1722,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input6 = 1.;
 		final Double expected = 6.;
 		final Functions.Arity6<Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6).function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6);
 		assertEquals(actual, expected);
 	}
@@ -1577,7 +1740,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_1<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).inplace1();
+			name("test.mulArrays6_1").input(input1, input2, input3, input4, input5, input6) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -1593,7 +1757,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_2<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).inplace2();
+			name("test.mulArrays6_2").input(input1, input2, input3, input4, input5, input6) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -1609,7 +1774,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_3<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).inplace3();
+			name("test.mulArrays6_3").input(input1, input2, input3, input4, input5, input6) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -1625,7 +1791,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_4<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).inplace4();
+			name("test.mulArrays6_4").input(input1, input2, input3, input4, input5, input6) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -1641,7 +1808,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_5<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).inplace5();
+			name("test.mulArrays6_5").input(input1, input2, input3, input4, input5, input6) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -1657,7 +1825,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
 		final Inplaces.Arity6_6<double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).inplace6();
+			name("test.mulArrays6_6").input(input1, input2, input3, input4, input5, input6) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -1672,7 +1841,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input5 = 1.;
 		final Double input6 = 1.;
 		final Double expected = 6.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -1686,7 +1857,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).mutate1();
+		name("test.mulArrays6_1") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -1700,7 +1873,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).mutate2();
+		name("test.mulArrays6_2") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -1714,7 +1889,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).mutate3();
+		name("test.mulArrays6_3") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -1728,7 +1905,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).mutate4();
+		name("test.mulArrays6_4") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -1742,7 +1921,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).mutate5();
+		name("test.mulArrays6_5") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -1756,7 +1937,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 64.0, 729.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6).mutate6();
+		name("test.mulArrays6_6") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -1771,8 +1954,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input6 = 1.;
 		final Double expected = 6.;
 		final Functions.Arity6<Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6).outType(Double.class)
-						.function();
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6);
 		assertEquals(actual, expected, 0.);
 	}
@@ -1789,7 +1972,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 6, 12, 18 };
 		final Computers.Arity6<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1804,8 +1989,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input5 = 1.;
 		final Double input6 = 1.;
 		final Double expected = 6.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6)
-				.outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -1821,7 +2007,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 6, 12, 18 };
 		final Computers.Arity6<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6).output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -1837,7 +2025,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input6 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 6, 12, 18 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -1855,8 +2045,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input7 = 1.;
 		final Double expected = 7.;
 		final Functions.Arity7<Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7);
 		assertEquals(actual, expected);
 	}
@@ -1873,8 +2064,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_1<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace1();
+			name("test.mulArrays7_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -1891,8 +2083,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_2<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace2();
+			name("test.mulArrays7_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -1909,8 +2102,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_3<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace3();
+			name("test.mulArrays7_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -1927,8 +2121,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_4<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace4();
+			name("test.mulArrays7_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -1945,8 +2140,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_5<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace5();
+			name("test.mulArrays7_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -1963,8 +2159,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_6<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace6();
+			name("test.mulArrays7_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -1981,8 +2178,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_7<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace7();
+			name("test.mulArrays7_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(input7, expected));
 	}
@@ -1999,8 +2197,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input7 = 1.;
 		final Double expected = 7.;
 		final Functions.Arity7<Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class).outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7);
 		assertEquals(actual, expected, 0.);
 	}
@@ -2018,8 +2216,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 7, 14, 21 };
 		final Computers.Arity7<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -2036,7 +2235,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input7 = 1.;
 		final Double expected = 7.;
 		final Functions.Arity7<Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7).function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7);
 		assertEquals(actual, expected);
 	}
@@ -2053,7 +2254,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_1<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace1();
+			name("test.mulArrays7_1").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -2070,7 +2272,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_2<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace2();
+			name("test.mulArrays7_2").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -2087,7 +2290,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_3<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace3();
+			name("test.mulArrays7_3").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -2104,7 +2308,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_4<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace4();
+			name("test.mulArrays7_4").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -2121,7 +2326,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_5<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace5();
+			name("test.mulArrays7_5").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -2138,7 +2344,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_6<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace6();
+			name("test.mulArrays7_6").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -2155,7 +2362,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
 		final Inplaces.Arity7_7<double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).inplace7();
+			name("test.mulArrays7_7").input(input1, input2, input3, input4, input5, input6, input7) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7);
 		assertTrue(Arrays.equals(expected, input7));
 	}
@@ -2171,8 +2379,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input6 = 1.;
 		final Double input7 = 1.;
 		final Double expected = 7.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7)
-				.apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -2187,7 +2396,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate1();
+		name("test.mulArrays7_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -2202,7 +2413,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate2();
+		name("test.mulArrays7_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -2217,7 +2430,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate3();
+		name("test.mulArrays7_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -2232,7 +2447,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate4();
+		name("test.mulArrays7_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -2247,7 +2464,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate5();
+		name("test.mulArrays7_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -2262,7 +2481,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate6();
+		name("test.mulArrays7_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -2277,7 +2498,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 128.0, 2187.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7).mutate7();
+		name("test.mulArrays7_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -2293,8 +2516,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input7 = 1.;
 		final Double expected = 7.;
 		final Functions.Arity7<Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7)
-						.outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7);
 		assertEquals(actual, expected, 0.);
 	}
@@ -2312,8 +2535,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 7, 14, 21 };
 		final Computers.Arity7<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7).output(actual)
-						.computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -2329,8 +2553,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input6 = 1.;
 		final Double input7 = 1.;
 		final Double expected = 7.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7)
-				.outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -2347,8 +2572,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 7, 14, 21 };
 		final Computers.Arity7<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7).output(actual)
-						.computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -2365,7 +2591,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input7 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 7, 14, 21 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -2384,8 +2612,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input8 = 1.;
 		final Double expected = 8.;
 		final Functions.Arity8<Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertEquals(actual, expected);
 	}
@@ -2403,8 +2632,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_1<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace1();
+			name("test.mulArrays8_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -2422,8 +2652,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_2<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace2();
+			name("test.mulArrays8_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -2441,8 +2672,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_3<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace3();
+			name("test.mulArrays8_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -2460,8 +2692,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_4<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace4();
+			name("test.mulArrays8_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -2479,8 +2712,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_5<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace5();
+			name("test.mulArrays8_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -2498,8 +2732,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_6<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace6();
+			name("test.mulArrays8_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -2517,8 +2752,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_7<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace7();
+			name("test.mulArrays8_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input7, expected));
 	}
@@ -2536,8 +2772,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_8<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace8();
+			name("test.mulArrays8_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(input8, expected));
 	}
@@ -2555,8 +2792,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input8 = 1.;
 		final Double expected = 8.;
 		final Functions.Arity8<Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class).outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertEquals(actual, expected, 0.);
 	}
@@ -2575,9 +2812,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 8, 16, 24 };
 		final Computers.Arity8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).outType(double[].class)
-						.computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -2595,8 +2832,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input8 = 1.;
 		final Double expected = 8.;
 		final Functions.Arity8<Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8)
-						.function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertEquals(actual, expected);
 	}
@@ -2614,7 +2852,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_1<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace1();
+			name("test.mulArrays8_1").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -2632,7 +2871,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_2<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace2();
+			name("test.mulArrays8_2").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -2650,7 +2890,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_3<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace3();
+			name("test.mulArrays8_3").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -2668,7 +2909,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_4<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace4();
+			name("test.mulArrays8_4").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -2686,7 +2928,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_5<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace5();
+			name("test.mulArrays8_5").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -2704,7 +2947,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_6<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace6();
+			name("test.mulArrays8_6").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -2722,7 +2966,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_7<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace7();
+			name("test.mulArrays8_7").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input7));
 	}
@@ -2740,7 +2985,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
 		final Inplaces.Arity8_8<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).inplace8();
+			name("test.mulArrays8_8").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertTrue(Arrays.equals(expected, input8));
 	}
@@ -2757,8 +3003,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input7 = 1.;
 		final Double input8 = 1.;
 		final Double expected = 8.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -2774,7 +3021,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate1();
+		name("test.mulArrays8_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -2790,7 +3039,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate2();
+		name("test.mulArrays8_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -2806,7 +3057,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate3();
+		name("test.mulArrays8_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -2822,7 +3075,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate4();
+		name("test.mulArrays8_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -2838,7 +3093,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate5();
+		name("test.mulArrays8_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -2854,7 +3111,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate6();
+		name("test.mulArrays8_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -2870,7 +3129,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate7();
+		name("test.mulArrays8_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -2886,7 +3147,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 256.0, 6561.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).mutate8();
+		name("test.mulArrays8_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -2903,8 +3166,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input8 = 1.;
 		final Double expected = 8.;
 		final Functions.Arity8<Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8)
-						.outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8);
 		assertEquals(actual, expected, 0.);
 	}
@@ -2923,8 +3186,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 8, 16, 24 };
 		final Computers.Arity8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -2941,8 +3205,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input7 = 1.;
 		final Double input8 = 1.;
 		final Double expected = 8.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -2960,8 +3225,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 8, 16, 24 };
 		final Computers.Arity8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -2979,8 +3245,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input8 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 8, 16, 24 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8).output(actual)
-				.compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -3000,8 +3267,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input9 = 1.;
 		final Double expected = 9.;
 		final Functions.Arity9<Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertEquals(actual, expected);
 	}
@@ -3020,8 +3288,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_1<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace1();
+			name("test.mulArrays9_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -3040,8 +3309,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_2<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace2();
+			name("test.mulArrays9_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -3060,8 +3330,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_3<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace3();
+			name("test.mulArrays9_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -3080,8 +3351,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_4<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace4();
+			name("test.mulArrays9_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -3100,8 +3372,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_5<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace5();
+			name("test.mulArrays9_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -3120,8 +3393,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_6<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace6();
+			name("test.mulArrays9_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -3140,8 +3414,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_7<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace7();
+			name("test.mulArrays9_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input7, expected));
 	}
@@ -3160,8 +3435,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace8();
+			name("test.mulArrays9_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input8, expected));
 	}
@@ -3180,8 +3456,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_9<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class).inplace9();
+			name("test.mulArrays9_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(input9, expected));
 	}
@@ -3200,8 +3477,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input9 = 1.;
 		final Double expected = 9.;
 		final Functions.Arity9<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class).outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertEquals(actual, expected, 0.);
 	}
@@ -3221,10 +3498,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 9, 18, 27 };
 		final Computers.Arity9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -3243,8 +3519,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input9 = 1.;
 		final Double expected = 9.;
 		final Functions.Arity9<Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertEquals(actual, expected);
 	}
@@ -3263,8 +3540,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_1<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace1();
+			name("test.mulArrays9_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -3283,8 +3560,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_2<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace2();
+			name("test.mulArrays9_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -3303,8 +3580,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_3<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace3();
+			name("test.mulArrays9_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -3323,8 +3600,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_4<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace4();
+			name("test.mulArrays9_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -3343,8 +3620,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_5<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace5();
+			name("test.mulArrays9_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -3363,8 +3640,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_6<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace6();
+			name("test.mulArrays9_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -3383,8 +3660,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_7<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace7();
+			name("test.mulArrays9_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input7));
 	}
@@ -3403,8 +3680,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace8();
+			name("test.mulArrays9_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input8));
 	}
@@ -3423,8 +3700,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
 		final Inplaces.Arity9_9<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.inplace9();
+			name("test.mulArrays9_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertTrue(Arrays.equals(expected, input9));
 	}
@@ -3442,8 +3719,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input8 = 1.;
 		final Double input9 = 1.;
 		final Double expected = 9.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -3460,7 +3738,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate1();
+		name("test.mulArrays9_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -3477,7 +3757,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate2();
+		name("test.mulArrays9_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -3494,7 +3776,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate3();
+		name("test.mulArrays9_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -3511,7 +3795,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate4();
+		name("test.mulArrays9_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -3528,7 +3814,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate5();
+		name("test.mulArrays9_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -3545,7 +3833,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate6();
+		name("test.mulArrays9_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -3562,7 +3852,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate7();
+		name("test.mulArrays9_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -3579,7 +3871,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate8();
+		name("test.mulArrays9_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -3596,7 +3890,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 512.0, 19683.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9).mutate9();
+		name("test.mulArrays9_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -3614,8 +3910,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input9 = 1.;
 		final Double expected = 9.;
 		final Functions.Arity9<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9);
 		assertEquals(actual, expected, 0.);
 	}
@@ -3635,8 +3931,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 9, 18, 27 };
 		final Computers.Arity9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -3654,9 +3951,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input8 = 1.;
 		final Double input9 = 1.;
 		final Double expected = 9.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9).outType(Double.class)
-				.apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -3675,8 +3972,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 9, 18, 27 };
 		final Computers.Arity9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -3695,8 +3993,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input9 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 9, 18, 27 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9)
-				.output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -3717,8 +4016,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input10 = 1.;
 		final Double expected = 10.;
 		final Functions.Arity10<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class).function();
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertEquals(actual, expected);
 	}
@@ -3738,10 +4038,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace1();
+			name("test.mulArrays10_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -3761,10 +4060,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace2();
+			name("test.mulArrays10_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -3784,10 +4082,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace3();
+			name("test.mulArrays10_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -3807,10 +4104,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace4();
+			name("test.mulArrays10_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -3830,10 +4126,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace5();
+			name("test.mulArrays10_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -3853,10 +4148,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace6();
+			name("test.mulArrays10_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -3876,10 +4170,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace7();
+			name("test.mulArrays10_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input7, expected));
 	}
@@ -3899,10 +4192,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace8();
+			name("test.mulArrays10_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input8, expected));
 	}
@@ -3922,10 +4214,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace9();
+			name("test.mulArrays10_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input9, expected));
 	}
@@ -3945,10 +4236,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace10();
+			name("test.mulArrays10_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(input10, expected));
 	}
@@ -3968,10 +4258,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input10 = 1.;
 		final Double expected = 10.;
 		final Functions.Arity10<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-								Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertEquals(actual, expected, 0.);
 	}
@@ -3992,10 +4280,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 10, 20, 30 };
 		final Computers.Arity10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -4015,9 +4302,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input10 = 1.;
 		final Double expected = 10.;
 		final Functions.Arity10<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.function();
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.function();
 		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertEquals(actual, expected);
 	}
@@ -4037,9 +4324,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace1();
+			name("test.mulArrays10_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -4059,9 +4345,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace2();
+			name("test.mulArrays10_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -4081,9 +4366,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace3();
+			name("test.mulArrays10_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -4103,9 +4387,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace4();
+			name("test.mulArrays10_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -4125,9 +4408,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace5();
+			name("test.mulArrays10_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -4147,9 +4429,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace6();
+			name("test.mulArrays10_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -4169,9 +4450,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace7();
+			name("test.mulArrays10_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input7));
 	}
@@ -4191,9 +4471,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace8();
+			name("test.mulArrays10_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input8));
 	}
@@ -4213,9 +4492,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace9();
+			name("test.mulArrays10_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input9));
 	}
@@ -4235,9 +4513,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
 		final Inplaces.Arity10_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.inplace10();
+			name("test.mulArrays10_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.inplace10();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertTrue(Arrays.equals(expected, input10));
 	}
@@ -4256,8 +4533,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input9 = 1.;
 		final Double input10 = 1.;
 		final Double expected = 10.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -4275,8 +4553,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate1();
+		name("test.mulArrays10_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -4294,8 +4573,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate2();
+		name("test.mulArrays10_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -4313,8 +4593,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate3();
+		name("test.mulArrays10_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -4332,8 +4613,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate4();
+		name("test.mulArrays10_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -4351,8 +4633,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate5();
+		name("test.mulArrays10_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -4370,8 +4653,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate6();
+		name("test.mulArrays10_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -4389,8 +4673,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate7();
+		name("test.mulArrays10_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -4408,8 +4693,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate8();
+		name("test.mulArrays10_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -4427,8 +4713,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate9();
+		name("test.mulArrays10_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -4446,8 +4733,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 1024.0, 59049.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.mutate10();
+		name("test.mulArrays10_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -4466,9 +4754,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input10 = 1.;
 		final Double expected = 10.;
 		final Functions.Arity10<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.outType(Double.class).function();
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.outType(Double.class).function();
 		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10);
 		assertEquals(actual, expected, 0.);
 	}
@@ -4489,9 +4776,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 10, 20, 30 };
 		final Computers.Arity10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -4510,9 +4797,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input9 = 1.;
 		final Double input10 = 1.;
 		final Double expected = 10.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -4532,9 +4819,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 10, 20, 30 };
 		final Computers.Arity10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -4554,8 +4841,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input10 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 10, 20, 30 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10)
-				.output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -4577,10 +4865,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input11 = 1.;
 		final Double expected = 11.;
 		final Functions.Arity11<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11);
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertEquals(actual, expected);
 	}
 
@@ -4600,9 +4888,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace1();
+			name("test.mulArrays11_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -4623,9 +4911,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace2();
+			name("test.mulArrays11_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -4646,9 +4934,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace3();
+			name("test.mulArrays11_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -4669,9 +4957,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace4();
+			name("test.mulArrays11_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -4692,9 +4980,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace5();
+			name("test.mulArrays11_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -4715,9 +5003,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace6();
+			name("test.mulArrays11_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -4738,9 +5026,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace7();
+			name("test.mulArrays11_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input7, expected));
 	}
@@ -4761,9 +5049,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace8();
+			name("test.mulArrays11_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input8, expected));
 	}
@@ -4784,9 +5072,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace9();
+			name("test.mulArrays11_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input9, expected));
 	}
@@ -4807,9 +5095,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace10();
+			name("test.mulArrays11_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input10, expected));
 	}
@@ -4830,9 +5118,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).inplace11();
+			name("test.mulArrays11_11") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace11();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(input11, expected));
 	}
@@ -4853,12 +5141,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input11 = 1.;
 		final Double expected = 11.;
 		final Functions.Arity11<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-								Double.class, Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11);
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -4879,9 +5164,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 11, 22, 33 };
 		final Computers.Arity11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class).outType(double[].class).computer();
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -4902,11 +5187,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input11 = 1.;
 		final Double expected = 11.;
 		final Functions.Arity11<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11);
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertEquals(actual, expected);
 	}
 
@@ -4926,9 +5210,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace1();
+			name("test.mulArrays11_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -4949,9 +5232,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace2();
+			name("test.mulArrays11_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -4972,9 +5254,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace3();
+			name("test.mulArrays11_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -4995,9 +5276,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace4();
+			name("test.mulArrays11_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -5018,9 +5298,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace5();
+			name("test.mulArrays11_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -5041,9 +5320,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace6();
+			name("test.mulArrays11_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -5064,9 +5342,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace7();
+			name("test.mulArrays11_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input7));
 	}
@@ -5087,9 +5364,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace8();
+			name("test.mulArrays11_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input8));
 	}
@@ -5110,9 +5386,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace9();
+			name("test.mulArrays11_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input9));
 	}
@@ -5133,9 +5408,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace10();
+			name("test.mulArrays11_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace10();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input10));
 	}
@@ -5156,9 +5430,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
 		final Inplaces.Arity11_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.inplace11();
+			name("test.mulArrays11_11").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.inplace11();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertTrue(Arrays.equals(expected, input11));
 	}
@@ -5178,9 +5451,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input10 = 1.;
 		final Double input11 = 1.;
 		final Double expected = 11.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -5199,9 +5472,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate1();
+		name("test.mulArrays11_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -5220,9 +5493,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate2();
+		name("test.mulArrays11_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -5241,9 +5514,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate3();
+		name("test.mulArrays11_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -5262,9 +5535,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate4();
+		name("test.mulArrays11_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -5283,9 +5556,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate5();
+		name("test.mulArrays11_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -5304,9 +5577,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate6();
+		name("test.mulArrays11_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -5325,9 +5598,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate7();
+		name("test.mulArrays11_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -5346,9 +5619,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate8();
+		name("test.mulArrays11_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -5367,9 +5640,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate9();
+		name("test.mulArrays11_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -5388,9 +5661,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate10();
+		name("test.mulArrays11_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -5409,9 +5682,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 2048.0, 177147.0 };
-		name("test.mulArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.mutate11();
+		name("test.mulArrays11_11") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.mutate11();
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -5431,11 +5704,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input11 = 1.;
 		final Double expected = 11.;
 		final Functions.Arity11<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11);
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -5456,9 +5727,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 11, 22, 33 };
 		final Computers.Arity11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -5478,9 +5749,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input10 = 1.;
 		final Double input11 = 1.;
 		final Double expected = 11.;
-		final Object actual = name("test.addDoubles")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -5501,9 +5772,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 11, 22, 33 };
 		final Computers.Arity11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-						.output(actual).computer();
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+				.output(actual).computer();
 		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
@@ -5524,9 +5795,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input11 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 11, 22, 33 };
-		name("test.addArrays")
-				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11)
-				.output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -5549,12 +5820,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input12 = 1.;
 		final Double expected = 12.;
 		final Functions.Arity12<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-								Double.class, Double.class, Double.class, Double.class, Double.class, Double.class)
-						.function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12);
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertEquals(actual, expected);
 	}
 
@@ -5575,9 +5844,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace1();
+			name("test.mulArrays12_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input1, expected));
 	}
@@ -5599,9 +5868,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace2();
+			name("test.mulArrays12_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input2, expected));
 	}
@@ -5623,9 +5892,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace3();
+			name("test.mulArrays12_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input3, expected));
 	}
@@ -5647,9 +5916,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace4();
+			name("test.mulArrays12_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input4, expected));
 	}
@@ -5671,9 +5940,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace5();
+			name("test.mulArrays12_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input5, expected));
 	}
@@ -5695,9 +5964,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace6();
+			name("test.mulArrays12_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input6, expected));
 	}
@@ -5719,9 +5988,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace7();
+			name("test.mulArrays12_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input7, expected));
 	}
@@ -5743,9 +6012,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace8();
+			name("test.mulArrays12_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input8, expected));
 	}
@@ -5767,9 +6036,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace9();
+			name("test.mulArrays12_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input9, expected));
 	}
@@ -5791,9 +6060,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace10();
+			name("test.mulArrays12_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input10, expected));
 	}
@@ -5815,9 +6084,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace11();
+			name("test.mulArrays12_11") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace11();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input11, expected));
 	}
@@ -5839,9 +6108,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).inplace12();
+			name("test.mulArrays12_12") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace12();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(input12, expected));
 	}
@@ -5863,12 +6132,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input12 = 1.;
 		final Double expected = 12.;
 		final Functions.Arity12<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-								Double.class, Double.class, Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12);
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -5890,11 +6156,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 12, 24, 36 };
 		final Computers.Arity12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class).outType(double[].class).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				actual);
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -5915,10 +6180,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input12 = 1.;
 		final Double expected = 12.;
 		final Functions.Arity12<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12);
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertEquals(actual, expected);
 	}
 
@@ -5939,8 +6204,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace1();
+			name("test.mulArrays12_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace1();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input1));
 	}
@@ -5962,8 +6227,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace2();
+			name("test.mulArrays12_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace2();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input2));
 	}
@@ -5985,8 +6250,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace3();
+			name("test.mulArrays12_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace3();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input3));
 	}
@@ -6008,8 +6273,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace4();
+			name("test.mulArrays12_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace4();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input4));
 	}
@@ -6031,8 +6296,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace5();
+			name("test.mulArrays12_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace5();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input5));
 	}
@@ -6054,8 +6319,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace6();
+			name("test.mulArrays12_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace6();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input6));
 	}
@@ -6077,8 +6342,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace7();
+			name("test.mulArrays12_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace7();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input7));
 	}
@@ -6100,8 +6365,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace8();
+			name("test.mulArrays12_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace8();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input8));
 	}
@@ -6123,8 +6388,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace9();
+			name("test.mulArrays12_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace9();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input9));
 	}
@@ -6146,8 +6411,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace10();
+			name("test.mulArrays12_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace10();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input10));
 	}
@@ -6169,8 +6434,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace11();
+			name("test.mulArrays12_11").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace11();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input11));
 	}
@@ -6192,8 +6457,8 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
 		final Inplaces.Arity12_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).inplace12();
+			name("test.mulArrays12_12").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.inplace12();
 		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertTrue(Arrays.equals(expected, input12));
 	}
@@ -6214,8 +6479,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input11 = 1.;
 		final Double input12 = 1.;
 		final Double expected = 12.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -6235,8 +6501,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate1();
+		name("test.mulArrays12_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -6256,8 +6523,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate2();
+		name("test.mulArrays12_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -6277,8 +6545,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate3();
+		name("test.mulArrays12_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -6298,8 +6567,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate4();
+		name("test.mulArrays12_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -6319,8 +6589,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate5();
+		name("test.mulArrays12_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -6340,8 +6611,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate6();
+		name("test.mulArrays12_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -6361,8 +6633,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate7();
+		name("test.mulArrays12_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -6382,8 +6655,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate8();
+		name("test.mulArrays12_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -6403,8 +6677,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate9();
+		name("test.mulArrays12_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -6424,8 +6699,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate10();
+		name("test.mulArrays12_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -6445,8 +6721,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate11();
+		name("test.mulArrays12_11") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate11();
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -6466,8 +6743,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 4096.0, 531441.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).mutate12();
+		name("test.mulArrays12_12") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.mutate12();
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -6488,10 +6766,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input12 = 1.;
 		final Double expected = 12.;
 		final Functions.Arity12<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12);
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -6513,10 +6790,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 12, 24, 36 };
 		final Computers.Arity12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -6536,8 +6813,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input11 = 1.;
 		final Double input12 = 1.;
 		final Double expected = 12.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -6559,10 +6837,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 12, 24, 36 };
 		final Computers.Arity12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -6583,8 +6861,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input12 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 12, 24, 36 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -6608,11 +6887,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input13 = 1.;
 		final Double expected = 13.;
 		final Functions.Arity13<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13);
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertEquals(actual, expected);
 	}
 
@@ -6634,11 +6912,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -6660,11 +6937,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -6686,11 +6962,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -6712,11 +6987,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -6738,11 +7012,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -6764,11 +7037,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -6790,11 +7062,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -6816,11 +7087,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -6842,11 +7112,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -6868,11 +7137,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -6894,11 +7162,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_11") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -6920,11 +7187,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_12") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -6946,11 +7212,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_13") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -6972,11 +7237,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input13 = 1.;
 		final Double expected = 13.;
 		final Functions.Arity13<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13);
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -6999,11 +7262,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 13, 26, 39 };
 		final Computers.Arity13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class).outType(double[].class).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, actual);
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -7025,10 +7287,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input13 = 1.;
 		final Double expected = 13.;
 		final Functions.Arity13<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13);
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertEquals(actual, expected);
 	}
 
@@ -7050,10 +7312,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input1));
 	}
 
@@ -7075,10 +7336,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input2));
 	}
 
@@ -7100,10 +7360,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input3));
 	}
 
@@ -7125,10 +7384,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input4));
 	}
 
@@ -7150,10 +7408,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input5));
 	}
 
@@ -7175,10 +7432,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input6));
 	}
 
@@ -7200,10 +7456,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input7));
 	}
 
@@ -7225,10 +7480,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input8));
 	}
 
@@ -7250,10 +7504,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input9));
 	}
 
@@ -7275,10 +7528,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input10));
 	}
 
@@ -7300,10 +7552,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_11").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input11));
 	}
 
@@ -7325,10 +7576,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_12").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input12));
 	}
 
@@ -7350,10 +7600,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
 		final Inplaces.Arity13_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13);
+			name("test.mulArrays13_13").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertTrue(Arrays.equals(expected, input13));
 	}
 
@@ -7374,8 +7623,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input12 = 1.;
 		final Double input13 = 1.;
 		final Double expected = 13.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -7396,8 +7646,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate1();
+		name("test.mulArrays13_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -7418,8 +7669,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate2();
+		name("test.mulArrays13_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -7440,8 +7692,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate3();
+		name("test.mulArrays13_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -7462,8 +7715,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate4();
+		name("test.mulArrays13_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -7484,8 +7738,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate5();
+		name("test.mulArrays13_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -7506,8 +7761,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate6();
+		name("test.mulArrays13_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -7528,8 +7784,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate7();
+		name("test.mulArrays13_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -7550,8 +7807,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate8();
+		name("test.mulArrays13_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -7572,8 +7830,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate9();
+		name("test.mulArrays13_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -7594,8 +7853,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate10();
+		name("test.mulArrays13_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -7616,8 +7876,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate11();
+		name("test.mulArrays13_11") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate11();
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -7638,8 +7899,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate12();
+		name("test.mulArrays13_12") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate12();
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -7660,8 +7922,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 8192.0, 1594323.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).mutate13();
+		name("test.mulArrays13_13") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.mutate13();
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -7683,10 +7946,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input13 = 1.;
 		final Double expected = 13.;
 		final Functions.Arity13<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13);
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -7709,10 +7971,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 13, 26, 39 };
 		final Computers.Arity13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -7733,8 +7995,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input12 = 1.;
 		final Double input13 = 1.;
 		final Double expected = 13.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -7757,10 +8020,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 13, 26, 39 };
 		final Computers.Arity13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -7782,8 +8045,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input13 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 13, 26, 39 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -7808,11 +8072,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input14 = 1.;
 		final Double expected = 14.;
 		final Functions.Arity14<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14);
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertEquals(actual, expected);
 	}
 
@@ -7835,11 +8098,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -7862,11 +8124,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -7889,11 +8150,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -7916,11 +8176,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -7943,11 +8202,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -7970,11 +8228,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -7997,11 +8254,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -8024,11 +8280,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -8051,11 +8306,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -8078,11 +8332,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -8105,11 +8358,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_11") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -8132,11 +8384,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_12") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -8159,11 +8410,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_13") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -8186,11 +8436,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class).inplace14();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_14") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace14();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(input14, expected));
 	}
 
@@ -8213,11 +8462,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input14 = 1.;
 		final Double expected = 14.;
 		final Functions.Arity14<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14);
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -8241,13 +8488,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 14, 28, 42 };
 		final Computers.Arity14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, actual);
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -8270,10 +8514,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input14 = 1.;
 		final Double expected = 14.;
 		final Functions.Arity14<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14);
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertEquals(actual, expected);
 	}
 
@@ -8296,10 +8540,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input1));
 	}
 
@@ -8322,10 +8565,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input2));
 	}
 
@@ -8348,10 +8590,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input3));
 	}
 
@@ -8374,10 +8615,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input4));
 	}
 
@@ -8400,10 +8640,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input5));
 	}
 
@@ -8426,10 +8665,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input6));
 	}
 
@@ -8452,10 +8690,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input7));
 	}
 
@@ -8478,10 +8715,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input8));
 	}
 
@@ -8504,10 +8740,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input9));
 	}
 
@@ -8530,10 +8765,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input10));
 	}
 
@@ -8556,10 +8790,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_11").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input11));
 	}
 
@@ -8582,10 +8815,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_12").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input12));
 	}
 
@@ -8608,10 +8840,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_13").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input13));
 	}
 
@@ -8634,10 +8865,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
 		final Inplaces.Arity14_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).inplace14();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14);
+			name("test.mulArrays14_14").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.inplace14();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertTrue(Arrays.equals(expected, input14));
 	}
 
@@ -8659,8 +8889,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input13 = 1.;
 		final Double input14 = 1.;
 		final Double expected = 14.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -8682,8 +8913,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate1();
+		name("test.mulArrays14_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -8705,8 +8937,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate2();
+		name("test.mulArrays14_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -8728,8 +8961,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate3();
+		name("test.mulArrays14_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -8751,8 +8985,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate4();
+		name("test.mulArrays14_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -8774,8 +9009,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate5();
+		name("test.mulArrays14_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -8797,8 +9033,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate6();
+		name("test.mulArrays14_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -8820,8 +9057,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate7();
+		name("test.mulArrays14_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -8843,8 +9081,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate8();
+		name("test.mulArrays14_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -8866,8 +9105,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate9();
+		name("test.mulArrays14_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -8889,8 +9129,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate10();
+		name("test.mulArrays14_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -8912,8 +9153,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate11();
+		name("test.mulArrays14_11") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate11();
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -8935,8 +9177,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate12();
+		name("test.mulArrays14_12") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate12();
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -8958,8 +9201,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate13();
+		name("test.mulArrays14_13") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate13();
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -8981,8 +9225,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 16384.0, 4782969.0 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).mutate14();
+		name("test.mulArrays14_14") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.mutate14();
 		assertTrue(Arrays.equals(input14, expected));
 	}
 
@@ -9005,10 +9250,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input14 = 1.;
 		final Double expected = 14.;
 		final Functions.Arity14<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14);
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -9032,10 +9276,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 14, 28, 42 };
 		final Computers.Arity14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -9057,8 +9301,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input13 = 1.;
 		final Double input14 = 1.;
 		final Double expected = 14.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -9082,10 +9327,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 14, 28, 42 };
 		final Computers.Arity14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -9108,8 +9353,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input14 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 14, 28, 42 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -9135,11 +9381,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input15 = 1.;
 		final Double expected = 15.;
 		final Functions.Arity15<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15);
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertEquals(actual, expected);
 	}
 
@@ -9163,13 +9408,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -9193,13 +9435,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -9223,13 +9462,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -9253,13 +9489,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -9283,13 +9516,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -9313,13 +9543,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -9343,13 +9570,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -9373,13 +9597,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -9403,13 +9624,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -9433,13 +9651,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -9463,13 +9678,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_11") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -9493,13 +9705,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_12") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -9523,13 +9732,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_13") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -9553,13 +9759,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace14();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_14") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace14();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input14, expected));
 	}
 
@@ -9583,13 +9786,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace15();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_15") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace15();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(input15, expected));
 	}
 
@@ -9613,11 +9813,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input15 = 1.;
 		final Double expected = 15.;
 		final Functions.Arity15<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15);
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -9642,13 +9840,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 15, 30, 45 };
 		final Computers.Arity15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays")
-						.inType(double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class,
-								double[].class, double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, actual);
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -9672,10 +9867,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input15 = 1.;
 		final Double expected = 15.;
 		final Functions.Arity15<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15);
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertEquals(actual, expected);
 	}
 
@@ -9699,10 +9894,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input1));
 	}
 
@@ -9726,10 +9920,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input2));
 	}
 
@@ -9753,10 +9946,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input3));
 	}
 
@@ -9780,10 +9972,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input4));
 	}
 
@@ -9807,10 +9998,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input5));
 	}
 
@@ -9834,10 +10024,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input6));
 	}
 
@@ -9861,10 +10050,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input7));
 	}
 
@@ -9888,10 +10076,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input8));
 	}
 
@@ -9915,10 +10102,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input9));
 	}
 
@@ -9942,10 +10128,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input10));
 	}
 
@@ -9969,10 +10154,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_11").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input11));
 	}
 
@@ -9996,10 +10180,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_12").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input12));
 	}
 
@@ -10023,10 +10206,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_13").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input13));
 	}
 
@@ -10050,10 +10232,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace14();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_14").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace14();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input14));
 	}
 
@@ -10077,10 +10258,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
 		final Inplaces.Arity15_15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).inplace15();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15);
+			name("test.mulArrays15_15").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.inplace15();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertTrue(Arrays.equals(expected, input15));
 	}
 
@@ -10103,8 +10283,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input14 = 1.;
 		final Double input15 = 1.;
 		final Double expected = 15.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -10127,8 +10308,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate1();
+		name("test.mulArrays15_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -10151,8 +10333,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate2();
+		name("test.mulArrays15_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -10175,8 +10358,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate3();
+		name("test.mulArrays15_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -10199,8 +10383,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate4();
+		name("test.mulArrays15_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -10223,8 +10408,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate5();
+		name("test.mulArrays15_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -10247,8 +10433,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate6();
+		name("test.mulArrays15_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -10271,8 +10458,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate7();
+		name("test.mulArrays15_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -10295,8 +10483,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate8();
+		name("test.mulArrays15_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -10319,8 +10508,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate9();
+		name("test.mulArrays15_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -10343,8 +10533,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate10();
+		name("test.mulArrays15_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -10367,8 +10558,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate11();
+		name("test.mulArrays15_11") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate11();
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -10391,8 +10583,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate12();
+		name("test.mulArrays15_12") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate12();
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -10415,8 +10608,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate13();
+		name("test.mulArrays15_13") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate13();
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -10439,8 +10633,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate14();
+		name("test.mulArrays15_14") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate14();
 		assertTrue(Arrays.equals(input14, expected));
 	}
 
@@ -10463,8 +10658,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).mutate15();
+		name("test.mulArrays15_15") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.mutate15();
 		assertTrue(Arrays.equals(input15, expected));
 	}
 
@@ -10488,10 +10684,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input15 = 1.;
 		final Double expected = 15.;
 		final Functions.Arity15<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15);
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -10516,10 +10711,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 15, 30, 45 };
 		final Computers.Arity15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -10542,8 +10737,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input14 = 1.;
 		final Double input15 = 1.;
 		final Double expected = 15.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15).outType(Double.class).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -10568,10 +10764,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 15, 30, 45 };
 		final Computers.Arity15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -10595,8 +10791,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input15 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 15, 30, 45 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -10623,11 +10820,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input16 = 1.;
 		final Double expected = 16.;
 		final Functions.Arity16<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-						Double.class, Double.class, Double.class, Double.class, Double.class).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16);
+			name("test.addDoubles") //
+				.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertEquals(actual, expected);
 	}
 
@@ -10652,12 +10848,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_1") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -10682,12 +10876,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_2") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -10712,12 +10904,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_3") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -10742,12 +10932,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_4") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -10772,12 +10960,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_5") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -10802,12 +10988,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_6") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -10832,12 +11016,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_7") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -10862,12 +11044,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_8") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -10892,12 +11072,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_9") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -10922,12 +11100,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_10") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -10952,12 +11128,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_11") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -10982,12 +11156,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_12") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -11012,12 +11184,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_13") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -11042,12 +11212,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace14();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_14") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace14();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input14, expected));
 	}
 
@@ -11072,12 +11240,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace15();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_15") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace15();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input15, expected));
 	}
 
@@ -11102,12 +11268,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.inplace16();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_16") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.inplace16();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(input16, expected));
 	}
 
@@ -11132,13 +11296,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input16 = 1.;
 		final Double expected = 16.;
 		final Functions.Arity16<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles")
-						.inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-								Double.class, Double.class, Double.class, Double.class, Double.class, Double.class,
-								Double.class, Double.class, Double.class, Double.class)
-						.outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16);
+			name("test.addDoubles").inType(Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -11164,12 +11324,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 16, 32, 48 };
 		final Computers.Arity16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").inType(double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class,
-						double[].class, double[].class, double[].class, double[].class, double[].class, double[].class)
-						.outType(double[].class).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16, actual);
+			name("test.addArrays") //
+				.inType(double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class, double[].class) //
+				.outType(double[].class).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -11194,10 +11352,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input16 = 1.;
 		final Double expected = 16.;
 		final Functions.Arity16<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, ?> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).function();
-		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16);
+			name("test.addDoubles") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.function();
+		final Object actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertEquals(actual, expected);
 	}
 
@@ -11222,10 +11380,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_1<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace1();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_1").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace1();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input1));
 	}
 
@@ -11250,10 +11407,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_2<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace2();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_2").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace2();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input2));
 	}
 
@@ -11278,10 +11434,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_3<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace3();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_3").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace3();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input3));
 	}
 
@@ -11306,10 +11461,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_4<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace4();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_4").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace4();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input4));
 	}
 
@@ -11334,10 +11488,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_5<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace5();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_5").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace5();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input5));
 	}
 
@@ -11362,10 +11515,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_6<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace6();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_6").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace6();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input6));
 	}
 
@@ -11390,10 +11542,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_7<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace7();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_7").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace7();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input7));
 	}
 
@@ -11418,10 +11569,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_8<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace8();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_8").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace8();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input8));
 	}
 
@@ -11446,10 +11596,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace9();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_9").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace9();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input9));
 	}
 
@@ -11474,10 +11623,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace10();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_10").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace10();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input10));
 	}
 
@@ -11502,10 +11650,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace11();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_11").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace11();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input11));
 	}
 
@@ -11530,10 +11677,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace12();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_12").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace12();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input12));
 	}
 
@@ -11558,10 +11704,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace13();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_13").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace13();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input13));
 	}
 
@@ -11586,10 +11731,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace14();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_14").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace14();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input14));
 	}
 
@@ -11614,10 +11758,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace15();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_15").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace15();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input15));
 	}
 
@@ -11642,10 +11785,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
 		final Inplaces.Arity16_16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).inplace16();
-		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16);
+			name("test.mulArrays16_16").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.inplace16();
+		op.mutate(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertTrue(Arrays.equals(expected, input16));
 	}
 
@@ -11669,8 +11811,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input15 = 1.;
 		final Double input16 = 1.;
 		final Double expected = 16.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15, input16).apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.apply();
 		assertEquals(actual, expected);
 	}
 
@@ -11694,8 +11837,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate1();
+		name("test.mulArrays16_1") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate1();
 		assertTrue(Arrays.equals(input1, expected));
 	}
 
@@ -11719,8 +11863,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate2();
+		name("test.mulArrays16_2") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate2();
 		assertTrue(Arrays.equals(input2, expected));
 	}
 
@@ -11744,8 +11889,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate3();
+		name("test.mulArrays16_3") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate3();
 		assertTrue(Arrays.equals(input3, expected));
 	}
 
@@ -11769,8 +11915,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate4();
+		name("test.mulArrays16_4") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate4();
 		assertTrue(Arrays.equals(input4, expected));
 	}
 
@@ -11794,8 +11941,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate5();
+		name("test.mulArrays16_5") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate5();
 		assertTrue(Arrays.equals(input5, expected));
 	}
 
@@ -11819,8 +11967,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate6();
+		name("test.mulArrays16_6") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate6();
 		assertTrue(Arrays.equals(input6, expected));
 	}
 
@@ -11844,8 +11993,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate7();
+		name("test.mulArrays16_7") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate7();
 		assertTrue(Arrays.equals(input7, expected));
 	}
 
@@ -11869,8 +12019,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate8();
+		name("test.mulArrays16_8") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate8();
 		assertTrue(Arrays.equals(input8, expected));
 	}
 
@@ -11894,8 +12045,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate9();
+		name("test.mulArrays16_9") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate9();
 		assertTrue(Arrays.equals(input9, expected));
 	}
 
@@ -11919,8 +12071,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate10();
+		name("test.mulArrays16_10") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate10();
 		assertTrue(Arrays.equals(input10, expected));
 	}
 
@@ -11944,8 +12097,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate11();
+		name("test.mulArrays16_11") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate11();
 		assertTrue(Arrays.equals(input11, expected));
 	}
 
@@ -11969,8 +12123,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate12();
+		name("test.mulArrays16_12") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate12();
 		assertTrue(Arrays.equals(input12, expected));
 	}
 
@@ -11994,8 +12149,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate13();
+		name("test.mulArrays16_13") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate13();
 		assertTrue(Arrays.equals(input13, expected));
 	}
 
@@ -12019,8 +12175,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate14();
+		name("test.mulArrays16_14") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate14();
 		assertTrue(Arrays.equals(input14, expected));
 	}
 
@@ -12044,8 +12201,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate15();
+		name("test.mulArrays16_15") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate15();
 		assertTrue(Arrays.equals(input15, expected));
 	}
 
@@ -12069,8 +12227,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		final double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		name("test.mulArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).mutate16();
+		name("test.mulArrays16_16") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.mutate16();
 		assertTrue(Arrays.equals(input16, expected));
 	}
 
@@ -12095,10 +12254,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input16 = 1.;
 		final Double expected = 16.;
 		final Functions.Arity16<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-				name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).outType(Double.class).function();
-		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16);
+			name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.outType(Double.class).function();
+		final double actual = op.apply(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16);
 		assertEquals(actual, expected, 0.);
 	}
 
@@ -12124,10 +12282,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 16, 32, 48 };
 		final Computers.Arity16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -12151,9 +12309,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		final Double input15 = 1.;
 		final Double input16 = 1.;
 		final Double expected = 16.;
-		final Object actual = name("test.addDoubles").input(input1, input2, input3, input4, input5, input6, input7,
-				input8, input9, input10, input11, input12, input13, input14, input15, input16).outType(Double.class)
-				.apply();
+		final Object actual = name("test.addDoubles") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.outType(Double.class).apply();
 		assertEquals(actual, expected);
 	}
 
@@ -12179,10 +12337,10 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 16, 32, 48 };
 		final Computers.Arity16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-				name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9,
-						input10, input11, input12, input13, input14, input15, input16).output(actual).computer();
-		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12,
-				input13, input14, input15, input16, actual);
+			name("test.addArrays") //
+				.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+				.output(actual).computer();
+		op.compute(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16, actual);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 
@@ -12207,8 +12365,9 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 		double[] input16 = { 1, 2, 3 };
 		double[] actual = { 0, 0, 0 };
 		double[] expected = { 16, 32, 48 };
-		name("test.addArrays").input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
-				input11, input12, input13, input14, input15, input16).output(actual).compute();
+		name("test.addArrays") //
+			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
+			.output(actual).compute();
 		assertTrue(Arrays.equals(actual, expected));
 	}
 

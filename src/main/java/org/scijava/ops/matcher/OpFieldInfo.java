@@ -29,6 +29,7 @@
 
 package org.scijava.ops.matcher;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -147,6 +148,11 @@ public class OpFieldInfo implements OpInfo {
 	@Override
 	public boolean isValid() {
 		return validityException == null;
+	}
+	
+	@Override
+	public AnnotatedElement getAnnotationBearer() {
+		return field;
 	}
 
 	// -- Object methods --

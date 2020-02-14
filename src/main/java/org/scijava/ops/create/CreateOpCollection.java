@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.scijava.core.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.function.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -28,4 +29,8 @@ public class CreateOpCollection {
 		}
 		return new double[i1.length];
 	};
+	
+	@OpField(names = "create", priority = Priority.HIGH)
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	public static final Producer<Double> doubleSource = () -> 0.0;
 }

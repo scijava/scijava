@@ -75,30 +75,51 @@ public class OpBuilder {
 
 #foreach($arity in $arities)
 	/** Specifies $arity input by value. */
-	public $genericsWithoutOutput.call($arity) Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) input($inputObjectsArgs.call($arity)) {
+	public $genericsWithoutOutput.call($arity) Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) input($inputObjectsArgs.call($arity))
+	{
 		return new Arity${arity}_IV_OU<>($inputObjects.call($arity));
 	}
 
 	/** Specifies $arity input by raw type. */
-	public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputClassesArgs.call($arity)) {
+	public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputClassesArgs.call($arity))
+	{
 		return inType($inputClassesToTypes.call($arity));
 	}
 
 	/** Specifies $arity input by generic type. */
-	public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputTypesArgs.call($arity)) {
+	public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputTypesArgs.call($arity))
+	{
 		return new Arity${arity}_IT_OU<>($inputTypes.call($arity));
 	}
 
 #end
-
 	// -- Helper methods --
 
 	@SuppressWarnings({ "unchecked" })
 	private <T> Nil<T> type(final WeakReference<T> obj) {
-		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj.get()));
+		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj
+			.get()));
 	}
 
-	
+	private void checkComputerRefs(Object... objects) {
+		checkRefs(objects.length - 1, "Output", objects);
+	}
+
+	private void checkInplaceRefs(int inplaceNo, Object... objects) {
+		checkRefs(inplaceNo - 1, "Mutable input " + inplaceNo, objects);
+	}
+
+	private void checkRefs(int mutableIndex, String label, Object... objects) {
+		for (int i = 0; i < objects.length; i++) {
+			if (i == mutableIndex) continue;
+			if (objects[mutableIndex] == objects[i]) {
+				throw new IllegalArgumentException(label +
+					" cannot be same reference as input #" + (i + 1));
+			}
+		}
+	}
+
+	// @formatter:off
 	/*
 	 * -- HELPER CLASSES --
 	 * 
@@ -122,6 +143,7 @@ public class OpBuilder {
 	 * 		a) matchable: Computer
 	 *  	b) runnable: compute
 	 */
+	// @formatter:on
 
 	/**
 	 * Builder with arity 0, output unspecified.
@@ -144,12 +166,15 @@ public class OpBuilder {
 
 		public Producer<?> producer() {
 			final Nil<Producer<Object>> specialType = new Nil<Producer<Object>>() {
+
 				@Override
 				public Type getType() {
-					return Types.parameterize(Producer.class, new Type[] { Object.class });
+					return Types.parameterize(Producer.class, new Type[] {
+						Object.class });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], Nil.of(Object.class));
+			return ops.findOp(opName, specialType, new Nil<?>[0], Nil.of(
+				Object.class));
 		}
 
 		public Object create() {
@@ -161,8 +186,7 @@ public class OpBuilder {
 	 * Builder with arity 0, output type given.
 	 *
 	 * @author Curtis Rueden
-	 * @param <O>
-	 *            The type of the output.
+	 * @param <O> The type of the output.
 	 */
 	public final class Arity0_OT<O> {
 
@@ -174,9 +198,11 @@ public class OpBuilder {
 
 		public Producer<O> producer() {
 			final Nil<Producer<O>> specialType = new Nil<Producer<O>>() {
+
 				@Override
 				public Type getType() {
-					return Types.parameterize(Producer.class, new Type[] { outType.getType() });
+					return Types.parameterize(Producer.class, new Type[] { outType
+						.getType() });
 				}
 			};
 			return ops.findOp(opName, specialType, new Nil<?>[0], outType);
@@ -196,8 +222,7 @@ public class OpBuilder {
 	 * Builder with arity 0, output value given.
 	 *
 	 * @author Curtis Rueden
-	 * @param <O>
-	 *            The type of the output.
+	 * @param <O> The type of the output.
 	 */
 	public final class Arity0_OV<O> {
 
@@ -216,18 +241,16 @@ public class OpBuilder {
 		}
 
 	}
-#foreach($arity in $arities)
 
+#foreach($arity in $arities)
 	/**
 	 * Builder with arity $arity, input type given, output type given.
 	 *
 	 * @author Curtis Rueden
 #foreach($a in [1..$arity])
-	 * @param <I$a>
-	 *            The type of input $a.
+	 * @param <I$a> The type of input $a.
 #end
-	 * @param <O>
-	 *            The type of the output.
+	 * @param <O> The type of the output.
 	 */
 	public final class Arity${arity}_IT_OT$generics.call($arity) {
 
@@ -236,7 +259,8 @@ public class OpBuilder {
 #end
 		private final Nil<O> outType;
 
-		public Arity${arity}_IT_OT($inputTypesArgsWithOutput.call($arity)) {
+		public Arity${arity}_IT_OT($inputTypesArgsWithOutput.call($arity))
+		{
 #foreach($a in [1..$arity])			
 			this.in${a}Type = in${a}Type;
 #end
@@ -255,8 +279,8 @@ public class OpBuilder {
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypes.call($arity));
 		}
-#end
 
+#end
 	}
 
 	/**
@@ -264,8 +288,7 @@ public class OpBuilder {
 	 *
 	 * @author Curtis Rueden
 #foreach($a in [1..$arity])
-	 * @param <I$a>
-	 *            The type of input $a.
+	 * @param <I$a> The type of input $a.
 #end
 	 */
 	public final class Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) {
@@ -274,7 +297,8 @@ public class OpBuilder {
 		private final Nil<I$a> in${a}Type;
 #end
 
-		public Arity${arity}_IT_OU($inputTypesArgs.call($arity)) {
+		public Arity${arity}_IT_OU($inputTypesArgs.call($arity))
+		{
 #foreach($a in [1..$arity])			
 			this.in${a}Type = in${a}Type;
 #end
@@ -296,6 +320,7 @@ public class OpBuilder {
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypes.call($arity));
 		}
+
 #end
 	}
 
@@ -304,11 +329,9 @@ public class OpBuilder {
 	 *
 	 * @author Curtis Rueden
 #foreach($a in [1..$arity])
-	 * @param <I$a>
-	 *            The type of input $a.
+	 * @param <I$a> The type of input $a.
 #end
-	 * @param <O>
-	 *            The type of the output.
+	 * @param <O> The type of the output.
 	 */
 	public final class Arity${arity}_IV_OT$generics.call($arity) {
 
@@ -317,7 +340,8 @@ public class OpBuilder {
 #end
 		private final Nil<O> outType;
 
-		public Arity${arity}_IV_OT($inputObjectsArgs.call($arity), final Nil<O> outType) {
+		public Arity${arity}_IV_OT($inputObjectsArgs.call($arity), final Nil<O> outType)
+		{
 #foreach($a in [1..$arity])
 			this.in$a = new WeakReference<>(in$a);
 #end
@@ -327,11 +351,11 @@ public class OpBuilder {
 		public $functionArity.call($arity)$generics.call($arity) function() {
 			return Functions.match(ops, opName, $inputTypesFromArgs.call($arity), outType);
 		}
-		
+	
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return Computers.match(ops, opName, $inputTypesFromArgs.call($arity), outType);
 		}
-		
+	
 		public O apply() {
 			return function().apply($inputArgsFromReferences.call($arity));
 		}
@@ -342,8 +366,7 @@ public class OpBuilder {
 	 *
 	 * @author Curtis Rueden
 #foreach($a in [1..$arity])
-	 * @param <I$a>
-	 *            The type of input $a.
+	 * @param <I$a> The type of input $a.
 #end
 	 */
 	public final class Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) {
@@ -352,13 +375,15 @@ public class OpBuilder {
 		private final WeakReference<I$a> in$a;
 #end
 
-		public Arity${arity}_IV_OU($inputObjectsArgs.call($arity)) {
+		public Arity${arity}_IV_OU($inputObjectsArgs.call($arity))
+		{
 #foreach($a in [1..$arity])
 			this.in$a = new WeakReference<>(in$a);
 #end
 		}
 
 		public <O> Arity${arity}_IV_OV$generics.call($arity) output(final O out) {
+			checkComputerRefs($inputArgsFromReferences.call($arity), out);
 			return new Arity${arity}_IV_OV<>($inputArgsFromReferences.call($arity), out);
 		}
 
@@ -376,10 +401,11 @@ public class OpBuilder {
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
+			checkInplaceRefs($a, $inputObjects.call($arity));
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypesFromArgs.call($arity));
 		}
-#end
 
+#end
 		public Object apply() {
 			return function().apply($inputArgsFromReferences.call($arity));
 		}
@@ -388,6 +414,7 @@ public class OpBuilder {
 		public void mutate${inplaceMatchNumber.call($arity, $a)}() {
 			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputArgsFromReferences.call($arity));
 		}
+
 #end
 	}
 
@@ -396,8 +423,7 @@ public class OpBuilder {
 	 *
 	 * @author Curtis Rueden
 #foreach($a in [1..$arity])
-	 * @param <I$a> 
-	 *            The type of input $a.
+	 * @param <I$a> The type of input $a.
 #end
 	 */
 	public final class Arity${arity}_IV_OV${generics.call($arity)} {
@@ -407,7 +433,8 @@ public class OpBuilder {
 #end
 		private final WeakReference<O> out;
 
-		public Arity${arity}_IV_OV($inputObjectsArgs.call($arity), final O out) {
+		public Arity${arity}_IV_OV($inputObjectsArgs.call($arity), final O out)
+		{
 #foreach($a in [1..$arity])
 			this.in$a = new WeakReference<>(in$a);
 #end
@@ -417,11 +444,11 @@ public class OpBuilder {
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
 			return Computers.match(ops, opName, $inputTypesFromArgs.call($arity), type(out));
 		}
-		
+
 		public void compute() {
 			computer().compute($inputArgsFromReferences.call($arity), out.get());
 		}
-		
+
 	}
 
 #end

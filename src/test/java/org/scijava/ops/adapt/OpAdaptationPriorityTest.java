@@ -1,0 +1,106 @@
+/*
+ * #%L
+ * SciJava Operations: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2016 - 2019 SciJava Ops developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+package org.scijava.ops.adapt;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import java.util.function.Function;
+
+import org.junit.Test;
+import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.OpField;
+import org.scijava.ops.adapt.functional.ComputersToFunctionsViaFunction;
+import org.scijava.ops.adapt.functional.ComputersToFunctionsViaSource;
+import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Producer;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
+
+/**
+ * Ensures that higher-priority adapt Ops are used over lower-priority adapt
+ * Ops. For reference we are using {@link ComputersToFunctionsViaSource} and
+ * {@link ComputersToFunctionsViaFunction}
+ * 
+ * @author Gabriel Selzer
+ */
+@Plugin(type = OpCollection.class)
+public class OpAdaptationPriorityTest extends AbstractTestEnvironment {
+
+	public static class PriorityThing {
+
+		double priority;
+
+		public PriorityThing(double priority) {
+			this.priority = priority;
+		}
+
+		public void increasePriority(double newPriority) {
+			priority += newPriority;
+		}
+
+		public double getPriority() {
+			return priority;
+		}
+	}
+
+	@OpField(names = "test.priorityOp")
+	@Parameter(key = "input")
+	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	public static final Computers.Arity1<Double, PriorityThing> priorityOp = (in,
+		out) -> {
+		out.increasePriority(in);
+	};
+
+	@OpField(names = "create")
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	public static final Producer<PriorityThing> priorityThingProducer =
+		() -> new PriorityThing(10000);
+
+	@OpField(names = "create")
+	@Parameter(key = "input")
+	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	public static final Function<Double, PriorityThing> priorityThingFunction = (
+		in) -> new PriorityThing(in);
+
+	@Test
+	public void testPriority() {
+		PriorityThing pThing = new OpBuilder(ops, "test.priorityOp").input(
+			new Double(10)).outType(PriorityThing.class).apply();
+		assertEquals(20, pThing.getPriority(), 0.);
+		// This would be the value of pThing if it were created using
+		// PriorityThingProducer
+		assertNotEquals(10010, pThing.getPriority(), 0.);
+	}
+
+}

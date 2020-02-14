@@ -56,7 +56,6 @@ import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.transform.DefaultOpTransformationMatcher;
-import org.scijava.ops.transform.OpRunner;
 import org.scijava.ops.transform.OpTransformationCandidate;
 import org.scijava.ops.transform.OpTransformationException;
 import org.scijava.ops.transform.OpTransformationMatcher;
@@ -322,10 +321,6 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 	private Object wrapOp(Object op, OpCandidate match, OpTransformationCandidate transformation) {
 		if (wrappers == null)
 			initWrappers();
-
-		// TODO: we don't want to wrap OpRunners, do we? What is the point?
-		if (OpRunner.class.isInstance(op))
-			return op;
 
 		OpInfo opInfo = match == null ? transformation.getSourceOp().opInfo() : match.opInfo();
 		// FIXME: this type is not necessarily Computer, Function, etc. but often

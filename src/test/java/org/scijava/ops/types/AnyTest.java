@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.scijava.core.Priority;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Producer;
 import org.scijava.param.Mutable;
@@ -23,10 +24,10 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = (Double) ops.run("test.nestedAny", nthing);
+		Double e = new OpBuilder(ops, "test.nestedAny").input(nthing).outType(Double.class).apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = (Double) ops.run("test.any", thing);
+		Double d = new OpBuilder(ops, "test.any").input(thing).outType(Double.class).apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -42,7 +43,7 @@ public class AnyTest extends AbstractTestEnvironment {
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
-		Double d = (Double) ops.run("test.exceptionalAny", ething);
+		Double d = new OpBuilder(ops, "test.exceptionalAny").input(ething).outType(Double.class).apply();
 
 	}
 
@@ -68,19 +69,20 @@ public class AnyTest extends AbstractTestEnvironment {
 	// TODO: Note that this wouldn't work for Computer -> Function because here
 	// LiftFunctionToArrayTransformer is the first transformer which is asked for
 	// source refs. This transformer doesn't support Any and would fail.
+	// TODO: can we remove this test?
 	@Test
 	public void testRunAnyFunction1FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final Object out = ops.run("test.integerAndLongAndNotAnyComputer", in1, in2);
-		assert out instanceof MutableNotAny;
-		assertEquals(Long.toString(in1 + in2), ((MutableNotAny) out).getValue());
+		final MutableNotAny out = new OpBuilder(ops, "test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(MutableNotAny.class).apply();
+		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 	
+	@SuppressWarnings("cast")
 	@Test
 	public void testAnyInjectionIntoFunctionRaws() {
 		final Function<Long, Long> func = (in) -> in / 2;
-		final Long output = (Long) ops.run("test.functionAndLongToLong", func, 20l);
+		final Long output = (Long) new OpBuilder(ops, "test.functionAndLongToLong").input(func, 20l).outType(Long.class).apply();
 		assert(output == 10);
 	}
 }

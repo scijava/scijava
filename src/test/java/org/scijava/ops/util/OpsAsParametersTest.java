@@ -10,6 +10,7 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.types.Nil;
 import org.scijava.param.Parameter;
@@ -43,7 +44,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		List<Double> output = (List<Double>) ops.run("test.parameter.op", list, func);
+		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {}).apply();
 	}
 
 	@Test
@@ -76,7 +77,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		}, new Nil<Double>() {
 		});
 
-		List<Double> output = (List<Double>) ops.run("test.parameter.op", list, funcClass);
+		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
 	}
 
 }

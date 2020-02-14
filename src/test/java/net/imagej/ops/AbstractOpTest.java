@@ -29,15 +29,10 @@
 
 package net.imagej.ops;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import io.scif.img.IO;
 
 import java.math.BigInteger;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.stream.StreamSupport;
 
@@ -461,18 +456,6 @@ public abstract class AbstractOpTest extends AbstractTestEnvironment{
 	{
 		final URL url = c.getResource(resourcePath);
 		return IO.openDoubleImgs(url.getPath()).get(0).getImg();
-	}
-
-	public <T> void assertIterationsEqual(final Iterable<T> expected,
-		final Iterable<T> actual)
-	{
-		final Iterator<T> e = expected.iterator();
-		final Iterator<T> a = actual.iterator();
-		while (e.hasNext()) {
-			assertTrue("Fewer elements than expected", a.hasNext());
-			assertEquals(e.next(), a.next());
-		}
-		assertFalse("More elements than expected", a.hasNext());
 	}
 
 	public static <T> RandomAccessible<T> deinterval(

@@ -116,8 +116,10 @@ public class CopyRAITest extends AbstractOpTest {
 	@Test
 	public void copyRAINoOutputTest() {
 		@SuppressWarnings("unchecked")
-		final RandomAccessibleInterval<UnsignedByteType> output = (RandomAccessibleInterval<UnsignedByteType>) ops
-				.run("copy.rai", input);
+		final RandomAccessibleInterval<UnsignedByteType> output = op("copy.rai")
+			.input(input).outType(
+				new Nil<RandomAccessibleInterval<UnsignedByteType>>()
+				{}).apply();
 
 		final Cursor<UnsignedByteType> inc = input.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();

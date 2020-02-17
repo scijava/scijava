@@ -90,7 +90,7 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 	public Long apply(Function<Long, Long> t, Long u) {
 		return t.apply(u);
 	}
-	
+
 }
 
 @Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")

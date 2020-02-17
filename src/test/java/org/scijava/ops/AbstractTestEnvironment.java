@@ -8,18 +8,29 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.scijava.Context;
+import org.scijava.ops.core.builder.OpBuilder;
 
 public abstract class AbstractTestEnvironment {
 
 	protected static Context context;
 	protected static OpService ops;
 
-	@BeforeClass
-	public static void setUp() {
-		context = new Context(OpService.class);
-		ops = context.service(OpService.class);
+	@Before
+	public void setUp() {
+		if(context == null) setUpSafe();
+	}
+	
+	private synchronized void setUpSafe() {
+		if(context != null) return; 
+		Context ctx = createContext();
+		ops = ctx.service(OpService.class);
+		context = ctx;
+	}
+	
+	protected Context createContext() {
+		return new Context(OpService.class);
 	}
 
 	@AfterClass
@@ -27,6 +38,10 @@ public abstract class AbstractTestEnvironment {
 		context.dispose();
 		context = null;
 		ops = null;
+	}
+	
+	protected static OpBuilder op(String name) {
+		return new OpBuilder(ops, name);
 	}
 	
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {

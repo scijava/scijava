@@ -34,7 +34,6 @@
 
 package org.scijava.ops.core.builder;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -364,9 +363,8 @@ public class OpBuilder {
 	// -- Helper methods --
 
 	@SuppressWarnings({ "unchecked" })
-	private <T> Nil<T> type(final WeakReference<T> obj) {
-		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj
-			.get()));
+	private <T> Nil<T> type(Object obj) {
+		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj));
 	}
 
 	private void checkComputerRefs(Object... objects) {
@@ -494,10 +492,10 @@ public class OpBuilder {
 	 */
 	public final class Arity0_OV<O> {
 
-		private final WeakReference<O> out;
+		private final O out;
 
 		public Arity0_OV(final O out) {
-			this.out = new WeakReference<>(out);
+			this.out = out;
 		}
 
 		public Computers.Arity0<O> computer() {
@@ -505,7 +503,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(out.get());
+			computer().compute(out);
 		}
 
 	}
@@ -584,12 +582,12 @@ public class OpBuilder {
 	 */
 	public final class Arity1_IV_OT<I1, O> {
 
-		private final WeakReference<I1> in1;
+		private final I1 in1;
 		private final Nil<O> outType;
 
 		public Arity1_IV_OT(final I1 in1, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
+			this.in1 = in1;
 			this.outType = outType;
 		}
 
@@ -602,7 +600,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get());
+			return function().apply(in1);
 		}
 	}
 
@@ -614,16 +612,16 @@ public class OpBuilder {
 	 */
 	public final class Arity1_IV_OU<I1> {
 
-		private final WeakReference<I1> in1;
+		private final I1 in1;
 
 		public Arity1_IV_OU(final I1 in1)
 		{
-			this.in1 = new WeakReference<>(in1);
+			this.in1 = in1;
 		}
 
 		public <O> Arity1_IV_OV<I1, O> output(final O out) {
-			checkComputerRefs(in1.get(), out);
-			return new Arity1_IV_OV<>(in1.get(), out);
+			checkComputerRefs(in1, out);
+			return new Arity1_IV_OV<>(in1, out);
 		}
 
 		public <O> Arity1_IV_OT<I1, O> outType(final Class<O> outType) {
@@ -631,7 +629,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity1_IV_OT<I1, O> outType(final Nil<O> outType) {
-			return new Arity1_IV_OT<>(in1.get(), outType);
+			return new Arity1_IV_OT<>(in1, outType);
 		}
 
 		public Function<I1, ?> function() {
@@ -644,11 +642,11 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get());
+			return function().apply(in1);
 		}
 
 		public void mutate() {
-			inplace().mutate(in1.get());
+			inplace().mutate(in1);
 		}
 
 	}
@@ -661,13 +659,13 @@ public class OpBuilder {
 	 */
 	public final class Arity1_IV_OV<I1, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final O out;
 
 		public Arity1_IV_OV(final I1 in1, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.out = out;
 		}
 
 		public Computers.Arity1<I1, O> computer() {
@@ -675,7 +673,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), out.get());
+			computer().compute(in1, out);
 		}
 
 	}
@@ -769,14 +767,14 @@ public class OpBuilder {
 	 */
 	public final class Arity2_IV_OT<I1, I2, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
+		private final I1 in1;
+		private final I2 in2;
 		private final Nil<O> outType;
 
 		public Arity2_IV_OT(final I1 in1, final I2 in2, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
+			this.in1 = in1;
+			this.in2 = in2;
 			this.outType = outType;
 		}
 
@@ -789,7 +787,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get());
+			return function().apply(in1, in2);
 		}
 	}
 
@@ -802,18 +800,18 @@ public class OpBuilder {
 	 */
 	public final class Arity2_IV_OU<I1, I2> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
+		private final I1 in1;
+		private final I2 in2;
 
 		public Arity2_IV_OU(final I1 in1, final I2 in2)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
+			this.in1 = in1;
+			this.in2 = in2;
 		}
 
 		public <O> Arity2_IV_OV<I1, I2, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), out);
-			return new Arity2_IV_OV<>(in1.get(), in2.get(), out);
+			checkComputerRefs(in1, in2, out);
+			return new Arity2_IV_OV<>(in1, in2, out);
 		}
 
 		public <O> Arity2_IV_OT<I1, I2, O> outType(final Class<O> outType) {
@@ -821,7 +819,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity2_IV_OT<I1, I2, O> outType(final Nil<O> outType) {
-			return new Arity2_IV_OT<>(in1.get(), in2.get(), outType);
+			return new Arity2_IV_OT<>(in1, in2, outType);
 		}
 
 		public BiFunction<I1, I2, ?> function() {
@@ -839,15 +837,15 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get());
+			return function().apply(in1, in2);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get());
+			inplace1().mutate(in1, in2);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get());
+			inplace2().mutate(in1, in2);
 		}
 
 	}
@@ -861,15 +859,15 @@ public class OpBuilder {
 	 */
 	public final class Arity2_IV_OV<I1, I2, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final O out;
 
 		public Arity2_IV_OV(final I1 in1, final I2 in2, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.out = out;
 		}
 
 		public Computers.Arity2<I1, I2, O> computer() {
@@ -877,7 +875,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), out.get());
+			computer().compute(in1, in2, out);
 		}
 
 	}
@@ -986,16 +984,16 @@ public class OpBuilder {
 	 */
 	public final class Arity3_IV_OT<I1, I2, I3, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
 		private final Nil<O> outType;
 
 		public Arity3_IV_OT(final I1 in1, final I2 in2, final I3 in3, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
 			this.outType = outType;
 		}
 
@@ -1008,7 +1006,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get());
+			return function().apply(in1, in2, in3);
 		}
 	}
 
@@ -1022,20 +1020,20 @@ public class OpBuilder {
 	 */
 	public final class Arity3_IV_OU<I1, I2, I3> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
 
 		public Arity3_IV_OU(final I1 in1, final I2 in2, final I3 in3)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
 		}
 
 		public <O> Arity3_IV_OV<I1, I2, I3, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), out);
-			return new Arity3_IV_OV<>(in1.get(), in2.get(), in3.get(), out);
+			checkComputerRefs(in1, in2, in3, out);
+			return new Arity3_IV_OV<>(in1, in2, in3, out);
 		}
 
 		public <O> Arity3_IV_OT<I1, I2, I3, O> outType(final Class<O> outType) {
@@ -1043,7 +1041,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity3_IV_OT<I1, I2, I3, O> outType(final Nil<O> outType) {
-			return new Arity3_IV_OT<>(in1.get(), in2.get(), in3.get(), outType);
+			return new Arity3_IV_OT<>(in1, in2, in3, outType);
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function() {
@@ -1066,19 +1064,19 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get());
+			return function().apply(in1, in2, in3);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get());
+			inplace1().mutate(in1, in2, in3);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get());
+			inplace2().mutate(in1, in2, in3);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get());
+			inplace3().mutate(in1, in2, in3);
 		}
 
 	}
@@ -1093,17 +1091,17 @@ public class OpBuilder {
 	 */
 	public final class Arity3_IV_OV<I1, I2, I3, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final O out;
 
 		public Arity3_IV_OV(final I1 in1, final I2 in2, final I3 in3, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.out = out;
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer() {
@@ -1111,7 +1109,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), out.get());
+			computer().compute(in1, in2, in3, out);
 		}
 
 	}
@@ -1235,18 +1233,18 @@ public class OpBuilder {
 	 */
 	public final class Arity4_IV_OT<I1, I2, I3, I4, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
 		private final Nil<O> outType;
 
 		public Arity4_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
 			this.outType = outType;
 		}
 
@@ -1259,7 +1257,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get());
+			return function().apply(in1, in2, in3, in4);
 		}
 	}
 
@@ -1274,22 +1272,22 @@ public class OpBuilder {
 	 */
 	public final class Arity4_IV_OU<I1, I2, I3, I4> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
 
 		public Arity4_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
 		}
 
 		public <O> Arity4_IV_OV<I1, I2, I3, I4, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), out);
-			return new Arity4_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, out);
+			return new Arity4_IV_OV<>(in1, in2, in3, in4, out);
 		}
 
 		public <O> Arity4_IV_OT<I1, I2, I3, I4, O> outType(final Class<O> outType) {
@@ -1297,7 +1295,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity4_IV_OT<I1, I2, I3, I4, O> outType(final Nil<O> outType) {
-			return new Arity4_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), outType);
+			return new Arity4_IV_OT<>(in1, in2, in3, in4, outType);
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
@@ -1325,23 +1323,23 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get());
+			return function().apply(in1, in2, in3, in4);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+			inplace1().mutate(in1, in2, in3, in4);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+			inplace2().mutate(in1, in2, in3, in4);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+			inplace3().mutate(in1, in2, in3, in4);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get());
+			inplace4().mutate(in1, in2, in3, in4);
 		}
 
 	}
@@ -1357,19 +1355,19 @@ public class OpBuilder {
 	 */
 	public final class Arity4_IV_OV<I1, I2, I3, I4, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final O out;
 
 		public Arity4_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.out = out;
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
@@ -1377,7 +1375,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), out.get());
+			computer().compute(in1, in2, in3, in4, out);
 		}
 
 	}
@@ -1516,20 +1514,20 @@ public class OpBuilder {
 	 */
 	public final class Arity5_IV_OT<I1, I2, I3, I4, I5, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
 		private final Nil<O> outType;
 
 		public Arity5_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
 			this.outType = outType;
 		}
 
@@ -1542,7 +1540,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			return function().apply(in1, in2, in3, in4, in5);
 		}
 	}
 
@@ -1558,24 +1556,24 @@ public class OpBuilder {
 	 */
 	public final class Arity5_IV_OU<I1, I2, I3, I4, I5> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
 
 		public Arity5_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
 		}
 
 		public <O> Arity5_IV_OV<I1, I2, I3, I4, I5, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), out);
-			return new Arity5_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, out);
+			return new Arity5_IV_OV<>(in1, in2, in3, in4, in5, out);
 		}
 
 		public <O> Arity5_IV_OT<I1, I2, I3, I4, I5, O> outType(final Class<O> outType) {
@@ -1583,7 +1581,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity5_IV_OT<I1, I2, I3, I4, I5, O> outType(final Nil<O> outType) {
-			return new Arity5_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), outType);
+			return new Arity5_IV_OT<>(in1, in2, in3, in4, in5, outType);
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
@@ -1616,27 +1614,27 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			return function().apply(in1, in2, in3, in4, in5);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			inplace1().mutate(in1, in2, in3, in4, in5);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			inplace2().mutate(in1, in2, in3, in4, in5);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			inplace3().mutate(in1, in2, in3, in4, in5);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			inplace4().mutate(in1, in2, in3, in4, in5);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get());
+			inplace5().mutate(in1, in2, in3, in4, in5);
 		}
 
 	}
@@ -1653,21 +1651,21 @@ public class OpBuilder {
 	 */
 	public final class Arity5_IV_OV<I1, I2, I3, I4, I5, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final O out;
 
 		public Arity5_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.out = out;
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
@@ -1675,7 +1673,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, out);
 		}
 
 	}
@@ -1829,22 +1827,22 @@ public class OpBuilder {
 	 */
 	public final class Arity6_IV_OT<I1, I2, I3, I4, I5, I6, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
 		private final Nil<O> outType;
 
 		public Arity6_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
 			this.outType = outType;
 		}
 
@@ -1857,7 +1855,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			return function().apply(in1, in2, in3, in4, in5, in6);
 		}
 	}
 
@@ -1874,26 +1872,26 @@ public class OpBuilder {
 	 */
 	public final class Arity6_IV_OU<I1, I2, I3, I4, I5, I6> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
 
 		public Arity6_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
 		}
 
 		public <O> Arity6_IV_OV<I1, I2, I3, I4, I5, I6, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), out);
-			return new Arity6_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, out);
+			return new Arity6_IV_OV<>(in1, in2, in3, in4, in5, in6, out);
 		}
 
 		public <O> Arity6_IV_OT<I1, I2, I3, I4, I5, I6, O> outType(final Class<O> outType) {
@@ -1901,7 +1899,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity6_IV_OT<I1, I2, I3, I4, I5, I6, O> outType(final Nil<O> outType) {
-			return new Arity6_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), outType);
+			return new Arity6_IV_OT<>(in1, in2, in3, in4, in5, in6, outType);
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
@@ -1939,31 +1937,31 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			return function().apply(in1, in2, in3, in4, in5, in6);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6);
 		}
 
 	}
@@ -1981,23 +1979,23 @@ public class OpBuilder {
 	 */
 	public final class Arity6_IV_OV<I1, I2, I3, I4, I5, I6, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final O out;
 
 		public Arity6_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.out = out;
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
@@ -2005,7 +2003,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, out);
 		}
 
 	}
@@ -2174,24 +2172,24 @@ public class OpBuilder {
 	 */
 	public final class Arity7_IV_OT<I1, I2, I3, I4, I5, I6, I7, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
 		private final Nil<O> outType;
 
 		public Arity7_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
 			this.outType = outType;
 		}
 
@@ -2204,7 +2202,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7);
 		}
 	}
 
@@ -2222,28 +2220,28 @@ public class OpBuilder {
 	 */
 	public final class Arity7_IV_OU<I1, I2, I3, I4, I5, I6, I7> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
 
 		public Arity7_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
 		}
 
 		public <O> Arity7_IV_OV<I1, I2, I3, I4, I5, I6, I7, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), out);
-			return new Arity7_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, out);
+			return new Arity7_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, out);
 		}
 
 		public <O> Arity7_IV_OT<I1, I2, I3, I4, I5, I6, I7, O> outType(final Class<O> outType) {
@@ -2251,7 +2249,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity7_IV_OT<I1, I2, I3, I4, I5, I6, I7, O> outType(final Nil<O> outType) {
-			return new Arity7_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), outType);
+			return new Arity7_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, outType);
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
@@ -2294,35 +2292,35 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7);
 		}
 
 	}
@@ -2341,25 +2339,25 @@ public class OpBuilder {
 	 */
 	public final class Arity7_IV_OV<I1, I2, I3, I4, I5, I6, I7, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final O out;
 
 		public Arity7_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.out = out;
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
@@ -2367,7 +2365,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, out);
 		}
 
 	}
@@ -2551,26 +2549,26 @@ public class OpBuilder {
 	 */
 	public final class Arity8_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
 		private final Nil<O> outType;
 
 		public Arity8_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
 			this.outType = outType;
 		}
 
@@ -2583,7 +2581,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 	}
 
@@ -2602,30 +2600,30 @@ public class OpBuilder {
 	 */
 	public final class Arity8_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
 
 		public Arity8_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
 		}
 
 		public <O> Arity8_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), out);
-			return new Arity8_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, out);
+			return new Arity8_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, out);
 		}
 
 		public <O> Arity8_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> outType(final Class<O> outType) {
@@ -2633,7 +2631,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity8_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> outType(final Nil<O> outType) {
-			return new Arity8_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), outType);
+			return new Arity8_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, outType);
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
@@ -2681,39 +2679,39 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8);
 		}
 
 	}
@@ -2733,27 +2731,27 @@ public class OpBuilder {
 	 */
 	public final class Arity8_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final O out;
 
 		public Arity8_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.out = out;
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
@@ -2761,7 +2759,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
 		}
 
 	}
@@ -2960,28 +2958,28 @@ public class OpBuilder {
 	 */
 	public final class Arity9_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
 		private final Nil<O> outType;
 
 		public Arity9_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
 			this.outType = outType;
 		}
 
@@ -2994,7 +2992,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 	}
 
@@ -3014,32 +3012,32 @@ public class OpBuilder {
 	 */
 	public final class Arity9_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
 
 		public Arity9_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
 		}
 
 		public <O> Arity9_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), out);
-			return new Arity9_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
+			return new Arity9_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 		}
 
 		public <O> Arity9_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> outType(final Class<O> outType) {
@@ -3047,7 +3045,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity9_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> outType(final Nil<O> outType) {
-			return new Arity9_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), outType);
+			return new Arity9_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, outType);
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
@@ -3100,43 +3098,43 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 		}
 
 	}
@@ -3157,29 +3155,29 @@ public class OpBuilder {
 	 */
 	public final class Arity9_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final O out;
 
 		public Arity9_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.out = out;
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
@@ -3187,7 +3185,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 		}
 
 	}
@@ -3401,30 +3399,30 @@ public class OpBuilder {
 	 */
 	public final class Arity10_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
 		private final Nil<O> outType;
 
 		public Arity10_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
 			this.outType = outType;
 		}
 
@@ -3437,7 +3435,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 	}
 
@@ -3458,34 +3456,34 @@ public class OpBuilder {
 	 */
 	public final class Arity10_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
 
 		public Arity10_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
 		}
 
 		public <O> Arity10_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), out);
-			return new Arity10_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
+			return new Arity10_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
 		}
 
 		public <O> Arity10_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> outType(final Class<O> outType) {
@@ -3493,7 +3491,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity10_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> outType(final Nil<O> outType) {
-			return new Arity10_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), outType);
+			return new Arity10_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, outType);
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
@@ -3551,47 +3549,47 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 		}
 
 	}
@@ -3613,31 +3611,31 @@ public class OpBuilder {
 	 */
 	public final class Arity10_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final O out;
 
 		public Arity10_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.out = out;
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
@@ -3645,7 +3643,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
 		}
 
 	}
@@ -3874,32 +3872,32 @@ public class OpBuilder {
 	 */
 	public final class Arity11_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
 		private final Nil<O> outType;
 
 		public Arity11_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
 			this.outType = outType;
 		}
 
@@ -3912,7 +3910,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 	}
 
@@ -3934,36 +3932,36 @@ public class OpBuilder {
 	 */
 	public final class Arity11_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
 
 		public Arity11_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
 		}
 
 		public <O> Arity11_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), out);
-			return new Arity11_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
+			return new Arity11_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
 		}
 
 		public <O> Arity11_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> outType(final Class<O> outType) {
@@ -3971,7 +3969,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity11_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> outType(final Nil<O> outType) {
-			return new Arity11_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), outType);
+			return new Arity11_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, outType);
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
@@ -4034,51 +4032,51 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 		public void mutate11() {
-			inplace11().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get());
+			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 		}
 
 	}
@@ -4101,33 +4099,33 @@ public class OpBuilder {
 	 */
 	public final class Arity11_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final O out;
 
 		public Arity11_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.out = out;
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
@@ -4135,7 +4133,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
 		}
 
 	}
@@ -4379,34 +4377,34 @@ public class OpBuilder {
 	 */
 	public final class Arity12_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
 		private final Nil<O> outType;
 
 		public Arity12_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
 			this.outType = outType;
 		}
 
@@ -4419,7 +4417,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 	}
 
@@ -4442,38 +4440,38 @@ public class OpBuilder {
 	 */
 	public final class Arity12_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
 
 		public Arity12_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
 		}
 
 		public <O> Arity12_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), out);
-			return new Arity12_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
+			return new Arity12_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
 		}
 
 		public <O> Arity12_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> outType(final Class<O> outType) {
@@ -4481,7 +4479,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity12_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> outType(final Nil<O> outType) {
-			return new Arity12_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), outType);
+			return new Arity12_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, outType);
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
@@ -4549,55 +4547,55 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate11() {
-			inplace11().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 		public void mutate12() {
-			inplace12().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get());
+			inplace12().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 		}
 
 	}
@@ -4621,35 +4619,35 @@ public class OpBuilder {
 	 */
 	public final class Arity12_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final O out;
 
 		public Arity12_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.out = out;
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
@@ -4657,7 +4655,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
 		}
 
 	}
@@ -4916,36 +4914,36 @@ public class OpBuilder {
 	 */
 	public final class Arity13_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
 		private final Nil<O> outType;
 
 		public Arity13_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
 			this.outType = outType;
 		}
 
@@ -4958,7 +4956,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 	}
 
@@ -4982,40 +4980,40 @@ public class OpBuilder {
 	 */
 	public final class Arity13_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
 
 		public Arity13_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
 		}
 
 		public <O> Arity13_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), out);
-			return new Arity13_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
+			return new Arity13_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
 		}
 
 		public <O> Arity13_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> outType(final Class<O> outType) {
@@ -5023,7 +5021,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity13_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> outType(final Nil<O> outType) {
-			return new Arity13_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), outType);
+			return new Arity13_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, outType);
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
@@ -5096,59 +5094,59 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate11() {
-			inplace11().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate12() {
-			inplace12().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace12().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 		public void mutate13() {
-			inplace13().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get());
+			inplace13().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 		}
 
 	}
@@ -5173,37 +5171,37 @@ public class OpBuilder {
 	 */
 	public final class Arity13_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final O out;
 
 		public Arity13_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.out = out;
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
@@ -5211,7 +5209,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
 		}
 
 	}
@@ -5485,38 +5483,38 @@ public class OpBuilder {
 	 */
 	public final class Arity14_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
 		private final Nil<O> outType;
 
 		public Arity14_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
 			this.outType = outType;
 		}
 
@@ -5529,7 +5527,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 	}
 
@@ -5554,42 +5552,42 @@ public class OpBuilder {
 	 */
 	public final class Arity14_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
 
 		public Arity14_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
 		}
 
 		public <O> Arity14_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), out);
-			return new Arity14_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
+			return new Arity14_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
 		}
 
 		public <O> Arity14_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> outType(final Class<O> outType) {
@@ -5597,7 +5595,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity14_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> outType(final Nil<O> outType) {
-			return new Arity14_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), outType);
+			return new Arity14_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, outType);
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
@@ -5675,63 +5673,63 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate11() {
-			inplace11().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate12() {
-			inplace12().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace12().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate13() {
-			inplace13().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace13().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 		public void mutate14() {
-			inplace14().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get());
+			inplace14().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 		}
 
 	}
@@ -5757,39 +5755,39 @@ public class OpBuilder {
 	 */
 	public final class Arity14_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final O out;
 
 		public Arity14_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.out = out;
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
@@ -5797,7 +5795,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
 		}
 
 	}
@@ -6086,40 +6084,40 @@ public class OpBuilder {
 	 */
 	public final class Arity15_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<I15> in15;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final I15 in15;
 		private final Nil<O> outType;
 
 		public Arity15_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.in15 = new WeakReference<>(in15);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.in15 = in15;
 			this.outType = outType;
 		}
 
@@ -6132,7 +6130,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 	}
 
@@ -6158,44 +6156,44 @@ public class OpBuilder {
 	 */
 	public final class Arity15_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<I15> in15;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final I15 in15;
 
 		public Arity15_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.in15 = new WeakReference<>(in15);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.in15 = in15;
 		}
 
 		public <O> Arity15_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), out);
-			return new Arity15_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
+			return new Arity15_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
 		}
 
 		public <O> Arity15_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> outType(final Class<O> outType) {
@@ -6203,7 +6201,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity15_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> outType(final Nil<O> outType) {
-			return new Arity15_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), outType);
+			return new Arity15_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, outType);
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
@@ -6286,67 +6284,67 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate11() {
-			inplace11().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate12() {
-			inplace12().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace12().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate13() {
-			inplace13().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace13().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate14() {
-			inplace14().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace14().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 		public void mutate15() {
-			inplace15().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get());
+			inplace15().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 		}
 
 	}
@@ -6373,41 +6371,41 @@ public class OpBuilder {
 	 */
 	public final class Arity15_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<I15> in15;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final I15 in15;
+		private final O out;
 
 		public Arity15_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.in15 = new WeakReference<>(in15);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.in15 = in15;
+			this.out = out;
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
@@ -6415,7 +6413,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
 		}
 
 	}
@@ -6719,42 +6717,42 @@ public class OpBuilder {
 	 */
 	public final class Arity16_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<I15> in15;
-		private final WeakReference<I16> in16;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final I15 in15;
+		private final I16 in16;
 		private final Nil<O> outType;
 
 		public Arity16_IV_OT(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16, final Nil<O> outType)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.in15 = new WeakReference<>(in15);
-			this.in16 = new WeakReference<>(in16);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.in15 = in15;
+			this.in16 = in16;
 			this.outType = outType;
 		}
 
@@ -6767,7 +6765,7 @@ public class OpBuilder {
 		}
 	
 		public O apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 	}
 
@@ -6794,46 +6792,46 @@ public class OpBuilder {
 	 */
 	public final class Arity16_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<I15> in15;
-		private final WeakReference<I16> in16;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final I15 in15;
+		private final I16 in16;
 
 		public Arity16_IV_OU(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.in15 = new WeakReference<>(in15);
-			this.in16 = new WeakReference<>(in16);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.in15 = in15;
+			this.in16 = in16;
 		}
 
 		public <O> Arity16_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> output(final O out) {
-			checkComputerRefs(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get(), out);
-			return new Arity16_IV_OV<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get(), out);
+			checkComputerRefs(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
+			return new Arity16_IV_OV<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
 		}
 
 		public <O> Arity16_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> outType(final Class<O> outType) {
@@ -6841,7 +6839,7 @@ public class OpBuilder {
 		}
 
 		public <O> Arity16_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> outType(final Nil<O> outType) {
-			return new Arity16_IV_OT<>(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get(), outType);
+			return new Arity16_IV_OT<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, outType);
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
@@ -6929,71 +6927,71 @@ public class OpBuilder {
 		}
 
 		public Object apply() {
-			return function().apply(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			return function().apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate1() {
-			inplace1().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace1().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate2() {
-			inplace2().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace2().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate3() {
-			inplace3().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace3().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate4() {
-			inplace4().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace4().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate5() {
-			inplace5().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace5().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate6() {
-			inplace6().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace6().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate7() {
-			inplace7().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace7().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate8() {
-			inplace8().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace8().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate9() {
-			inplace9().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace9().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate10() {
-			inplace10().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace10().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate11() {
-			inplace11().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace11().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate12() {
-			inplace12().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace12().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate13() {
-			inplace13().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace13().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate14() {
-			inplace14().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace14().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate15() {
-			inplace15().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace15().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 		public void mutate16() {
-			inplace16().mutate(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get());
+			inplace16().mutate(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 		}
 
 	}
@@ -7021,43 +7019,43 @@ public class OpBuilder {
 	 */
 	public final class Arity16_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
 
-		private final WeakReference<I1> in1;
-		private final WeakReference<I2> in2;
-		private final WeakReference<I3> in3;
-		private final WeakReference<I4> in4;
-		private final WeakReference<I5> in5;
-		private final WeakReference<I6> in6;
-		private final WeakReference<I7> in7;
-		private final WeakReference<I8> in8;
-		private final WeakReference<I9> in9;
-		private final WeakReference<I10> in10;
-		private final WeakReference<I11> in11;
-		private final WeakReference<I12> in12;
-		private final WeakReference<I13> in13;
-		private final WeakReference<I14> in14;
-		private final WeakReference<I15> in15;
-		private final WeakReference<I16> in16;
-		private final WeakReference<O> out;
+		private final I1 in1;
+		private final I2 in2;
+		private final I3 in3;
+		private final I4 in4;
+		private final I5 in5;
+		private final I6 in6;
+		private final I7 in7;
+		private final I8 in8;
+		private final I9 in9;
+		private final I10 in10;
+		private final I11 in11;
+		private final I12 in12;
+		private final I13 in13;
+		private final I14 in14;
+		private final I15 in15;
+		private final I16 in16;
+		private final O out;
 
 		public Arity16_IV_OV(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16, final O out)
 		{
-			this.in1 = new WeakReference<>(in1);
-			this.in2 = new WeakReference<>(in2);
-			this.in3 = new WeakReference<>(in3);
-			this.in4 = new WeakReference<>(in4);
-			this.in5 = new WeakReference<>(in5);
-			this.in6 = new WeakReference<>(in6);
-			this.in7 = new WeakReference<>(in7);
-			this.in8 = new WeakReference<>(in8);
-			this.in9 = new WeakReference<>(in9);
-			this.in10 = new WeakReference<>(in10);
-			this.in11 = new WeakReference<>(in11);
-			this.in12 = new WeakReference<>(in12);
-			this.in13 = new WeakReference<>(in13);
-			this.in14 = new WeakReference<>(in14);
-			this.in15 = new WeakReference<>(in15);
-			this.in16 = new WeakReference<>(in16);
-			this.out = new WeakReference<>(out);
+			this.in1 = in1;
+			this.in2 = in2;
+			this.in3 = in3;
+			this.in4 = in4;
+			this.in5 = in5;
+			this.in6 = in6;
+			this.in7 = in7;
+			this.in8 = in8;
+			this.in9 = in9;
+			this.in10 = in10;
+			this.in11 = in11;
+			this.in12 = in12;
+			this.in13 = in13;
+			this.in14 = in14;
+			this.in15 = in15;
+			this.in16 = in16;
+			this.out = out;
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
@@ -7065,7 +7063,7 @@ public class OpBuilder {
 		}
 
 		public void compute() {
-			computer().compute(in1.get(), in2.get(), in3.get(), in4.get(), in5.get(), in6.get(), in7.get(), in8.get(), in9.get(), in10.get(), in11.get(), in12.get(), in13.get(), in14.get(), in15.get(), in16.get(), out.get());
+			computer().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
 		}
 
 	}

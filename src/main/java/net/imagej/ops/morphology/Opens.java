@@ -14,35 +14,34 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
-import org.scijava.ops.function.Inplaces;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 @Plugin(type = OpCollection.class)
 public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "morphology.open", params = "source, strels, numThreads, result")
-	public final Functions.Arity3<Img<R>, List<Shape>, Integer, Img<R>> openImgList = Opening::open;
+	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> openImgList = (in1, in2, in3) -> Opening.open(in1, (List<Shape>) in2, in3);
 
 	@OpField(names = "morphology.open", params = "source, strel, numThreads, result")
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> openImgSingle = Opening::open;
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "morphology.open", params = "source, strels, minValue, maxValue, numThreads, result")
-	public final Functions.Arity5<Img<T>, List<Shape>, T, T, Integer, Img<T>> openImgListMinMax = Opening::open;
+	public final Functions.Arity5<Img<T>, List<? extends Shape>, T, T, Integer, Img<T>> openImgListMinMax = (in1, in2, in3, in4, in5) -> Opening.open(in1, (List<Shape>) in2, in3, in4, in5);
 
 	@OpField(names = "morphology.open", params = "source, strel, minValue, maxValue, numThreads, result")
 	public final Functions.Arity5<Img<T>, Shape, T, T, Integer, Img<T>> openImgSingleMinMax = Opening::open;
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "morphology.open", params = "source, strels, numThreads, target")
-	public final Computers.Arity3<RandomAccessible<R>, List<Shape>, Integer, IterableInterval<R>> openImgListComputer = (in1, in2, in3, out) -> Opening.open(in1, out, in2, in3);
+	public final Computers.Arity3<RandomAccessible<R>, List<? extends Shape>, Integer, IterableInterval<R>> openImgListComputer = (in1, in2, in3, out) -> Opening.open(in1, out, (List<Shape>) in2, in3);
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "morphology.open", params = "source, strels, minVal, maxVal, numThreads, target")
-	public final Computers.Arity5<RandomAccessible<T>, List<Shape>, T, T, Integer, IterableInterval<T>> openImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Opening.open(in1, out, in2, in3, in4, in5);
+	public final Computers.Arity5<RandomAccessible<T>, List<? extends Shape>, T, T, Integer, IterableInterval<T>> openImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Opening.open(in1, out, (List<Shape>) in2, in3, in4, in5);
 
 	@OpField(names = "morphology.open", params = "source, strel, numThreads, target")
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> openImgComputer = (in1, in2, in3, out) -> Opening.open(in1, out, in2, in3);
@@ -50,11 +49,13 @@ public class Opens<T extends RealType<T> & Comparable<T>, R extends RealType<R>>
 	@OpField(names = "morphology.open", params = "source, strel, minVal, maxVal, numThreads, target")
 	public final Computers.Arity5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> openImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> Opening.open(in1, out, in2, in3, in4, in5);
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "morphology.open", params = "source, interval, strels, numThreads")
-	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<Shape>, Integer> openImgListInPlace = Opening::openInPlace;
+	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<? extends Shape>, Integer> openImgListInPlace = (io, in2, in3, in4) -> Opening.openInPlace(io, in2, (List<Shape>) in3, in4);
 
+	@SuppressWarnings("unchecked")
 	@OpField(names = "morphology.open", params = "source, interval, strels, minVal, maxVal, numThreads")
-	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, List<Shape>, T, T, Integer> openImgListMinMaxInplace = Opening::openInPlace;
+	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, List<? extends Shape>, T, T, Integer> openImgListMinMaxInplace = (io, in2, in3, in4, in5, in6) -> Opening.openInPlace(io, in2, (List<Shape>) in3, in4, in5, in6);
 
 	@OpField(names = "morphology.open", params = "source, interval, strel, numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> openImgSingleInPlace = Opening::openInPlace;

@@ -347,7 +347,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				Object toOp = ((Function<Object, Object>) adaptorOp).apply(fromOp);
 				// construct type of adapted op
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output().getType(),
-						srcCandidate.typeVarAssigns());
+						map);
 				return new AdaptedOp(toOp, adapterOpType, srcCandidate.opInfo(), adaptor);
 			} catch (OpMatchingException e1) {
 				log.trace(e1);

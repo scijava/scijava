@@ -331,9 +331,9 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 				// grab the first type parameter (from the OpCandidate?) and search for an Op
 				// that will then be adapted (this will be the first (only) type in the args of
 				// the adaptor)
-				Type srcOpType = adaptor.inputs().get(0).getType();
+				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0).getType(), map);
 				final OpRef srcOpRef;
-					srcOpRef = inferOpRef(srcOpType, ref.getName(), candidate.typeVarAssigns());
+					srcOpRef = inferOpRef(srcOpType, ref.getName(), map);
 				// TODO: export this to another function (also done in findOpInstance).
 				// We need this here because we need to grab the OpInfo. 
 				// TODO: is there a better way to do this?

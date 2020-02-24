@@ -3326,7 +3326,7 @@ public final class Types {
 			if (containsTypeVariables(type)) {
 				if (type instanceof TypeVariable) {
 					if (followTypeVars) {
-						return unrollVariables(typeArguments, typeArguments.get(type));
+						return unrollVariables(typeArguments, typeArguments.get(type), followTypeVars);
 					} else {
 						return typeArguments.get(type);
 					}
@@ -3344,7 +3344,7 @@ public final class Types {
 					final Type[] args = p.getActualTypeArguments();
 					for (int i = 0; i < args.length; i++) {
 						final Type unrolled = unrollVariables(parameterizedTypeArguments,
-							args[i]);
+							args[i], followTypeVars);
 						if (unrolled != null) {
 							args[i] = unrolled;
 						}

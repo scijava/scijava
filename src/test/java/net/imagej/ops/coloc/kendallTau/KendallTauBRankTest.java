@@ -125,14 +125,15 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = Functions.match(ops,
-				"coloc.kendallTau", nilI, nilI, new Nil<Double>() {});
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
-				"transform.raiToIterable").input(op).outType(
-						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
-						.apply();
+		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = Functions.match(ops,
+				"coloc.kendallTau", nilRAI, nilRAI, new Nil<Double>() {});
+//		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
+//				"transform.raiToIterable").input(op).outType(
+//						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
+//						.apply();
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, raiOp, es).output(value).compute();
+		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 

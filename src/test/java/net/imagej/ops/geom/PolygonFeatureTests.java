@@ -42,7 +42,6 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 
 /**
  * Tests for polygon features.

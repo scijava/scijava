@@ -32,16 +32,18 @@ package net.imagej.ops.geom.geom2d;
 import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.roi.labeling.LabelRegion;
+import net.imglib2.type.logic.BoolType;
 
 import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
 import org.scijava.convert.Converter;
 import org.scijava.ops.OpService;
-import org.scijava.ops.types.Nil;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -58,14 +60,13 @@ public class LabelRegionToPolygonConverter extends
 	@Parameter
 	private OpService ops;
 
-	//TODO can this LabelRegion be widened?
-	private BiFunction<LabelRegion, Boolean, Polygon2D> contourFunc;
+	private BiFunction<RandomAccessibleInterval<BoolType>, Boolean, Polygon2D> contourFunc;
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public <T> T convert(final Object src, final Class<T> dest) {
 		if (contourFunc == null) {
-			contourFunc = Functions.match(ops, "geom.contour", new Nil<LabelRegion>() {}, new Nil<Boolean>() {},
+			contourFunc = Functions.match(ops, "geom.contour", new Nil<RandomAccessibleInterval<BoolType>>() {}, new Nil<Boolean>() {},
 					new Nil<Polygon2D>() {});
 		}
 		// FIXME: can we make this faster?

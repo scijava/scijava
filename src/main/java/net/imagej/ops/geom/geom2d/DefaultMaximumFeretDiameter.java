@@ -30,6 +30,7 @@ package net.imagej.ops.geom.geom2d;
 
 import java.util.function.Function;
 
+import net.imglib2.RealLocalizable;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
@@ -46,12 +47,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "maxFeretsDiameter", itemIO = ItemIO.BOTH)
 public class DefaultMaximumFeretDiameter implements Computers.Arity1<Polygon2D, DoubleType> {
 
-	@SuppressWarnings("rawtypes")
 	@OpDependency(name = "geom.maximumFeret")
-	private Function<Polygon2D, Pair> maxFeret;
-	@SuppressWarnings("rawtypes")
+	private Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> maxFeret;
 	@OpDependency(name = "geom.feretsDiameter")
-	private Function<Pair, DoubleType> feretDiameter;
+	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretDiameter;
 
 	@Override
 	public void compute(Polygon2D input, DoubleType output) {

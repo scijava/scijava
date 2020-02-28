@@ -1,4 +1,4 @@
-package net.imagej.ops.types.transform;
+package net.imagej.ops.types.adapt;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

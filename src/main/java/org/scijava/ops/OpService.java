@@ -379,7 +379,8 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		OpInfo opInfo = match == null ? adaptationSrcInfo : match.opInfo();
 		// FIXME: this type is not necessarily Computer, Function, etc. but often
 		// something more specific (like the class of an Op).
-		Type type = opInfo.opType();
+		// TODO: Is this correct?
+		Type type = match.getRef().getTypes()[0];
 		try {
 			// determine the Op wrappers that could wrap the matched Op
 			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))

@@ -36,7 +36,6 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Functions;
-import org.scijava.ops.function.Functions;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -77,16 +76,16 @@ public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y ex
 	public final Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, ? extends GenericComposite<T>>> collapseViewRAI = Views::collapse;
 
 	@OpField(names = "transform.collapseRealView", params = "input, numChannels, result")
-	public final BiFunction<RandomAccessible<R>, Integer, CompositeView<R, ? extends RealComposite<R>>> collapseRealViewRA = Views::collapseReal;
+	public final BiFunction<RandomAccessible<R>, Integer, CompositeView<R, RealComposite<R>>> collapseRealViewRA = Views::collapseReal;
 
 	@OpField(names = "transform.collapseRealView", params = "input, result")
-	public final Function<RandomAccessibleInterval<R>, CompositeIntervalView<R, ? extends RealComposite<R>>> collapseRealViewRAI = Views::collapseReal;
+	public final Function<RandomAccessibleInterval<R>, CompositeIntervalView<R, RealComposite<R>>> collapseRealViewRAI = Views::collapseReal;
 
 	@OpField(names = "transform.collapseNumericView", params = "input, numChannels, result")
-	public final BiFunction<RandomAccessible<N>, Integer, CompositeView<N, ? extends NumericComposite<N>>> collapseNumericViewRA = Views::collapseNumeric;
+	public final BiFunction<RandomAccessible<N>, Integer, CompositeView<N, NumericComposite<N>>> collapseNumericViewRA = Views::collapseNumeric;
 
 	@OpField(names = "transform.collapseNumericView", params = "input, result")
-	public final Function<RandomAccessibleInterval<N>, CompositeIntervalView<N, ? extends NumericComposite<N>>> collapseNumericViewRAI = Views::collapseNumeric;
+	public final Function<RandomAccessibleInterval<N>, CompositeIntervalView<N, NumericComposite<N>>> collapseNumericViewRAI = Views::collapseNumeric;
 
 	@OpField(names = "transform.concatenateView", params = "concatenationAxis, inputs, result")
 	public final BiFunction<Integer, RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> concatenateArray = Views::concatenate;

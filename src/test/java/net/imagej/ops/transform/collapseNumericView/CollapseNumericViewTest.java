@@ -45,8 +45,8 @@ import net.imglib2.view.composite.NumericComposite;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.types.Nil;
 import org.scijava.ops.function.Functions;
+import org.scijava.ops.types.Nil;
 
 /**
  * Tests {@link net.imagej.ops.Ops.Transform.CollapseNumericView} ops.
@@ -59,18 +59,18 @@ import org.scijava.ops.function.Functions;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 public class CollapseNumericViewTest extends AbstractTestEnvironment {
+	
+	private static CompositeIntervalView<NativeARGBDoubleType, ? extends NumericComposite<NativeARGBDoubleType>> foo() {
+		return null;
+	}
 
 	@Test
 	public void defaultCollapseNumericTest() {
 
-		Function<RandomAccessibleInterval<NativeARGBDoubleType>, CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFunc = Functions
-				.match(ops, "transform.collapseNumericView",
-						new Nil<RandomAccessibleInterval<NativeARGBDoubleType>>() {
-				},
-						new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {
-				});
-
 		Img<NativeARGBDoubleType> img = new ArrayImgFactory<>(new NativeARGBDoubleType()).create(new int[] { 10, 10 });
+		
+		Function<Img<NativeARGBDoubleType>, CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFunc = 
+				op("transform.collapseNumericView").input(img).outType(new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {}).function();
 
 		CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> il2 = Views
 				.collapseNumeric((RandomAccessibleInterval<NativeARGBDoubleType>) img);

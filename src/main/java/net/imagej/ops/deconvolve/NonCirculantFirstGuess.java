@@ -36,6 +36,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.Priority;
@@ -74,7 +75,7 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	BiFunction<Dimensions, O, Img<O>> create;
 
 	@OpDependency(name = "stats.sum")
-	Computers.Arity1<Iterable<I>, O> sum;
+	Computers.Arity1<Iterable<I>, DoubleType> sum;
 
 	/**
 	 * k is the size of the measurement window. That is the size of the acquired
@@ -89,7 +90,7 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 		// set first guess to be a constant = to the average value
 
 		// so first compute the sum...
-		final O s = outType.createVariable(); 
+		final DoubleType s = new DoubleType();
 		sum.compute(Views.iterable(in), s);
 
 		// then the number of pixels
@@ -109,5 +110,4 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 
 		return firstGuess;
 	}
-
 }

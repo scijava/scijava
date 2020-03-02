@@ -138,8 +138,6 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	@OpDependency(name = "copy.rai")
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy2Op;
 
-	private RandomAccessibleInterval<O> raiExtendedReblurred;
-
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
@@ -171,7 +169,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		}
 
 		// create image for the reblurred
-		raiExtendedReblurred = createOp.apply(in, Util.getTypeFromInterval(out));
+		RandomAccessibleInterval<O> raiExtendedReblurred = createOp.apply(in, Util.getTypeFromInterval(out));
 
 		// perform fft of psf
 		fftKernelOp.compute(kernel, es, fftKernel);
@@ -185,7 +183,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			// parameter. when the op was set up, and computed above, so we can use
 			// compute
 			convolverOp.compute(raiExtendedEstimate, null, fftInput, fftKernel, true, false, es,
-					this.raiExtendedReblurred);
+				raiExtendedReblurred);
 
 			// compute correction factor
 			rlCorrectionOp.compute(in, raiExtendedReblurred, fftInput, fftKernel, es, raiExtendedReblurred);
@@ -219,5 +217,4 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 		copy2Op.compute(Views.interval(raiExtendedEstimate, new FinalInterval(start, end)), out);
 	}
-
 }

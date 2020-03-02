@@ -2245,6 +2245,10 @@ public final class Types {
 						Type[] fromTypes = ((ParameterizedType) fromResolved).getActualTypeArguments();
 						Type[] toTypes = ((ParameterizedType) toResolved).getActualTypeArguments();
 						for(int i = 0; i < fromTypes.length; i++) {
+							if(toTypes[i] instanceof TypeVariable<?> && Types.isAssignable(fromTypes[i], toTypes[i], typeVarAssigns)) {
+								typeVarAssigns.put((TypeVariable<?>) toTypes[i], fromTypes[i]);
+								continue;
+							}
 							if(!(fromTypes[i] instanceof Any || toTypes[i] instanceof Any)) return false;
 						}
 						continue;

@@ -80,8 +80,8 @@ public class DeconvolveTest extends AbstractOpTest {
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// convolve FFTF
-		final Img<FloatType> convolved = op("filter.convolve").input(//
-				incropped, kernel, es).outType(new Nil<Img<FloatType>>() {}).apply();
+		final RandomAccessibleInterval<FloatType> convolved = op("filter.convolve").input(//
+				incropped, kernel, es).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// find a RichardsonLucyF op
 		Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //

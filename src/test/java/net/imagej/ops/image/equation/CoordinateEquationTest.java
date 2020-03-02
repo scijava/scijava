@@ -43,7 +43,6 @@ import net.imglib2.type.numeric.integer.ShortType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.types.Nil;
 
 /**
@@ -77,8 +76,12 @@ public class CoordinateEquationTest extends AbstractOpTest {
 		// implement x^2+y^2 taking into account the calibration
 		final Function<long[], Double> op = (coords) -> Math.pow(start[0] + coords[0] * spacing[0], 2)
 				+ Math.pow(start[1] + coords[1] * spacing[1], 2);
-
-		op("image.equation").input(op).output(image).compute();
+		
+		final Function<long[], Double> wrapped = ops.wrap(op,
+			new Nil<Function<long[], Double>>()
+			{}.getType());
+		
+		op("image.equation").input(wrapped).output(image).compute();
 
 		DoubleType sum = new DoubleType();
 		op("stats.sum").input(image).output(sum).compute();
@@ -98,18 +101,23 @@ public class CoordinateEquationTest extends AbstractOpTest {
 		final Dimensions dimensions4D = new FinalDimensions(size4D);
 
 		final Img<ShortType> image = op("create.img").input(dimensions4D,
-			new ShortType()).outType(new Nil<Img<ShortType>>() {}).apply();
+			new ShortType()).outType(new Nil<Img<ShortType>>()
+		{}).apply();
 
 		// implement c[0]+10*c[1]+100*c[3]+1000*c[4]
 		final Function<long[], Double> op = (coords) -> {
 
-					final double result = coords[0] + 10 * coords[1] + 100 * coords[2] +
-						1000 * coords[3];
+			final double result = coords[0] + 10 * coords[1] + 100 * coords[2] +
+				1000 * coords[3];
 
-					return result;
-			};
+			return result;
+		};
 
-		op("image.equation").input(op).output(image).compute();
+		Function<long[], Double> wrapped = ops.wrap(op,
+			new Nil<Function<long[], Double>>()
+			{}.getType());
+
+		op("image.equation").input(wrapped).output(image).compute();
 
 		final RandomAccess<ShortType> ra = image.randomAccess();
 

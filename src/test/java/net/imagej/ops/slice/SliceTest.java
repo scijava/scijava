@@ -51,6 +51,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;
+import org.scijava.ops.types.Nil;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -95,7 +96,11 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		// selected interval XY
 		final int[] xyAxis = new int[] { 0, 1 };
 
-		op("slice").input(in, test, xyAxis, true).output(out).compute();
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
+			ops.wrap(test,
+				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
+				{}.getType());
+		op("slice").input(in, wrapped, xyAxis, true).output(out).compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -129,7 +134,11 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		// selected interval XYZ
 		final int[] xyAxis = new int[] { 0, 1, 2 };
 
-		op("slice").input(inSequence, test, xyAxis, true).output(outSequence).compute();
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
+			ops.wrap(test,
+				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
+				{}.getType());
+		op("slice").input(inSequence, wrapped, xyAxis, true).output(outSequence).compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();

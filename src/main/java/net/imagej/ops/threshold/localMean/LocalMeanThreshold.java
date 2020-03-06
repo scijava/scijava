@@ -50,8 +50,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -123,7 +121,7 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 		final RandomAccessibleInterval<T> input,
 		final RectangleShape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> integralImageOp,
+		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> integralImageOp,
 		final Computers.Arity3<RectangleNeighborhood<Composite<DoubleType>>, T, Double, BitType> computeThresholdOp,
 		@Mutable final IterableInterval<BitType> output)
 	{

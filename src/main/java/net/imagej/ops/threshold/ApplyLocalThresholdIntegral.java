@@ -81,13 +81,13 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 	// boilerplate code in extending classes. Is there some better way to do this?
 
 	@OpDependency(name = "image.integral")
-	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> integralImgOp;
+	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> integralImgOp;
 
 	@OpDependency(name = "image.squareIntegral")
-	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> squareIntegralImgOp;
+	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> squareIntegralImgOp;
 
 	protected
-		Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>>
+		Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>>
 		getIntegralImageOp(final int integralImageOrder)
 	{
 		if (integralImageOrder == 1) return integralImgOp;
@@ -103,7 +103,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 		final RandomAccessibleInterval<T> input,
 		RectangleShape inputNeighborhoodShape,
 		OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>>> integralImageOps,
+		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>>> integralImageOps,
 		final Computers.Arity2<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> thresholdOp,
 		final IterableInterval<BitType> output)
 	{
@@ -116,7 +116,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 
 		final List<RandomAccessibleInterval<RealType>> listOfIntegralImages =
 			new ArrayList<>(integralImageOps.size());
-		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> //
+		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> //
 		integralImageOp : integralImageOps) {
 			final RandomAccessibleInterval<RealType> requiredIntegralImg =
 				getIntegralImage(input, inputNeighborhoodShape, outOfBoundsFactory,
@@ -151,7 +151,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 		getIntegralImage(final RandomAccessibleInterval<T> input,
 			final RectangleShape shape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<RealType<?>>> integralOp)
+			final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> integralOp)
 	{
 		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedInput =
 			Views.extend(input, outOfBoundsFactory);

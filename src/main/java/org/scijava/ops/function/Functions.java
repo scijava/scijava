@@ -46,27 +46,27 @@ public final class Functions {
 	 * All known function types and their arities. The entries are sorted by
 	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
 	 */
-	public static final BiMap<Class<?>, Integer> ALL_FUNCTIONS;
+	public static final BiMap<Integer, Class<?>> ALL_FUNCTIONS;
 
 	static {
-		final Map<Class<?>, Integer> functions = new HashMap<>(10);
-		functions.put(Producer.class, 0);
-		functions.put(Function.class, 1);
-		functions.put(BiFunction.class, 2);
-		functions.put(Functions.Arity3.class, 3);
-		functions.put(Functions.Arity4.class, 4);
-		functions.put(Functions.Arity5.class, 5);
-		functions.put(Functions.Arity6.class, 6);
-		functions.put(Functions.Arity7.class, 7);
-		functions.put(Functions.Arity8.class, 8);
-		functions.put(Functions.Arity9.class, 9);
-		functions.put(Functions.Arity10.class, 10);
-		functions.put(Functions.Arity11.class, 11);
-		functions.put(Functions.Arity12.class, 12);
-		functions.put(Functions.Arity13.class, 13);
-		functions.put(Functions.Arity14.class, 14);
-		functions.put(Functions.Arity15.class, 15);
-		functions.put(Functions.Arity16.class, 16);
+		final Map<Integer, Class<?>> functions = new HashMap<>(10);
+		functions.put(0, Producer.class);
+		functions.put(1, Function.class);
+		functions.put(2, BiFunction.class);
+		functions.put(3, Functions.Arity3.class);
+		functions.put(4, Functions.Arity4.class);
+		functions.put(5, Functions.Arity5.class);
+		functions.put(6, Functions.Arity6.class);
+		functions.put(7, Functions.Arity7.class);
+		functions.put(8, Functions.Arity8.class);
+		functions.put(9, Functions.Arity9.class);
+		functions.put(10, Functions.Arity10.class);
+		functions.put(11, Functions.Arity11.class);
+		functions.put(12, Functions.Arity12.class);
+		functions.put(13, Functions.Arity13.class);
+		functions.put(14, Functions.Arity14.class);
+		functions.put(15, Functions.Arity15.class);
+		functions.put(16, Functions.Arity16.class);
 		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
 	}
 
@@ -78,7 +78,7 @@ public final class Functions {
 	 * @throws NullPointerException If {@code type} is {@code null}.
 	 */
 	public static boolean isFunction(Type type) {
-		return ALL_FUNCTIONS.containsKey(Types.raw(type));
+		return ALL_FUNCTIONS.containsValue(Types.raw(type));
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -181,6 +181,20 @@ public final class Functions {
 	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType)
 	{
 		return matchHelper(ops, opName, Functions.Arity16.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	public static <O, T> Functions.ArityN<O> matchN(final OpService ops,
+		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
+	{
+		Object op = matchHelper(ops, opName, ALL_FUNCTIONS.get(inTypes.length),
+			outType, inTypes);
+		if (op instanceof Producer) {
+			return new Arity0AsN<>((Producer<O>) op);
+		}
+		else if (op instanceof Function) {
+			return new Arity1AsN<>((Function<Object, O>) op);
+		}
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -963,6 +977,53 @@ public final class Functions {
 			Objects.requireNonNull(after);
 			return (I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) -> after.apply(apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16));
 		}
+	}
+
+	public interface ArityN<O> {
+
+		O apply(Object... ins);
+
+		Object getOp();
+	}
+
+	protected static class Arity0AsN<O> implements ArityN<O> {
+
+		Producer<O> func;
+
+		public Arity0AsN(Producer<O> func) {
+			this.func = func;
+		}
+
+		@Override
+		public O apply(Object... ins) {
+			return func.create();
+		}
+
+		@Override
+		public Object getOp() {
+			return func;
+		}
+
+	}
+
+	protected static class Arity1AsN<I, O> implements ArityN<O> {
+
+		Function<Object, O> func;
+
+		public Arity1AsN(Function<Object, O> func) {
+			this.func = func;
+		}
+
+		@Override
+		public O apply(Object... ins) {
+			return func.apply(ins[0]);
+		}
+
+		@Override
+		public Object getOp() {
+			return func;
+		}
+
 	}
 
 }

@@ -106,14 +106,10 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 			mean, spread, sigma, 0x01234567);
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
 			mean, spread, sigma, 0x98765432);
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op =
-			Functions.match(ops, "coloc.pearsons", new Nil<Iterable<FloatType>>() {}, new Nil<Iterable<FloatType>>() {}, new Nil<Double>() {});
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
-				"transform.raiToIterable").input(op).outType(
-						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
-						.apply();
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
+			Functions.match(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, raiOp, es).output(value).compute();
+		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

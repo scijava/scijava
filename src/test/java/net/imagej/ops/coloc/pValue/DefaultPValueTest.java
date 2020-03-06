@@ -36,12 +36,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops.coloc.ColocalisationTest;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.types.Nil;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -87,7 +88,7 @@ public class DefaultPValueTest extends ColocalisationTest {
 
 		// Mock the underlying op.
 		final int[] count = { 0 };
-		BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> op = //
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = //
 				op((input1, input2) -> {
 					Double r;
 					synchronized (this) {
@@ -96,11 +97,13 @@ public class DefaultPValueTest extends ColocalisationTest {
 					return r;
 				});
 
-//		GenericBiFunction<Iterable<FloatType>, Iterable<FloatType>, Double> genOp = new GenericBiFunction(op,
-//				new Nil<BiFunction<Iterable<FloatType>, Iterable<FloatType>, Double>>() {}.getType());
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped = ops
+			.wrap(op,
+				new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>()
+				{}.getType());
 
 		PValueResult output = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, result.length - 1, es).output(output).compute();
+		op("coloc.pValue").input(ch1, ch2, wrapped, result.length - 1, es).output(output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

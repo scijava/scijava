@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>28.0.0</version>
+		<relativePath />
+	</parent>
+
+	<artifactId>scijava-incubator</artifactId>
+	<version>0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>SciJava Incubator</name>
+	<description>A wonderful bag of cats.</description>
+	<url>https://github.com/scijava/incubator</url>
+	<inceptionYear>2020</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>N/A - See individual modules</name>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>N/A - see individual modules</name>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>N/A - see individual modules</name>
+		</contributor>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>N/A - see individual modules</name>
+		</mailingList>
+	</mailingLists>
+
+	<modules>
+		<module>scijava/scijava-ops</module>
+	</modules>
+
+	<scm>
+		<connection>scm:git:git://github.com/scijava/incubator</connection>
+		<developerConnection>scm:git:git@github.com:scijava/incubator</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/scijava/incubator</url>
+	</scm>
+	<issueManagement>
+		<system>N/A - see individual modules</system>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.com/scijava/incubator</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>N/A</package-name>
+		<license.licenseName>N/A</license.licenseName>
+		<license.copyrightOwners>N/A</license.copyrightOwners>
+	</properties>
+</project>

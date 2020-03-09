@@ -1,0 +1,23 @@
+.include Globals.list
+arities = (0..maxArity).collect()
+
+[Computers.java]
+nilArgs = ```
+{ arity ->
+  names = nilNames(arity)
+  names.swap(0, names.size() - 1)
+  String.join(', ', names)
+}
+```
+matchParams = ```
+{ arity ->
+  // contains "I1, I2, ..., IN, O"
+  generics = genericParamTypes(arity)
+  // contains "in1, in2, ..., inN, out"
+  names = nilNames(arity)
+  // constructing strings of the term "final Nil<I1> in1"
+  nilArgs = (0..arity).stream().map{a -> "final Nil<${generics[a]}> ${names[a]}"}.collect()
+  String.join(', ', nilArgs)
+}
+```
+

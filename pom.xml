@@ -68,6 +68,10 @@
 		<scijava.jvm.version>11</scijava.jvm.version>
 		<scijava.jvm.build.version>[11,11.9999]</scijava.jvm.build.version>
 
+		<!-- NB: Old version of javadoc plugin avoids modularity conflicts -->
+		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+		<doclint>none</doclint>
+
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->
 		<releaseProfiles>deploy-to-scijava</releaseProfiles>
 	</properties>

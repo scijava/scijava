@@ -34,6 +34,7 @@ import java.util.Random;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import org.scijava.common3.MersenneTwisterFast;
 import org.scijava.ops.spi.Nullable;
 
 /**
@@ -162,6 +163,50 @@ public class NoiseAdders {
 			p *= rng.nextDouble();
 		} while (p >= l);
 		output.setReal(k - 1);
+	}
+
+	// -- UNIFORM NOISE -- //
+
+	/**
+	 * Sets the real component of an output real number to the addition of the real
+	 * component of an input real number with an amount of uniform noise.
+	 *
+	 * @param input the input {@link RandomAccessibleInterval}
+	 * @param rangeMin the "most negative" value that can be added to each element
+	 * @param rangeMax the "most positive" value that can be added to each element
+	 * @param seed the seed to the random number generator
+	 * @param output the output {@link RandomAccessibleInterval}
+	 * @implNote op names='filter.addUniformNoise', type=Computer
+	 */
+	public static <I extends RealType<I>> void addUniformNoise( //
+		RandomAccessibleInterval<I> input, //
+		I rangeMin, //
+		I rangeMax, //
+		@Nullable Long seed, //
+		RandomAccessibleInterval<I> output //
+	) {
+		// Set seed to default if necessary
+		if (seed == null) {
+			seed = 0xabcdef1234567890L;
+		}
+		// Construct the Random Number Generator
+		MersenneTwisterFast rng = new MersenneTwisterFast(seed);
+		// Find the range
+		I range = rangeMax.createVariable();
+		range.set(rangeMax);
+		range.sub(rangeMin);
+
+		// Loop over the images
+		LoopBuilder.setImages(input, output).forEachPixel( (i, o) -> {
+			// Random value = next double * range
+			o.set(range);
+			o.mul(rng.nextDouble(true, true));
+			// Add the range minimum
+			o.add(rangeMin);
+			// Add the original value
+			o.add(i);
+		});
+
 	}
 
 }

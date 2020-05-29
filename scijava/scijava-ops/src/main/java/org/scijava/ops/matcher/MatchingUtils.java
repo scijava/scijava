@@ -393,7 +393,7 @@ public final class MatchingUtils {
 	/**
 	 * Exception indicating that type vars could not be inferred.
 	 */
-	private static class TypeInferenceException extends Exception {
+	protected static class TypeInferenceException extends Exception {
 		/**
 		 *
 		 */
@@ -427,7 +427,7 @@ public final class MatchingUtils {
 	 * @param typeAssigns
 	 * @throws TypeInferenceException
 	 */
-	private static void inferTypeVariables(Type[] types, Type[] inferFrom, Map<TypeVariable<?>, Type> typeAssigns)
+	protected static void inferTypeVariables(Type[] types, Type[] inferFrom, Map<TypeVariable<?>, Type> typeAssigns)
 			throws TypeInferenceException {
 		if (typeAssigns == null)
 			throw new IllegalArgumentException();
@@ -510,7 +510,15 @@ public final class MatchingUtils {
 					}
 				} else {
 					ParameterizedType paramType = (ParameterizedType) types[i];
-					ParameterizedType paramInferFrom = (ParameterizedType) inferFrom[i];
+
+					// Finding the supertype here is really important. Suppose that we are
+					// inferring from a StrangeThing<Long> extends Thing<Double> and our
+					// Op requires a Thing<T>. We need to ensure that T gets
+					// resolved to a Double and NOT a Long.
+					ParameterizedType paramInferFrom = (ParameterizedType) Types
+						.getExactSuperType(inferFrom[i], Types.raw(paramType));
+					if (paramInferFrom == null) throw new TypeInferenceException();
+
 					inferTypeVariables(paramType.getActualTypeArguments(), paramInferFrom.getActualTypeArguments(),
 							typeAssigns);
 				}

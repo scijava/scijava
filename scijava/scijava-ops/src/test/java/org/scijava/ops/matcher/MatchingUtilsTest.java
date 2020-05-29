@@ -27,8 +27,9 @@
  * #L%
  */
 
-package org.scijava.ops.util;
+package org.scijava.ops.matcher;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.ParameterizedType;
@@ -36,12 +37,13 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.junit.Test;
-import org.scijava.ops.matcher.MatchingUtils;
+import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
 import org.scijava.ops.types.Nil;
 import org.scijava.util.Types;
 
@@ -445,6 +447,34 @@ public class MatchingUtilsTest {
 		assertAll(List.class, true, listT, listNumber, listInteger);
 		assertAll(List.class, false, listExtendsNumber, t);
 	}
+	
+	@Test
+	public <I, O> void testSupertypeTypeInference()
+		throws TypeInferenceException
+	{
+		final Type t = new Nil<Function<Thing<I>, List<O>>>() {}.getType();
+		final Type[] tArgs = ((ParameterizedType) t).getActualTypeArguments();
+		final Type dest =
+			new Nil<Function<StrangeThing<Double, String>, List<Double>>>()
+			{}.getType();
+		final Type[] destArgs = ((ParameterizedType) dest).getActualTypeArguments();
+
+		final Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
+		MatchingUtils.inferTypeVariables(tArgs, destArgs, typeAssigns);
+
+		// We expect I=String, O=Double
+		final Map<TypeVariable<?>, Type> expected = new HashMap<>();
+		expected.put((TypeVariable<?>) ((ParameterizedType) tArgs[0])
+			.getActualTypeArguments()[0], String.class);
+		expected.put((TypeVariable<?>) ((ParameterizedType) tArgs[1])
+			.getActualTypeArguments()[0], Double.class);
+
+		assertEquals(typeAssigns, expected);
+	}
+	
+	class Thing<T> {}
+	
+	class StrangeThing<N extends Number, T> extends Thing<T> {}
 	
 	/**
 	 * {@link MatchingUtils#checkGenericOutputsAssignability(Type[], Type[], HashMap)} not yet fully

@@ -441,17 +441,18 @@ public final class MatchingUtils {
 				TypeVariable<?> varType = (TypeVariable<?>) types[i];
 				Type from = inferFrom[i];
 
-				// If current type var is absent put it to the map. Otherwise,
-				// we already encountered that var.
-				// Hence, we require them to be exactly the same.
 				Type current = typeAssigns.putIfAbsent(varType, from);
+				// If current is not null then we have already encountered that
+				// variable. If so, we require them to be exactly the same, and throw a
+				// TypeInferenceException if they are not.
 				if (current != null) {
+					if (Objects.equal(current, from))
+						continue;
 					if (current instanceof Any) {
 						typeAssigns.put(varType, from);
+						continue;
 					}
-					else if (!Objects.equal(from, current)) {
-						throw new TypeInferenceException();
-					}
+					throw new TypeInferenceException();
 				}
 
 				// Bounds could also contain type vars, hence possibly go into

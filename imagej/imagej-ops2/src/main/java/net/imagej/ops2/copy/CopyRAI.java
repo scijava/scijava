@@ -30,6 +30,7 @@
 package net.imagej.ops2.copy;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
@@ -52,13 +53,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "copy", itemIO = ItemIO.BOTH)
 public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 
-	@OpDependency(name = "copy.type")
-	private Computers.Arity1<Iterable<T>, Iterable<T>> mapComputer;
+	@OpDependency(name = "copy")
+	private Computers.Arity1<T, T> mapComputer;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final RandomAccessibleInterval<T> output) {
 		if (!Intervals.equalDimensions(input, output))
 			throw new IllegalArgumentException("input and output must be of the same dimensionality!");
-		mapComputer.compute(Views.flatIterable(input), Views.flatIterable(output));
+		LoopBuilder.setImages(input, output).forEachPixel((in, out) -> mapComputer.compute(in, out));
 	}
 }

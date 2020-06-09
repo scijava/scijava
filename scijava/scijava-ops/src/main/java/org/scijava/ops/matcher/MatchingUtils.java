@@ -393,7 +393,7 @@ public final class MatchingUtils {
 	/**
 	 * Exception indicating that type vars could not be inferred.
 	 */
-	private static class TypeInferenceException extends Exception {
+	protected static class TypeInferenceException extends Exception {
 		/**
 		 *
 		 */
@@ -427,7 +427,7 @@ public final class MatchingUtils {
 	 * @param typeAssigns
 	 * @throws TypeInferenceException
 	 */
-	private static void inferTypeVariables(Type[] types, Type[] inferFrom, Map<TypeVariable<?>, Type> typeAssigns)
+	protected static void inferTypeVariables(Type[] types, Type[] inferFrom, Map<TypeVariable<?>, Type> typeAssigns)
 			throws TypeInferenceException {
 		if (typeAssigns == null)
 			throw new IllegalArgumentException();
@@ -441,17 +441,18 @@ public final class MatchingUtils {
 				TypeVariable<?> varType = (TypeVariable<?>) types[i];
 				Type from = inferFrom[i];
 
-				// If current type var is absent put it to the map. Otherwise,
-				// we already encountered that var.
-				// Hence, we require them to be exactly the same.
 				Type current = typeAssigns.putIfAbsent(varType, from);
+				// If current is not null then we have already encountered that
+				// variable. If so, we require them to be exactly the same, and throw a
+				// TypeInferenceException if they are not.
 				if (current != null) {
+					if (Objects.equal(current, from))
+						continue;
 					if (current instanceof Any) {
 						typeAssigns.put(varType, from);
+						continue;
 					}
-					else if (!Objects.equal(from, current)) {
-						throw new TypeInferenceException();
-					}
+					throw new TypeInferenceException();
 				}
 
 				// Bounds could also contain type vars, hence possibly go into
@@ -510,7 +511,15 @@ public final class MatchingUtils {
 					}
 				} else {
 					ParameterizedType paramType = (ParameterizedType) types[i];
-					ParameterizedType paramInferFrom = (ParameterizedType) inferFrom[i];
+
+					// Finding the supertype here is really important. Suppose that we are
+					// inferring from a StrangeThing<Long> extends Thing<Double> and our
+					// Op requires a Thing<T>. We need to ensure that T gets
+					// resolved to a Double and NOT a Long.
+					ParameterizedType paramInferFrom = (ParameterizedType) Types
+						.getExactSuperType(inferFrom[i], Types.raw(paramType));
+					if (paramInferFrom == null) throw new TypeInferenceException();
+
 					inferTypeVariables(paramType.getActualTypeArguments(), paramInferFrom.getActualTypeArguments(),
 							typeAssigns);
 				}

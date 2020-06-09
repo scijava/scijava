@@ -29,7 +29,7 @@
 
 package net.imagej.ops2.filter.max;
 
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
@@ -55,18 +55,18 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultMaxFilter<T, V> implements
-		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, IterableInterval<V>> {
+		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>> {
 
 	@OpDependency(name = "stats.max")
 	private Computers.Arity1<Iterable<T>, V> statsOp;
 
 	@OpDependency(name = "map.neighborhood")
-	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity1<Iterable<T>, V>, IterableInterval<V>> mapper;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity1<Iterable<T>, V>, RandomAccessibleInterval<V>> mapper;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final IterableInterval<V> output) {
+			final RandomAccessibleInterval<V> output) {
 		RandomAccessibleInterval<T> extended = outOfBoundsFactory == null ? input
 			: Views.interval((Views.extend(input, outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, statsOp, output);

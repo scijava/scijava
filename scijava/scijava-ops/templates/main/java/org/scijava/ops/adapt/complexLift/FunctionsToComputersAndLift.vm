@@ -37,7 +37,7 @@ package org.scijava.ops.adapt.complexLift;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.core.Priority;
+import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;

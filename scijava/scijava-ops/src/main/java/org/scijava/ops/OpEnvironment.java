@@ -29,7 +29,6 @@
 
 package org.scijava.ops;
 
-import org.scijava.ops.matcher.OpInfo;
 import org.scijava.ops.matcher.OpRef;
 
 /**

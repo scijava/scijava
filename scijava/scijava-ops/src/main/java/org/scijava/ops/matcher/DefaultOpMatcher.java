@@ -43,6 +43,7 @@ import java.util.function.Predicate;
 
 import org.scijava.log.Logger;
 import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.plugin.Plugin;

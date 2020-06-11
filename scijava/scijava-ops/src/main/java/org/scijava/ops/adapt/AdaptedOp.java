@@ -3,8 +3,8 @@ package org.scijava.ops.adapt;
 
 import java.lang.reflect.Type;
 
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.matcher.OpAdaptationInfo;
-import org.scijava.ops.matcher.OpInfo;
 
 /**
  * Wrapper class combining an adapted Op with its adapted type and associated

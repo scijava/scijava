@@ -1,12 +1,10 @@
 
-package org.scijava.ops.matcher;
+package org.scijava.ops;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.scijava.ops.OpDependencyMember;
-import org.scijava.ops.OpUtils;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;

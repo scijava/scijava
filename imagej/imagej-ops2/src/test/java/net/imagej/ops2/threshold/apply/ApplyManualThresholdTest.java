@@ -51,12 +51,12 @@ public class ApplyManualThresholdTest extends AbstractThresholdTest {
 
 	@Test
 	public void testApplyThreshold() throws IncompatibleTypeException {
-		Computers.Arity3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>,Iterable<BitType>> createFunc = Computers.match(ops,
-				"threshold.apply", new Nil<Img<UnsignedShortType>>() {
-				}, new Nil<UnsignedShortType>() {
-				}, new Nil<Comparator<UnsignedShortType>>() {
-				}, new Nil<Iterable<BitType>>() {
-				});
+		Computers.Arity3<Img<UnsignedShortType>, UnsignedShortType, Comparator<UnsignedShortType>, Iterable<BitType>> createFunc =
+			Computers.match(ops.env(), "threshold.apply",
+				new Nil<Img<UnsignedShortType>>()
+				{}, new Nil<UnsignedShortType>() {},
+				new Nil<Comparator<UnsignedShortType>>()
+				{}, new Nil<Iterable<BitType>>() {});
 
 		final Img<BitType> out = bitmap();
 		final UnsignedShortType threshold = new UnsignedShortType(30000);

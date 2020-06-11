@@ -53,7 +53,7 @@ public class HelpForName extends AbstractHelp implements BiFunction<String, OpSe
 
 	@Override
 	public String apply(String name, OpService ops) {
-		final Iterable<OpInfo> allOps = ops.infos(name);
+		final Iterable<OpInfo> allOps = ops.env().infos(name);
 		help(allOps);
 		return help;
 	}

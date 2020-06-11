@@ -45,7 +45,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction1ToComputer1() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in).output(output).compute();
+		ops.op("test.FtC").input(in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {2, 4}, output, 0);
 	}
 
@@ -53,7 +53,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction2ToComputer2() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {4, 8}, output, 0);
 	}
 
@@ -61,7 +61,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction3ToComputer3() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {6, 12}, output, 0);
 	}
 
@@ -69,7 +69,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction4ToComputer4() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {8, 16}, output, 0);
 	}
 
@@ -77,7 +77,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction5ToComputer5() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {10, 20}, output, 0);
 	}
 
@@ -85,7 +85,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction6ToComputer6() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {12, 24}, output, 0);
 	}
 
@@ -93,7 +93,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction7ToComputer7() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {14, 28}, output, 0);
 	}
 
@@ -101,7 +101,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction8ToComputer8() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {16, 32}, output, 0);
 	}
 
@@ -109,7 +109,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction9ToComputer9() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {18, 36}, output, 0);
 	}
 
@@ -117,7 +117,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction10ToComputer10() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {20, 40}, output, 0);
 	}
 
@@ -125,7 +125,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction11ToComputer11() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {22, 44}, output, 0);
 	}
 
@@ -133,7 +133,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction12ToComputer12() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {24, 48}, output, 0);
 	}
 
@@ -141,7 +141,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction13ToComputer13() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {26, 52}, output, 0);
 	}
 
@@ -149,7 +149,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction14ToComputer14() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {28, 56}, output, 0);
 	}
 
@@ -157,7 +157,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction15ToComputer15() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {30, 60}, output, 0);
 	}
 
@@ -165,7 +165,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction16ToComputer16() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		new OpBuilder(ops, "test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
+		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
 		Assert.assertArrayEquals(new double[] {32, 64}, output, 0);
 	}
 }

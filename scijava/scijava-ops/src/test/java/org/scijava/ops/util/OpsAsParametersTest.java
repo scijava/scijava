@@ -46,7 +46,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {}).apply();
+		List<Double> output = ops.op("test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {}).apply();
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing = Functions.match(ops,
+		BiFunction<List<Number>, Function<Number, Double>, List<Double>> thing = Functions.match(ops.env(),
 				"test.parameter.op", new Nil<List<Number>>() {
 				}, new Nil<Function<Number, Double>>() {
 				}, new Nil<List<Double>>() {
@@ -75,12 +75,12 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		list.add(20.5);
 		list.add(4.0d);
 
-		Function<Number, Double> funcClass = Functions.match(ops, "test.parameter.class", new Nil<Number>() {
+		Function<Number, Double> funcClass = Functions.match(ops.env(), "test.parameter.class", new Nil<Number>() {
 		}, new Nil<Double>() {
 		});
 
 		@SuppressWarnings("unused")
-		List<Double> output = new OpBuilder(ops, "test.parameter.op").input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
+		List<Double> output = ops.op("test.parameter.op").input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
 	}
 
 }

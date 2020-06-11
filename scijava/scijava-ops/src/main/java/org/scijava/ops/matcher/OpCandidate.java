@@ -64,7 +64,7 @@ public class OpCandidate {
 		DOES_NOT_CONFORM, OTHER //
 	}
 
-	private final OpEnvironment ops;
+	private final OpEnvironment env;
 	private final Logger log;
 	private final OpRef ref;
 	private final OpInfo info;
@@ -79,10 +79,10 @@ public class OpCandidate {
 	 * If the op does not, this will be the same as {@link #ref}.getArgs(). */
 	private final Type[] paddedArgs;
 
-	public OpCandidate(final OpEnvironment ops, final Logger log, final OpRef ref, final OpInfo info,
+	public OpCandidate(final OpEnvironment env, final Logger log, final OpRef ref, final OpInfo info,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
-		this.ops = ops;
+		this.env = env;
 		this.log = log;
 		this.ref = ref;
 		this.info = info;
@@ -92,8 +92,8 @@ public class OpCandidate {
 	}
 
 	/** Gets the op execution environment of the desired match. */
-	public OpEnvironment ops() {
-		return ops;
+	public OpEnvironment env() {
+		return env;
 	}
 
 	/** Gets the op reference describing the desired match. */

@@ -29,7 +29,11 @@
 
 package org.scijava.ops;
 
+import java.lang.reflect.Type;
+
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.types.Nil;
 
 /**
  * An op environment is the top-level entry point into op execution. It provides
@@ -49,15 +53,8 @@ import org.scijava.ops.matcher.OpRef;
  * <li>Configuration of environment "hints" to improve performance in time or
  * space.</li>
  * </ul>
- * <p>
- * The default&mdash;but not necessarily <em>only</em>&mdash;op environment is
- * the {@link OpService} of the application. The environment can be modified by
- * using a {@link CustomOpEnvironment}, or by implementing this interface
- * directly.
- * </p>
  * 
  * @author Curtis Rueden
- * @see OpService
  */
 public interface OpEnvironment {
 
@@ -65,4 +62,15 @@ public interface OpEnvironment {
 	Iterable<OpInfo> infos();
 	
 	Iterable<OpInfo> infos(String name);
+
+	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
+
+	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
+
+	default OpBuilder op(final String opName) {
+		return new OpBuilder(this, opName);
+	}
+
+	/** Discerns the generic type of an object instance. */
+	Type genericType(Object obj);
 }

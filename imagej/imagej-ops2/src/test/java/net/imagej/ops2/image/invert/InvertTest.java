@@ -276,7 +276,7 @@ public class InvertTest extends AbstractOpTest {
 		min.setReal(type.getMinValue());
 		final T max = type.copy();
 		max.setReal(type.getMaxValue());
-		op("image.invert").input(in).output(out).compute();
+		ops.op("image.invert").input(in).output(out).compute();
 
 		defaultCompare(in, out, min, max);
 	}
@@ -284,7 +284,7 @@ public class InvertTest extends AbstractOpTest {
 	private <T extends RealType<T>> void assertDefaultInvertMinMaxProvided(final Img<T> in, final Img<T> out,
 			final T min, final T max) {
 
-		op("image.invert").input(in, min, max).output(out).compute();
+		ops.op("image.invert").input(in, min, max).output(out).compute();
 
 		defaultCompare(in, out, min, max);
 	}
@@ -314,7 +314,7 @@ public class InvertTest extends AbstractOpTest {
 			final T min, final T max) {
 
 		// unsigned type test
-		op("image.invert").input(in, min, max).output(out).compute();
+		ops.op("image.invert").input(in, min, max).output(out).compute();
 
 		integerCompare(in, out, min, max);
 
@@ -322,7 +322,7 @@ public class InvertTest extends AbstractOpTest {
 
 	private <T extends IntegerType<T>> void assertIntegerInvert(final Img<T> in, final Img<T> out) {
 
-		op("image.invert").input(in).output(out).compute();
+		ops.op("image.invert").input(in).output(out).compute();
 
 		Cursor<T> inCursor = in.localizingCursor();
 		Cursor<T> outCursor = out.localizingCursor();

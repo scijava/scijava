@@ -52,8 +52,9 @@ import org.scijava.Context;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.TypeService;
 
 /**
  * Base class for {@link Op} unit testing.
@@ -72,7 +73,8 @@ public abstract class AbstractOpTest{
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class, ThreadService.class);
+		context = new Context(OpService.class, CacheService.class,
+			ThreadService.class, PluginService.class, TypeService.class);
 		ops = context.service(OpService.class);
 	}
 
@@ -83,10 +85,6 @@ public abstract class AbstractOpTest{
 		ops = null;
 	}
 	
-	protected static OpBuilder op(String name) {
-		return new OpBuilder(ops, name);
-	}
-
 	private int seed;
 
 	private int pseudoRandom() {

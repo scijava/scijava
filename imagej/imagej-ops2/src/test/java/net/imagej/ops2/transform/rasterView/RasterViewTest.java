@@ -66,7 +66,7 @@ public class RasterViewTest extends AbstractOpTest {
 	public void defaultRasterTest() {
 
 		Function<RealRandomAccessible<DoubleType>, RandomAccessibleOnRealRandomAccessible<DoubleType>> rasterFunc = Functions
-				.match(ops, "transform.rasterView", new Nil<RealRandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.rasterView", new Nil<RealRandomAccessible<DoubleType>>() {
 				}, new Nil<RandomAccessibleOnRealRandomAccessible<DoubleType>>() {
 				});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

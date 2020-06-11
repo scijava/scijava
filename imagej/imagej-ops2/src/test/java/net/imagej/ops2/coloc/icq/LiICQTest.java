@@ -60,7 +60,7 @@ public class LiICQTest extends ColocalisationTest {
 		final Img<ByteType> img1 = TestImgGeneration.byteArray(true, 10, 15, 20);
 		final Img<ByteType> img2 = TestImgGeneration.byteArray(true, 10, 15, 20);
 
-		final Double icqValue = op("coloc.icq").input(img1, img2).outType(Double.class).apply();
+		final Double icqValue = ops.op("coloc.icq").input(img1, img2).outType(Double.class).apply();
 
 		assertEquals(0.5, icqValue, 0.0);
 	}
@@ -70,7 +70,7 @@ public class LiICQTest extends ColocalisationTest {
 	 */
 	@Test
 	public void liPositiveCorrTest() {
-		final Double icqValue = op("coloc.icq").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2)
+		final Double icqValue = ops.op("coloc.icq").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2)
 				.outType(Double.class).apply();
 		assertTrue(icqValue > 0.34 && icqValue < 0.35);
 	}
@@ -81,7 +81,7 @@ public class LiICQTest extends ColocalisationTest {
 	 */
 	@Test
 	public void liZeroCorrTest() {
-		final Object icqValue = op("coloc.icq").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
+		final Object icqValue = ops.op("coloc.icq").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).apply();
 
 		assertTrue(icqValue instanceof Double);
 		final double icq = (Double) icqValue;
@@ -101,10 +101,10 @@ public class LiICQTest extends ColocalisationTest {
 				0x01234567);
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = Functions.match(ops, "coloc.icq",
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = Functions.match(ops.env(), "coloc.icq",
 				new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.72, value.getPValue(), 0.0);
 	}
 

@@ -57,7 +57,7 @@ public class EvalTest extends AbstractOpTest {
 		final OpService opService = context.getService(OpService.class);
 
 		// TODO: can we use ops.run here?
-		Functions.Arity3<String, Map<String, Object>, OpService, Object> evaluator = ops.op("eval",
+		Functions.Arity3<String, Map<String, Object>, OpService, Object> evaluator = ops.env().op("eval",
 				new Nil<Functions.Arity3<String, Map<String, Object>, OpService, Object>>() {},
 				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpService>() {} },
 				new Nil<Object>() {});

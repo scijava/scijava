@@ -57,11 +57,11 @@ public class NormalizeTest extends AbstractOpTest {
 		Img<ByteType> in = TestImgGeneration.byteArray(true, 5, 5);
 		Img<ByteType> out = in.factory().create(in, new ByteType());
 
-		op("image.normalize").input(in).output(out).compute();
+		ops.op("image.normalize").input(in).output(out).compute();
 
-		final Pair<ByteType, ByteType> minMax = op("stats.minMax").input(in)
+		final Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").input(in)
 				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
-		final Pair<ByteType, ByteType> minMax2 = op("stats.minMax").input(out)
+		final Pair<ByteType, ByteType> minMax2 = ops.op("stats.minMax").input(out)
 				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
 
 		assertEquals(minMax2.getA().get(), Byte.MIN_VALUE);
@@ -70,9 +70,9 @@ public class NormalizeTest extends AbstractOpTest {
 		final ByteType min = new ByteType((byte) in.firstElement().getMinValue());
 		final ByteType max = new ByteType((byte) in.firstElement().getMaxValue());
 
-		final IterableInterval<ByteType> lazyOut = op("image.normalize").input(in)
+		final IterableInterval<ByteType> lazyOut = ops.op("image.normalize").input(in)
 				.outType(new Nil<IterableInterval<ByteType>>() {}).apply();
-		final IterableInterval<ByteType> notLazyOut = op("image.normalize")
+		final IterableInterval<ByteType> notLazyOut = ops.op("image.normalize")
 				.input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<IterableInterval<ByteType>>() {})
 				.apply();
 

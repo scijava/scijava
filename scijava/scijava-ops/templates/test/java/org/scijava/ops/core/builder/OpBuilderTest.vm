@@ -348,6 +348,6 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 	// -- Helper methods --
 
 	private OpBuilder name(String opName) {
-		return new OpBuilder(ops, opName);
+		return ops.op(opName);
 	}
 }

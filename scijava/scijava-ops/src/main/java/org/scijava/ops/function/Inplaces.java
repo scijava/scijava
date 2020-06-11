@@ -15,7 +15,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.OpService;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.types.Nil;
 import org.scijava.param.Mutable;
 import org.scijava.types.Types;
@@ -223,830 +223,830 @@ public final class Inplaces {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO> Arity1<IO> match(final OpService ops, final String opName, final Nil<IO> ioType)
+	public static <IO> Arity1<IO> match(final OpEnvironment env, final String opName, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity1.class, ioType, new Nil[] {ioType});
+		return matchHelper(env, opName, Arity1.class, ioType, new Nil[] {ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2> Arity2_1<IO, I2> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type)
+	public static <IO, I2> Arity2_1<IO, I2> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type)
 	{
-		return matchHelper(ops, opName, Arity2_1.class, ioType, new Nil[] {ioType, in2Type});
+		return matchHelper(env, opName, Arity2_1.class, ioType, new Nil[] {ioType, in2Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO> Arity2_2<I1, IO> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType)
+	public static <I1, IO> Arity2_2<I1, IO> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity2_2.class, ioType, new Nil[] {in1Type, ioType});
+		return matchHelper(env, opName, Arity2_2.class, ioType, new Nil[] {in1Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3> Arity3_1<IO, I2, I3> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type)
+	public static <IO, I2, I3> Arity3_1<IO, I2, I3> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type)
 	{
-		return matchHelper(ops, opName, Arity3_1.class, ioType, new Nil[] {ioType, in2Type, in3Type});
+		return matchHelper(env, opName, Arity3_1.class, ioType, new Nil[] {ioType, in2Type, in3Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3> Arity3_2<I1, IO, I3> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type)
+	public static <I1, IO, I3> Arity3_2<I1, IO, I3> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type)
 	{
-		return matchHelper(ops, opName, Arity3_2.class, ioType, new Nil[] {in1Type, ioType, in3Type});
+		return matchHelper(env, opName, Arity3_2.class, ioType, new Nil[] {in1Type, ioType, in3Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO> Arity3_3<I1, I2, IO> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType)
+	public static <I1, I2, IO> Arity3_3<I1, I2, IO> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity3_3.class, ioType, new Nil[] {in1Type, in2Type, ioType});
+		return matchHelper(env, opName, Arity3_3.class, ioType, new Nil[] {in1Type, in2Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4> Arity4_1<IO, I2, I3, I4> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type)
+	public static <IO, I2, I3, I4> Arity4_1<IO, I2, I3, I4> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type)
 	{
-		return matchHelper(ops, opName, Arity4_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type});
+		return matchHelper(env, opName, Arity4_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4> Arity4_2<I1, IO, I3, I4> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type)
+	public static <I1, IO, I3, I4> Arity4_2<I1, IO, I3, I4> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type)
 	{
-		return matchHelper(ops, opName, Arity4_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type});
+		return matchHelper(env, opName, Arity4_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4> Arity4_3<I1, I2, IO, I4> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type)
+	public static <I1, I2, IO, I4> Arity4_3<I1, I2, IO, I4> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type)
 	{
-		return matchHelper(ops, opName, Arity4_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type});
+		return matchHelper(env, opName, Arity4_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO> Arity4_4<I1, I2, I3, IO> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, IO> Arity4_4<I1, I2, I3, IO> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity4_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType});
+		return matchHelper(env, opName, Arity4_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5> Arity5_1<IO, I2, I3, I4, I5> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type)
+	public static <IO, I2, I3, I4, I5> Arity5_1<IO, I2, I3, I4, I5> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type)
 	{
-		return matchHelper(ops, opName, Arity5_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type});
+		return matchHelper(env, opName, Arity5_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5> Arity5_2<I1, IO, I3, I4, I5> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type)
+	public static <I1, IO, I3, I4, I5> Arity5_2<I1, IO, I3, I4, I5> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type)
 	{
-		return matchHelper(ops, opName, Arity5_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type});
+		return matchHelper(env, opName, Arity5_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5> Arity5_3<I1, I2, IO, I4, I5> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type)
+	public static <I1, I2, IO, I4, I5> Arity5_3<I1, I2, IO, I4, I5> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type)
 	{
-		return matchHelper(ops, opName, Arity5_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type});
+		return matchHelper(env, opName, Arity5_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5> Arity5_4<I1, I2, I3, IO, I5> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type)
+	public static <I1, I2, I3, IO, I5> Arity5_4<I1, I2, I3, IO, I5> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type)
 	{
-		return matchHelper(ops, opName, Arity5_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type});
+		return matchHelper(env, opName, Arity5_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO> Arity5_5<I1, I2, I3, I4, IO> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, IO> Arity5_5<I1, I2, I3, I4, IO> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity5_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType});
+		return matchHelper(env, opName, Arity5_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6> Arity6_1<IO, I2, I3, I4, I5, I6> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
+	public static <IO, I2, I3, I4, I5, I6> Arity6_1<IO, I2, I3, I4, I5, I6> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
 	{
-		return matchHelper(ops, opName, Arity6_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type});
+		return matchHelper(env, opName, Arity6_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6> Arity6_2<I1, IO, I3, I4, I5, I6> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
+	public static <I1, IO, I3, I4, I5, I6> Arity6_2<I1, IO, I3, I4, I5, I6> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
 	{
-		return matchHelper(ops, opName, Arity6_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type});
+		return matchHelper(env, opName, Arity6_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6> Arity6_3<I1, I2, IO, I4, I5, I6> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
+	public static <I1, I2, IO, I4, I5, I6> Arity6_3<I1, I2, IO, I4, I5, I6> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
 	{
-		return matchHelper(ops, opName, Arity6_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type});
+		return matchHelper(env, opName, Arity6_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6> Arity6_4<I1, I2, I3, IO, I5, I6> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type)
+	public static <I1, I2, I3, IO, I5, I6> Arity6_4<I1, I2, I3, IO, I5, I6> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type)
 	{
-		return matchHelper(ops, opName, Arity6_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type});
+		return matchHelper(env, opName, Arity6_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6> Arity6_5<I1, I2, I3, I4, IO, I6> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type)
+	public static <I1, I2, I3, I4, IO, I6> Arity6_5<I1, I2, I3, I4, IO, I6> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type)
 	{
-		return matchHelper(ops, opName, Arity6_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type});
+		return matchHelper(env, opName, Arity6_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO> Arity6_6<I1, I2, I3, I4, I5, IO> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, IO> Arity6_6<I1, I2, I3, I4, I5, IO> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity6_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType});
+		return matchHelper(env, opName, Arity6_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7> Arity7_1<IO, I2, I3, I4, I5, I6, I7> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
+	public static <IO, I2, I3, I4, I5, I6, I7> Arity7_1<IO, I2, I3, I4, I5, I6, I7> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
 	{
-		return matchHelper(ops, opName, Arity7_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type});
+		return matchHelper(env, opName, Arity7_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7> Arity7_2<I1, IO, I3, I4, I5, I6, I7> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
+	public static <I1, IO, I3, I4, I5, I6, I7> Arity7_2<I1, IO, I3, I4, I5, I6, I7> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
 	{
-		return matchHelper(ops, opName, Arity7_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type});
+		return matchHelper(env, opName, Arity7_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7> Arity7_3<I1, I2, IO, I4, I5, I6, I7> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
+	public static <I1, I2, IO, I4, I5, I6, I7> Arity7_3<I1, I2, IO, I4, I5, I6, I7> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
 	{
-		return matchHelper(ops, opName, Arity7_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type});
+		return matchHelper(env, opName, Arity7_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7> Arity7_4<I1, I2, I3, IO, I5, I6, I7> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
+	public static <I1, I2, I3, IO, I5, I6, I7> Arity7_4<I1, I2, I3, IO, I5, I6, I7> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
 	{
-		return matchHelper(ops, opName, Arity7_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type});
+		return matchHelper(env, opName, Arity7_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7> Arity7_5<I1, I2, I3, I4, IO, I6, I7> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type)
+	public static <I1, I2, I3, I4, IO, I6, I7> Arity7_5<I1, I2, I3, I4, IO, I6, I7> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type)
 	{
-		return matchHelper(ops, opName, Arity7_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type});
+		return matchHelper(env, opName, Arity7_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7> Arity7_6<I1, I2, I3, I4, I5, IO, I7> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type)
+	public static <I1, I2, I3, I4, I5, IO, I7> Arity7_6<I1, I2, I3, I4, I5, IO, I7> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type)
 	{
-		return matchHelper(ops, opName, Arity7_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type});
+		return matchHelper(env, opName, Arity7_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO> Arity7_7<I1, I2, I3, I4, I5, I6, IO> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, IO> Arity7_7<I1, I2, I3, I4, I5, I6, IO> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity7_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType});
+		return matchHelper(env, opName, Arity7_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8> Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8> Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type});
+		return matchHelper(env, opName, Arity8_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8> Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8> Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type});
+		return matchHelper(env, opName, Arity8_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8> Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8> Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type});
+		return matchHelper(env, opName, Arity8_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8> Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8> Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type});
+		return matchHelper(env, opName, Arity8_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8> Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8> Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type});
+		return matchHelper(env, opName, Arity8_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8> Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8> Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type});
+		return matchHelper(env, opName, Arity8_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8> Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8> Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type)
 	{
-		return matchHelper(ops, opName, Arity8_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type});
+		return matchHelper(env, opName, Arity8_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO> Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO> Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity8_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType});
+		return matchHelper(env, opName, Arity8_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9> Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9> Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9> Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9> Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9> Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9> Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9> Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9> Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9> Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9> Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9> Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9> Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type});
+		return matchHelper(env, opName, Arity9_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9> Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9> Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type)
 	{
-		return matchHelper(ops, opName, Arity9_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type});
+		return matchHelper(env, opName, Arity9_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO> Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO> Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity9_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType});
+		return matchHelper(env, opName, Arity9_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type});
+		return matchHelper(env, opName, Arity10_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type)
 	{
-		return matchHelper(ops, opName, Arity10_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type});
+		return matchHelper(env, opName, Arity10_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity10_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType});
+		return matchHelper(env, opName, Arity10_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type});
+		return matchHelper(env, opName, Arity11_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type)
 	{
-		return matchHelper(ops, opName, Arity11_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type});
+		return matchHelper(env, opName, Arity11_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> match11(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity11_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType});
+		return matchHelper(env, opName, Arity11_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type});
+		return matchHelper(env, opName, Arity12_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> match11(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type)
 	{
-		return matchHelper(ops, opName, Arity12_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type});
+		return matchHelper(env, opName, Arity12_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> match12(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity12_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType});
+		return matchHelper(env, opName, Arity12_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> match11(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type});
+		return matchHelper(env, opName, Arity13_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> match12(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type)
 	{
-		return matchHelper(ops, opName, Arity13_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type});
+		return matchHelper(env, opName, Arity13_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> match13(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity13_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType});
+		return matchHelper(env, opName, Arity13_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> match11(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> match12(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type});
+		return matchHelper(env, opName, Arity14_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> match13(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type)
 	{
-		return matchHelper(ops, opName, Arity14_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type});
+		return matchHelper(env, opName, Arity14_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> match14(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> match14(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity14_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType});
+		return matchHelper(env, opName, Arity14_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> match11(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> match12(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> match13(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type});
+		return matchHelper(env, opName, Arity15_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> match14(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType, final Nil<I15> in15Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> match14(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType, final Nil<I15> in15Type)
 	{
-		return matchHelper(ops, opName, Arity15_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type});
+		return matchHelper(env, opName, Arity15_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> match15(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> match15(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity15_15.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType});
+		return matchHelper(env, opName, Arity15_15.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match1(final OpService ops, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match1(final OpEnvironment env, final String opName, final Nil<IO> ioType, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_1.class, ioType, new Nil[] {ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match2(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match2(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<IO> ioType, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_2.class, ioType, new Nil[] {in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match3(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match3(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<IO> ioType, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_3.class, ioType, new Nil[] {in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match4(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match4(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<IO> ioType, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_4.class, ioType, new Nil[] {in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match5(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match5(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<IO> ioType, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_5.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match6(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> match6(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<IO> ioType, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_6.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> match7(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> match7(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<IO> ioType, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_7.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> match8(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> match8(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<IO> ioType, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_8.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> match9(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> match9(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<IO> ioType, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_9.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> match10(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> match10(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<IO> ioType, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_10.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> match11(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> match11(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<IO> ioType, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_11.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> match12(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> match12(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<IO> ioType, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_12.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> match13(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> match13(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<IO> ioType, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_13.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> match14(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType, final Nil<I15> in15Type, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> match14(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<IO> ioType, final Nil<I15> in15Type, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type});
+		return matchHelper(env, opName, Arity16_14.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> match15(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<IO> ioType, final Nil<I16> in16Type)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> match15(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<IO> ioType, final Nil<I16> in16Type)
 	{
-		return matchHelper(ops, opName, Arity16_15.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type});
+		return matchHelper(env, opName, Arity16_15.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> match16(final OpService ops, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<IO> ioType)
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> match16(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<IO> ioType)
 	{
-		return matchHelper(ops, opName, Arity16_16.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType});
+		return matchHelper(env, opName, Arity16_16.class, ioType, new Nil[] {in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType});
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName,
+	private static <T> T matchHelper(final OpEnvironment env, final String opName,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
 		final Type[] types = new Type[inTypes.length];
 		for (int i = 0; i < inTypes.length; i++)
 			types[i] = inTypes[i].getType();
 		final Type specialType = Types.parameterize(opClass, types);
-		return (T) ops.op(opName, Nil.of(specialType), inTypes, outType);
+		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}
 
 	public static class InplaceInfo {

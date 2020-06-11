@@ -66,7 +66,7 @@ public class LabelRegionToPolygonConverter extends
 	@Override
 	public <T> T convert(final Object src, final Class<T> dest) {
 		if (contourFunc == null) {
-			contourFunc = Functions.match(ops, "geom.contour", new Nil<RandomAccessibleInterval<BoolType>>() {}, new Nil<Boolean>() {},
+			contourFunc = Functions.match(ops.env(), "geom.contour", new Nil<RandomAccessibleInterval<BoolType>>() {}, new Nil<Boolean>() {},
 					new Nil<Polygon2D>() {});
 		}
 		// FIXME: can we make this faster?

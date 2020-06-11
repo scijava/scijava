@@ -64,12 +64,12 @@ public class AddDimensionViewTest extends AbstractOpTest {
 
 		MixedTransformView<DoubleType> il2 = Views.addDimension((RandomAccessible<DoubleType>) img);
 
-		Function<RandomAccessible<DoubleType>, MixedTransformView<DoubleType>> addDimFunc = ops.op(
-				"transform.addDimensionView",
-				new Nil<Function<RandomAccessible<DoubleType>, MixedTransformView<DoubleType>>>() {
-				}, new Nil[] { new Nil<RandomAccessible<DoubleType>>() {
-				} }, new Nil<MixedTransformView<DoubleType>>() {
-				});
+		Function<RandomAccessible<DoubleType>, MixedTransformView<DoubleType>> addDimFunc =
+			ops.env().op("transform.addDimensionView",
+				new Nil<Function<RandomAccessible<DoubleType>, MixedTransformView<DoubleType>>>()
+				{}, new Nil[] { new Nil<RandomAccessible<DoubleType>>() {} },
+				new Nil<MixedTransformView<DoubleType>>()
+				{});
 		MixedTransformView<DoubleType> opr = addDimFunc.apply(img);
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
@@ -90,15 +90,12 @@ public class AddDimensionViewTest extends AbstractOpTest {
 
 		IntervalView<DoubleType> il2 = Views.addDimension(img, min, max);
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>> addDimFunc = ops
-				.op(
-				"transform.addDimensionView",
-						new Nil<Functions.Arity3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>>>() {
-						}, new Nil[] { new Nil<RandomAccessibleInterval<DoubleType>>() {
-				}, new Nil<Long>() {
-				}, new Nil<Long>() {
-				} }, new Nil<IntervalView<DoubleType>>() {
-				});
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>> addDimFunc =
+			ops.env().op("transform.addDimensionView",
+				new Nil<Functions.Arity3<RandomAccessibleInterval<DoubleType>, Long, Long, IntervalView<DoubleType>>>()
+				{}, new Nil[] { new Nil<RandomAccessibleInterval<DoubleType>>() {},
+					new Nil<Long>()
+					{}, new Nil<Long>() {} }, new Nil<IntervalView<DoubleType>>() {});
 		IntervalView<DoubleType> opr = addDimFunc.apply(img, min, max);
 
 		assertEquals(il2.numDimensions(), opr.numDimensions(), 0.0);

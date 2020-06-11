@@ -71,24 +71,33 @@ public class WatershedTest extends AbstractOpTest {
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 
 		// threshold it
-		RandomAccessibleInterval<BitType> thresholdedImg = op("create.img")
+		RandomAccessibleInterval<BitType> thresholdedImg = ops.op("create.img")
 				.input(watershedTestImg, new BitType()).outType(new Nil<RandomAccessibleInterval<BitType>>() {})
 				.apply();
-		op("threshold.apply").input(Views.flatIterable(watershedTestImg), new FloatType(1))
+		ops.op("threshold.apply").input(Views.flatIterable(watershedTestImg), new FloatType(1))
 				.output(Views.flatIterable(thresholdedImg)).compute();
 
 		// compute inverted distance transform and smooth it with gaussian
 		// filtering
 
-		final RandomAccessibleInterval<FloatType> distMap = new OpBuilder(ops,
-				"create.img").input(thresholdedImg, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("image.distanceTransform").input(thresholdedImg, es).output(distMap).compute();
-		final RandomAccessibleInterval<FloatType> invertedDistMap = new OpBuilder(
-				ops, "create.img").input(distMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(invertedDistMap)).compute();
-		final RandomAccessibleInterval<FloatType> gauss = new OpBuilder(ops,
-				"create.img").input(invertedDistMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("filter.gauss").input(invertedDistMap, es, new double[] { 3, 3 }).output(gauss).compute();
+		final RandomAccessibleInterval<FloatType> distMap = ops.op("create.img")
+			.input(thresholdedImg, new FloatType()).outType(
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
+		ops.op("image.distanceTransform").input(thresholdedImg, es).output(distMap)
+			.compute();
+		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op(
+			"create.img").input(distMap, new FloatType()).outType(
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
+		ops.op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(
+			invertedDistMap)).compute();
+		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img")
+			.input(invertedDistMap, new FloatType()).outType(
+				new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
+		ops.op("filter.gauss").input(invertedDistMap, es, new double[] { 3, 3 })
+			.output(gauss).compute();
 
 		testWithoutMask(gauss);
 
@@ -108,13 +117,13 @@ public class WatershedTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = op("image.watershed")
+		ImgLabeling<Integer, IntType> out = ops.op("image.watershed")
 				.input(in, true, false).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out, mask, true, false, false);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out2 = op("image.watershed")
+		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed")
 				.input(in, true, true).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out2, mask, true, true, false);
@@ -123,13 +132,13 @@ public class WatershedTest extends AbstractOpTest {
 		 * use 4-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out3 = op("image.watershed")
+		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed")
 				.input(in, false, false).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out3, mask, false, false, false);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out4 = op("image.watershed")
+		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed")
 				.input(in, false, true).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out4, mask, false, true, false);
@@ -155,13 +164,13 @@ public class WatershedTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = op("image.watershed")
+		ImgLabeling<Integer, IntType> out = ops.op("image.watershed")
 				.input(in, true, false, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out, mask, true, false, true);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out2 = op("image.watershed")
+		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed")
 				.input(in, true, true, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out2, mask, true, true, true);
@@ -170,13 +179,13 @@ public class WatershedTest extends AbstractOpTest {
 		 * use 4-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out3 = op("image.watershed")
+		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed")
 				.input(in, false, false, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out3, mask, false, false, true);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out4 = op("image.watershed")
+		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed")
 				.input(in, false, true, mask).outType(new Nil<ImgLabeling<Integer, IntType>>(){}).apply();
 
 		assertResults(in, out4, mask, false, true, true);

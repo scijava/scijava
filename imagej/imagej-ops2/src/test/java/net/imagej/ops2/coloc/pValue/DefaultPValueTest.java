@@ -97,13 +97,13 @@ public class DefaultPValueTest extends ColocalisationTest {
 					return r;
 				});
 
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped = ops
-			.wrap(op,
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
+			ops.env().opify(op,
 				new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>()
 				{}.getType());
 
 		PValueResult output = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, wrapped, result.length - 1, es).output(output).compute();
+		ops.op("coloc.pValue").input(ch1, ch2, wrapped, result.length - 1, es).output(output).compute();
 		Double actualPValue = output.getPValue();
 		Double actualColocValue = output.getColocValue();
 		double[] actualColocValuesArray = output.getColocValuesArray();

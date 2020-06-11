@@ -59,7 +59,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer${arity}ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] $expectedList.call($arity));
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input($inputList.call($arity)).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input($inputList.call($arity)).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 

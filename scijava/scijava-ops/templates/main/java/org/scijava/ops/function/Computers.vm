@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.scijava.ops.OpService;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.types.Nil;
 import org.scijava.param.Mutable;
 import org.scijava.types.Types;
@@ -72,14 +72,14 @@ public final class Computers {
 
 #foreach($arity in [0..$maxArity])
 	@SuppressWarnings("unchecked")
-	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity))
+	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) match(final OpEnvironment env, final String opName, $matchParams.call($arity))
 	{
-		return matchHelper(ops, opName, ${computerArity.call($arity)}.class, $nilArgs.call($arity));
+		return matchHelper(env, opName, ${computerArity.call($arity)}.class, $nilArgs.call($arity));
 	}
 
 #end
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
+	private static <T> T matchHelper(final OpEnvironment env, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
 		final Type[] types = new Type[inTypes.length + 1];
 		for (int i = 0; i < inTypes.length; i++)
@@ -89,7 +89,7 @@ public final class Computers {
 		final Nil<?>[] nils = new Nil[inTypes.length + 1];
 		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
 		nils[nils.length - 1] = outType;
-		return (T) ops.op(opName, Nil.of(specialType), nils, outType);
+		return (T) env.op(opName, Nil.of(specialType), nils, outType);
 	}
 
 	// -- END TEMP --

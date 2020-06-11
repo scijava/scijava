@@ -70,21 +70,21 @@ public class CoordinateEquationTest extends AbstractOpTest {
 	@Test
 	public void testEquation2DOp() {
 
-		final IterableInterval<DoubleType> image = op("create.img").input(dimensions,
+		final IterableInterval<DoubleType> image = ops.op("create.img").input(dimensions,
 				new DoubleType()).outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
 
 		// implement x^2+y^2 taking into account the calibration
 		final Function<long[], Double> op = (coords) -> Math.pow(start[0] + coords[0] * spacing[0], 2)
 				+ Math.pow(start[1] + coords[1] * spacing[1], 2);
 		
-		final Function<long[], Double> wrapped = ops.wrap(op,
+		final Function<long[], Double> wrapped = ops.env().opify(op,
 			new Nil<Function<long[], Double>>()
 			{}.getType());
 		
-		op("image.equation").input(wrapped).output(image).compute();
+		ops.op("image.equation").input(wrapped).output(image).compute();
 
 		DoubleType sum = new DoubleType();
-		op("stats.sum").input(image).output(sum).compute();
+		ops.op("stats.sum").input(image).output(sum).compute();
 
 		assertEquals(6801.346801346799, sum.getRealDouble(), 0.00001);
 
@@ -100,7 +100,7 @@ public class CoordinateEquationTest extends AbstractOpTest {
 
 		final Dimensions dimensions4D = new FinalDimensions(size4D);
 
-		final Img<ShortType> image = op("create.img").input(dimensions4D,
+		final Img<ShortType> image = ops.op("create.img").input(dimensions4D,
 			new ShortType()).outType(new Nil<Img<ShortType>>()
 		{}).apply();
 
@@ -113,11 +113,11 @@ public class CoordinateEquationTest extends AbstractOpTest {
 			return result;
 		};
 
-		Function<long[], Double> wrapped = ops.wrap(op,
+		Function<long[], Double> wrapped = ops.env().opify(op,
 			new Nil<Function<long[], Double>>()
 			{}.getType());
 
-		op("image.equation").input(wrapped).output(image).compute();
+		ops.op("image.equation").input(wrapped).output(image).compute();
 
 		final RandomAccess<ShortType> ra = image.randomAccess();
 

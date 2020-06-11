@@ -9,11 +9,10 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.types.GenericTyped;
-import org.scijava.ops.OpInfo;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.Mutable;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.GenericTyped;
 
 public class OpWrappers {
 

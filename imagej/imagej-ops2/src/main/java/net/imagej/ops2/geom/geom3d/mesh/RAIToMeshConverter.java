@@ -67,7 +67,7 @@ public class RAIToMeshConverter <B extends BooleanType<B>> extends
 	@Override
 	public <T> T convert(Object src, Class<T> dest) {
 		if (marchingCubesFunc == null) {
-			marchingCubesFunc = Functions.match(ops, "geom.marchingCubes", new Nil<RandomAccessibleInterval<B>>() {},
+			marchingCubesFunc = Functions.match(ops.env(), "geom.marchingCubes", new Nil<RandomAccessibleInterval<B>>() {},
 					new Nil<Mesh>() {});
 		}
 		if (src instanceof IterableInterval<?>) {

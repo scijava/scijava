@@ -67,7 +67,7 @@ public class RotateViewTest extends AbstractOpTest {
 	public void testDefaultRotate() {
 
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = Functions
-				.match(ops, "transform.rotateView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
@@ -90,7 +90,7 @@ public class RotateViewTest extends AbstractOpTest {
 	public void testIntervalRotate() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
-				.match(ops, "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {
@@ -117,7 +117,7 @@ public class RotateViewTest extends AbstractOpTest {
 	public void testIntervalRotateInterval() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
-				.match(ops, "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {

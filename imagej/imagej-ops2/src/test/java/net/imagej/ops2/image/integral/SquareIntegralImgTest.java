@@ -65,7 +65,7 @@ public class SquareIntegralImgTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testSquareIntegralImageCorrectness() {
-		op("image.squareIntegral").input(generateKnownByteArrayTestImg()).output(out).compute();
+		ops.op("image.squareIntegral").input(generateKnownByteArrayTestImg()).output(out).compute();
 
 		Img<ByteType> bytes = generateKnownSquareIntegralImage();
 

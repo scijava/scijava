@@ -64,6 +64,6 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 #end
 #end
 	private OpBuilder name(String opName) {
-		return new OpBuilder(ops, opName);
+		return ops.op(opName);
 	}
 }

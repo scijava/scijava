@@ -63,7 +63,7 @@ public class ExtendValueViewTest extends AbstractOpTest {
 	@Test
 	public void extendValueTest() {
 		BiFunction<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessible<DoubleType>> extendFunc = Functions
-				.match(ops, "transform.extendValueView", raiNil, new Nil<DoubleType>() {
+				.match(ops.env(), "transform.extendValueView", raiNil, new Nil<DoubleType>() {
 				}, new Nil<RandomAccessible<DoubleType>>() {
 				});
 

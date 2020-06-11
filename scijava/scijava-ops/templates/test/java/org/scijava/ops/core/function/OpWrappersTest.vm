@@ -30,7 +30,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	@Test
 	public void testWrapProducer() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
-		Producer<Double> op = Functions.match(ops, "test.addDoubles", nilDouble);
+		Producer<Double> op = Functions.match(ops.env(), "test.addDoubles", nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -39,7 +39,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction$arity() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		$functionArity.call($arity)$doubleTypeParams.call($arity) op = //
-			Functions.match(ops, "test.addDoubles", //
+			Functions.match(ops.env(), "test.addDoubles", //
 				$nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -50,7 +50,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer$arity() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$computerArity.call($arity)$doubleArrayTypeParams.call($arity) op = //
-			Computers.match(ops, "test.addArrays", $nilDoubleList.call($arity));
+			Computers.match(ops.env(), "test.addArrays", $nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -62,7 +62,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapInplace$inplaceSuffix.call($arity, $a)() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$inplaceType.call($arity, $a)$doubleArrayTypeParams.call($t) op = //
-			Inplaces.$matchName.call($arity, $a)(ops, "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
+			Inplaces.$matchName.call($arity, $a)(ops.env(), "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
 		assertTrue(op instanceof GenericTyped);
 	}
 

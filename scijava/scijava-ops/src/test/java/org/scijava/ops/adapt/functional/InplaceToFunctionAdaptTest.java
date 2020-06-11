@@ -3038,6 +3038,6 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 	}
 
 	private OpBuilder name(String opName) {
-		return new OpBuilder(ops, opName);
+		return ops.op(opName);
 	}
 }

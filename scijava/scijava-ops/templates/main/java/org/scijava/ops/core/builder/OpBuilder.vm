@@ -171,7 +171,7 @@ public class OpBuilder {
 						Object.class });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], Nil.of(
+			return ops.op(opName, specialType, new Nil<?>[0], Nil.of(
 				Object.class));
 		}
 
@@ -203,7 +203,7 @@ public class OpBuilder {
 						.getType() });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], outType);
+			return ops.op(opName, specialType, new Nil<?>[0], outType);
 		}
 
 		public Computers.Arity0<O> computer() {

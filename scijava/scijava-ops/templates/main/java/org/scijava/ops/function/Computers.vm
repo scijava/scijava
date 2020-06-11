@@ -89,7 +89,7 @@ public final class Computers {
 		final Nil<?>[] nils = new Nil[inTypes.length + 1];
 		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
 		nils[nils.length - 1] = outType;
-		return (T) ops.findOp(opName, Nil.of(specialType), nils, outType);
+		return (T) ops.op(opName, Nil.of(specialType), nils, outType);
 	}
 
 	// -- END TEMP --

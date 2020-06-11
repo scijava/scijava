@@ -103,7 +103,7 @@ public final class Functions {
 			types[i] = inTypes[i].getType();
 		types[types.length - 1] = outType.getType();
 		final Type specialType = Types.parameterize(opClass, types);
-		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
+		return (T) ops.op(opName, Nil.of(specialType), inTypes, outType);
 	}
 
 #foreach($arity in $arities)

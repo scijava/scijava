@@ -401,7 +401,7 @@ public class OpService extends AbstractService implements SciJavaService, OpEnvi
 		return wrapper.wrap((T) op, reifiedType);
 	}
 
-	public <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
+	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
 		return findOpInstance(opName, specialType, inTypes, outType);
 	}
 

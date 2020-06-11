@@ -88,7 +88,7 @@ public class DeconvolveTest extends AbstractOpTest {
 				long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 				OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
 				ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
-				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.findOp("deconvolve.richardsonLucy",
+				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.op("deconvolve.richardsonLucy",
 						new Nil<Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
 								long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 								OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //

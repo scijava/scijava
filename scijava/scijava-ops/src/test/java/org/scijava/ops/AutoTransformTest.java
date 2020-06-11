@@ -51,7 +51,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		// There is no sqrt function for iterables in the system, however we can auto
 		// transform
 		// as there is a lifter for Functions to iterables
-		Function<Iterable<Double>, Iterable<Double>> sqrtFunction = ops.findOp( //
+		Function<Iterable<Double>, Iterable<Double>> sqrtFunction = ops.op( //
 				"math.sqrt", new Nil<Function<Iterable<Double>, Iterable<Double>>>() {}, //
 				new Nil[] { nilIterableDouble }, //
 				nilIterableDouble//
@@ -81,7 +81,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		// check transformation as a Function<Iterable, Iterable>
 		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {};
 
-		Function<Iterable<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
+		Function<Iterable<double[]>, Iterable<double[]>> sqrtListFunction = ops.op( //
 				"test.liftSqrt", new Nil<Function<Iterable<double[]>, Iterable<double[]>>>() {}, //
 				new Nil[] { n }, //
 				n//
@@ -100,7 +100,7 @@ public class AutoTransformTest extends AbstractTestEnvironment {
 		Nil<Iterable<double[]>> n = new Nil<Iterable<double[]>>() {};
 		Nil<List<double[]>> l = new Nil<List<double[]>>() {};
 
-		Function<List<double[]>, Iterable<double[]>> sqrtListFunction = ops.findOp( //
+		Function<List<double[]>, Iterable<double[]>> sqrtListFunction = ops.op( //
 				"test.liftSqrt", new Nil<Function<List<double[]>, Iterable<double[]>>>() {}, //
 				new Nil[] { l }, //
 				n//

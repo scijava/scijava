@@ -163,7 +163,7 @@ public class OpBuilder {
 		}
 
 		public Producer<?> producer() {
-			final Nil<Producer<Object>> specialType = new Nil<Producer<Object>>() {
+			final Nil<Producer<Object>> specialType = new Nil<>() {
 
 				@Override
 				public Type getType() {
@@ -195,7 +195,7 @@ public class OpBuilder {
 		}
 
 		public Producer<O> producer() {
-			final Nil<Producer<O>> specialType = new Nil<Producer<O>>() {
+			final Nil<Producer<O>> specialType = new Nil<>() {
 
 				@Override
 				public Type getType() {

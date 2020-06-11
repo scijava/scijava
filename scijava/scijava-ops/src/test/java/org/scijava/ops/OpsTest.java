@@ -39,10 +39,10 @@ import org.scijava.types.Nil;
 
 public class OpsTest extends AbstractTestEnvironment {
 
-	private static Nil<Double> nilDouble = new Nil<Double>() {
+	private static Nil<Double> nilDouble = new Nil<>() {
 	};
 
-	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	private static Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test

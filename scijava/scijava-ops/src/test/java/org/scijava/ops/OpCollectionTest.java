@@ -37,7 +37,7 @@ import org.scijava.param.ValidityException;
 
 public class OpCollectionTest extends AbstractTestEnvironment {
 
-	Nil<Double> nilDouble = new Nil<Double>() {
+	Nil<Double> nilDouble = new Nil<>() {
 	};
 	
 	@Test

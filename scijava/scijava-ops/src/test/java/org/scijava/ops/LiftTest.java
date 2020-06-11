@@ -45,10 +45,10 @@ import org.scijava.ops.util.Maps;
 
 public class LiftTest extends AbstractTestEnvironment {
 
-	Nil<Double> nilDouble = new Nil<Double>() {
+	Nil<Double> nilDouble = new Nil<>() {
 	};
 
-	Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test

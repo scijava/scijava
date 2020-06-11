@@ -38,10 +38,10 @@ import org.scijava.ops.util.Adapt;
 
 public class AdaptersTest extends AbstractTestEnvironment {
 
-	private static Nil<Double> nilDouble = new Nil<Double>() {
+	private static Nil<Double> nilDouble = new Nil<>() {
 	};
 
-	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	private static Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test

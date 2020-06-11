@@ -38,7 +38,7 @@ import org.scijava.types.Nil;
 
 public class FunctionsTest extends AbstractTestEnvironment {
 
-	private static Nil<Double> nilDouble = new Nil<Double>() {
+	private static Nil<Double> nilDouble = new Nil<>() {
 	};
 
 	@Test

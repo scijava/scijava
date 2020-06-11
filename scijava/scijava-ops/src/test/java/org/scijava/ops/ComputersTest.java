@@ -35,7 +35,7 @@ import org.scijava.types.Nil;
 
 public class ComputersTest extends AbstractTestEnvironment {
 
-	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	private static Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test

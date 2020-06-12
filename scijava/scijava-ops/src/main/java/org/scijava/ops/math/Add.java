@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.scijava.core.Priority;
+import org.scijava.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;

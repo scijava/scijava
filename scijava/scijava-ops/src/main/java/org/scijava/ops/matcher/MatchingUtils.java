@@ -46,11 +46,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.scijava.ops.types.Any;
-import org.scijava.ops.types.Nil;
-import org.scijava.util.Types;
-import org.scijava.util.Types.TypeVarFromParameterizedTypeInfo;
-import org.scijava.util.Types.TypeVarInfo;
+import org.scijava.types.Any;
+import org.scijava.types.Nil;
+import org.scijava.types.Types;
+import org.scijava.types.Types.TypeVarFromParameterizedTypeInfo;
+import org.scijava.types.Types.TypeVarInfo;
 
 public final class MatchingUtils {
 

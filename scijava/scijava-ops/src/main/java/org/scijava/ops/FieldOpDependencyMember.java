@@ -35,7 +35,7 @@ import java.lang.reflect.Field;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.struct.ValueAccessibleMemberInstance;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * @author Marcel Wiedenmann

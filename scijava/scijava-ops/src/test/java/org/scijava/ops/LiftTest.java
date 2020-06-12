@@ -40,7 +40,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
-import org.scijava.ops.types.Nil;
+import org.scijava.types.Nil;
 import org.scijava.ops.util.Maps;
 
 public class LiftTest extends AbstractTestEnvironment {

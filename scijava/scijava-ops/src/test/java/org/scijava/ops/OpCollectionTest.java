@@ -32,7 +32,7 @@ package org.scijava.ops;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
-import org.scijava.ops.types.Nil;
+import org.scijava.types.Nil;
 import org.scijava.param.ValidityException;
 
 public class OpCollectionTest extends AbstractTestEnvironment {

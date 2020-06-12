@@ -25,13 +25,13 @@ import org.scijava.ops.FieldOpDependencyMember;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.util.AnnotationUtils;
 import org.scijava.util.ClassUtils;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * Utility functions for working with {@link org.scijava.param} classes.
@@ -296,42 +296,43 @@ public final class ParameterStructs {
 		return params.toArray(new Parameter[params.size()]);
 	}
 	
-	/**
-	 * Mutates {@link ItemIO#AUTO} in the specified annotations array by replacing it with the inferred {@link ItemIO}
-	 * from the specified {@link FunctionalMethodType}s. Also checks if the user defined {@link ItemIO} matches the 
-	 * inferred one if its different from AUTO and logs the errors in the specified problems list. It is expected that
-	 * the order of annotations matches the order of specified {@link FunctionalMethodType}s.
-	 * 
-	 * @param annotations the {@link Parameter} annotations to mutate
-	 * @param fmts inferred method types from the functional method
-	 * @param problems list to record problems
-	 * @return true if new problems got added to the problems list
-	 */
-	private static boolean resolveItemIOAuto(Parameter[] annotations, List<FunctionalMethodType> fmts, final ArrayList<ValidityProblem> problems) {
-		boolean dirty = false;
-		int i = 0;
-		for (Parameter anno : annotations) {
-			FunctionalMethodType fmt = fmts.get(i);
-			if (anno.itemIO().equals(ItemIO.AUTO)) {
-				// NB: Mutating the annotation should be fine here, as the functional signature can't change dynamically.
-				// Hence, the inferred ITemIO should stay valid. (And for now we do not need information about AUTO after
-				// this point)
-				ItemIO io = (ItemIO) AnnotationUtils.mutateAnnotationInstance(anno, Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
-				assert io.equals(ItemIO.AUTO);
-			// if the ItemIO is explicitly specified, we can check if it matches the inferred ItemIO from the functional method
-			} else if (!anno.itemIO().equals(fmt.itemIO())) {
-				String message = "";
-				message += "Inferred ItemIO of parameter annotation number " + i + " does not match "
-						+ "the specified ItemIO of the annotation: "
-						+ "inferred: " + fmt.itemIO() + " vs. "
-						+ "specified: " + anno.itemIO();
-				problems.add(new ValidityProblem(message));
-				dirty = true;
-			}
-			i++;
-		}
-		return dirty;
-	}
+	//TODO: delete
+//	/**
+//	 * Mutates {@link ItemIO#AUTO} in the specified annotations array by replacing it with the inferred {@link ItemIO}
+//	 * from the specified {@link FunctionalMethodType}s. Also checks if the user defined {@link ItemIO} matches the 
+//	 * inferred one if its different from AUTO and logs the errors in the specified problems list. It is expected that
+//	 * the order of annotations matches the order of specified {@link FunctionalMethodType}s.
+//	 * 
+//	 * @param annotations the {@link Parameter} annotations to mutate
+//	 * @param fmts inferred method types from the functional method
+//	 * @param problems list to record problems
+//	 * @return true if new problems got added to the problems list
+//	 */
+//	private static boolean resolveItemIOAuto(Parameter[] annotations, List<FunctionalMethodType> fmts, final ArrayList<ValidityProblem> problems) {
+//		boolean dirty = false;
+//		int i = 0;
+//		for (Parameter anno : annotations) {
+//			FunctionalMethodType fmt = fmts.get(i);
+//			if (anno.itemIO().equals(ItemIO.AUTO)) {
+//				// NB: Mutating the annotation should be fine here, as the functional signature can't change dynamically.
+//				// Hence, the inferred ITemIO should stay valid. (And for now we do not need information about AUTO after
+//				// this point)
+//				ItemIO io = (ItemIO) AnnotationUtils.mutateAnnotationInstance(anno, Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
+//				assert io.equals(ItemIO.AUTO);
+//			// if the ItemIO is explicitly specified, we can check if it matches the inferred ItemIO from the functional method
+//			} else if (!anno.itemIO().equals(fmt.itemIO())) {
+//				String message = "";
+//				message += "Inferred ItemIO of parameter annotation number " + i + " does not match "
+//						+ "the specified ItemIO of the annotation: "
+//						+ "inferred: " + fmt.itemIO() + " vs. "
+//						+ "specified: " + anno.itemIO();
+//				problems.add(new ValidityProblem(message));
+//				dirty = true;
+//			}
+//			i++;
+//		}
+//		return dirty;
+//	}
 	
 	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
 			AnnotatedElement annotationBearer, Type type, final boolean synthesizeAnnotations) {
@@ -343,26 +344,29 @@ public final class ParameterStructs {
 		}
 		
 		// Get parameter annotations (may not be present)
-		Parameter[] annotations = AnnotationUtils.parameters(annotationBearer);
-		// 'type' is annotated, resolve ItemIO.AUTO by matching it to the signature of the functional method
-		if (annotations.length > 0 && !synthesizeAnnotations) {
-			if (annotations.length != fmts.size()) {
-				String fmtIOs = Arrays.deepToString(fmts.stream().map(fmt -> fmt.itemIO()).toArray(ItemIO[]::new));
-				problems.add(new ValidityProblem("The number of inferred functional method types does not match "
-						+ "the number of specified parameters annotations.\n"
-						+ "#inferred functional method types: " + fmts.size() + " " +  fmtIOs + "\n"
-						+ "#specified paraeter annotations: " + annotations.length));
-				return;
-			}
-			if (resolveItemIOAuto(annotations, fmts, problems)) {
-				// specified parameter annotations do not match functional method signature
-				return;
-			}
-		// 'type' is not annotated, synthesize parameter annotations using defaults and ItemIO inferred from 
-		// the functional method
-		} else {
-			annotations = synthesizeParameterAnnotations(fmts);
-		}
+		// TODO: remove Parameter annotations from all ops and remove logic below.
+		// TODO: grab names from OpClass/OpField annotations.
+		Parameter[] annotations = synthesizeParameterAnnotations(fmts);
+//		// 'type' is annotated, resolve ItemIO.AUTO by matching it to the signature of the functional method
+//		if (annotations.length > 0 && !synthesizeAnnotations) {
+//			if (annotations.length != fmts.size()) {
+//				String fmtIOs = Arrays.deepToString(fmts.stream().map(fmt -> fmt.itemIO()).toArray(ItemIO[]::new));
+//				problems.add(new ValidityProblem("The number of inferred functional method types does not match "
+//						+ "the number of specified parameters annotations.\n"
+//						+ "#inferred functional method types: " + fmts.size() + " " +  fmtIOs + "\n"
+//						+ "#specified paraeter annotations: " + annotations.length));
+//				return;
+//			}
+//			// START HERE: Instead of hacking the annotation here, we need to 
+//			if (resolveItemIOAuto(annotations, fmts, problems)) {
+//				// specified parameter annotations do not match functional method signature
+//				return;
+//			}
+//		// 'type' is not annotated, synthesize parameter annotations using defaults and ItemIO inferred from 
+//		// the functional method
+//		} else {
+//			annotations = synthesizeParameterAnnotations(fmts);
+//		}
 		
 		for (int i=0; i<annotations.length; i++) {
 			String key = annotations[i].key();

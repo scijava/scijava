@@ -22,6 +22,8 @@ public abstract class AnnotatedParameterMember<T> implements ParameterMember<T> 
 
 	/** Annotation describing the item. */
 	private final Parameter annotation;
+	
+	private ItemIO itemIO;
 
 	public AnnotatedParameterMember(final Type itemType,
 		final Parameter annotation)
@@ -119,7 +121,11 @@ public abstract class AnnotatedParameterMember<T> implements ParameterMember<T> 
 
 	@Override
 	public ItemIO getIOType() {
-		return getAnnotation().itemIO();
+		if (itemIO == null) {
+			// CTR START HERE: if AUTO here, compute what it actually is and cache.
+			itemIO = getAnnotation().itemIO();
+		}
+		return itemIO;
 	}
 	
 	@Override

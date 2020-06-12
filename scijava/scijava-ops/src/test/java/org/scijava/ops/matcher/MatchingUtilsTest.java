@@ -44,8 +44,8 @@ import java.util.function.Supplier;
 
 import org.junit.Test;
 import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
-import org.scijava.ops.types.Nil;
-import org.scijava.util.Types;
+import org.scijava.types.Nil;
+import org.scijava.types.Types;
 
 public class MatchingUtilsTest {
 

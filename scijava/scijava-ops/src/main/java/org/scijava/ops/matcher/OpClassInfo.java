@@ -35,7 +35,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.scijava.core.Priority;
+import org.scijava.Priority;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ParameterStructs;
@@ -43,7 +43,7 @@ import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * Metadata about an op implementation defined as a class.

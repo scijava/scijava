@@ -31,10 +31,10 @@ package org.scijava.ops;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.scijava.core.Priority;
+import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Producer;
-import org.scijava.ops.types.Nil;
+import org.scijava.types.Nil;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

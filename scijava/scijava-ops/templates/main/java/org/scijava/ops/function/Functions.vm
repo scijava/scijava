@@ -16,8 +16,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.types.Nil;
-import org.scijava.util.Types;
+import org.scijava.types.Nil;
+import org.scijava.types.Types;
 
 /**
  * Container class for
@@ -46,12 +46,12 @@ public final class Functions {
 	 * All known function types and their arities. The entries are sorted by
 	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
 	 */
-	public static final BiMap<Class<?>, Integer> ALL_FUNCTIONS;
+	public static final BiMap<Integer, Class<?>> ALL_FUNCTIONS;
 
 	static {
-		final Map<Class<?>, Integer> functions = new HashMap<>(10);
+		final Map<Integer, Class<?>> functions = new HashMap<>(10);
 #foreach($arity in [0..$maxArity])
-		functions.put(${functionArity.call($arity)}.class, $arity);
+		functions.put($arity, ${functionArity.call($arity)}.class);
 #end
 		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
 	}
@@ -75,6 +75,25 @@ public final class Functions {
 	}
 
 #end
+
+	@SuppressWarnings({ "unchecked" })
+	public static <O, T> Functions.ArityN<O> matchN(final OpService ops,
+		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
+	{
+		Object op = matchHelper(ops, opName, ALL_FUNCTIONS.get(inTypes.length),
+			outType, inTypes);
+		if (op instanceof Producer) {
+			return new Arity0AsN<>((Producer<O>) op);
+		}
+#set($maxMinusOne = $maxArity - 1)
+#foreach($arity in [1..$maxMinusOne])
+		else if (op instanceof $functionArity.call($arity)) {
+			return new Arity${arity}AsN<>(($functionArity.call($arity)$objectGenerics.call($arity)) op);
+		}
+#end
+		return new Arity${maxArity}AsN<>(($functionArity.call($maxArity)$objectGenerics.call($maxArity)) op);
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	private static <T> T matchHelper(final OpService ops, final String opName,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
@@ -128,6 +147,55 @@ public final class Functions {
 			Objects.requireNonNull(after);
 			return ($applyParams.call($arity)) -> after.apply(apply($applyArgs.call($arity)));
 		}
+	}
+
+#end
+	public interface ArityN<O> {
+
+		O apply(Object... ins);
+
+		Object getOp();
+	}
+
+	protected static class Arity0AsN<O> implements ArityN<O> {
+
+		Producer<O> func;
+
+		public Arity0AsN(Producer<O> func) {
+			this.func = func;
+		}
+
+		@Override
+		public O apply(Object... ins) {
+			return func.create();
+		}
+
+		@Override
+		public Object getOp() {
+			return func;
+		}
+
+	}
+
+#foreach($arity in [1..$maxArity])
+	protected static class Arity${arity}AsN<O> implements ArityN<O> {
+
+		$functionArity.call($arity)$objectGenerics.call($arity) func;
+
+		public Arity${arity}AsN($functionArity.call($arity)$objectGenerics.call($arity) func) {
+			this.func = func;
+		}
+
+		@Override
+		public O apply(Object... ins) {
+			return func.apply($insArgs.call($arity));
+		}
+
+		@Override
+		public Object getOp() {
+			return func;
+		}
+
 	}
 
 #end

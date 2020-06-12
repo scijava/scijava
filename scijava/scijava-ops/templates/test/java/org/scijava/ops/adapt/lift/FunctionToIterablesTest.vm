@@ -41,7 +41,7 @@ import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.function.Functions;
-import org.scijava.ops.types.Nil;
+import org.scijava.types.Nil;
 
 /**
  * Tests the adaptation of {@link Functions} running on a type into

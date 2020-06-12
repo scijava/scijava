@@ -19,7 +19,7 @@ public class AdaptedOp {
 	private OpInfo srcInfo;
 	private OpInfo adaptorInfo;
 
-	private OpInfo opInfo;
+	private OpAdaptationInfo opInfo;
 
 	public AdaptedOp(Object op, Type type, OpInfo srcInfo, OpInfo adaptorInfo) {
 		this.op = op;
@@ -42,7 +42,7 @@ public class AdaptedOp {
 		return adaptorInfo;
 	}
 	
-	public OpInfo opInfo() {
+	public OpAdaptationInfo opInfo() {
 		return opInfo;
 	}
 

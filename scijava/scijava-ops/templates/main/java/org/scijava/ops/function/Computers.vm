@@ -15,9 +15,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.types.Nil;
+import org.scijava.types.Nil;
 import org.scijava.param.Mutable;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * Container class for computer-style functional interfaces at various

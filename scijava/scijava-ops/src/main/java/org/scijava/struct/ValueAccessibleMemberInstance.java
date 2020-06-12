@@ -1,6 +1,6 @@
 package org.scijava.struct;
 
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 public class ValueAccessibleMemberInstance<T> implements MemberInstance<T> {
 

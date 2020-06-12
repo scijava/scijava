@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.matcher.OpInfo;
-import org.scijava.ops.types.GenericTyped;
+import org.scijava.types.GenericTyped;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.Mutable;
 import org.scijava.plugin.Plugin;
@@ -23,7 +23,7 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final OpInfo opInfo) {
+		public Producer<T> wrap(final Producer<T> op, final Type reifiedType) {
 			class GenericTypedProducer implements Producer<T>, GenericTyped {
 
 				@Override
@@ -33,7 +33,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return reifiedType;
 				}
 			}
 			return new GenericTypedProducer();
@@ -53,7 +53,7 @@ public class OpWrappers {
 		@Override
 		public $fg wrap( //
 			final $fg op, //
-			final OpInfo opInfo)
+			final Type reifiedType)
 		{
 			class GenericTypedFunction${arity} implements //
 				$fg, //
@@ -68,7 +68,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return reifiedType;
 				}
 			}
 			return new GenericTypedFunction${arity}();
@@ -89,7 +89,7 @@ public class OpWrappers {
 		@Override
 		public $cg wrap( //
 			final $cg op, //
-			final OpInfo opInfo)
+			final Type reifiedType)
 		{
 			class GenericTypedComputer${arity} implements //
 				$cg, //
@@ -104,7 +104,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return reifiedType;
 				}
 			}
 			return new GenericTypedComputer${arity}();
@@ -126,7 +126,7 @@ public class OpWrappers {
 		@Override
 		public $ig wrap( //
 			final $ig op, //
-			final OpInfo opInfo)
+			final Type reifiedType)
 		{
 			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
 				implements $ig, //
@@ -141,7 +141,7 @@ public class OpWrappers {
 
 				@Override
 				public Type getType() {
-					return opInfo.opType();
+					return reifiedType;
 				}
 			}
 			return new GenericTypedInplace${inplaceSuffix.call($arity, $a)}();

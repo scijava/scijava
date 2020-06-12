@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.struct.Member;
-import org.scijava.util.Types;
-import org.scijava.util.Types.TypeVarInfo;
+import org.scijava.types.Types;
+import org.scijava.types.Types.TypeVarInfo;
 
 /**
  * Default implementation of {@link OpMatcher}. Used for finding Ops which match

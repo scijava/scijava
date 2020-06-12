@@ -8,7 +8,7 @@ import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.struct.ValueAccessibleMemberInstance;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * {@link Member} backed by a {@link Field} annotated by {@link Parameter}.

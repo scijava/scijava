@@ -34,7 +34,7 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.function.Functions;
-import org.scijava.ops.types.Nil;
+import org.scijava.types.Nil;
 
 public class FunctionsTest extends AbstractTestEnvironment {
 

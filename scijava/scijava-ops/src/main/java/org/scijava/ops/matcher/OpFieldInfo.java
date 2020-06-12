@@ -36,7 +36,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.core.Priority;
+import org.scijava.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ParameterStructs;

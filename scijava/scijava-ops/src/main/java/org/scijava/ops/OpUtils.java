@@ -51,7 +51,7 @@ import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.ValueAccessible;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * Utility methods for working with ops.

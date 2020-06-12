@@ -11,6 +11,7 @@ import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.util.MiscUtils;
 
 /**
  * Metadata about an op implementation.
@@ -18,7 +19,7 @@ import org.scijava.struct.StructInstance;
  * @author Curtis Rueden
  * @author David Kolb
  */
-public interface OpInfo {
+public interface OpInfo extends Comparable<OpInfo> {
 
 	/** Generic type of the op. This will be the parameterized type of the concrete class */
 	Type opType();
@@ -55,4 +56,11 @@ public interface OpInfo {
 	ValidityException getValidityException();
 	
 	AnnotatedElement getAnnotationBearer();
+
+	@Override
+	default int compareTo(final OpInfo that) {
+		if (this.priority() < that.priority()) return 1;
+		if (this.priority() > that.priority()) return -1;
+		return MiscUtils.compare(this.implementationName(), that.implementationName());
+	}
 }

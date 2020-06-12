@@ -56,8 +56,8 @@ public class CreateImgPlusTest extends AbstractOpTest {
 
 	@Test
 	public void createImgPlusTest() {
-		BiFunction<Dimensions, DoubleType, Img<DoubleType>> createImgFunc = Functions.match(ops, "create.img", new Nil<Dimensions>() {}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
-		Function<Img<DoubleType>, ImgPlus<DoubleType>> imgPlusFunction = Functions.match(ops, "create.imgPlus", new Nil<Img<DoubleType>>() {}, new Nil<ImgPlus<DoubleType>>() {});
+		BiFunction<Dimensions, DoubleType, Img<DoubleType>> createImgFunc = Functions.match(ops.env(), "create.img", new Nil<Dimensions>() {}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
+		Function<Img<DoubleType>, ImgPlus<DoubleType>> imgPlusFunction = Functions.match(ops.env(), "create.imgPlus", new Nil<Img<DoubleType>>() {}, new Nil<ImgPlus<DoubleType>>() {});
 		assertEquals(imgPlusFunction.apply(createImgFunc.apply(new FinalDimensions(new long[] { 10, 9, 8 }), new DoubleType())).getClass(), ImgPlus.class);
 	}
 }

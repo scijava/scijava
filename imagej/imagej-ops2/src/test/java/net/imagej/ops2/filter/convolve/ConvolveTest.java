@@ -81,7 +81,7 @@
 //
 //		// make sure it runs
 //		@SuppressWarnings("unchecked")
-//		final Img<FloatType> out1 = (Img<FloatType>) op("filter.convolve").input(
+//		final Img<FloatType> out1 = (Img<FloatType>) ops.op("filter.convolve").input(
 //			in, kernel);
 //
 //		assertEquals(out1.dimension(0), 20);
@@ -97,7 +97,7 @@
 //
 //		// make sure it runs
 //		@SuppressWarnings("unchecked")
-//		final Img<FloatType> out2 = (Img<FloatType>) op("filter.convolve").input(in,
+//		final Img<FloatType> out2 = (Img<FloatType>) ops.op("filter.convolve").input(in,
 //			kernel);
 //
 //		assertEquals(out2.dimension(0), 20);
@@ -132,13 +132,13 @@
 //		FloatType outSum3 = new FloatType();
 //
 //		// calculate sum of input and kernel
-//		op("stats.sum").input(in, inSum).apply();
-//		op("stats.sum").input(kernel, kernelSum).apply();
+//		ops.op("stats.sum").input(in, inSum).apply();
+//		ops.op("stats.sum").input(kernel, kernelSum).apply();
 //
 //		// convolve and calculate the sum of output
 //		@SuppressWarnings("unchecked")
 //		// should match to ConvolveFFTF
-//		final Img<FloatType> out = (Img<FloatType>) op("filter.convolve").input(in,
+//		final Img<FloatType> out = (Img<FloatType>) ops.op("filter.convolve").input(in,
 //			kernel, borderSize);
 //
 //		// create an output for the next test
@@ -149,19 +149,19 @@
 //
 //		// Op used to pad the input
 //		final BinaryFunctionOp<RandomAccessibleInterval<FloatType>, Dimensions, RandomAccessibleInterval<FloatType>> padOp =
-//			(BinaryFunctionOp) Functions.match(ops, PadInputFFTMethods.class,
+//			(BinaryFunctionOp) Functions.match(ops.env(), PadInputFFTMethods.class,
 //				RandomAccessibleInterval.class, RandomAccessibleInterval.class,
 //				Dimensions.class, true);
 //
 //		// Op used to pad the kernel
 //		final BinaryFunctionOp<RandomAccessibleInterval<FloatType>, Dimensions, RandomAccessibleInterval<FloatType>> padKernelOp =
-//			(BinaryFunctionOp) Functions.match(ops, PadShiftKernelFFTMethods.class,
+//			(BinaryFunctionOp) Functions.match(ops.env(), PadShiftKernelFFTMethods.class,
 //				RandomAccessibleInterval.class, RandomAccessibleInterval.class,
 //				Dimensions.class, true);
 //
 //		// Op used to create the complex FFTs
 //		UnaryFunctionOp<Dimensions, RandomAccessibleInterval<ComplexFloatType>> createOp =
-//			(UnaryFunctionOp) Functions.match(ops, CreateOutputFFTMethods.class,
+//			(UnaryFunctionOp) Functions.match(ops.env(), CreateOutputFFTMethods.class,
 //				RandomAccessibleInterval.class, Dimensions.class,
 //				new ComplexFloatType(), true);
 //
@@ -189,15 +189,15 @@
 //			new FinalDimensions(paddedSize));
 //
 //		// run convolve using the rai version with the memory created above
-//		op("filter.convolve").input(paddedInput, paddedKernel, fftImage,
+//		ops.op("filter.convolve").input(paddedInput, paddedKernel, fftImage,
 //			fftKernel, out2);
 //
-//		op("filter.convolve").input(paddedInput, paddedKernel, fftImage,
+//		ops.op("filter.convolve").input(paddedInput, paddedKernel, fftImage,
 //			fftKernel, true, false, es, out3);
 //
-//		op("stats.sum").input(Views.iterable(out), outSum).apply();
-//		op("stats.sum").input(out2, outSum2).apply();
-//		op("stats.sum").input(out3, outSum3).apply();
+//		ops.op("stats.sum").input(Views.iterable(out), outSum).apply();
+//		ops.op("stats.sum").input(out2, outSum2).apply();
+//		ops.op("stats.sum").input(out3, outSum3).apply();
 //
 //		// multiply input sum by kernelSum and assert it is the same as outSum
 //		inSum.mul(kernelSum);
@@ -235,7 +235,7 @@
 //
 //		int[] size = new int[] { xSize, ySize, zSize };
 //
-//		Img<DoubleType> phantom = (Img<DoubleType>) op("create.img").input(size).apply();
+//		Img<DoubleType> phantom = (Img<DoubleType>) ops.op("create.img").input(size).apply();
 //
 //		RandomAccess<DoubleType> randomAccess = phantom.randomAccess();
 //
@@ -269,9 +269,9 @@
 //		DoubleType max = new DoubleType();
 //		DoubleType min = new DoubleType();
 //
-//		op("stats.sum").input(Views.iterable(convolved), sum).apply();
-//		op("stats.max").input(Views.iterable(convolved), max).apply();
-//		op("stats.min").input(Views.iterable(convolved), min).apply();
+//		ops.op("stats.sum").input(Views.iterable(convolved), sum).apply();
+//		ops.op("stats.max").input(Views.iterable(convolved), max).apply();
+//		ops.op("stats.min").input(Views.iterable(convolved), min).apply();
 //
 //		assertEquals(sum.getRealDouble(), 8750.00, 0.001);
 //		assertEquals(max.getRealDouble(), 3.155, 0.001);

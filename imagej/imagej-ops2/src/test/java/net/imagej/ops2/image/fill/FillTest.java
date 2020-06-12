@@ -56,7 +56,7 @@ public class FillTest extends AbstractOpTest {
 
 	@Test
 	public void testDefaultFill() {
-		op("image.fill").input(new ByteType((byte) 10)).output(out).compute();
+		ops.op("image.fill").input(new ByteType((byte) 10)).output(out).compute();
 
 		for (ByteType px : out)
 			assertEquals(px.get(), 10);

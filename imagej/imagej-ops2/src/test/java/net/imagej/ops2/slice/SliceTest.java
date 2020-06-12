@@ -97,10 +97,10 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		final int[] xyAxis = new int[] { 0, 1 };
 
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.wrap(test,
+			ops.env().opify(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		op("slice").input(in, wrapped, xyAxis, true).output(out).compute();
+		ops.op("slice").input(in, wrapped, xyAxis, true).output(out).compute();
 
 		for (final Cursor<ByteType> cur = out.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -135,10 +135,11 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		final int[] xyAxis = new int[] { 0, 1, 2 };
 
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.wrap(test,
+			ops.env().opify(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
-		op("slice").input(inSequence, wrapped, xyAxis, true).output(outSequence).compute();
+		ops.op("slice").input(inSequence, wrapped, xyAxis, true).output(outSequence)
+			.compute();
 
 		for (final Cursor<ByteType> cur = outSequence.cursor(); cur.hasNext();) {
 			cur.fwd();
@@ -206,13 +207,14 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 
 	}
 
-	public Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> test = (input, output) -> {
-		final Iterator<I> itA = Views.iterable(input).iterator();
-		final Iterator<O> itB = Views.iterable(output).iterator();
+	public Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> test =
+		(input, output) -> {
+			final Iterator<ByteType> itA = Views.iterable(input).iterator();
+			final Iterator<ByteType> itB = Views.iterable(output).iterator();
 
-		while (itA.hasNext() && itB.hasNext()) {
-			itB.next().setReal(itA.next().getRealDouble());
-		}
-	};
+			while (itA.hasNext() && itB.hasNext()) {
+				itB.next().setReal(itA.next().getRealDouble());
+			}
+		};
 
 }

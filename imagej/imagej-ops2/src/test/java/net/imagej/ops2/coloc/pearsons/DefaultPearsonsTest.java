@@ -57,7 +57,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsZeroCorrTest(){
-		double result = op("coloc.pearsons").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).outType(Double.class).apply();
+		double result = ops.op("coloc.pearsons").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).outType(Double.class).apply();
 		assertEquals(0.0, result, 0.05);
 	}
 	
@@ -67,7 +67,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsPositiveCorrTest() {
-		double result = op("coloc.pearsons").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
+		double result = ops.op("coloc.pearsons").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
 		assertEquals(0.75, result, 0.01);
 	}
 	
@@ -86,7 +86,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 					512, 512, mean, spread, sigma, 0x01234567);
 			RandomAccessibleInterval<FloatType> ch2 = produceMeanBasedNoiseImage(new FloatType(),
 					512, 512, mean, spread, sigma, 0x98765432);
-			double resultFast =  op("coloc.pearsons").input(ch1, ch2).outType(Double.class).apply();
+			double resultFast =  ops.op("coloc.pearsons").input(ch1, ch2).outType(Double.class).apply();
 			assertEquals(0.0, resultFast, 0.1);
 
 			/* If the means are the same, it causes a numerical problem in the classic implementation of Pearson's
@@ -107,9 +107,9 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
 			mean, spread, sigma, 0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			Functions.match(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+			Functions.match(ops.env(), "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

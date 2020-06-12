@@ -59,11 +59,10 @@ public class ZeroMinViewTest extends AbstractOpTest {
 	@Test
 	public void defaultZeroMinTest() {
 
-		Function<IntervalView<DoubleType>, IntervalView<DoubleType>> zeroMinFunc = Functions.match(ops,
-				"transform.zeroMinView",
-				new Nil<IntervalView<DoubleType>>() {
-		}, new Nil<IntervalView<DoubleType>>() {
-		});
+		Function<IntervalView<DoubleType>, IntervalView<DoubleType>> zeroMinFunc =
+			Functions.match(ops.env(), "transform.zeroMinView",
+				new Nil<IntervalView<DoubleType>>()
+				{}, new Nil<IntervalView<DoubleType>>() {});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		IntervalView<DoubleType> imgTranslated = Views.interval(

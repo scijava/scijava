@@ -148,7 +148,7 @@ public class OpEvaluator extends AbstractStandardStackEvaluator {
 		Nil<Object> outType = new Nil<>() {};
 
 		// Try executing the op.
-		Functions.ArityN<Object> func = Functions.matchN(ops, opName, outType, inTypes);
+		Functions.ArityN<Object> func = Functions.matchN(ops.env(), opName, outType, inTypes);
 		return func.apply(argValues);
 	}
 

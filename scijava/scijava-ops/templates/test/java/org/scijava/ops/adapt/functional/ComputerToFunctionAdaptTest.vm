@@ -46,7 +46,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 	@Test
 	public void testComputer${arity}ToFunction${arity}() {
 		double[] in = {2, 4};
-		double[] output = new OpBuilder(ops, "test.CtF").input($inList.call($arity)).outType(double[].class).apply();
+		double[] output = ops.op("test.CtF").input($inList.call($arity)).outType(double[].class).apply();
 		double[] expected = $expectedValue.call($arity); 
 		Assert.assertArrayEquals(expected, output, 0);
 	}

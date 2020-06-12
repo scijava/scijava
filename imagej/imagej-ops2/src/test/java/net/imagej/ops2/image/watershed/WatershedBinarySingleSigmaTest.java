@@ -66,75 +66,75 @@ public class WatershedBinarySingleSigmaTest extends AbstractOpTest {
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 
 		// threshold it
-		RandomAccessibleInterval<BitType> thresholdedImg = op("create.img").input(watershedTestImg, new BitType())
+		RandomAccessibleInterval<BitType> thresholdedImg = ops.op("create.img").input(watershedTestImg, new BitType())
 				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
-		op("threshold.apply").input(Views.flatIterable(watershedTestImg), new FloatType(1))
+		ops.op("threshold.apply").input(Views.flatIterable(watershedTestImg), new FloatType(1))
 				.output(Views.flatIterable(thresholdedImg)).compute();
 
 		// compute inverted distance transform and smooth it with gaussian
 		// filtering
-		final RandomAccessibleInterval<FloatType> distMap = op("create.img").input(thresholdedImg, new FloatType())
+		final RandomAccessibleInterval<FloatType> distMap = ops.op("create.img").input(thresholdedImg, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("image.distanceTransform").input(thresholdedImg, es).output(distMap).compute();
-		final RandomAccessibleInterval<FloatType> invertedDistMap = op("create.img").input(distMap, new FloatType())
+		ops.op("image.distanceTransform").input(thresholdedImg, es).output(distMap).compute();
+		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op("create.img").input(distMap, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(invertedDistMap)).compute();
+		ops.op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(invertedDistMap)).compute();
 
 		Double sigma = 3.0;
-		final RandomAccessibleInterval<FloatType> gauss = op("create.img").input(invertedDistMap, new FloatType())
+		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img").input(invertedDistMap, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		op("filter.gauss").input(invertedDistMap, es, sigma).output(gauss).compute();
+		ops.op("filter.gauss").input(invertedDistMap, es, sigma).output(gauss).compute();
 
 		// compute result
-		final ImgLabeling<Integer, IntType> out1 = op("image.watershed")
+		final ImgLabeling<Integer, IntType> out1 = ops.op("image.watershed")
 				.input(thresholdedImg, true, false, sigma, thresholdedImg, es)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
-		final ImgLabeling<Integer, IntType> expOut1 = op("image.watershed").input(gauss, true, false, thresholdedImg)
+		final ImgLabeling<Integer, IntType> expOut1 = ops.op("image.watershed").input(gauss, true, false, thresholdedImg)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut1, out1);
 
-		final ImgLabeling<Integer, IntType> out2 = op("image.watershed").input(thresholdedImg, true, false, sigma, es)
+		final ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").input(thresholdedImg, true, false, sigma, es)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
-		final ImgLabeling<Integer, IntType> expOut2 = op("image.watershed").input(gauss, true, false)
+		final ImgLabeling<Integer, IntType> expOut2 = ops.op("image.watershed").input(gauss, true, false)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut2, out2);
 
 		// compute result
-		final ImgLabeling<Integer, IntType> out3 = op("image.watershed")
+		final ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed")
 				.input(thresholdedImg, true, true, sigma, thresholdedImg, es)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
-		final ImgLabeling<Integer, IntType> expOut3 = op("image.watershed").input(gauss, true, true, thresholdedImg)
+		final ImgLabeling<Integer, IntType> expOut3 = ops.op("image.watershed").input(gauss, true, true, thresholdedImg)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut3, out3);
 
-		final ImgLabeling<Integer, IntType> out4 = op("image.watershed").input(thresholdedImg, true, true, sigma, es)
+		final ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").input(thresholdedImg, true, true, sigma, es)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
-		final ImgLabeling<Integer, IntType> expOut4 = op("image.watershed").input(gauss, true, true)
+		final ImgLabeling<Integer, IntType> expOut4 = ops.op("image.watershed").input(gauss, true, true)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut4, out4);
 
 		// compute result
-		final ImgLabeling<Integer, IntType> out5 = op("image.watershed")
+		final ImgLabeling<Integer, IntType> out5 = ops.op("image.watershed")
 				.input(thresholdedImg, false, true, sigma, thresholdedImg, es)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
-		final ImgLabeling<Integer, IntType> expOut5 = op("image.watershed").input(gauss, false, true, thresholdedImg)
+		final ImgLabeling<Integer, IntType> expOut5 = ops.op("image.watershed").input(gauss, false, true, thresholdedImg)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut5, out5);
 
-		final ImgLabeling<Integer, IntType> out6 = op("image.watershed").input(thresholdedImg, false, true, sigma, es)
+		final ImgLabeling<Integer, IntType> out6 = ops.op("image.watershed").input(thresholdedImg, false, true, sigma, es)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
-		final ImgLabeling<Integer, IntType> expOut6 = op("image.watershed").input(gauss, false, true)
+		final ImgLabeling<Integer, IntType> expOut6 = ops.op("image.watershed").input(gauss, false, true)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(expOut6, out6);

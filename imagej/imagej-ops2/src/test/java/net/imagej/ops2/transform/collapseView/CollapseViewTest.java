@@ -64,7 +64,7 @@ public class CollapseViewTest extends AbstractOpTest {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = Functions
-				.match(ops, "transform.collapseView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.collapseView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>>() {
 				});
 
@@ -80,7 +80,7 @@ public class CollapseViewTest extends AbstractOpTest {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
 
 		Function<RandomAccessible<DoubleType>, CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = Functions
-				.match(ops, "transform.collapseView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.collapseView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>>() {
 				});
 

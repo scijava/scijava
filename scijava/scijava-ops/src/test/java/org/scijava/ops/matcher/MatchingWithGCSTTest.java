@@ -69,7 +69,7 @@ public class MatchingWithGCSTTest extends AbstractTestEnvironment {
 		things.add(new YThing());
 		List<Double> actual = fooOP.apply(things);
 		// N.B. The type reifier reifies this list to a List<Thing>
-		List<Double> expected = new OpBuilder(ops, "test.listTypeReification").input(things)
+		List<Double> expected = ops.op("test.listTypeReification").input(things)
 				.outType(new Nil<List<Double>>() {}).apply();
 		assertEquals(actual, expected);
 	}

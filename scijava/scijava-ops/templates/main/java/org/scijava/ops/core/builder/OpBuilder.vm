@@ -38,7 +38,7 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.OpService;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
@@ -59,11 +59,11 @@ import org.scijava.types.Types;
  */
 public class OpBuilder {
 
-	private final OpService ops;
+	private final OpEnvironment env;
 	private final String opName;
 
-	public OpBuilder(final OpService ops, final String opName) {
-		this.ops = ops;
+	public OpBuilder(final OpEnvironment env, final String opName) {
+		this.env = env;
 		this.opName = opName;
 	}
 
@@ -96,7 +96,8 @@ public class OpBuilder {
 
 	@SuppressWarnings({ "unchecked" })
 	private <T> Nil<T> type(Object obj) {
-		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj));
+		// FIXME: This vacuous T and unsafe cast is wrong.
+		return (Nil<T>) Nil.of(env.genericType(obj));
 	}
 
 	private void checkComputerRefs(Object... objects) {
@@ -163,7 +164,7 @@ public class OpBuilder {
 		}
 
 		public Producer<?> producer() {
-			final Nil<Producer<Object>> specialType = new Nil<Producer<Object>>() {
+			final Nil<Producer<Object>> specialType = new Nil<>() {
 
 				@Override
 				public Type getType() {
@@ -171,7 +172,7 @@ public class OpBuilder {
 						Object.class });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], Nil.of(
+			return env.op(opName, specialType, new Nil<?>[0], Nil.of(
 				Object.class));
 		}
 
@@ -195,7 +196,7 @@ public class OpBuilder {
 		}
 
 		public Producer<O> producer() {
-			final Nil<Producer<O>> specialType = new Nil<Producer<O>>() {
+			final Nil<Producer<O>> specialType = new Nil<>() {
 
 				@Override
 				public Type getType() {
@@ -203,11 +204,11 @@ public class OpBuilder {
 						.getType() });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], outType);
+			return env.op(opName, specialType, new Nil<?>[0], outType);
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(ops, opName, outType);
+			return Computers.match(env, opName, outType);
 		}
 
 		public O create() {
@@ -231,7 +232,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(ops, opName, type(out));
+			return Computers.match(env, opName, type(out));
 		}
 
 		public void compute() {
@@ -266,16 +267,16 @@ public class OpBuilder {
 		}
 
 		public $functionArity.call($arity)$generics.call($arity) function() {
-			return Functions.match(ops, opName, $inputTypesWithOutput.call($arity));
+			return Functions.match(env, opName, $inputTypesWithOutput.call($arity));
 		}
 
 		public Computers.Arity${arity}$generics.call($arity) computer() {
-			return Computers.match(ops, opName, $inputTypesWithOutput.call($arity));
+			return Computers.match(env, opName, $inputTypesWithOutput.call($arity));
 		}
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypes.call($arity));
+			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
 		}
 
 #end
@@ -311,12 +312,12 @@ public class OpBuilder {
 		}
 
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
-			return Functions.match(ops, opName, $inputTypes.call($arity), Nil.of(Object.class));
+			return Functions.match(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
 		}
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypes.call($arity));
+			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
 		}
 
 #end
@@ -347,11 +348,11 @@ public class OpBuilder {
 		}
 
 		public $functionArity.call($arity)$generics.call($arity) function() {
-			return Functions.match(ops, opName, $inputTypesFromArgs.call($arity), outType);
+			return Functions.match(env, opName, $inputTypesFromArgs.call($arity), outType);
 		}
 	
 		public Computers.Arity${arity}$generics.call($arity) computer() {
-			return Computers.match(ops, opName, $inputTypesFromArgs.call($arity), outType);
+			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), outType);
 		}
 	
 		public O apply() {
@@ -394,13 +395,13 @@ public class OpBuilder {
 		}
 
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
-			return Functions.match(ops, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
+			return Functions.match(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
 		}
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(ops, opName, $inputTypesFromArgs.call($arity));
+			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity));
 		}
 
 #end
@@ -440,7 +441,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
-			return Computers.match(ops, opName, $inputTypesFromArgs.call($arity), type(out));
+			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), type(out));
 		}
 
 		public void compute() {

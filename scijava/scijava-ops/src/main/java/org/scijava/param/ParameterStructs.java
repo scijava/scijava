@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import org.scijava.ops.FieldOpDependencyMember;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
-import org.scijava.ops.matcher.OpInfo;
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;

@@ -105,7 +105,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 			//final PairIterator<DoubleType> iter = pairIterator(values1, values2);
 			final Iterable<Pair<IntType, IntType>> iter = new IterablePair<>(ArrayImgs.ints(values1, n), ArrayImgs.ints(values2, n));
 			double kendallValue1 = calculateNaive(iter.iterator());
-			double kendallValue2 = op("coloc.kendallTau").input(values1, values2).outType(Double.class).apply();
+			double kendallValue2 = ops.op("coloc.kendallTau").input(values1, values2).outType(Double.class).apply();
 			if (Double.isNaN(kendallValue1)) {
 				assertTrue(Double.isInfinite(kendallValue2) || Double.isNaN(
 					kendallValue2), "i: " + i + ", value2: " + kendallValue2);
@@ -127,14 +127,14 @@ public class KendallTauBRankTest extends AbstractOpTest {
 				0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
 		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = Functions.match(ops,
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = Functions.match(ops.env(),
 				"coloc.kendallTau", nilRAI, nilRAI, new Nil<Double>() {});
 //		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
 //				"transform.raiToIterable").input(op).outType(
 //						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
 //						.apply();
 		PValueResult value = new PValueResult();
-		op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 
@@ -146,7 +146,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 	}
 	
 	private <T extends RealType<T>, U extends RealType<U>> void assertTau(final double expected, final Iterable<T> img1, final Iterable<U> img2) {
-		final double kendallValue = (double) op("coloc.kendallTau").input(img1, img2).apply();
+		final double kendallValue = (double) ops.op("coloc.kendallTau").input(img1, img2).apply();
 		assertEquals(expected, kendallValue, 1e-10);
 	}
 

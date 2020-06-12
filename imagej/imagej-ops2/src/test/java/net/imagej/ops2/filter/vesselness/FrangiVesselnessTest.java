@@ -50,8 +50,10 @@ import org.scijava.Context;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.plugin.PluginService;
 import org.scijava.script.ScriptService;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.TypeService;
 
 /**
  * Tests the Frangi Vesselness operation.
@@ -65,7 +67,9 @@ public class FrangiVesselnessTest{
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class, ThreadService.class, ScriptService.class);
+		context = new Context(OpService.class, CacheService.class,
+			ThreadService.class, ScriptService.class, PluginService.class,
+			TypeService.class);
 		ops = context.service(OpService.class);
 	}
 
@@ -77,7 +81,7 @@ public class FrangiVesselnessTest{
 	}
 	
 	private static OpBuilder op(String name) {
-		return new OpBuilder(ops, name);
+		return ops.op(name);
 	}
 	
 	private Img<FloatType> openFloatImg(
@@ -92,7 +96,7 @@ public class FrangiVesselnessTest{
 
 		// load in input image and expected output image.
 		Img<DoubleType> inputImg = ArrayImgs.doubles(256, 256);
-		op("image.equation")
+		ops.op("image.equation")
 				.input("Math.tan(0.3*p[0]) + Math.tan(0.1*p[1])", context.getService(ScriptService.class))
 				.output(inputImg).compute();
 		Img<FloatType> expectedOutput = ((Img<FloatType>) openFloatImg("Result.tif"));
@@ -110,7 +114,7 @@ public class FrangiVesselnessTest{
 		double[] spacing = { 1, 1 };
 
 		// run the op
-		op("filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
+		ops.op("filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
 
 		// compare the output image data to that stored in the file.
 		Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();

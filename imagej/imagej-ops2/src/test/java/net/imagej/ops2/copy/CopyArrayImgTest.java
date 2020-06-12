@@ -69,8 +69,9 @@ public class CopyArrayImgTest extends AbstractOpTest {
 	@Test
 	public void copyArrayImgNoOutputTest() {
 		@SuppressWarnings("unchecked")
-		final RandomAccessibleInterval<UnsignedByteType> output = (RandomAccessibleInterval<UnsignedByteType>) new OpBuilder(
-				ops, "copy.img").input(input).apply();
+		final RandomAccessibleInterval<UnsignedByteType> output =
+			(RandomAccessibleInterval<UnsignedByteType>) ops.op("copy.img").input(
+				input).apply();
 
 		final Cursor<UnsignedByteType> inc = input.localizingCursor();
 		final RandomAccess<UnsignedByteType> outRA = output.randomAccess();
@@ -86,7 +87,7 @@ public class CopyArrayImgTest extends AbstractOpTest {
 	public void copyArrayImgWithOutputTest() {
 		final Img<UnsignedByteType> output = input.factory().create(input, input.firstElement());
 
-		op("copy.img").input(input).output(output).compute();
+		ops.op("copy.img").input(input).output(output).compute();
 
 		final Cursor<UnsignedByteType> inc = input.cursor();
 		final Cursor<UnsignedByteType> outc = output.cursor();

@@ -37,6 +37,7 @@ import java.util.List;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependencyMember;
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

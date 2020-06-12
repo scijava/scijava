@@ -75,7 +75,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Supplier<N>> y2 = new Nil<Supplier<N>>() {
 		};
-		Nil<Double> n1 = new Nil<Double>() {
+		Nil<Double> n1 = new Nil<>() {
 		};
 
 		assertAll(Single.class, true, y1, y2);
@@ -93,7 +93,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Supplier<Number>> y2 = new Nil<Supplier<Number>>() {
 		};
-		Nil<Double> n1 = new Nil<Double>() {
+		Nil<Double> n1 = new Nil<>() {
 		};
 
 		assertAll(Single.class, true, y1, y2);
@@ -107,7 +107,7 @@ public class MatchingUtilsTest {
 
 		Nil<Supplier<Double>> y1 = new Nil<Supplier<Double>>() {
 		};
-		Nil<Double> n1 = new Nil<Double>() {
+		Nil<Double> n1 = new Nil<>() {
 		};
 		Nil<String> n2 = new Nil<String>() {
 		};
@@ -121,7 +121,7 @@ public class MatchingUtilsTest {
 		abstract class SingleVarBoundedUsedNested<I extends Number> implements Supplier<List<I>> {
 		}
 
-		Nil<Double> n1 = new Nil<Double>() {
+		Nil<Double> n1 = new Nil<>() {
 		};
 		Nil<String> n2 = new Nil<String>() {
 		};
@@ -147,41 +147,41 @@ public class MatchingUtilsTest {
 				implements Function<List<I>, List<? extends Number>> {
 		}
 
-		Nil<Function<List<Double>, Double>> y1 = new Nil<Function<List<Double>, Double>>() {
+		Nil<Function<List<Double>, Double>> y1 = new Nil<>() {
 		};
-		Nil<Function<Double, Double>> n1 = new Nil<Function<Double, Double>>() {
+		Nil<Function<Double, Double>> n1 = new Nil<>() {
 		};
-		Nil<Function<List<String>, Double>> n2 = new Nil<Function<List<String>, Double>>() {
+		Nil<Function<List<String>, Double>> n2 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, String>> n3 = new Nil<Function<List<Double>, String>>() {
+		Nil<Function<List<Double>, String>> n3 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedUsedNestedAndOther.class, true, y1);
 		assertAll(SingleVarBoundedUsedNestedAndOther.class, false, n1, n2, n3);
 
-		Nil<Function<List<Double>, List<Double>>> y2 = new Nil<Function<List<Double>, List<Double>>>() {
+		Nil<Function<List<Double>, List<Double>>> y2 = new Nil<>() {
 		};
-		Nil<Function<Double, List<Double>>> n4 = new Nil<Function<Double, List<Double>>>() {
+		Nil<Function<Double, List<Double>>> n4 = new Nil<>() {
 		};
 		Nil<Function<List<String>, List<Double>>> n5 = new Nil<Function<List<String>, List<Double>>>() {
 		};
-		Nil<Function<List<Double>, List<String>>> n6 = new Nil<Function<List<Double>, List<String>>>() {
+		Nil<Function<List<Double>, List<String>>> n6 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedUsedNestedAndOtherNested.class, true, y2);
 		assertAll(SingleVarBoundedUsedNestedAndOtherNested.class, false, n4, n5, n6);
 
-		Nil<Function<Double, List<Double>>> n7 = new Nil<Function<Double, List<Double>>>() {
+		Nil<Function<Double, List<Double>>> n7 = new Nil<>() {
 		};
 		Nil<Function<List<String>, List<Double>>> n8 = new Nil<Function<List<String>, List<Double>>>() {
 		};
-		Nil<Function<List<Double>, List<String>>> n9 = new Nil<Function<List<Double>, List<String>>>() {
+		Nil<Function<List<Double>, List<String>>> n9 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<Double>>> n10 = new Nil<Function<List<Double>, List<Double>>>() {
+		Nil<Function<List<Double>, List<Double>>> n10 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<Integer>>> n11 = new Nil<Function<List<Double>, List<Integer>>>() {
+		Nil<Function<List<Double>, List<Integer>>> n11 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<? extends Number>>> y3 = new Nil<Function<List<Double>, List<? extends Number>>>() {
+		Nil<Function<List<Double>, List<? extends Number>>> y3 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedUsedNestedAndOtherNestedWildcard.class, false, n7, n8, n9, n10, n11);
@@ -196,33 +196,33 @@ public class MatchingUtilsTest {
 				implements Function<I, List<Double>> {
 		}
 
-		Nil<Function<List<String>, Double>> y1 = new Nil<Function<List<String>, Double>>() {
+		Nil<Function<List<String>, Double>> y1 = new Nil<>() {
 		};
-		Nil<Function<Iterable<String>, Double>> y2 = new Nil<Function<Iterable<String>, Double>>() {
+		Nil<Function<Iterable<String>, Double>> y2 = new Nil<>() {
 		};
-		Nil<Function<Double, Double>> n1 = new Nil<Function<Double, Double>>() {
+		Nil<Function<Double, Double>> n1 = new Nil<>() {
 		};
 		Nil<Function<List<String>, String>> n2 = new Nil<Function<List<String>, String>>() {
 		};
-		Nil<Function<Iterable<Double>, Double>> n3 = new Nil<Function<Iterable<Double>, Double>>() {
+		Nil<Function<Iterable<Double>, Double>> n3 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedNestedAndOther.class, true, y1, y2);
 		assertAll(SingleVarBoundedNestedAndOther.class, false, n1, n2, n3);
 
-		Nil<Function<List<Integer>, List<Double>>> y3 = new Nil<Function<List<Integer>, List<Double>>>() {
+		Nil<Function<List<Integer>, List<Double>>> y3 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<Double>>> y4 = new Nil<Function<List<Double>, List<Double>>>() {
+		Nil<Function<List<Double>, List<Double>>> y4 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Double>, List<Double>>> y5 = new Nil<Function<Iterable<Double>, List<Double>>>() {
+		Nil<Function<Iterable<Double>, List<Double>>> y5 = new Nil<>() {
 		};
-		Nil<Function<List<Integer>, Double>> n4 = new Nil<Function<List<Integer>, Double>>() {
+		Nil<Function<List<Integer>, Double>> n4 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<Integer>>> n5 = new Nil<Function<List<Double>, List<Integer>>>() {
+		Nil<Function<List<Double>, List<Integer>>> n5 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Double>, Iterable<Double>>> n6 = new Nil<Function<Iterable<Double>, Iterable<Double>>>() {
+		Nil<Function<Iterable<Double>, Iterable<Double>>> n6 = new Nil<>() {
 		};
-		Nil<Function<Integer, List<Double>>> n7 = new Nil<Function<Integer, List<Double>>>() {
+		Nil<Function<Integer, List<Double>>> n7 = new Nil<>() {
 		};
 		Nil<Function<List<String>, List<Double>>> n8 = new Nil<Function<List<String>, List<Double>>>() {
 		};
@@ -246,7 +246,7 @@ public class MatchingUtilsTest {
 
 		Nil<Function<List<String>, List<String>>> y1 = new Nil<Function<List<String>, List<String>>>() {
 		};
-		Nil<Function<Iterable<String>, Iterable<String>>> y2 = new Nil<Function<Iterable<String>, Iterable<String>>>() {
+		Nil<Function<Iterable<String>, Iterable<String>>> y2 = new Nil<>() {
 		};
 		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<Function<List<String>, List<Integer>>>() {
 		};
@@ -256,11 +256,11 @@ public class MatchingUtilsTest {
 		assertAll(SingleVarBoundedNestedMultipleOccurence.class, true, y1, y2);
 		assertAll(SingleVarBoundedNestedMultipleOccurence.class, false, n1, n2);
 
-		Nil<Function<List<Double>, List<Double>>> y3 = new Nil<Function<List<Double>, List<Double>>>() {
+		Nil<Function<List<Double>, List<Double>>> y3 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Double>, Iterable<Double>>> y4 = new Nil<Function<Iterable<Double>, Iterable<Double>>>() {
+		Nil<Function<Iterable<Double>, Iterable<Double>>> y4 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Double>, Iterable<Integer>>> n3 = new Nil<Function<Iterable<Double>, Iterable<Integer>>>() {
+		Nil<Function<Iterable<Double>, Iterable<Integer>>> n3 = new Nil<>() {
 		};
 		Nil<Function<List<String>, Integer>> n4 = new Nil<Function<List<String>, Integer>>() {
 		};
@@ -268,9 +268,9 @@ public class MatchingUtilsTest {
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurence.class, true, y3, y4);
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurence.class, false, n3, n4);
 
-		Nil<Function<List<Double>, Iterable<List<Double>>>> n5 = new Nil<Function<List<Double>, Iterable<List<Double>>>>() {
+		Nil<Function<List<Double>, Iterable<List<Double>>>> n5 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Double>, List<Iterable<Double>>>> y5 = new Nil<Function<Iterable<Double>, List<Iterable<Double>>>>() {
+		Nil<Function<Iterable<Double>, List<Iterable<Double>>>> y5 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class, true, y5);
@@ -278,7 +278,7 @@ public class MatchingUtilsTest {
 		
 		abstract class SingleVarMultipleOccurenceUsedNested<I> implements Function<I, List<I>> {}
 		
-		Nil<Function<Integer, List<Number>>> n6 = new Nil<Function<Integer,List<Number>>>() {
+		Nil<Function<Integer, List<Number>>> n6 = new Nil<>() {
 		};
 		assertAll(SingleVarMultipleOccurenceUsedNested.class, false, n6);
 	}
@@ -293,7 +293,7 @@ public class MatchingUtilsTest {
 
 		Nil<Function<List<String>, List<String>>> y1 = new Nil<Function<List<String>, List<String>>>() {
 		};
-		Nil<Function<Iterable<String>, Iterable<String>>> y2 = new Nil<Function<Iterable<String>, Iterable<String>>>() {
+		Nil<Function<Iterable<String>, Iterable<String>>> y2 = new Nil<>() {
 		};
 		Nil<Function<List<String>, List<Integer>>> y3 = new Nil<Function<List<String>, List<Integer>>>() {
 		};
@@ -306,9 +306,9 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<List<String>, Float>> y6 = new Nil<Function<List<String>, Float>>() {
 		};
-		Nil<Function<Iterable<String>, Double>> n1 = new Nil<Function<Iterable<String>, Double>>() {
+		Nil<Function<Iterable<String>, Double>> n1 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, Integer>> n2 = new Nil<Function<List<Double>, Integer>>() {
+		Nil<Function<List<Double>, Integer>> n2 = new Nil<>() {
 		};
 		Nil<Function<List<String>, String>> n3 = new Nil<Function<List<String>, String>>() {
 		};
@@ -325,37 +325,37 @@ public class MatchingUtilsTest {
 		abstract class IBoundedByN<N extends Number, I extends Iterable<N>> implements BiFunction<I, I, N> {
 		}
 
-		Nil<Function<List<Integer>, List<Integer>>> y1 = new Nil<Function<List<Integer>, List<Integer>>>() {
+		Nil<Function<List<Integer>, List<Integer>>> y1 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Integer>, List<Integer>>> y2 = new Nil<Function<Iterable<Integer>, List<Integer>>>() {
+		Nil<Function<Iterable<Integer>, List<Integer>>> y2 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Integer>, Iterable<Integer>>> y3 = new Nil<Function<Iterable<Integer>, Iterable<Integer>>>() {
+		Nil<Function<Iterable<Integer>, Iterable<Integer>>> y3 = new Nil<>() {
 		};
 		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<Function<List<String>, List<Integer>>>() {
 		};
 		Nil<Function<List<String>, Double>> n2 = new Nil<Function<List<String>, Double>>() {
 		};
-		Nil<Function<List<Integer>, List<Double>>> n3 = new Nil<Function<List<Integer>, List<Double>>>() {
+		Nil<Function<List<Integer>, List<Double>>> n3 = new Nil<>() {
 		};
-		Nil<Function<Integer, List<Integer>>> n4 = new Nil<Function<Integer, List<Integer>>>() {
+		Nil<Function<Integer, List<Integer>>> n4 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Integer>, Integer>> n5 = new Nil<Function<Iterable<Integer>, Integer>>() {
+		Nil<Function<Iterable<Integer>, Integer>> n5 = new Nil<>() {
 		};
 		
 		assertAll(BExtendsI.class, true, y1, y2, y3);
 		assertAll(BExtendsI.class, false, n1, n2, n3, n4, n5);
 
-		Nil<BiFunction<List<Integer>, List<Integer>, Integer>> y4 = new Nil<BiFunction<List<Integer>, List<Integer>, Integer>>() {
+		Nil<BiFunction<List<Integer>, List<Integer>, Integer>> y4 = new Nil<>() {
 		};
-		Nil<BiFunction<Iterable<Integer>, Iterable<Integer>, Integer>> y5 = new Nil<BiFunction<Iterable<Integer>, Iterable<Integer>, Integer>>() {
+		Nil<BiFunction<Iterable<Integer>, Iterable<Integer>, Integer>> y5 = new Nil<>() {
 		};
-		Nil<BiFunction<List<Integer>, List<Integer>, Double>> n6 = new Nil<BiFunction<List<Integer>, List<Integer>, Double>>() {
+		Nil<BiFunction<List<Integer>, List<Integer>, Double>> n6 = new Nil<>() {
 		};
-		Nil<BiFunction<Iterable<Double>, Iterable<Integer>, Integer>> n7 = new Nil<BiFunction<Iterable<Double>, Iterable<Integer>, Integer>>() {
+		Nil<BiFunction<Iterable<Double>, Iterable<Integer>, Integer>> n7 = new Nil<>() {
 		};
-		Nil<BiFunction<Iterable<Integer>, List<Integer>, Integer>> n8 = new Nil<BiFunction<Iterable<Integer>, List<Integer>, Integer>>() {
+		Nil<BiFunction<Iterable<Integer>, List<Integer>, Integer>> n8 = new Nil<>() {
 		};
-		Nil<BiFunction<Iterable<String>, List<String>, String>> n9 = new Nil<BiFunction<Iterable<String>, List<String>, String>>() {
+		Nil<BiFunction<Iterable<String>, List<String>, String>> n9 = new Nil<>() {
 		};
 
 		assertAll(IBoundedByN.class, true, y4, y5);
@@ -368,7 +368,7 @@ public class MatchingUtilsTest {
 				implements BiFunction<I, I, List<String>> {
 		}
 
-		Nil<BiFunction<Iterable<Double>, Iterable<Double>, List<String>>> y1 = new Nil<BiFunction<Iterable<Double>, Iterable<Double>, List<String>>>() {
+		Nil<BiFunction<Iterable<Double>, Iterable<Double>, List<String>>> y1 = new Nil<>() {
 		};
 		
 		assertAll(IBoundedByNImplicitely.class, true, y1);
@@ -380,21 +380,21 @@ public class MatchingUtilsTest {
 				implements BiFunction<I, I, Iterable<M>> {
 		}
 
-		Nil<BiFunction<Iterable<Double>, Double, Iterable<Double>>> n1 = new Nil<BiFunction<Iterable<Double>, Double, Iterable<Double>>>() {
+		Nil<BiFunction<Iterable<Double>, Double, Iterable<Double>>> n1 = new Nil<>() {
 		};
-		Nil<BiFunction<Double, Iterable<Double>, Iterable<Double>>> n2 = new Nil<BiFunction<Double, Iterable<Double>, Iterable<Double>>>() {
+		Nil<BiFunction<Double, Iterable<Double>, Iterable<Double>>> n2 = new Nil<>() {
 		};
-		Nil<BiFunction<List<Float>, List<Number>, Iterable<Double>>> n3 = new Nil<BiFunction<List<Float>, List<Number>, Iterable<Double>>>() {
+		Nil<BiFunction<List<Float>, List<Number>, Iterable<Double>>> n3 = new Nil<>() {
 		};
-		Nil<BiFunction<Iterable<Double>, List<Double>, Iterable<Double>>> n4 = new Nil<BiFunction<Iterable<Double>, List<Double>, Iterable<Double>>>() {
+		Nil<BiFunction<Iterable<Double>, List<Double>, Iterable<Double>>> n4 = new Nil<>() {
 		};
-		Nil<BiFunction<List<Double>, List<Double>, List<Double>>> n5 = new Nil<BiFunction<List<Double>, List<Double>, List<Double>>>() {
+		Nil<BiFunction<List<Double>, List<Double>, List<Double>>> n5 = new Nil<>() {
 		};
-		Nil<BiFunction<List<Integer>, List<Double>, Iterable<Double>>> n6 = new Nil<BiFunction<List<Integer>, List<Double>, Iterable<Double>>>() {
+		Nil<BiFunction<List<Integer>, List<Double>, Iterable<Double>>> n6 = new Nil<>() {
 		};
-		Nil<BiFunction<List<Double>, List<Double>, Iterable<Double>>> y1 = new Nil<BiFunction<List<Double>, List<Double>, Iterable<Double>>>() {
+		Nil<BiFunction<List<Double>, List<Double>, Iterable<Double>>> y1 = new Nil<>() {
 		};
-		Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>> y2 = new Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>>() {
+		Nil<BiFunction<Iterable<Double>, Iterable<Double>, Iterable<Double>>> y2 = new Nil<>() {
 		};
 
 		assertAll(DoubleVarBoundedAndWildcard.class, true, y1, y2);
@@ -406,15 +406,15 @@ public class MatchingUtilsTest {
 		abstract class Wildcards implements Function<List<? extends Number>, List<? extends Number>> {
 		}
 
-		Nil<Function<List<? extends Number>, List<? extends Number>>> y1 = new Nil<Function<List<? extends Number>, List<? extends Number>>>() {
+		Nil<Function<List<? extends Number>, List<? extends Number>>> y1 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Integer>, Iterable<Double>>> n1 = new Nil<Function<Iterable<Integer>, Iterable<Double>>>() {
+		Nil<Function<Iterable<Integer>, Iterable<Double>>> n1 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<Integer>>> n2 = new Nil<Function<List<Double>, List<Integer>>>() {
+		Nil<Function<List<Double>, List<Integer>>> n2 = new Nil<>() {
 		};
-		Nil<Function<List<Double>, List<Double>>> n3 = new Nil<Function<List<Double>, List<Double>>>() {
+		Nil<Function<List<Double>, List<Double>>> n3 = new Nil<>() {
 		};
-		Nil<Function<Iterable<Double>, Iterable<Double>>> n4 = new Nil<Function<Iterable<Double>, Iterable<Double>>>() {
+		Nil<Function<Iterable<Double>, Iterable<Double>>> n4 = new Nil<>() {
 		};
 
 		assertAll(Wildcards.class, true, y1);

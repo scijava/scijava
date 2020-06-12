@@ -75,12 +75,12 @@ public class DeconvolveTest extends AbstractOpTest {
 
 		incropped = Views.zeroMin(incropped);
 
-		RandomAccessibleInterval<FloatType> kernel = op("create.kernelGauss")
+		RandomAccessibleInterval<FloatType> kernel = ops.op("create.kernelGauss")
 				.input(new double[] { 4.0, 4.0 }, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// convolve FFTF
-		final RandomAccessibleInterval<FloatType> convolved = op("filter.convolve").input(//
+		final RandomAccessibleInterval<FloatType> convolved = ops.op("filter.convolve").input(//
 				incropped, kernel, es).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// find a RichardsonLucyF op
@@ -88,7 +88,7 @@ public class DeconvolveTest extends AbstractOpTest {
 				long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 				OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
 				ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
-				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.findOp("deconvolve.richardsonLucy",
+				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.env().op("deconvolve.richardsonLucy",
 						new Nil<Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
 								long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 								OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //

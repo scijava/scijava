@@ -62,13 +62,13 @@ public class GaussTest extends AbstractOpTest {
 		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
 
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10, 10 });
-		final Img<ByteType> out1 = op("create.img").input(in, Util.getTypeFromInterval(in))
+		final Img<ByteType> out1 = ops.op("create.img").input(in, Util.getTypeFromInterval(in))
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final double sigma = 5;
-		final Img<ByteType> out2 = op("create.img").input(in, Util.getTypeFromInterval(in))
+		final Img<ByteType> out2 = ops.op("create.img").input(in, Util.getTypeFromInterval(in))
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 
-		op("filter.gauss").input(in, es, sigma).output(out1).compute();
+		ops.op("filter.gauss").input(in, es, sigma).output(out1).compute();
 		try {
 			Gauss3.gauss(sigma, Views.extendMirrorSingle(in), out2);
 		} catch (IncompatibleTypeException e) {

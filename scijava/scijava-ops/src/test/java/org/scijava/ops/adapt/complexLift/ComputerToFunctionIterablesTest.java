@@ -58,7 +58,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer1ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {1., 2., 3. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -66,7 +66,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer2ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {2., 4., 6. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -74,7 +74,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer3ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {3., 6., 9. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -82,7 +82,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer4ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {4., 8., 12. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -90,7 +90,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer5ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {5., 10., 15. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -98,7 +98,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer6ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {6., 12., 18. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -106,7 +106,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer7ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {7., 14., 21. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -114,7 +114,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer8ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {8., 16., 24. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -122,7 +122,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer9ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {9., 18., 27. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -130,7 +130,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer10ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {10., 20., 30. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -138,7 +138,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer11ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {11., 22., 33. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -146,7 +146,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer12ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {12., 24., 36. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -154,7 +154,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer13ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {13., 26., 39. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -162,7 +162,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer14ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {14., 28., 42. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -170,7 +170,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer15ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {15., 30., 45. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 
@@ -178,7 +178,7 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	public void testComputer16ToIterables() {
 		final List<double[]> in = Arrays.asList(new double[] { 1, 2, 3 });
 		final List<double[]> expected = Arrays.asList(new double[] {16., 32., 48. });
-		final Iterable<double[]> out = new OpBuilder(ops, "test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
+		final Iterable<double[]> out = ops.op("test.addArrays").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(new Nil<Iterable<double[]>>(){}).apply();
 		assertArrayEquals(out.iterator().next(), expected.get(0), 0);
 	}
 

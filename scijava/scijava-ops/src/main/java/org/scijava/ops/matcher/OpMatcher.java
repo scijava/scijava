@@ -41,15 +41,15 @@ import org.scijava.ops.OpEnvironment;
 //TODO javadoc
 public interface OpMatcher {
 
-	OpCandidate findSingleMatch(OpEnvironment ops, OpRef ref) throws OpMatchingException;
+	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref) throws OpMatchingException;
 
-	MatchingResult findMatch(OpEnvironment ops, OpRef ref);
+	MatchingResult findMatch(OpEnvironment env, OpRef ref);
 
-	MatchingResult findMatch(OpEnvironment ops, List<OpRef> refs);
+	MatchingResult findMatch(OpEnvironment env, List<OpRef> refs);
 
-	List<OpCandidate> findCandidates(OpEnvironment ops, OpRef ref);
+	List<OpCandidate> findCandidates(OpEnvironment env, OpRef ref);
 
-	List<OpCandidate> findCandidates(OpEnvironment ops, List<OpRef> refs);
+	List<OpCandidate> findCandidates(OpEnvironment env, List<OpRef> refs);
 
 	List<OpCandidate> filterMatches(List<OpCandidate> candidates);
 

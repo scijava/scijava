@@ -63,7 +63,7 @@ public class ExtendZeroViewTest extends AbstractOpTest {
 	@Test
 	public void extendZeroTest() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = Functions
-				.match(ops, "transform.extendZeroView", raiNil,
+				.match(ops.env(), "transform.extendZeroView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

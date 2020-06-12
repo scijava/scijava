@@ -31,10 +31,10 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 	public void testAny() {
 
 		NestedThing<String, Thing<String>> nthing = new NestedThing<>();
-		Double e = new OpBuilder(ops, "test.nestedAny").input(nthing).outType(Double.class).apply();
+		Double e = ops.op("test.nestedAny").input(nthing).outType(Double.class).apply();
 
 		Thing<Double> thing = new Thing<>();
-		Double d = new OpBuilder(ops, "test.any").input(thing).outType(Double.class).apply();
+		Double d = ops.op("test.any").input(thing).outType(Double.class).apply();
 
 		assert d == 5.;
 		assert e == 5.;
@@ -50,7 +50,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
-		Double d = new OpBuilder(ops, "test.exceptionalAny").input(ething).outType(Double.class).apply();
+		Double d = ops.op("test.exceptionalAny").input(ething).outType(Double.class).apply();
 
 	}
 
@@ -81,7 +81,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 	public void testRunAnyFunction1FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final MutableNotAny out = new OpBuilder(ops, "test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(MutableNotAny.class).apply();
+		final MutableNotAny out = ops.op("test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(MutableNotAny.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 	

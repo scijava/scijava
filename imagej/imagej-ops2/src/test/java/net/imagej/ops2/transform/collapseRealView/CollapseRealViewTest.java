@@ -66,7 +66,7 @@ public class CollapseRealViewTest extends AbstractOpTest {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
 		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, RealComposite<DoubleType>>> collapseFunc = Functions
-				.match(ops, "transform.collapseRealView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.collapseRealView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<CompositeIntervalView<DoubleType, RealComposite<DoubleType>>>() {
 				});
 
@@ -77,7 +77,7 @@ public class CollapseRealViewTest extends AbstractOpTest {
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
 		BiFunction<RandomAccessible<DoubleType>, Integer, CompositeView<DoubleType, RealComposite<DoubleType>>> collapseFuncRA = Functions
-				.match(ops, "transform.collapseRealView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.collapseRealView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<CompositeView<DoubleType, RealComposite<DoubleType>>>() {
 				});

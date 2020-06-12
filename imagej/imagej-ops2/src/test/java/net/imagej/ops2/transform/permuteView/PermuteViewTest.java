@@ -76,7 +76,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void defaultPermuteTest() {
 
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.permuteView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
@@ -99,7 +99,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void defaultPermuteCoordinatesTest() {
 
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
@@ -125,7 +125,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void permuteCoordinatesOfDimensionTest() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {
@@ -153,7 +153,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void defaultPermuteCoordinatesInverseTest() {
 
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesInverseView",
+				.match(ops.env(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {
@@ -180,7 +180,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void permuteCoordinatesInverseOfDimensionTest() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesInverseView",
+				.match(ops.env(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<Integer>() {
@@ -211,7 +211,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void testIntervalPermute() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteView",
+				.match(ops.env(), "transform.permuteView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -240,7 +240,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void testIntervalPermuteCoordinates() {
 
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.match(ops.env(), "transform.permuteCoordinatesView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
@@ -270,7 +270,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void testIntervalPermuteDimensionCoordinates() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesInverseView",
+				.match(ops.env(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<Integer>() {
@@ -303,7 +303,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void testIntervalPermuteInverseCoordinates() {
 
 		BiFunction<RandomAccessibleInterval<DoubleType>, int[], IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesInverseView",
+				.match(ops.env(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {
@@ -335,7 +335,7 @@ public class PermuteViewTest extends AbstractOpTest {
 	public void testIntervalPermuteInverseDimensionCoordinates() {
 
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, int[], Integer, IntervalView<DoubleType>> permuteFunc = Functions
-				.match(ops, "transform.permuteCoordinatesInverseView",
+				.match(ops.env(), "transform.permuteCoordinatesInverseView",
 						new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<int[]>() {
 				}, new Nil<Integer>() {

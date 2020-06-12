@@ -220,11 +220,11 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 	static <E> Iterable<E> lazyIterable(final Function<Iterator<?>[], E> nexter,
 		final Iterable<?>... iterables)
 	{
-		return new Iterable<E>() {
+		return new Iterable<>() {
 
 			@Override
 			public Iterator<E> iterator() {
-				return new Iterator<E>() {
+				return new Iterator<>() {
 
 					private Iterator<?>[] iterators;
 					{

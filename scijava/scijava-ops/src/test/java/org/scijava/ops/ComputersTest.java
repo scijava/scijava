@@ -35,12 +35,12 @@ import org.scijava.types.Nil;
 
 public class ComputersTest extends AbstractTestEnvironment {
 
-	private static Nil<double[]> nilDoubleArray = new Nil<double[]>() {
+	private static Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test
 	public void testUnaryComputers() {
-		Computers.Arity1<double[], double[]> sqrtComputer = Computers.match(ops,
+		Computers.Arity1<double[], double[]> sqrtComputer = Computers.match(ops.env(),
 			"math.sqrt", nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];
@@ -51,7 +51,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 	@Test
 	public void testBinaryComputers() {
 		Computers.Arity2<double[], double[], double[]> addComputer = //
-			Computers.match(ops, "math.add", nilDoubleArray, nilDoubleArray,
+			Computers.match(ops.env(), "math.add", nilDoubleArray, nilDoubleArray,
 				nilDoubleArray);
 
 		double[] result = new double[3];

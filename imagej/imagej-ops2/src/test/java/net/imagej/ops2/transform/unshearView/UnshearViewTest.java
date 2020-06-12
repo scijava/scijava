@@ -64,7 +64,7 @@ public class UnshearViewTest extends AbstractOpTest {
 	public void defaultUnshearTest() {
 
 		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> unshearFunc = Functions
-				.match(ops, "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<TransformView<DoubleType>>() {
@@ -94,7 +94,7 @@ public class UnshearViewTest extends AbstractOpTest {
 	public void UnshearIntervalTest() {
 
 		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> unshearFunc = Functions
-				.match(ops, "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
+				.match(ops.env(), "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {

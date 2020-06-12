@@ -52,7 +52,7 @@ public class EulerCharacteristic26NFloatingTest extends AbstractOpTest {
         final Img<BitType> img = ArrayImgs.bits(3, 3);
 
 				Assertions.assertThrows(IllegalArgumentException.class, () -> {
-					op("topology.eulerCharacteristic26NFloating").input(img).outType(
+					ops.op("topology.eulerCharacteristic26NFloating").input(img).outType(
 						Double.class).apply();
 				});
 	    }
@@ -69,7 +69,7 @@ public class EulerCharacteristic26NFloatingTest extends AbstractOpTest {
         final Img<BitType> img = drawCube(1, 1, 1, 1);
 
         final DoubleType result = new DoubleType();
-        op("topology.eulerCharacteristic26NFloating").input(img).output(result).compute();
+        ops.op("topology.eulerCharacteristic26NFloating").input(img).output(result).compute();
 
         assertEquals(1.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
     }
@@ -85,7 +85,7 @@ public class EulerCharacteristic26NFloatingTest extends AbstractOpTest {
         final Img<BitType> img = drawCube(1, 1, 1, 0);
 
         final DoubleType result = new DoubleType();
-        op("topology.eulerCharacteristic26NFloating").input(img).output(result).compute();
+        ops.op("topology.eulerCharacteristic26NFloating").input(img).output(result).compute();
 
         assertEquals(1.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
     }
@@ -106,7 +106,7 @@ public class EulerCharacteristic26NFloatingTest extends AbstractOpTest {
         access.get().setZero();
 
         final DoubleType result = new DoubleType();
-        op("topology.eulerCharacteristic26NFloating").input(img).output(result).compute();
+        ops.op("topology.eulerCharacteristic26NFloating").input(img).output(result).compute();
 
         assertEquals(2.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
     }
@@ -137,7 +137,7 @@ public class EulerCharacteristic26NFloatingTest extends AbstractOpTest {
         access.get().setOne();
 
         final DoubleType result = new DoubleType();
-        op("topology.eulerCharacteristic26NFloating").input(cube).output(result).compute();
+        ops.op("topology.eulerCharacteristic26NFloating").input(cube).output(result).compute();
 
         assertEquals(0.0, result.get(), 1e-12, "Euler characteristic (χ) is incorrect");
     }

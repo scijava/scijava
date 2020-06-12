@@ -38,7 +38,7 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.OpService;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
@@ -59,11 +59,11 @@ import org.scijava.types.Types;
  */
 public class OpBuilder {
 
-	private final OpService ops;
+	private final OpEnvironment env;
 	private final String opName;
 
-	public OpBuilder(final OpService ops, final String opName) {
-		this.ops = ops;
+	public OpBuilder(final OpEnvironment env, final String opName) {
+		this.env = env;
 		this.opName = opName;
 	}
 
@@ -364,7 +364,8 @@ public class OpBuilder {
 
 	@SuppressWarnings({ "unchecked" })
 	private <T> Nil<T> type(Object obj) {
-		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj));
+		// FIXME: This vacuous T and unsafe cast is wrong.
+		return (Nil<T>) Nil.of(env.genericType(obj));
 	}
 
 	private void checkComputerRefs(Object... objects) {
@@ -431,7 +432,7 @@ public class OpBuilder {
 		}
 
 		public Producer<?> producer() {
-			final Nil<Producer<Object>> specialType = new Nil<Producer<Object>>() {
+			final Nil<Producer<Object>> specialType = new Nil<>() {
 
 				@Override
 				public Type getType() {
@@ -439,7 +440,7 @@ public class OpBuilder {
 						Object.class });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], Nil.of(
+			return env.op(opName, specialType, new Nil<?>[0], Nil.of(
 				Object.class));
 		}
 
@@ -463,7 +464,7 @@ public class OpBuilder {
 		}
 
 		public Producer<O> producer() {
-			final Nil<Producer<O>> specialType = new Nil<Producer<O>>() {
+			final Nil<Producer<O>> specialType = new Nil<>() {
 
 				@Override
 				public Type getType() {
@@ -471,11 +472,11 @@ public class OpBuilder {
 						.getType() });
 				}
 			};
-			return ops.findOp(opName, specialType, new Nil<?>[0], outType);
+			return env.op(opName, specialType, new Nil<?>[0], outType);
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(ops, opName, outType);
+			return Computers.match(env, opName, outType);
 		}
 
 		public O create() {
@@ -499,7 +500,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(ops, opName, type(out));
+			return Computers.match(env, opName, type(out));
 		}
 
 		public void compute() {
@@ -527,15 +528,15 @@ public class OpBuilder {
 		}
 
 		public Function<I1, O> function() {
-			return Functions.match(ops, opName, in1Type, outType);
+			return Functions.match(env, opName, in1Type, outType);
 		}
 
 		public Computers.Arity1<I1, O> computer() {
-			return Computers.match(ops, opName, in1Type, outType);
+			return Computers.match(env, opName, in1Type, outType);
 		}
 
 		public Inplaces.Arity1<I1> inplace() {
-			return Inplaces.match(ops, opName, in1Type);
+			return Inplaces.match(env, opName, in1Type);
 		}
 
 	}
@@ -564,11 +565,11 @@ public class OpBuilder {
 		}
 
 		public Function<I1, ?> function() {
-			return Functions.match(ops, opName, in1Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity1<I1> inplace() {
-			return Inplaces.match(ops, opName, in1Type);
+			return Inplaces.match(env, opName, in1Type);
 		}
 
 	}
@@ -592,11 +593,11 @@ public class OpBuilder {
 		}
 
 		public Function<I1, O> function() {
-			return Functions.match(ops, opName, type(in1), outType);
+			return Functions.match(env, opName, type(in1), outType);
 		}
 	
 		public Computers.Arity1<I1, O> computer() {
-			return Computers.match(ops, opName, type(in1), outType);
+			return Computers.match(env, opName, type(in1), outType);
 		}
 	
 		public O apply() {
@@ -633,12 +634,12 @@ public class OpBuilder {
 		}
 
 		public Function<I1, ?> function() {
-			return Functions.match(ops, opName, type(in1), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity1<I1> inplace() {
 			checkInplaceRefs(1, in1);
-			return Inplaces.match(ops, opName, type(in1));
+			return Inplaces.match(env, opName, type(in1));
 		}
 
 		public Object apply() {
@@ -669,7 +670,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity1<I1, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(out));
+			return Computers.match(env, opName, type(in1), type(out));
 		}
 
 		public void compute() {
@@ -700,19 +701,19 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, outType);
 		}
 
 		public Computers.Arity2<I1, I2, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, outType);
 		}
 
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type);
 		}
 
 		public Inplaces.Arity2_2<I1, I2> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type);
 		}
 
 	}
@@ -744,15 +745,15 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type);
 		}
 
 		public Inplaces.Arity2_2<I1, I2> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type);
 		}
 
 	}
@@ -779,11 +780,11 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), outType);
+			return Functions.match(env, opName, type(in1), type(in2), outType);
 		}
 	
 		public Computers.Arity2<I1, I2, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), outType);
+			return Computers.match(env, opName, type(in1), type(in2), outType);
 		}
 	
 		public O apply() {
@@ -823,17 +824,17 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
 			checkInplaceRefs(1, in1, in2);
-			return Inplaces.match1(ops, opName, type(in1), type(in2));
+			return Inplaces.match1(env, opName, type(in1), type(in2));
 		}
 
 		public Inplaces.Arity2_2<I1, I2> inplace2() {
 			checkInplaceRefs(2, in1, in2);
-			return Inplaces.match2(ops, opName, type(in1), type(in2));
+			return Inplaces.match2(env, opName, type(in1), type(in2));
 		}
 
 		public Object apply() {
@@ -871,7 +872,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity2<I1, I2, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(out));
 		}
 
 		public void compute() {
@@ -905,23 +906,23 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, outType);
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, outType);
 		}
 
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type);
 		}
 
 		public Inplaces.Arity3_2<I1, I2, I3> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type);
 		}
 
 		public Inplaces.Arity3_3<I1, I2, I3> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type);
 		}
 
 	}
@@ -956,19 +957,19 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type);
 		}
 
 		public Inplaces.Arity3_2<I1, I2, I3> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type);
 		}
 
 		public Inplaces.Arity3_3<I1, I2, I3> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type);
 		}
 
 	}
@@ -998,11 +999,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), outType);
 		}
 	
 		public Computers.Arity3<I1, I2, I3, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), outType);
 		}
 	
 		public O apply() {
@@ -1045,22 +1046,22 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3));
 		}
 
 		public Inplaces.Arity3_2<I1, I2, I3> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3));
 		}
 
 		public Inplaces.Arity3_3<I1, I2, I3> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3));
 		}
 
 		public Object apply() {
@@ -1105,7 +1106,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(out));
 		}
 
 		public void compute() {
@@ -1142,27 +1143,27 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType);
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType);
 		}
 
 		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 		public Inplaces.Arity4_2<I1, I2, I3, I4> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 		public Inplaces.Arity4_3<I1, I2, I3, I4> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 		public Inplaces.Arity4_4<I1, I2, I3, I4> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 	}
@@ -1200,23 +1201,23 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 		public Inplaces.Arity4_2<I1, I2, I3, I4> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 		public Inplaces.Arity4_3<I1, I2, I3, I4> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 		public Inplaces.Arity4_4<I1, I2, I3, I4> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type);
 		}
 
 	}
@@ -1249,11 +1250,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType);
 		}
 	
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType);
 		}
 	
 		public O apply() {
@@ -1299,27 +1300,27 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4));
 		}
 
 		public Inplaces.Arity4_2<I1, I2, I3, I4> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4));
 		}
 
 		public Inplaces.Arity4_3<I1, I2, I3, I4> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4));
 		}
 
 		public Inplaces.Arity4_4<I1, I2, I3, I4> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4));
 		}
 
 		public Object apply() {
@@ -1371,7 +1372,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(out));
 		}
 
 		public void compute() {
@@ -1411,31 +1412,31 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
 		}
 
 		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_2<I1, I2, I3, I4, I5> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_3<I1, I2, I3, I4, I5> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_4<I1, I2, I3, I4, I5> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_5<I1, I2, I3, I4, I5> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 	}
@@ -1476,27 +1477,27 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_2<I1, I2, I3, I4, I5> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_3<I1, I2, I3, I4, I5> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_4<I1, I2, I3, I4, I5> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 		public Inplaces.Arity5_5<I1, I2, I3, I4, I5> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type);
 		}
 
 	}
@@ -1532,11 +1533,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
 		}
 	
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
 		}
 	
 		public O apply() {
@@ -1585,32 +1586,32 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
 		}
 
 		public Inplaces.Arity5_2<I1, I2, I3, I4, I5> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
 		}
 
 		public Inplaces.Arity5_3<I1, I2, I3, I4, I5> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
 		}
 
 		public Inplaces.Arity5_4<I1, I2, I3, I4, I5> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
 		}
 
 		public Inplaces.Arity5_5<I1, I2, I3, I4, I5> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5));
 		}
 
 		public Object apply() {
@@ -1669,7 +1670,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out));
 		}
 
 		public void compute() {
@@ -1712,35 +1713,35 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
 		}
 
 		public Inplaces.Arity6_1<I1, I2, I3, I4, I5, I6> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_2<I1, I2, I3, I4, I5, I6> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_3<I1, I2, I3, I4, I5, I6> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_4<I1, I2, I3, I4, I5, I6> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_5<I1, I2, I3, I4, I5, I6> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_6<I1, I2, I3, I4, I5, I6> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 	}
@@ -1784,31 +1785,31 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity6_1<I1, I2, I3, I4, I5, I6> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_2<I1, I2, I3, I4, I5, I6> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_3<I1, I2, I3, I4, I5, I6> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_4<I1, I2, I3, I4, I5, I6> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_5<I1, I2, I3, I4, I5, I6> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 		public Inplaces.Arity6_6<I1, I2, I3, I4, I5, I6> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
 		}
 
 	}
@@ -1847,11 +1848,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
 		}
 	
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
 		}
 	
 		public O apply() {
@@ -1903,37 +1904,37 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity6_1<I1, I2, I3, I4, I5, I6> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
 		}
 
 		public Inplaces.Arity6_2<I1, I2, I3, I4, I5, I6> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
 		}
 
 		public Inplaces.Arity6_3<I1, I2, I3, I4, I5, I6> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
 		}
 
 		public Inplaces.Arity6_4<I1, I2, I3, I4, I5, I6> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
 		}
 
 		public Inplaces.Arity6_5<I1, I2, I3, I4, I5, I6> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
 		}
 
 		public Inplaces.Arity6_6<I1, I2, I3, I4, I5, I6> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6));
 		}
 
 		public Object apply() {
@@ -1999,7 +2000,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(out));
 		}
 
 		public void compute() {
@@ -2045,39 +2046,39 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
 		}
 
 		public Inplaces.Arity7_1<I1, I2, I3, I4, I5, I6, I7> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_2<I1, I2, I3, I4, I5, I6, I7> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_3<I1, I2, I3, I4, I5, I6, I7> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_4<I1, I2, I3, I4, I5, I6, I7> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_5<I1, I2, I3, I4, I5, I6, I7> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_6<I1, I2, I3, I4, I5, I6, I7> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, I7> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 	}
@@ -2124,35 +2125,35 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity7_1<I1, I2, I3, I4, I5, I6, I7> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_2<I1, I2, I3, I4, I5, I6, I7> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_3<I1, I2, I3, I4, I5, I6, I7> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_4<I1, I2, I3, I4, I5, I6, I7> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_5<I1, I2, I3, I4, I5, I6, I7> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_6<I1, I2, I3, I4, I5, I6, I7> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 		public Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, I7> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 		}
 
 	}
@@ -2194,11 +2195,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
 		}
 	
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
 		}
 	
 		public O apply() {
@@ -2253,42 +2254,42 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity7_1<I1, I2, I3, I4, I5, I6, I7> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Inplaces.Arity7_2<I1, I2, I3, I4, I5, I6, I7> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Inplaces.Arity7_3<I1, I2, I3, I4, I5, I6, I7> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Inplaces.Arity7_4<I1, I2, I3, I4, I5, I6, I7> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Inplaces.Arity7_5<I1, I2, I3, I4, I5, I6, I7> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Inplaces.Arity7_6<I1, I2, I3, I4, I5, I6, I7> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, I7> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7));
 		}
 
 		public Object apply() {
@@ -2361,7 +2362,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(out));
 		}
 
 		public void compute() {
@@ -2410,43 +2411,43 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
 		}
 
 		public Inplaces.Arity8_1<I1, I2, I3, I4, I5, I6, I7, I8> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_2<I1, I2, I3, I4, I5, I6, I7, I8> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_3<I1, I2, I3, I4, I5, I6, I7, I8> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_4<I1, I2, I3, I4, I5, I6, I7, I8> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_5<I1, I2, I3, I4, I5, I6, I7, I8> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_6<I1, I2, I3, I4, I5, I6, I7, I8> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, I7, I8> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, I8> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 	}
@@ -2496,39 +2497,39 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity8_1<I1, I2, I3, I4, I5, I6, I7, I8> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_2<I1, I2, I3, I4, I5, I6, I7, I8> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_3<I1, I2, I3, I4, I5, I6, I7, I8> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_4<I1, I2, I3, I4, I5, I6, I7, I8> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_5<I1, I2, I3, I4, I5, I6, I7, I8> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_6<I1, I2, I3, I4, I5, I6, I7, I8> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, I7, I8> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 		public Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, I8> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 		}
 
 	}
@@ -2573,11 +2574,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
 		}
 	
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
 		}
 	
 		public O apply() {
@@ -2635,47 +2636,47 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity8_1<I1, I2, I3, I4, I5, I6, I7, I8> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_2<I1, I2, I3, I4, I5, I6, I7, I8> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_3<I1, I2, I3, I4, I5, I6, I7, I8> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_4<I1, I2, I3, I4, I5, I6, I7, I8> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_5<I1, I2, I3, I4, I5, I6, I7, I8> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_6<I1, I2, I3, I4, I5, I6, I7, I8> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, I7, I8> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, I8> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8));
 		}
 
 		public Object apply() {
@@ -2755,7 +2756,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(out));
 		}
 
 		public void compute() {
@@ -2807,47 +2808,47 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
 		}
 
 		public Inplaces.Arity9_1<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_2<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_3<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_4<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_5<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_6<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 	}
@@ -2900,43 +2901,43 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity9_1<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_2<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_3<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_4<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_5<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_6<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 		public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 		}
 
 	}
@@ -2984,11 +2985,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
 		}
 	
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
 		}
 	
 		public O apply() {
@@ -3049,52 +3050,52 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity9_1<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_2<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_3<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_4<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_5<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_6<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9));
 		}
 
 		public Object apply() {
@@ -3181,7 +3182,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(out));
 		}
 
 		public void compute() {
@@ -3236,51 +3237,51 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
 		}
 
 		public Inplaces.Arity10_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 	}
@@ -3336,47 +3337,47 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity10_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 		public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 		}
 
 	}
@@ -3427,11 +3428,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
 		}
 	
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
 		}
 	
 		public O apply() {
@@ -3495,57 +3496,57 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity10_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10));
 		}
 
 		public Object apply() {
@@ -3639,7 +3640,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(out));
 		}
 
 		public void compute() {
@@ -3697,55 +3698,55 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
 		}
 
 		public Inplaces.Arity11_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 	}
@@ -3804,51 +3805,51 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity11_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 		public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 		}
 
 	}
@@ -3902,11 +3903,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
 		}
 	
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
 		}
 	
 		public O apply() {
@@ -3973,62 +3974,62 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity11_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace11() {
 			checkInplaceRefs(11, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-			return Inplaces.match11(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
+			return Inplaces.match11(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11));
 		}
 
 		public Object apply() {
@@ -4129,7 +4130,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(out));
 		}
 
 		public void compute() {
@@ -4190,59 +4191,59 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
 		}
 
 		public Inplaces.Arity12_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 	}
@@ -4304,55 +4305,55 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity12_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 		public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 		}
 
 	}
@@ -4409,11 +4410,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
 		}
 	
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
 		}
 	
 		public O apply() {
@@ -4483,67 +4484,67 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity12_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace11() {
 			checkInplaceRefs(11, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match11(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match11(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace12() {
 			checkInplaceRefs(12, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-			return Inplaces.match12(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
+			return Inplaces.match12(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12));
 		}
 
 		public Object apply() {
@@ -4651,7 +4652,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(out));
 		}
 
 		public void compute() {
@@ -4715,63 +4716,63 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
 		}
 
 		public Inplaces.Arity13_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 	}
@@ -4836,59 +4837,59 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity13_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 		public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 		}
 
 	}
@@ -4948,11 +4949,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
 		}
 	
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
 		}
 	
 		public O apply() {
@@ -5025,72 +5026,72 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity13_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace11() {
 			checkInplaceRefs(11, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match11(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match11(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace12() {
 			checkInplaceRefs(12, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match12(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match12(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace13() {
 			checkInplaceRefs(13, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-			return Inplaces.match13(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
+			return Inplaces.match13(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13));
 		}
 
 		public Object apply() {
@@ -5205,7 +5206,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(out));
 		}
 
 		public void compute() {
@@ -5272,67 +5273,67 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
 		}
 
 		public Inplaces.Arity14_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace14() {
-			return Inplaces.match14(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 	}
@@ -5400,63 +5401,63 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity14_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 		public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace14() {
-			return Inplaces.match14(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+			return Inplaces.match14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 		}
 
 	}
@@ -5519,11 +5520,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
 		}
 	
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
 		}
 	
 		public O apply() {
@@ -5599,77 +5600,77 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity14_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace11() {
 			checkInplaceRefs(11, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match11(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match11(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace12() {
 			checkInplaceRefs(12, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match12(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match12(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace13() {
 			checkInplaceRefs(13, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match13(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match13(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace14() {
 			checkInplaceRefs(14, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-			return Inplaces.match14(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
+			return Inplaces.match14(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14));
 		}
 
 		public Object apply() {
@@ -5791,7 +5792,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(out));
 		}
 
 		public void compute() {
@@ -5861,71 +5862,71 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
 		}
 
 		public Inplaces.Arity15_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace14() {
-			return Inplaces.match14(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace15() {
-			return Inplaces.match15(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match15(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 	}
@@ -5996,67 +5997,67 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity15_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace14() {
-			return Inplaces.match14(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 		public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace15() {
-			return Inplaces.match15(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+			return Inplaces.match15(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 		}
 
 	}
@@ -6122,11 +6123,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
 		}
 	
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
 		}
 	
 		public O apply() {
@@ -6205,82 +6206,82 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity15_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace11() {
 			checkInplaceRefs(11, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match11(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match11(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace12() {
 			checkInplaceRefs(12, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match12(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match12(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace13() {
 			checkInplaceRefs(13, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match13(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match13(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace14() {
 			checkInplaceRefs(14, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match14(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match14(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace15() {
 			checkInplaceRefs(15, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-			return Inplaces.match15(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
+			return Inplaces.match15(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15));
 		}
 
 		public Object apply() {
@@ -6409,7 +6410,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(out));
 		}
 
 		public void compute() {
@@ -6482,75 +6483,75 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
-			return Computers.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
+			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
 		}
 
 		public Inplaces.Arity16_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace14() {
-			return Inplaces.match14(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace15() {
-			return Inplaces.match15(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match15(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace16() {
-			return Inplaces.match16(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match16(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 	}
@@ -6624,71 +6625,71 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
-			return Functions.match(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class));
+			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity16_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace1() {
-			return Inplaces.match1(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match1(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace2() {
-			return Inplaces.match2(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match2(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace3() {
-			return Inplaces.match3(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match3(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace4() {
-			return Inplaces.match4(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match4(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace5() {
-			return Inplaces.match5(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match5(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace6() {
-			return Inplaces.match6(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match6(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace7() {
-			return Inplaces.match7(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match7(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace8() {
-			return Inplaces.match8(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match8(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace9() {
-			return Inplaces.match9(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match9(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace10() {
-			return Inplaces.match10(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match10(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace11() {
-			return Inplaces.match11(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match11(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace12() {
-			return Inplaces.match12(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match12(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace13() {
-			return Inplaces.match13(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match13(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace14() {
-			return Inplaces.match14(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match14(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace15() {
-			return Inplaces.match15(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match15(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 		public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace16() {
-			return Inplaces.match16(ops, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+			return Inplaces.match16(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 		}
 
 	}
@@ -6757,11 +6758,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
 		}
 	
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
 		}
 	
 		public O apply() {
@@ -6843,87 +6844,87 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
-			return Functions.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class));
+			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class));
 		}
 
 		public Inplaces.Arity16_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace1() {
 			checkInplaceRefs(1, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match1(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match1(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_2<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace2() {
 			checkInplaceRefs(2, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match2(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match2(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_3<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace3() {
 			checkInplaceRefs(3, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match3(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match3(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_4<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace4() {
 			checkInplaceRefs(4, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match4(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match4(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_5<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace5() {
 			checkInplaceRefs(5, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match5(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match5(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_6<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace6() {
 			checkInplaceRefs(6, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match6(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match6(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace7() {
 			checkInplaceRefs(7, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match7(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match7(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace8() {
 			checkInplaceRefs(8, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match8(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match8(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace9() {
 			checkInplaceRefs(9, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match9(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match9(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace10() {
 			checkInplaceRefs(10, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match10(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match10(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace11() {
 			checkInplaceRefs(11, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match11(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match11(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace12() {
 			checkInplaceRefs(12, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match12(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match12(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace13() {
 			checkInplaceRefs(13, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match13(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match13(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace14() {
 			checkInplaceRefs(14, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match14(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match14(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace15() {
 			checkInplaceRefs(15, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match15(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match15(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace16() {
 			checkInplaceRefs(16, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-			return Inplaces.match16(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
+			return Inplaces.match16(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16));
 		}
 
 		public Object apply() {
@@ -7059,7 +7060,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
-			return Computers.match(ops, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), type(out));
+			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), type(out));
 		}
 
 		public void compute() {

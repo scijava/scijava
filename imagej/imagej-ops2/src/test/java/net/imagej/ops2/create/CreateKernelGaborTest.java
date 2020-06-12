@@ -60,28 +60,28 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		final double[] period = { 4.0, 1.0 };
 
 		// define functions used in the test
-		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = Functions.match(ops,
+		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = Functions.match(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<C>() {
 				}, new Nil<RandomAccessibleInterval<C>>() {
 				});
 		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma = Functions
-				.match(ops, "create.kernelGabor", new Nil<Double>() {
+				.match(ops.env(), "create.kernelGabor", new Nil<Double>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = Functions.match(ops,
+		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = Functions.match(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = Functions.match(ops,
+		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = Functions.match(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<FloatType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = Functions.match(ops,
+		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = Functions.match(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {

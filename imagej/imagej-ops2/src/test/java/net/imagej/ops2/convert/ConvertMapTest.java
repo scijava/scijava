@@ -73,7 +73,7 @@ public class ConvertMapTest extends AbstractOpTest {
 				outC1.next().getRealDouble(), 0d);
 		}
 		
-		op("convert.float32").input(in).output(out).compute();
+		ops.op("convert.float32").input(in).output(out).compute();
 
 //		ops.run(Ops.Map.class, out, in, new ComplexToFloat32<UnsignedByteType>());
 
@@ -96,7 +96,7 @@ public class ConvertMapTest extends AbstractOpTest {
 		final byte[] outArray = { 4, 123, 18, 64, 90, 120, 12, 17, 73 };
 		final Img<UnsignedByteType> out = generateUnsignedByteImg(outArray);
 
-		op("convert.uint8").input(in).output(out).compute();
+		ops.op("convert.uint8").input(in).output(out).compute();
 //		ops.run(Ops.Map.class, out, in, new ComplexToUint8<FloatType>());
 
 		final Cursor<FloatType> inC = in.cursor();

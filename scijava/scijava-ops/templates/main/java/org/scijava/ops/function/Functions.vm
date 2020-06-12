@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.OpService;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -69,18 +69,18 @@ public final class Functions {
 
 #foreach($arity in [0..$maxArity])
 	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpService ops, final String opName, $matchParams.call($arity))
+	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpEnvironment env, final String opName, $matchParams.call($arity))
 	{
-		return matchHelper(ops, opName, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
+		return matchHelper(env, opName, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
 	}
 
 #end
 
 	@SuppressWarnings({ "unchecked" })
-	public static <O, T> Functions.ArityN<O> matchN(final OpService ops,
+	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
 	{
-		Object op = matchHelper(ops, opName, ALL_FUNCTIONS.get(inTypes.length),
+		Object op = matchHelper(env, opName, ALL_FUNCTIONS.get(inTypes.length),
 			outType, inTypes);
 		if (op instanceof Producer) {
 			return new Arity0AsN<>((Producer<O>) op);
@@ -95,7 +95,7 @@ public final class Functions {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpService ops, final String opName,
+	private static <T> T matchHelper(final OpEnvironment env, final String opName,
 		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
 		final Type[] types = new Type[inTypes.length + 1];
@@ -103,7 +103,7 @@ public final class Functions {
 			types[i] = inTypes[i].getType();
 		types[types.length - 1] = outType.getType();
 		final Type specialType = Types.parameterize(opClass, types);
-		return (T) ops.findOp(opName, Nil.of(specialType), inTypes, outType);
+		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}
 
 #foreach($arity in $arities)

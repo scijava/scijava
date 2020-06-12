@@ -29,8 +29,11 @@
 
 package org.scijava.ops;
 
-import org.scijava.ops.matcher.OpInfo;
+import java.lang.reflect.Type;
+
+import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.types.Nil;
 
 /**
  * An op environment is the top-level entry point into op execution. It provides
@@ -50,15 +53,8 @@ import org.scijava.ops.matcher.OpRef;
  * <li>Configuration of environment "hints" to improve performance in time or
  * space.</li>
  * </ul>
- * <p>
- * The default&mdash;but not necessarily <em>only</em>&mdash;op environment is
- * the {@link OpService} of the application. The environment can be modified by
- * using a {@link CustomOpEnvironment}, or by implementing this interface
- * directly.
- * </p>
  * 
  * @author Curtis Rueden
- * @see OpService
  */
 public interface OpEnvironment {
 
@@ -66,4 +62,51 @@ public interface OpEnvironment {
 	Iterable<OpInfo> infos();
 	
 	Iterable<OpInfo> infos(String name);
+
+	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
+
+	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
+
+	default OpBuilder op(final String opName) {
+		return new OpBuilder(this, opName);
+	}
+
+	/** Discerns the generic type of an object instance. */
+	Type genericType(Object obj);
+
+	/**
+	 * Used to enrich a lambda expression with its generic type. Its usage is
+	 * necessary in order to find Ops that could take this lamdba expression as an
+	 * argument.
+	 * <p>
+	 * Suppose, for example, that a user has written a lambda
+	 * {@code Computers.Arity1<Double, Double> computer}, but a user wishes to
+	 * have a {@code Computers.Arity1<Iterable<Double>, Iterable<Double>>}. They
+	 * know of an Op in the {@code OpEnvironment} that is able to adapt
+	 * {@code computer} so that it is run in a parallel fashion. They cannot
+	 * simply call
+	 * <p>
+	 *
+	 * <pre>
+	 * <code>
+	 * op("adapt").input(computer).outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {}).apply()
+	 * </code>
+	 * </pre>
+	 *
+	 * since the type parameters of {@code computer} are not retained at runtime.
+	 * <p>
+	 * {@code opify} should be used as a method of retaining that fully reified
+	 * lambda type so that it can be used by the {@link OpMatcher}.
+	 * <p>
+	 * Note: {@code opify} <b>does not</b> need to be used with anonymous
+	 * subclasses; these retain their type parameters at runtime. It is only
+	 * lambda expressions that need to be passed to this method.
+	 * 
+	 * @param <T> The type of the op instance to enrich.
+	 * @param op The op instance to enrich.
+	 * @param type The intended generic type of the object to be known at runtime.
+	 * @return An enriched version of the object with full knowledge of its
+	 *         generic type.
+	 */
+	<T> T opify(T op, Type type);
 }

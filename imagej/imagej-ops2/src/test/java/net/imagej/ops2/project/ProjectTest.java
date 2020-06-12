@@ -70,7 +70,7 @@ public class ProjectTest extends AbstractOpTest {
 		out1 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 		out2 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 
-		op = Computers.match(ops, "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
+		op = Computers.match(ops.env(), "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
 				new Nil<UnsignedByteType>() {});
 	}
 
@@ -81,8 +81,8 @@ public class ProjectTest extends AbstractOpTest {
 		// ops.run(DefaultProjectParallel.class, out2, in, op, PROJECTION_DIM);
 		// testEquality(out1, out2);
 
-		op("project").input(in, op, PROJECTION_DIM).output(out1).compute();
-		op("project").input(in, op, PROJECTION_DIM).output(out2).compute();
+		ops.op("project").input(in, op, PROJECTION_DIM).output(out1).compute();
+		ops.op("project").input(in, op, PROJECTION_DIM).output(out2).compute();
 		testEquality(out1, out2);
 	}
 

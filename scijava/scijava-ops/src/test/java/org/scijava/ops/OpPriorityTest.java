@@ -62,7 +62,7 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 	@Test
 	public void testOpPriority() {
 
-		Producer<Number> testFunc = ops.findOp("test.priority", new Nil<Producer<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
+		Producer<Number> testFunc = ops.env().op("test.priority", new Nil<Producer<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
 		Number x = testFunc.create();
 		assertTrue(x instanceof Double);
 	}

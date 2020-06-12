@@ -78,13 +78,13 @@ public class IntegralImgTest extends AbstractOpTest {
 	public void testIntegralImageSimilarity() {
 		// should match DefaultIntegralImg
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = Computers
-				.match(ops, "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
+				.match(ops.env(), "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
 		defaultOp.compute(in, out1);
 
 		// should match WrappedIntegralImg
-		out2 = op("image.integral").input(
+		out2 = ops.op("image.integral").input(
 				in).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		// Remove 0s from integralImg by shifting its interval by +1

@@ -4,6 +4,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

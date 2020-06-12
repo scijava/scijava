@@ -56,7 +56,7 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 	public void testFunction${arity}ToIterables() {
 		List<Double> in = Arrays.asList(1., 2., 3.);
 		List<Double> expected = $inplaceExpectedList.call($arity)
-		Iterable<Double> output = new OpBuilder(ops, "test.addDoubles") //
+		Iterable<Double> output = ops.op("test.addDoubles") //
 			.input($inputList.call($arity)) //
 			.outType(new Nil<Iterable<Double>>()
 			{}).apply();

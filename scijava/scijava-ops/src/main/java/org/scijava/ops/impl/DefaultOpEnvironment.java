@@ -135,6 +135,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return typeService.reify(obj);
 	}
 
+	@Override
+	public <T> T opify(final T op, Type reifiedType) {
+		if (wrappers == null) initWrappers();
+		@SuppressWarnings("unchecked")
+		final OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedType));
+		return wrapper.wrap(op, reifiedType);
+	}
+
 	@SuppressWarnings("unchecked")
 	private <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType) {
@@ -335,7 +343,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			// get the wrapper and wrap up the Op
 			if (!Types.isAssignable(Types.raw(type), suitableWrappers[0]))
 				throw new IllegalArgumentException(Types.raw(type) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
-			return wrap(op, type);
+			return opify(op, type);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;
@@ -397,14 +405,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			throw new OpMatchingException(error);
 		}
 		return new OpRef(name, new Type[] { type }, mappedOutputs[0], mappedInputs);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> T wrap(Object op, Type reifiedType) {
-		if (wrappers == null)
-			initWrappers();
-		OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedType));
-		return wrapper.wrap((T) op, reifiedType);
 	}
 
 	private void initOpCache() {

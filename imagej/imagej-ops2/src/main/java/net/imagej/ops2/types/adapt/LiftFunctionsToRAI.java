@@ -7,10 +7,12 @@ import java.util.function.Function;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.Type;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
+import org.scijava.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Functions;
@@ -37,9 +39,9 @@ import org.scijava.plugin.Plugin;
  * @param <O> - the {@code Type} of the output of the {@link Function}
  */
 @Plugin(type = OpCollection.class)
-public class LiftFunctionsToRAI<I1, I2, O extends Type<O>> {
+public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 
-	@OpField(names = "adapt")
+	@OpField(names = "adapt", priority = Priority.HIGH)
 	@Parameter(key = "from")
 	@Parameter(key = "to")
 	public final Function<Function<I1, O>, Function<RandomAccessibleInterval<I1>, RandomAccessibleInterval<O>>> lift1 =
@@ -48,11 +50,8 @@ public class LiftFunctionsToRAI<I1, I2, O extends Type<O>> {
 				O outType = function.apply(Util.getTypeFromInterval(raiInput));
 				Img<O> outImg = Util.getSuitableImgFactory(raiInput, outType).create(
 					raiInput);
-				Cursor<I1> inCursor = Views.flatIterable(raiInput).cursor();
-				Cursor<O> outCursor = Views.flatIterable(outImg).cursor();
-				while (inCursor.hasNext()) {
-					outCursor.next().set(function.apply(inCursor.next()));
-				}
+				LoopBuilder.setImages(raiInput, outImg).multiThreaded().forEachPixel((
+					in, out) -> out.set(function.apply(in)));
 				return outImg;
 			};
 		};
@@ -67,13 +66,62 @@ public class LiftFunctionsToRAI<I1, I2, O extends Type<O>> {
 					.getTypeFromInterval(raiInput2));
 				Img<O> outImg = Util.getSuitableImgFactory(raiInput1, outType).create(
 					raiInput1);
-				Cursor<I1> inCursor1 = Views.flatIterable(raiInput1).cursor();
-				Cursor<I2> inCursor2 = Views.flatIterable(raiInput2).cursor();
-				Cursor<O> outCursor = Views.flatIterable(outImg).cursor();
-				while (inCursor1.hasNext() && inCursor2.hasNext()) {
-					outCursor.next().set(function.apply(inCursor1.next(), inCursor2
-						.next()));
-				}
+				LoopBuilder.setImages(raiInput1, raiInput2, outImg).multiThreaded()
+					.forEachPixel((in1, in2, out) -> out.set(function.apply(in1, in2)));
+				return outImg;
+			};
+		};
+
+	@OpField(names = "adapt")
+	@Parameter(key = "from")
+	@Parameter(key = "to")
+	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<O>>> lift3 =
+		(function) -> {
+			return (raiInput1, raiInput2, raiInput3) -> {
+				O outType = function.apply(Util.getTypeFromInterval(raiInput1), Util
+					.getTypeFromInterval(raiInput2), Util.getTypeFromInterval(raiInput3));
+				Img<O> outImg = Util.getSuitableImgFactory(raiInput1, outType).create(
+					raiInput1);
+				LoopBuilder.setImages(raiInput1, raiInput2, raiInput3, outImg)
+					.multiThreaded().forEachPixel((in1, in2, in3, out) -> out.set(function
+						.apply(in1, in2, in3)));
+				return outImg;
+			};
+		};
+
+		@OpField(names = "adapt")
+		@Parameter(key = "from")
+		@Parameter(key = "to")
+		public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<O>>> lift4 =
+			(function) -> {
+				return (raiInput1, raiInput2, raiInput3, raiInput4) -> {
+					O outType = function.apply(Util.getTypeFromInterval(raiInput1), Util
+						.getTypeFromInterval(raiInput2), Util.getTypeFromInterval(
+							raiInput3), Util.getTypeFromInterval(raiInput4));
+					Img<O> outImg = Util.getSuitableImgFactory(raiInput1, outType).create(
+						raiInput1);
+					LoopBuilder.setImages(raiInput1, raiInput2, raiInput3, raiInput4,
+						outImg).multiThreaded().forEachPixel((in1, in2, in3, in4,
+							out) -> out.set(function.apply(in1, in2, in3, in4)));
+					return outImg;
+				};
+			};
+
+		@OpField(names = "adapt")
+	@Parameter(key = "from")
+	@Parameter(key = "to")
+	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<I5>, RandomAccessibleInterval<O>>> lift5 =
+		(function) -> {
+			return (raiInput1, raiInput2, raiInput3, raiInput4, raiInput5) -> {
+				O outType = function.apply(Util.getTypeFromInterval(raiInput1), Util
+					.getTypeFromInterval(raiInput2), Util.getTypeFromInterval(raiInput3),
+					Util.getTypeFromInterval(raiInput4), Util.getTypeFromInterval(
+						raiInput5));
+				Img<O> outImg = Util.getSuitableImgFactory(raiInput1, outType).create(
+					raiInput1);
+				LoopBuilder.setImages(raiInput1, raiInput2, raiInput3, raiInput4,
+					raiInput5, outImg).multiThreaded().forEachPixel((in1, in2, in3, in4,
+						in5, out) -> out.set(function.apply(in1, in2, in3, in4, in5)));
 				return outImg;
 			};
 		};

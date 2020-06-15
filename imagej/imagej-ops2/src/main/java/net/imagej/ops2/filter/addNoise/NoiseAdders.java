@@ -32,7 +32,8 @@ package net.imagej.ops2.filter.addNoise;
 import java.util.Random;
 
 import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpField;
@@ -74,7 +75,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * be the same.
 	 */
 	@OpField(names = "filter.addNoise", params = "input, rangeMin, rangeMax, rangeStdDev, seed, output")
-	public final Computers.Arity5<IterableInterval<I>, Double, Double, Double, Long, IterableInterval<O>> addNoiseInterval = (
+	public final Computers.Arity5<RandomAccessibleInterval<I>, Double, Double, Double, Long, RandomAccessibleInterval<O>> addNoiseInterval = (
 			input, rangeMin, rangeMax, rangeStdDev, seed, output) -> {
 		addNoise(input, output, rangeMin, rangeMax, rangeStdDev, new Random(seed));
 	};
@@ -84,22 +85,22 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * taken from past implementation).
 	 */
 	@OpField(names = "filter.addNoise", params = "input, rangeMin, rangeMax, rangeStdDev, output")
-	public final Computers.Arity4<IterableInterval<I>, Double, Double, Double, IterableInterval<O>> addNoiseIntervalSeedless = (
+	public final Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Double, RandomAccessibleInterval<O>> addNoiseIntervalSeedless = (
 			input, rangeMin, rangeMax, rangeStdDev,
 			output) -> addNoiseInterval.compute(input, rangeMin, rangeMax, rangeStdDev, 0xabcdef1234567890L, output);
 
 	// -- Static utility methods --
 
 	// Runs the below method on every element of the input iterables.
-	public static <I extends RealType<I>, O extends RealType<O>> void addNoise(final IterableInterval<I> input,
-			final IterableInterval<O> output, final double rangeMin, final double rangeMax, final double rangeStdDev,
-			final Random rng) {
-		final Cursor<I> inCursor = input.cursor();
-		final Cursor<O> outCursor = output.cursor();
-		while (inCursor.hasNext()) {
-			addNoise(inCursor.next(), outCursor.next(), rangeMin, rangeMax, rangeStdDev, rng);
-		}
-
+	public static <I extends RealType<I>, O extends RealType<O>> void addNoise(
+		final RandomAccessibleInterval<I> input,
+		final RandomAccessibleInterval<O> output, final double rangeMin,
+		final double rangeMax, final double rangeStdDev, final Random rng)
+	{
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
+			out) -> {
+			addNoise(in, out, rangeMin, rangeMax, rangeStdDev, rng);
+		});
 	}
 
 	// Copied from the previous implementation of addNoise
@@ -146,7 +147,7 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 *         same.
 	 */
 	@OpField(names = "filter.addPoissonNoise", params = "input, seed, output")
-	public final Computers.Arity2<IterableInterval<I>, Long, IterableInterval<O>> addPoissonNoiseInterval = (input, seed,
+	public final Computers.Arity2<RandomAccessibleInterval<I>, Long, RandomAccessibleInterval<O>> addPoissonNoiseInterval = (input, seed,
 			output) -> addPoissonNoise(input, new Random(seed), output);
 
 	/**
@@ -154,19 +155,20 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * taken from past implementation).
 	 */
 	@OpField(names = "filter.addPoissonNoise", params = "input, output")
-	public final Computers.Arity1<IterableInterval<I>, IterableInterval<O>> addPoissonNoiseIntervalSeedless = (input,
+	public final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> addPoissonNoiseIntervalSeedless = (input,
 			output) -> addPoissonNoise(input, new Random(0xabcdef1234567890L), output);
 
 	// -- Static utility methods --
 
 	// Runs the below method on every element of the input iterables.
-	public static <I extends RealType<I>, O extends RealType<O>> void addPoissonNoise(final IterableInterval<I> input,
-			final Random rng, final IterableInterval<O> output) {
-		final Cursor<I> inCursor = input.cursor();
-		final Cursor<O> outCursor = output.cursor();
-		while (inCursor.hasNext()) {
-			addPoissonNoise(inCursor.next(), rng, outCursor.next());
-		}
+	public static <I extends RealType<I>, O extends RealType<O>> void
+		addPoissonNoise(final RandomAccessibleInterval<I> input, final Random rng,
+			final RandomAccessibleInterval<O> output)
+	{
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in,
+			out) -> {
+			addPoissonNoise(in, rng, out);
+		});
 	}
 
 	// Copied from the previous implementation of addNoise

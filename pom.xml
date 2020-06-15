@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>29.0.0-beta-2</version>
+		<version>29.0.0-beta-3</version>
 		<relativePath />
 	</parent>
 
@@ -72,6 +72,8 @@
 
 		<scijava.jvm.version>11</scijava.jvm.version>
 		<scijava.jvm.build.version>[11,11.9999]</scijava.jvm.build.version>
+		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
+		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
 
 		<!-- NB: Javadoc has issues with JPMS... for now we skip it. -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>

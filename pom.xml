@@ -77,6 +77,7 @@
 
 		<!-- NB: Javadoc has issues with JPMS... for now we skip it. -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<javadoc.skip>true</javadoc.skip>
 		<doclint>none</doclint>
 
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->

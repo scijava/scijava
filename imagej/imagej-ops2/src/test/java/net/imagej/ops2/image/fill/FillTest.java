@@ -31,12 +31,15 @@ package net.imagej.ops2.image.fill;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.imagej.ops2.AbstractOpTest;
-import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.type.numeric.integer.ByteType;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,19 +49,28 @@ import org.junit.jupiter.api.Test;
  */
 public class FillTest extends AbstractOpTest {
 
-	private Img<ByteType> out;
-
-	@BeforeEach
-	public void setUpMethod() {
-		super.setUp();
-		out = ArrayImgs.bytes(10, 10);
-	}
+	private ArrayImg<ByteType, ByteArray> out;
 
 	@Test
-	public void testDefaultFill() {
+	public void testFillRAI() {
+		out = ArrayImgs.bytes(10, 10);
 		ops.op("image.fill").input(new ByteType((byte) 10)).output(out).compute();
 
 		for (ByteType px : out)
 			assertEquals(px.get(), 10);
+	}
+
+	@Test
+	public void testDefaultFill() {
+		List<ByteType> list = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			list.add(new ByteType((byte) 5));
+		}
+
+		ops.op("image.fill").input(new ByteType((byte) 20)).output(list).compute();
+
+		for (ByteType px : list)
+			assertEquals(px.get(), 20);
+
 	}
 }

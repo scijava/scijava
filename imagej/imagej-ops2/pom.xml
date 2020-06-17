@@ -219,20 +219,8 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>union-metadata-indices</id>
-						<phase>process-test-classes</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>${basedir}/unionPluginInfo.sh</executable>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

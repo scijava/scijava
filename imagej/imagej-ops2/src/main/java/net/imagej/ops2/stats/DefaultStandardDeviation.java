@@ -29,8 +29,10 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
@@ -42,25 +44,28 @@ import org.scijava.struct.ItemIO;
  * {@link Op} to calculate the {@code stats.stdDev} using
  * {@code stats.variance}.
  * 
- * @author Daniel Seebacher (University of Konstanz)
- * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
+ * @author Gabriel Selzer
+ * @param <I> input type
+ * @param <O> output type
  */
-@Plugin(type = Op.class, name = "stats.stdDev")
-@Parameter(key = "iteableInput")
+@Plugin(type = Op.class, name = "stats.stdDev", priority = Priority.HIGH)
+@Parameter(key = "raiInput")
 @Parameter(key = "stdDev", itemIO = ItemIO.BOTH)
 public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity1<Iterable<I>, O> {
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
+{
 
 	@OpDependency(name = "stats.variance")
-	private Computers.Arity1<Iterable<I>, O> varianceComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> varianceComputer;
+
+	@OpDependency(name = "math.sqrt")
+	private Computers.Arity1<O, O> sqrtComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		varianceComputer.compute(input, output);
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+		O variance = output.createVariable();
+		varianceComputer.compute(input, variance);
+		sqrtComputer.compute(variance, output);
 	}
 
 }

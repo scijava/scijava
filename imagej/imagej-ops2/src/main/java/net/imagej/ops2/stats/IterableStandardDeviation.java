@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.stdDev", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "stats.stdDev")
 @Parameter(key = "iterableInput")
 @Parameter(key = "stdDev", itemIO = ItemIO.BOTH)
 public class IterableStandardDeviation<I extends RealType<I>, O extends RealType<O>>

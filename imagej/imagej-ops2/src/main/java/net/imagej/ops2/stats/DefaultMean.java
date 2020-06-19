@@ -29,6 +29,7 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
@@ -49,21 +50,22 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.mean",
-	priority = Priority.LOW)
-@Parameter(key = "iterableInput")
+	priority = Priority.HIGH)
+@Parameter(key = "rai")
 @Parameter(key = "mean", itemIO = ItemIO.BOTH)
 public class DefaultMean<I extends RealType<I>, O extends RealType<O>> 
-	implements Computers.Arity1<Iterable<I>, O>
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 	
 	@OpDependency(name = "stats.sum")
-	private Computers.Arity1<Iterable<I>, O> sumComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> sumComputer;
 	
 	@OpDependency(name = "stats.size")
-	private Computers.Arity1<Iterable<I>, O> areaComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> areaComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+
 		sumComputer.compute(input, output);
 		final O size = output.createVariable();
 		areaComputer.compute(input, size);

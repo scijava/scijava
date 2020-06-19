@@ -29,15 +29,8 @@
 
 package net.imagej.ops2.stats;
 
-import java.util.function.BiFunction;
-
-import net.imglib2.Dimensions;
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
-import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
@@ -47,34 +40,27 @@ import org.scijava.struct.ItemIO;
 /**
  * {@link Op} to calculate the {@code stats.sumOfInverses}.
  * 
- * @author Gabriel Selzer
+ * @author Daniel Seebacher (University of Konstanz)
+ * @author Christian Dietz (University of Konstanz)
  * @param <I>
  *            input type
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.sumOfInverses", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
+@Plugin(type = Op.class, name = "stats.sumOfInverses")
+@Parameter(key = "iterableInput")
 @Parameter(key = "sumOfInverses", itemIO = ItemIO.BOTH)
-public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
-	
-	@OpDependency(name = "create.img")
-	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> imgCreator;
-	
-	//TODO: Can we lift this? Would require making a RAI of Doubles.
-	@OpDependency(name = "math.reciprocal")
-	private Computers.Arity2<I, Double, O> reciprocalOp;
-	
-	@OpDependency(name = "stats.sum")
-	private Computers.Arity1<RandomAccessibleInterval<O>, O> sumOp;
+public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
-		//TODO: Can we lift this? Would require making a RAI of Doubles.
-		LoopBuilder.setImages(input, tmpImg).multiThreaded().forEachPixel((inPixel, outPixel) -> {
-			reciprocalOp.compute(inPixel, Double.POSITIVE_INFINITY, outPixel);
-		});
-		sumOp.compute(tmpImg, output);
+	public void compute(final Iterable<I> input, final O output) {
+		double res = 0.0;
+		for (final I in : input) {
+			double inVal = in.getRealDouble();
+			if (inVal == 0d) res += Double.POSITIVE_INFINITY;
+			if (inVal == -0d) res += Double.NEGATIVE_INFINITY;
+			res += 1.0d / in.getRealDouble();
+		}
+		output.setReal(res);
 	}
 }

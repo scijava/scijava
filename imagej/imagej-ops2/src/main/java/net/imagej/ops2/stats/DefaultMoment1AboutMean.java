@@ -29,6 +29,8 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -39,11 +41,14 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * {@link Op} to calculate the {@code stats.moment1AboutMean} using
- * {@code stats.mean} and {@code stats.size}.
+ * {@link Op} to calculate the {@code stats.moment1AboutMean}
+ * <p>
+ * Note that by definition &Sigma;(x<sub>i</sub>-&mu;)=0, thus the output of the
+ * Op <b>must</b> be 0.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I> input type
  * @param <O> output type
  */
@@ -51,28 +56,10 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "moment1AboutMean", itemIO = ItemIO.BOTH)
 public class DefaultMoment1AboutMean<I extends RealType<I>, O extends RealType<O>>
-	implements Computers.Arity1<Iterable<I>, O>
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
-
-	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<I>, O> meanComputer;
-	@OpDependency(name = "stats.size")
-	private Computers.Arity1<Iterable<I>, O> sizeComputer;
-
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		final O mean = output.createVariable();
-		meanComputer.compute(input, mean);
-		final O size = output.createVariable();
-		sizeComputer.compute(input, size);
-
-		double res = 0;
-		double m = mean.getRealDouble();
-		for (final I in : input) {
-			final double val = in.getRealDouble() - m;
-			res += val;
-		}
-
-		output.setReal(res / size.getRealDouble());
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+		output.setZero();
 	}
 }

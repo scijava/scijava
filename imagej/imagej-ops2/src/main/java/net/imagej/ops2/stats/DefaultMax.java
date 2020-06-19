@@ -29,9 +29,14 @@
 
 package net.imagej.ops2.stats;
 
+import java.util.function.Function;
+
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Pair;
 
 import org.scijava.Priority;
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
@@ -39,25 +44,21 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * {@link Op} to calculate the {@code stats.max}.
+ * {@link Op} to calculate the {@code stats.max}. Leans on other Ops.
  * 
- * @author Daniel Seebacher (University of Konstanz)
- * @author Christian Dietz (University of Konstanz)
- * @author Stefan Helfrich (University of Konstanz)
- * @param <T>
- *            input type
+ * @author Gabriel Selzer
+ * @param <T> input type
  */
-@Plugin(type = Op.class, name = "stats.max")
+@Plugin(type = Op.class, name = "stats.max", priority = Priority.HIGH)
 @Parameter(key = "iterableInput")
 @Parameter(key = "max", itemIO = ItemIO.BOTH)
-public class IterableMax<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
+public class DefaultMax<T extends RealType<T>> implements Computers.Arity1<RandomAccessibleInterval<T>, T> {
+	
+	@OpDependency(name = "stats.minMax")
+	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minMaxOp;
 
 	@Override
-	public void compute(final Iterable<T> input, final T output) {
-		// Re-use output to compare against
-		output.setReal(output.getMinValue());
-		for (final T in : input)
-			if (output.compareTo(in) < 0)
-				output.set(in);
+	public void compute(final RandomAccessibleInterval<T> input, final T output) {
+		output.set(minMaxOp.apply(input).getB());
 	}
 }

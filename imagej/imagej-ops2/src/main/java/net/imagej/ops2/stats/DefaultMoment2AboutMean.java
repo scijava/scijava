@@ -29,7 +29,12 @@
 
 package net.imagej.ops2.stats;
 
+import java.util.List;
+
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
@@ -51,28 +56,37 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "moment2AboutMean", itemIO = ItemIO.BOTH)
 public class DefaultMoment2AboutMean<I extends RealType<I>, O extends RealType<O>>
-implements Computers.Arity1<Iterable<I>, O>
+implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 	
 	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<I>, O> meanComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanComputer;
 	@OpDependency(name = "stats.size")
-	private Computers.Arity1<Iterable<I>, O> sizeComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> sizeComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		final O mean = output.createVariable();
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+		final DoubleType mean = new DoubleType();
 		meanComputer.compute(input, mean);
-		final O size = output.createVariable();
+		final DoubleType size = new DoubleType();
 		sizeComputer.compute(input, size);
+		
+		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
+			DoubleType chunkSum = new DoubleType(0);
+			DoubleType difference = new DoubleType();
+			chunk.forEachPixel(pixel -> {
+				difference.set(pixel.getRealDouble());
+				difference.sub(mean);
+				difference.mul(difference);
+				chunkSum.add(difference);
+			});
+			return chunkSum;
+		});
+		
+		DoubleType sum = new DoubleType(0);
+		for(DoubleType chunkSum : chunkSums) sum.add(chunkSum);
+		sum.div(size);
 
-		double res = 0;
-		final double m = mean.getRealDouble();
-		for (final I in : input) {
-			final double val = in.getRealDouble() - m;
-			res += val * val;
-		}
-
-		output.setReal(res / size.getRealDouble());
+		output.setReal(sum.getRealDouble());
 	}
 }

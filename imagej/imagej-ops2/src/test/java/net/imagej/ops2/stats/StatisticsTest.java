@@ -242,6 +242,7 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testQuantile() {
 		final DoubleType quantile = new DoubleType();
+		UnsignedByteType test = new UnsignedByteType();
 		ops.op("stats.quantile").input(randomlyFilledImg, 0.5d).output(quantile).compute();
 		Assertions.assertEquals(128d, quantile.getRealDouble(), 0.00001d, "0.5-th Quantile");
 	}
@@ -256,8 +257,8 @@ public class StatisticsTest extends AbstractOpTest {
 	@Test
 	public void testSumOfInverses() {
 		final DoubleType sumOfInverses = new DoubleType();
-		ops.op("stats.sumOfInverses").input(randomlyFilledImg).output(sumOfInverses).compute();
-		Assertions.assertEquals(Double.POSITIVE_INFINITY, sumOfInverses.getRealDouble(), 0.00001d, "Sum Of Inverses");
+		ops.op("stats.sumOfInverses").input(randomlyFilledImg, new DoubleType(0)).output(sumOfInverses).compute();
+		Assertions.assertEquals(236.60641289378648, sumOfInverses.getRealDouble(), 0.00001d, "Sum Of Inverses");
 	}
 
 	@Test

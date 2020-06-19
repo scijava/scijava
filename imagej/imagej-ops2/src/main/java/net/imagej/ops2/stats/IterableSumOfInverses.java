@@ -42,6 +42,7 @@ import org.scijava.struct.ItemIO;
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I>
  *            input type
  * @param <O>
@@ -50,16 +51,21 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.sumOfInverses")
 @Parameter(key = "iterableInput")
 @Parameter(key = "sumOfInverses", itemIO = ItemIO.BOTH)
-public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
+public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<Iterable<I>, O, O> {
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final Iterable<I> input, final O dbzValue,
+		final O output)
+	{
 		double res = 0.0;
 		for (final I in : input) {
 			double inVal = in.getRealDouble();
-			if (inVal == 0d) res += Double.POSITIVE_INFINITY;
-			if (inVal == -0d) res += Double.NEGATIVE_INFINITY;
-			res += 1.0d / in.getRealDouble();
+			if (inVal == 0d) {
+				res += dbzValue.getRealDouble();
+			}
+			else {
+				res += 1.0d / in.getRealDouble();
+			}
 		}
 		output.setReal(res);
 	}

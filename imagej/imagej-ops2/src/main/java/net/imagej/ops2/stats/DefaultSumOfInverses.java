@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.sumOfInverses", priority = Priority.HIGH)
 @Parameter(key = "raiInput")
 @Parameter(key = "sumOfInverses", itemIO = ItemIO.BOTH)
-public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, O, O> {
 	
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> imgCreator;
@@ -69,11 +69,11 @@ public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> 
 	private Computers.Arity1<RandomAccessibleInterval<O>, O> sumOp;
 
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O dbzValue, final O output) {
 		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
 		//TODO: Can we lift this? Would require making a RAI of Doubles.
 		LoopBuilder.setImages(input, tmpImg).multiThreaded().forEachPixel((inPixel, outPixel) -> {
-			reciprocalOp.compute(inPixel, Double.POSITIVE_INFINITY, outPixel);
+			reciprocalOp.compute(inPixel, dbzValue.getRealDouble(), outPixel);
 		});
 		sumOp.compute(tmpImg, output);
 	}

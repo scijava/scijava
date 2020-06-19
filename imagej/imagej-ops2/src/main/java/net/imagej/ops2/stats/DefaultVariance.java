@@ -29,8 +29,16 @@
 
 package net.imagej.ops2.stats;
 
-import net.imglib2.type.numeric.RealType;
+import java.util.List;
 
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.integer.LongType;
+import net.imglib2.type.numeric.real.DoubleType;
+import net.imglib2.util.Util;
+
+import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
@@ -52,29 +60,39 @@ import org.scijava.struct.ItemIO;
  *      "https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm">
  *      Wikipedia </a>
  */
-@Plugin(type = Op.class, name = "stats.variance")
-@Parameter(key = "iterableInput")
+@Plugin(type = Op.class, name = "stats.variance", priority = Priority.HIGH)
+@Parameter(key = "raiInput")
 @Parameter(key = "variance", itemIO = ItemIO.BOTH)
-public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
+public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<I>, O> meanOp;
+	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanOp;
+
+	@OpDependency(name = "stats.size")
+	private Computers.Arity1<RandomAccessibleInterval<I>, LongType> sizeOp;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 
-		final O mean = output.createVariable();
+		final DoubleType mean = new DoubleType();
 		meanOp.compute(input, mean);
+		final LongType size = new LongType(0);
+		sizeOp.compute(input, size);
 
-		int n = 0;
-		double sum = 0d;
+		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
+			DoubleType chunkSum = new DoubleType(0);
+			DoubleType temp = new DoubleType();
+			chunk.forEachPixel(pixel -> {
+				double x = pixel.getRealDouble();
+				temp.set((x - mean.getRealDouble()) * (x - mean.getRealDouble()));
+				chunkSum.add(temp);
+			});
+			return chunkSum;
+		});
 
-		for (I in : input) {
-			n++;
-			double x = in.getRealDouble();
-			sum += (x - mean.getRealDouble()) * (x - mean.getRealDouble());
-		}
+		double sum = chunkSums.parallelStream().mapToDouble(chunkSum -> chunkSum
+			.get()).sum();
 
-		output.setReal(sum / (n - 1));
+		output.setReal(sum / (size.get() - 1));
 	}
 }

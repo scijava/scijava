@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  *      "https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Online_algorithm">
  *      Wikipedia</a>
  */
-@Plugin(type = Op.class, name = "stats.variance", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "stats.variance")
 @Parameter(key = "iterableInput")
 @Parameter(key = "variance", itemIO = ItemIO.BOTH)
 public class IterableVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {

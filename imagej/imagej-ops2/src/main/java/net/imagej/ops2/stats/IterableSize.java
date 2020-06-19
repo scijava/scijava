@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.stats;
 
-import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
@@ -40,23 +39,28 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * {@link Op} to calculate the {@code stats.size} directly.
+ * {@link Op} to calculate the {@code stats.size}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * @param <I>
- *            input type
- * @param <O>
- *            output type
+ * @param <I> input type
+ * @param <O> output type
  */
-@Plugin(type = Op.class, name = "stats.size", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "stats.size", priority = Priority.LOW)
 @Parameter(key = "iterableInput")
 @Parameter(key = "size", itemIO = ItemIO.BOTH)
-public class IISize<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<IterableInterval<I>, O> {
+public class IterableSize<I extends RealType<I>, O extends RealType<O>> 
+	implements Computers.Arity1<Iterable<I>, O>
+{
 
 	@Override
-	public void compute(final IterableInterval<I> input, final O output) {
-		output.setReal(input.size());
-	}
+	public void compute(final Iterable<I> input, final O output) {
+		double size = 0;
 
+		for (@SuppressWarnings("unused") final I i : input) {
+			size++;
+		}
+		
+		output.setReal(size);
+	}
 }

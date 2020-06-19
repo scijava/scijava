@@ -29,6 +29,7 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.Interval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
@@ -38,28 +39,23 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * {@link Op} to calculate the {@code stats.size}.
+ * {@link Op} to calculate the {@code stats.size} of an {@link Interval}.
  * 
- * @author Daniel Seebacher (University of Konstanz)
- * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I> input type
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.size")
-@Parameter(key = "iterableInput")
+@Parameter(key = "interval")
 @Parameter(key = "size", itemIO = ItemIO.BOTH)
 public class DefaultSize<I extends RealType<I>, O extends RealType<O>> 
-	implements Computers.Arity1<Iterable<I>, O>
+	implements Computers.Arity1<Interval, O>
 {
-
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		double size = 0;
-
-		for (@SuppressWarnings("unused") final I i : input) {
-			size++;
+	public void compute(final Interval input, final O output) {
+		output.setOne();
+		for(int i = 0; i < input.numDimensions(); i++) {
+			output.mul(input.dimension(i));
 		}
-
-		output.setReal(size);
 	}
 }

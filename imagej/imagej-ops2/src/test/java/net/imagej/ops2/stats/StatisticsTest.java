@@ -171,7 +171,7 @@ public class StatisticsTest extends AbstractOpTest {
 
 	@Test
 	public void testSum() {
-		final DoubleType sum = new DoubleType();
+		final FloatType sum = new FloatType();
 		ops.op("stats.sum").input(randomlyFilledImg).output(sum).compute();
 		Assertions.assertEquals(1277534.0, sum.getRealDouble(), 0.00001d, "Sum");
 	}

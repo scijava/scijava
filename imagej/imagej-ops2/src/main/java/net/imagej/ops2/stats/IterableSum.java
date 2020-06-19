@@ -29,13 +29,8 @@
 
 package net.imagej.ops2.stats;
 
-import java.util.List;
-
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
@@ -44,31 +39,26 @@ import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.sum}.
- * 
- * @author Gabriel Selzer
+ *
+ * @author Daniel Seebacher (University of Konstanz)
+ * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
  */
-@Plugin(type = Op.class, name = "stats.sum", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
+@Plugin(type = Op.class, name = "stats.sum")
+@Parameter(key = "iterableInput")
 @Parameter(key = "sum", itemIO = ItemIO.BOTH)
-public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
-	Computers.Arity1<RandomAccessibleInterval<I>, O>
+public class IterableSum<I extends RealType<I>, O extends RealType<O>>
+	implements Computers.Arity1<Iterable<I>, O>
 {
 
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		output.setZero();
-		List<O> chunkSums = LoopBuilder.setImages(input).multiThreaded()
-			.forEachChunk(chunk -> {
-				O chunkSum = output.createVariable();
-				chunkSum.setZero();
-				chunk.forEachPixel(pixel -> chunkSum.setReal(chunkSum.getRealDouble() +
-					pixel.getRealDouble()));
-				return chunkSum;
-			});
+	public void compute(final Iterable<I> input, final O output) {
+		double sum = 0;
+		for (final I in : input) {
+			sum += in.getRealDouble();
+		}
 
-		for (O chunkSum : chunkSums)
-			output.add(chunkSum);
+		output.setReal(sum);
 	}
 }

@@ -78,7 +78,7 @@ public class WatershedBinarySingleSigmaTest extends AbstractOpTest {
 		ops.op("image.distanceTransform").input(thresholdedImg, es).output(distMap).compute();
 		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op("create.img").input(distMap, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
-		ops.op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(invertedDistMap)).compute();
+		ops.op("image.invert").input(distMap).output(invertedDistMap).compute();
 
 		Double sigma = 3.0;
 		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img").input(invertedDistMap, new FloatType())

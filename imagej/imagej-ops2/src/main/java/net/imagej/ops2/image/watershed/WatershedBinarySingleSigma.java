@@ -108,7 +108,7 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, FloatType, RandomAccessibleInterval<FloatType>> imgCreator;
 	@OpDependency(name = "image.invert")
-	private Computers.Arity1<IterableInterval<FloatType>, IterableInterval<FloatType>> imgInverter;
+	private Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>> imgInverter;
 	@OpDependency(name = "filter.gauss")
 	private Computers.Arity3<RandomAccessibleInterval<FloatType>, ExecutorService, Double, RandomAccessibleInterval<FloatType>> gaussOp;
 	@OpDependency(name = "image.watershed")
@@ -133,7 +133,7 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 		final RandomAccessibleInterval<FloatType> distMap = imgCreator.apply(in, new FloatType());
 		distanceTransformer.compute(in, es, distMap);
 		final RandomAccessibleInterval<FloatType> invertedDT = imgCreator.apply(in, new FloatType());
-		imgInverter.compute(Views.iterable(distMap), Views.iterable(invertedDT));
+		imgInverter.compute(distMap, invertedDT);
 		final RandomAccessibleInterval<FloatType> gauss = imgCreator.apply(in, new FloatType());
 		gaussOp.compute(invertedDT, es, sigma, gauss);
 		// run the default watershed

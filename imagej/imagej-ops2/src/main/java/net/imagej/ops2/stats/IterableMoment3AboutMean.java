@@ -29,14 +29,8 @@
 
 package net.imagej.ops2.stats;
 
-import java.util.List;
-
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
@@ -48,48 +42,37 @@ import org.scijava.struct.ItemIO;
  * {@link Op} to calculate the {@code stats.moment3AboutMean} using
  * {@code stats.mean} and {@code stats.size}.
  * 
- * @author Gabriel Selzer
+ * @author Daniel Seebacher (University of Konstanz)
+ * @author Christian Dietz (University of Konstanz)
  * @param <I>
  *            input type
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.moment3AboutMean", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "stats.moment3AboutMean")
 @Parameter(key = "iterableInput")
 @Parameter(key = "moment3AboutMean", itemIO = ItemIO.BOTH)
-public class DefaultMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+public class IterableMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanComputer;
+	private Computers.Arity1<Iterable<I>, O> meanComputer;
 	@OpDependency(name = "stats.size")
-	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> sizeComputer;
-	@OpDependency(name = "math.power")
-	private Computers.Arity2<DoubleType, Integer, DoubleType> powOp;
+	private Computers.Arity1<Iterable<I>, O> sizeComputer;
 
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		final DoubleType mean = new DoubleType();
+	public void compute(final Iterable<I> input, final O output) {
+		final O mean = output.createVariable();
 		meanComputer.compute(input, mean);
-		final DoubleType size = new DoubleType();
+		final O size = output.createVariable();
 		sizeComputer.compute(input, size);
 
-		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			DoubleType chunkSum = new DoubleType(0);
-			DoubleType difference = new DoubleType();
-			DoubleType product = new DoubleType();
-			chunk.forEachPixel(pixel -> {
-				difference.set(pixel.getRealDouble());
-				difference.sub(mean);
-				powOp.compute(difference, 3, product);
-				chunkSum.add(product);
-			});
-			return chunkSum;
-		});
+		double res = 0;
+		final double m = mean.getRealDouble();
+		for (final I in : input) {
+			final double val = in.getRealDouble() - m;
+			res += val * val * val;
+		}
 
-		DoubleType sum = new DoubleType(0);
-		for(DoubleType chunkSum : chunkSums) sum.add(chunkSum);
-		sum.div(size);
-
-		output.setReal(sum.getRealDouble());
+		output.setReal(res / size.getRealDouble());
 	}
 }

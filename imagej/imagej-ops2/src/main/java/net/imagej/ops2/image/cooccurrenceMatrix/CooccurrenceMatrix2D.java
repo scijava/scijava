@@ -32,12 +32,14 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Intervals;
 import net.imglib2.util.Pair;
 
 /**
- * Calculates coocccurrence matrix from an 2D-{@link IterableInterval}.
+ * Calculates coocccurrence matrix from an 2D-{@link RandomAccessibleInterval}.
  * 
  * @author Stephan Sellien (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
@@ -45,13 +47,11 @@ import net.imglib2.util.Pair;
  */
 public class CooccurrenceMatrix2D {
 
-	public static final <T extends RealType<T>> double[][] apply(final IterableInterval<T> input,
-			final Integer nrGreyLevels, final Integer distance, final Function<IterableInterval<T>, Pair<T, T>> minmax,
+	public static final <T extends RealType<T>> double[][] apply(final RandomAccessibleInterval<T> input,
+			final Integer nrGreyLevels, final Integer distance, final Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax,
 			final MatrixOrientation orientation) {
 
 		final double[][] output = new double[nrGreyLevels][nrGreyLevels];
-
-		final Cursor<? extends RealType<?>> cursor = input.localizingCursor();
 
 		final Pair<T, T> minMax = minmax.apply(input);
 
@@ -67,13 +67,12 @@ public class CooccurrenceMatrix2D {
 		final int minimumX = (int) input.min(0);
 		final int minimumY = (int) input.min(1);
 		final double diff = localMax - localMin;
-		while (cursor.hasNext()) {
-			cursor.fwd();
-			final int bin = (int) ((cursor.get().getRealDouble() - localMin) / diff * nrGreyLevels);
-			pixels[cursor.getIntPosition(1) - minimumY][cursor.getIntPosition(0) - minimumX] = bin < nrGreyLevels - 1
+		LoopBuilder.setImages(input, Intervals.positions(input)).multiThreaded().forEachPixel((pixel, pos) -> {
+			final int bin = (int) ((pixel.getRealDouble() - localMin) / diff * nrGreyLevels);
+			pixels[pos.getIntPosition(1) - minimumY][pos.getIntPosition(0) - minimumX] = bin < nrGreyLevels - 1
 					? bin
 					: nrGreyLevels - 1;
-		}
+		});
 
 		int nrPairs = 0;
 

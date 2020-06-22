@@ -2,7 +2,7 @@ package net.imagej.ops2.image.cooccurrenceMatrix;
 
 import java.util.function.Function;
 
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
@@ -28,13 +28,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "matrixOrientation")
 @Parameter(key = "cooccurrenceMatrix", itemIO = ItemIO.OUTPUT)
 public class CooccurrenceMatrix<T extends RealType<T>>
-		implements Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
+		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 
 	@OpDependency(name = "stats.minMax")
-	private Function<IterableInterval<T>, Pair<T, T>> minmax;
+	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax;
 
 	@Override
-	public double[][] apply(IterableInterval<T> input, Integer nrGreyLevels, Integer distance,
+	public double[][] apply(RandomAccessibleInterval<T> input, Integer nrGreyLevels, Integer distance,
 			MatrixOrientation orientation) {
 		if (input.numDimensions() == 3 && orientation.isCompatible(3)) {
 			return CooccurrenceMatrix3D.apply(input, nrGreyLevels, distance, minmax, orientation);

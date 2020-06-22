@@ -32,7 +32,7 @@ package net.imagej.ops2.image.normalize;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -44,7 +44,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Normalizes an {@link IterableInterval} given its minimum and maximum to
+ * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
  * another range defined by minimum and maximum.
  * 
  * @author Christian Dietz (University of Konstanz)
@@ -59,19 +59,24 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "targetMax")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
-		implements Functions.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
+	implements
+	Functions.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>>
+{
 
 	@OpDependency(name = "create.img")
-	private BiFunction<Dimensions, O, IterableInterval<O>> imgCreator;
+	private BiFunction<Dimensions, O, RandomAccessibleInterval<O>> imgCreator;
 
 	@OpDependency(name = "image.normalize")
-	private Computers.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizer;
+	private Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> normalizer;
 
 	@Override
-	public IterableInterval<O> apply(final IterableInterval<I> input, final I sourceMin, final I sourceMax,
-			final O targetMin, final O targetMax) {
-		IterableInterval<O> output = imgCreator.apply(input, targetMin);
-		normalizer.compute(input, sourceMin, sourceMax, targetMin, targetMax, output);
+	public RandomAccessibleInterval<O> apply(
+		final RandomAccessibleInterval<I> input, final I sourceMin,
+		final I sourceMax, final O targetMin, final O targetMax)
+	{
+		RandomAccessibleInterval<O> output = imgCreator.apply(input, targetMin);
+		normalizer.compute(input, sourceMin, sourceMax, targetMin, targetMax,
+			output);
 		return output;
 	}
 }

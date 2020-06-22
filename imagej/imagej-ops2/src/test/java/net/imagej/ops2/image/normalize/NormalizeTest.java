@@ -34,10 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.util.Pair;
+import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.core.builder.OpBuilder;
@@ -70,15 +71,15 @@ public class NormalizeTest extends AbstractOpTest {
 		final ByteType min = new ByteType((byte) in.firstElement().getMinValue());
 		final ByteType max = new ByteType((byte) in.firstElement().getMaxValue());
 
-		final IterableInterval<ByteType> lazyOut = ops.op("image.normalize").input(in)
-				.outType(new Nil<IterableInterval<ByteType>>() {}).apply();
-		final IterableInterval<ByteType> notLazyOut = ops.op("image.normalize")
-				.input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<IterableInterval<ByteType>>() {})
+		final RandomAccessibleInterval<ByteType> lazyOut = ops.op("image.normalize").input(in)
+				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
+		final RandomAccessibleInterval<ByteType> notLazyOut = ops.op("image.normalize")
+				.input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<RandomAccessibleInterval<ByteType>>() {})
 				.apply();
 
 		final Cursor<ByteType> outCursor = out.cursor();
-		final Cursor<ByteType> lazyCursor = lazyOut.cursor();
-		final Cursor<ByteType> notLazyCursor = notLazyOut.cursor();
+		final Cursor<ByteType> lazyCursor = Views.flatIterable(lazyOut).cursor();
+		final Cursor<ByteType> notLazyCursor = Views.flatIterable(notLazyOut).cursor();
 		while (outCursor.hasNext()) {
 			assertEquals(outCursor.next().get(), lazyCursor.next().get());
 			assertEquals(outCursor.get().get(), notLazyCursor.next().get());

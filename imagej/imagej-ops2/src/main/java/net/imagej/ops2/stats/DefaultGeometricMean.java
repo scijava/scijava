@@ -29,6 +29,7 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -52,16 +53,16 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.geometricMean")
 @Parameter(key = "iterableInput")
 @Parameter(key = "geometricMean", itemIO = ItemIO.BOTH)
-public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
+public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.size")
-	private Computers.Arity1<Iterable<I>, O> sizeComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> sizeComputer;
 
 	@OpDependency(name = "stats.sumOfLogs")
-	private Computers.Arity1<Iterable<I>, O> sumOfLogsComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> sumOfLogsComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O size = output.createVariable();
 		sizeComputer.compute(input, size);
 		final O sumOfLogs = output.createVariable();

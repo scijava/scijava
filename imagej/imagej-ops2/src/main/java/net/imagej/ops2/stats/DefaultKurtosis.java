@@ -29,6 +29,7 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -51,17 +52,17 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "kurtosis", itemIO = ItemIO.BOTH)
 public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
-	implements Computers.Arity1<Iterable<I>, O>
+	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 
 	@OpDependency(name = "stats.stdDev")
-	private Computers.Arity1<Iterable<I>, O> stdDevComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> stdDevComputer;
 	
 	@OpDependency(name = "stats.moment4AboutMean")
-	private Computers.Arity1<Iterable<I>, O> moment4AboutMeanComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment4AboutMeanComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setReal(Double.NaN);
 
 		final O std = output.createVariable();

@@ -29,17 +29,13 @@
 
 package net.imagej.ops2.stats;
 
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
-import net.imglib2.util.Util;
 import net.imglib2.util.ValuePair;
 
-import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -53,38 +49,32 @@ import org.scijava.struct.ItemIO;
  * @param <I>
  *            input type
  */
-@Plugin(type = Op.class, name = "stats.minMax", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "stats.minMax")
 @Parameter(key = "iterableInput")
 @Parameter(key = "minMax", itemIO = ItemIO.OUTPUT)
-public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAccessibleInterval<I>, Pair<I, I>> {
+public class IterableMinMax<I extends RealType<I>> implements Function<Iterable<I>, Pair<I, I>> {
 
 	@Override
-	public Pair<I, I> apply(final RandomAccessibleInterval<I> input) {
-		// set minVal to the largest possible value and maxVal to the smallest possible.
-		final I minVal = Util.getTypeFromInterval(input).createVariable();
-		minVal.setReal(minVal.getMinValue());
-		final I maxVal = minVal.createVariable();
-		maxVal.setReal(maxVal.getMaxValue());
+	public Pair<I, I> apply(final Iterable<I> input) {
 
-		List<Pair<I, I>> minMaxes = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			final I min = maxVal.copy();
-			final I max = minVal.copy();
-			
-			chunk.forEachPixel((in) -> {
-				if (in.compareTo(min) < 0) min.set(in);
-				if (in.compareTo(max) > 0) max.set(in);
-			});
-			
-			return new ValuePair<>(min, max);
-		});
-		
-		final I raiMin = minMaxes.parallelStream() //
-				.map(pair -> pair.getA()) //
-				.reduce(maxVal, (result, min) -> min.compareTo(result) < 0 ? min : result);
-		final I raiMax = minMaxes.parallelStream() //
-				.map(pair -> pair.getB()) //
-				.reduce(minVal, (result, max) -> max.compareTo(result) > 0 ? max : result);
-		return new ValuePair<> (raiMin, raiMax);
+		// set minVal to the largest possible value and maxVal to the smallest possible.
+		I minVal, maxVal;
+		try {
+			minVal = input.iterator().next().createVariable();
+			minVal.setReal(minVal.getMaxValue());
+			maxVal = minVal.createVariable();
+			maxVal.setReal(maxVal.getMinValue());
+		} catch (NoSuchElementException e) {
+			throw new IllegalArgumentException("Cannot determine minimum/maximum of an empty Iterator!");
+		}
+
+		for (final I in : input) {
+			if (in.compareTo(minVal) < 0)
+				minVal.set(in);
+			if (in.compareTo(maxVal) > 0)
+				maxVal.set(in);
+		}
+		return new ValuePair<>(minVal, maxVal);
 	}
 
 }

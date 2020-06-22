@@ -29,13 +29,10 @@
 
 package net.imagej.ops2.stats;
 
-import java.util.List;
-
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
@@ -47,46 +44,22 @@ import org.scijava.struct.ItemIO;
  * {@link Op} to calculate the {@code stats.moment2AboutMean} using
  * {@code stats.mean} and {@code stats.size}.
  * 
- * @author Daniel Seebacher (University of Konstanz)
- * @author Christian Dietz (University of Konstanz)
- * @param <I> input type
- * @param <O> output type
+ * @author Gabriel Selzer
+ * @param <I>
+ *            input type
+ * @param <O>
+ *            output type
  */
-@Plugin(type = Op.class, name = "stats.moment2AboutMean")
+@Plugin(type = Op.class, name = "stats.moment2AboutMean", priority = Priority.HIGH)
 @Parameter(key = "iterableInput")
 @Parameter(key = "moment2AboutMean", itemIO = ItemIO.BOTH)
-public class DefaultMoment2AboutMean<I extends RealType<I>, O extends RealType<O>>
-implements Computers.Arity1<RandomAccessibleInterval<I>, O>
-{
-	
-	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanComputer;
-	@OpDependency(name = "stats.size")
-	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> sizeComputer;
+public class DefaultMoment2AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+
+	@OpDependency(name = "stats.momentNAboutMean")
+	private Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> momentComputer;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		final DoubleType mean = new DoubleType();
-		meanComputer.compute(input, mean);
-		final DoubleType size = new DoubleType();
-		sizeComputer.compute(input, size);
-		
-		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
-			DoubleType chunkSum = new DoubleType(0);
-			DoubleType difference = new DoubleType();
-			chunk.forEachPixel(pixel -> {
-				difference.set(pixel.getRealDouble());
-				difference.sub(mean);
-				difference.mul(difference);
-				chunkSum.add(difference);
-			});
-			return chunkSum;
-		});
-		
-		DoubleType sum = new DoubleType(0);
-		for(DoubleType chunkSum : chunkSums) sum.add(chunkSum);
-		sum.div(size);
-
-		output.setReal(sum.getRealDouble());
+		momentComputer.compute(input, 2, output);
 	}
 }

@@ -29,8 +29,12 @@
 
 package net.imagej.ops2.stats;
 
+import java.util.List;
+
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
@@ -41,8 +45,8 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * {@link Op} to calculate the {@code stats.moment3AboutMean} using
- * {@code stats.mean} and {@code stats.size}.
+ * {@link Op} to calculate the {@code stats.momentNAboutMean} using
+ * {@code stats.mean} and {@code stats.size}. N can be bounded to any positive {@link Integer}
  * 
  * @author Gabriel Selzer
  * @param <I>
@@ -50,16 +54,42 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.moment3AboutMean", priority = Priority.HIGH)
+@Plugin(type = Op.class, name = "stats.momentNAboutMean", priority = Priority.HIGH)
 @Parameter(key = "iterableInput")
 @Parameter(key = "moment3AboutMean", itemIO = ItemIO.BOTH)
-public class DefaultMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
 
-	@OpDependency(name = "stats.momentNAboutMean")
-	private Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> momentComputer;
+	@OpDependency(name = "stats.mean")
+	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> meanComputer;
+	@OpDependency(name = "stats.size")
+	private Computers.Arity1<RandomAccessibleInterval<I>, DoubleType> sizeComputer;
+	@OpDependency(name = "math.power")
+	private Computers.Arity2<DoubleType, Integer, DoubleType> powOp;
 
 	@Override
-	public void compute(final RandomAccessibleInterval<I> input, final O output) {
-		momentComputer.compute(input, 3, output);
+	public void compute(final RandomAccessibleInterval<I> input, final Integer n, final O output) {
+		final DoubleType mean = new DoubleType();
+		meanComputer.compute(input, mean);
+		final DoubleType size = new DoubleType();
+		sizeComputer.compute(input, size);
+
+		List<DoubleType> chunkSums = LoopBuilder.setImages(input).multiThreaded().forEachChunk(chunk -> {
+			DoubleType chunkSum = new DoubleType(0);
+			DoubleType difference = new DoubleType();
+			DoubleType product = new DoubleType();
+			chunk.forEachPixel(pixel -> {
+				difference.set(pixel.getRealDouble());
+				difference.sub(mean);
+				powOp.compute(difference, n, product);
+				chunkSum.add(product);
+			});
+			return chunkSum;
+		});
+
+		DoubleType sum = new DoubleType(0);
+		for(DoubleType chunkSum : chunkSums) sum.add(chunkSum);
+		sum.div(size);
+
+		output.setReal(sum.getRealDouble());
 	}
 }

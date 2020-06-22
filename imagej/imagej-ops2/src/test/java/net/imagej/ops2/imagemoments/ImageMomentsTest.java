@@ -96,27 +96,27 @@ public class ImageMomentsTest extends AbstractOpTest {
 				ops.op("imageMoments.centralMoment11").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment11");
-		assertEquals(1.0694469880269902E9,
+		assertEquals(1.069446988026993E9,
 				ops.op("imageMoments.centralMoment02").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment02");
-		assertEquals(1.0585772432642114E9,
+		assertEquals(1.0585772432642086E9,
 				ops.op("imageMoments.centralMoment20").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment20");
-		assertEquals(5478324.271281097,
+		assertEquals(5478324.271281064,
 				ops.op("imageMoments.centralMoment12").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment12");
-		assertEquals(-2.1636455685489437E8,
+		assertEquals(-2.163645568548715E8,
 				ops.op("imageMoments.centralMoment21").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment21");
-		assertEquals(1.7355602329912126E8,
+		assertEquals(1.735560232991217E8,
 				ops.op("imageMoments.centralMoment30").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment30");
-		assertEquals(-4.099421316116555E8,
+		assertEquals(-4.0994213161155105E8,
 				ops.op("imageMoments.centralMoment03").input(img).outType(DoubleType.class).apply()
 						.getRealDouble(),
 				EPSILON, "ImageMoments.CentralMoment03");

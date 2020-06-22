@@ -29,7 +29,7 @@
 
 package net.imagej.ops2.imagemoments;
 
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpService;
@@ -47,12 +47,12 @@ import org.scijava.ops.function.Computers;
  *            output type
  */
 public interface AbstractImageMomentOp<I extends RealType<I>, O extends RealType<O>>
-		extends Computers.Arity1<IterableInterval<I>, O> {
+		extends Computers.Arity1<RandomAccessibleInterval<I>, O> {
 	
-	public void computeMoment(IterableInterval<I> input, O output);
+	public void computeMoment(RandomAccessibleInterval<I> input, O output);
 
 	@Override
-	default void compute(IterableInterval<I> input, O output) {
+	default void compute(RandomAccessibleInterval<I> input, O output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only two-dimensional inputs allowed!");
 		computeMoment(input, output);

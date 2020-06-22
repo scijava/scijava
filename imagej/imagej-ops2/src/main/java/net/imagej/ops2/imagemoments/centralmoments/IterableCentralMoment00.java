@@ -29,13 +29,13 @@
 
 package net.imagej.ops2.imagemoments.centralmoments;
 
-import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,10 +54,12 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class IterableCentralMoment00<I extends RealType<I>, O extends RealType<O>>
-		implements AbstractImageMomentOp<I, O> {
+		implements Computers.Arity1<IterableInterval<I>, O> {
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void compute(final IterableInterval<I> input, final O output) {
+		if (input.numDimensions() != 2)
+			throw new IllegalArgumentException("Only two-dimensional inputs allowed!");
 
 		double moment00 = 0;
 

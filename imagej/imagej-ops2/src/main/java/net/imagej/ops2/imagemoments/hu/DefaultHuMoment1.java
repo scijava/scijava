@@ -30,7 +30,7 @@
 package net.imagej.ops2.imagemoments.hu;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -47,6 +47,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
  */
 @Plugin(type = Op.class, name = "imageMoments.huMoment1", label = "Image Moment: HuMoment1")
 @Parameter(key = "input")
@@ -56,18 +57,19 @@ public class DefaultHuMoment1<I extends RealType<I>, O extends RealType<O>>
 {
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment20")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment20Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment20Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment02")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment02Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment02Func;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O n20 = output.createVariable();
 		normalizedCentralMoment20Func.compute(input, n20);
 		final O n02 = output.createVariable();
 		normalizedCentralMoment02Func.compute(input, n02);
 
-		output.setReal(n20.getRealDouble() + n02.getRealDouble());
+		output.set(n20);
+		output.add(n02);
 	}
 }

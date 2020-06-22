@@ -29,10 +29,14 @@
 
 package net.imagej.ops2.imagemoments.centralmoments;
 
+import java.util.List;
+
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
 import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Intervals;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
@@ -59,32 +63,42 @@ public class DefaultCentralMoment02<I extends RealType<I>, O extends RealType<O>
 
 	// Required
 	@OpDependency(name = "imageMoments.moment00")
-	private Computers.Arity1<IterableInterval<I>, O> moment00Func;
-
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment00Func;
 	@OpDependency(name = "imageMoments.moment01")
-	private Computers.Arity1<IterableInterval<I>, O> moment01Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment01Func;
+	@OpDependency(name = "math.power")
+	private Computers.Arity2<O, Integer, O> powerOp;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
-
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O moment00 = output.createVariable();
 		moment00Func.compute(input, moment00);
 		final O moment01 = output.createVariable();
 		moment01Func.compute(input, moment01);
 
-		final double centerY = moment01.getRealDouble() / moment00.getRealDouble();
+		final O centerY = moment01.copy();
+		centerY.div(moment00);
 
-		double centralmoment02 = 0;
+		List<O> sums = LoopBuilder.setImages(input, Intervals.positions(input))
+			.multiThreaded().forEachChunk(chunk -> {
+				O sum = output.createVariable();
+				O temp = output.createVariable();
+				O y = output.createVariable();
+				chunk.forEachPixel((pixel, pos) -> {
+					// y = (pixelPos - centerY)^2
+					temp.setReal(pos.getDoublePosition(1));
+					temp.sub(centerY);
+					powerOp.compute(temp, 2, y);
+					// temp = pixelVal * (pixelPos - centerY)^2
+					temp.setReal(pixel.getRealDouble());
+					temp.mul(y);
+					sum.add(temp);
+				});
+				return sum;
+			});
 
-		final Cursor<I> it = input.localizingCursor();
-		while (it.hasNext()) {
-			it.fwd();
-			final double y = it.getDoublePosition(1) - centerY;
-			final double val = it.get().getRealDouble();
-
-			centralmoment02 += val * y * y;
-		}
-
-		output.setReal(centralmoment02);
+		output.setZero();
+		for (O sum : sums)
+			output.add(sum);
 	}
 }

@@ -126,12 +126,12 @@
 									basedir = '${project.basedir}'.gsub /\\+/, '\\\\'
 									sourceFile = basedir + '/target/classes/META-INF/json/org.scijava.plugin.Plugin'
 									destFile = basedir + '/target/test-classes/META-INF/json/org.scijava.plugin.Plugin'
-									input = File.open(sourceFile)
-									data_to_copy = input.read()
-									output = File.open(destFile, 'a')
-									output.write(data_to_copy)
-									input.close()
-									output.close()
+									File.open(sourceFile) do |input|
+										data_to_copy = input.read()
+										File.open(destFile, 'a') do |output|
+											output.write(data_to_copy)
+										end
+									end
 								</script>
 							</configuration>
 						</execution>

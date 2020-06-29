@@ -152,7 +152,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				toTypes(inTypes));
 		return (T) findOpInstance(opName, ref, true);
 	}
-
+	
+	// TODO: can we do better than Object here? Would be nice to return a T
 	private Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
 		Object cachedOp = checkCacheForRef(ref);
 		if (cachedOp != null) return cachedOp;
@@ -331,7 +332,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 *            needed.
 	 * @return an {@link Op} wrapping of op.
 	 */
-	private Object wrapOp(Object op, OpCandidate match, OpAdaptationInfo adaptationInfo) {
+	private <T> T wrapOp(T op, OpCandidate match, OpAdaptationInfo adaptationInfo) {
 		if (wrappers == null)
 			initWrappers();
 

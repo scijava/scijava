@@ -243,6 +243,23 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		}
 		return resolvedDependencies;
 	}
+	
+	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo, Map<TypeVariable<?>, Type> map, OpRef ref) {
+		for (Type opType : ref.getTypes()) {
+			// TODO: clean this logic
+			if (opType instanceof ParameterizedType) {
+				if (!MatchingUtils.checkGenericAssignability(adaptTo,
+					(ParameterizedType) opType, map, true))
+				{
+					return false;
+				}
+			}
+			else if (!Types.isAssignable(opType, adaptTo, map)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * Adapts an Op with the name of ref into a type that can be SAFELY cast to ref.
@@ -254,23 +271,13 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @throws OpMatchingException
 	 */
 	private AdaptedOp adaptOp(OpRef ref) throws OpMatchingException {
-		// FIXME: Need to validate against all types, not just the first.
-		final Type opType = ref.getTypes()[0];
 
 		for (final OpInfo adaptor : infos("adapt")) {
 			Type adaptTo = adaptor.output().getType();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type
-			if (opType instanceof ParameterizedType) {
-				if (!MatchingUtils.checkGenericAssignability(adaptTo,
-					(ParameterizedType) opType, map, true))
-				{
-					continue;
-				}
-			}
-			else if (!Types.isAssignable(opType, adaptTo, map)) {
+			if (!adaptOpOutputSatisfiesRefTypes(adaptTo, map, ref))
 				continue;
-			}
 			// make sure that the adaptor is a Function (so we can cast it later)
 			if (Types.isInstance(adaptor.opType(), Function.class)) {
 				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");

@@ -208,26 +208,32 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private Type[] toTypes(Nil<?>... nils) {
 		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
 	}
+	
+	private List<Object> resolveOpDependencies(OpCandidate candidate) throws OpMatchingException {
+		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns());
+	}
 
 	/**
 	 * Attempts to inject {@link OpDependency} annotated fields of the specified
 	 * object by looking for Ops matching the field type and the name specified in
 	 * the annotation. The field type is assumed to be functional.
 	 *
-	 * @param op
-	 * @throws OpMatchingException
-	 *             if the type of the specified object is not functional, if the Op
-	 *             matching the functional type and the name could not be found, if
-	 *             an exception occurs during injection
+	 * @param info - the {@link OpInfo} whose {@link OpDependency}s will be
+	 *          injected
+	 * @param typeVarAssigns - the mapping of {@link TypeVariable}s in the
+	 *          {@code OpInfo} to {@link Type}s given in the request.
+	 * @throws OpMatchingException if the type of the specified object is not
+	 *           functional, if the Op matching the functional type and the name
+	 *           could not be found, if an exception occurs during injection
 	 */
-	private List<Object> resolveOpDependencies(OpCandidate op) throws OpMatchingException {
-		final List<OpDependencyMember<?>> dependencies = op.opInfo().dependencies();
+	private List<Object> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) throws OpMatchingException {
+		final List<OpDependencyMember<?>> dependencies = info.dependencies();
 		final List<Object> resolvedDependencies = new ArrayList<>(dependencies.size());
 		for (final OpDependencyMember<?> dependency : dependencies) {
 			final String dependencyName = dependency.getDependencyName();
 			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] { dependency.getType() },
-					op.typeVarAssigns())[0];
-			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName, op.typeVarAssigns());
+					typeVarAssigns)[0];
+			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName, typeVarAssigns);
 			if (inferredRef == null) {
 				throw new OpMatchingException("Could not infer functional "
 						+ "method inputs and outputs of Op dependency field: " + dependency.getKey());
@@ -236,7 +242,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef, dependency.isAdaptable()));
 			} catch (final Exception e) {
 				throw new OpMatchingException("Could not find Op that matches requested Op dependency:" + "\nOp class: "
-						+ op.opInfo().implementationName() + //
+						+ info.implementationName() + //
 						"\nDependency identifier: " + dependency.getKey() + //
 						"\n\n Attempted request:\n" + inferredRef, e);
 			}
@@ -283,22 +289,10 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");
 				continue;
 			}
-			// build the type of fromOp (we know there must be one input because the adaptor
-			// is a Function)
-			Type adaptFrom = adaptor.inputs().get(0).getType();
-			Type refAdaptTo = Types.substituteTypeVariables(adaptTo, map);
-			Type refAdaptFrom = Types.substituteTypeVariables(adaptFrom, map);
-
-			// build the OpRef of the adaptor.
-			Type refType = Types.parameterize(Function.class, new Type[] { refAdaptFrom, refAdaptTo });
-			OpRef adaptorRef = new OpRef("adapt", new Type[] { refType }, refAdaptTo, new Type[] { refAdaptFrom });
-
-			// make an OpCandidate
-			OpCandidate candidate = new OpCandidate(this, log, adaptorRef, adaptor, map);
 
 			try {
 				// resolve adaptor dependencies and get the adaptor (as a function)
-				final List<Object> dependencies = resolveOpDependencies(candidate);
+				final List<Object> dependencies = resolveOpDependencies(adaptor, map);
 				Object adaptorOp = adaptor.createOpInstance(dependencies).object();
 
 				// grab the first type parameter (from the OpCandidate?) and search for an Op

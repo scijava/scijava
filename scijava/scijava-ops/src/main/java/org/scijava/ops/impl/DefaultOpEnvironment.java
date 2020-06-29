@@ -56,7 +56,7 @@ import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.adapt.AdaptedOp;
+import org.scijava.ops.adapt.AdaptedOpCandidate;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.DefaultOpMatcher;
@@ -153,40 +153,45 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return (T) findOpInstance(opName, ref, true);
 	}
 	
+	// TODO: This method does two things. Would be nice to split into a method
+	// that creates the Op, and another that wraps it.
+	// Problem is that we need the OpInfo and TypeVarAssigns to wrap the Op
+	private Object wrappedOpFromCandidate(final OpCandidate candidate)
+		throws OpMatchingException
+	{
+		final List<Object> dependencies = resolveOpDependencies(candidate);
+		final Object op = candidate.createOp(dependencies);
+
+		return wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
+	}
+
 	// TODO: can we do better than Object here? Would be nice to return a T
 	private Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
 		Object cachedOp = checkCacheForRef(ref);
 		if (cachedOp != null) return cachedOp;
 
-		Object op = null;
 		OpCandidate match = null;
-		AdaptedOp adaptation = null;
 		try {
 			// Find single match which matches the specified types
 			match = matcher.findSingleMatch(this, ref);
-			final List<Object> dependencies = resolveOpDependencies(match);
-			op = match.createOp(dependencies);
-		} catch (OpMatchingException e) {
+			return wrappedOpFromCandidate(match);
+		}
+		catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
 			if (!adaptable) {
-				throw new IllegalArgumentException(opName + " cannot be adapted (adaptation is disabled)");
+				throw new IllegalArgumentException(opName +
+					" cannot be adapted (adaptation is disabled)");
 			}
 			log.debug("Attempting Op adaptation...");
 			try {
-				adaptation = adaptOp(ref);
-				op = adaptation.op();
-			} catch (OpMatchingException e1) {
+				match = adaptOp(ref);
+				return wrappedOpFromCandidate(match);
+			}
+			catch (OpMatchingException e1) {
 				log.debug("No suitable Op adaptation found");
 				throw new IllegalArgumentException(e1);
 			}
-
 		}
-		OpAdaptationInfo adaptedInfo = adaptation == null ? null : adaptation.opInfo();
-		Object wrappedOp = wrapOp(op, match, adaptedInfo);
-
-		// TODO: consider extracting to some other method
-		opCache.putIfAbsent(ref, wrappedOp);
-		return wrappedOp;
 	}
 
 	private Object checkCacheForRef(OpRef ref) {
@@ -261,22 +266,31 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	/**
-	 * Adapts an Op with the name of ref into a type that can be SAFELY cast to ref.
+	 * Adapts an Op with the name of ref into a type that can be SAFELY cast to
+	 * ref.
+	 * <p>
+	 * NB This method <b>cannot</b> use the {@link OpMatcher} to find a suitable
+	 * {@code adapt} Op. The premise of adaptation depends on the ability to
+	 * examine the applicability of all {@code adapt} Ops with the correct output
+	 * type. We need to check all of them because we do not know whether:
+	 * <ul>
+	 * <li>The dependencies will exist for a particular {@code adapt} Op
+	 * <li>The Op we want exists with the correct type for the input of the
+	 * {@code adapt} Op.
+	 * </ul>
 	 * 
-	 * @param ref
-	 *            - the type of Op that we are looking to adapt to.
-	 * @return {@link AdaptedOp} - an Op that has been adapted to conform the the
-	 *         ref type.
+	 * @param ref - the type of Op that we are looking to adapt to.
+	 * @return {@link AdaptedOpCandidate} - an Op that has been adapted to conform
+	 *         the the ref type (if one exists).
 	 * @throws OpMatchingException
 	 */
-	private AdaptedOp adaptOp(OpRef ref) throws OpMatchingException {
+	private OpCandidate adaptOp(OpRef ref) throws OpMatchingException {
 
 		for (final OpInfo adaptor : infos("adapt")) {
 			Type adaptTo = adaptor.output().getType();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
 			// make sure that the adaptor outputs the correct type
-			if (!adaptOpOutputSatisfiesRefTypes(adaptTo, map, ref))
-				continue;
+			if (!adaptOpOutputSatisfiesRefTypes(adaptTo, map, ref)) continue;
 			// make sure that the adaptor is a Function (so we can cast it later)
 			if (Types.isInstance(adaptor.opType(), Function.class)) {
 				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");
@@ -286,61 +300,52 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			try {
 				// resolve adaptor dependencies and get the adaptor (as a function)
 				final List<Object> dependencies = resolveOpDependencies(adaptor, map);
-				Object adaptorOp = adaptor.createOpInstance(dependencies).object();
-
-				// grab the first type parameter (from the OpCandidate?) and search for an Op
-				// that will then be adapted (this will be the first (only) type in the args of
-				// the adaptor)
-				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0).getType(), map);
-				final OpRef srcOpRef;
-					srcOpRef = inferOpRef(srcOpType, ref.getName(), map);
-				// TODO: export this to another function (also done in findOpInstance).
-				// We need this here because we need to grab the OpInfo. 
-				// TODO: is there a better way to do this?
-				final OpCandidate srcCandidate = matcher.findSingleMatch(this, srcOpRef);
-				final List<Object> srcDependencies = resolveOpDependencies(srcCandidate);
-				final Object fromOp = srcCandidate.opInfo().createOpInstance(srcDependencies).object();
-
-				// get adapted Op by applying adaptor on unadapted Op, then return
-				// TODO: can we make this safer?
 				@SuppressWarnings("unchecked")
-				Object toOp = ((Function<Object, Object>) adaptorOp).apply(fromOp);
-				// construct type of adapted op
-				Type adapterOpType = Types.substituteTypeVariables(adaptor.output().getType(),
-						map);
-				return new AdaptedOp(toOp, adapterOpType, srcCandidate.opInfo(), adaptor);
-			} catch (OpMatchingException e1) {
+				Function<Object, Object> adaptorOp = //
+					(Function<Object, Object>) adaptor.createOpInstance(dependencies) //
+						.object(); //
+
+				// grab the first type parameter from the OpInfo and search for
+				// an Op that will then be adapted (this will be the first (only) type
+				// in the args of the adaptor)
+				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0)
+					.getType(), map);
+				final OpRef srcOpRef = inferOpRef(srcOpType, ref.getName(), map);
+				final OpCandidate srcCandidate = matcher.findSingleMatch(this,
+					srcOpRef);
+				map.putAll(srcCandidate.typeVarAssigns());
+				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
+					.getType(), map);
+				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
+					.opInfo(), adapterOpType, adaptorOp);
+				return new AdaptedOpCandidate(this, log, ref, adaptedInfo, map);
+			}
+			catch (OpMatchingException e1) {
 				log.trace(e1);
 			}
 		}
 
 		// no adaptors available.
-		throw new OpMatchingException("Op adaptation failed: no adaptable Ops of type " + ref.getName());
+		throw new OpMatchingException(
+			"Op adaptation failed: no adaptable Ops of type " + ref.getName());
 	}
 
 	/**
-	 * Wraps the matched op into an {@link Op} that knows its generic typing and
-	 * {@link OpInfo}.
+	 * Wraps the matched op into an {@link Op} that knows its generic typing.
 	 * 
-	 * @param op
-	 *            - the matched op to wrap.
-	 * @param match
-	 *            - where to retrieve the {@link OpInfo} if no transformation is
-	 *            needed.
-	 * @param adaptationInfo
-	 *            - where to retrieve the {@link OpInfo} if a transformation is
-	 *            needed.
+	 * @param op - the op to wrap.
+	 * @param opInfo - from which we determine the {@link Type} of the {@code Op}
+	 *            
 	 * @return an {@link Op} wrapping of op.
 	 */
-	private <T> T wrapOp(T op, OpCandidate match, OpAdaptationInfo adaptationInfo) {
+	private <T> T wrapOp(T op, OpInfo opInfo, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		if (wrappers == null)
 			initWrappers();
 
-		OpInfo opInfo = match == null ? adaptationInfo : match.opInfo();
 		// FIXME: this type is not necessarily Computer, Function, etc. but often
 		// something more specific (like the class of an Op).
 		// TODO: Is this correct?
-		Type type = match == null ? adaptationInfo.opType() : match.getRef().getTypes()[0];
+		Type type = opInfo.opType();
 		try {
 			// determine the Op wrappers that could wrap the matched Op
 			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
@@ -354,7 +359,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			// get the wrapper and wrap up the Op
 			if (!Types.isAssignable(Types.raw(type), suitableWrappers[0]))
 				throw new IllegalArgumentException(Types.raw(type) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
-			return opify(op, type);
+			Type exactSuperType = Types.getExactSuperType(type, suitableWrappers[0]);
+			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
+			return opify(op, reifiedSuperType);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;

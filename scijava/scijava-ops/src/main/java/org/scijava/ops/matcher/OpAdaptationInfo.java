@@ -1,9 +1,13 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.function.Function;
 
+import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ParameterStructs;
@@ -15,19 +19,21 @@ import org.scijava.struct.StructInstance;
  * {@link OpInfo} for ops that have been adapted to some other Op type.
  * 
  * @author Gabriel Selzer
- *
+ * @see OpInfo
  */
 public class OpAdaptationInfo implements OpInfo {
 
 	private OpInfo srcInfo;
 	private Type type;
+	private Function<Object, Object> adaptor;
 
 	private Struct struct;
 	private ValidityException validityException;
 
-	public OpAdaptationInfo(OpInfo srcInfo, Type type) {
+	public OpAdaptationInfo(OpInfo srcInfo, Type type, Function<Object, Object> adaptor) {
 		this.srcInfo = srcInfo;
 		this.type = type;
+		this.adaptor = adaptor;
 
 		// NOTE: since the source Op has already been shown to be valid, there is not
 		// much for us to do here.
@@ -38,6 +44,11 @@ public class OpAdaptationInfo implements OpInfo {
 			validityException = e;
 		}
 	}
+	
+	@Override
+	public List<OpDependencyMember<?>> dependencies() {
+		return srcInfo.dependencies();
+	}
 
 	@Override
 	public Type opType() {
@@ -46,7 +57,6 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public Struct struct() {
-		// TODO Can we build this struct?
 		return struct;
 	}
 
@@ -58,16 +68,17 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName();
+		return srcInfo.implementationName() + " adapted to " + type.toString();
 	}
 
+	/**
+	 * @param dependencies - the list of depencies <b>for the source Op</b>
+	 */
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
-		// TODO: does this method make sense for this kind of Op? It really doesn't have
-		// any dependencies...if so, we should implement this method.
-		throw new UnsupportedOperationException(
-				"StructInstance unavailable for adaptation of " + srcInfo.implementationName());
-
+		final Object op = srcInfo.createOpInstance(dependencies).object();
+		final Object adaptedOp = adaptor.apply(op);
+		return struct().createInstance(adaptedOp);
 	}
 
 	@Override

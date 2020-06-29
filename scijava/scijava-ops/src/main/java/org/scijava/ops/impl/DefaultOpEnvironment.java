@@ -180,14 +180,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			}
 
 		}
-		try {
-			// Try to resolve annotated OpDependency fields
-			// N.B. Adapted Op dependency fields are already matched.
-			if (match != null)
-				resolveOpDependencies(match);
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
 		OpAdaptationInfo adaptedInfo = adaptation == null ? null : adaptation.opInfo();
 		Object wrappedOp = wrapOp(op, match, adaptedInfo);
 

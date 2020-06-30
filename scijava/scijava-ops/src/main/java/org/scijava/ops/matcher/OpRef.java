@@ -189,11 +189,11 @@ public class OpRef {
 		final OpRef other = (OpRef) obj;
 		if (!Objects.equals(name, other.name))
 			return false;
-		if (!Objects.equals(types, other.types))
+		if (!Arrays.equals(types, other.types))
 			return false;
 		if (!Objects.equals(outType, other.outType))
 			return false;
-		if (!Objects.equals(args, other.args))
+		if (!Arrays.equals(args, other.args))
 			return false;
 		return true;
 	}

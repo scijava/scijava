@@ -342,33 +342,35 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		if (wrappers == null)
 			initWrappers();
 
-		// FIXME: this type is not necessarily Computer, Function, etc. but often
-		// something more specific (like the class of an Op).
-		// TODO: Is this correct?
-		Type type = opInfo.opType();
+		Type opType = opInfo.opType();
 		try {
-			// determine the Op wrappers that could wrap the matched Op
-			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
-					.toArray(Class[]::new);
-			if (suitableWrappers.length == 0)
-				throw new IllegalArgumentException(opInfo.implementationName() + ": matched op Type " + type.getClass()
-						+ " does not match a wrappable Op type.");
-			if (suitableWrappers.length > 1)
-				throw new IllegalArgumentException(
-						"Matched op Type " + type.getClass() + " matches multiple Op types: " + wrappers.toString());
-			// get the wrapper and wrap up the Op
-			if (!Types.isAssignable(Types.raw(type), suitableWrappers[0]))
-				throw new IllegalArgumentException(Types.raw(type) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
-			Type exactSuperType = Types.getExactSuperType(type, suitableWrappers[0]);
+			// find the opWrapper that wraps this type of Op
+			Class<?> wrapper = getWrapperClass(op, opInfo);
+			Type exactSuperType = Types.getExactSuperType(opType, wrapper);
 			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
+
 			return opify(op, reifiedSuperType);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;
 		} catch (NullPointerException e) {
-			log.error("No wrapper exists for " + Types.raw(type).toString() + ".");
+			log.error("No wrapper exists for " + Types.raw(opType).toString() + ".");
 			return op;
 		}
+	}
+
+	private Class<?> getWrapperClass(Object op, OpInfo info) {
+			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
+					.toArray(Class[]::new);
+			if (suitableWrappers.length == 0)
+				throw new IllegalArgumentException(info.implementationName() + ": matched op Type " + info.opType().getClass()
+						+ " does not match a wrappable Op type.");
+			if (suitableWrappers.length > 1)
+				throw new IllegalArgumentException(
+						"Matched op Type " + info.opType().getClass() + " matches multiple Op types: " + wrappers.toString());
+			if (!Types.isAssignable(Types.raw(info.opType()), suitableWrappers[0]))
+				throw new IllegalArgumentException(Types.raw(info.opType()) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
+			return suitableWrappers[0];
 	}
 
 	/**

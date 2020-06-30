@@ -200,7 +200,7 @@ public class OpRef {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, types, outType, args);
+		return Arrays.deepHashCode(new Object[] {name, types, outType, args});
 	}
 
 	// -- Utility methods --

@@ -33,18 +33,36 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.scijava.Context;
+import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Producer;
 import org.scijava.ops.impl.DefaultOpEnvironment;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginService;
+import org.scijava.struct.ItemIO;
+import org.scijava.types.TypeService;
 
-// TODO: assert multiple Ops in the cache when OpDependencies present.
 @Plugin(type = OpCollection.class)
 public class OpCachingTest extends AbstractTestEnvironment {
+
+	/**
+	 * Obtains a new {@link OpService} for each test (we also need to create a new
+	 * {@link Context} to ensure that we start with a fresh cache).
+	 */
+	@Before
+	public void setUpEach() {
+		context = new Context(OpService.class, PluginService.class,
+			TypeService.class);
+		ops = context.getService(OpService.class);
+	}
 
 	/**
 	 * Basic Op used to test cache functionality. NB we use an {@link OpField}
@@ -54,23 +72,34 @@ public class OpCachingTest extends AbstractTestEnvironment {
 	@OpField(names = "test.basicOp")
 	public final Producer<String> basicOp = () -> "This Op should be cached";
 
-	@Test
-	public void cacheOp() throws NoSuchFieldException, SecurityException,
-		IllegalArgumentException, IllegalAccessException
-	{
-		// put the Op in the cache
+	private DefaultOpEnvironment getDefaultOpEnv() {
 		OpEnvironment opEnv = ops.env();
 		if (!(opEnv instanceof DefaultOpEnvironment)) fail(
 			"OpCachingTest expects a DefaultOpEnvironment (since it is testing the caching behavior of that class).");
-		DefaultOpEnvironment defOpEnv = (DefaultOpEnvironment) opEnv;
+		return (DefaultOpEnvironment) opEnv;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<OpRef, Object> getOpCache(DefaultOpEnvironment opEnv)
+		throws NoSuchFieldException, SecurityException, IllegalArgumentException,
+		IllegalAccessException
+	{
+		// use reflection to grab a hold of the opCache
+		Field cacheField = opEnv.getClass().getDeclaredField("opCache");
+		cacheField.setAccessible(true);
+		return (Map<OpRef, Object>) cacheField.get(opEnv);
+	}
+
+	@Test
+	public void cacheOp() throws SecurityException, IllegalArgumentException,
+		NoSuchFieldException, IllegalAccessException
+	{
+		// put the Op in the cache
+		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
 		Producer<String> op = defOpEnv.op("test.basicOp").input().outType(
 			String.class).producer();
 
-		// use reflection to grab a hold of the opCache
-		Field cacheField = defOpEnv.getClass().getDeclaredField("opCache");
-		cacheField.setAccessible(true);
-		@SuppressWarnings("unchecked")
-		Map<OpRef, Object> opCache = (Map<OpRef, Object>) cacheField.get(defOpEnv);
+		Map<OpRef, Object> opCache = getOpCache(defOpEnv);
 
 		// assert there is exactly one Op in the cache
 		Assertions.assertEquals(opCache.size(), 1, 0);
@@ -90,4 +119,46 @@ public class OpCachingTest extends AbstractTestEnvironment {
 
 	}
 
+	@Test
+	public void cacheOpAndDependencies() throws NoSuchFieldException,
+		SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		// put the Op in the cache
+		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
+		Producer<String> op = defOpEnv.op("test.complicatedOp").input().outType(
+			String.class).producer();
+
+		Map<OpRef, Object> opCache = getOpCache(defOpEnv);
+
+		// assert there are exactly two Ops in the cache
+		Assertions.assertEquals(opCache.size(), 2, 0);
+
+		// assert that complicatedOp is in the cache (
+		Optional<OpRef> complicatedOptional = opCache.keySet().stream().filter(
+			ref -> ref.getName().equals("test.complicatedOp")).findFirst();
+		Assertions.assertFalse(complicatedOptional.isEmpty(),
+			"test.complicatedOp not in cache!");
+		Assertions.assertEquals(op, opCache.get(complicatedOptional.get()),
+			"Object in cache was not the same Object that was returned!");
+
+		// assert that basic Op is also in the cache
+		Optional<OpRef> basicOptional = opCache.keySet().stream().filter(ref -> ref
+			.getName().equals("test.basicOp")).findFirst();
+		Assertions.assertFalse(basicOptional.isEmpty(),
+			"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");
+	}
+
+}
+
+@Plugin(type = Op.class, name = "test.complicatedOp")
+@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+class ComplicatedOp implements Producer<String> {
+
+	@OpDependency(name = "test.basicOp")
+	private Producer<String> basicOp;
+
+	@Override
+	public String create() {
+		return basicOp.create();
+	}
 }

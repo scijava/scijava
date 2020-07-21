@@ -116,6 +116,8 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.transform to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.types to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.types.adapt to org.scijava, org.scijava.ops;
+	opens net.imagej.ops2.types.maxValue to org.scijava, org.scijava.ops;
+	opens net.imagej.ops2.types.minValue to org.scijava, org.scijava.ops;
 	
 	requires java.desktop;
 	requires java.scripting;

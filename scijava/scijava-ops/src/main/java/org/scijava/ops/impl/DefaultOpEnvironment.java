@@ -103,7 +103,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * Map to collect all aliases for a specific op. All aliases will map to one
 	 * canonical name of the op which is defined as the first one.
 	 */
-	private Map<String, Set<OpInfo>> opCache;
+	private Map<String, Set<OpInfo>> opDirectory;
+
+	private Map<OpRef, Object> opCache;
 
 	private Map<Class<?>, OpWrapper<?>> wrappers;
 
@@ -114,13 +116,13 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@Override
 	public Iterable<OpInfo> infos() {
-		if (opCache == null) initOpCache();
-		return opCache.values().stream().flatMap(list -> list.stream()).collect(Collectors.toList());
+		if (opDirectory == null) initOpDirectory();
+		return opDirectory.values().stream().flatMap(list -> list.stream()).collect(Collectors.toList());
 	}
 
 	@Override
 	public Iterable<OpInfo> infos(String name) {
-		if (opCache == null) initOpCache();
+		if (opDirectory == null) initOpDirectory();
 		if (name == null || name.isEmpty()) return infos();
 		return opsOfName(name);
 	}
@@ -152,6 +154,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	private Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
+		Object cachedOp = checkCacheForRef(ref);
+		if (cachedOp != null) return cachedOp;
+
 		Object op = null;
 		OpCandidate match = null;
 		AdaptedOp adaptation = null;
@@ -185,7 +190,19 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		}
 		OpAdaptationInfo adaptedInfo = adaptation == null ? null : adaptation.opInfo();
 		Object wrappedOp = wrapOp(op, match, adaptedInfo);
+
+		// TODO: consider extracting to some other method
+		opCache.putIfAbsent(ref, wrappedOp);
 		return wrappedOp;
+	}
+
+	private Object checkCacheForRef(OpRef ref) {
+		if (opCache == null) {
+			opCache = new HashMap<>();
+		}
+		if (opCache.containsKey(ref))
+			return opCache.get(ref);
+		return null;
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -407,8 +424,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return new OpRef(name, new Type[] { type }, mappedOutputs[0], mappedInputs);
 	}
 
-	private void initOpCache() {
-		opCache = new HashMap<>();
+	private void initOpDirectory() {
+		opDirectory = new HashMap<>();
 
 		// Add regular Ops
 		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
@@ -459,14 +476,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			return;
 		}
 		for (String opName : parsedOpNames) {
-			if (!opCache.containsKey(opName))
-				opCache.put(opName, new TreeSet<>());
-			opCache.get(opName).add(opInfo);
+			if (!opDirectory.containsKey(opName))
+				opDirectory.put(opName, new TreeSet<>());
+			opDirectory.get(opName).add(opInfo);
 		}
 	}
 
 	private Set<OpInfo> opsOfName(final String name) {
-		final Set<OpInfo> ops = opCache.getOrDefault(name, Collections.emptySet());
+		final Set<OpInfo> ops = opDirectory.getOrDefault(name, Collections.emptySet());
 		return Collections.unmodifiableSet(ops);
 	}
 

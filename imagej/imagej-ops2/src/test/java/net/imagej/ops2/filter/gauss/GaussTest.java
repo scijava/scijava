@@ -32,7 +32,7 @@ package net.imagej.ops2.filter.gauss;
 import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.algorithm.gauss3.Gauss3;
 import net.imglib2.exception.IncompatibleTypeException;

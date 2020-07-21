@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
-import org.scijava.test_util.AssertIterations;
+import org.scijava.testutil.AssertIterations;
 import org.scijava.thread.ThreadService;
 
 import net.imagej.ops2.AbstractOpTest;

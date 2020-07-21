@@ -1,4 +1,4 @@
-package net.imagej.test_util;
+package net.imagej.testutil;
 
 import java.math.BigInteger;
 import java.util.Random;

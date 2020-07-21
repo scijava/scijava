@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.FinalDimensions;
 import net.imglib2.IterableInterval;

@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.test_util.AssertIterations;
+import org.scijava.testutil.AssertIterations;
 
 public class ShuffledViewTest extends ColocalisationTest {
 

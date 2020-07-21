@@ -11,11 +11,11 @@
 		<relativePath>../..</relativePath>
 	</parent>
 
-	<artifactId>scijava-test-util</artifactId>
+	<artifactId>scijava-testutil</artifactId>
 
-	<name>SciJava Test-Util</name>
-	<description>SciJava Test Utils: a set of shared test utilities for Scijava projects.</description>
-	<url>https://github.com/scijava/scijava-test-util</url>
+	<name>SciJava Test Util</name>
+	<description>Shared test utilities for SciJava projects.</description>
+	<url>None</url>
 	<inceptionYear>2020</inceptionYear>
 	<organization>
 		<name>SciJava</name>
@@ -54,23 +54,19 @@
 		</developer>
 	</developers>
 	<contributors>
-		<!-- TODO: Remove -->
+		<!--
+		NB: Need a least one element to override the parent.
+		See: https://issues.apache.org/jira/browse/MNG-5220
+		-->
 		<contributor>
-			<name>Christian Dietz</name>
-			<url>https://imagej.net/User:Dietzc</url>
-			<roles>
-				<role>founder</role>
-			</roles>
-			<properties>
-				<id>dietzc</id>
-			</properties>
+			<name>None</name>
 		</contributor>
 	</contributors>
 
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-test-util</archive>
+			<archive>https://forum.image.sc/tag/scijava</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -82,16 +78,16 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/scijava/scijava-test-util/issues</url>
+		<url>https://github.com/scijava/scijava-testutil/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Travis CI</system>
-		<url>https://travis-ci.com/scijava/test-util</url>
+		<url>https://travis-ci.org/scijava/incubator</url>
 	</ciManagement>
 
 	<properties>
-		<main-class>org.scijava.test_util.Main</main-class>
-		<package-name>org.scijava.test_util</package-name>
+		<main-class>org.scijava.testutil.Main</main-class>
+		<package-name>org.scijava.testutil</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>

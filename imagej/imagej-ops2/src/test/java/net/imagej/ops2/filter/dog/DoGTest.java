@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.dog.DifferenceOfGaussian;

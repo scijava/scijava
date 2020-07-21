@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.test_util.AssertIterations;
+import org.scijava.testutil.AssertIterations;
 import org.scijava.types.Nil;
 
 /**

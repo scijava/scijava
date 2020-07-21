@@ -55,7 +55,7 @@ import net.imagej.ops2.threshold.localMean.LocalMeanThreshold;
 import net.imagej.ops2.threshold.localMedian.LocalMedianThreshold;
 import net.imagej.ops2.threshold.localNiblack.LocalNiblackThreshold;
 import net.imagej.ops2.threshold.localSauvola.LocalSauvolaThreshold;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;

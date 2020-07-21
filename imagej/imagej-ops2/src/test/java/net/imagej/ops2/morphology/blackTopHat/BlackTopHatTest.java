@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.IterableInterval;
 import net.imglib2.algorithm.morphology.BlackTopHat;
 import net.imglib2.algorithm.neighborhood.DiamondShape;
@@ -48,7 +48,7 @@ import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.test_util.AssertIterations;
+import org.scijava.testutil.AssertIterations;
 import org.scijava.types.Nil;
 
 /**

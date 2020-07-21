@@ -41,7 +41,7 @@ import net.imagej.ops2.filter.median.DefaultMedianFilter;
 import net.imagej.ops2.filter.min.DefaultMinFilter;
 import net.imagej.ops2.filter.sigma.DefaultSigmaFilter;
 import net.imagej.ops2.filter.variance.DefaultVarianceFilter;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.RectangleShape.NeighborhoodsIterableInterval;
 import net.imglib2.img.Img;

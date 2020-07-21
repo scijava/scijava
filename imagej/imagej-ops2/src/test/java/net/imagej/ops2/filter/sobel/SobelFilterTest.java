@@ -31,7 +31,7 @@ package net.imagej.ops2.filter.sobel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;

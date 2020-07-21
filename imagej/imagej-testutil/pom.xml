@@ -105,39 +105,16 @@
 	</repositories>
 
 	<dependencies>
-		<!-- ImageJ dependencies -->
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
 
 		<!-- ImgLib2 dependencies -->
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2</artifactId>
-		</dependency>
-
-		<!-- SciJava dependencies -->
-		<dependency>
-			<!-- Do not remove - Maven incorrectly identifies it as an unused dependency!  -->
-			<groupId>org.scijava</groupId>
-			<artifactId>scripting-javascript</artifactId>
-		</dependency>
-
-		<!-- Third party dependencies -->
-		
-		<!-- Test scope dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>junit-benchmarks</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-testutil</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

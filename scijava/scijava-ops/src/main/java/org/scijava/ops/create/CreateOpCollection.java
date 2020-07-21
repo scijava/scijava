@@ -11,6 +11,11 @@ import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
+/**
+ * Creation ops
+ * @author G
+ *
+ */
 @Plugin(type = OpCollection.class)
 public class CreateOpCollection {
 

@@ -114,6 +114,7 @@ public class SimplificationUtils {
 		return Types.mapVarToTypes(types, map);
 	}
 
+	// TODO: extract this method to a more general utility class
 	public static Method findFMethod(Class<?> c) {
 			Class<?> fIface = ParameterStructs.findFunctionalInterface(c);
 			if(fIface == null) throw new IllegalArgumentException("Class " + c +" does not implement a functional interface!");

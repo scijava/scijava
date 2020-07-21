@@ -1,4 +1,4 @@
-module org.scijava.ops {
+open module org.scijava.ops {
 	
 	//TODO: rearrange packages to export only needed classes
 	exports org.scijava.ops; //contains OpDependency interface
@@ -15,19 +15,17 @@ module org.scijava.ops {
 	exports org.scijava.struct;
 	exports org.scijava.param;
 
-	// -- Open plugins to scijava-common
-	opens org.scijava.ops to org.scijava;
-	opens org.scijava.ops.impl to org.scijava;
-	opens org.scijava.ops.provenance to org.scijava;
-	opens org.scijava.ops.provenance.impl to org.scijava;
-
   // FIXME: This is a file name and is thus unstable
   requires geantyref;
-  
+
   requires java.desktop;
 
 	requires org.scijava;
 	requires org.scijava.types;
 	requires javassist;
 	requires org.scijava.function;
+	requires java.compiler;
+	requires therapi.runtime.javadoc;
+
+	uses javax.annotation.processing.Processor;
 }

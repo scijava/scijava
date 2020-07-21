@@ -158,6 +158,7 @@ public final class ParameterStructs {
 		Class<?> c = field.getDeclaringClass();
 		if (c == null || field == null) return null;
 
+		JavadocParameterData paramData = new JavadocParameterData(field);
 		field.setAccessible(true);
 		
 		final ArrayList<Member<?>> items = new ArrayList<>();
@@ -198,6 +199,8 @@ public final class ParameterStructs {
 			if (c == null || method == null) return null;
 
 			method.setAccessible(true);
+			
+			JavadocParameterData paramData = new JavadocParameterData(method);
 
 			final ArrayList<Member<?>> items = new ArrayList<>();
 			final ArrayList<ValidityProblem> problems = new ArrayList<>();
@@ -505,6 +508,7 @@ public final class ParameterStructs {
 			return;
 		}
 		
+		
 		// Get parameter annotations (may not be present)
 		// TODO: remove Parameter annotations from all ops and remove logic below.
 		// TODO: grab names from OpClass/OpField annotations.
@@ -694,4 +698,6 @@ public final class ParameterStructs {
 		
 		return nonDefaults.get(0);
 	}
+	
+	
 }

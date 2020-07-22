@@ -1,18 +1,18 @@
-/*-
+/*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * SciJava Operations: a framework for reusable algorithms.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2018 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,44 +27,36 @@
  * #L%
  */
 
-package net.imagej.ops2.filter.tubeness;
+package org.scijava.testutil;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ExecutorService;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-import org.scijava.testutil.AssertIterations;
-import org.scijava.thread.ThreadService;
-
-import net.imagej.ops2.AbstractOpTest;
-import net.imglib2.img.Img;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.real.DoubleType;
+import org.junit.jupiter.api.Assertions;
 
 /**
- * Tests {@link DefaultTubeness}.
- * 
- * @author Gabe Selzer
+ * Assertions to be used when a relative delta should be used to compare the
+ * actual and expected values.
+ *
+ * @author Gabriel Selzer
+ * @see Assertions
  */
-public class TubenessTest extends AbstractOpTest {
+public class AssertClose {
 
-	@Test
-	public void testTubeness() {
-		Img<UnsignedByteType> input = openUnsignedByteType(DefaultTubeness.class, "TubesInput.png");
-		Img<DoubleType> expected = openDoubleImg("tube.tif");
-
-		final double scale = 5;
-		final double sigma = scale / Math.sqrt(2);
-
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
-		Img<DoubleType> actual = ops.op("create.img").input(input, new DoubleType())
-				.outType(new Nil<Img<DoubleType>>() {}).apply();
-		ops.op("filter.tubeness").input(input, es, sigma).output(actual).compute();
-
-		assertTrue(AssertIterations.equal(expected, actual));
-
+	/**
+	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within
+	 * the non-negative delta {@code 10^epsilonExp}.
+	 * 
+	 * @param expected
+	 * @param actual
+	 * @param epsilonExp
+	 */
+	public static void asesrtCloseEnough(double expected, double actual,
+		int epsilonExp)
+	{
+		double numerator = Math.abs(expected);
+		double denominator = Math.pow(10., epsilonExp);
+		double epsilon = numerator / denominator;
+		assertEquals(expected, actual, epsilon);
 	}
 
 }

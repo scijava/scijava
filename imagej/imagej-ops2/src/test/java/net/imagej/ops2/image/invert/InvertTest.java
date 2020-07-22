@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.math.BigInteger;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imagej.types.UnboundedIntegerType;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
@@ -238,7 +238,7 @@ public class InvertTest extends AbstractOpTest {
 				new UnsignedShortType((short) 8008));
 	}
 
-	//TODO: resolve imagej-common dependency within imagej-test-util
+	//TODO: resolve imagej-common dependency within imagej-testutil
 //	@Test
 //	public void testUnboundedIntegerTypeInvert() {
 //		final Img<UnboundedIntegerType> inUnboundedIntegerType = TestImgGeneration.generateUnboundedIntegerTypeListTestImg(true, 5, 5);

@@ -1,4 +1,4 @@
-package org.scijava.test_util;
+package org.scijava.testutil;
 
 import java.util.Iterator;
 

@@ -164,7 +164,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-test-util</artifactId>
+			<artifactId>scijava-testutil</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

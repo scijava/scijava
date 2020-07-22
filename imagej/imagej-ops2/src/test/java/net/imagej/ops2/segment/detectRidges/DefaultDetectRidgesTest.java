@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.test_util.TestImgGeneration;
+import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.roi.geom.real.DefaultWritablePolyline;

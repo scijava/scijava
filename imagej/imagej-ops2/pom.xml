@@ -343,13 +343,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-test-util</artifactId>
+			<artifactId>scijava-testutil</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.imagej</groupId>
-			<artifactId>imagej-test-util</artifactId>
+			<artifactId>imagej-testutil</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

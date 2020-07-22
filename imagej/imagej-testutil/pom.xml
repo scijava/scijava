@@ -10,15 +10,15 @@
 	</parent>
 
 	<groupId>net.imagej</groupId>
-	<artifactId>imagej-test-util</artifactId>
+	<artifactId>imagej-testutil</artifactId>
 
 	<name>ImageJ Test Util</name>
-	<description>ImageJ Test Util: a testing framework for reusable algorithms.</description>
+	<description>Shared test utilities for ImageJ projects.</description>
 	<url>None</url>
 	<inceptionYear>2020</inceptionYear>
 	<organization>
 		<name>ImageJ</name>
-		<url>http://imagej.net/</url>
+		<url>https://imagej.net/</url>
 	</organization>
 	<licenses>
 		<license>
@@ -31,12 +31,10 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>http://imagej.net/User:Rueden</url>
+			<url>https://imagej.net/User:Rueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
-				<role>developer</role>
-				<role>debugger</role>
 				<role>reviewer</role>
 				<role>support</role>
 				<role>maintainer</role>
@@ -58,23 +56,19 @@
 		</developer>
 	</developers>
 	<contributors>
-		<!-- TODO: Remove -->
+		<!--
+		NB: Need a least one element to override the parent.
+		See: https://issues.apache.org/jira/browse/MNG-5220
+		-->
 		<contributor>
-			<name>Christian Dietz</name>
-			<url>https://imagej.net/User:Dietzc</url>
-			<roles>
-				<role>founder</role>
-			</roles>
-			<properties>
-				<id>dietzc</id>
-			</properties>
+			<name>None</name>
 		</contributor>
 	</contributors>
 
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/</archive>
+			<archive>https://forum.image.sc/tag/imagej</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -86,7 +80,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/imagej/imagej-test-util/issues</url>
+		<url>https://github.com/imagej/imagej-testutil/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Travis CI</system>
@@ -94,8 +88,8 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>net.imagej.test_util</package-name>
-		<main-class>net.imagej.test_util.Main</main-class>
+		<package-name>net.imagej.testutil</package-name>
+		<main-class>net.imagej.testutil.Main</main-class>
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>ImageJ developers.</license.copyrightOwners>
 
@@ -111,39 +105,16 @@
 	</repositories>
 
 	<dependencies>
-		<!-- ImageJ dependencies -->
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common</artifactId>
+		</dependency>
 
 		<!-- ImgLib2 dependencies -->
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2</artifactId>
-		</dependency>
-
-		<!-- SciJava dependencies -->
-		<dependency>
-			<!-- Do not remove - Maven incorrectly identifies it as an unused dependency!  -->
-			<groupId>org.scijava</groupId>
-			<artifactId>scripting-javascript</artifactId>
-		</dependency>
-
-		<!-- Third party dependencies -->
-		
-		<!-- Test scope dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>junit-benchmarks</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-test-util</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

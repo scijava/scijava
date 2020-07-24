@@ -50,7 +50,7 @@ public class AssertClose {
 	 * @param actual
 	 * @param deltaExp
 	 */
-	public static void asesrtCloseEnough(double expected, double actual,
+	public static void assertCloseEnough(double expected, double actual,
 		int deltaExp)
 	{
 		double numerator = Math.abs(expected);
@@ -68,7 +68,7 @@ public class AssertClose {
 	 * @param deltaExp
 	 * @param message
 	 */
-	public static void asesrtCloseEnough(double expected, double actual,
+	public static void assertCloseEnough(double expected, double actual,
 		int deltaExp, String message)
 	{
 		double numerator = Math.abs(expected);

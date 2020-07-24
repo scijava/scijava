@@ -48,14 +48,14 @@ public class AssertClose {
 	 * 
 	 * @param expected
 	 * @param actual
-	 * @param deltaExp
+	 * @param order - the order of magnitude of the delta
 	 */
 	public static void assertCloseEnough(double expected, double actual,
-		int deltaExp)
+		int order)
 	{
-		double numerator = Math.abs(expected);
-		double denominator = Math.pow(10., deltaExp);
-		double delta = numerator / denominator;
+		double significand = Math.abs(expected);
+		double exponential = Math.pow(10., order);
+		double delta = significand * exponential;
 		assertEquals(expected, actual, delta);
 	}
 
@@ -65,15 +65,15 @@ public class AssertClose {
 	 *
 	 * @param expected
 	 * @param actual
-	 * @param deltaExp
+	 * @param order - the order of magnitude of the delta
 	 * @param message
 	 */
 	public static void assertCloseEnough(double expected, double actual,
-		int deltaExp, String message)
+		int order, String message)
 	{
-		double numerator = Math.abs(expected);
-		double denominator = Math.pow(10., deltaExp);
-		double delta = numerator / denominator;
+		double significand = Math.abs(expected);
+		double exponential = Math.pow(10., order);
+		double delta = significand * exponential;
 		assertEquals(expected, actual, delta, message);
 	}
 

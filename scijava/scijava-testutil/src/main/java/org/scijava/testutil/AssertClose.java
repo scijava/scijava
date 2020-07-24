@@ -44,7 +44,7 @@ public class AssertClose {
 
 	/**
 	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within
-	 * the non-negative delta {@code 10^deltaExp}.
+	 * the non-negative delta {@code |expected| * 10^deltaExp}.
 	 * 
 	 * @param expected
 	 * @param actual
@@ -61,7 +61,7 @@ public class AssertClose {
 
 	/**
 	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within
-	 * the non-negative delta {@code 10^deltaExp}.
+	 * the non-negative delta {@code |expected| * 10^deltaExp}.
 	 *
 	 * @param expected
 	 * @param actual

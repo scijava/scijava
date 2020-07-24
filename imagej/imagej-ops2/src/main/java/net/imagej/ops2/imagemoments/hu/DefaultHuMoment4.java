@@ -79,7 +79,7 @@ public class DefaultHuMoment4<I extends RealType<I>, O extends RealType<O>> impl
 		final O n21 = output.createVariable();
 		normalizedCentralMoment21Func.compute(input, n21);
 		final O n03 = output.createVariable();
-		normalizedCentralMoment03Func.compute(input, n30);
+		normalizedCentralMoment03Func.compute(input, n03);
 
 		// term1 = (n30 + n12)^2
 		final O term1 = n30.copy();

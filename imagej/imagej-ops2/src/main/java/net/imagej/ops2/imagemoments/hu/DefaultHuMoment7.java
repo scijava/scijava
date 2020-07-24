@@ -82,9 +82,8 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 		// term1 = (3*n21 - n03)(n30 + n12)[(n30 + n12)^2 - 3*(n21 + n03)^2]
 		// term11 = (3*n21 - n03)
 		final O term11 = n21.copy();
-		output.mul(3d);
-		output.set(n03);
-		term11.sub(output);
+		term11.mul(3d);
+		term11.sub(n03);
 		// term12 = (n30 + n12)
 		final O term12 = n30.copy();
 		term12.add(n12);
@@ -123,7 +122,7 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 		term2.mul(term23);
 		
 		output.set(term1);
-		output.add(term2);
+		output.sub(term2);
 
 	}
 }

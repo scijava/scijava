@@ -112,8 +112,8 @@ public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>> impl
 		// term21 = 4*n11
 		final O term21 = n11.copy();
 		term21.mul(4);
-		// term22 = (n20 + n12)
-		final O term22 = n20.copy();
+		// term22 = (n30 + n12)
+		final O term22 = n30.copy();
 		term22.add(n12);
 		// term23 = (n21 + n03)
 		final O term23 = n21.copy();

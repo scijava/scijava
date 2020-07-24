@@ -59,4 +59,22 @@ public class AssertClose {
 		assertEquals(expected, actual, delta);
 	}
 
+	/**
+	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within
+	 * the non-negative delta {@code 10^deltaExp}.
+	 *
+	 * @param expected
+	 * @param actual
+	 * @param deltaExp
+	 * @param message
+	 */
+	public static void asesrtCloseEnough(double expected, double actual,
+		int deltaExp, String message)
+	{
+		double numerator = Math.abs(expected);
+		double denominator = Math.pow(10., deltaExp);
+		double delta = numerator / denominator;
+		assertEquals(expected, actual, delta, message);
+	}
+
 }

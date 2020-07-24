@@ -31,7 +31,7 @@ package net.imagej.ops2.image.normalize;
 
 import java.util.function.Function;
 
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -42,7 +42,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Normalizes an {@link IterableInterval} given its minimum and maximum to
+ * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
  * another range defined by minimum and maximum.
  * 
  * TODO: Should this be a scale op?
@@ -56,17 +56,17 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class NormalizeIILazyFunction<I extends RealType<I>>
-		implements Function<IterableInterval<I>, IterableInterval<I>> {
+		implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> {
 
 	@OpDependency(name = "create.img")
-	private Function<IterableInterval<I>, IterableInterval<I>> createFunc;
+	private Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> createFunc;
 
 	@OpDependency(name = "image.normalize")
-	private Computers.Arity1<IterableInterval<I>, IterableInterval<I>> normalizer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> normalizer;
 
 	@Override
-	public IterableInterval<I> apply(IterableInterval<I> img) {
-		IterableInterval<I> output = createFunc.apply(img);
+	public RandomAccessibleInterval<I> apply(RandomAccessibleInterval<I> img) {
+		RandomAccessibleInterval<I> output = createFunc.apply(img);
 		normalizer.compute(img, output);
 		return output;
 	}

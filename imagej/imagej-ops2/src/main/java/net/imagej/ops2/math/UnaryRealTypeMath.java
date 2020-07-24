@@ -34,14 +34,11 @@ import java.util.Random;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Ops of the {@code math} namespace which operate on {@link RealType}s.
@@ -384,6 +381,18 @@ public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O
 	@OpField(names = "math.power", params = "input, constant, output")
 	public final Computers.Arity2<I, Double, O> power = (input, constant, output) -> output
 			.setReal(Math.pow(input.getRealDouble(), constant));
+	
+	/**
+	 * Uses ImgLib2 Mul interface to take a type to an integer power.
+	 */
+	@OpField(names = "math.power", params = "input, constant, output")
+	public final Computers.Arity2<I, Integer, I> intPower = (input, constant,
+		output) -> {
+		output.setOne();
+		for (int i = 0; i < constant; i++) {
+			output.mul(input);
+		}
+	};
 
 	/**
 	 * Sets the real component of an output real number to a random value using a

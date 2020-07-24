@@ -30,7 +30,7 @@
 package net.imagej.ops2.imagemoments.hu;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -49,6 +49,7 @@ import org.scijava.struct.ItemIO;
  *            input type
  * @param <O>
  *            output type
+ * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
  */
 @Plugin(type = Op.class, name = "imageMoments.huMoment7", label = "Image Moment: HuMoment7")
 @Parameter(key = "input")
@@ -56,19 +57,19 @@ import org.scijava.struct.ItemIO;
 public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment30")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment30Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment30Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment12")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment12Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment12Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment21")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment21Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment21Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment03")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment03Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment03Func;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O n03 = output.createVariable();
 		normalizedCentralMoment03Func.compute(input, n03);
 		final O n12 = output.createVariable();
@@ -77,12 +78,51 @@ public class DefaultHuMoment7<I extends RealType<I>, O extends RealType<O>> impl
 		normalizedCentralMoment21Func.compute(input, n21);
 		final O n30 = output.createVariable();
 		normalizedCentralMoment30Func.compute(input, n30);
+		
+		// term1 = (3*n21 - n03)(n30 + n12)[(n30 + n12)^2 - 3*(n21 + n03)^2]
+		// term11 = (3*n21 - n03)
+		final O term11 = n21.copy();
+		term11.mul(3d);
+		term11.sub(n03);
+		// term12 = (n30 + n12)
+		final O term12 = n30.copy();
+		term12.add(n12);
+		// term13 = [(n30 + n12)^2 - 3*(n21 + n03)^2]
+		final O term13 = term12.copy();
+		term13.mul(term12);
+		output.set(n21);
+		output.add(n03);
+		output.mul(output);
+		output.mul(3);
+		term13.sub(output);
+		
+		final O term1 = term11.copy();
+		term1.mul(term12);
+		term1.mul(term13);
+		
+		// term2 = (n30 - 3*n12)(n21 + n03)[3*(n30 + n12)^2 - (n21 + n03)^2]
+		// term21 = (n30 - 3*n12)
+		final O term21 = n30.copy();
+		output.set(n12);
+		output.mul(3);
+		term21.sub(output);
+		// term22 = (n21 + n03)
+		final O term22 = n21.copy();
+		term22.add(n03);
+		// term23 = [3*(n30 + n12)^2 - (n21 + n03)^2] = [3*(term12^2) - term22^2]
+		final O term23 = term12.copy();
+		term23.mul(term12);
+		term23.mul(3);
+		output.set(term22);
+		output.mul(term22);
+		term23.sub(output);
+		
+		final O term2 = term21.copy();
+		term2.mul(term22);
+		term2.mul(term23);
+		
+		output.set(term1);
+		output.sub(term2);
 
-		output.setReal((3 * n21.getRealDouble() - n03.getRealDouble()) * (n30.getRealDouble() + n12.getRealDouble())
-				* (Math.pow(n30.getRealDouble() + n12.getRealDouble(), 2)
-						- 3 * Math.pow(n21.getRealDouble() + n03.getRealDouble(), 2))
-				- (n30.getRealDouble() - 3 * n12.getRealDouble()) * (n21.getRealDouble() + n03.getRealDouble())
-						* (3 * Math.pow(n30.getRealDouble() + n12.getRealDouble(), 2)
-								- Math.pow(n21.getRealDouble() + n03.getRealDouble(), 2)));
 	}
 }

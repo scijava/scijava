@@ -29,8 +29,10 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
@@ -42,37 +44,22 @@ import org.scijava.struct.ItemIO;
  * {@link Op} to calculate the {@code stats.moment3AboutMean} using
  * {@code stats.mean} and {@code stats.size}.
  * 
- * @author Daniel Seebacher (University of Konstanz)
- * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I>
  *            input type
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.moment3AboutMean")
+@Plugin(type = Op.class, name = "stats.moment3AboutMean", priority = Priority.HIGH)
 @Parameter(key = "iterableInput")
 @Parameter(key = "moment3AboutMean", itemIO = ItemIO.BOTH)
-public class DefaultMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
+public class DefaultMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
-	@OpDependency(name = "stats.mean")
-	private Computers.Arity1<Iterable<I>, O> meanComputer;
-	@OpDependency(name = "stats.size")
-	private Computers.Arity1<Iterable<I>, O> sizeComputer;
+	@OpDependency(name = "stats.momentNAboutMean")
+	private Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> momentComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		final O mean = output.createVariable();
-		meanComputer.compute(input, mean);
-		final O size = output.createVariable();
-		sizeComputer.compute(input, size);
-
-		double res = 0;
-		final double m = mean.getRealDouble();
-		for (final I in : input) {
-			final double val = in.getRealDouble() - m;
-			res += val * val * val;
-		}
-
-		output.setReal(res / size.getRealDouble());
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+		momentComputer.compute(input, 3, output);
 	}
 }

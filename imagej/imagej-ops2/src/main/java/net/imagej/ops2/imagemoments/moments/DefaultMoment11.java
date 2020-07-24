@@ -29,10 +29,14 @@
 
 package net.imagej.ops2.imagemoments.moments;
 
+import java.util.List;
+
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
 import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Intervals;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
@@ -57,19 +61,26 @@ public class DefaultMoment11<I extends RealType<I>, O extends RealType<O>>
 {
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input,
+		final O output)
+	{
 
-		double moment11 = 0;
+		List<O> sums = LoopBuilder.setImages(input, Intervals.positions(input))
+			.multiThreaded().forEachChunk(chunk -> {
+				O sum = output.createVariable();
+				sum.setZero();
+				O temp = output.createVariable();
+				chunk.forEachPixel((pixel, pos) -> {
+					temp.setReal(pixel.getRealDouble());
+					temp.mul(pos.getDoublePosition(0));
+					temp.mul(pos.getDoublePosition(1));
+					sum.add(temp);
+				});
+				return sum;
+			});
 
-		final Cursor<I> cur = input.localizingCursor();
-		while (cur.hasNext()) {
-			cur.fwd();
-			double x = cur.getDoublePosition(0);
-			double y = cur.getDoublePosition(1);
-			double val = cur.get().getRealDouble();
-			moment11 += x * y * val;
-		}
-
-		output.setReal(moment11);
+		output.setZero();
+		for (O sum : sums)
+			output.add(sum);
 	}
 }

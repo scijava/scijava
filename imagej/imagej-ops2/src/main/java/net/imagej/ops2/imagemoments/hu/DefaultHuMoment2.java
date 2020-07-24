@@ -30,7 +30,7 @@
 package net.imagej.ops2.imagemoments.hu;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -45,10 +45,12 @@ import org.scijava.struct.ItemIO;
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I>
  *            input type
  * @param <O>
  *            output type
+ * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
  */
 @Plugin(type = Op.class, name = "imageMoments.huMoment2", label = "Image Moment: HuMoment2")
 @Parameter(key = "input")
@@ -56,16 +58,16 @@ import org.scijava.struct.ItemIO;
 public class DefaultHuMoment2<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment20")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment20Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment20Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment02")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment02Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment02Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment11")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment11Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment11Func;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 
 		final O n11 = output.createVariable();
 		normalizedCentralMoment11Func.compute(input, n11);
@@ -73,7 +75,20 @@ public class DefaultHuMoment2<I extends RealType<I>, O extends RealType<O>> impl
 		normalizedCentralMoment20Func.compute(input, n20);
 		final O n02 = output.createVariable();
 		normalizedCentralMoment02Func.compute(input, n02);
-
-		output.setReal(Math.pow(n20.getRealDouble() - n02.getRealDouble(), 2) + 4 * (Math.pow(n11.getRealDouble(), 2)));
+		
+		// n11Squared = 4 * n11 * n11
+		final O n11Squared = n11.copy();
+		n11Squared.mul(n11);
+		output.setReal(4d);
+		n11Squared.mul(output);
+		
+		// n2Squared = (n20 - n02)^2
+		final O n2Squared = n20.copy();
+		n2Squared.sub(n02);
+		n2Squared.mul(n2Squared);
+		
+		//output = n2Squared + n11Squared
+		output.set(n2Squared);
+		output.add(n11Squared);
 	}
 }

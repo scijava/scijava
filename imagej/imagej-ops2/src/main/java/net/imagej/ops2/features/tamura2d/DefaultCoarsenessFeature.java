@@ -72,7 +72,7 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 
 	@OpDependency(name = "filter.mean")
 	private Computers.Arity3<RandomAccessibleInterval<I>, Shape, //
-			OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, IterableInterval<I>> meanOp;
+			OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> meanOp;
 
 	@SuppressWarnings("unchecked")
 	@Override

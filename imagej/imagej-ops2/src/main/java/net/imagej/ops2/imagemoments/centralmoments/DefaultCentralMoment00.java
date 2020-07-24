@@ -30,7 +30,7 @@
 package net.imagej.ops2.imagemoments.centralmoments;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -56,10 +56,10 @@ public class DefaultCentralMoment00<I extends RealType<I>, O extends RealType<O>
 {
 
 	@OpDependency(name = "imageMoments.moment00")
-	private Computers.Arity1<IterableInterval<I>, O> moment00Cmp;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment00Cmp;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		moment00Cmp.compute(input, output);
 	}
 }

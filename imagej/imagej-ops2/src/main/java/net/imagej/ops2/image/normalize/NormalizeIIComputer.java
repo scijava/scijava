@@ -32,9 +32,11 @@ package net.imagej.ops2.image.normalize;
 import java.util.function.Function;
 
 import net.imglib2.Cursor;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
+import net.imglib2.util.Util;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
@@ -44,7 +46,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Normalizes an {@link IterableInterval} given its minimum and maximum to
+ * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
  * another range defined by minimum and maximum.
  * 
  * @author Christian Dietz (University of Konstanz)
@@ -63,14 +65,14 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "targetMax")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> {
+		implements Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> {
 
 	private NormalizeRealTypeComputer<I, O> normalizer;
 
 	@OpDependency(name = "stats.minMax")
-	private Function<IterableInterval<I>, Pair<I, I>> minMaxFunc;
+	private Function<RandomAccessibleInterval<I>, Pair<I, I>> minMaxFunc;
 
-	private double[] getBounds(final IterableInterval<I> input, final I sourceMin, final I sourceMax, final O targetMin,
+	private double[] getBounds(final RandomAccessibleInterval<I> input, final I sourceMin, final I sourceMax, final O targetMin,
 			final O targetMax) {
 		// the four elements are source min, source max, target min, and target max.
 		final double[] result = new double[4];
@@ -82,22 +84,20 @@ public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 			result[0] = sourceMin.getRealDouble();
 			result[1] = sourceMax.getRealDouble();
 		}
-		final I first = input.firstElement();
+		final I first = Util.getTypeFromInterval(input);
 		result[2] = targetMin == null ? first.getMinValue() : targetMin.getRealDouble();
 		result[3] = targetMax == null ? first.getMaxValue() : targetMax.getRealDouble();
 		return result;
 	}
 
 	@Override
-	public void compute(final IterableInterval<I> input, final I sourceMin, final I sourceMax, final O targetMin,
-			final O targetMax, final IterableInterval<O> output) {
+	public void compute(final RandomAccessibleInterval<I> input, final I sourceMin, final I sourceMax, final O targetMin,
+			final O targetMax, final RandomAccessibleInterval<O> output) {
 		normalizer = new NormalizeRealTypeComputer<>();
 		final double[] bounds = getBounds(input, sourceMin, sourceMax, targetMin, targetMax);
 		normalizer.setup(bounds[0], bounds[1], bounds[2], bounds[3]);
-		Cursor<I> inCursor = input.cursor();
-		Cursor<O> outCursor = output.cursor();
-		while(inCursor.hasNext()) {
-			normalizer.compute(inCursor.next(), outCursor.next());
-		}
+		LoopBuilder.setImages(input, output).multiThreaded().forEachPixel((in, out) -> {
+			normalizer.compute(in, out);
+		});
 	}
 }

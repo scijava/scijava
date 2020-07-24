@@ -44,19 +44,37 @@ public class AssertClose {
 
 	/**
 	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within
-	 * the non-negative delta {@code 10^epsilonExp}.
+	 * the non-negative delta {@code |expected| * 10^deltaExp}.
 	 * 
 	 * @param expected
 	 * @param actual
-	 * @param epsilonExp
+	 * @param order - the order of magnitude of the delta
 	 */
-	public static void asesrtCloseEnough(double expected, double actual,
-		int epsilonExp)
+	public static void assertCloseEnough(double expected, double actual,
+		int order)
 	{
-		double numerator = Math.abs(expected);
-		double denominator = Math.pow(10., epsilonExp);
-		double epsilon = numerator / denominator;
-		assertEquals(expected, actual, epsilon);
+		double significand = Math.abs(expected);
+		double exponential = Math.pow(10., order);
+		double delta = significand * exponential;
+		assertEquals(expected, actual, delta);
+	}
+
+	/**
+	 * <em>Assert</em> that {@code expected} and {@code actual} are equal within
+	 * the non-negative delta {@code |expected| * 10^deltaExp}.
+	 *
+	 * @param expected
+	 * @param actual
+	 * @param order - the order of magnitude of the delta
+	 * @param message
+	 */
+	public static void assertCloseEnough(double expected, double actual,
+		int order, String message)
+	{
+		double significand = Math.abs(expected);
+		double exponential = Math.pow(10., order);
+		double delta = significand * exponential;
+		assertEquals(expected, actual, delta, message);
 	}
 
 }

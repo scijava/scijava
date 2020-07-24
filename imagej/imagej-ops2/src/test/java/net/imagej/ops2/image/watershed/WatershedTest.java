@@ -90,8 +90,7 @@ public class WatershedTest extends AbstractOpTest {
 			"create.img").input(distMap, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()
 				{}).apply();
-		ops.op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(
-			invertedDistMap)).compute();
+		ops.op("image.invert").input(distMap).output(invertedDistMap).compute();
 		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img")
 			.input(invertedDistMap, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()

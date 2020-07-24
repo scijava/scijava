@@ -29,8 +29,16 @@
 
 package net.imagej.ops2.stats;
 
-import net.imglib2.type.numeric.RealType;
+import java.util.function.BiFunction;
 
+import net.imglib2.Dimensions;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.Img;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
+
+import org.scijava.Priority;
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
@@ -40,24 +48,30 @@ import org.scijava.struct.ItemIO;
 /**
  * {@link Op} to calculate the {@code stats.sumOfLogs}.
  * 
- * @author Daniel Seebacher (University of Konstanz)
- * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I>
  *            input type
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.sumOfLogs")
-@Parameter(key = "iterableInput")
+@Plugin(type = Op.class, name = "stats.sumOfLogs", priority = Priority.HIGH)
+@Parameter(key = "raiInput")
 @Parameter(key = "sumOfLogs", itemIO = ItemIO.BOTH)
-public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
+public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
+	
+	@OpDependency(name = "create.img")
+	private BiFunction<Dimensions, DoubleType, RandomAccessibleInterval<DoubleType>> imgCreator;
+	
+	@OpDependency(name = "math.log")
+	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<DoubleType>> logOp;
+	
+	@OpDependency(name = "stats.sum")
+	private Computers.Arity1<RandomAccessibleInterval<DoubleType>, O> sumOp;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
-		double res = 0.0;
-		for (final I in : input) {
-			res += Math.log(in.getRealDouble());
-		}
-		output.setReal(res);
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
+		RandomAccessibleInterval<DoubleType> logImg = imgCreator.apply(input, new DoubleType());
+		logOp.compute(input, logImg);
+		sumOp.compute(logImg, output);
 	}
 }

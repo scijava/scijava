@@ -31,7 +31,7 @@ package net.imagej.ops2.features.haralick;
 
 import net.imagej.ops2.image.cooccurrenceMatrix.CooccurrenceMatrix2D;
 import net.imagej.ops2.image.cooccurrenceMatrix.MatrixOrientation;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
@@ -45,18 +45,17 @@ import org.scijava.ops.function.Functions;
  * @param <T>
  */
 public abstract class AbstractHaralickFeature<T extends RealType<T>>
-		implements Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> {
+		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> {
 
 	@OpDependency(name = "image.cooccurrenceMatrix")
-	private Functions.Arity4<IterableInterval<T>, Integer, Integer, MatrixOrientation, double[][]> coocFunc;
+	private Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> coocFunc;
 
 	/**
-	 * Creates {@link CooccurrenceMatrix2D} from {@link IterableInterval} on demand,
 	 * given the specified parameters. No caching!
 	 * 
 	 * @return the {@link CooccurrenceMatrix2D}
 	 */
-	protected double[][] getCooccurrenceMatrix(final IterableInterval<T> input, final Integer numGreyLevels,
+	protected double[][] getCooccurrenceMatrix(final RandomAccessibleInterval<T> input, final Integer numGreyLevels,
 			final Integer distance, final MatrixOrientation matrixOrientation) {
 		if (matrixOrientation.numDims() != input.numDimensions())
 			throw new IllegalArgumentException("MatrixOrientation must be of the same dimensions as the input!");

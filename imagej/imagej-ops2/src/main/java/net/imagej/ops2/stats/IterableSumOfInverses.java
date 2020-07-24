@@ -29,10 +29,8 @@
 
 package net.imagej.ops2.stats;
 
-import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
@@ -40,23 +38,35 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * {@link Op} to calculate the {@code stats.size} directly.
+ * {@link Op} to calculate the {@code stats.sumOfInverses}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <I>
  *            input type
  * @param <O>
  *            output type
  */
-@Plugin(type = Op.class, name = "stats.size", priority = Priority.VERY_HIGH)
+@Plugin(type = Op.class, name = "stats.sumOfInverses")
 @Parameter(key = "iterableInput")
-@Parameter(key = "size", itemIO = ItemIO.BOTH)
-public class IISize<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<IterableInterval<I>, O> {
+@Parameter(key = "sumOfInverses", itemIO = ItemIO.BOTH)
+public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<Iterable<I>, O, O> {
 
 	@Override
-	public void compute(final IterableInterval<I> input, final O output) {
-		output.setReal(input.size());
+	public void compute(final Iterable<I> input, final O dbzValue,
+		final O output)
+	{
+		double res = 0.0;
+		for (final I in : input) {
+			double inVal = in.getRealDouble();
+			if (inVal == 0d) {
+				res += dbzValue.getRealDouble();
+			}
+			else {
+				res += 1.0d / in.getRealDouble();
+			}
+		}
+		output.setReal(res);
 	}
-
 }

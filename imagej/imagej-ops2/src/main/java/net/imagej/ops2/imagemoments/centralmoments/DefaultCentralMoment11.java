@@ -31,6 +31,7 @@ package net.imagej.ops2.imagemoments.centralmoments;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
 import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -57,19 +58,19 @@ public class DefaultCentralMoment11<I extends RealType<I>, O extends RealType<O>
 		implements AbstractImageMomentOp<I, O> {
 
 	@OpDependency(name = "imageMoments.moment00")
-	private Computers.Arity1<IterableInterval<I>, O> moment00Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment00Func;
 
 	@OpDependency(name = "imageMoments.moment01")
-	private Computers.Arity1<IterableInterval<I>, O> moment01Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment01Func;
 
 	@OpDependency(name = "imageMoments.moment10")
-	private Computers.Arity1<IterableInterval<I>, O> moment10Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment10Func;
 
 	@OpDependency(name = "imageMoments.moment11")
-	private Computers.Arity1<IterableInterval<I>, O> moment11Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment11Func;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O moment00 = output.createVariable();
 		moment00Func.compute(input, moment00);
 		final O moment01 = output.createVariable();
@@ -78,9 +79,13 @@ public class DefaultCentralMoment11<I extends RealType<I>, O extends RealType<O>
 		moment10Func.compute(input, moment10);
 		final O moment11 = output.createVariable();
 		moment11Func.compute(input, moment11);
-
-		final double centerX = moment10.getRealDouble() / moment00.getRealDouble();
-
-		output.setReal(moment11.getRealDouble() - (centerX * moment01.getRealDouble()));
+		
+		// output = moment11 - (moment10 * moment01 / moment00)
+		final O centerX = moment10;
+		centerX.div(moment00);
+		centerX.mul(moment01);
+		
+		output.set(moment11);
+		output.sub(centerX);
 	}
 }

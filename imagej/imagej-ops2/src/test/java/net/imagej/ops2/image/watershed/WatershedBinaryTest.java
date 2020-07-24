@@ -81,7 +81,7 @@ public class WatershedBinaryTest extends AbstractOpTest {
 		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op("create.img")
 				.input(distMap, new FloatType()).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 		double[] sigma = { 3.0, 3.0, 0.0 };
-		ops.op("image.invert").input(Views.iterable(distMap)).output(Views.iterable(invertedDistMap))
+		ops.op("image.invert").input(distMap).output(invertedDistMap)
 				.compute();
 
 		final RandomAccessibleInterval<FloatType> gauss = ops.op("create.img")

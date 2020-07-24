@@ -29,6 +29,7 @@
 
 package net.imagej.ops2.stats;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -52,15 +53,15 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.skewness")
 @Parameter(key = "iterableInput")
 @Parameter(key = "skewness", itemIO = ItemIO.BOTH)
-public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
+public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.moment3AboutMean")
-	private Computers.Arity1<Iterable<I>, O> moment3AboutMeanComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment3AboutMeanComputer;
 	@OpDependency(name = "stats.stdDev")
-	private Computers.Arity1<Iterable<I>, O> stdDevComputer;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> stdDevComputer;
 
 	@Override
-	public void compute(final Iterable<I> input, final O output) {
+	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O moment3 = output.createVariable();
 		moment3AboutMeanComputer.compute(input, moment3);
 		final O stdDev = output.createVariable();

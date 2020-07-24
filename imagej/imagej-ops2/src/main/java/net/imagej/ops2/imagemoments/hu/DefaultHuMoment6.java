@@ -30,7 +30,7 @@
 package net.imagej.ops2.imagemoments.hu;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
@@ -49,6 +49,7 @@ import org.scijava.struct.ItemIO;
  *            input type
  * @param <O>
  *            output type
+ * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
  */
 @Plugin(type = Op.class, name = "imageMoments.huMoment6", label = "Image Moment: HuMoment6")
 @Parameter(key = "input")
@@ -56,28 +57,28 @@ import org.scijava.struct.ItemIO;
 public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment30")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment30Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment30Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment12")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment12Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment12Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment21")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment21Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment21Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment03")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment03Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment03Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment02")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment02Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment02Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment11")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment11Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment11Func;
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment20")
-	private Computers.Arity1<IterableInterval<I>, O> normalizedCentralMoment20Func;
+	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment20Func;
 
 	@Override
-	public void computeMoment(final IterableInterval<I> input, final O output) {
+	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O n02 = output.createVariable();
 		normalizedCentralMoment02Func.compute(input, n02);
 		final O n03 = output.createVariable();
@@ -92,11 +93,37 @@ public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>> impl
 		normalizedCentralMoment21Func.compute(input, n21);
 		final O n30 = output.createVariable();
 		normalizedCentralMoment30Func.compute(input, n30);
-
-		output.setReal((n20.getRealDouble() - n02.getRealDouble())
-				* (Math.pow(n30.getRealDouble() + n12.getRealDouble(), 2)
-						- Math.pow(n21.getRealDouble() + n03.getRealDouble(), 2))
-				+ 4 * n11.getRealDouble() * (n30.getRealDouble() + n12.getRealDouble())
-						* (n21.getRealDouble() + n03.getRealDouble()));
+		
+		// term11 = (n20 - n02)
+		final O term11 = n20.copy();
+		term11.sub(n02);
+		// term12 = [(n30 + n12)^2 - (n21 + n03)^2]
+		final O term12 = n30.copy();
+		term12.add(n12);
+		term12.mul(term12);
+		output.set(n21);
+		output.add(n03);
+		output.mul(output);
+		term12.sub(output);
+		// term1 = term11 * term12
+		final O term1 = term11.copy();
+		term1.mul(term12);
+		
+		// term21 = 4*n11
+		final O term21 = n11.copy();
+		term21.mul(4);
+		// term22 = (n30 + n12)
+		final O term22 = n30.copy();
+		term22.add(n12);
+		// term23 = (n21 + n03)
+		final O term23 = n21.copy();
+		term23.add(n03);
+		// term2 = term21 * term22 * term23 
+		final O term2 = term21.copy();
+		term2.mul(term22);
+		term2.mul(term23);
+		
+		output.set(term1);
+		output.add(term2);
 	}
 }

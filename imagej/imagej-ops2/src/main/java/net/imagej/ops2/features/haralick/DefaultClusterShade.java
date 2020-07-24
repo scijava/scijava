@@ -31,7 +31,7 @@ package net.imagej.ops2.features.haralick;
 import java.util.function.Function;
 
 import net.imagej.ops2.image.cooccurrenceMatrix.MatrixOrientation;
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
@@ -62,7 +62,7 @@ public class DefaultClusterShade<T extends RealType<T>> extends AbstractHaralick
 	private Function<double[][], DoubleType> coocMeanYFunc;
 
 	@Override
-	public DoubleType apply(final IterableInterval<T> input, final Integer numGreyLevels, final Integer distance,
+	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);
 

@@ -31,13 +31,13 @@ package net.imagej.ops2.image.normalize;
 
 import java.util.function.Function;
 
-import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
+import net.imglib2.util.Util;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
@@ -45,7 +45,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 /**
- * Normalizes an {@link IterableInterval} given its minimum and maximum to
+ * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
  * another range defined by minimum and maximum.
  * 
  * TODO: Should this be a scale op?
@@ -59,20 +59,20 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
-		implements Computers.Arity1<IterableInterval<I>, IterableInterval<O>> {
+		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "stats.minMax")
-	private Function<IterableInterval<I>, Pair<I, I>> minMaxFunc;
+	private Function<RandomAccessibleInterval<I>, Pair<I, I>> minMaxFunc;
 
 	@OpDependency(name = "image.normalize")
-	private Computers.Arity5<IterableInterval<I>, I, I, O, O, IterableInterval<O>> normalizerFunc;
+	private Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> normalizerFunc;
 
 	@Override
-	public void compute(IterableInterval<I> img, @Mutable IterableInterval<O> output) {
+	public void compute(RandomAccessibleInterval<I> img, @Mutable RandomAccessibleInterval<O> output) {
 		Pair<I, I> sourceMinMax = minMaxFunc.apply(img);
-		O min = output.firstElement().createVariable();
+		O min = Util.getTypeFromInterval(output).createVariable();
 		min.setReal(min.getMinValue());
-		O max = output.firstElement().createVariable();
+		O max = Util.getTypeFromInterval(output).createVariable();
 		max.setReal(max.getMaxValue());
 
 		normalizerFunc.accept(img, sourceMinMax.getA(), sourceMinMax.getB(), min, max, output);

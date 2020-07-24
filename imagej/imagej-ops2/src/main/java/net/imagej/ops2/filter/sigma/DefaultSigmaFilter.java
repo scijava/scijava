@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.filter.sigma;
 
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
@@ -60,18 +59,18 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "minPixelFraction")
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
-		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, IterableInterval<V>> {
+		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, RandomAccessibleInterval<V>> {
 
 	@OpDependency(name = "stats.variance")
 	private Computers.Arity1<Iterable<T>, DoubleType> varianceOp;
 
 	@OpDependency(name = "map.neighborhood")
-	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity2<Iterable<T>, T, V>, IterableInterval<V>> mapper;
+	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity2<Iterable<T>, T, V>, RandomAccessibleInterval<V>> mapper;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory, final Double range,
-			final Double minPixelFraction, final IterableInterval<V> output) {
+			final Double minPixelFraction, final RandomAccessibleInterval<V> output) {
 		if (range <= 0)
 			throw new IllegalArgumentException("range must be positive!");
 		Computers.Arity2<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op.compute(in1, in2, range, minPixelFraction, out);

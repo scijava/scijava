@@ -249,29 +249,24 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 *           could not be found, if an exception occurs during injection
 	 */
 	private List<Object> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) throws OpMatchingException {
+
 		final List<OpDependencyMember<?>> dependencies = info.dependencies();
 		final List<Object> resolvedDependencies = new ArrayList<>(dependencies.size());
+
 		for (final OpDependencyMember<?> dependency : dependencies) {
-			final String dependencyName = dependency.getDependencyName();
-			final Type mappedDependencyType = Types.mapVarToTypes(new Type[] { dependency.getType() },
-					typeVarAssigns)[0];
-			final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName, typeVarAssigns);
-			if (inferredRef == null) {
-				throw new OpMatchingException("Could not infer functional "
-						+ "method inputs and outputs of Op dependency field: " + dependency.getKey());
-			}
+			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
 			try {
-				resolvedDependencies.add(findOpInstance(dependencyName, inferredRef, dependency.isAdaptable()));
+				resolvedDependencies.add(findOpInstance(dependencyRef.getName(), dependencyRef, dependency.isAdaptable()));
 			} catch (final Exception e) {
 				throw new OpMatchingException("Could not find Op that matches requested Op dependency:" + "\nOp class: "
 						+ info.implementationName() + //
 						"\nDependency identifier: " + dependency.getKey() + //
-						"\n\n Attempted request:\n" + inferredRef, e);
+						"\n\n Attempted request:\n" + dependencyRef, e);
 			}
 		}
 		return resolvedDependencies;
 	}
-	
+
 	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo, Map<TypeVariable<?>, Type> map, OpRef ref) {
 		for (Type opType : ref.getTypes()) {
 			// TODO: clean this logic
@@ -395,6 +390,20 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			if (!Types.isAssignable(Types.raw(info.opType()), suitableWrappers[0]))
 				throw new IllegalArgumentException(Types.raw(info.opType()) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
 			return suitableWrappers[0];
+	}
+
+	private OpRef inferOpRef(OpDependencyMember<?> dependency,
+		Map<TypeVariable<?>, Type> typeVarAssigns) throws OpMatchingException
+	{
+		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
+			dependency.getType() }, typeVarAssigns)[0];
+		final String dependencyName = dependency.getDependencyName();
+		final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
+			typeVarAssigns);
+		if (inferredRef != null) return inferredRef;
+		throw new OpMatchingException("Could not infer functional " +
+			"method inputs and outputs of Op dependency field: " + dependency
+				.getKey());
 	}
 
 	/**

@@ -180,46 +180,25 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @param ref
 	 * @param adaptable
 	 * @return an Op satisfying the request described by {@code ref}.
-	 * @throws OpMatchingException 
+	 * @throws OpMatchingException
 	 */
 	private Object findOpInstance(final String opName, final OpRef ref,
 		boolean adaptable) throws OpMatchingException
 	{
+		// see if the ref has been matched already
 		Object cachedOp = checkCacheForRef(ref);
 		if (cachedOp != null) return cachedOp;
 
-		OpCandidate match = null;
-		OpMatchingException directMatchException = null;
-		// Attempt to find a direct match
-		try {
-			match = matcher.findSingleMatch(this, ref);
-			Object wrappedOp = wrappedOpFromCandidate(match);
-			opCache.putIfAbsent(ref, wrappedOp);
-			return wrappedOp;
-		}
-		catch (OpMatchingException e) {
-			log.debug("No matching Op for request: " + ref + "\n");
-			directMatchException = new OpMatchingException("No matching Op for request: " + ref + "\n", e);
-		}
+		// obtain suitable OpCandidate
+		OpCandidate match = findOpCandidate(ref, adaptable);
 
-		// Attempt to find a match through adaptation
-		if (!adaptable) {
-			throw new OpMatchingException(opName +
-				" cannot be adapted (adaptation is disabled)", directMatchException);
-		}
+		// obtain (wrapped) Op instance
+		Object wrappedOp = wrappedOpFromCandidate(match);
 
-		log.debug("Attempting Op adaptation...");
-		try {
-			match = adaptOp(ref);
-			Object wrappedOp = wrappedOpFromCandidate(match);
-			opCache.putIfAbsent(ref, wrappedOp);
-			return wrappedOp;
-		}
-		catch (OpMatchingException adaptedMatchException) {
-			log.debug("No suitable Op adaptation found");
-			adaptedMatchException.addSuppressed(directMatchException);
-			throw adaptedMatchException;
-		}
+		// cache instance
+		opCache.putIfAbsent(ref, wrappedOp);
+
+		return wrappedOp;
 	}
 
 	private Object checkCacheForRef(OpRef ref) {
@@ -229,6 +208,29 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		if (opCache.containsKey(ref))
 			return opCache.get(ref);
 		return null;
+	}
+	
+	private OpCandidate findOpCandidate(OpRef ref, boolean adaptable) throws OpMatchingException{
+		try {
+			// attempt to find a direct match
+			return matcher.findSingleMatch(this, ref);
+		}
+		catch (OpMatchingException e1) {
+			// no direct match; find an adapted match
+			if (!adaptable) throw new OpMatchingException(
+				"No matching Op for request: " + ref + "\n(adaptation is disabled)",
+				e1);
+			try {
+				return adaptOp(ref);
+			}
+			catch (OpMatchingException e2) {
+				// no adapted match
+				OpMatchingException adaptedMatchException = new OpMatchingException(
+					"No Op available for request: " + ref, e2);
+				adaptedMatchException.addSuppressed(e1);
+				throw adaptedMatchException;
+			}
+		}
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {

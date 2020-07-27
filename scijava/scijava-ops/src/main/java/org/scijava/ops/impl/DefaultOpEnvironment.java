@@ -193,7 +193,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		// Attempt to find a direct match
 		try {
 			match = matcher.findSingleMatch(this, ref);
-			return wrappedOpFromCandidate(match);
+			Object wrappedOp = wrappedOpFromCandidate(match);
+			opCache.putIfAbsent(ref, wrappedOp);
+			return wrappedOp;
 		}
 		catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
@@ -209,7 +211,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		log.debug("Attempting Op adaptation...");
 		try {
 			match = adaptOp(ref);
-			return wrappedOpFromCandidate(match);
+			Object wrappedOp = wrappedOpFromCandidate(match);
+			opCache.putIfAbsent(ref, wrappedOp);
+			return wrappedOp;
 		}
 		catch (OpMatchingException adaptedMatchException) {
 			log.debug("No suitable Op adaptation found");

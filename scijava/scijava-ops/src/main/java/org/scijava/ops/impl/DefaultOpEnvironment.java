@@ -384,6 +384,13 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		}
 	}
 
+	private void initWrappers() {
+		wrappers = new HashMap<>();
+		for (OpWrapper<?> wrapper : pluginService.createInstancesOfType(OpWrapper.class)) {
+			wrappers.put(wrapper.type(), wrapper);
+		}
+	}
+
 	private Class<?> getWrapperClass(Object op, OpInfo info) {
 			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
 					.toArray(Class[]::new);
@@ -496,13 +503,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			} catch (InstantiableException | InstantiationException | IllegalAccessException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
 			}
-		}
-	}
-
-	private void initWrappers() {
-		wrappers = new HashMap<>();
-		for (OpWrapper<?> wrapper : pluginService.createInstancesOfType(OpWrapper.class)) {
-			wrappers.put(wrapper.type(), wrapper);
 		}
 	}
 

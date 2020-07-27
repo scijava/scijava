@@ -129,7 +129,11 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@Override
 	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
-		return findOpInstance(opName, specialType, inTypes, outType);
+		try {
+			return findOpInstance(opName, specialType, inTypes, outType);
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	@Override
@@ -147,7 +151,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@SuppressWarnings("unchecked")
 	private <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?> outType) {
+			final Nil<?> outType) throws OpMatchingException {
 		final OpRef ref = OpRef.fromTypes(opName, toTypes(specialType), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
 		return (T) findOpInstance(opName, ref, true);
@@ -165,32 +169,52 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
 	}
 
-	// TODO: can we do better than Object here? Would be nice to return a T
-	private Object findOpInstance(final String opName, final OpRef ref, boolean adaptable) {
+	/**
+	 * Finds an Op instance matching the request described by {@link OpRef}
+	 * {@code ref}. NB the return must be an {@link Object} here (instead of some
+	 * type variable T where T is the Op type} since there is no way to ensure
+	 * that the {@code OpRef} can provide that T (since the OpRef could require
+	 * that the Op returned is of multiple types).
+	 * 
+	 * @param opName
+	 * @param ref
+	 * @param adaptable
+	 * @return an Op satisfying the request described by {@code ref}.
+	 * @throws OpMatchingException 
+	 */
+	private Object findOpInstance(final String opName, final OpRef ref,
+		boolean adaptable) throws OpMatchingException
+	{
 		Object cachedOp = checkCacheForRef(ref);
 		if (cachedOp != null) return cachedOp;
 
 		OpCandidate match = null;
+		OpMatchingException directMatchException = null;
+		// Attempt to find a direct match
 		try {
-			// Find single match which matches the specified types
 			match = matcher.findSingleMatch(this, ref);
 			return wrappedOpFromCandidate(match);
 		}
 		catch (OpMatchingException e) {
 			log.debug("No matching Op for request: " + ref + "\n");
-			if (!adaptable) {
-				throw new IllegalArgumentException(opName +
-					" cannot be adapted (adaptation is disabled)");
-			}
-			log.debug("Attempting Op adaptation...");
-			try {
-				match = adaptOp(ref);
-				return wrappedOpFromCandidate(match);
-			}
-			catch (OpMatchingException e1) {
-				log.debug("No suitable Op adaptation found");
-				throw new IllegalArgumentException(e1);
-			}
+			directMatchException = new OpMatchingException("No matching Op for request: " + ref + "\n", e);
+		}
+
+		// Attempt to find a match through adaptation
+		if (!adaptable) {
+			throw new OpMatchingException(opName +
+				" cannot be adapted (adaptation is disabled)", directMatchException);
+		}
+
+		log.debug("Attempting Op adaptation...");
+		try {
+			match = adaptOp(ref);
+			return wrappedOpFromCandidate(match);
+		}
+		catch (OpMatchingException adaptedMatchException) {
+			log.debug("No suitable Op adaptation found");
+			adaptedMatchException.addSuppressed(directMatchException);
+			throw adaptedMatchException;
 		}
 	}
 

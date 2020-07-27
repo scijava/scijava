@@ -156,18 +156,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				toTypes(inTypes));
 		return (T) findOpInstance(opName, ref, true);
 	}
-	
-	// TODO: This method does two things. Would be nice to split into a method
-	// that creates the Op, and another that wraps it.
-	// Problem is that we need the OpInfo and TypeVarAssigns to wrap the Op
-	private Object wrappedOpFromCandidate(final OpCandidate candidate)
-		throws OpMatchingException
-	{
-		final List<Object> dependencies = resolveOpDependencies(candidate);
-		final Object op = candidate.createOp(dependencies);
-
-		return wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
-	}
 
 	/**
 	 * Finds an Op instance matching the request described by {@link OpRef}
@@ -231,6 +219,18 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				throw adaptedMatchException;
 			}
 		}
+	}
+
+	// TODO: This method does two things. Would be nice to split into a method
+	// that creates the Op, and another that wraps it.
+	// Problem is that we need the OpInfo and TypeVarAssigns to wrap the Op
+	private Object wrappedOpFromCandidate(final OpCandidate candidate)
+		throws OpMatchingException
+	{
+		final List<Object> dependencies = resolveOpDependencies(candidate);
+		final Object op = candidate.createOp(dependencies);
+
+		return wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {

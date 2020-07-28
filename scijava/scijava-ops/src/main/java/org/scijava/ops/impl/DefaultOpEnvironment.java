@@ -141,14 +141,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return typeService.reify(obj);
 	}
 
-	@Override
-	public <T> T opify(final T op, Type reifiedType) {
-		if (wrappers == null) initWrappers();
-		@SuppressWarnings("unchecked")
-		final OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedType));
-		return wrapper.wrap(op, reifiedType);
-	}
-
 	@SuppressWarnings("unchecked")
 	private <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType) throws OpMatchingException {
@@ -157,6 +149,10 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return (T) findOpInstance(opName, ref, true);
 	}
 
+	private Type[] toTypes(Nil<?>... nils) {
+		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
+	}
+	
 	/**
 	 * Finds an Op instance matching the request described by {@link OpRef}
 	 * {@code ref}. NB the return must be an {@link Object} here (instead of some
@@ -178,10 +174,13 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		if (cachedOp != null) return cachedOp;
 
 		// obtain suitable OpCandidate
-		OpCandidate match = findOpCandidate(ref, adaptable);
+		OpCandidate candidate = findOpCandidate(ref, adaptable);
 
-		// obtain (wrapped) Op instance
-		Object wrappedOp = wrappedOpFromCandidate(match);
+		// obtain Op instance (with dependencies)
+		Object op = instantiateOp(candidate);
+		
+		// wrap Op
+		Object wrappedOp = wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
 
 		// cache instance
 		opCache.putIfAbsent(ref, wrappedOp);
@@ -221,24 +220,82 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		}
 	}
 
-	// TODO: This method does two things. Would be nice to split into a method
-	// that creates the Op, and another that wraps it.
-	// Problem is that we need the OpInfo and TypeVarAssigns to wrap the Op
-	private Object wrappedOpFromCandidate(final OpCandidate candidate)
+	/**
+	 * Creates an instance of the Op from the {@link OpCandidate} <b>with its
+	 * required {@link OpDependency} fields</b>.
+	 * 
+	 * @param candidate
+	 * @return an Op with all needed dependencies
+	 * @throws OpMatchingException
+	 */
+	private Object instantiateOp(final OpCandidate candidate)
 		throws OpMatchingException
 	{
 		final List<Object> dependencies = resolveOpDependencies(candidate);
-		final Object op = candidate.createOp(dependencies);
-
-		return wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
+		return candidate.createOp(dependencies);
 	}
 
-	private Type[] toTypes(Nil<?>... nils) {
-		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType()).toArray(Type[]::new);
+	/**
+	 * Wraps the matched op into an {@link Op} that knows its generic typing.
+	 * 
+	 * @param op - the op to wrap.
+	 * @param opInfo - from which we determine the {@link Type} of the {@code Op}
+	 *            
+	 * @return an {@link Op} wrapping of op.
+	 */
+	private <T> T wrapOp(T op, OpInfo opInfo, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		if (wrappers == null)
+			initWrappers();
+
+		Type opType = opInfo.opType();
+		try {
+			// find the opWrapper that wraps this type of Op
+			Class<?> wrapper = getWrapperClass(op, opInfo);
+			// obtain the generic type of the Op w.r.t. the Wrapper class 
+			Type exactSuperType = Types.getExactSuperType(opType, wrapper);
+			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
+			// wrap the Op
+			return opify(op, reifiedSuperType);
+		} catch (IllegalArgumentException | SecurityException exc) {
+			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
+			return op;
+		} catch (NullPointerException e) {
+			log.error("No wrapper exists for " + Types.raw(opType).toString() + ".");
+			return op;
+		}
 	}
-	
+
+	private Class<?> getWrapperClass(Object op, OpInfo info) {
+			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
+					.toArray(Class[]::new);
+			if (suitableWrappers.length == 0)
+				throw new IllegalArgumentException(info.implementationName() + ": matched op Type " + info.opType().getClass()
+						+ " does not match a wrappable Op type.");
+			if (suitableWrappers.length > 1)
+				throw new IllegalArgumentException(
+						"Matched op Type " + info.opType().getClass() + " matches multiple Op types: " + wrappers.toString());
+			if (!Types.isAssignable(Types.raw(info.opType()), suitableWrappers[0]))
+				throw new IllegalArgumentException(Types.raw(info.opType()) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
+			return suitableWrappers[0];
+	}
+
+	@Override
+	public <T> T opify(final T op, Type reifiedType) {
+		if (wrappers == null) initWrappers();
+		@SuppressWarnings("unchecked")
+		final OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedType));
+		return wrapper.wrap(op, reifiedType);
+	}
+
 	private List<Object> resolveOpDependencies(OpCandidate candidate) throws OpMatchingException {
 		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns());
+	}
+
+	private void initWrappers() {
+		wrappers = new HashMap<>();
+		for (OpWrapper<?> wrapper : pluginService.createInstancesOfType(OpWrapper.class)) {
+			wrappers.put(wrapper.type(), wrapper);
+		}
 	}
 
 	/**
@@ -271,23 +328,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			}
 		}
 		return resolvedDependencies;
-	}
-
-	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo, Map<TypeVariable<?>, Type> map, OpRef ref) {
-		for (Type opType : ref.getTypes()) {
-			// TODO: clean this logic
-			if (opType instanceof ParameterizedType) {
-				if (!MatchingUtils.checkGenericAssignability(adaptTo,
-					(ParameterizedType) opType, map, true))
-				{
-					return false;
-				}
-			}
-			else if (!Types.isAssignable(opType, adaptTo, map)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -355,54 +395,21 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			"Op adaptation failed: no adaptable Ops of type " + ref.getName());
 	}
 
-	/**
-	 * Wraps the matched op into an {@link Op} that knows its generic typing.
-	 * 
-	 * @param op - the op to wrap.
-	 * @param opInfo - from which we determine the {@link Type} of the {@code Op}
-	 *            
-	 * @return an {@link Op} wrapping of op.
-	 */
-	private <T> T wrapOp(T op, OpInfo opInfo, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		if (wrappers == null)
-			initWrappers();
-
-		Type opType = opInfo.opType();
-		try {
-			// find the opWrapper that wraps this type of Op
-			Class<?> wrapper = getWrapperClass(op, opInfo);
-			Type exactSuperType = Types.getExactSuperType(opType, wrapper);
-			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
-
-			return opify(op, reifiedSuperType);
-		} catch (IllegalArgumentException | SecurityException exc) {
-			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
-			return op;
-		} catch (NullPointerException e) {
-			log.error("No wrapper exists for " + Types.raw(opType).toString() + ".");
-			return op;
+	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo, Map<TypeVariable<?>, Type> map, OpRef ref) {
+		for (Type opType : ref.getTypes()) {
+			// TODO: clean this logic
+			if (opType instanceof ParameterizedType) {
+				if (!MatchingUtils.checkGenericAssignability(adaptTo,
+					(ParameterizedType) opType, map, true))
+				{
+					return false;
+				}
+			}
+			else if (!Types.isAssignable(opType, adaptTo, map)) {
+				return false;
+			}
 		}
-	}
-
-	private void initWrappers() {
-		wrappers = new HashMap<>();
-		for (OpWrapper<?> wrapper : pluginService.createInstancesOfType(OpWrapper.class)) {
-			wrappers.put(wrapper.type(), wrapper);
-		}
-	}
-
-	private Class<?> getWrapperClass(Object op, OpInfo info) {
-			Class<?>[] suitableWrappers = wrappers.keySet().stream().filter(wrapper -> wrapper.isInstance(op))
-					.toArray(Class[]::new);
-			if (suitableWrappers.length == 0)
-				throw new IllegalArgumentException(info.implementationName() + ": matched op Type " + info.opType().getClass()
-						+ " does not match a wrappable Op type.");
-			if (suitableWrappers.length > 1)
-				throw new IllegalArgumentException(
-						"Matched op Type " + info.opType().getClass() + " matches multiple Op types: " + wrappers.toString());
-			if (!Types.isAssignable(Types.raw(info.opType()), suitableWrappers[0]))
-				throw new IllegalArgumentException(Types.raw(info.opType()) + "cannot be wrapped as a " + suitableWrappers[0].getClass());
-			return suitableWrappers[0];
+		return true;
 	}
 
 	private OpRef inferOpRef(OpDependencyMember<?> dependency,

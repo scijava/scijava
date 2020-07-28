@@ -363,16 +363,17 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			}
 
 			try {
-				// resolve adaptor dependencies and get the adaptor (as a function)
+				// resolve adaptor dependencies
 				final List<Object> dependencies = resolveOpDependencies(adaptor, map);
+
 				@SuppressWarnings("unchecked")
 				Function<Object, Object> adaptorOp = //
 					(Function<Object, Object>) adaptor.createOpInstance(dependencies) //
 						.object(); //
 
 				// grab the first type parameter from the OpInfo and search for
-				// an Op that will then be adapted (this will be the first (only) type
-				// in the args of the adaptor)
+				// an Op that will then be adapted (this will be the only input of the
+				// adaptor since we know it is a Function)
 				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0)
 					.getType(), map);
 				final OpRef srcOpRef = inferOpRef(srcOpType, ref.getName(), map);

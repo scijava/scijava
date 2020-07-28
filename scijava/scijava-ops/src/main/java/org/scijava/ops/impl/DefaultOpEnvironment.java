@@ -56,13 +56,13 @@ import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.adapt.AdaptedOpCandidate;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
 import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpMatcher;
@@ -345,7 +345,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * </ul>
 	 * 
 	 * @param ref - the type of Op that we are looking to adapt to.
-	 * @return {@link AdaptedOpCandidate} - an Op that has been adapted to conform
+	 * @return {@link OpCandidate} - an Op that has been adapted to conform
 	 *         the the ref type (if one exists).
 	 * @throws OpMatchingException
 	 */
@@ -383,7 +383,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 					.getType(), map);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
 					.opInfo(), adapterOpType, adaptorOp);
-				return new AdaptedOpCandidate(this, log, ref, adaptedInfo, map);
+				OpCandidate adaptedCandidate = new OpCandidate(this, log, ref, adaptedInfo, map);
+				adaptedCandidate.setStatus(StatusCode.MATCH);
+				return adaptedCandidate;
 			}
 			catch (OpMatchingException e1) {
 				log.trace(e1);

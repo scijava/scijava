@@ -97,7 +97,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		final int[] xyAxis = new int[] { 0, 1 };
 
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.env().opify(test,
+			ops.env().bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
 		ops.op("slice").input(in, wrapped, xyAxis, true).output(out).compute();
@@ -135,7 +135,7 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 		final int[] xyAxis = new int[] { 0, 1, 2 };
 
 		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>> wrapped =
-			ops.env().opify(test,
+			ops.env().bakeLambdaType(test,
 				new Nil<Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<ByteType>>>()
 				{}.getType());
 		ops.op("slice").input(inSequence, wrapped, xyAxis, true).output(outSequence)

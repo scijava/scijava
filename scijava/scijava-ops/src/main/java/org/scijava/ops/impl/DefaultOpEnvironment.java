@@ -154,7 +154,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	@Override
-	public <T> T opify(final T op, Type reifiedType) {
+	public <T> T bakeLambdaType(final T op, Type reifiedType) {
 		if (wrappers == null) initWrappers();
 		@SuppressWarnings("unchecked")
 		final OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedType));
@@ -275,7 +275,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			Type exactSuperType = Types.getExactSuperType(opType, wrapper);
 			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
 			// wrap the Op
-			return opify(op, reifiedSuperType);
+			return bakeLambdaType(op, reifiedSuperType);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;

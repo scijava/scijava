@@ -32,6 +32,7 @@ package org.scijava.ops;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Nil;
 
@@ -89,16 +90,19 @@ public interface OpEnvironment {
 	 *
 	 * <pre>
 	 * <code>
-	 * op("adapt").input(computer).outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {}).apply()
+	 * op("adapt")
+	 *   .input(computer)
+	 *   .outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {})
+	 *   .apply()
 	 * </code>
 	 * </pre>
 	 *
 	 * since the type parameters of {@code computer} are not retained at runtime.
 	 * <p>
-	 * {@code opify} should be used as a method of retaining that fully reified
-	 * lambda type so that it can be used by the {@link OpMatcher}.
+	 * {@code bakeLambdaType} should be used as a method of retaining that fully
+	 * reified lambda type so that the lambda can be used
 	 * <p>
-	 * Note: {@code opify} <b>does not</b> need to be used with anonymous
+	 * Note: {@code bakeLambdaType} <b>does not</b> need to be used with anonymous
 	 * subclasses; these retain their type parameters at runtime. It is only
 	 * lambda expressions that need to be passed to this method.
 	 * 
@@ -108,5 +112,5 @@ public interface OpEnvironment {
 	 * @return An enriched version of the object with full knowledge of its
 	 *         generic type.
 	 */
-	<T> T opify(T op, Type type);
+	<T> T bakeLambdaType(T op, Type type);
 }

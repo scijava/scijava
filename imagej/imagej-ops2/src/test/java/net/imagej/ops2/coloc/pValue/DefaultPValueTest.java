@@ -98,7 +98,7 @@ public class DefaultPValueTest extends ColocalisationTest {
 				});
 
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
-			ops.env().opify(op,
+			ops.env().bakeLambdaType(op,
 				new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>()
 				{}.getType());
 

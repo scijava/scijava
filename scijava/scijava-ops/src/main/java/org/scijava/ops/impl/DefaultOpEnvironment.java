@@ -100,13 +100,25 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private TypeService typeService;
 
 	/**
-	 * Map to collect all aliases for a specific op. All aliases will map to one
-	 * canonical name of the op which is defined as the first one.
+	 * Data structure storing all known Ops, grouped by name. This reduces the
+	 * search size for any Op request to the number of known Ops with the name
+	 * given in the request.
 	 */
 	private Map<String, Set<OpInfo>> opDirectory;
 
+	/**
+	 * Map containing pairs of {@link OpRef} op requests and the {@code Op}s that
+	 * matched those requests. Used to quickly return Ops when an {@OpRef} matches
+	 * a previous call.
+	 *
+	 * @see OpRef#equals(Object)
+	 */
 	private Map<OpRef, Object> opCache;
 
+	/**
+	 * Data structure storing all known {@link OpWrapper}s. Each {@link OpWrapper}
+	 * is retrieved by providing the {@link Class} that it is able to wrap.
+	 */
 	private Map<Class<?>, OpWrapper<?>> wrappers;
 
 	public DefaultOpEnvironment(final Context context) {

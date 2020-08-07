@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 import org.scijava.AbstractContextual;
 import org.scijava.Context;
 import org.scijava.InstantiableException;
+import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
@@ -159,6 +160,16 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		@SuppressWarnings("unchecked")
 		final OpWrapper<T> wrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedType));
 		return wrapper.wrap(op, reifiedType);
+	}
+
+	@Override
+	public OpInfo opify(final Class<?> opClass) {
+		return opify(opClass, Priority.NORMAL);
+	}
+
+	@Override
+	public OpInfo opify(final Class<?> opClass, final double priority) {
+		return new OpClassInfo(opClass, priority);
 	}
 
 	@SuppressWarnings("unchecked")

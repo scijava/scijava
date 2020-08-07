@@ -113,4 +113,21 @@ public interface OpEnvironment {
 	 *         generic type.
 	 */
 	<T> T bakeLambdaType(T op, Type type);
+
+	/**
+	 * Creates an {@link OpInfo} from an {@link Class}.
+	 *
+	 * @param opClass
+	 * @return an {@link OpInfo} which can make instances of {@code opClass}
+	 */
+	OpInfo opify(Class<?> opClass);
+
+	/**
+	 * Creates an {@link OpInfo} from an {@link Class} with the given priority.
+	 *
+	 * @param opClass
+	 * @param priority - the assigned priority of the Op.
+	 * @return an {@link OpInfo} which can make instances of {@code opClass}
+	 */
+	OpInfo opify(Class<?> opClass, double priority);
 }

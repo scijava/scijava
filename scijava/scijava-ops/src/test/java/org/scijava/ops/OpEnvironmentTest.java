@@ -56,14 +56,36 @@ public class OpEnvironmentTest extends AbstractTestEnvironment{
 		Assert.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);
 	}
 
+	@Test
+	public void testRegister() {
+		String opName = "test.opifyOp";
+		OpInfo opifyOpInfo = ops.env().opify(OpifyOp.class, Priority.HIGH);
+		ops.env().register(opifyOpInfo, opName);
+
+		String actual = ops.op(opName).input().outType(String.class).create();
+
+		String expected = new OpifyOp().getString();
+		Assert.assertEquals(expected, actual);
+	}
+
 }
 
-// TODO: remove @Parameter annotation when it is no longer necessary
+/**
+ * Test class to be opified (and added to the {@link OpEnvironment})
+ *
+ * TODO: remove @Parameter annotation when it is no longer necessary
+ *
+ * @author Gabriel Selzer
+ */
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class OpifyOp implements Producer<String> {
 
 	@Override
 	public String create() {
+		return getString();
+	}
+
+	public String getString() {
 		return "This Op tests opify!";
 	}
 

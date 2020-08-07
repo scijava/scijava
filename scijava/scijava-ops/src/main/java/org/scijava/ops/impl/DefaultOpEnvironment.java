@@ -172,6 +172,12 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return new OpClassInfo(opClass, priority);
 	}
 
+	@Override
+	public void register(final OpInfo info, final String name) {
+		if (opDirectory == null) initOpDirectory();
+		addToOpIndex(info, name);
+	}
+
 	@SuppressWarnings("unchecked")
 	private <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType) throws OpMatchingException {

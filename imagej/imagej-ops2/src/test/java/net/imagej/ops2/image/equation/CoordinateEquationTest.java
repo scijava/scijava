@@ -77,7 +77,7 @@ public class CoordinateEquationTest extends AbstractOpTest {
 		final Function<long[], Double> op = (coords) -> Math.pow(start[0] + coords[0] * spacing[0], 2)
 				+ Math.pow(start[1] + coords[1] * spacing[1], 2);
 		
-		final Function<long[], Double> wrapped = ops.env().opify(op,
+		final Function<long[], Double> wrapped = ops.env().bakeLambdaType(op,
 			new Nil<Function<long[], Double>>()
 			{}.getType());
 		
@@ -113,7 +113,7 @@ public class CoordinateEquationTest extends AbstractOpTest {
 			return result;
 		};
 
-		Function<long[], Double> wrapped = ops.env().opify(op,
+		Function<long[], Double> wrapped = ops.env().bakeLambdaType(op,
 			new Nil<Function<long[], Double>>()
 			{}.getType());
 

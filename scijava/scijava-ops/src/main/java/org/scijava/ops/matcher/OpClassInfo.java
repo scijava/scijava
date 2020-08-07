@@ -57,8 +57,13 @@ public class OpClassInfo implements OpInfo {
 	private final Class<?> opClass;
 	private Struct struct;
 	private ValidityException validityException;
+	private final double priority;
 
 	public OpClassInfo(final Class<?> opClass) {
+		this(opClass, priorityFromAnnotation(opClass));
+	}
+
+	public OpClassInfo(final Class<?> opClass, final double priority) {
 		this.opClass = opClass;
 		try {
 			struct = ParameterStructs.structOf(opClass);
@@ -66,6 +71,7 @@ public class OpClassInfo implements OpInfo {
 		} catch (ValidityException e) {
 			validityException = e;
 		} 
+		this.priority = priority;
 	}
 
 	// -- OpInfo methods --
@@ -84,8 +90,7 @@ public class OpClassInfo implements OpInfo {
 
 	@Override
 	public double priority() {
-		final Plugin opAnnotation = opClass.getAnnotation(Plugin.class);
-		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
+		return priority;
 	}
 
 	@Override
@@ -166,5 +171,12 @@ public class OpClassInfo implements OpInfo {
 	@Override
 	public String toString() {
 		return OpUtils.opString(this);
+	}
+
+	// -- Helper methods
+
+	private static double priorityFromAnnotation(Class<?> annotationBearer) {
+		final Plugin opAnnotation = annotationBearer.getAnnotation(Plugin.class);
+		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
 	}
 }

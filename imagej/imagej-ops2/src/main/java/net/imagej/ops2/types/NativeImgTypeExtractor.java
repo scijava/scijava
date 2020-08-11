@@ -34,7 +34,6 @@ package net.imagej.ops2.types;
 import java.lang.reflect.Type;
 
 import net.imglib2.img.NativeImg;
-import net.imglib2.img.array.ArrayImg;
 
 import org.scijava.Priority;
 import org.scijava.plugin.Parameter;
@@ -43,28 +42,25 @@ import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeService;
 
 /**
- * {@link TypeExtractor} plugin which operates on {@link ArrayImg} objects.
+ * {@link TypeExtractor} plugin which operates on {@link NativeImg} objects.
  * <p>
  * This TypeExtractor is high priority to allow precedence over the RAI
  * TypeExtractor, IterableTypeExtractor, etc. We cannot remove this
  * TypeExtractor in favor of those type extractors since this image type has a
  * second type variable (the data array) that should be reified (otherwise we
- * might have wildcards in the fully reified type). We note that while it would
- * be preferable to create a TypeExtractor based on a wider Image type, such as
- * {@link NativeImg}, there is no safe way to call
- * {@link NativeImg#update(Object)} that applies for all image types.
+ * might have wildcards in the fully reified type).
  * </p>
  *
  * @author Gabriel Selzer
  */
 @Plugin(type = TypeExtractor.class, priority = Priority.HIGH)
-public class ArrayImgTypeExtractor implements TypeExtractor<ArrayImg<?, ?>> {
+public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
 
 	@Parameter
 	private TypeService typeService;
 
 	@Override
-	public Type reify(final ArrayImg<?, ?> o, final int n) {
+	public Type reify(final NativeImg<?, ?> o, final int n) {
 		if (n < 0 || n > 1)
 			throw new IndexOutOfBoundsException();
 
@@ -74,13 +70,13 @@ public class ArrayImgTypeExtractor implements TypeExtractor<ArrayImg<?, ?>> {
 			return labelingType;
 		}
 		// type of the backing array
-		return typeService.reify(o.update(null));
+		return typeService.reify(o.update(o.cursor()));
 	}
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<ArrayImg<?, ?>> getRawType() {
-		return (Class) ArrayImg.class;
+	public Class<NativeImg<?, ?>> getRawType() {
+		return (Class) NativeImg.class;
 	}
 
 }

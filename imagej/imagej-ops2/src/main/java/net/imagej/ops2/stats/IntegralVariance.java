@@ -56,13 +56,13 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "integralVariance", itemIO = ItemIO.BOTH)
 public class IntegralVariance<I extends RealType<I>>
-		implements Computers.Arity1<RectangleNeighborhood<Composite<I>>, DoubleType> {
+		implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 
 	@Override
-	public void compute(final RectangleNeighborhood<Composite<I>> input, final DoubleType output) {
+	public void compute(final RectangleNeighborhood<? extends Composite<I>> input, final DoubleType output) {
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
-		final IntegralCursor<Composite<I>> cursorS1 = new IntegralCursor<>(input);
+		final IntegralCursor<? extends Composite<I>> cursorS1 = new IntegralCursor<>(input);
 		final int dimensions = input.numDimensions();
 
 		// Compute \sum (-1)^{dim - ||cornerVector||_{1}} * I(x^{cornerVector})

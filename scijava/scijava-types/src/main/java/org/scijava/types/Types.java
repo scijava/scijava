@@ -759,13 +759,23 @@ public final class Types {
 	 */
 	public static Type greatestCommonSuperType(final Type[] types, final boolean wildcardSingleIface) {
 
-		if (types.length == 0)
-			return null;
+		// return answer quick if the answer is trivial
+		if (types.length == 0) return null;
+		if (types.length == 1) return types[0];
+
 		// make sure that all types are supported
 		// TODO: are there any other types that aren't fully supported?
-		for (Type t : types) {
-			if (t instanceof TypeVariable<?>)
-				throw new UnsupportedOperationException("Unsupported type: " + t);
+		for (int i = 0; i < types.length; i++) {
+			if (types[i] instanceof TypeVariable<?>) {
+				TypeVariable<?> typeVar = (TypeVariable<?>) types[i];
+				types[i] = greatestCommonSuperType(typeVar.getBounds(), false);
+			}
+			// wildcards themselves are not supported, however we know that the
+			// greatest superType of any wildcard is its upper bound
+			if (types[i] instanceof WildcardType) {
+				WildcardType wildcard = (WildcardType) types[i];
+				types[i] = greatestCommonSuperType(wildcard.getUpperBounds(), false);
+			}
 		}
 
 		// We can effectively find the greatest common super type by assuming that
@@ -806,8 +816,13 @@ public final class Types {
 					for (int j = 0; j < typeVarsI.length; j++) {
 						typeVarsI[j] = castedTypes[j].getActualTypeArguments()[i];
 					}
-					resolvedTypeArgs[i] = wildcard(new Type[] { greatestCommonSuperType(typeVarsI, true) },
-							new Type[] {});
+					// If each of these types implements some recursive interface, e.g. Comparable,
+					// the best we can do is return an unbounded wildcard.
+					if (Arrays.equals(types, typeVarsI))
+						resolvedTypeArgs[i] = wildcard();
+					else
+						resolvedTypeArgs[i] = wildcard(new Type[] { greatestCommonSuperType(typeVarsI, true) },
+								new Type[] {});
 				}
 
 				// return supertype parameterized with the resolved type args
@@ -878,6 +893,11 @@ public final class Types {
 		if (sharedInterfaces.size() == 1 && !wildcardSingleIface) {
 			return sharedInterfaces.get(0);
 		} else if (sharedInterfaces.size() > 0) {
+			// TODO: such a wildcard is technically illegal as a result of current
+			// Java language specifications. See
+			// https://stackoverflow.com/questions/6643241/why-cant-you-have-multiple-interfaces-in-a-bounded-wildcard-generic
+			// Consider a wildcard extending a typeVar that extends multiple
+			// interfaces?
 			return wildcard(sharedInterfaces.toArray(new Type[] {}), new Type[] {});
 		}
 		return Object.class;
@@ -1286,9 +1306,16 @@ public final class Types {
 	 * @return
 	 */
 	public static Type[] mapVarToTypes(Type[] typesToMap, Map<TypeVariable<?>, Type> typeAssigns) {
-		return Arrays.stream(typesToMap).map(type -> Types.unrollVariables(typeAssigns, type, false))
-				.toArray(Type[]::new);
+		return Arrays.stream(typesToMap).map(type -> mapVarToTypes(type,
+			typeAssigns)).toArray(Type[]::new);
 	}
+
+	public static Type mapVarToTypes(Type typeToMap,
+		Map<TypeVariable<?>, Type> typeAssigns)
+	{
+		return Types.unrollVariables(typeAssigns, typeToMap, false);
+	}
+
 	/**
 	 * Converts the given string value to an enumeration constant of the specified
 	 * type.
@@ -2004,7 +2031,7 @@ public final class Types {
 			if (toType == null) {
 				throw new NullPointerException("Destination type is null");
 			}
-			return isAssignable(type, toType, null);
+			return isAssignable(type, toType, new HashMap<>());
 		}
 
 		/**
@@ -3362,6 +3389,12 @@ public final class Types {
 						.getUpperBounds())).withLowerBounds(unrollBounds(typeArguments, wild
 							.getLowerBounds())).build();
 				}
+				if (type instanceof GenericArrayType) {
+					final GenericArrayType genArrType = (GenericArrayType) type;
+					final Type componentType = genArrType.getGenericComponentType();
+					final Type unrolledComponent = unrollVariables(typeArguments, componentType, followTypeVars);
+					return array(unrolledComponent);
+				}
 			}
 			return type;
 		}
@@ -3415,6 +3448,11 @@ public final class Types {
 				return containsTypeVariables(TypeUtils.getImplicitLowerBounds(
 					wild)[0]) || containsTypeVariables(TypeUtils.getImplicitUpperBounds(
 						wild)[0]);
+			}
+			if (type instanceof GenericArrayType) {
+				// if this type contains type vars, they will be in the component type
+				final GenericArrayType genArrType = (GenericArrayType) type;
+				return containsTypeVariables(genArrType.getGenericComponentType());
 			}
 			return false;
 		}

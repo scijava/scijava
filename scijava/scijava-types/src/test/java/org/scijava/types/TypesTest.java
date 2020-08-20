@@ -552,9 +552,9 @@ public class TypesTest {
 		assertTrue(Types.isAssignable(listNumber, listExtendsNumber));
 		assertTrue(Types.isAssignable(listInteger, listExtendsNumber));
 
-		assertFalse(Types.isAssignable(listNumber, listT));
-		assertFalse(Types.isAssignable(listInteger, listT));
-		assertFalse(Types.isAssignable(listExtendsNumber, listT));
+		assertTrue(Types.isAssignable(listNumber, listT));
+		assertTrue(Types.isAssignable(listInteger, listT));
+		assertTrue(Types.isAssignable(listExtendsNumber, listT));
 		assertFalse(Types.isAssignable(listExtendsNumber, listNumber));
 	}
 

@@ -321,7 +321,7 @@ public final class ApplyThresholdMethodLocal {
 	private abstract static class AbstractApplyLocalHistogramBasedThreshold<T extends RealType<T>>
 		implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-				IterableInterval<BitType>> {
+				RandomAccessibleInterval<BitType>> {
 
 		// TODO: Once optional primary parameters are supported by the matching
 		// system, this can be made a unary function (drop integer parameter, which
@@ -339,7 +339,7 @@ public final class ApplyThresholdMethodLocal {
 		public void compute(final RandomAccessibleInterval<T> input,
 			final Shape inputNeighborhoodShape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final IterableInterval<BitType> output)
+			@Mutable final RandomAccessibleInterval<BitType> output)
 		{
 			if (thresholdOp == null) thresholdOp = getThresholdOp();
 			ApplyCenterAwareNeighborhoodBasedFilter.compute(input,

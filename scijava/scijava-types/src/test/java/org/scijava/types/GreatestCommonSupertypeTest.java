@@ -1,8 +1,10 @@
 package org.scijava.types;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,18 @@ public class GreatestCommonSupertypeTest {
 
 	static class YThing implements Thing {
 
+	}
+	
+	static abstract class RecursiveThing<T extends RecursiveThing<T>> {
+		
+	}
+	
+	static class StrangeThing extends RecursiveThing<StrangeThing> {
+		
+	}
+	
+	static class WeirdThing extends RecursiveThing<WeirdThing> {
+		
 	}
 
 	@Test
@@ -142,5 +156,36 @@ public class GreatestCommonSupertypeTest {
 		assertTrue(superType.equals(new Nil<Base>() {}.getType()));
 		assertFalse(superType.equals(new Nil<Thing>() {}.getType()),
 			"Non-Object classes should take precedence over interfaces");
+	}
+	
+	@Test
+	public void RecursiveClassTest() {
+		Type t1 = new Nil<StrangeThing>() {}.getType();
+		Type t2 = new Nil<WeirdThing>() {}.getType();
+		Type superType = Types.greatestCommonSuperType(new Type[] {t1, t2}, false);
+		Nil<RecursiveThing<?>> expected = new Nil<>() {};
+		assertTrue(superType.equals(expected.getType()));
+	}
+
+	@Test
+	public <T extends Base> void typeVarTest() {
+		Type t1 = new Nil<T>() {}.getType();
+		Type t2 = new Nil<NThing>() {}.getType();
+		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+			false);
+		Nil<Base> expected = new Nil<>() {};
+		assertTrue(superType.equals(expected.getType()));
+	}
+
+	@Test
+	public void wildcardTypeTest() {
+		Type typeWithWildcard = new Nil<List<? extends NThing>>() {}.getType();
+		Type t1 = ((ParameterizedType) typeWithWildcard)
+			.getActualTypeArguments()[0];
+		Type t2 = new Nil<XThing>() {}.getType();
+		Type superType = Types.greatestCommonSuperType(new Type[] { t1, t2 },
+			false);
+		Nil<Base> expected = new Nil<>() {};
+		assertTrue(superType.equals(expected.getType()));
 	}
 }

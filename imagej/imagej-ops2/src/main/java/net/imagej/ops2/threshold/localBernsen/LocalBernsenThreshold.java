@@ -31,7 +31,6 @@
 package net.imagej.ops2.threshold.localBernsen;
 
 import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
@@ -40,8 +39,6 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
@@ -62,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-			IterableInterval<BitType>> {
+			RandomAccessibleInterval<BitType>> {
 
 	@OpDependency(name = "threshold.localBernsen")
 	private Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
@@ -72,7 +69,7 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 		final Shape inputNeighborhoodShape, final Double contrastThreshold,
 		final Double halfMaxValue,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		@Mutable final IterableInterval<BitType> output)
+		@Mutable final RandomAccessibleInterval<BitType> output)
 	{
 		compute(input, inputNeighborhoodShape, contrastThreshold, halfMaxValue,
 			outOfBoundsFactory, computeThresholdOp, output);
@@ -83,7 +80,7 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 		final Double contrastThreshold, final Double halfMaxValue,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
-		@Mutable final IterableInterval<BitType> output)
+		@Mutable final RandomAccessibleInterval<BitType> output)
 	{
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, contrastThreshold,

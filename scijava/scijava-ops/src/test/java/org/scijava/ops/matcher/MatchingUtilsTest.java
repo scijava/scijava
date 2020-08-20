@@ -29,7 +29,6 @@
 
 package org.scijava.ops.matcher;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.ParameterizedType;
@@ -37,13 +36,13 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -71,9 +70,9 @@ public class MatchingUtilsTest {
 		}
 		abstract class SingleBounded<I extends Number> implements Supplier<I> {
 		}
-		Nil<Supplier<E>> y1 = new Nil<Supplier<E>>() {
+		Nil<Supplier<E>> y1 = new Nil<>() {
 		};
-		Nil<Supplier<N>> y2 = new Nil<Supplier<N>>() {
+		Nil<Supplier<N>> y2 = new Nil<>() {
 		};
 		Nil<Double> n1 = new Nil<>() {
 		};
@@ -89,9 +88,9 @@ public class MatchingUtilsTest {
 	public void genericAssignabilitySingleVar() {
 		abstract class Single<I> implements Supplier<I> {
 		}
-		Nil<Supplier<Double>> y1 = new Nil<Supplier<Double>>() {
+		Nil<Supplier<Double>> y1 = new Nil<>() {
 		};
-		Nil<Supplier<Number>> y2 = new Nil<Supplier<Number>>() {
+		Nil<Supplier<Number>> y2 = new Nil<>() {
 		};
 		Nil<Double> n1 = new Nil<>() {
 		};
@@ -105,11 +104,11 @@ public class MatchingUtilsTest {
 		abstract class SingleBounded<I extends Number> implements Supplier<I> {
 		}
 
-		Nil<Supplier<Double>> y1 = new Nil<Supplier<Double>>() {
+		Nil<Supplier<Double>> y1 = new Nil<>() {
 		};
 		Nil<Double> n1 = new Nil<>() {
 		};
-		Nil<String> n2 = new Nil<String>() {
+		Nil<String> n2 = new Nil<>() {
 		};
 
 		assertAll(SingleBounded.class, true, y1);
@@ -123,13 +122,13 @@ public class MatchingUtilsTest {
 
 		Nil<Double> n1 = new Nil<>() {
 		};
-		Nil<String> n2 = new Nil<String>() {
+		Nil<String> n2 = new Nil<>() {
 		};
-		Nil<Supplier<Double>> n3 = new Nil<Supplier<Double>>() {
+		Nil<Supplier<Double>> n3 = new Nil<>() {
 		};
-		Nil<Supplier<List<String>>> n4 = new Nil<Supplier<List<String>>>() {
+		Nil<Supplier<List<String>>> n4 = new Nil<>() {
 		};
-		Nil<Supplier<List<Double>>> y1 = new Nil<Supplier<List<Double>>>() {
+		Nil<Supplier<List<Double>>> y1 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedUsedNested.class, true, y1);
@@ -163,7 +162,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<Double, List<Double>>> n4 = new Nil<>() {
 		};
-		Nil<Function<List<String>, List<Double>>> n5 = new Nil<Function<List<String>, List<Double>>>() {
+		Nil<Function<List<String>, List<Double>>> n5 = new Nil<>() {
 		};
 		Nil<Function<List<Double>, List<String>>> n6 = new Nil<>() {
 		};
@@ -173,7 +172,7 @@ public class MatchingUtilsTest {
 
 		Nil<Function<Double, List<Double>>> n7 = new Nil<>() {
 		};
-		Nil<Function<List<String>, List<Double>>> n8 = new Nil<Function<List<String>, List<Double>>>() {
+		Nil<Function<List<String>, List<Double>>> n8 = new Nil<>() {
 		};
 		Nil<Function<List<Double>, List<String>>> n9 = new Nil<>() {
 		};
@@ -202,7 +201,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<Double, Double>> n1 = new Nil<>() {
 		};
-		Nil<Function<List<String>, String>> n2 = new Nil<Function<List<String>, String>>() {
+		Nil<Function<List<String>, String>> n2 = new Nil<>() {
 		};
 		Nil<Function<Iterable<Double>, Double>> n3 = new Nil<>() {
 		};
@@ -224,7 +223,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<Integer, List<Double>>> n7 = new Nil<>() {
 		};
-		Nil<Function<List<String>, List<Double>>> n8 = new Nil<Function<List<String>, List<Double>>>() {
+		Nil<Function<List<String>, List<Double>>> n8 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedNestedWildcardAndOther.class, true, y3, y4, y5);
@@ -244,13 +243,13 @@ public class MatchingUtilsTest {
 				implements Function<I, List<I>> {
 		}
 
-		Nil<Function<List<String>, List<String>>> y1 = new Nil<Function<List<String>, List<String>>>() {
+		Nil<Function<List<String>, List<String>>> y1 = new Nil<>() {
 		};
 		Nil<Function<Iterable<String>, Iterable<String>>> y2 = new Nil<>() {
 		};
-		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<Function<List<String>, List<Integer>>>() {
+		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<>() {
 		};
-		Nil<Function<List<String>, Double>> n2 = new Nil<Function<List<String>, Double>>() {
+		Nil<Function<List<String>, Double>> n2 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedNestedMultipleOccurence.class, true, y1, y2);
@@ -262,7 +261,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<Iterable<Double>, Iterable<Integer>>> n3 = new Nil<>() {
 		};
-		Nil<Function<List<String>, Integer>> n4 = new Nil<Function<List<String>, Integer>>() {
+		Nil<Function<List<String>, Integer>> n4 = new Nil<>() {
 		};
 
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurence.class, true, y3, y4);
@@ -291,26 +290,26 @@ public class MatchingUtilsTest {
 		abstract class DoubleVarBounded<I extends List<String>, B extends Number> implements Function<I, B> {
 		}
 
-		Nil<Function<List<String>, List<String>>> y1 = new Nil<Function<List<String>, List<String>>>() {
+		Nil<Function<List<String>, List<String>>> y1 = new Nil<>() {
 		};
 		Nil<Function<Iterable<String>, Iterable<String>>> y2 = new Nil<>() {
 		};
-		Nil<Function<List<String>, List<Integer>>> y3 = new Nil<Function<List<String>, List<Integer>>>() {
+		Nil<Function<List<String>, List<Integer>>> y3 = new Nil<>() {
 		};
-		Nil<Function<List<String>, Double>> y4 = new Nil<Function<List<String>, Double>>() {
+		Nil<Function<List<String>, Double>> y4 = new Nil<>() {
 		};
 
 		assertAll(DoubleVar.class, true, y1, y2, y3, y4);
 
-		Nil<Function<List<String>, Double>> y5 = new Nil<Function<List<String>, Double>>() {
+		Nil<Function<List<String>, Double>> y5 = new Nil<>() {
 		};
-		Nil<Function<List<String>, Float>> y6 = new Nil<Function<List<String>, Float>>() {
+		Nil<Function<List<String>, Float>> y6 = new Nil<>() {
 		};
 		Nil<Function<Iterable<String>, Double>> n1 = new Nil<>() {
 		};
 		Nil<Function<List<Double>, Integer>> n2 = new Nil<>() {
 		};
-		Nil<Function<List<String>, String>> n3 = new Nil<Function<List<String>, String>>() {
+		Nil<Function<List<String>, String>> n3 = new Nil<>() {
 		};
 
 		assertAll(DoubleVarBounded.class, true, y5, y6);
@@ -331,9 +330,9 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<Iterable<Integer>, Iterable<Integer>>> y3 = new Nil<>() {
 		};
-		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<Function<List<String>, List<Integer>>>() {
+		Nil<Function<List<String>, List<Integer>>> n1 = new Nil<>() {
 		};
-		Nil<Function<List<String>, Double>> n2 = new Nil<Function<List<String>, Double>>() {
+		Nil<Function<List<String>, Double>> n2 = new Nil<>() {
 		};
 		Nil<Function<List<Integer>, List<Double>>> n3 = new Nil<>() {
 		};
@@ -400,7 +399,7 @@ public class MatchingUtilsTest {
 		assertAll(DoubleVarBoundedAndWildcard.class, true, y1, y2);
 		assertAll(DoubleVarBoundedAndWildcard.class, false, n1, n2, n3, n4, n5, n6);
 	}
-
+	
 	@Test
 	public void genericAssignabilityWildcards() {
 		abstract class Wildcards implements Function<List<? extends Number>, List<? extends Number>> {
@@ -420,6 +419,98 @@ public class MatchingUtilsTest {
 		assertAll(Wildcards.class, true, y1);
 		assertAll(Wildcards.class, false, n1, n2, n3, n4);
 	}
+	
+	@Test
+	public void genericAssignabilityWildcardExtendingTypeVar() {
+		abstract class StrangeConsumer<T extends Number> implements
+			BiConsumer<List<? extends T>, T>
+		{}
+		
+		Nil<BiConsumer<List<? extends Number>, Number>> y1 = new Nil<>() {};
+		Nil<BiConsumer<List<? extends Integer>, Integer>> y2 = new Nil<>() {};
+		Nil<BiConsumer<List<? extends Number>, ? extends Number>> y3 = new Nil<>() {};
+
+		Nil<BiConsumer<List<? extends Integer>, Double>> n1 = new Nil<>() {};
+
+		assertAll(StrangeConsumer.class, true, y1, y2, y3);
+		assertAll(StrangeConsumer.class, false, n1);
+		
+	}
+
+	/**
+	 * Suppose we have a
+	 *
+	 * <pre>
+	 * class Foo&lt;I extends Number&gt implements Function&lt;I[], Double&gt;
+	 * </pre>
+	 *
+	 * It is legal to write
+	 *
+	 * <pre>
+	 *
+	 * Function&lt;Double[], Double[]&gt; fooFunc = new Foo&lt;&gt;();
+	 * </pre>
+	 *
+	 * If we instead have a
+	 *
+	 * <pre>
+	 * class Bar implements Function&lt;O[], Double&gt;
+	 * </pre>
+	 *
+	 * where <code>O extends Number</code>, is <strong>not</strong> legal to write
+	 *
+	 * <pre>
+	 *
+	 * Function&lt;Double[], Double[]&gt; barFunc = new Bar&lt;&gt;();
+	 * </pre>
+	 *
+	 * @param <O>
+	 */
+	@Test
+	public <O extends Number> void testGenericArrayFunction() {
+		class Foo<I extends Number> implements Function<I[], Double> {
+			@Override
+			public Double apply(I[] t) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		}
+
+		class Bar implements Function<O[], Double> {
+			@Override
+			public Double apply(O[] t) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		}
+		Nil<Function<Double[], Double>> doubleFunction = new Nil<>() {};
+		assertAll(Foo.class, true, doubleFunction);
+		assertAll(Bar.class, false, doubleFunction);
+	}
+
+	@Test
+	public void testGenericArrayToWildcardWithinParameterizedType() {
+		abstract class Foo<T extends Number> implements List<T[]> {}
+		final Nil<List<? extends Double[]>> upperType = new Nil<>() {};
+		final Nil<List<? super Double[]>> lowerType = new Nil<>() {};
+
+		// Since it is legal to write
+		// List<? extends Double[]> list = new Foo<>() {...};
+		// assertAll must return true
+		assertAll(Foo.class, true, upperType, lowerType);
+	}
+
+	@Test
+	public <T extends Number> void testSuperWildcardToSuperWildcard() {
+		final Nil<List<? super T>> listT = new Nil<>() {};
+		final Nil<List<? super Number>> listWildcard = new Nil<>() {};
+
+		// unfortunately we cannot use assertAll since it is impossible to create a
+		// Class implementing List<? super T>
+		boolean success = MatchingUtils.checkGenericAssignability(listT.getType(),
+			(ParameterizedType) listWildcard.getType(), false);
+		Assert.assertTrue(success);
+	}
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableNullToNull() {
@@ -433,43 +524,14 @@ public class MatchingUtilsTest {
 
 	@Test
 	public <T extends Number> void testIsAssignableT() {
-		final Type t = new Nil<T>() {
-		}.getType();
-		final Type listT = new Nil<List<T>>() {
-		}.getType();
-		final Type listNumber = new Nil<List<Number>>() {
-		}.getType();
-		final Type listInteger = new Nil<List<Integer>>() {
-		}.getType();
-		final Type listExtendsNumber = new Nil<List<? extends Number>>() {
-		}.getType();
+		final Nil<T> t = new Nil<>() {};
+		final Nil<List<T>> listT = new Nil<>() {};
+		final Nil<List<Number>> listNumber = new Nil<>() {};
+		final Nil<List<Integer>> listInteger = new Nil<>() {};
+		final Nil<List<? extends Number>> listExtendsNumber = new Nil<>() {};
 
-		assertAll(List.class, true, listT, listNumber, listInteger);
-		assertAll(List.class, false, listExtendsNumber, t);
-	}
-	
-	@Test
-	public <I, O> void testSupertypeTypeInference()
-		throws TypeInferenceException
-	{
-		final Type t = new Nil<Function<Thing<I>, List<O>>>() {}.getType();
-		final Type[] tArgs = ((ParameterizedType) t).getActualTypeArguments();
-		final Type dest =
-			new Nil<Function<StrangeThing<Double, String>, List<Double>>>()
-			{}.getType();
-		final Type[] destArgs = ((ParameterizedType) dest).getActualTypeArguments();
-
-		final Map<TypeVariable<?>, Type> typeAssigns = new HashMap<>();
-		MatchingUtils.inferTypeVariables(tArgs, destArgs, typeAssigns);
-
-		// We expect I=String, O=Double
-		final Map<TypeVariable<?>, Type> expected = new HashMap<>();
-		expected.put((TypeVariable<?>) ((ParameterizedType) tArgs[0])
-			.getActualTypeArguments()[0], String.class);
-		expected.put((TypeVariable<?>) ((ParameterizedType) tArgs[1])
-			.getActualTypeArguments()[0], Double.class);
-
-		assertEquals(typeAssigns, expected);
+		assertAll(List.class, true, listT, listNumber, listInteger, listExtendsNumber);
+		assertAll(List.class, false, t);
 	}
 	
 	class Thing<T> {}

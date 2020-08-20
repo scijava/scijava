@@ -55,13 +55,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.integralMean")
 @Parameter(key = "iterableInput")
 @Parameter(key = "integralMean", itemIO = ItemIO.BOTH)
-public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<Composite<I>>, DoubleType> {
+public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 
 	@Override
-	public void compute(final RectangleNeighborhood<Composite<I>> input, final DoubleType output) {
+	public void compute(final RectangleNeighborhood<? extends Composite<I>> input, final DoubleType output) {
 		// computation according to
 		// https://en.wikipedia.org/wiki/Summed_area_table
-		final IntegralCursor<Composite<I>> cursor = new IntegralCursor<>(input);
+		final IntegralCursor<? extends Composite<I>> cursor = new IntegralCursor<>(input);
 		final int dimensions = input.numDimensions();
 
 		// Compute \sum (-1)^{dim - ||cornerVector||_{1}} * I(x^{cornerVector})

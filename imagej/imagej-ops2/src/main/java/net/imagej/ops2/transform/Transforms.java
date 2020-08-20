@@ -25,6 +25,7 @@ import net.imglib2.view.SubsampleIntervalView;
 import net.imglib2.view.SubsampleView;
 import net.imglib2.view.TransformView;
 import net.imglib2.view.Views;
+import net.imglib2.view.composite.Composite;
 import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.GenericComposite;

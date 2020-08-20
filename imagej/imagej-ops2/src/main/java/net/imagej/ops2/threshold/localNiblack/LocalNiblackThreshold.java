@@ -35,7 +35,6 @@ import java.util.function.Function;
 
 import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
 import net.imagej.ops2.threshold.ApplyLocalThresholdIntegral;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
@@ -64,9 +63,9 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "outOfBoundsFactory", required = false)
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class LocalNiblackThreshold<T extends RealType<T>> extends
-	ApplyLocalThresholdIntegral<T> implements
+	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
-			IterableInterval<BitType>> {
+			RandomAccessibleInterval<BitType>> {
 
 	private static final int INTEGRAL_IMAGE_ORDER_1 = 1;
 	private static final int INTEGRAL_IMAGE_ORDER_2 = 2;
@@ -75,19 +74,22 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	private Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdNonIntegralOp;
 
 	@OpDependency(name = "threshold.localNiblack")
-	private Computers.Arity4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdIntegralOp;
+	private Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdIntegralOp;
 
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c, final Double k,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		@Mutable final IterableInterval<BitType> output)
+		@Mutable final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.
-		if (inputNeighborhoodShape instanceof RectangleShape &&
-			((RectangleShape) inputNeighborhoodShape).getSpan() > 2)
-		{
-			computeIntegral(input, (RectangleShape) inputNeighborhoodShape, c, k,
+		RectangleShape rShape = inputNeighborhoodShape instanceof RectangleShape
+			? (RectangleShape) inputNeighborhoodShape : null;
+		if (rShape != null && rShape.getSpan() > 2 && !rShape.isSkippingCenter()) {
+			// NB: under these conditions, the RectangleShape will produce
+			// RectangleNeighborhoods (which is needed to perform the computations via
+			// an IntegralImg).
+			computeIntegral(input, rShape, c, k,
 				outOfBoundsFactory, getIntegralImageOp(INTEGRAL_IMAGE_ORDER_1),
 				getIntegralImageOp(INTEGRAL_IMAGE_ORDER_2), computeThresholdIntegralOp,
 				output);
@@ -98,12 +100,12 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 		}
 	}
 
-	public static <T extends RealType<T>> void computeNonIntegral(
+	public void computeNonIntegral(
 		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 		final Double c, final Double k,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
-		@Mutable final IterableInterval<BitType> output)
+		@Mutable final RandomAccessibleInterval<BitType> output)
 	{
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, k, o);
@@ -112,18 +114,18 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 			parametrizedComputeThresholdOp, output);
 	}
 
-	public static <T extends RealType<T>> void computeIntegral(
+	public void computeIntegral(
 		final RandomAccessibleInterval<T> input,
 		final RectangleShape inputNeighborhoodShape, final Double c, final Double k,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> integralImageOp,
-		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> squareIntegralImageOp,
-		final Computers.Arity4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp,
-		@Mutable final IterableInterval<BitType> output)
+		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> integralImageOp,
+		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> squareIntegralImageOp,
+		final Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp,
+		@Mutable final RandomAccessibleInterval<BitType> output)
 	{
-		final Computers.Arity2<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
+		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, k, o);
-		ApplyLocalThresholdIntegral.compute(input, inputNeighborhoodShape,
+		compute(input, inputNeighborhoodShape,
 			outOfBoundsFactory, Arrays.asList(integralImageOp, squareIntegralImageOp),
 			parametrizedComputeThresholdOp, output);
 	}

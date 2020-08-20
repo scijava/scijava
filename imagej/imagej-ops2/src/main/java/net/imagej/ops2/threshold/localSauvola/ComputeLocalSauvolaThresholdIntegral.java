@@ -42,7 +42,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
 import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
@@ -73,33 +72,22 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "output", itemIO = ItemIO.BOTH)
 public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	implements
-	Computers.Arity4<RectangleNeighborhood<Composite<DoubleType>>, T, Double, Double, BitType>
+	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>
 {
 
 	public static final double DEFAULT_K = 0.5;
 	public static final double DEFAULT_R = 0.5;
 
 	@OpDependency(name = "stats.integralMean")
-	private Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp;
+	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralMeanOp;
 
 	@OpDependency(name = "stats.integralVariance")
-	private Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp;
+	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralVarianceOp;
 
 	@Override
 	public void compute(
-		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
-		final T inputCenterPixel, final Double k, final Double r,
-		@Mutable final BitType output)
-	{
-		compute(inputNeighborhood, inputCenterPixel, k, r, integralMeanOp,
-			integralVarianceOp, output);
-	}
-
-	public static <T extends RealType<T>> void compute(
-		final RectangleNeighborhood<Composite<DoubleType>> inputNeighborhood,
+		final RectangleNeighborhood<? extends Composite<DoubleType>> inputNeighborhood,
 		final T inputCenterPixel, Double k, Double r,
-		final Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralMeanOp,
-		final Computers.Arity1<RectangleNeighborhood<Composite<DoubleType>>, DoubleType> integralVarianceOp,
 		@Mutable final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;

@@ -33,26 +33,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import net.imagej.ops2.stats.IntegralMean;
-import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
-import net.imglib2.IterableInterval;
-import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
+import net.imglib2.algorithm.neighborhood.RectangleShape.NeighborhoodsAccessible;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.Composite;
+import net.imglib2.view.composite.GenericComposite;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpExecutionException;
@@ -64,16 +62,15 @@ import org.scijava.ops.function.Computers;
  *
  * @author Stefan Helfrich (University of Konstanz)
  */
-public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
+public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>, U extends RealType<U>> {
 
-	private static final OutOfBoundsFactory<?, ?> DEFAULT_OUT_OF_BOUNDS_FACTORY =
+	private final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> DEFAULT_OUT_OF_BOUNDS_FACTORY =
 		new OutOfBoundsBorderFactory<>();
 
-	@SuppressWarnings("unchecked")
-	public static <I> OutOfBoundsFactory<I, RandomAccessibleInterval<I>>
+	public OutOfBoundsFactory<T, RandomAccessibleInterval<T>>
 		defaultOutOfBoundsFactory()
 	{
-		return (OutOfBoundsFactory<I, RandomAccessibleInterval<I>>) DEFAULT_OUT_OF_BOUNDS_FACTORY;
+		return DEFAULT_OUT_OF_BOUNDS_FACTORY;
 	}
 
 	// TODO: The only reason this class is not fully static (but also serves as
@@ -81,13 +78,13 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 	// boilerplate code in extending classes. Is there some better way to do this?
 
 	@OpDependency(name = "image.integral")
-	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> integralImgOp;
+	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> integralImgOp;
 
 	@OpDependency(name = "image.squareIntegral")
-	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> squareIntegralImgOp;
+	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> squareIntegralImgOp;
 
 	protected
-		Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>>
+		Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>>
 		getIntegralImageOp(final int integralImageOrder)
 	{
 		if (integralImageOrder == 1) return integralImgOp;
@@ -98,14 +95,13 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 				". There is no op available to do that (available orders are: 1, 2).");
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static <T extends RealType<T>> void compute(
+	protected void compute(
 		final RandomAccessibleInterval<T> input,
 		RectangleShape inputNeighborhoodShape,
 		OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>>> integralImageOps,
-		final Computers.Arity2<RectangleNeighborhood<Composite<DoubleType>>, T, BitType> thresholdOp,
-		final IterableInterval<BitType> output)
+		final List<Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>>> integralImageOps,
+		final Computers.Arity2<RectangleNeighborhood<? extends Composite<U>>, T, BitType> thresholdOp,
+		final RandomAccessibleInterval<BitType> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
 			defaultOutOfBoundsFactory();
@@ -114,29 +110,53 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 		inputNeighborhoodShape = new RectangleShape(inputNeighborhoodShape
 			.getSpan() + 1, false);
 
-		final List<RandomAccessibleInterval<RealType>> listOfIntegralImages =
+		final List<RandomAccessibleInterval<U>> listOfIntegralImages =
 			new ArrayList<>(integralImageOps.size());
-		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> //
+		for (final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> //
 		integralImageOp : integralImageOps) {
-			final RandomAccessibleInterval<RealType> requiredIntegralImg =
+			final RandomAccessibleInterval<U> requiredIntegralImg =
 				getIntegralImage(input, inputNeighborhoodShape, outOfBoundsFactory,
 					integralImageOp);
 			listOfIntegralImages.add(requiredIntegralImg);
 		}
 
 		// Composite image of integral images of all orders
-		final RandomAccessibleInterval<RealType> stacked = Views.stack(
+		final RandomAccessibleInterval<U> stacked = Views.stack(
 			listOfIntegralImages);
-		final RandomAccessibleInterval<? extends Composite<RealType>> compositeRAI =
-			Views.collapse(stacked);
-		final RandomAccessibleInterval<? extends Composite<RealType>> extendedCompositeRAI =
+		// NB Views.collapse returns a RandomAccessibleInterval<? extends
+		// GenericComposite<U>>. We know that any subclass of GenericComposite<U> is
+		// inherently a Composite<U>, but due to generic typing we cannot simply
+		// cast a RAI<? extends GenericComposite<U>> to a RAI<Composite<U>>. This
+		// raw cast allows us to get a RAI<Composite<U>> in a way that satisfies
+		// javac.
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		final RandomAccessibleInterval<Composite<U>> compositeRAI =
+			(RandomAccessibleInterval) Views.collapse(stacked);
+		final RandomAccessibleInterval<Composite<U>> extendedCompositeRAI =
 			removeLeadingZeros(compositeRAI, inputNeighborhoodShape);
 
-		final IterableInterval<? extends Neighborhood<? extends Composite<RealType>>> neighborhoods =
-			inputNeighborhoodShape.neighborhoodsSafe(extendedCompositeRAI);
+		RandomAccessibleInterval<RectangleNeighborhood<Composite<U>>> neighborhoodsRAI =
+				asRectangularNeighborhoodInterval(inputNeighborhoodShape, extendedCompositeRAI);
+	
+		LoopBuilder.setImages(neighborhoodsRAI, input, output) //
+			.multiThreaded() //
+			.forEachPixel(thresholdOp::compute);
+	}
 
-		// TODO: Typing
-		map(neighborhoods, input, (Computers.Arity2) thresholdOp, output);
+	private <A>
+		RandomAccessibleInterval<RectangleNeighborhood<A>>
+		asRectangularNeighborhoodInterval(RectangleShape inputNeighborhoodShape,
+			final RandomAccessibleInterval<A> extendedCompositeRAI)
+	{
+		final NeighborhoodsAccessible<A> neighborhoods = inputNeighborhoodShape.neighborhoodsRandomAccessibleSafe(extendedCompositeRAI);
+		final IntervalView<Neighborhood<A>> interval = Views.interval(neighborhoods, extendedCompositeRAI);
+		
+		if (!(Util.getTypeFromInterval(interval) instanceof RectangleNeighborhood)) {
+			throw new IllegalStateException("RectangleShape did not produce a RandomAccess<RectangleNeighborhood>!");
+		}
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		final RandomAccessibleInterval<RectangleNeighborhood<A>> result = (RandomAccessibleInterval) interval;
+		return result ;
 	}
 
 	/**
@@ -146,12 +166,11 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 	 * @param input The RAI for which an integral image is computed
 	 * @return An extended integral image for the input RAI
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static <T extends RealType<T>> RandomAccessibleInterval<RealType>
+	private RandomAccessibleInterval<U>
 		getIntegralImage(final RandomAccessibleInterval<T> input,
 			final RectangleShape shape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<? extends RealType<?>>> integralOp)
+			final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>> integralOp)
 	{
 		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedInput =
 			Views.extend(input, outOfBoundsFactory);
@@ -159,8 +178,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 			.getSpan() - 1l);
 		final IntervalView<T> offsetInterval2 = Views.offsetInterval(extendedInput,
 			expandedInterval);
-		final RandomAccessibleInterval<RealType> img =
-			(RandomAccessibleInterval) integralOp.apply(offsetInterval2);
+		final RandomAccessibleInterval<U> img = integralOp.apply(offsetInterval2);
 		return addLeadingZeros(img);
 	}
 
@@ -184,7 +202,7 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 		realZero.setZero();
 
 		final ExtendedRandomAccessibleInterval<T, RandomAccessibleInterval<T>> extendedImg =
-			Views.extendValue(input, realZero);
+			Views.extendValue(input, realZero.getRealFloat());
 		final IntervalView<T> offsetInterval = Views.interval(extendedImg, min,
 			max);
 
@@ -214,29 +232,6 @@ public abstract class ApplyLocalThresholdIntegral<T extends RealType<T>> {
 		final FinalInterval interval = new FinalInterval(min, max);
 
 		return Views.offsetInterval(Views.extendBorder(input), interval);
-	}
-
-	private static <I1, I2, O> void map(
-		final IterableInterval<? extends I1> inputNeighborhoods,
-		final RandomAccessibleInterval<I2> inputCenterPixels,
-		final Computers.Arity2<I1, I2, O> filterOp, final IterableInterval<O> output)
-	{
-		// TODO: This used to be done via a net.imagej.ops2.Ops.Map meta op. We may
-		// want to revert to that approach if this proves to be too inflexible.
-		// (Parallelization would be useful, for instance.) In this case, we would
-		// need to make this static method part of a proper op, again (or let
-		// clients pass a mapper op).
-		final Cursor<? extends I1> neighborhoodCursor = inputNeighborhoods
-			.localizingCursor();
-		final RandomAccess<I2> centerPixelsAccess = inputCenterPixels
-			.randomAccess();
-		final Cursor<O> outputCursor = output.cursor();
-		while (neighborhoodCursor.hasNext()) {
-			neighborhoodCursor.fwd();
-			centerPixelsAccess.setPosition(neighborhoodCursor);
-			filterOp.compute(neighborhoodCursor.get(), centerPixelsAccess.get(),
-				outputCursor.next());
-		}
 	}
 
 }

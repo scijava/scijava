@@ -612,9 +612,11 @@ public final class MatchingUtils {
 				// of type.
 				ParameterizedType superTypeOfType = (ParameterizedType) Types
 					.getExactSuperType(type, Types.raw(inferFrom));
-				if (superTypeOfType == null) throw new TypeInferenceException(
-					inferFrom + " cannot be implicitly cast to " + type +
+				if (superTypeOfType == null) {
+					throw new TypeInferenceException(inferFrom +
+						" cannot be implicitly cast to " + type +
 						", thus it is impossible to infer type variables for " + inferFrom);
+				}
 				inferTypeVariables(superTypeOfType.getActualTypeArguments(),
 					((ParameterizedType) inferFrom).getActualTypeArguments(),
 					typeMappings, false);
@@ -625,6 +627,13 @@ public final class MatchingUtils {
 			}
 		}
 		else {
+			// getExactSuperType does not return Object as a superType for any
+			// interface, so we cover it here.
+			// TODO: clean
+			if (Object.class.equals(inferFrom)) {
+				mapTypeVarsToAny(type, typeMappings);
+				return;
+			}
 			if (inferFrom instanceof WildcardType) {
 				WildcardType inferFromWildcard = (WildcardType) inferFrom;
 				if (inferFromWildcard.getUpperBounds().length == 1) inferFrom = inferFromWildcard.getUpperBounds()[0];
@@ -640,6 +649,37 @@ public final class MatchingUtils {
 		}
 	}
 	
+	private static void mapTypeVarsToAny(Type type,
+		Map<TypeVariable<?>, TypeMapping> typeMappings)
+	{
+		if(!Types.containsTypeVars(type)) return;
+
+		if(type instanceof TypeVariable) {
+			if (typeMappings.containsKey(type)) return;
+			TypeVariable<?> typeVar = (TypeVariable<?>) type;
+			typeMappings.put(typeVar, suitableTypeMapping(typeVar, new Any(), true));
+		}
+		else if(type instanceof ParameterizedType) {
+			ParameterizedType pType = (ParameterizedType) type;
+			Type[] typeParams = pType.getActualTypeArguments();
+			for (Type typeParam : typeParams) {
+				mapTypeVarsToAny(typeParam, typeMappings);
+			}
+		}
+		else if (type instanceof WildcardType) {
+			WildcardType wildcard = (WildcardType) type;
+			for (Type lowerBound : wildcard.getLowerBounds())
+				mapTypeVarsToAny(lowerBound, typeMappings);
+			for (Type upperBound : wildcard.getUpperBounds())
+				mapTypeVarsToAny(upperBound, typeMappings);
+		}
+		else if (type instanceof Class) {
+			Class<?> clazz = (Class<?>) type;
+			for (Type typeParam : clazz.getTypeParameters())
+				mapTypeVarsToAny(typeParam, typeMappings);
+		}
+	}
+
 	private static void inferTypeVariables(WildcardType type, Type inferFrom, Map<TypeVariable<?>, TypeMapping> typeMappings) {
 		Type inferrableBound = getInferrableBound(type);
 		if (inferFrom instanceof WildcardType) {

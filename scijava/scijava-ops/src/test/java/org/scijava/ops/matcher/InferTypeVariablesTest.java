@@ -7,16 +7,19 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.scijava.ops.function.Producer;
 import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
 import org.scijava.ops.matcher.MatchingUtils.TypeMapping;
 import org.scijava.ops.matcher.MatchingUtilsTest.StrangeThing;
 import org.scijava.ops.matcher.MatchingUtilsTest.Thing;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 
 public class InferTypeVariablesTest {
@@ -268,6 +271,25 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVarT = (TypeVariable<?>) new Nil<T>() {}.getType();
 		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, true));
+
+		assertEquals(expected, typeAssigns);
+	}
+
+	@Test
+	public <O extends Number> void testInferOToAny()
+		throws TypeInferenceException
+	{
+		final Type iterableO = new Nil<Iterable<O>>() {}.getType();
+		final Type object = Object.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(iterableO, object, typeAssigns);
+
+		// We expect O = Any
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
 
 		assertEquals(expected, typeAssigns);
 	}

@@ -558,6 +558,13 @@ public class TypesTest {
 		assertFalse(Types.isAssignable(listExtendsNumber, listNumber));
 	}
 
+	/** Tests {@link Types#isAssignable(Type, Type)} against {@link Object} */
+	@Test
+	public <T extends Number> void testIsAssignableObject() {
+		final Type iterableT = new Nil<Iterable<T>>() {}.getType();
+		assertTrue(Types.isAssignable(iterableT, Object.class));
+	}
+
 	/** Tests {@link Types#isInstance(Object, Class)}. */
 	@Test
 	public void testIsInstance() {

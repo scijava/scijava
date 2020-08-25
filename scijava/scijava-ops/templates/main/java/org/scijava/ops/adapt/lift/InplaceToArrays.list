@@ -1,0 +1,46 @@
+.include templates/main/java/org/scijava/ops/function/Globals.list
+arities = (1..maxArity).collect()
+
+[InplaceToArrays.java]
+typeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+genericsList = ```
+{ arity, io ->
+  typeVarNums(arity, io).stream().map{a -> "I$a"}.collect()
+}
+```
+generics = ```
+{ arity, io ->
+  '<' + String.join(', ', genericsList(arity, io)) + '>'
+}
+```
+arrayGenerics = ```
+{ arity, io ->
+  '<' + String.join(', ', genericsList(arity, io).stream().map{a -> a + '[]'}.collect()) + '>'
+}
+```
+classGenerics = ```
+{ arity ->
+  types = genericParamTypes(arity)
+  '<IO, ' + String.join(', ', types[0..types.size() - 2]) + '>'
+}
+```
+arraysAtPosI = ```
+{ arity, io ->
+  if (arity == 1) return 'io[i]'
+  String.join(', ', genericsList(arity, io).stream().map{a -> a.substring(1) == 'O' ? "io[i]" : "in${a.substring(1)}[i]"}.collect())
+}
+```
+mutateArgs = ```
+{ arity, io ->
+  String.join(', ', genericsList(arity, io).stream().map{a -> a.substring(1) == 'O' ? "IO io" : "$a in${a.substring(1)}"}.collect())
+  }
+```
+mutateParams = ```
+{ arity, io ->
+  String.join(', ', genericsList(arity, io).stream().map{a -> a.substring(1) == 'O' ? "io" : "in${a.substring(1)}"}.collect())
+  }
+```

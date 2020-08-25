@@ -1,0 +1,46 @@
+.include templates/main/java/org/scijava/ops/function/Globals.list
+arities = (1..maxArity).collect()
+
+[FunctionToArraysTest.java]
+
+numericalGenerics = ```
+{ arity -> 
+  '<' + String.join(', ', (1..arity+1).stream().map{a -> 'NumericalThing'}.collect()) + '>'
+}
+```
+getNumbers = ```
+{ arity -> 
+  names = genericsNamesList(arity)
+  arity == 0 ? '0' : 
+  String.join(' + ', names[0..names.size() - 2].stream().map{a -> a + '.getNumber()'}.collect())
+}
+```
+inputArgs = ```
+{ arity ->
+  arity == 0 ? '' :
+  String.join(', ', (1..arity).stream().map{a -> 'input'}.collect())
+}
+```
+functionInputName = ```
+{ arity, num ->
+  arity == 1 ? 'input' :
+  'input'+num
+}
+```
+inputList = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> 'in'}.collect())
+}
+```
+expectedList = ```
+{ arity ->
+  '{ ' + String.join(', ', (1..3).stream().map{a -> "" + a * arity + '.'}.collect()) + " }"
+}
+```
+args = ```
+{arity ->
+  arity == 0 ? '' :
+  arity == 1 ? 'input' :
+  String.join(', ',(1..arity).stream().map{a -> 'input' + a}.collect())
+}
+```

@@ -627,6 +627,8 @@ public final class MatchingUtils {
 					" cannot be implicitly cast to " + mappedType +
 					", thus it is impossible to infer type variables for " + inferFrom);
 			}
+			// for all remaining unmapped type vars, map to Any
+			mapTypeVarsToAny(type, typeMappings);
 		}
 		// -- edge cases -> do our best -- //
 		else if (superInferFrom == null) {

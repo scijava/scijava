@@ -332,6 +332,25 @@ public class InferTypeVariablesTest {
 		assertEquals(expected, typeAssigns);
 	}
 	
+	@Test
+	public <O extends Number> void testInferOToAnyWithRawType()
+		throws TypeInferenceException
+	{
+		final Type type = new Nil<TypedBar<O>>() {}.getType();
+		final Type inferFrom = TypedBar.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect O = Any
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+
+		assertEquals(expected, typeAssigns);
+	}
+
 	class Bar {
 		
 	}

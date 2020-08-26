@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.function.Producer;
 import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
 import org.scijava.ops.matcher.MatchingUtils.TypeMapping;
 import org.scijava.ops.matcher.MatchingUtilsTest.StrangeThing;
@@ -351,6 +350,42 @@ public class InferTypeVariablesTest {
 		assertEquals(expected, typeAssigns);
 	}
 
+	@Test
+	public <O extends Number, I extends O> void testInferTypeVarExtendingTypeVar() {
+		final Type type = new Nil<I>() {}.getType();
+		final Type inferFrom = Double.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect I= Double, O = Double
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		TypeVariable<?> typeVarI = (TypeVariable<?>) new Nil<I>() {}.getType();
+		expected.put(typeVarI, new TypeMapping(typeVarI, Double.class, true));
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		expected.put(typeVarO, new TypeMapping(typeVarO, Double.class, true));
+
+		assertEquals(expected, typeAssigns);
+	}
+	
+	@Test
+	public <O extends RecursiveThing<O>> void testInferRecursiveTypeVar() {
+		final Type type = new Nil<O>() {}.getType();
+		final Type inferFrom = FooThing.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect O = FooThing
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, false));
+
+		assertEquals(expected, typeAssigns);
+	}
+
 	class Bar {
 		
 	}
@@ -358,4 +393,13 @@ public class InferTypeVariablesTest {
 	class TypedBar<E> extends Bar {
 		E type;
 	}
+
+	static abstract class RecursiveThing<T extends RecursiveThing<T>> {
+		
+	}
+	
+	static class FooThing extends RecursiveThing<FooThing> {
+		
+	}
+
 }

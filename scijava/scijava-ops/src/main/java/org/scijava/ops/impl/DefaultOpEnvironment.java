@@ -68,6 +68,7 @@ import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers.Arity1;
 import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.MatchingResult;
+import org.scijava.ops.matcher.DependencyMatchingException;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
 import org.scijava.ops.matcher.OpCandidate;
@@ -501,11 +502,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
 			try {
 				resolvedDependencies.add(findOpInstance(dependencyRef, dependency.isAdaptable(), false));
-			} catch (final Exception e) {
-				throw new OpMatchingException("Could not find Op that matches requested Op dependency:" + "\nOp class: "
-						+ info.implementationName() + //
-						"\nDependency identifier: " + dependency.getKey() + //
-						"\n\n Attempted request:\n" + dependencyRef, e);
+			}
+			catch (final OpMatchingException e) {
+				String message = DependencyMatchingException.message(info
+					.implementationName(), dependency.getKey(), dependencyRef);
+				if (e instanceof DependencyMatchingException) {
+					throw new DependencyMatchingException(message, (DependencyMatchingException) e);
+				}
+				throw new DependencyMatchingException(message);
 			}
 		}
 		return resolvedDependencies;
@@ -532,6 +536,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 */
 	private OpCandidate adaptOp(OpRef ref) throws OpMatchingException {
 
+		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : infos("adapt")) {
 			Type adaptTo = adaptor.output().getType();
 			Map<TypeVariable<?>, Type> map = new HashMap<>();
@@ -572,14 +577,24 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;
 			}
+			catch (DependencyMatchingException d) {
+				depExceptions.add(d);
+			}
 			catch (OpMatchingException e1) {
 				log.trace(e1);
 			}
 		}
 
-		// no adaptors available.
-		throw new OpMatchingException(
-			"Op adaptation failed: no adaptable Ops of type " + ref.getName());
+		//no adaptors available.
+		if (depExceptions.size() == 0) {
+			throw new OpMatchingException(
+				"Op adaptation failed: no adaptable Ops of type " + ref.getName());
+		}
+		StringBuilder sb = new StringBuilder();
+		for (DependencyMatchingException d : depExceptions) {
+			sb.append("\n\n" + d.getMessage());
+		}
+		throw new DependencyMatchingException(sb.toString());
 	}
 
 	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo, Map<TypeVariable<?>, Type> map, OpRef ref) {

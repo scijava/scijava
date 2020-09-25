@@ -312,12 +312,16 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 					return findSimplifiedOp(ref);
 				}
 				catch (OpMatchingException e3) {
-					// no direct, adapted, or simplified matches
-					OpMatchingException matchingException = new OpMatchingException(
-						"No Op available for request: " + ref, e1);
-					matchingException.addSuppressed(e2);
-					matchingException.addSuppressed(e3);
-					throw matchingException;
+					// NB: It is important that the adaptation and simplification errors be
+					// suppressed here. If a failure occurs in Op matching, it
+					// is not the fault of our adaptation/simplification process but is
+					// instead due to the incongruity between the request and the set of
+					// available Ops. Thus the error stemming from the direct match
+					// attempt will provide the user with more information on how to fix
+					// their Op request.
+					e1.addSuppressed(e2);
+					e1.addSuppressed(e3);
+					throw e1;
 				}
 			}
 		}

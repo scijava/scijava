@@ -127,19 +127,20 @@
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 		<!-- Third-party dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>io.leangen.geantyref</groupId>
 			<artifactId>geantyref</artifactId>
 			<version>${geantyref.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

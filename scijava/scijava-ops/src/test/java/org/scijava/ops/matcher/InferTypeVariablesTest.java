@@ -34,7 +34,7 @@ public class InferTypeVariablesTest {
 
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
 			new HashMap<>();
-		MatchingUtils.inferTypeVariables(tArgs, destArgs, typeAssigns);
+		MatchingUtils.inferTypeVariablesWithTypeMappings(tArgs, destArgs, typeAssigns);
 
 		// We expect I=String, O=Double
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected =
@@ -61,7 +61,7 @@ public class InferTypeVariablesTest {
 
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
 			new HashMap<>();
-		MatchingUtils.inferTypeVariables(types, inferFroms, typeAssigns);
+		MatchingUtils.inferTypeVariablesWithTypeMappings(types, inferFroms, typeAssigns);
 
 		// We expect T=Number
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected =
@@ -85,7 +85,7 @@ public class InferTypeVariablesTest {
 
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns2 =
 			new HashMap<>();
-		MatchingUtils.inferTypeVariables(types2, inferFroms2, typeAssigns2);
+		MatchingUtils.inferTypeVariablesWithTypeMappings(types2, inferFroms2, typeAssigns2);
 
 		// We expect T=Number
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected2 =
@@ -158,7 +158,7 @@ public class InferTypeVariablesTest {
 
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
 			new HashMap<>();
-		MatchingUtils.inferTypeVariables(types, inferFroms, typeAssigns);
+		MatchingUtils.inferTypeVariablesWithTypeMappings(types, inferFroms, typeAssigns);
 
 		// We expect T=Number
 		final Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected =
@@ -222,7 +222,7 @@ public class InferTypeVariablesTest {
 
 		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
 			new HashMap<>();
-		MatchingUtils.inferTypeVariables(tArr, badInferFrom, typeAssigns);
+		MatchingUtils.inferTypeVariablesWithTypeMappings(tArr, badInferFrom, typeAssigns);
 
 		// We expect T=Number
 		TypeVariable<?> typeVarT = (TypeVariable<?>) t;

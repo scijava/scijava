@@ -243,7 +243,10 @@ public final class MatchingUtils {
 		ParameterizedType dest, Map<TypeVariable<?>, Type> typeVarAssigns,
 		boolean safeAssignability)
 	{
-		if (typeVarAssigns != null && !typeVarAssigns.isEmpty()) {
+		if (typeVarAssigns == null) {
+			typeVarAssigns = new HashMap<>();
+		}
+		else if (!typeVarAssigns.isEmpty()) {
 			throw new IllegalArgumentException(
 				"Expected empty typeVarAssigns but contained " + typeVarAssigns.size() +
 					" entries");
@@ -260,12 +263,8 @@ public final class MatchingUtils {
 		// assignability check.
 		if (srcTypes.length == 0) return Types.isAssignable(src, dest);
 		// if there are type parameters, do a more complicated assignability check.
-		Map<TypeVariable<?>, TypeMapping> typeMappings = new HashMap<>();
 		boolean result = checkGenericAssignability(srcTypes, destTypes, src, dest,
-			typeMappings, safeAssignability);
-		if (typeVarAssigns != null) {
-			typeVarAssigns.putAll(new TypeVarAssigns(typeMappings));
-		}
+			typeVarAssigns, safeAssignability);
 		return result;
 	}
 
@@ -334,7 +333,7 @@ public final class MatchingUtils {
 	 * @param src the type for which assignment should be checked from
 	 * @param dest the parameterized type for which assignment should be checked
 	 *          to
-	 * @param typeMappings the map of {@link TypeVariable}s to
+	 * @param typeVarAssigns the map of {@link TypeVariable}s to
 	 *          {@link TypeMapping}s that would occur in this scenario
 	 * @param safeAssignability used to determine if we want to check if the
 	 *          src->dest assignment would be safely assignable even though it
@@ -344,20 +343,18 @@ public final class MatchingUtils {
 	 *         java statement
 	 */
 	private static boolean checkGenericAssignability(Type[] srcTypes, Type[] destTypes, Type src, Type dest,
-			Map<TypeVariable<?>, TypeMapping> typeMappings, boolean safeAssignability) {
+			Map<TypeVariable<?>, Type> typeVarAssigns, boolean safeAssignability) {
 		// if the number of type arguments does not match, the types can't be
 		// assignable
 		if (srcTypes.length != destTypes.length) {
 			return false;
 		}
 		
-		TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
-
 		try {
 			// Try to infer type variables contained in the type arguments of
 			// sry
-			inferTypeVariables(srcTypes, destTypes, typeMappings);
-		} catch (TypeInferenceException e) {
+			inferTypeVariables(srcTypes, destTypes, typeVarAssigns);
+		} catch (IllegalArgumentException e) {
 			// types can't be inferred
 			// TODO: Consider the situations in which it is okay that the type
 			// variables cannot be inferred. For example, if we have a
@@ -464,11 +461,18 @@ public final class MatchingUtils {
 	 * @param types - the types containing {@link TypeVariable}s
 	 * @param inferFroms - the types used to infer the {@link TypeVariable}s
 	 *          within {@code types}
-	 * @param typeMappings - the mapping of {@link TypeVariable}s to
+	 * @param typeVarAssigns - the mapping of {@link TypeVariable}s to
 	 *          {@link Type}s
 	 */
-	static void inferTypeVariables(Type[] types, Type[] inferFroms, Map<TypeVariable<?>, TypeMapping> typeMappings) {
-		inferTypeVariables(types, inferFroms, typeMappings, true);
+	public static void inferTypeVariables(Type[] types, Type[] inferFroms, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		Map<TypeVariable<?>, TypeMapping> typeMappings = new HashMap<>();
+		try {
+			inferTypeVariables(types, inferFroms, typeMappings, true);
+			typeVarAssigns.putAll(new TypeVarAssigns(typeMappings));
+		}
+		catch (TypeInferenceException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 	
 	private static void inferTypeVariables(Type[] types, Type[] inferFroms,
@@ -490,6 +494,22 @@ public final class MatchingUtils {
 		if (!Types.typesSatisfyVariables(typeVarAssigns)) {
 			throw new TypeInferenceException();
 		}
+	}
+	
+	/**
+	 * Tries to infer type vars contained in types from corresponding types from
+	 * inferFrom, putting them into the specified map. <b>When a
+	 * {@link TypeInferenceException} is thrown, the caller should assume that
+	 * some of the mappings within {@code typeMappings} are incorrect.</b>
+	 *
+	 * @param type
+	 * @param inferFrom
+	 * @param typeMappings
+	 */
+	static void inferTypeVariablesWithTypeMappings(Type type[], Type[] inferFrom,
+		Map<TypeVariable<?>, TypeMapping> typeMappings)
+	{
+		inferTypeVariables(type, inferFrom, typeMappings, true);
 	}
 	
 	/**

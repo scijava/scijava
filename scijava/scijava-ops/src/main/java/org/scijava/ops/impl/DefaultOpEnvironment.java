@@ -30,6 +30,7 @@
 package org.scijava.ops.impl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -56,6 +57,7 @@ import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
+import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
@@ -68,6 +70,7 @@ import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
+import org.scijava.ops.matcher.OpMethodInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.FunctionalMethodType;
@@ -528,7 +531,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		// Add Ops contained in an OpCollection
 		for (final PluginInfo<OpCollection> pluginInfo : pluginService.getPluginsOfType(OpCollection.class)) {
 			try {
-				Class<? extends OpCollection> c = pluginInfo.loadClass();
+				final Class<? extends OpCollection> c = pluginInfo.loadClass();
 				final List<Field> fields = ClassUtils.getAnnotatedFields(c, OpField.class);
 				Object instance = null;
 				for (Field field : fields) {
@@ -538,6 +541,11 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 					}
 					OpInfo opInfo = new OpFieldInfo(isStatic ? null : instance, field);
 					addToOpIndex(opInfo, field.getAnnotation(OpField.class).names());
+				}
+				final List<Method> methods = ClassUtils.getAnnotatedMethods(c, OpMethod.class);
+				for (final Method method: methods) {
+					OpInfo opInfo = new OpMethodInfo(method);
+					addToOpIndex(opInfo, method.getAnnotation(OpMethod.class).names());
 				}
 			} catch (InstantiableException | InstantiationException | IllegalAccessException exc) {
 				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);

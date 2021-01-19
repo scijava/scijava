@@ -22,4 +22,5 @@ module org.scijava.ops {
 
 	requires org.scijava;
 	requires org.scijava.types;
+	requires javassist;
 }

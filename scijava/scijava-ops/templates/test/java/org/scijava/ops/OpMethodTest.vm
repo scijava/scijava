@@ -1,0 +1,208 @@
+/*
+ * #%L
+ * SciJava Operations: a framework for reusable algorithms.
+ * %%
+ * Copyright (C) 2018 SciJava developers.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+package org.scijava.ops;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.junit.Test;
+import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.Producer;
+import org.scijava.param.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.struct.ItemIO;
+import org.scijava.types.Nil;
+
+/**
+ * Tests the construction of {@link OpMethod}s.
+ * 
+ * @author Gabriel Selzer
+ * @author Marcel Wiedenmann
+ */
+@Plugin(type = OpCollection.class)
+public class OpMethodTest extends AbstractTestEnvironment {
+
+//	@Test
+//	public void testParseIntegerOp() {
+//		// Will match a lambda created and returned by createParseIntegerOp() below.
+//		final Function<String, Integer> parseIntegerOp = ops.op("test.parseInteger")
+//			.inType(String.class).outType(Integer.class).function();
+//
+//		final String numericString = "42";
+//		final Integer parsedInteger = parseIntegerOp.apply(numericString);
+//		assertEquals(Integer.parseInt(numericString), (int) parsedInteger);
+//	}
+//
+//	@Test
+//	public void testMultiplyNumericStringsOpMethod() {
+//		// Will match a lambda created and returned by
+//		// createMultiplyNumericStringsOp(..), which itself captured a lambda
+//		// created and returned by createParseIntegerOp().
+//		final BiFunction<String, String, Integer> multiplyNumericStringsOp = ops.op(
+//			"test.multiplyNumericStrings").inType(String.class, String.class).outType(
+//				Integer.class).function();
+//
+//		final String numericString1 = "3";
+//		final String numericString2 = "18";
+//		final Integer multipliedNumericStrings = multiplyNumericStringsOp.apply(
+//			numericString1, numericString2);
+//		assertEquals(Integer.parseInt(numericString1) * Integer.parseInt(
+//			numericString2), (int) multipliedNumericStrings);
+//	}
+//
+//	@OpMethod(names = "test.parseInteger", type = Function.class)
+//	// Refers to the input parameter of the function that's returned by this
+//	// factory method.
+//	@Parameter(key = "numericString")
+//	// Refers to the output parameter of the function.
+//	@Parameter(key = "parsedInteger", itemIO = ItemIO.OUTPUT)
+//	public static Integer createParseIntegerOp(String in) {
+//		return Integer.parseInt(in);
+//	}
+//
+//	@OpMethod(names = "test.multiplyNumericStrings", type = BiFunction.class)
+//	@Parameter(key = "numericString1")
+//	@Parameter(key = "numericString2")
+//	@Parameter(key = "multipliedNumericStrings", itemIO = ItemIO.OUTPUT)
+//	public static Integer createMultiplyNumericStringsOp(final String in1,
+//		final String in2, @OpDependency(
+//			name = "test.parseInteger") Function<String, Integer> parseIntegerOp)
+//	{
+//		return parseIntegerOp.apply(in1) * parseIntegerOp.apply(in2);
+//	}
+	// -- Functions -- //
+
+	@Test
+	public void testOpMethodProducer() {
+		final Integer out = ops.op("test.multiplyNumericStrings").input()
+			.outType(Integer.class).create();
+		final Integer expected = Integer.valueOf(1);
+		assertEquals(expected, out);
+	}
+#foreach($arity in [1..$maxArity])
+
+	@Test
+	public void testOpMethodFunction$arity() {
+		final String in = "2";
+		final Integer out = ops.op("test.multiplyNumericStrings").input($computerInputs.call($arity))
+			.outType(Integer.class).apply();
+		assertEquals(Math.pow(2, $arity), out, 0);
+	}
+#end
+
+	// -- Computers -- //
+
+	public List<Double> expected(double expected, int size) {
+		List<Double> list = new ArrayList<>();
+		for (int i = 0; i < size; i++) {
+			list.add(expected);
+		}
+		return list;
+	}
+#foreach($arity in [0..$maxArity])
+
+	@Test
+	public void testOpMethodComputer$arity() {
+		String in = "$arity";
+		List<Double> out = new ArrayList<>();
+		ops.op("test.doubleList").input($computerInputs.call($arity))
+			.output(out).compute();
+		assertEquals(expected($arity, $arity), out);
+	}
+#end
+
+	// -- Inplaces -- //
+
+	private boolean outputExpected(double[] array, int multiplier) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != (i + 1) * multiplier) return false;
+		}
+		return true;
+	}
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+
+	@Test
+	public void testOpMethodInplace${inplaceSuffix.call($arity, $a)}() {
+		final double[] io = { 1., 2., 3. };
+		final double[] in = { 1., 2., 3. };
+		ops.op("test.addDoubles${inplaceSuffix.call($arity, $a)}").input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
+		assertTrue(outputExpected(io, $arity));
+	}
+#end
+#end
+
+	// -- Dependent Functions -- //
+#foreach($arity in [1..$maxArity])
+
+	@Test
+	public void testDependentMethodFunction$arity() {
+		final String in = "2";
+		final Integer out = ops.op("test.dependentMultiplyStrings").input($computerInputs.call($arity))
+			.outType(Integer.class).apply();
+		assertEquals(Math.pow(2, $arity), out, 0);
+	}
+#end
+
+	// -- Dependent Computers -- //
+#foreach($arity in [1..$maxArity])
+
+	@Test
+	public void testDependentMethodComputer$arity() {
+		String in = "$arity";
+		List<Double> out = new ArrayList<>();
+		ops.op("test.dependentDoubleList").input($computerInputs.call($arity))
+			.output(out).compute();
+		assertEquals(expected($arity, $arity), out);
+	}
+#end
+
+	// -- Dependent Inplaces -- //
+#foreach($arity in [1..$maxArity])
+#foreach($a in [1..$arity])
+
+	@Test
+	public void testDependentMethodInplace${inplaceSuffix.call($arity, $a)}() {
+		final double[] io = { 1., 2., 3. };
+		final double[] in = { 1., 2., 3. };
+		ops.op("test.dependentAddDoubles${inplaceSuffix.call($arity, $a)}").input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
+		assertTrue(outputExpected(io, $arity));
+	}
+#end
+#end
+}

@@ -196,7 +196,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@Override
 	public OpInfo opify(final Class<?> opClass, final double priority) {
-		return new OpClassInfo(opClass, priority, opClass.getAnnotation(Unsimplifiable.class) == null);
+		return new OpClassInfo(opClass, priority);
 	}
 
 	@Override

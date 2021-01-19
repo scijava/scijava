@@ -12,6 +12,7 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -29,6 +30,7 @@ public class SimplifiedOpInfo implements OpInfo {
 	private final SimplificationMetadata metadata;
 	private final Type opType;
 	private final double priority;
+	private final List<String> hints;
 
 	private Struct struct;
 	private ValidityException validityException;
@@ -47,6 +49,10 @@ public class SimplifiedOpInfo implements OpInfo {
 		}
 
 		this.priority = calculatePriority(info, metadata, env);
+
+		this.hints = new ArrayList<>(srcInfo.declaredHints());
+		this.hints.remove(Simplifiable.YES);
+		this.hints.add(Simplifiable.NO);
 	}
 
 	public OpInfo srcInfo() {
@@ -56,6 +62,11 @@ public class SimplifiedOpInfo implements OpInfo {
 	@Override
 	public Type opType() {
 		return opType;
+	}
+
+	@Override
+	public List<String> declaredHints() {
+		return hints;
 	}
 
 	@Override
@@ -187,11 +198,6 @@ public class SimplifiedOpInfo implements OpInfo {
 					"\nProvided Op dependencies were: " + Objects.toString(dependencies),
 				ex);
 		}
-	}
-
-	@Override
-	public boolean isSimplifiable() {
-		return false;
 	}
 
 	@Override

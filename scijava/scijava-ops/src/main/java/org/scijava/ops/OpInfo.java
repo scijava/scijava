@@ -4,10 +4,13 @@ package org.scijava.ops;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.scijava.log.Logger;
+import org.scijava.ops.hints.OpHints;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ValidityException;
@@ -29,9 +32,14 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** Gets the associated {@link Struct} metadata. */
 	Struct struct();
-	
-	/** Describes whether this Op can be simplified. */
-	boolean isSimplifiable();
+
+	/** Gets the hints declared in the {@link OpHints} annotation */
+	List<String> declaredHints();
+
+	default List<String> formHints(OpHints hints) {
+		if (hints == null) return Collections.emptyList();
+		return Arrays.asList(hints.hints());
+	}
 
 	/** Gets the op's input parameters. */
 	default List<Member<?>> inputs() {

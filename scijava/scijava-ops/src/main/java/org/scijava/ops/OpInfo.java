@@ -3,8 +3,13 @@ package org.scijava.ops;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
+import java.util.Map;
 
+import org.scijava.log.Logger;
+import org.scijava.ops.matcher.OpCandidate;
+import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -24,6 +29,9 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** Gets the associated {@link Struct} metadata. */
 	Struct struct();
+	
+	/** Describes whether this Op can be simplified. */
+	boolean isSimplifiable();
 
 	/** Gets the op's input parameters. */
 	default List<Member<?>> inputs() {
@@ -38,6 +46,10 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the op's dependencies on other ops. */
 	default List<OpDependencyMember<?>> dependencies() {
 		return OpUtils.dependencies(struct());
+	}
+	
+	default OpCandidate createCandidate(OpEnvironment env, Logger log, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		return new OpCandidate(env, log, ref, this, typeVarAssigns);
 	}
 
 	/** The op's priority. */

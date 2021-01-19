@@ -48,6 +48,7 @@ import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.simplify.Unsimplifiable;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -77,6 +78,8 @@ public class OpMethodInfo implements OpInfo {
 	private Struct struct;
 	private final ValidityException validityException;
 
+	private final boolean simplifiable;
+
 	public OpMethodInfo(final Method method) {
 		final List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public methods
@@ -92,6 +95,8 @@ public class OpMethodInfo implements OpInfo {
 				" must be static."));
 		}
 		this.method = method;
+		// we cannot simplify this op iff it has the Unsimplifiable annotation.
+		simplifiable = method.getAnnotation(Unsimplifiable.class) == null; 
 		try {
 			struct = ParameterStructs.structOf(method.getDeclaringClass(), method);
 			final OpMethod methodAnnotation = method.getAnnotation(OpMethod.class);
@@ -348,5 +353,10 @@ public class OpMethodInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return method;
+	}
+
+	@Override
+	public boolean isSimplifiable() {
+		return simplifiable;
 	}
 }

@@ -99,7 +99,8 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 			for (final OpInfo info : env.infos(ref.getName())) {
 				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
-					candidates.add(new OpCandidate(env, log, ref, info, typeVarAssigns));
+					OpCandidate candidate = info.createCandidate(env, log, ref, typeVarAssigns);
+					candidates.add(candidate);
 				}
 			}
 		}
@@ -113,7 +114,7 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 		// List of valid candidates needs to be sorted according to priority.
 		// This is used as an optimization in order to not look at ops with
 		// lower priority than the already found one.
-		validCandidates.sort((c1, c2) -> Double.compare(c2.opInfo().priority(), c1.opInfo().priority()));
+		validCandidates.sort((c1, c2) -> Double.compare(c2.priority(), c1.priority()));
 
 		List<OpCandidate> matches;
 		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
@@ -278,26 +279,25 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 		if (checkCandidates(Collections.singletonList(candidate)).isEmpty())
 			return false;
 		final Type[] refArgTypes = candidate.paddedArgs();
-		final Type[] refTypes = candidate.getRef().getTypes();
+		final Type refType = candidate.getRef().getType();
 		final Type infoType = candidate.opInfo().opType();
 		Type[] candidateArgTypes = OpUtils.inputTypes(candidate);
-		for (Type refType : refTypes) {
-			//TODO: can this be simplified?
-			Type implementedInfoType = Types.getExactSuperType(infoType, Types.raw(refType));
-			if (implementedInfoType instanceof ParameterizedType) {
-				Type[] implTypeParams = ((ParameterizedType) implementedInfoType).getActualTypeArguments();
-				candidateArgTypes = candidate.opInfo().struct().members().stream()//
-						.map(member -> member.isInput() ? member.getType() : null) //
-						.toArray(Type[]::new);
-				for (int i = 0; i < implTypeParams.length; i++) {
-					if (candidateArgTypes[i] == null)
-						implTypeParams[i] = null;
-				}
-				candidateArgTypes = Arrays.stream(implTypeParams) //
-						.filter(t -> t != null).toArray(Type[]::new);
-				break;
-			}
+		Type implementedInfoType = Types.getExactSuperType(infoType, Types.raw(
+			refType));
+		if (!(implementedInfoType instanceof ParameterizedType)) {
+			throw new UnsupportedOperationException(
+				"Op type is not a ParameterizedType; we don't know how to deal with these yet.");
 		}
+			Type[] implTypeParams = ((ParameterizedType) implementedInfoType)
+				.getActualTypeArguments();
+			candidateArgTypes = candidate.opInfo().struct().members().stream()//
+				.map(member -> member.isInput() ? member.getType() : null) //
+				.toArray(Type[]::new);
+			for (int i = 0; i < implTypeParams.length; i++) {
+				if (candidateArgTypes[i] == null) implTypeParams[i] = null;
+			}
+			candidateArgTypes = Arrays.stream(implTypeParams) //
+				.filter(t -> t != null).toArray(Type[]::new);
 
 		if (refArgTypes == null)
 			return true; // no constraints on output types

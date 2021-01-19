@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.simplify.SimplifiedOpInfo;
 
 /**
  * Class representing the result from type matching done by the
@@ -55,9 +56,10 @@ public class MatchingResult {
 			// }
 
 			return matches.get(0);
-		} else {
-			final String analysis = OpUtils.matchInfo(this);
-			throw new OpMatchingException(analysis);
 		}
+
+		// There is no clear matching Op
+		final String analysis = OpUtils.matchInfo(this);
+		throw new OpMatchingException(analysis);
 	}
 }

@@ -118,6 +118,12 @@ public interface TypeService extends
 		final int numVars = typeVars.length;
 
 		if (numVars == 0) {
+			// if the class is synthetic, we are probably missing something due to
+			// type erasure.
+			if (c.isSynthetic()) {
+				log().warn("Object " + o + " is synthetic. " +
+					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
+			}
 			// Object has no generic parameters; we are done!
 			return c;
 		}

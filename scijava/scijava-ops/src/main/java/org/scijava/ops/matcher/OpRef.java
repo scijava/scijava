@@ -37,6 +37,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.scijava.log.Logger;
+import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.core.Op;
 import org.scijava.types.Types;
 
@@ -56,8 +59,8 @@ public class OpRef {
 	/** Name of the op, or null for any name. */
 	private final String name;
 
-	/** Types which the op must match. */
-	private final Type[] types;
+	/** Type which the op must match. */
+	private final Type type;
 
 	/** The op's output parameter types, or null for no constraints. */
 	private final Type outType;
@@ -67,12 +70,12 @@ public class OpRef {
 
 	// -- Static construction methods --
 
-	public static OpRef fromTypes(final Type[] types, final Type outType, final Type... args) {
-		return new OpRef(null, filterNulls(types), outType, filterNulls(args));
+	public static OpRef fromTypes(final Type type, final Type outType, final Type... args) {
+		return new OpRef(null, type, outType, filterNulls(args));
 	}
 
-	public static OpRef fromTypes(final String name, final Type[] types, final Type outType, final Type... args) {
-		return new OpRef(name, filterNulls(types), outType, filterNulls(args));
+	public static OpRef fromTypes(final String name, final Type type, final Type outType, final Type... args) {
+		return new OpRef(name, type, outType, filterNulls(args));
 	}
 
 	// -- Constructor --
@@ -82,16 +85,16 @@ public class OpRef {
 	 *
 	 * @param name
 	 *            name of the op, or null for any name.
-	 * @param types
-	 *            types which the ops must match.
+	 * @param type
+	 *            type which the ops must match.
 	 * @param outType
 	 *            the op's required output type.
 	 * @param args
 	 *            arguments to the op.
 	 */
-	public OpRef(final String name, final Type[] types, final Type outType, final Type[] args) {
+	public OpRef(final String name, final Type type, final Type outType, final Type[] args) {
 		this.name = name;
-		this.types = types;
+		this.type = type;
 		this.outType = outType;
 		this.args = args;
 	}
@@ -103,9 +106,9 @@ public class OpRef {
 		return name;
 	}
 
-	/** Gets the types which the op must match. */
-	public Type[] getTypes() {
-		return types.clone();
+	/** Gets the type which the op must match. */
+	public Type getType() {
+		return type;
 	}
 
 	/**
@@ -126,10 +129,8 @@ public class OpRef {
 	public String getLabel() {
 		final StringBuilder sb = new StringBuilder();
 		append(sb, name);
-		if (types != null) {
-			for (final Type t : types) {
-				append(sb, Types.name(t));
-			}
+		if (type != null) {
+			append(sb, Types.name(type));
 		}
 		return sb.toString();
 	}
@@ -143,17 +144,17 @@ public class OpRef {
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
 	public boolean typesMatch(final Type opType, final Map<TypeVariable<?>, Type> typeVarAssigns) {
-		if (types == null)
-			return true;
-		for (Type t : types) {
-			if(t instanceof ParameterizedType) {
-				if (!MatchingUtils.checkGenericAssignability(opType, (ParameterizedType) t, typeVarAssigns, true)) {
-					return false;
-				}
-			} else {
-				if (!Types.isAssignable(opType, t)) {
-					return false;
-				}
+		if (type == null) return true;
+		if (type instanceof ParameterizedType) {
+			if (!MatchingUtils.checkGenericAssignability(opType,
+				(ParameterizedType) type, typeVarAssigns, true))
+			{
+				return false;
+			}
+		}
+		else {
+			if (!Types.isAssignable(opType, type)) {
+				return false;
 			}
 		}
 		return true;
@@ -164,7 +165,7 @@ public class OpRef {
 	@Override
 	public String toString() {
 		String n = name == null ? "" : "Name: \"" + name + "\", Types: ";
-		n += Arrays.deepToString(types) + "\n";
+		n += type + "\n";
 		n += "Input Types: \n";
 		for (Type arg : args) {
 			n += "\t\t* ";
@@ -189,7 +190,7 @@ public class OpRef {
 		final OpRef other = (OpRef) obj;
 		if (!Objects.equals(name, other.name))
 			return false;
-		if (!Arrays.equals(types, other.types))
+		if (!Objects.equals(type, other.type))
 			return false;
 		if (!Objects.equals(outType, other.outType))
 			return false;
@@ -200,7 +201,7 @@ public class OpRef {
 
 	@Override
 	public int hashCode() {
-		return Arrays.deepHashCode(new Object[] {name, types, outType, args});
+		return Arrays.deepHashCode(new Object[] {name, type, outType, args});
 	}
 
 	// -- Utility methods --

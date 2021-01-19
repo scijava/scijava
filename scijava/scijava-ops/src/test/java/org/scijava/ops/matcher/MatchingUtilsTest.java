@@ -512,6 +512,20 @@ public class MatchingUtilsTest {
 		Assert.assertTrue(success);
 	}
 
+	@Test
+	public void testNonReifiableFunction() {
+		Function<Double[], Double[]> fooFunc = (in) -> in;
+		final Nil<Function<Double[], Double[]>> doubleFunc = new Nil<>() {};
+		final Nil<Function<Integer[], Integer[]>> integerFunc = new Nil<>() {};
+
+		boolean successDouble = MatchingUtils.checkGenericAssignability(fooFunc
+			.getClass(), (ParameterizedType) doubleFunc.getType(), false);
+		Assert.assertTrue(successDouble);
+		boolean successInteger = MatchingUtils.checkGenericAssignability(fooFunc
+			.getClass(), (ParameterizedType) integerFunc.getType(), false);
+		Assert.assertTrue(successInteger);
+	}
+
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableNullToNull() {
 		MatchingUtils.checkGenericAssignability(null, null, false);

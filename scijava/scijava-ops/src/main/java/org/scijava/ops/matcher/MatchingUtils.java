@@ -403,6 +403,9 @@ public final class MatchingUtils {
 
 		Method[] destMethods = Arrays.stream(Types.raw(dest).getDeclaredMethods())
 				.filter(method -> Modifier.isAbstract(method.getModifiers())).toArray(Method[]::new);
+		if (destMethods.length == 0) {
+			throw new IllegalArgumentException(src + " does not have an abstract method!");
+		}
 		Type[] params = Types.getExactParameterTypes(destMethods[0], src);
 		Type returnType = Types.getExactReturnType(destMethods[0], src);
 		for (int i = 0; i < params.length; i++) {

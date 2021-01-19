@@ -132,6 +132,10 @@ public final class OpUtils {
 		return getTypes(inputs(candidate.struct()));
 	}
 
+	public static Type[] inputTypes(Struct struct) {
+		return getTypes(inputs(struct));
+	}
+
 	public static Member<?> output(OpCandidate candidate) {
 		return candidate.opInfo().output();
 	}
@@ -174,7 +178,7 @@ public final class OpUtils {
 	}
 
 	public static double getPriority(final OpCandidate candidate) {
-		return candidate.opInfo().priority();
+		return candidate.priority();
 	}
 
 	public static Type[] padTypes(final OpCandidate candidate, Type[] types) {
@@ -397,8 +401,6 @@ public final class OpUtils {
 
 			if (!typeOnly) {
 				sb.append(" " + item.getKey());
-				if (!((ParameterMember<?>) item).isRequired())
-					sb.append("?");
 			}
 		}
 		return sb.toString();
@@ -426,11 +428,10 @@ public final class OpUtils {
 	}
 
 	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {
-		for (final Type opType : opRef.getTypes()) {
-			final Class<?> functionalInterface = ParameterStructs.findFunctionalInterface(Types.raw(opType));
-			if (functionalInterface != null) {
-				return functionalInterface;
-			}
+		final Class<?> functionalInterface = ParameterStructs
+			.findFunctionalInterface(Types.raw(opRef.getType()));
+		if (functionalInterface != null) {
+			return functionalInterface;
 		}
 		return null;
 	}

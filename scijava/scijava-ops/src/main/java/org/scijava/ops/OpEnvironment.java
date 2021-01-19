@@ -68,6 +68,8 @@ public interface OpEnvironment {
 
 	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
+	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType);
+
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
 	}

@@ -40,6 +40,7 @@ import org.scijava.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.simplify.Unsimplifiable;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.param.ValidityProblem;
@@ -58,6 +59,8 @@ public class OpFieldInfo implements OpInfo {
 
 	private Struct struct;
 	private ValidityException validityException;
+
+	private final boolean simplifiable;
 
 	public OpFieldInfo(final Object instance, final Field field) {
 		this.instance = instance;
@@ -94,7 +97,9 @@ public class OpFieldInfo implements OpInfo {
 		if (!problems.isEmpty()) {
 			validityException = new ValidityException(problems);
 		}
-		
+
+		// we cannot simplify the Op iff it has the Unsimplifiable annotation.
+		simplifiable = field.getAnnotation(Unsimplifiable.class) == null;
 	}
 
 	// -- OpInfo methods --
@@ -174,5 +179,10 @@ public class OpFieldInfo implements OpInfo {
 	@Override
 	public String toString() {
 		return OpUtils.opString(this);
+	}
+
+	@Override
+	public boolean isSimplifiable() {
+		return simplifiable;
 	}
 }

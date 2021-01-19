@@ -105,6 +105,11 @@ public class OpCandidate {
 	public OpInfo opInfo() {
 		return info;
 	}
+	
+	/** Gets the priority of this result */
+	public double priority() {
+		return info.priority();
+	}
 
 	/** Gets the mapping between {@link TypeVariable}s and {@link Type}s that makes the {@link OpCandidate} pair legal. */
 	public Map<TypeVariable<?>, Type> typeVarAssigns() {

@@ -1,8 +1,6 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.function.Function;
@@ -68,7 +66,8 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + " adapted to " + type.toString();
+		return srcInfo.implementationName() + " adapted to " + type
+			.toString();
 	}
 
 	/**
@@ -94,6 +93,16 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return srcInfo.getAnnotationBearer();
+	}
+
+	/**
+	 * TODO: consider whether we could simplify {@link OpAdaptationInfo}s.
+	 * Currently, the system doesn't even store them outside of caching, so they
+	 * cannot be simplified. But maybe it would be useful.
+	 */
+	@Override
+	public boolean isSimplifiable() {
+		return false;
 	}
 
 }

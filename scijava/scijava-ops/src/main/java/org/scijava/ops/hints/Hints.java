@@ -1,16 +1,20 @@
 
 package org.scijava.ops.hints;
 
-public interface Hints {
+import java.util.Map;
 
-	public static final String BASE = "hints";
+public interface Hints {
 
 	public String setHint(String hint);
 
 	public String getHint(String hintType);
 
-	public boolean isActive(String hint);
+	public boolean containsHint(String hint);
 
-	boolean containsHintType(String hintType);
+	public boolean containsHintType(String hintType);
+
+	public Map<String, String> getHints();
+
+	public Hints getCopy();
 
 }

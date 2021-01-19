@@ -3,7 +3,6 @@ package org.scijava.ops.hints;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.scijava.ops.hints.DefaultOpHints.Adaptable;
 import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
@@ -15,6 +14,7 @@ import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
  */
 public class DefaultHints implements Hints {
 
+	// Hints are stored by their hint type (the middle term)
 	private final Map<String, String> hints;
 
 	public DefaultHints() {
@@ -27,47 +27,47 @@ public class DefaultHints implements Hints {
 			setHint(hint);
 	}
 
+	private DefaultHints(Map<String, String> hints) {
+		this.hints = hints;
+	}
+
 	@Override
 	public String setHint(String hint) {
-		String[] hintParts = getHintParts(hint);
-		validateHintParts(hint, hintParts);
-		return hints.put(hintParts[0], hintParts[1]);
+		String prefix = getPrefix(hint);
+		return hints.put(prefix, hint);
 	}
 
 	@Override
-	public boolean containsHintType(String hintType) {
-		String[] hintParts = getHintParts(hintType);
-		return hints.containsKey(hintParts[1]);
+	public boolean containsHintType(String prefix) {
+		return hints.containsKey(prefix);
 	}
 
 	@Override
-	public boolean isActive(String hint) {
-		return hints.containsKey(hint);
+	public boolean containsHint(String hint) {
+		String prefix = getPrefix(hint);
+		return hints.containsKey(prefix) && hints.get(prefix).equals(
+			hint);
 	}
 
 	@Override
-	public String getHint(String hintType) {
-		String[] hintParts = getHintParts(hintType);
-		if (!hints.containsKey(hintParts[1])) throw new NoSuchElementException(
-			"No hint of type " + hintType + " is contained!");
-		return buildHint(hintParts[0], hintParts[1], hints.get(hintParts[1]));
-		
+	public String getHint(String prefix) {
+		if (!hints.containsKey(prefix)) throw new NoSuchElementException(
+			"No hint of type " + prefix + " is contained!");
+		return hints.get(prefix);
 	}
 
-	private String buildHint(String base, String prefix, String suffix) {
-		return String.join(".", base, prefix, suffix);
+	private String getPrefix(String hint) {
+		return hint.split("\\.")[0];
 	}
 
-	private String[] getHintParts(String hint) {
-		return hint.split(".");
+	@Override
+	public Map<String, String> getHints() {
+		return hints;
 	}
 
-	private void validateHintParts(String hint, String[] hintParts) {
-		if (hintParts.length != 3) throw new IllegalArgumentException("Hint " +
-			hint +
-			" does not conform to hint structure <Hints.BASE>.<hint_type>.<hint>!");
-		if (!hintParts[0].equals(Hints.BASE)) throw new IllegalArgumentException(
-			"Hint " + hint + " must begin with " + Hints.BASE);
+	@Override
+	public Hints getCopy() {
+		return new DefaultHints(new HashMap<>(getHints()));
 	}
 
 }

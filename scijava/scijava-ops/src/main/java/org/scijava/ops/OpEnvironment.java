@@ -32,7 +32,7 @@ package org.scijava.ops;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.ops.matcher.OpMatcher;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Nil;
 
@@ -69,6 +69,10 @@ public interface OpEnvironment {
 	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
 	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType);
+
+	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
+
+	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType, Hints hints);
 
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
@@ -139,4 +143,16 @@ public interface OpEnvironment {
 	 * @param name
 	 */
 	void register(OpInfo info, String name);
+
+	/**
+	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to
+	 * {@link #op} that <b>does not</b> pass a {@link Hints} will <b>copy</b> the
+	 * Hints passed here (to prevent multiple Op calls from accessing/changing the
+	 * same {@link Hints}). In the case that <b>no {@link Hints} have been
+	 * given</b> to the Environment before {@code op} is called, the
+	 * implementation will create a suitable stand-in.
+	 * 
+	 * @param hints
+	 */
+	void setHints(Hints hints);
 }

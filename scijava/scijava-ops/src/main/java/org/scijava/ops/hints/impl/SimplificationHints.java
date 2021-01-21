@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.impl.DefaultOpHints.Simplification;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
 
 public class SimplificationHints extends AbstractHints {
 

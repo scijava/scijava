@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.impl.DefaultOpHints.Adaptation;
-import org.scijava.ops.hints.impl.DefaultOpHints.Simplification;
+import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
 
 /**
  * Default Implementation of 

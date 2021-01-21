@@ -1,4 +1,4 @@
-package org.scijava.ops.hints.impl;
+package org.scijava.ops.hints;
 
 import java.lang.annotation.Annotation;
 
@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
  * 
  * @author Gabriel Selzer
  */
-public class DefaultOpHints {
+public class BaseOpHints {
 
 	public static class Simplification {
 		public static final String prefix = "simplification";

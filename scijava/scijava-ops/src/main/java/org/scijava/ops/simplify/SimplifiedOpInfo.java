@@ -12,7 +12,7 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.hints.impl.DefaultOpHints.Simplification;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

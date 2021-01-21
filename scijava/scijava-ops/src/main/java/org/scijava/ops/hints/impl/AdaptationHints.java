@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.impl.DefaultOpHints.Adaptation;
+import org.scijava.ops.hints.BaseOpHints.Adaptation;
 
 /**
  * A set of {@link Hints} governing Adaptation procedures.

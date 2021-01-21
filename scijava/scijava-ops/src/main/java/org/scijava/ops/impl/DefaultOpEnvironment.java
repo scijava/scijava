@@ -71,6 +71,7 @@ import org.scijava.ops.hints.BaseOpHints.Adaptation;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 import org.scijava.ops.hints.impl.AdaptationHints;
 import org.scijava.ops.hints.impl.DefaultHints;
+import org.scijava.ops.hints.impl.SimplificationHints;
 import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.DependencyMatchingException;
@@ -409,7 +410,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	private List<OpCandidate> generateSimplifiedCandidates(SimplifiedOpRef ref, Hints hints) {
 		Class<?> functionalType = Types.raw(ref.getType());
-		Stream<OpInfo> infoStream = StreamSupport.stream(infos(ref.getName(), hints).spliterator(), true);
+		Hints simplificationHints = SimplificationHints.generateHints(hints);
+		Stream<OpInfo> infoStream = StreamSupport.stream(infos(ref.getName(),
+			simplificationHints).spliterator(), true);
 		List<OpCandidate> candidates = infoStream.filter(info -> Types
 			.isAssignable(Types.raw(info.opType()), functionalType))//
 			.map(info -> generateSimpleInfo(ref, info))//

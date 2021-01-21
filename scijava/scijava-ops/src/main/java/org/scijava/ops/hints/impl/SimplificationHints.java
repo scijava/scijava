@@ -11,6 +11,7 @@ public class SimplificationHints extends AbstractHints {
 
 	private SimplificationHints(Map<String, String> map) {
 		super(map);
+		setHint(Simplification.IN_PROGRESS);
 	}
 
 	public static SimplificationHints generateHints(Hints hints) {
@@ -22,7 +23,6 @@ public class SimplificationHints extends AbstractHints {
 
 		// add Simplifiable.NO
 		SimplificationHints newHints = new SimplificationHints(map);
-		newHints.setHint(Simplification.FORBIDDEN);
 
 		return newHints;
 	}

@@ -32,6 +32,7 @@ package org.scijava.ops.matcher;
 import java.util.List;
 
 import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.hints.Hints;
 
 /**
  * Finds Ops which match an {@link OpRef}.
@@ -43,13 +44,23 @@ public interface OpMatcher {
 
 	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref) throws OpMatchingException;
 
+	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref, Hints hints) throws OpMatchingException;
+
 	MatchingResult findMatch(OpEnvironment env, OpRef ref);
+
+	MatchingResult findMatch(OpEnvironment env, OpRef ref, Hints hints);
 
 	MatchingResult findMatch(OpEnvironment env, List<OpRef> refs);
 
+	MatchingResult findMatch(OpEnvironment env, List<OpRef> refs, Hints hints);
+
 	List<OpCandidate> findCandidates(OpEnvironment env, OpRef ref);
 
+	List<OpCandidate> findCandidates(OpEnvironment env, OpRef ref, Hints hints);
+
 	List<OpCandidate> findCandidates(OpEnvironment env, List<OpRef> refs);
+
+	List<OpCandidate> findCandidates(OpEnvironment env, List<OpRef> refs, Hints hints);
 
 	List<OpCandidate> filterMatches(List<OpCandidate> candidates);
 

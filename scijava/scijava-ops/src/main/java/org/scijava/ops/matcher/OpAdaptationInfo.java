@@ -9,7 +9,7 @@ import java.util.function.Function;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
+import org.scijava.ops.hints.DefaultOpHints.Adaptation;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Struct;
@@ -45,8 +45,8 @@ public class OpAdaptationInfo implements OpInfo {
 			validityException = e;
 		}
 		this.hints = new ArrayList<>(srcInfo.declaredHints());
-		hints.remove(Simplifiable.NO);
-		hints.add(Simplifiable.YES);
+		hints.remove(Adaptation.ALLOWED);
+		hints.add(Adaptation.FORBIDDEN);
 	}
 	
 	@Override

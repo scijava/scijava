@@ -12,7 +12,7 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
+import org.scijava.ops.hints.DefaultOpHints.Simplification;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -51,8 +51,8 @@ public class SimplifiedOpInfo implements OpInfo {
 		this.priority = calculatePriority(info, metadata, env);
 
 		this.hints = new ArrayList<>(srcInfo.declaredHints());
-		this.hints.remove(Simplifiable.YES);
-		this.hints.add(Simplifiable.NO);
+		this.hints.remove(Simplification.ALLOWED);
+		this.hints.add(Simplification.FORBIDDEN);
 	}
 
 	public OpInfo srcInfo() {

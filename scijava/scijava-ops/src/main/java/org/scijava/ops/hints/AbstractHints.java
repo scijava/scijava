@@ -64,4 +64,9 @@ public abstract class AbstractHints implements Hints {
 		return getHints().equals(thoseHints.getHints());
 	}
 
+	@Override
+	public int hashCode() {
+		return hints.hashCode();
+	}
+
 }

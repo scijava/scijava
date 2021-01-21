@@ -64,6 +64,10 @@ public interface OpEnvironment {
 	
 	Iterable<OpInfo> infos(String name);
 
+	Iterable<OpInfo> infos(Hints hints);
+
+	Iterable<OpInfo> infos(String name, Hints hints);
+
 	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
 	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);

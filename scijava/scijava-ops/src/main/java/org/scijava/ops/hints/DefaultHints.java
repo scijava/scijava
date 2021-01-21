@@ -2,10 +2,9 @@ package org.scijava.ops.hints;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
-import org.scijava.ops.hints.DefaultOpHints.Adaptable;
-import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
+import org.scijava.ops.hints.DefaultOpHints.Adaptation;
+import org.scijava.ops.hints.DefaultOpHints.Simplification;
 
 /**
  * Default Implementation of 
@@ -15,7 +14,7 @@ import org.scijava.ops.hints.DefaultOpHints.Simplifiable;
 public class DefaultHints extends AbstractHints {
 
 	public DefaultHints() {
-		super(new String[] {Simplifiable.YES, Adaptable.YES});
+		super(new String[] {Simplification.ALLOWED, Adaptation.ALLOWED});
 	}
 
 	private DefaultHints(Map<String, String> hints) {

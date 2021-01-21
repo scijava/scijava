@@ -45,6 +45,8 @@ import org.scijava.log.Logger;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.DefaultHints;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.service.AbstractService;
 import org.scijava.struct.Member;
@@ -71,14 +73,29 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 	}
 
 	@Override
+	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref, final Hints hints) throws OpMatchingException {
+		return findMatch(env, ref, hints).singleMatch();
+	}
+
+	@Override
 	public MatchingResult findMatch(final OpEnvironment env, final OpRef ref) {
 		return findMatch(env, Collections.singletonList(ref));
 	}
 
 	@Override
+	public MatchingResult findMatch(final OpEnvironment env, final OpRef ref, final Hints hints) {
+		return findMatch(env, Collections.singletonList(ref), hints);
+	}
+
+	@Override
 	public MatchingResult findMatch(final OpEnvironment env, final List<OpRef> refs) {
+		return findMatch(env, refs, new DefaultHints());
+	}
+
+	@Override
+	public MatchingResult findMatch(final OpEnvironment env, final List<OpRef> refs, final Hints hints) {
 		// find candidates with matching name & type
-		final List<OpCandidate> candidates = findCandidates(env, refs);
+		final List<OpCandidate> candidates = findCandidates(env, refs, hints);
 		if (candidates.isEmpty()) {
 			return MatchingResult.empty(refs);
 		}
@@ -93,10 +110,20 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 	}
 
 	@Override
+	public List<OpCandidate> findCandidates(final OpEnvironment env, final OpRef ref, final Hints hints) {
+		return findCandidates(env, Collections.singletonList(ref), hints);
+	}
+
+	@Override
 	public List<OpCandidate> findCandidates(final OpEnvironment env, final List<OpRef> refs) {
+		return findCandidates(env, refs, new DefaultHints());
+	}
+
+	@Override
+	public List<OpCandidate> findCandidates(final OpEnvironment env, final List<OpRef> refs, final Hints hints) {
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
 		for (final OpRef ref : refs) {
-			for (final OpInfo info : env.infos(ref.getName())) {
+			for (final OpInfo info : env.infos(ref.getName(), hints)) {
 				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
 					OpCandidate candidate = info.createCandidate(env, log, ref, typeVarAssigns);

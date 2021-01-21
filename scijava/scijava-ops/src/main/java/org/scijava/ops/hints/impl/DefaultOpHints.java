@@ -1,4 +1,4 @@
-package org.scijava.ops.hints;
+package org.scijava.ops.hints.impl;
 
 import java.lang.annotation.Annotation;
 

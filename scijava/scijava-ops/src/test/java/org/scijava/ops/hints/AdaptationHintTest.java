@@ -9,7 +9,8 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;
-import org.scijava.ops.hints.DefaultOpHints.Adaptation;
+import org.scijava.ops.hints.impl.DefaultHints;
+import org.scijava.ops.hints.impl.DefaultOpHints.Adaptation;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.plugin.Plugin;
 

@@ -1,8 +1,10 @@
-package org.scijava.ops.hints;
+package org.scijava.ops.hints.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
+import org.scijava.ops.hints.Hints;
 
 /**
  * Default Implementation of 

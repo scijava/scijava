@@ -3,6 +3,11 @@ package org.scijava.ops.hints;
 
 import java.util.Map;
 
+/**
+ * A basic interface for storing and accessing Hints.
+ *
+ * @author Gabriel Selzer
+ */
 public interface Hints {
 
 	public String setHint(String hint);

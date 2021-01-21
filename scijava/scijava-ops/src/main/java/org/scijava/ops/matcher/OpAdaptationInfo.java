@@ -9,7 +9,7 @@ import java.util.function.Function;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.DefaultOpHints.Adaptation;
+import org.scijava.ops.hints.impl.DefaultOpHints.Adaptation;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Struct;

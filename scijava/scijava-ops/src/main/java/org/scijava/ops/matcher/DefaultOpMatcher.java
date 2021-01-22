@@ -36,18 +36,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.scijava.log.Logger;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.impl.DefaultHints;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
+import org.scijava.ops.simplify.InfoSimplificationGenerator;
 import org.scijava.service.AbstractService;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
@@ -123,7 +127,7 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 	public List<OpCandidate> findCandidates(final OpEnvironment env, final List<OpRef> refs, final Hints hints) {
 		final ArrayList<OpCandidate> candidates = new ArrayList<>();
 		for (final OpRef ref : refs) {
-			for (final OpInfo info : env.infos(ref.getName(), hints)) {
+			for (final OpInfo info : getInfos(env, ref, hints)) {
 				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
 					OpCandidate candidate = info.createCandidate(env, log, ref, typeVarAssigns);
@@ -132,6 +136,24 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 			}
 		}
 		return candidates;
+	}
+
+	private Iterable<OpInfo> getInfos(OpEnvironment env, OpRef ref, Hints hints) {
+		Iterable<OpInfo> suitableInfos = env.infos(ref.getName(), hints);
+		if(hints.containsHint(Simplification.IN_PROGRESS)) {
+			Set<OpInfo> simpleInfos = new HashSet<>();
+			for(OpInfo info: suitableInfos) {
+				boolean functionallyAssignable = Types.isAssignable(Types.raw(info.opType()), Types.raw(ref.getType()));
+				if(!functionallyAssignable) continue;
+				try {
+					InfoSimplificationGenerator gen = new InfoSimplificationGenerator(info, env);
+					simpleInfos.add(gen.generateSuitableInfo(env, ref, hints));
+				} catch(Throwable e) {continue; }
+			}
+			// TODO: should this also return suitableInfos (i.e. combine the two)?
+			return simpleInfos;
+		}
+		return suitableInfos;
 	}
 
 	@Override

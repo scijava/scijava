@@ -42,13 +42,10 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.scijava.AbstractContextual;
 import org.scijava.Context;
@@ -64,8 +61,6 @@ import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers.Arity1;
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.BaseOpHints.Adaptation;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
@@ -73,7 +68,6 @@ import org.scijava.ops.hints.impl.AdaptationHints;
 import org.scijava.ops.hints.impl.DefaultHints;
 import org.scijava.ops.hints.impl.SimplificationHints;
 import org.scijava.ops.matcher.DefaultOpMatcher;
-import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.DependencyMatchingException;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
@@ -85,10 +79,7 @@ import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpMethodInfo;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.simplify.InfoSimplificationGenerator;
-import org.scijava.ops.simplify.SimplificationUtils;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
-import org.scijava.ops.simplify.SimplifiedOpRef;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.FunctionalMethodType;
 import org.scijava.param.ParameterStructs;
@@ -389,91 +380,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	private OpCandidate findSimplifiedOp(OpRef ref, Hints hints) throws OpMatchingException {
-		// obtain simplifications for ref
-		SimplifiedOpRef simplifiedRef = getSimplifiedRef(ref, hints);
-		List<OpCandidate> candidates = generateSimplifiedCandidates(simplifiedRef, hints);
-		return findSimplifiedMatch(ref, candidates);
-	}
-
-	private SimplifiedOpRef getSimplifiedRef(OpRef ref, Hints hints)
-		throws OpMatchingException
-	{
-		Class<?> opType = Types.raw(ref.getType());
-		int mutableIndex = SimplificationUtils.findMutableArgIndex(opType);
-		if (mutableIndex == -1) return new SimplifiedOpRef(ref, this);
-
-		// if the Op's output is mutable, we will also need a copy Op for it.
-		Computers.Arity1<?, ?> copyOp = simplifierCopyOp(ref
-			.getArgs()[mutableIndex], hints);
-		return new SimplifiedOpRef(ref, this, copyOp);
-	}
-
-	private List<OpCandidate> generateSimplifiedCandidates(SimplifiedOpRef ref, Hints hints) {
-		Class<?> functionalType = Types.raw(ref.getType());
 		Hints simplificationHints = SimplificationHints.generateHints(hints);
-		Stream<OpInfo> infoStream = StreamSupport.stream(infos(ref.getName(),
-			simplificationHints).spliterator(), true);
-		List<OpCandidate> candidates = infoStream.filter(info -> Types
-			.isAssignable(Types.raw(info.opType()), functionalType))//
-			.map(info -> generateSimpleInfo(ref, info))//
-			.filter(optional -> optional.isPresent())//
-			.map(optional -> optional.get())//
-			.filter(info -> info.getValidityException() == null)//
-			.map(info -> new OpCandidate(this, log, ref, info, new HashMap<>()))//
-			.collect(Collectors.toList());
-		return candidates;
-	}
-
-	private Optional<OpInfo> generateSimpleInfo(SimplifiedOpRef ref, OpInfo info) {
-		if(info.declaredHints().contains(Simplification.FORBIDDEN)) return Optional.empty();
-		InfoSimplificationGenerator gen = new InfoSimplificationGenerator(info, this);
-		try {
-			return Optional.of(gen.generateSuitableInfo(ref));
-		} catch (IllegalArgumentException e) {
-			return Optional.empty();
-		}
-	}
-
-	private OpCandidate findSimplifiedMatch(OpRef ref, List<OpCandidate> candidates) throws OpMatchingException {
-//		List<OpCandidate> matches = candidates.parallelStream()
-//			.filter(candidate -> candidate.getStatusCode() == StatusCode.MATCH)
-//			.collect(Collectors.toList());
-		List<OpCandidate> matches = matcher.filterMatches(candidates);
-		return new MatchingResult(candidates, matches, Collections.singletonList(ref)).singleMatch();
-	}
-
-	/**
-	 * Finds a {@code copy} Op designed to copy an Op's output (of {@link Type}
-	 * {@code copyType}) back into the preallocated output during simplification.
-	 * <p>
-	 * NB Simplification is forbidden here because we are asking for a
-	 * {@code Computers.Arity1<T, T>} copy Op (for some {@link Type}
-	 * {@code type}). Suppose that no direct match existed, and we tried to find a
-	 * simplified version. This simplified version, because it is a
-	 * Computers.Arity1, would need a {@lnk Computers.Arity<T, T>} copy Op to copy
-	 * the output of the simplified Op back into the preallocated output. But this
-	 * call is already identical to the Op we asked for, and we know that there is
-	 * no direct match, thus we go again into simplification. This thus causes an
-	 * infinite loop (and eventually a {@link StackOverflowError}. This means that
-	 * we cannot find a simplified copy Op <b>unless a direct match can be
-	 * found</b>, at which point we might as well just use the direct match.
-	 * <p>
-	 * Adaptation is similarly forbidden, as to convert most Op types to
-	 * {@link Arity1} you would need an identical copy Op.
-	 * 
-	 * @param copyType - the {@link Type} that we need to be able to copy
-	 * @param hints
-	 * @return an {@code Op} able to copy data between {@link Object}s of
-	 *         {@link Type} {@code copyType}
-	 * @throws OpMatchingException
-	 */
-	private Computers.Arity1<?, ?> simplifierCopyOp(Type copyType, Hints hints) throws OpMatchingException{
-			Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {copyType, copyType});
-			OpRef copierRef = inferOpRef(copierType, "copy", new HashMap<>());
-			Hints hintsCopy = hints.getCopy();
-			hintsCopy.setHint(Adaptation.FORBIDDEN);
-			hintsCopy.setHint(Simplification.FORBIDDEN);
-			return (Arity1<?, ?>) findOpInstance(copierRef, hintsCopy);
+		return matcher.findSingleMatch(this, ref, simplificationHints);
 	}
 
 	/**

@@ -442,12 +442,31 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return new MatchingResult(candidates, matches, Collections.singletonList(ref)).singleMatch();
 	}
 
-	// WARNING: If no copy Computers.Arity1 exists for copyType (i.e. a
-	// Computers.Arity1<copyType, copyType>) then this method will result in an
-	// infinite recursive loop. This problem can be immediately solved by ensuring
-	// that a copy Op Computers.Arity1<copyType, copyType> exists, and will be
-	// permanently fixed with the introduction of hints (see
-	// scijava/scijava-ops#43)
+	/**
+	 * Finds a {@code copy} Op designed to copy an Op's output (of {@link Type}
+	 * {@code copyType}) back into the preallocated output during simplification.
+	 * <p>
+	 * NB Simplification is forbidden here because we are asking for a
+	 * {@code Computers.Arity1<T, T>} copy Op (for some {@link Type}
+	 * {@code type}). Suppose that no direct match existed, and we tried to find a
+	 * simplified version. This simplified version, because it is a
+	 * Computers.Arity1, would need a {@lnk Computers.Arity<T, T>} copy Op to copy
+	 * the output of the simplified Op back into the preallocated output. But this
+	 * call is already identical to the Op we asked for, and we know that there is
+	 * no direct match, thus we go again into simplification. This thus causes an
+	 * infinite loop (and eventually a {@link StackOverflowError}. This means that
+	 * we cannot find a simplified copy Op <b>unless a direct match can be
+	 * found</b>, at which point we might as well just use the direct match.
+	 * <p>
+	 * Adaptation is similarly forbidden, as to convert most Op types to
+	 * {@link Arity1} you would need an identical copy Op.
+	 * 
+	 * @param copyType - the {@link Type} that we need to be able to copy
+	 * @param hints
+	 * @return an {@code Op} able to copy data between {@link Object}s of
+	 *         {@link Type} {@code copyType}
+	 * @throws OpMatchingException
+	 */
 	private Computers.Arity1<?, ?> simplifierCopyOp(Type copyType, Hints hints) throws OpMatchingException{
 			Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {copyType, copyType});
 			OpRef copierRef = inferOpRef(copierType, "copy", new HashMap<>());

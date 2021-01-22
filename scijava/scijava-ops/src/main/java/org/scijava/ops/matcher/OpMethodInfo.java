@@ -49,7 +49,6 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.hints.OpHints;
-import org.scijava.ops.simplify.Unsimplifiable;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

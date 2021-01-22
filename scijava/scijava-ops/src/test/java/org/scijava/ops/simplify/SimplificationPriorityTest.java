@@ -11,6 +11,8 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.hints.OpHints;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)
@@ -53,42 +55,42 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment {
 		assertEquals(2., output);
 	}
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<FromThing, BasicThing> fromToBasic =
 		from -> new BasicThing();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<BasicThing, LosslessThing> basicToLossless =
 		basic -> new LosslessThing();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<BasicThing, SomewhatLossyThing> basicToSomewhat =
 		basic -> new SomewhatLossyThing();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<BasicThing, VeryLossyThing> basicToVery =
 		basic -> new VeryLossyThing();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<BasicThing, InconceivablyLossyThing> basicToInconceivable =
 		basic -> new InconceivablyLossyThing();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<FromThing, LosslessThing> fromToLossless = (nil1,
 		nil2) -> 1.;
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<FromThing, SomewhatLossyThing> fromToSomewhat = (
 		nil1, nil2) -> 1e3;
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<FromThing, VeryLossyThing> fromToVery = (nil1,
 		nil2) -> 1e6;

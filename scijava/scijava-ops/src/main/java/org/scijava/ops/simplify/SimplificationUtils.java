@@ -497,15 +497,7 @@ public class SimplificationUtils {
 		sb.append(fMethodPreprocessing(metadata));
 
 		// processing
-		if (metadata.pureOutput()) {
-			sb.append(metadata.originalOutput().getTypeName() + " " + opOutput + " = ");
-		}
-		sb.append("op." + m.getName() + "(");
-		for (int i = 0; i < metadata.numInputs(); i++) {
-			sb.append(" focused" + i);
-			if (i + 1 < metadata.numInputs()) sb.append(",");
-		}
-		sb.append(");");
+		sb.append(fMethodProcessing(metadata, m, opOutput));
 
 		// postprocessing
 		sb.append(fMethodPostprocessing(metadata, opOutput));
@@ -535,6 +527,26 @@ public class SimplificationUtils {
 
 		sb.append(" )");
 
+		return sb.toString();
+	}
+
+	private static String fMethodProcessing(SimplificationMetadata metadata,
+		Method m, String opOutput)
+	{
+		StringBuilder sb = new StringBuilder();
+		// declare / assign Op's original output
+		if (metadata.pureOutput()) {
+			sb.append(metadata.originalOutput().getTypeName() + " " + opOutput +
+				" = ");
+			sb.append("(" + metadata.originalOutput().getTypeName() + ") ");
+		}
+		// call the op
+		sb.append("op." + m.getName() + "(");
+		for (int i = 0; i < metadata.numInputs(); i++) {
+			sb.append(" focused" + i);
+			if (i + 1 < metadata.numInputs()) sb.append(",");
+		}
+		sb.append(");");
 		return sb.toString();
 	}
 

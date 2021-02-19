@@ -54,7 +54,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -268,7 +267,7 @@ class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, ExecutorService in2, Double in3,
-			@Mutable IterableInterval<DoubleType> out) {
+			IterableInterval<DoubleType> out) {
 		tubenessOp.compute(in1, in2, in3, new double[] {}, out);
 	}
 	

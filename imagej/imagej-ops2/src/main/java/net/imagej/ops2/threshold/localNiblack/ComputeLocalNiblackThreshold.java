@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -69,7 +68,7 @@ public class ComputeLocalNiblackThreshold<T extends RealType<T>> implements
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double c, final Double k,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, c, k, meanOp, stdDeviationOp,
 			output);
@@ -80,7 +79,7 @@ public class ComputeLocalNiblackThreshold<T extends RealType<T>> implements
 		final Double c, final Double k,
 		final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
 		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		final DoubleType m = new DoubleType();
 		meanOp.compute(inputNeighborhood, m);

@@ -15,7 +15,6 @@ import net.imglib2.util.Util;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)
@@ -78,7 +77,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	// TODO: Think of a better solution.
 	@SuppressWarnings("unchecked")
 	public void computeIIInteger(final RandomAccessibleInterval<T> input, final T min, final T max,
-			final @Mutable RandomAccessibleInterval<T> output) {
+			final RandomAccessibleInterval<T> output) {
 
 		final BigInteger minValue = getBigInteger(min);
 		final BigInteger maxValue = getBigInteger(max);

@@ -46,7 +46,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -339,7 +338,7 @@ public final class ApplyThresholdMethodLocal {
 		public void compute(final RandomAccessibleInterval<T> input,
 			final Shape inputNeighborhoodShape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			@Mutable final RandomAccessibleInterval<BitType> output)
+			final RandomAccessibleInterval<BitType> output)
 		{
 			if (thresholdOp == null) thresholdOp = getThresholdOp();
 			ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
@@ -353,7 +352,7 @@ public final class ApplyThresholdMethodLocal {
 
 				@Override
 				public void compute(final Iterable<T> inputNeighborhood,
-					final T inputCenterPixel, @Mutable final BitType output)
+					final T inputCenterPixel, final BitType output)
 				{
 					final Histogram1d<T> histogram = createHistogramOp.apply(
 						inputNeighborhood, null);

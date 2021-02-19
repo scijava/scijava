@@ -49,7 +49,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -80,7 +79,7 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double k, final Double r,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		@Mutable final RandomAccessibleInterval<BitType> output)
+		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.
 		if (inputNeighborhoodShape instanceof RectangleShape &&
@@ -102,7 +101,7 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 		final Double k, final Double r,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp,
-		@Mutable final RandomAccessibleInterval<BitType> output)
+		final RandomAccessibleInterval<BitType> output)
 	{
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);
@@ -118,7 +117,7 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> integralImageOp,
 		final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<DoubleType>> squareIntegralImageOp,
 		final Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdOp,
-		@Mutable final RandomAccessibleInterval<BitType> output)
+		final RandomAccessibleInterval<BitType> output)
 	{
 		final Computers.Arity2<RectangleNeighborhood<? extends Composite<DoubleType>>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, k, r, o);

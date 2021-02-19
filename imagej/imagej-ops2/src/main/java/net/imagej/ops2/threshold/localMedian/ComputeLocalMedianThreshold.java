@@ -37,7 +37,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -62,7 +61,7 @@ public class ComputeLocalMedianThreshold<T extends RealType<T>> implements
 
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double c, @Mutable final BitType output)
+		final T inputCenterPixel, final Double c, final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, c, medianOp, output);
 	}
@@ -70,7 +69,7 @@ public class ComputeLocalMedianThreshold<T extends RealType<T>> implements
 	public static <T extends RealType<T>> void compute(
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
 		final Double c, final Computers.Arity1<Iterable<T>, DoubleType> medianOp,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		final DoubleType m = new DoubleType();
 		medianOp.compute(inputNeighborhood, m);

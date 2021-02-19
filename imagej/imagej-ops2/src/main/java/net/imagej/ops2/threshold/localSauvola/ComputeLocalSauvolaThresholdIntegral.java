@@ -42,7 +42,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -88,7 +87,7 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<DoubleType>> inputNeighborhood,
 		final T inputCenterPixel, Double k, Double r,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;
 		if (r == null) r = DEFAULT_R;

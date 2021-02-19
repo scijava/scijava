@@ -50,7 +50,6 @@ import net.imglib2.view.Views;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -207,7 +206,7 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
 			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, Integer in4,
-			ExecutorService in5, @Mutable PValueResult out) {
+			ExecutorService in5, PValueResult out) {
 		Long defaultSeed = 0x27372034l;
 		pValueOp.compute(in1, in2, in3, in4, null, defaultSeed, in5, out);
 	}
@@ -229,7 +228,7 @@ class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
 			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, ExecutorService in4,
-			@Mutable PValueResult out) {
+			PValueResult out) {
 		Integer defaultNumberRandomizations = 100;
 		pValueOp.compute(in1, in2, in3, defaultNumberRandomizations, in4, out);
 	}

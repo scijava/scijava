@@ -38,7 +38,6 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 
 public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 
@@ -60,7 +59,7 @@ public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 		final Shape inputNeighborhoodShape,
 		OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory,
 		final Computers.Arity2<Iterable<I>, I, O> filterOp,
-		@Mutable final RandomAccessibleInterval<O> output)
+		final RandomAccessibleInterval<O> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
 			defaultOutOfBoundsFactory();

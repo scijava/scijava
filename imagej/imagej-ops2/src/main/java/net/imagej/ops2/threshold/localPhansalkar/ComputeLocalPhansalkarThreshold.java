@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -95,7 +94,7 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double k, final Double r,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,
 			output);
@@ -105,7 +104,7 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel, Double k,
 		Double r, final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
 		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;
 		if (r == null) r = DEFAULT_R;

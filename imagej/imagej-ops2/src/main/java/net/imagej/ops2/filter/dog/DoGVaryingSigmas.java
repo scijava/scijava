@@ -42,7 +42,6 @@ import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -107,7 +106,7 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, Double in2, Double in3,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> in4, ExecutorService in5,
-			@Mutable RandomAccessibleInterval<T> out) {
+			RandomAccessibleInterval<T> out) {
 		double[] sigmas1 = new double[in1.numDimensions()];
 		double[] sigmas2 = new double[in1.numDimensions()];
 		for (int i = 0; i < in1.numDimensions(); i++) {

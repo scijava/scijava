@@ -33,7 +33,6 @@ import net.imglib2.type.logic.BitType;
 
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -55,7 +54,7 @@ public class ApplyThresholdComparable<T> implements
 
 	@Override
 	public void compute(final Comparable<? super T> input, final T threshold,
-		final @Mutable BitType output)
+		final BitType output)
 	{
 		output.set(input.compareTo(threshold) > 0);
 	}

@@ -45,7 +45,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -156,7 +155,7 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
-			double[] sigma, ExecutorService es, @Mutable ImgLabeling<Integer, IntType> outputLabeling) {
+			double[] sigma, ExecutorService es, ImgLabeling<Integer, IntType> outputLabeling) {
 		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, null, es, outputLabeling);
 
 	}

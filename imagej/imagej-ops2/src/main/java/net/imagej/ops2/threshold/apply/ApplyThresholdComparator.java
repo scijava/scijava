@@ -35,7 +35,6 @@ import net.imglib2.type.logic.BitType;
 
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -56,7 +55,7 @@ public class ApplyThresholdComparator<T> implements Computers.Arity3<T, T, Compa
 {
 
 	@Override
-	public void compute(T input1, T input2, Comparator<? super T> comparator, @Mutable BitType out) {
+	public void compute(T input1, T input2, Comparator<? super T> comparator, BitType out) {
 		out.set(comparator.compare(input1, input2) > 0);
 	}
 

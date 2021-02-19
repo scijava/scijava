@@ -68,7 +68,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -404,7 +403,7 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, ImgLabeling<Integer, IntType> seeds,
 			Boolean useEightConnectivity, Boolean drawWatersheds,
-			@Mutable ImgLabeling<Integer, IntType> outputLabeling) {
+			ImgLabeling<Integer, IntType> outputLabeling) {
 		watershedOp.compute(in, seeds, useEightConnectivity, drawWatersheds, null, outputLabeling);
 
 	}

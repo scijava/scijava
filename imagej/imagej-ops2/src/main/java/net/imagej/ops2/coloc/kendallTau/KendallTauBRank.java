@@ -78,7 +78,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "coloc.kendallTau")
 @Parameter(key = "image1")
 @Parameter(key = "image2")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 

@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.moment3AboutMean", priority = Priority.HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "moment3AboutMean", itemIO = ItemIO.BOTH)
+@Parameter(key = "moment3AboutMean")
 public class DefaultMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.momentNAboutMean")

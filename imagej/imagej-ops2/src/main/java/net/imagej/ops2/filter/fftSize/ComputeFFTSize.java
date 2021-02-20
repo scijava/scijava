@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "fftSize")
 @Parameter(key = "forward")
 @Parameter(key = "fast")
-@Parameter(key = "outputs", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputs")
 public class ComputeFFTSize implements Functions.Arity5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>> {
 
 	@Override

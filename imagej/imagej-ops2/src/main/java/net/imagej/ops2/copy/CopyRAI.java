@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "copy, copy.rai", priority = 1.0)
 @Parameter(key = "input")
-@Parameter(key = "copy", itemIO = ItemIO.BOTH)
+@Parameter(key = "copy")
 public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "copy")

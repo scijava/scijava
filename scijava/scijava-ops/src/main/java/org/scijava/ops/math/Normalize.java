@@ -16,7 +16,7 @@ public class Normalize {
 	@Parameter(key = "numbers")
 	@Parameter(key = "newMin")
 	@Parameter(key = "newMax")
-	@Parameter(key = "normalized", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "normalized")
 	public static class MathMinMaxNormalizeFunction implements Functions.Arity3<double[], Double, Double, double[]> {
 
 		@Override

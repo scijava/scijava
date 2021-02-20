@@ -76,20 +76,20 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment {
 
 	@OpField(names = "test.priorityOp")
 	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.BOTH)
+	@Parameter(key = "output")
 	public static final Computers.Arity1<Double, PriorityThing> priorityOp = (in,
 		out) -> {
 		out.increasePriority(in);
 	};
 
 	@OpField(names = "create")
-	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "output")
 	public static final Producer<PriorityThing> priorityThingProducer =
 		() -> new PriorityThing(10000);
 
 	@OpField(names = "create")
 	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "output")
 	public static final Function<Double, PriorityThing> priorityThingFunction = (
 		in) -> new PriorityThing(in);
 

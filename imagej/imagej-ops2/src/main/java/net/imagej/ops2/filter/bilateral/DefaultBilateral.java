@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sigmaR", description = "range smoothing param, larger sigma means larger effect of intensity differences.")
 @Parameter(key = "sigmaS", description = "spatial smoothing param, larger sigma means smoother image.")
 @Parameter(key = "radius", description = "defines size of the square of pixels considered at each iteration.")
-@Parameter(key = "outputRAI", itemIO = ItemIO.BOTH)
+@Parameter(key = "outputRAI")
 public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>> {
 

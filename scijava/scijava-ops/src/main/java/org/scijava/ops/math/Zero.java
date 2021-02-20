@@ -7,7 +7,6 @@ import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 @Plugin(type = OpCollection.class)
 public class Zero {
@@ -17,7 +16,7 @@ public class Zero {
 	// --------- Computers ---------
 
 	@OpField(names = NAMES)
-	@Parameter(key = "resultArray", itemIO = ItemIO.BOTH)
+	@Parameter(key = "resultArray")
 	public static final Computers.Arity0<double[]> MathParallelPointwiseZeroDoubleArrayComputer = out -> {
 		IntStream.range(0, out.length).parallel().forEach(i -> {
 			out[i] = 0.0;

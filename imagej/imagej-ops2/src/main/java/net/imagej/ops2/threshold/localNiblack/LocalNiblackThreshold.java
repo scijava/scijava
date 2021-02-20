@@ -61,7 +61,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "c")
 @Parameter(key = "k")
 @Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class LocalNiblackThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

@@ -63,7 +63,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "labeling1")
 @Parameter(key = "labeling2")
 @Parameter(key = "mask")
-@Parameter(key = "combinedLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "combinedLabeling")
 public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
 
@@ -114,7 +114,7 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 @Plugin(type = Op.class, name = "labeling.merge")
 @Parameter(key = "labeling1")
 @Parameter(key = "labeling2")
-@Parameter(key = "combinedLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "combinedLabeling")
 class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements BiFunction<ImgLabeling<L, I>, ImgLabeling<L, I>, ImgLabeling<L, I>> {
 

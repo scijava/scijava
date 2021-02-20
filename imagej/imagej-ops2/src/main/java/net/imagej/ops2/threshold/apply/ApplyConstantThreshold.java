@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "threshold")
 @Parameter(key = "comparator")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ApplyConstantThreshold<T extends RealType<T>>
 		implements Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> {
 
@@ -80,7 +80,7 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 @Plugin(type = Op.class, name = "threshold.apply")
 @Parameter(key = "input")
 @Parameter(key = "threshold")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.Arity2<Iterable<T>, T, Iterable<BitType>> {
 
 	@OpDependency(name = "threshold.apply")

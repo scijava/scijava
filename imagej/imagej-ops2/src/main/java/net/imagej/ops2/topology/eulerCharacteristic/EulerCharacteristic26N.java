@@ -70,7 +70,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "topology.eulerCharacteristic26N")
 @Parameter(key = "interval")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class EulerCharacteristic26N<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */

@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "iterableInput")
 @Parameter(key = "min")
 @Parameter(key = "max")
-@Parameter(key = "ASCIIArt", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "ASCIIArt")
 public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<IterableInterval<T>, T, T, String>
 {
 

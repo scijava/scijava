@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "logic.default")
 @Parameter(key = "input")
 @Parameter(key = "defaultValue")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	Computers.Arity2<I, O, O> 
 {

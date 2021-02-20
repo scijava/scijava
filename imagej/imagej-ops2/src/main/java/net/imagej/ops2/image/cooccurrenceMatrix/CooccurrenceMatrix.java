@@ -26,7 +26,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "nrGreyLevels", min = "0", max = "128", stepSize = "1", initializer = "32")
 @Parameter(key = "distance", min = "0", max = "128", stepSize = "1", initializer = "1")
 @Parameter(key = "matrixOrientation")
-@Parameter(key = "cooccurrenceMatrix", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "cooccurrenceMatrix")
 public class CooccurrenceMatrix<T extends RealType<T>>
 		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 

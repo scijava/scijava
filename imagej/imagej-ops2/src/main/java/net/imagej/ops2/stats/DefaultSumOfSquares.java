@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.sumOfSquares", priority = Priority.HIGH)
 @Parameter(key = "raiInput")
-@Parameter(key = "sumOfSquares", itemIO = ItemIO.BOTH)
+@Parameter(key = "sumOfSquares")
 public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {

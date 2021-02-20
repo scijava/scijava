@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.kurtosis")
 @Parameter(key = "iterableInput")
-@Parameter(key = "kurtosis", itemIO = ItemIO.BOTH)
+@Parameter(key = "kurtosis")
 public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {

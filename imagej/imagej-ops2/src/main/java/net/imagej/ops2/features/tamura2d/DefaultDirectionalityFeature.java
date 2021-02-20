@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "features.tamura.directionality")
 @Parameter(key = "input")
 @Parameter(key = "histogramSize")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
 

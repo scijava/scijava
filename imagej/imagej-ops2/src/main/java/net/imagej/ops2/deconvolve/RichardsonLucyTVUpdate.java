@@ -66,7 +66,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "regularizationFactor")
 @Parameter(key = "variation")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I extends RandomAccessibleInterval<T>>
 	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I> 
 {

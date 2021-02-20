@@ -43,5 +43,5 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.sizeConvexHull", label = "Geometric (2D): Size ConvexHull", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "sizeConvexHull", itemIO = ItemIO.BOTH)
+@Parameter(key = "sizeConvexHull")
 public class DefaultSizeConvexHullPolygon extends AbstractSizeConvexHull<Polygon2D> {}

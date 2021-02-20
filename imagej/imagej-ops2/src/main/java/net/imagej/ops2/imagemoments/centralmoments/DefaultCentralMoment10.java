@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "imageMoments.centralMoment10", label = "Image Moment: CentralMoment10",
 	priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DefaultCentralMoment10<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

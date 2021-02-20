@@ -97,7 +97,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
+@Parameter(key = "outputLabeling")
 public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -148,7 +148,7 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
+@Parameter(key = "outputLabeling")
 class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -170,7 +170,7 @@ class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends Boolea
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling")
 class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -194,7 +194,7 @@ class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends Boolea
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling")
 class WatershedBinarySigngleSigmaFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 

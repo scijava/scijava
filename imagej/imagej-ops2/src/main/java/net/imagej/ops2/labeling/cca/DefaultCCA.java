@@ -60,7 +60,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "structuringElement")
 @Parameter(key = "labelGenerator")
-@Parameter(key = "labeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "labeling")
 public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
 
@@ -83,7 +83,7 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 @Parameter(key = "input")
 @Parameter(key = "executorService")
 @Parameter(key = "structuringElement")
-@Parameter(key = "labeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "labeling")
 class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
 		Functions.Arity3<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, ImgLabeling<Integer, IntType>> {
 	@OpDependency(name = "labeling.cca")

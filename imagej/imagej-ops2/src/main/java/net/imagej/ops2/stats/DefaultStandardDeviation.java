@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.stdDev", priority = Priority.HIGH)
 @Parameter(key = "raiInput")
-@Parameter(key = "stdDev", itemIO = ItemIO.BOTH)
+@Parameter(key = "stdDev")
 public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {

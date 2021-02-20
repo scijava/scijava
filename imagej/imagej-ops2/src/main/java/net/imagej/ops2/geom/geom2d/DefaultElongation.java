@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (2D): Elongation")
 @Parameter(key = "input")
-@Parameter(key = "elongation", itemIO = ItemIO.BOTH)
+@Parameter(key = "elongation")
 public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")

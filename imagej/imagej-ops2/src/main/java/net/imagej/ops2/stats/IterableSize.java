@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.size", priority = Priority.LOW)
 @Parameter(key = "iterableInput")
-@Parameter(key = "size", itemIO = ItemIO.BOTH)
+@Parameter(key = "size")
 public class IterableSize<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<Iterable<I>, O>
 {

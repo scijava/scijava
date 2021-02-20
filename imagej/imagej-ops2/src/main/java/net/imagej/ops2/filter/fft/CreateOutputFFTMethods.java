@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "Dimensions")
 @Parameter(key = "outType")
 @Parameter(key = "fast")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T, Boolean, Img<T>> {
 
 	@OpDependency(name = "create.img")
@@ -71,7 +71,7 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 @Plugin(type = Op.class, name = "filter.createFFTOutput")
 @Parameter(key = "Dimensions")
 @Parameter(key = "outType")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, T, Boolean, Img<T>> create;

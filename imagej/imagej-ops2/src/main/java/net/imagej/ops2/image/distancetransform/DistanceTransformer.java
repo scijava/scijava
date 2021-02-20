@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "image.distanceTransform")
 @Parameter(key = "binaryInput")
 @Parameter(key = "executorService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
 

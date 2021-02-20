@@ -59,7 +59,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "filter.partialDerivative")
 @Parameter(key = "input")
 @Parameter(key = "dimension")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class PartialDerivativeRAI<T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> {
 

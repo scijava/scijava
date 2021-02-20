@@ -47,7 +47,7 @@ public class OpMethodTestOps {
 
 	// -- Functions -- //
 	@OpMethod(names = "test.multiplyNumericStrings", type = Producer.class)
-	@Parameter(key = "multipliedNumericStrings", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "multipliedNumericStrings")
 	public static Integer multiplyNumericStringsProducer() {
 		return Integer.valueOf(1);
 	}

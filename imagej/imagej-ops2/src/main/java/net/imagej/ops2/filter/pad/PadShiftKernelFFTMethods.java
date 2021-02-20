@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 	priority = Priority.HIGH)
 @Parameter(key = "input")
 @Parameter(key = "paddedDimensions")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class PadShiftKernelFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	extends PadShiftKernel<T, I, O>
 {

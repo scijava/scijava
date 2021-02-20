@@ -10,7 +10,7 @@ import org.scijava.struct.ItemIO;
 @Unsimplifiable
 @Plugin(type = Op.class, name = "simplify, focus")
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class Identity<T> implements Function<T, T> {
 
 	public Identity() {

@@ -86,7 +86,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 
 @Plugin(type = Op.class, name = "test.opMonitor")
 @Parameter(key = "monitor")
-@Parameter(key = "bigInteger", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "bigInteger")
 class InfiniteOp implements Function<OpMonitor, BigInteger> {
 
 	@Override
@@ -107,7 +107,7 @@ class InfiniteOp implements Function<OpMonitor, BigInteger> {
 @Plugin(type = Op.class, name = "test.progress")
 @Parameter(key = "monitor")
 @Parameter(key = "target")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class CountingOp implements BiFunction<OpMonitor, BigInteger, BigInteger> {
 
 	@Override

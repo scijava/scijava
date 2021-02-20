@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.percentile")
 @Parameter(key = "iterableInput")
 @Parameter(key = "percent", min="0", max="100")
-@Parameter(key = "percentile", itemIO = ItemIO.BOTH)
+@Parameter(key = "percentile")
 public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity2<Iterable<I>, Double, O> {
 

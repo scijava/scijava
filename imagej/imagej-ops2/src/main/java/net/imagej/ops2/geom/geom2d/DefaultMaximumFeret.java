@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.maximumFeret")
 @Parameter(key = "input")
-@Parameter(key = "maximumFeret", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "maximumFeret")
 public class DefaultMaximumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")

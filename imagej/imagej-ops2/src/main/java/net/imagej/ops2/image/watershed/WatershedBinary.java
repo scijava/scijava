@@ -91,7 +91,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
+@Parameter(key = "outputLabeling")
 public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -147,7 +147,7 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
+@Parameter(key = "outputLabeling")
 class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -169,7 +169,7 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 @Parameter(key = "sigma")
 @Parameter(key = "mask")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling")
 class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -193,7 +193,7 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "sigma")
 @Parameter(key = "executorService")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling")
 class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends BooleanType<B>>
 		implements Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 

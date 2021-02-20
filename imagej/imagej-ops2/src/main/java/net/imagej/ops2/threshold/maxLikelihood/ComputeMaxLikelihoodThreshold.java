@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.maxLikelihood")
 @Parameter(key = "inputHistogram")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

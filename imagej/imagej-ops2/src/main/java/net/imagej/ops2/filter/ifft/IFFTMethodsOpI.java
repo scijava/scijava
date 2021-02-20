@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "filter.ifft")
-@Parameter(key = "input", itemIO = ItemIO.BOTH)
+@Parameter(key = "input")
 @Parameter(key = "executorService")
 public class IFFTMethodsOpI<C extends ComplexType<C>>
 		implements Inplaces.Arity2_1<RandomAccessibleInterval<C>, ExecutorService> {

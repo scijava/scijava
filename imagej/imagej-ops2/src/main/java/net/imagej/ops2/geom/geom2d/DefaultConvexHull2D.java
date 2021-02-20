@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.convexHull")
 @Parameter(key = "input")
-@Parameter(key = "convexHull", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "convexHull")
 public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
 	@Override

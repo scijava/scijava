@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.integral", priority = Priority.LOW + 1)
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DefaultIntegralImg<I extends RealType<I>, O extends RealType<O>> extends AbstractIntegralImg<I, O> {
 
 	@Override

@@ -43,7 +43,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public abstract class AbstractApplyThresholdIterable<T> implements
 	Computers.Arity1<Iterable<T>, Iterable<BitType>>
 {

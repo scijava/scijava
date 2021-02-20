@@ -22,13 +22,13 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 
 	@OpField(names = "test.parameter.computer")
 	@Parameter(key = "input")
-	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "output")
 	public final Function<Number, Double> func = (x) -> x.doubleValue();
 
 	@OpField(names = "test.parameter.op")
 	@Parameter(key = "inputList")
 	@Parameter(key = "op")
-	@Parameter(key = "outputList", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "outputList")
 	public final BiFunction<List<Number>, Function<Number, Double>, List<Double>> biFunc = (x, op) -> {
 		List<Double> output = new ArrayList<>();
 		for (Number n : x)
@@ -87,7 +87,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 
 @Plugin(type = Op.class, name = "test.parameter.class")
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class FuncClass implements Function<Number, Double> {
 
 	@Override

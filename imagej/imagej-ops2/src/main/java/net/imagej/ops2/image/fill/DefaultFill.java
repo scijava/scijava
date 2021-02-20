@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.fill")
 @Parameter(key = "constant")
-@Parameter(key = "iterableOutput", itemIO = ItemIO.BOTH)
+@Parameter(key = "iterableOutput")
 public class DefaultFill<T extends Type<T>> implements
 	Computers.Arity1<T, Iterable<T>> 
 {

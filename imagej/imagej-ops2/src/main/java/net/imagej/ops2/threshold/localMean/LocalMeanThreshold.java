@@ -69,7 +69,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputNeighborhoodShape")
 @Parameter(key = "c")
 @Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class LocalMeanThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

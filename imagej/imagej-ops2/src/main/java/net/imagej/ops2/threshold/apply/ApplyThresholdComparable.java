@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "threshold.apply")
 @Parameter(key = "input")
 @Parameter(key = "threshold")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ApplyThresholdComparable<T> implements
 	Computers.Arity2<Comparable<? super T>, T, BitType>
 {

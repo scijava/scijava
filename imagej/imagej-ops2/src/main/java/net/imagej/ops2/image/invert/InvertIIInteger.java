@@ -55,7 +55,7 @@
 //@Parameter(key = "input")
 //@Parameter(key = "min")
 //@Parameter(key = "max")
-//@Parameter(key = "invertedOutput", itemIO = ItemIO.BOTH)
+//@Parameter(key = "invertedOutput")
 //public class InvertIIInteger<T extends IntegerType<T>> implements
 //	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> 
 //{

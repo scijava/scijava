@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric (2D): Size", priority = Priority.VERY_HIGH - 1)
 @Parameter(key = "input")
-@Parameter(key = "size", itemIO = ItemIO.BOTH)
+@Parameter(key = "size")
 public class DefaultSizePolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@Override

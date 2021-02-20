@@ -108,7 +108,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "mask")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -394,7 +394,7 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 @Parameter(key = "seeds")
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.BOTH)
+@Parameter(key = "outputLabeling")
 class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -415,7 +415,7 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 @Parameter(key = "seeds")
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling")
 class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -439,7 +439,7 @@ class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanTy
 @Parameter(key = "useEightConnectivity")
 @Parameter(key = "drawWatersheds")
 @Parameter(key = "mask")
-@Parameter(key = "outputLabeling", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputLabeling")
 class WatershedSeededFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 

@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric3D: Volume", priority = Priority.VERY_HIGH - 1)
 @Parameter(key = "input")
-@Parameter(key = "volume", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "volume")
 public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 
 	@Override

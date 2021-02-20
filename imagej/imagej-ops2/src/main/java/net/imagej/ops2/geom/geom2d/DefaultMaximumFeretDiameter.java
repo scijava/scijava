@@ -44,7 +44,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "geom.maximumFeretsDiameter")
 @Parameter(key = "input")
-@Parameter(key = "maxFeretsDiameter", itemIO = ItemIO.BOTH)
+@Parameter(key = "maxFeretsDiameter")
 public class DefaultMaximumFeretDiameter implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.maximumFeret")

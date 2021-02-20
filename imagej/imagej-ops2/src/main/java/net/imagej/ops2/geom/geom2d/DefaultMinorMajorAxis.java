@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
 @Parameter(key = "input")
-@Parameter(key = "minorMajorAxisPair", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "minorMajorAxisPair")
 public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleType, DoubleType>> {
 
 	/**

@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.minorAxis", label = "Geometric (2D): Minor Axis")
 @Parameter(key = "input")
-@Parameter(key = "minorAxis", itemIO = ItemIO.BOTH)
+@Parameter(key = "minorAxis")
 public class DefaultMinorAxis implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

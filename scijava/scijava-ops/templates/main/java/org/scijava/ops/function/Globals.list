@@ -99,7 +99,7 @@ applyArgs = ```
 computeParams = ```
 { arity ->
   typeParams = typeParamsList(arity)
-  typeParams.set(arity, "@Mutable " + typeParams.get(arity))
+  typeParams.set(arity, "@Container " + typeParams.get(arity))
   String.join(', ', typeParams)
 }
 ```

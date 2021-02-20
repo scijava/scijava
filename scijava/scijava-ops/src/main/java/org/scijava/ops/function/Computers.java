@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.types.Nil;
-import org.scijava.param.Mutable;
+import org.scijava.param.Container;
 import org.scijava.types.Types;
 
 /**
@@ -207,7 +207,7 @@ public final class Computers {
 		Consumer<O>
 	{
 
-		void compute(@Mutable O out);
+		void compute(@Container O out);
 
 		@Override
 		default void accept(final O out)
@@ -221,7 +221,7 @@ public final class Computers {
 		BiConsumer<I, O>
 	{
 
-		void compute(I in, @Mutable O out);
+		void compute(I in, @Container O out);
 
 		@Override
 		default void accept(final I in, final O out)
@@ -235,7 +235,7 @@ public final class Computers {
 		Consumers.Arity3<I1, I2, O>
 	{
 
-		void compute(I1 in1, I2 in2, @Mutable O out);
+		void compute(I1 in1, I2 in2, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final O out)
@@ -249,7 +249,7 @@ public final class Computers {
 		Consumers.Arity4<I1, I2, I3, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final O out)
@@ -263,7 +263,7 @@ public final class Computers {
 		Consumers.Arity5<I1, I2, I3, I4, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final O out)
@@ -277,7 +277,7 @@ public final class Computers {
 		Consumers.Arity6<I1, I2, I3, I4, I5, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final O out)
@@ -291,7 +291,7 @@ public final class Computers {
 		Consumers.Arity7<I1, I2, I3, I4, I5, I6, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final O out)
@@ -305,7 +305,7 @@ public final class Computers {
 		Consumers.Arity8<I1, I2, I3, I4, I5, I6, I7, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final O out)
@@ -319,7 +319,7 @@ public final class Computers {
 		Consumers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final O out)
@@ -333,7 +333,7 @@ public final class Computers {
 		Consumers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final O out)
@@ -347,7 +347,7 @@ public final class Computers {
 		Consumers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final O out)
@@ -361,7 +361,7 @@ public final class Computers {
 		Consumers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final O out)
@@ -375,7 +375,7 @@ public final class Computers {
 		Consumers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final O out)
@@ -389,7 +389,7 @@ public final class Computers {
 		Consumers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final O out)
@@ -403,7 +403,7 @@ public final class Computers {
 		Consumers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final O out)
@@ -417,7 +417,7 @@ public final class Computers {
 		Consumers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final O out)
@@ -431,7 +431,7 @@ public final class Computers {
 		Consumers.Arity17<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
 	{
 
-		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Mutable O out);
+		void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Container O out);
 
 		@Override
 		default void accept(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16, final O out)

@@ -39,12 +39,12 @@ public interface Member<T> {
 
 	/** Gets whether the member is an input. */
 	default boolean isInput() {
-		return getIOType() == ItemIO.INPUT || getIOType() == ItemIO.BOTH;
+		return getIOType() == ItemIO.INPUT || getIOType() == ItemIO.CONTAINER || getIOType() == ItemIO.MUTABLE;
 	}
 
 	/** Gets whether the member is an output. */
 	default boolean isOutput() {
-		return getIOType() == ItemIO.OUTPUT || getIOType() == ItemIO.BOTH;
+		return getIOType() == ItemIO.OUTPUT || getIOType() == ItemIO.CONTAINER || getIOType() == ItemIO.MUTABLE;
 	}
 
 	default boolean isStruct() {

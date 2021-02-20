@@ -4,7 +4,6 @@ package org.scijava.param;
 import io.leangen.geantyref.AnnotationFormatException;
 import io.leangen.geantyref.TypeFactory;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -325,14 +324,16 @@ public final class ParameterStructs {
 	}
 	
 	/**
-	 * Returns a list of {@link FunctionalMethodType}s describing the input and output
-	 * types of the functional method of the specified functional type. In doing so,
-	 * the return type of the method will me marked as {@link ItemIO#OUTPUT} and the
-	 * all method parameters as {@link ItemIO#OUTPUT}, except for parameters annotated
-	 * with {@link Mutable} which will be marked as {@link ItemIO#BOTH}. If the specified
-	 * type does not have a functional method in its hierarchy, null will be
-	 * returned.<br>
-	 * The order will be the following: method parameters from left to right, return type
+	 * Returns a list of {@link FunctionalMethodType}s describing the input and
+	 * output types of the functional method of the specified functional type. In
+	 * doing so, the return type of the method will me marked as
+	 * {@link ItemIO#OUTPUT} and the all method parameters as {@link ItemIO#OUTPUT},
+	 * except for parameters annotated with {@link Container} or {@link Mutable}
+	 * which will be marked as {@link ItemIO#CONTAINER} or {@link ItemIO#MUTABLE}
+	 * respectively. If the specified type does not have a functional method in its
+	 * hierarchy, {@code null} will be returned.<br>
+	 * The order will be the following: method parameters from left to right, then
+	 * return type.
 	 * 
 	 * @param functionalType
 	 * @return
@@ -349,8 +350,14 @@ public final class ParameterStructs {
 		List<FunctionalMethodType> out = new ArrayList<>();
 		int i = 0;
 		for (Type t : Types.getExactParameterTypes(functionalMethod, paramfunctionalType)) {
-			boolean isMutable = AnnotationUtils.getMethodParameterAnnotation(functionalMethod, i, Mutable.class) != null;
-			out.add(new FunctionalMethodType(t, isMutable ? ItemIO.BOTH : ItemIO.INPUT));
+			final ItemIO ioType;
+			if (AnnotationUtils.getMethodParameterAnnotation(functionalMethod, i, Container.class) != null)
+				ioType = ItemIO.CONTAINER;
+			else if (AnnotationUtils.getMethodParameterAnnotation(functionalMethod, i, Mutable.class) != null)
+				ioType = ItemIO.MUTABLE;
+			else
+				ioType = ItemIO.INPUT;
+			out.add(new FunctionalMethodType(t, ioType));
 			i++;
 		}
 		
@@ -391,9 +398,10 @@ public final class ParameterStructs {
 	/**
 	 * Create new instances of {@link Parameter} annotations having default names (key) and the {@link ItemIO}
 	 * from the specified list of {@link FunctionalMethodType}s. Default names will be:<br><br>
-	 * 'mutable{index}' for {@link ItemIO#BOTH}<br>
 	 * 'input{index}' for {@link ItemIO#INPUT}<br>
-	 * 'output{index}' for {@link ItemIO#OUTPUT}<br><br>
+	 * 'output{index}' for {@link ItemIO#OUTPUT}<br>
+	 * 'container{index}' for {@link ItemIO#CONTAINER}<br>
+	 * 'mutable{index}' for {@link ItemIO#MUTABLE}<br><br>
 	 * with {index} being counted individually.
 	 * 
 	 * This is used to infer the annotations for {@link FunctionalParameterMember}s if the {@link Parameter} is not
@@ -405,25 +413,25 @@ public final class ParameterStructs {
 	private static Parameter[] synthesizeParameterAnnotations(final List<FunctionalMethodType> fmts) {
 		List<Parameter> params = new ArrayList<>();
 		
-		int ins, outs, insOuts;
-		ins = outs = insOuts = 1;
+		int ins, outs, containers, mutables;
+		ins = outs = containers = mutables = 1;
 		for (FunctionalMethodType fmt : fmts) {
 			Map<String, Object> paramValues = new HashMap<>();
 			paramValues.put(Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
 			
 			String key;
 			switch (fmt.itemIO()) {
-			case BOTH:
-				key = "mutable" + insOuts;
-				insOuts++;
-				break;
 			case INPUT:
-				key = "input" + ins;
-				ins++;
+				key = "input" + ins++;
 				break;
 			case OUTPUT:
-				key = "output" + outs;
-				outs++;
+				key = "output" + outs++;
+				break;
+			case CONTAINER:
+				key = "container" + containers++;
+				break;
+			case MUTABLE:
+				key = "mutable" + mutables++;
 				break;
 			default:
 				throw new RuntimeException("Unexpected ItemIO type encountered!");
@@ -639,11 +647,11 @@ public final class ParameterStructs {
 			valid = false;
 		}
 
-		if (param.itemIO() == ItemIO.BOTH && isImmutable(type)) {
-			// NB: The BOTH type signifies that the parameter will be changed
-			// in-place somehow. But immutable parameters cannot be changed in
-			// such a manner, so it makes no sense to label them as BOTH.
-			final String error = "Immutable BOTH parameter: " + name + " (" + type.getName() + " is immutable)";
+		if ((param.itemIO() == ItemIO.MUTABLE || param.itemIO() == ItemIO.CONTAINER) && isImmutable(type)) {
+			// NB: The MUTABLE and CONTAINER types signify that the parameter
+			// will be written to, but immutable parameters cannot be changed in
+			// such a manner, so it makes no sense to label them as such.
+			final String error = "Immutable " + param.itemIO() + " parameter: " + name + " (" + type.getName() + " is immutable)";
 			problems.add(new ValidityProblem(error));
 			valid = false;
 		}

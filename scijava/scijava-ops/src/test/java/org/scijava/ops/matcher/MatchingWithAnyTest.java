@@ -81,7 +81,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 	public void testRunAnyFunction1FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
-		final MutableNotAny out = ops.op("test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(MutableNotAny.class).apply();
+		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(StringContainer.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
 	
@@ -104,15 +104,15 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 @Parameter(key = "input1")
 @Parameter(key = "input2")
 @Parameter(key = "output")
-class IntegerAndLongAndNotAnyComputer implements Computers.Arity2<Integer, Long, MutableNotAny> {
+class IntegerAndLongAndNotAnyComputer implements Computers.Arity2<Integer, Long, StringContainer> {
 
 	@Override
-	public void compute(Integer in1, Long in2, @Mutable MutableNotAny out) {
+	public void compute(Integer in1, Long in2, StringContainer out) {
 		out.setValue(Long.toString(in1 + in2));
 	}
 }
 
-class MutableNotAny {
+class StringContainer {
 
 	private String value;
 
@@ -125,13 +125,13 @@ class MutableNotAny {
 	}
 }
 
-@Plugin(type = Op.class, name = "create, create.mutableNotAny")
-@Parameter(key = "mutableNotAny")
-class MutableNotAnyCreator implements Producer<MutableNotAny> {
+@Plugin(type = Op.class, name = "create, create.stringContainer")
+@Parameter(key = "stringContainer")
+class StringContainerCreator implements Producer<StringContainer> {
 
 	@Override
-	public MutableNotAny create() {
-		return new MutableNotAny();
+	public StringContainer create() {
+		return new StringContainer();
 	}
 }
 

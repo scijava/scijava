@@ -340,7 +340,9 @@ public final class ParameterStructs {
 	 */
 	public static List<FunctionalMethodType> findFunctionalMethodTypes(Type functionalType) {
 		Method functionalMethod = findFunctionalMethod(Types.raw(functionalType));
-		if (functionalMethod == null) return null;
+		if (functionalMethod == null) throw new IllegalArgumentException("Type " +
+			functionalType +
+			" is not a functional type, thus its functional method types cannot be determined");
 		
 		Type paramfunctionalType = functionalType;
 		if (functionalType instanceof Class) {
@@ -491,9 +493,13 @@ public final class ParameterStructs {
 	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
 			AnnotatedElement annotationBearer, Type type, final boolean synthesizeAnnotations) {
 		//Search for the functional method of 'type' and map its signature to ItemIO
-		List<FunctionalMethodType> fmts = findFunctionalMethodTypes(type);
-		if (fmts == null) {
-			problems.add(new ValidityProblem("Could not find functional method of " + type.getTypeName()));
+		List<FunctionalMethodType> fmts;
+		try {
+			fmts = findFunctionalMethodTypes(type);
+		}
+		catch (IllegalArgumentException e) {
+			problems.add(new ValidityProblem("Could not find functional method of " +
+				type.getTypeName()));
 			return;
 		}
 		

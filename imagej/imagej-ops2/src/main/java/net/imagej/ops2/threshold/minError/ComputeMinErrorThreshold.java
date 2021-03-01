@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.minError", priority = Priority.HIGH)
 @Parameter(key = "inputHistogram")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeMinErrorThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

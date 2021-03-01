@@ -332,7 +332,7 @@ public class BoxCount {
 @Parameter(key = "minSize")
 @Parameter(key = "scaling")
 @Parameter(key = "gridMoves")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class DefaultBoxCount<B extends BooleanType<B>> implements
 	Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>>
 {

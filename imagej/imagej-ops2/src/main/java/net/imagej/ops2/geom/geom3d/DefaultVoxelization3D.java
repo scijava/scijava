@@ -67,7 +67,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "width", required = false)
 @Parameter(key = "height", required = false)
 @Parameter(key = "depth", required = false)
-@Parameter(key = "voxelizedImage", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "voxelizedImage")
 public class DefaultVoxelization3D
 		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 

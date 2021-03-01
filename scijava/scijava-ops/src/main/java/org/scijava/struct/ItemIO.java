@@ -32,38 +32,49 @@
 
 package org.scijava.struct;
 
-import org.scijava.param.Mutable;
-
 /**
- * Defines the input/output type of a module.
+ * Defines the input/output type of a struct {@link Member}.
  *
  * @author Curtis Rueden
  * @author David Kolb
  */
 public enum ItemIO {
 	/**
-	 * The item is an input for the module.
+	 * The item is an input for the operation.
 	 */
 	INPUT, 
 	/**
-	 * The item is an output for the module.
+	 * The item is an output for the operation.
 	 */
 	OUTPUT,
 	/**
-	 * The item is both an input and an output for the module. This type is
-	 * used to indicate an object that is mutated somehow during execution.
+	 * The item is a hybrid input/output for the operation, whose structure is fixed
+	 * but whose content will be populated during execution of the operation.
+	 * 
+	 * @see org.scijava.param.Container
+	 * @see org.scijava.ops.function.Computers
 	 */
-	BOTH, 
+	CONTAINER,
 	/**
-	 * Marker to specify that one of the above should be inferred automatically 
-	 * during structification. I.e. the type can be inferred from the functional method 
-	 * signature of a functional type. The return type will always be ItemIO.Output and 
-	 * method parameters should be ItemIO.Input. If a method parameter is ItemIO.Both, 
-	 * it should be annotated with {@link Mutable}.
+	 * The item is a hybrid input/output for the operation, whose current value will
+	 * be used as input to the computation, but subsequently overwritten with a
+	 * result.
+	 * 
+	 * @see org.scijava.param.Mutable
+	 * @see org.scijava.ops.function.Inplaces
+	 */
+	MUTABLE,
+	/**
+	 * The type of the item should be inferred automatically during structification.
+	 * For instance, for methods of functional interfaces, the types can be inferred
+	 * as follows: the return type (if not {@code void}) is {@code ItemIO.OUTPUT}
+	 * and method parameters are typically {@code ItemIO.INPUT}, although method
+	 * parameters could be annotated to indicate they should be treated as
+	 * {@code ItemIO.CONTAINER} or {@code ItemIO.MUTABLE} type instead.
 	 */
 	AUTO,
 	/**
-	 * TODO
+	 * The type of the item is none of the above.
 	 */
 	NONE
 }

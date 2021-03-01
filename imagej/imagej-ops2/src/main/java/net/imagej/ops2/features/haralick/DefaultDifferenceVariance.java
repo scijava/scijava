@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "numGreyLevels")
 @Parameter(key = "distance")
 @Parameter(key = "matrixOrientation")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class DefaultDifferenceVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXMinusY")

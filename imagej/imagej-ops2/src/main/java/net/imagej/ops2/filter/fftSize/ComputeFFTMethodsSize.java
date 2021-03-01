@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "dimensions")
 @Parameter(key = "forward")
 @Parameter(key = "fast")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class ComputeFFTMethodsSize implements Functions.Arity3<Dimensions, Boolean, Boolean, long[][]> {
 
 	@Override

@@ -41,7 +41,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "math.complexConjugateMultiply", priority = Priority.LOW)
 @Parameter(key = "input1")
 @Parameter(key = "input2")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements Computers.Arity2<T, T, T> {
 
 	// TODO: extend common abstract base class which implements Contingent

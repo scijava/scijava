@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.skewness")
 @Parameter(key = "iterableInput")
-@Parameter(key = "skewness", itemIO = ItemIO.BOTH)
+@Parameter(key = "skewness")
 public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.moment3AboutMean")

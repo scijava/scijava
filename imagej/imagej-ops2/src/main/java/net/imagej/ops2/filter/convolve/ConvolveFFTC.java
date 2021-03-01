@@ -63,7 +63,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "performInputFFT")
 @Parameter(key = "performKernelFFT")
 @Parameter(key = "executorService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
 
@@ -90,7 +90,7 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 @Parameter(key = "fftInput")
 @Parameter(key = "fftKernel")
 @Parameter(key = "executorService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 class ConvolveFFTCSimple<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements
 		Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>> {

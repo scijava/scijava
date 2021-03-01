@@ -46,7 +46,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.feretsDiameter", label = "Geometric (2D): Ferets Diameter")
 @Parameter(key = "points")
-@Parameter(key = "feretsDiameter", itemIO = ItemIO.BOTH)
+@Parameter(key = "feretsDiameter")
 public class DefaultFeretsDiameter implements Computers.Arity1<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
 
 	@Override

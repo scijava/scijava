@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "morphology.fillHoles")
 @Parameter(key = "input")
 @Parameter(key = "structElement")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class FillHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {

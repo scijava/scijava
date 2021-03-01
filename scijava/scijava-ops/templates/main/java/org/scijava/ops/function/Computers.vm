@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.types.Nil;
-import org.scijava.param.Mutable;
+import org.scijava.param.Container;
 import org.scijava.types.Types;
 
 /**

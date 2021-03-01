@@ -71,7 +71,7 @@ import org.scijava.util.IntArray;
 @Parameter(key = "image1")
 @Parameter(key = "image2")
 @Parameter(key = "seed")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	implements Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
 {
@@ -250,7 +250,7 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 @Plugin(type = Op.class, name = "coloc.maxTKendallTau")
 @Parameter(key = "image1")
 @Parameter(key = "image2")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 	implements BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> 
 {

@@ -81,7 +81,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "raiExtendedEstimate")
 @Parameter(key = "iterativePostProcessingOps")
 @Parameter(key = "executorService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //

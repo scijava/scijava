@@ -50,7 +50,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.shanbhag", priority = Priority.HIGH)
 @Parameter(key = "inputHistogram")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeShanbhagThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

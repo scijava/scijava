@@ -67,7 +67,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "fftBuffer")
 @Parameter(key = "fftKernel")
 @Parameter(key = "executorService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<O>, C extends ComplexType<C>>
 	implements
 	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>

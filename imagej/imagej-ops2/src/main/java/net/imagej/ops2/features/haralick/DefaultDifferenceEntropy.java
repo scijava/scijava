@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "numGreyLevels")
 @Parameter(key = "distance")
 @Parameter(key = "matrixOrientation")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class DefaultDifferenceEntropy<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	// Avoid log 0

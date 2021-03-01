@@ -34,7 +34,6 @@ import net.imglib2.type.logic.BitType;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.struct.ItemIO;
 
@@ -43,7 +42,7 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public abstract class AbstractApplyThresholdIterable<T> implements
 	Computers.Arity1<Iterable<T>, Iterable<BitType>>
 {
@@ -53,7 +52,7 @@ public abstract class AbstractApplyThresholdIterable<T> implements
 
 	@Override
 	public void compute(final Iterable<T> input,
-		@Mutable final Iterable<BitType> output)
+		final Iterable<BitType> output)
 	{
 		applyThresholdOp.compute(input, computeThreshold(input), output);
 	}

@@ -33,14 +33,14 @@ public class Inject {
 		public static void inputs(StructInstance<?> instance, Object... objs) {
 			unsafe(filterAccessibles(getAccessibles(instance), m -> {
 				ItemIO ioType = m.member().getIOType();
-				return EnumSet.of(ItemIO.BOTH, ItemIO.INPUT).contains(ioType);
+				return EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER, ItemIO.MUTABLE).contains(ioType);
 			}), objs);
 		}
 
 		public static void outputs(StructInstance<?> instance, Object... objs) {
 			unsafe(filterAccessibles(getAccessibles(instance), m -> {
 				ItemIO ioType = m.member().getIOType();
-				return EnumSet.of(ItemIO.BOTH, ItemIO.OUTPUT).contains(ioType);
+				return EnumSet.of(ItemIO.OUTPUT, ItemIO.CONTAINER, ItemIO.MUTABLE).contains(ioType);
 			}), objs);
 		}
 

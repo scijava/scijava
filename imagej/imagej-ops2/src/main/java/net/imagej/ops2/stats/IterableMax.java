@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.max")
 @Parameter(key = "iterableInput")
-@Parameter(key = "max", itemIO = ItemIO.BOTH)
+@Parameter(key = "max")
 public class IterableMax<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
 
 	@Override

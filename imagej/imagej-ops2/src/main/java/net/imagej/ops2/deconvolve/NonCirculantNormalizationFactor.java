@@ -70,7 +70,7 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "deconvolve.normalizationFactor",
 	priority = Priority.LOW)
-@Parameter(key = "io", itemIO = ItemIO.BOTH)
+@Parameter(key = "io")
 @Parameter(key = "k")
 @Parameter(key = "l")
 @Parameter(key = "fftInput")

@@ -55,7 +55,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.medianElongation", label = "Geometric (3D): Median Elongation", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "medianElongation", itemIO = ItemIO.BOTH)
+@Parameter(key = "medianElongation")
 public class DefaultMedianElongation implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

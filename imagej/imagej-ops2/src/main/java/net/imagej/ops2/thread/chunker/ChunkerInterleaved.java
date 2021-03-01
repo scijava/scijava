@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  * @author Michael Zinsmaier (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "thread.chunker", priority = Priority.VERY_LOW)
-@Parameter(key = "chunk", itemIO = ItemIO.BOTH)
+@Parameter(key = "chunk")
 @Parameter(key = "numberOfElements")
 @Parameter(key = "executorService")
 public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, ExecutorService>{

@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "ifTrueVal")
 @Parameter(key = "ifFalseVal")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computers.Arity3<I, O, O, O>
 
 {

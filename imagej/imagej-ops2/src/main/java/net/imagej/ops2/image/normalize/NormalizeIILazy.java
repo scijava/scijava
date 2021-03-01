@@ -39,7 +39,6 @@ import net.imglib2.util.Util;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -57,7 +56,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.normalize")
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
 
@@ -68,7 +67,7 @@ public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 	private Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> normalizerFunc;
 
 	@Override
-	public void compute(RandomAccessibleInterval<I> img, @Mutable RandomAccessibleInterval<O> output) {
+	public void compute(RandomAccessibleInterval<I> img, RandomAccessibleInterval<O> output) {
 		Pair<I, I> sourceMinMax = minMaxFunc.apply(img);
 		O min = Util.getTypeFromInterval(output).createVariable();
 		min.setReal(min.getMinValue());

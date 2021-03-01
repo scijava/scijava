@@ -41,7 +41,7 @@ import org.scijava.struct.ItemIO;
  * @author Curtis Rueden
  */
 @Plugin(type = Op.class, name = "identity")
-@Parameter(key = "io", itemIO = ItemIO.BOTH)
+@Parameter(key = "io")
 public class DefaultIdentity<A> implements Inplaces.Arity1<A>
 {
 

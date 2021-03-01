@@ -64,7 +64,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "outType")
 @Parameter(key = "k")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
 	Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>

@@ -48,7 +48,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "image.fill", priority = Priority.HIGH)
 @Parameter(key = "constant")
-@Parameter(key = "iterableOutput", itemIO = ItemIO.BOTH)
+@Parameter(key = "iterableOutput")
 public class FillRAI<T extends Type<T>> implements
 	Computers.Arity1<T, RandomAccessibleInterval<T>> 
 {

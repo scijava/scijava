@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.min", priority = Priority.HIGH)
 @Parameter(key = "iterableInput")
-@Parameter(key = "max", itemIO = ItemIO.BOTH)
+@Parameter(key = "max")
 public class DefaultMin<T extends RealType<T>> implements Computers.Arity1<RandomAccessibleInterval<T>, T> {
 	
 	@OpDependency(name = "stats.minMax")

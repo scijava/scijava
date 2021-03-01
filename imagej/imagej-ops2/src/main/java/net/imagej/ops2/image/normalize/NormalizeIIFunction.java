@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sourceMax")
 @Parameter(key = "targetMin")
 @Parameter(key = "targetMax")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
 	implements
 	Functions.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>>

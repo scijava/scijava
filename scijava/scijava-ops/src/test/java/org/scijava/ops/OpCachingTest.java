@@ -151,7 +151,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 }
 
 @Plugin(type = Op.class, name = "test.complicatedOp")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class ComplicatedOp implements Producer<String> {
 
 	@OpDependency(name = "test.basicOp")

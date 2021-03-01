@@ -63,7 +63,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "deconvolve.accelerate",
 	priority = Priority.NORMAL)
-@Parameter(key = "io", itemIO = ItemIO.BOTH)
+@Parameter(key = "io")
 public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	Inplaces.Arity1<RandomAccessibleInterval<T>> 
 {

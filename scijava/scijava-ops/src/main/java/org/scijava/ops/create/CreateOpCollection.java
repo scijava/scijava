@@ -29,6 +29,6 @@ public class CreateOpCollection {
 	};
 	
 	@OpField(names = "create", priority = Priority.HIGH)
-	@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+	@Parameter(key = "output")
 	public static final Producer<Double> doubleSource = () -> 0.0;
 }

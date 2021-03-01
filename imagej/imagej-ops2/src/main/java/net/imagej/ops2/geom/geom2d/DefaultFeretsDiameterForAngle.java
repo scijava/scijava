@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.feretsDiameter")
 @Parameter(key = "input")
 @Parameter(key = "angle")
-@Parameter(key = "feretsDiameter", itemIO = ItemIO.BOTH)
+@Parameter(key = "feretsDiameter")
 public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D, Double, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")

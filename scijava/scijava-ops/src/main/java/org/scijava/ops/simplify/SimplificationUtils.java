@@ -24,6 +24,7 @@ import org.scijava.ops.function.Computers;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.util.AnnotationUtils;
+import org.scijava.param.Container;
 import org.scijava.param.Mutable;
 import org.scijava.param.ParameterStructs;
 import org.scijava.types.Nil;
@@ -120,21 +121,23 @@ public class SimplificationUtils {
 	}
 
 	/**
-	 * Finds the {@link Mutable} argument of a {@link FunctionalInterface}'s
-	 * singular abstract method. If there is no argument annotated with
-	 * {@code Mutable}, then it is assumed that no arguments are mutable and that
-	 * the output of the functional {@link Method} is its output. We also assume
-	 * that only one argument is annotated.
+	 * Finds the {@link Mutable} or {@link Container} argument of a
+	 * {@link FunctionalInterface}'s singular abstract method. If there is no
+	 * argument annotated with {@code Mutable} or {@code Container}, then it is
+	 * assumed that no arguments are mutable and that the output of the functional
+	 * {@link Method} is its output. We also assume that only one argument is
+	 * annotated.
 	 * 
 	 * @param c - the {@link Class} extending a {@link FunctionalInterface}
-	 * @return the index of the mutable argument (or -1 iff the output is
-	 *         returned).
+	 * @return the index of the mutable argument (or -1 iff the output is returned).
 	 */
 	public static int findMutableArgIndex(Class<?> c) {
 		Method fMethod = findFMethod(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
 				Mutable.class) != null) return i;
+			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
+				Container.class) != null) return i;
 		}
 		return -1;
 	}

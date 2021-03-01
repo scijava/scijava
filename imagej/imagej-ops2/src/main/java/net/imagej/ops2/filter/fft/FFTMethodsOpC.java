@@ -56,7 +56,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "filter.fft", priority = Priority.NORMAL)
 @Parameter(key = "input")
 @Parameter(key = "executorService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	implements Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>>
 {

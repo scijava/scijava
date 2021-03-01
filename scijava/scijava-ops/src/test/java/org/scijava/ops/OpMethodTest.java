@@ -90,7 +90,7 @@ public class OpMethodTest extends AbstractTestEnvironment {
 //	// factory method.
 //	@Parameter(key = "numericString")
 //	// Refers to the output parameter of the function.
-//	@Parameter(key = "parsedInteger", itemIO = ItemIO.OUTPUT)
+//	@Parameter(key = "parsedInteger")
 //	public static Integer createParseIntegerOp(String in) {
 //		return Integer.parseInt(in);
 //	}
@@ -98,7 +98,7 @@ public class OpMethodTest extends AbstractTestEnvironment {
 //	@OpMethod(names = "test.multiplyNumericStrings", type = BiFunction.class)
 //	@Parameter(key = "numericString1")
 //	@Parameter(key = "numericString2")
-//	@Parameter(key = "multipliedNumericStrings", itemIO = ItemIO.OUTPUT)
+//	@Parameter(key = "multipliedNumericStrings")
 //	public static Integer createMultiplyNumericStringsOp(final String in1,
 //		final String in2, @OpDependency(
 //			name = "test.parseInteger") Function<String, Integer> parseIntegerOp)

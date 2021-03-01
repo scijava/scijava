@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (2D): Perimeter")
 @Parameter(key = "input")
-@Parameter(key = "boundarySize", itemIO = ItemIO.BOTH)
+@Parameter(key = "boundarySize")
 public class DefaultPerimeterLength implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@Override

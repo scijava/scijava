@@ -66,7 +66,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "image.equation")
 @Parameter(key = "input")
 @Parameter(key = "scriptService")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DefaultEquation<T extends RealType<T>> implements
 	Computers.Arity2<String, ScriptService, IterableInterval<T>> 
 {

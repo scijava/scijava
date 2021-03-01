@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.median")
 @Parameter(key = "iterableInput")
-@Parameter(key = "median", itemIO = ItemIO.BOTH)
+@Parameter(key = "median")
 public class DefaultMedian<I extends RealType<I>, O extends RealType<O>> 
 		implements Computers.Arity1<Iterable<I>, O> {
 

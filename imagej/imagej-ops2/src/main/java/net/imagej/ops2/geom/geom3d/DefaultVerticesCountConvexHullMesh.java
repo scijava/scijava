@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.verticesCountConvexHull", label = "Geometric (3D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "verticesCountConvexHull", itemIO = ItemIO.BOTH)
+@Parameter(key = "verticesCountConvexHull")
 public class DefaultVerticesCountConvexHullMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")

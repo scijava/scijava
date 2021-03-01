@@ -40,7 +40,6 @@ import net.imglib2.type.BooleanType;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -54,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "morphology.extractHoles")
 @Parameter(key = "input")
 @Parameter(key = "structElement")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ExtractHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
@@ -76,7 +75,7 @@ public class ExtractHoles<T extends BooleanType<T>> implements
 
 @Plugin(type = Op.class, name = "morphology.extractHoles")
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 class SimpleExtractHolesComputer<T extends BooleanType<T>> implements
 	Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {
@@ -84,7 +83,7 @@ class SimpleExtractHolesComputer<T extends BooleanType<T>> implements
 	private Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>> extractOp;
 
 	@Override
-	public void compute(RandomAccessibleInterval<T> in1, @Mutable RandomAccessibleInterval<T> out) {
+	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<T> out) {
 		Shape defaultStructElement = new RectangleShape(1, false);
 		extractOp.compute(in1, defaultStructElement, out);
 	}

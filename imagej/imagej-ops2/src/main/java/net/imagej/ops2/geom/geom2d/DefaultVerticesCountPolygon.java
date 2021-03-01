@@ -44,7 +44,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric (2D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
 @Parameter(key = "input")
-@Parameter(key = "verticesCount", itemIO = ItemIO.BOTH)
+@Parameter(key = "verticesCount")
 public class DefaultVerticesCountPolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@Override

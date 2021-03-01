@@ -45,7 +45,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "copy, copy.type")
 @Parameter(key = "input")
-@Parameter(key = "copy", itemIO = ItemIO.BOTH)
+@Parameter(key = "copy")
 public class CopyType<T extends Type<T>> implements Computers.Arity1<T, T> {
 
 	@Override

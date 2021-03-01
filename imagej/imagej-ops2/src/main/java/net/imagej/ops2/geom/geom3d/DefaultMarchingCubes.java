@@ -64,7 +64,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "isolevel")
 @Parameter(key = "interpolatorClass")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
@@ -558,7 +558,7 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 
 @Plugin(type = Op.class, name = "geom.marchingCubes")
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	

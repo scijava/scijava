@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "copy, copy.imgLabeling")
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
 		implements Computers.Arity1<ImgLabeling<L, T>, ImgLabeling<L, T>> {
 

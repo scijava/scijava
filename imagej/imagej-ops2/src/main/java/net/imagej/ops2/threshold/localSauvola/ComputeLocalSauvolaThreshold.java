@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -67,7 +66,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
@@ -84,7 +83,7 @@ public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double k, final Double r,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,
 			output);
@@ -94,7 +93,7 @@ public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel, Double k,
 		Double r, final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
 		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;
 		if (r == null) r = DEFAULT_R;

@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.eccentricity", label = "Geometric (2D): Eccentricity")
 @Parameter(key = "input")
-@Parameter(key = "eccentricity", itemIO = ItemIO.BOTH)
+@Parameter(key = "eccentricity")
 public class DefaultEccentricity implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minorAxis")

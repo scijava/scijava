@@ -42,7 +42,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -69,7 +68,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "k", required = false)
 @Parameter(key = "r", required = false)
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>
@@ -91,7 +90,7 @@ public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<DoubleType>> inputNeighborhood,
 		final T inputCenterPixel, Double k, Double r,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;
 		if (r == null) r = DEFAULT_R;

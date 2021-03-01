@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Centroid")
 @Parameter(key = "input")
-@Parameter(key = "centroid", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "centroid")
 public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")

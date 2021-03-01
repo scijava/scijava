@@ -15,7 +15,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "simplify")
 @Parameter(key = "inList")
-@Parameter(key = "simpleList", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "simpleList")
 public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>{
 
 	@Override

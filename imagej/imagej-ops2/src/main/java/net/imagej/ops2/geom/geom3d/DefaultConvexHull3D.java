@@ -63,7 +63,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.convexHull")
 @Parameter(key = "input")
-@Parameter(key = "convexHull", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "convexHull")
 public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 {
 
@@ -613,7 +613,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 @Plugin(type = Op.class, name = "geom.convexHullEpsilon")
 @Parameter(key = "input")
-@Parameter(key = "epsilon", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "epsilon")
 class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 {
 

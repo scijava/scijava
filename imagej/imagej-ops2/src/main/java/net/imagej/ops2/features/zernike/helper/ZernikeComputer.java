@@ -49,7 +49,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "order")
 @Parameter(key = "repetition")
-@Parameter(key = "zernikeMoment", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "zernikeMoment")
 public class ZernikeComputer<T extends RealType<T>>
 		implements Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
 

@@ -63,7 +63,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "sourceMax")
 @Parameter(key = "targetMin")
 @Parameter(key = "targetMax")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> {
 

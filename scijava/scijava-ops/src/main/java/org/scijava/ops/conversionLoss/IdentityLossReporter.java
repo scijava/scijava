@@ -18,7 +18,7 @@ import org.scijava.types.Nil;
 @Plugin(type = Op.class, name = "lossReporter")
 @Parameter(key = "fromType")
 @Parameter(key = "toType")
-@Parameter(key = "maximumLoss", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "maximumLoss")
 public class IdentityLossReporter<T> implements LossReporter<T, T> {
 
 	@Override

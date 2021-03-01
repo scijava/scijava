@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "deconvolve.richardsonLucyUpdate",
 	priority = Priority.HIGH)
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class RichardsonLucyUpdate<T extends RealType<T>> implements
 	Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {

@@ -41,7 +41,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -68,7 +67,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputNeighborhood")
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeLocalMeanThresholdIntegral<T extends RealType<T>, U extends RealType<U>> implements
 	Computers.Arity3<RectangleNeighborhood<? extends Composite<U>>, T, Double, BitType>
 {
@@ -80,7 +79,7 @@ public class ComputeLocalMeanThresholdIntegral<T extends RealType<T>, U extends 
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<U>> inputNeighborhood,
 		final T inputCenterPixel, final Double c,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		final DoubleType sum = new DoubleType();
 		integralMeanOp.compute(inputNeighborhood, sum);

@@ -62,7 +62,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.variance", priority = Priority.HIGH)
 @Parameter(key = "raiInput")
-@Parameter(key = "variance", itemIO = ItemIO.BOTH)
+@Parameter(key = "variance")
 public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.mean")

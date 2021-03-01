@@ -52,7 +52,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.integralSum")
 @Parameter(key = "iterableInput")
-@Parameter(key = "integralSum", itemIO = ItemIO.BOTH)
+@Parameter(key = "integralSum")
 public class IntegralSum<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<I>, DoubleType> {
 
 	@Override

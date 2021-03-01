@@ -54,7 +54,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
 @Parameter(key = "iterableRegion")
-@Parameter(key = "inertiaTensor", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "inertiaTensor")
 public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Function<IterableRegion<B>, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")

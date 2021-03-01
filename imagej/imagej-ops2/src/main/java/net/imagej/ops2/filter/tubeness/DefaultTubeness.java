@@ -54,7 +54,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -103,7 +102,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "executorService")
 @Parameter(key = "sigma")
 @Parameter(key = "calibration")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DefaultTubeness<T extends RealType<T>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
 		Cancelable {
@@ -259,7 +258,7 @@ public class DefaultTubeness<T extends RealType<T>> implements
 @Parameter(key = "input")
 @Parameter(key = "executorService")
 @Parameter(key = "sigma")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
 
@@ -268,7 +267,7 @@ class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, ExecutorService in2, Double in3,
-			@Mutable IterableInterval<DoubleType> out) {
+			IterableInterval<DoubleType> out) {
 		tubenessOp.compute(in1, in2, in3, new double[] {}, out);
 	}
 	

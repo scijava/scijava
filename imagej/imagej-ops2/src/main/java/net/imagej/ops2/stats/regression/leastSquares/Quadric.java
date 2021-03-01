@@ -60,7 +60,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.leastSquares")
 @Parameter(key = "vectorCollection")
-@Parameter(key = "outputMatrix", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "outputMatrix")
 public class Quadric implements
 	Function<Collection<Vector3d>, Matrix4d> 
 {

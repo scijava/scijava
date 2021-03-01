@@ -39,7 +39,6 @@ import net.imglib2.util.Pair;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -59,7 +58,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "contrastThreshold")
 @Parameter(key = "halfMaxValue")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
@@ -70,7 +69,7 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double contrastThreshold,
-		final Double halfMaxValue, @Mutable final BitType output)
+		final Double halfMaxValue, final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, contrastThreshold,
 			halfMaxValue, minMaxOp, output);
@@ -80,7 +79,7 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 		final Iterable<T> inputNeighborhood, final T inputCenterPixel,
 		final Double contrastThreshold, final Double halfMaxValue,
 		final Function<Iterable<T>, Pair<T, T>> minMaxOp,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		final Pair<T, T> outputs = minMaxOp.apply(inputNeighborhood);
 		final double minValue = outputs.getA().getRealDouble();

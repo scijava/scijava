@@ -53,7 +53,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "vars")
 @Parameter(key = "opService")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpService, Object>
 {
 

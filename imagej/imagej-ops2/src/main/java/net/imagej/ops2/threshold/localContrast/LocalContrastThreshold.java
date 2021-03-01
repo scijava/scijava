@@ -40,7 +40,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -53,7 +52,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "inputNeighborhoodShape")
 @Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class LocalContrastThreshold<T extends RealType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {
@@ -65,7 +64,7 @@ public class LocalContrastThreshold<T extends RealType<T>> implements
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		@Mutable final RandomAccessibleInterval<BitType> output)
+		final RandomAccessibleInterval<BitType> output)
 	{
 		compute(input, inputNeighborhoodShape, outOfBoundsFactory,
 			computeThresholdOp, output);
@@ -75,7 +74,7 @@ public class LocalContrastThreshold<T extends RealType<T>> implements
 		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final Computers.Arity2<Iterable<T>, T, BitType> computeThresholdOp,
-		@Mutable final RandomAccessibleInterval<BitType> output)
+		final RandomAccessibleInterval<BitType> output)
 	{
 		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
 			inputNeighborhoodShape, outOfBoundsFactory, computeThresholdOp, output);

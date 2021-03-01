@@ -15,7 +15,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
-import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -81,12 +80,10 @@ public class SimplifiedOpInfo implements OpInfo {
 	 * <li>a penalty defined as a lossiness heuristic of this simplification. This
 	 * penalty is the sum of:
 	 * <ul>
-	 * <li>the loss undertaken by converting each of the Op's inputs (as defined
-	 * by an {@link ItemIO#INPUT} or {@link ItemIO#BOTH} annotation) from the ref
+	 * <li>the loss undertaken by converting each of the Op's inputs from the ref
 	 * type to the info type
-	 * <li>the loss undertaken by converting each of the Op's outputs (as defined
-	 * by an {@link ItemIO#OUTPUT} or {@link ItemIO#BOTH} annotation) from the
-	 * info type to the ref type
+	 * <li>the loss undertaken by converting each of the Op's outputs from the info
+	 * type to the ref type
 	 * </ul>
 	 * </ul>
 	 */

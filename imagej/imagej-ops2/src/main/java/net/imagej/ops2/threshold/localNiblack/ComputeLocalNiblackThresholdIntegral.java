@@ -42,7 +42,6 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.Computers;
-import org.scijava.param.Mutable;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -69,7 +68,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "inputCenterPixel")
 @Parameter(key = "c")
 @Parameter(key = "k")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U extends RealType<U>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<U>>, T, Double, Double, BitType>
@@ -85,7 +84,7 @@ public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U exten
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<U>> inputNeighborhood,
 		final T inputCenterPixel, final Double c, final Double k,
-		@Mutable final BitType output)
+		final BitType output)
 	{
 		final DoubleType threshold = new DoubleType(0.0d);
 

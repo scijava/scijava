@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to mark a parameter as mutable: the value of the given argument
- * will be altered by the algorithm during execution.
+ * Annotation to mark a parameter as a container: the value of the given
+ * argument will be populated by the algorithm during execution.
  * 
- * @see Inplaces
+ * @see Computers
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE_USE)
-public @interface Mutable {
+public @interface Container {
 
 }

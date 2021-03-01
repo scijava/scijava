@@ -47,7 +47,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.size")
 @Parameter(key = "interval")
-@Parameter(key = "size", itemIO = ItemIO.BOTH)
+@Parameter(key = "size")
 public class DefaultSize<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<Interval, O>
 {

@@ -51,7 +51,7 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, IterableInterval<T>> {
 
 	// used internally
@@ -70,7 +70,7 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 
 @Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
 @Parameter(key = "input")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
+@Parameter(key = "output")
 class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterval<T>> {
 
 	@OpDependency(name = "create.img")

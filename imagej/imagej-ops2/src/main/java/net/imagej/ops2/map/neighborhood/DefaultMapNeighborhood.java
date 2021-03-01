@@ -57,7 +57,7 @@ import org.scijava.struct.ItemIO;
 @Parameter(key = "input")
 @Parameter(key = "shape")
 @Parameter(key = "op")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 public class DefaultMapNeighborhood<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, IterableInterval<O>>
 {
@@ -94,7 +94,7 @@ public class DefaultMapNeighborhood<I, O> implements
 @Parameter(key = "input")
 @Parameter(key = "shape")
 @Parameter(key = "op")
-@Parameter(key = "output", itemIO = ItemIO.BOTH)
+@Parameter(key = "output")
 class MapNeighborhoodAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, RandomAccessibleInterval<O>>
 {

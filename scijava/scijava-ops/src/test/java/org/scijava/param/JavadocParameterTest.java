@@ -1,31 +1,25 @@
 package org.scijava.param;
 
-import com.github.therapi.runtimejavadoc.ClassJavadoc;
-import com.github.therapi.runtimejavadoc.FieldJavadoc;
-import com.github.therapi.runtimejavadoc.MethodJavadoc;
-import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import com.google.common.collect.Streams;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.create.CreateOpCollection;
-import org.scijava.ops.simplify.SimplificationUtils;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
-import org.scijava.types.Types;
+import org.scijava.types.Nil;
 
 /**
  * Tests the ability of a Javadoc parser to scrape an Op's parameters out of its Javadoc
@@ -36,45 +30,64 @@ import org.scijava.types.Types;
 public class JavadocParameterTest extends AbstractTestEnvironment {
 	
 	/**
-	 * 
-	 * @param in1 the first input
-	 * @param in2 the second input
-	 * @return in1 + in2
+	 * @param foo the first input
+	 * @param bar the second input
+	 * @return foo + bar
 	 */
-	@OpMethod(names = "test.javadoc", type = BiFunction.class)
+	@OpMethod(names = "test.javadoc.method", type = BiFunction.class)
 	public static List<Long> OpMethodFoo(List<String> in1, List<String> in2) {
 		BiFunction<String, String, Long> func = (s1, s2) -> Long.parseLong(s1) + Long.parseLong(s2);
 		return Streams.zip(in1.stream(), in2.stream(), func).collect(Collectors.toList());
 	}
-	
+
 	/**
-	 * @param thing the input
-	 * @return the output
+	 * @input the input
+	 * @output the output
 	 */
 	@OpField(names = "test.javadoc")
 	public final Function<Double, Double> javadocFieldOp = (in) -> in + 1;
 	
 	@Test
-	public void testJavadocMethod() throws NoSuchMethodException, SecurityException, NoSuchFieldException {
-		Method fMethod = SimplificationUtils.findFMethod(JavadocOp.class);
-		Type[] exactParameterTypes = Types.getExactParameterTypes(fMethod, JavadocOp.class);
-		Class<?>[] rawParamTypes = Arrays.stream(exactParameterTypes).map(t -> Types.raw(t)).toArray(Class[]::new);
-		Method opMethod = JavadocOp.class.getMethod(fMethod.getName(), rawParamTypes);
-		MethodJavadoc javadoc = RuntimeJavadoc.getJavadoc(opMethod);
-		System.out.println("Functional Method javadoc" + javadoc);
+	public void testJavadocMethod() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.method").iterator();
 		
-		ClassJavadoc classdoc = RuntimeJavadoc.getJavadoc(org.scijava.ops.OpInfo.class);
-		System.out.println("Class javadoc" + classdoc);
-		
-		ClassJavadoc createDoc = RuntimeJavadoc.getJavadoc(CreateOpCollection.class);
-		System.out.println("Create javadoc: " + createDoc);
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+		}
 
-		ClassJavadoc testDoc = RuntimeJavadoc.getJavadoc(JavadocOp.class);
-		System.out.println("Class javado" + testDoc);
-		ops.op("math.add").input(2, 3).apply();
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(String[]::new);
+		Assert.assertArrayEquals(inputNames, new String[] {"foo", "bar"});
 		
-		Field field = this.getClass().getField("javadocFieldOp");
-		FieldJavadoc fieldDoc = RuntimeJavadoc.getJavadoc(field);
+		// assert input descriptions
+		
+		// assert output name
+		
+		// assert output description
+	}
+
+	@Test
+	public void testJavadocClass() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.class").iterator();
+		
+		if (!infos.hasNext()) {
+			Assert.fail("No OpInfos with name \"test.javadoc.class\"");
+		}
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.class\"");
+		}
+
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(String[]::new);
+		Assert.assertArrayEquals(inputNames, new String[] {"t"});
+		
+		// assert input descriptions
+		
+		// assert output name
+		
+		// assert output description
 	}
 
 }
@@ -84,14 +97,14 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
  * @author Gabriel Selzer
  *
  */
-@Plugin(type = Op.class) 
+@Plugin(type = Op.class, name = "test.javadoc.class") 
 @Parameter(key = "input")
 @Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 class JavadocOp implements Function<Double, Double> {
 
 	/**
 	 * @param t the input
-	 * @return u the output
+	 * @return the output
 	 */
 	@Override
 	public Double apply(Double t) {

@@ -68,6 +68,13 @@ public @interface Parameter {
 	 * by name. If the name is changed, this has to be changed accordingly.
 	 */
 	public static final String KEY_FIELD_NAME = "key";
+
+	/**
+	 * IMPORTANT: Parameter annotation instances are mutated using reflections
+	 * in order to resolve {@link ItemIO#AUTO} which accesses this field
+	 * by name. If the name is changed, this has to be changed accordingly.
+	 */
+	public static final String DESCRIPTION_FIELD_NAME = "description";
 	
 	/** Defines a key for the parameter. */
 	String key() default "";

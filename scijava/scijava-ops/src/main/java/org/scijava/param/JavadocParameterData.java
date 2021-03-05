@@ -7,15 +7,23 @@ import com.github.therapi.runtimejavadoc.OtherJavadoc;
 import com.github.therapi.runtimejavadoc.ParamJavadoc;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
+import io.leangen.geantyref.AnnotationFormatException;
+import io.leangen.geantyref.TypeFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.simplify.SimplificationUtils;
+import org.scijava.struct.Member;
 import org.scijava.types.Types;
 
 /**
@@ -23,11 +31,13 @@ import org.scijava.types.Types;
  * 
  * @author Gabriel Selzer
  */
-public class JavadocParameterData {
+public class JavadocParameterData implements ParameterData {
 
 	List<String> paramNames;
 	List<String> paramDescriptions;
 	String returnDescription;
+
+	
 
 	public JavadocParameterData(Method m) {
 		parseMethod(m);
@@ -67,8 +77,53 @@ public class JavadocParameterData {
 					returnDescription = other.getComment().toString();
 					break;
 			}
-
 		}
+
+		// ensure non-null description
+		if (returnDescription == null) returnDescription = "";
+
+		// ensure that f has enough @parameter annotations
+		Method sam = ParameterStructs.singularAbstractMethod(f.getType());
+		int numParams = sam.getParameterCount();
+		if (numParams != paramNames.size()) {
+			throw new IllegalArgumentException("Field " + f +
+				" does not have one @param annotation for each parameter of the Op!");
+		}
+	}
+
+	// TODO: consider if we want to add more data to the {@link OpInfo}
+	// 
+	public JavadocParameterData(OpInfo info, Type newType) {
+		paramNames = new ArrayList<>();
+		paramDescriptions = new ArrayList<>();
+		List<Member<?>> inputs = new ArrayList<>(info.inputs());
+		Member<?> output = info.output();
+
+		// this method is called when the op is adapted/simplified. In the case of
+		// adaptation, the op's output might shift from a pure output to an input,
+		// or might shift from a container to a pure output. We 
+		Method sam = ParameterStructs.singularAbstractMethod(Types.raw(newType));
+		if (sam.getParameterCount() > inputs.size()) {
+			inputs.add(output);
+		}
+		else if (sam.getParameterCount() < inputs.size()) {
+			// one of the inputs is an I/O and should be a pure output. We need to
+			// remove it from the inputs.
+			Optional<Member<?>> ioMember = inputs.parallelStream().filter(m -> m
+				.isOutput()).findFirst();
+			if (ioMember == null) throw new IllegalArgumentException(
+				"Cannot transform Op of type " + info.opType() + " into type " +
+					newType + "; at least one input must also be an output!");
+
+			inputs.remove(ioMember.get());
+		}
+		for(Member<?> m : inputs) {
+			paramNames.add(m.getKey());
+			// TODO: Add member support for descriptions
+			paramDescriptions.add("");
+		}
+		// TODO: Add member support for descriptions
+		returnDescription = "";
 	}
 
 	public List<String> paramNames() {
@@ -113,11 +168,70 @@ public class JavadocParameterData {
 	private void parseMethod(Method m) {
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
 		List<ParamJavadoc> params = doc.getParams();
-		paramNames = params.stream().map(param -> param.getName()).collect(
-			Collectors.toList());
+		if (params.size() != m.getParameterCount())
+			throw new IllegalArgumentException("Method " + m +
+				" does not have valid @param tags for each of its inputs!");
+		paramNames = params.stream().map(param -> param.getName() != null ? param
+			.getName() : null).collect(Collectors.toList());
 		paramDescriptions = params.stream().map(param -> param.getComment()
 			.toString()).collect(Collectors.toList());
 		returnDescription = doc.getReturns().toString();
+		if (returnDescription == null) returnDescription = "";
+	}
+
+	@Override
+	public List<Parameter> synthesizeAnnotations(List<FunctionalMethodType> fmts) {
+		List<Parameter> params = new ArrayList<>();
+		int ins = 0;
+		int outs = 1;
+
+		Map<String, Object> paramValues = new HashMap<>();
+		for (FunctionalMethodType fmt : fmts) {
+			paramValues.clear();
+			paramValues.put(Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
+			
+			String key;
+			String description;
+			switch (fmt.itemIO()) {
+			case INPUT:
+				key = paramNames.get(ins);
+				description = paramDescriptions.get(ins);
+				ins++;
+				break;
+			case OUTPUT:
+				// NB the @return tag does not provide a name, only a comment
+				key = "output" + outs; 
+				description = returnDescription;
+				outs++;
+				break;
+			case CONTAINER:
+				key = paramNames.get(ins);
+				description = paramDescriptions.get(ins);
+				ins++;
+				outs++;
+				break;
+			case MUTABLE:
+				key = paramNames.get(ins);
+				description = paramDescriptions.get(ins);
+				ins++;
+				outs++;
+				break;
+			default:
+				throw new RuntimeException("Unexpected ItemIO type encountered!");
+			}
+			
+			paramValues.put(Parameter.KEY_FIELD_NAME, key);
+			paramValues.put(Parameter.DESCRIPTION_FIELD_NAME, description);
+			
+			try {
+				params.add(TypeFactory.annotation(Parameter.class, paramValues));
+			} catch (AnnotationFormatException e) {
+				throw new RuntimeException("Error during Parameter annotation synthetization. This is "
+						+ "most likely an implementation error.", e);
+			}
+		}
+		// TODO: consider if some error should be thrown when there are 2+ outputs
+		return params;
 	}
 
 }

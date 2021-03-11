@@ -1,9 +1,10 @@
 
 package org.scijava.param;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.common.collect.Streams;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -18,9 +19,9 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.function.Computers;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
-import org.scijava.types.Nil;
 
 /**
  * Tests the ability of a Javadoc parser to scrape an Op's parameters out of its
@@ -44,13 +45,6 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 			.toList());
 	}
 
-	/**
-	 * @input in the input
-	 * @output the output
-	 */
-	@OpField(names = "test.javadoc.field")
-	public final Function<Double, Double> javadocFieldOp = (in) -> in + 1;
-
 	@Test
 	public void testJavadocMethod() {
 		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.method").iterator();
@@ -66,10 +60,55 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		Assert.assertArrayEquals(inputNames, new String[] { "foo", "bar" });
 
 		// assert input descriptions
+		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(inputDescriptions, new String[] { "the first input", "the second input" });
 
 		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("output1", outputName);
 
 		// assert output description
+		String outputDescription = info.output().getDescription();
+		Assert.assertEquals("foo + bar", outputDescription);
+	}
+
+	/**
+	 * @input in the input
+	 * @output the output
+	 */
+	@OpField(names = "test.javadoc.field")
+	public final Function<Double, Double> javadocFieldOp = (in) -> in + 1;
+
+	@Test
+	public void testJavadocField() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.field").iterator();
+
+		if (!infos.hasNext()) {
+			Assert.fail("No OpInfos with name \"test.javadoc.field\"");
+		}
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.field\"");
+		}
+
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(new String[] { "in" }, inputNames);
+
+		// assert input descriptions
+		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
+
+		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("output1", outputName);
+
+		// assert output description
+		String outputDescription = info.output().getDescription();
+		assertEquals("the output", outputDescription);
 	}
 
 	@Test
@@ -87,37 +126,20 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputNames, new String[] { "t" });
+		Assert.assertArrayEquals(new String[] { "t" }, inputNames);
 
 		// assert input descriptions
-
-		// assert output name
-
-		// assert output description
-	}
-
-	@Test
-	public void testJavadocField() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.field").iterator();
-
-		if (!infos.hasNext()) {
-			Assert.fail("No OpInfos with name \"test.javadoc.field\"");
-		}
-		OpInfo info = infos.next();
-		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.field\"");
-		}
-
-		// assert input names
-		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
+		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputNames, new String[] { "in" });
-
-		// assert input descriptions
+		Assert.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
 
 		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("output1", outputName);
 
 		// assert output description
+		String outputDescription = info.output().getDescription();
+		Assert.assertEquals("the output", outputDescription);
 	}
 
 }

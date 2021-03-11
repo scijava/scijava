@@ -71,7 +71,7 @@ public class JavadocParameterData implements ParameterData {
 					paramNames.add(param.substring(0, param.indexOf(" ")));
 					paramDescriptions.add(param.substring(param.indexOf(" ") + 1));
 					break;
-				case "return":
+				case "output":
 					if (returnDescription != null) throw new IllegalArgumentException(
 						"Op cannot have multiple returns!");
 					returnDescription = other.getComment().toString();
@@ -120,10 +120,10 @@ public class JavadocParameterData implements ParameterData {
 		for(Member<?> m : inputs) {
 			paramNames.add(m.getKey());
 			// TODO: Add member support for descriptions
-			paramDescriptions.add("");
+			paramDescriptions.add(m.getDescription());
 		}
 		// TODO: Add member support for descriptions
-		returnDescription = "";
+		returnDescription = output.getDescription();
 	}
 
 	public List<String> paramNames() {

@@ -16,6 +16,9 @@ public interface Member<T> {
 	/** Unique name of the member. */
 	String getKey();
 
+	/** Description of the member. */
+	String getDescription();
+
 	/**
 	 * Gets the type of the member, including Java generic parameters.
 	 * 

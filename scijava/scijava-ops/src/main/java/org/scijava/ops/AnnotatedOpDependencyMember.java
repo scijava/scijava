@@ -75,6 +75,12 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	}
 
 	@Override
+	public String getDescription() {
+		// TODO: consider more implementation here
+		return "";
+	}
+
+	@Override
 	public Type getType() {
 		return type;
 	}

@@ -42,7 +42,6 @@ import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -56,13 +55,15 @@ public class FunctionsToComputers {
 
 #foreach($arity in [0..$maxArity])
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function${arity}ToComputer${arity}$generics.call($arity) implements Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$generics.call($arity)> {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
 
+		/**
+		 * @param function the function to adapt
+		 * @return an adaptation of function
+		 */
 		@Override
 		public $computerArity.call($arity)$generics.call($arity) apply($functionArity.call($arity)$generics.call($arity) function) {
 			return ($computeArgs.call($arity)) -> {

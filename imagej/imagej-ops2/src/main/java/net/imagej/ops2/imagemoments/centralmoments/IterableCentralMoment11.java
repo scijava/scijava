@@ -51,12 +51,16 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "imageMoments.centralMoment11", label = "Image Moment: CentralMoment11", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class IterableCentralMoment11<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(final IterableInterval<I> input, final O output) {
 		if (input.numDimensions() != 2) throw new IllegalArgumentException(
 			"Only two-dimensional inputs allowed!");

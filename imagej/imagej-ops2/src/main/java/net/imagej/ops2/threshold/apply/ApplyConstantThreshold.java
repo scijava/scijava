@@ -51,10 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.apply")
-@Parameter(key = "input")
-@Parameter(key = "threshold")
-@Parameter(key = "comparator")
-@Parameter(key = "output")
 public class ApplyConstantThreshold<T extends RealType<T>>
 		implements Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> {
 
@@ -63,6 +59,14 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param threshold
+	 * @param comparator
+	 * @param output
+	 */
 	public void compute(final Iterable<T> input1, final T input2, final Comparator<T> comparator,
 			final Iterable<BitType> output) {
 		Computers.Arity1<T, BitType> thresholdComputer = Adapt.ComputerAdapt.asComputer(applyThreshold, input2, comparator);
@@ -78,9 +82,6 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 // use this Op. The default comparator just returns true if the input is greater
 // than the threshold.
 @Plugin(type = Op.class, name = "threshold.apply")
-@Parameter(key = "input")
-@Parameter(key = "threshold")
-@Parameter(key = "output")
 class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.Arity2<Iterable<T>, T, Iterable<BitType>> {
 
 	@OpDependency(name = "threshold.apply")
@@ -88,6 +89,13 @@ class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.A
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param threshold
+	 * @param output
+	 */
 	public void compute(final Iterable<T> input1, final T input2, final Iterable<BitType> output) {
 
 		applyThreshold.compute(input1, input2, (in1, in2) -> in1.compareTo(in2), output);

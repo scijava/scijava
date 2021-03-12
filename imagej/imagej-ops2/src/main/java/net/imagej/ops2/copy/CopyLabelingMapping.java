@@ -49,11 +49,15 @@ import org.scijava.struct.ItemIO;
  * @param <L>
  */
 @Plugin(type = Op.class, name = "copy, copy.labelingMapping", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(final LabelingMapping<L> input, final LabelingMapping<L> output) {
 
 		final LabelingMappingSerializationAccess<L> access = new LabelingMappingSerializationAccess<>(output);
@@ -63,8 +67,6 @@ public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<
 }
 
 //@Plugin(type = Op.class, name = "copy.labelingMapping", priority = Priority.VERY_HIGH)
-//@Parameter(key = "input")
-//@Parameter(key = "output")
 //class CopyLabelingMappingFunction<L> implements Function<LabelingMapping<L>, LabelingMapping<L>> {
 //
 //	@OpDependency(name = "copy.labelingMapping")

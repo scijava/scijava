@@ -42,6 +42,4 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.boxivity", label = "Geometric (2D): Rectangularity", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "boxivity")
 public class DefaultBoxivityPolygon extends AbstractBoxivity<Polygon2D> {}

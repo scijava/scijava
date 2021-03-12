@@ -51,11 +51,15 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.convexHull")
-@Parameter(key = "input")
-@Parameter(key = "convexHull")
 public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param convexHull
+	 */
 	public Polygon2D apply(final Polygon2D input) {
 		// create a copy of points because se will get resorted, etc.
 		List<? extends RealLocalizable> RealPoints = new ArrayList<>(GeomUtils.vertices(input));

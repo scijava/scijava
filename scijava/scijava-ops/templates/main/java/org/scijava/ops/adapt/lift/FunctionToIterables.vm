@@ -61,8 +61,6 @@ public class FunctionToIterables$classGenerics.call($maxArity) {
 #foreach($arity in [1..$maxArity])
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> liftFunction$arity =
 		(function) -> {
 			return ($iteratorInputs.call($arity)) -> lazyIterable(itrs -> function.apply(${funcItrsNext.call($arity)}), $iteratorInputs.call($arity));

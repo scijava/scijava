@@ -58,12 +58,6 @@ import org.scijava.struct.ItemIO;
  *            input.
  */
 @Plugin(type = Op.class, name = "image.normalize")
-@Parameter(key = "input")
-@Parameter(key = "sourceMin")
-@Parameter(key = "sourceMax")
-@Parameter(key = "targetMin")
-@Parameter(key = "targetMax")
-@Parameter(key = "output")
 public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> {
 
@@ -91,6 +85,16 @@ public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 	}
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sourceMin
+	 * @param sourceMax
+	 * @param targetMin
+	 * @param targetMax
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final I sourceMin, final I sourceMax, final O targetMin,
 			final O targetMax, final RandomAccessibleInterval<O> output) {
 		normalizer = new NormalizeRealTypeComputer<>();

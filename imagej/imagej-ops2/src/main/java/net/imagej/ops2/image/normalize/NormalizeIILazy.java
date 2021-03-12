@@ -55,8 +55,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> - the type of the output image
  */
 @Plugin(type = Op.class, name = "image.normalize")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
 
@@ -67,6 +65,12 @@ public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 	private Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> normalizerFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<I> img, RandomAccessibleInterval<O> output) {
 		Pair<I, I> sourceMinMax = minMaxFunc.apply(img);
 		O min = Util.getTypeFromInterval(output).createVariable();

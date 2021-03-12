@@ -44,14 +44,18 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "project", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "op")
-@Parameter(key = "dim")
-@Parameter(key = "output")
 public class ProjectRAIToIterableInterval<T, V>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param op
+	 * @param dim
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input, final Computers.Arity1<Iterable<T>, V> method,
 			final Integer dim, final IterableInterval<V> output) {
 		if (input.numDimensions() != output.numDimensions() + 1)

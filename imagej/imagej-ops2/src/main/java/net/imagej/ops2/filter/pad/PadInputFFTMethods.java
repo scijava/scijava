@@ -53,11 +53,6 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "filter.padInputFFTMethods", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "fast")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "output")
 public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadInputFFT<T, I, O> {
 	

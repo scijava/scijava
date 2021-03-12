@@ -49,11 +49,6 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.localMedian")
-@Parameter(key = "input")
-@Parameter(key = "inputNeighborhoodShape")
-@Parameter(key = "c")
-@Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output")
 public class LocalMedianThreshold<T extends RealType<T>> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {
@@ -62,6 +57,15 @@ public class LocalMedianThreshold<T extends RealType<T>> implements
 	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param c
+	 * @param outOfBoundsFactory
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,

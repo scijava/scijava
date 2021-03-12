@@ -26,8 +26,6 @@ public class TestOps {
 	// AutoTransformTest
 
 	@Plugin(type = Op.class, name = "test.liftSqrt")
-	@Parameter(key = "in")
-	@Parameter(key = "out")
 	public static class LiftSqrt implements Computers.Arity1<double[], double[]> {
 
 		@Override
@@ -41,9 +39,6 @@ public class TestOps {
 	// AdaptersTest
 
 	@Plugin(type = Op.class, name = "test.adaptersC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "out")
 	public static class testAddTwoArraysComputer implements Computers.Arity2<double[], double[], double[]> {
 		@Override
 		public void compute(double[] arr1, double[] arr2, double[] out) {
@@ -53,9 +48,6 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "test.adaptersF")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "out")
 	public static class testAddTwoArraysFunction implements BiFunction<double[], double[], double[]> {
 		@Override
 		public double[] apply(double[] arr1, double[] arr2) {
@@ -69,8 +61,6 @@ public class TestOps {
 	// LiftTest
 
 	@Plugin(type = Op.class, name = "test.liftFunction")
-	@Parameter(key = "in")
-	@Parameter(key = "out")
 	public static class liftFunction implements Function<Double, Double> {
 		@Override
 		public Double apply(Double in) {
@@ -79,8 +69,6 @@ public class TestOps {
 	}
 
 	@Plugin(type = Op.class, name = "test.liftComputer")
-	@Parameter(key = "in")
-	@Parameter(key = "out")
 	public static class liftComputer implements Computers.Arity1<double[], double[]> {
 		@Override
 		public void compute(double[] in, double[] out) {

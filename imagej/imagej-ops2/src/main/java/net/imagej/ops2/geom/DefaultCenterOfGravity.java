@@ -50,11 +50,15 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centerOfGravity")
-@Parameter(key = "input")
-@Parameter(key = "centerOfGravity")
 public class DefaultCenterOfGravity<T extends RealType<T>> implements Function<IterableInterval<T>, RealLocalizable> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centerOfGravity
+	 */
 	public RealLocalizable apply(final IterableInterval<T> input) {
 		final int numDimensions = input.numDimensions();
 

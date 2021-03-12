@@ -19,7 +19,6 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 

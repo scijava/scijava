@@ -50,9 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.localContrast")
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "output")
 public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	Computers.Arity2<Iterable<T>, T, BitType>
 {
@@ -61,6 +58,13 @@ public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param output
+	 */
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final BitType output)
 	{

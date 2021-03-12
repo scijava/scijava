@@ -57,10 +57,6 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "filter.padInput", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "outOfBoundsFactory", description = "The OutOfBoundsFactory used to extend the image")
-@Parameter(key = "output")
 public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		implements Functions.Arity3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 
@@ -69,6 +65,14 @@ public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterv
 
 	@Override
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param paddedDimensions
+	 * @param outOfBoundsFactory The OutOfBoundsFactory used to extend the image
+	 * @return the output
+	 */
 	public O apply(final I input, final Dimensions paddedDimensions,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
 

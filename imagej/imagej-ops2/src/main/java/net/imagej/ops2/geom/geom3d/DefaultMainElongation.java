@@ -53,14 +53,18 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (3D): Main Elongation", priority = Priority.VERY_HIGH)
-@Parameter(key = "inputMesh")
-@Parameter(key = "output")
 public class DefaultMainElongation implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Mesh, RealMatrix> inertiaTensor;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param inputMesh
+	 * @param output
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 		final RealMatrix it = inertiaTensor.apply(input);
 		final EigenDecomposition ed = new EigenDecomposition(it);

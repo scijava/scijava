@@ -52,12 +52,6 @@ import org.scijava.struct.ItemIO;
  *            type
  */
 @Plugin(type = Op.class, name = "filter.sigma", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "inputNeighborhoodShape")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "range")
-@Parameter(key = "minPixelFraction")
-@Parameter(key = "output")
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, RandomAccessibleInterval<V>> {
 
@@ -68,6 +62,16 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity2<Iterable<T>, T, V>, RandomAccessibleInterval<V>> mapper;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param outOfBoundsFactory
+	 * @param range
+	 * @param minPixelFraction
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory, final Double range,
 			final Double minPixelFraction, final RandomAccessibleInterval<V> output) {

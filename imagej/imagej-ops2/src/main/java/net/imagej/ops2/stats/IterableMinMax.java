@@ -50,11 +50,15 @@ import org.scijava.struct.ItemIO;
  *            input type
  */
 @Plugin(type = Op.class, name = "stats.minMax")
-@Parameter(key = "iterableInput")
-@Parameter(key = "minMax")
 public class IterableMinMax<I extends RealType<I>> implements Function<Iterable<I>, Pair<I, I>> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param minMax
+	 */
 	public Pair<I, I> apply(final Iterable<I> input) {
 
 		// set minVal to the largest possible value and maxVal to the smallest possible.

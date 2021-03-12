@@ -51,8 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "image.integral", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class WrappedIntegralImg<I extends RealType<I>>
 	implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<DoubleType>>
 {
@@ -60,6 +58,12 @@ public class WrappedIntegralImg<I extends RealType<I>>
 	private IntegralImg<I, DoubleType> integralImg;
 
 	@Override
+		/**
+		 * TODO
+		 *
+		 * @param input
+		 * @return the output
+		 */
 	public RandomAccessibleInterval<DoubleType> apply(
 		final RandomAccessibleInterval<I> input)
 	{

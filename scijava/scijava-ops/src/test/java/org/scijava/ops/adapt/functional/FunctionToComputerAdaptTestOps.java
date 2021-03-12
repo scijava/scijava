@@ -47,8 +47,6 @@ import org.scijava.plugin.Plugin;
 public class FunctionToComputerAdaptTestOps {
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in")
-	@Parameter(key = "out")
 	public static final Function<double[], double[]> toComp1 = (in) -> {
 		double[] out = new double[in.length];
 		for(int i = 0; i < in.length; i++) {
@@ -58,9 +56,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "out")
 	public static final BiFunction<double[], double[], double[]> toComp2 = (in1, in2) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -71,10 +66,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "out")
 	public static final Functions.Arity3<double[], double[], double[], double[]> toComp3 = (in1, in2, in3) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -86,11 +77,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "out")
 	public static final Functions.Arity4<double[], double[], double[], double[], double[]> toComp4 = (in1, in2, in3, in4) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -103,12 +89,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "out")
 	public static final Functions.Arity5<double[], double[], double[], double[], double[], double[]> toComp5 = (in1, in2, in3, in4, in5) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -122,13 +102,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "out")
 	public static final Functions.Arity6<double[], double[], double[], double[], double[], double[], double[]> toComp6 = (in1, in2, in3, in4, in5, in6) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -143,14 +116,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "out")
 	public static final Functions.Arity7<double[], double[], double[], double[], double[], double[], double[], double[]> toComp7 = (in1, in2, in3, in4, in5, in6, in7) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -166,15 +131,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "out")
 	public static final Functions.Arity8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp8 = (in1, in2, in3, in4, in5, in6, in7, in8) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -191,16 +147,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "out")
 	public static final Functions.Arity9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp9 = (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -218,17 +164,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "out")
 	public static final Functions.Arity10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp10 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -247,18 +182,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "in11")
-	@Parameter(key = "out")
 	public static final Functions.Arity11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp11 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -278,19 +201,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "in11")
-	@Parameter(key = "in12")
-	@Parameter(key = "out")
 	public static final Functions.Arity12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp12 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -311,20 +221,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "in11")
-	@Parameter(key = "in12")
-	@Parameter(key = "in13")
-	@Parameter(key = "out")
 	public static final Functions.Arity13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp13 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -346,21 +242,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "in11")
-	@Parameter(key = "in12")
-	@Parameter(key = "in13")
-	@Parameter(key = "in14")
-	@Parameter(key = "out")
 	public static final Functions.Arity14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp14 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -383,22 +264,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "in11")
-	@Parameter(key = "in12")
-	@Parameter(key = "in13")
-	@Parameter(key = "in14")
-	@Parameter(key = "in15")
-	@Parameter(key = "out")
 	public static final Functions.Arity15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp15 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {
@@ -422,23 +287,6 @@ public class FunctionToComputerAdaptTestOps {
 	};
 
 	@OpField(names = "test.FtC")
-	@Parameter(key = "in1")
-	@Parameter(key = "in2")
-	@Parameter(key = "in3")
-	@Parameter(key = "in4")
-	@Parameter(key = "in5")
-	@Parameter(key = "in6")
-	@Parameter(key = "in7")
-	@Parameter(key = "in8")
-	@Parameter(key = "in9")
-	@Parameter(key = "in10")
-	@Parameter(key = "in11")
-	@Parameter(key = "in12")
-	@Parameter(key = "in13")
-	@Parameter(key = "in14")
-	@Parameter(key = "in15")
-	@Parameter(key = "in16")
-	@Parameter(key = "out")
 	public static final Functions.Arity16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> toComp16 = (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {
 		double[] out = new double[in1.length];
 		for(int i = 0; i < in1.length; i++) {

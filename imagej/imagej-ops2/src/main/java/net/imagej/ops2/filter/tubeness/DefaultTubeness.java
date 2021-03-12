@@ -96,11 +96,6 @@ import org.scijava.struct.ItemIO;
  *            the type of the source pixels. Must extends {@link RealType}.
  */
 @Plugin(type = Op.class, name = "filter.tubeness")
-@Parameter(key = "input")
-@Parameter(key = "executorService")
-@Parameter(key = "sigma")
-@Parameter(key = "calibration")
-@Parameter(key = "output")
 public class DefaultTubeness<T extends RealType<T>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
 		Cancelable {
@@ -116,6 +111,15 @@ public class DefaultTubeness<T extends RealType<T>> implements
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 * @param sigma
+	 * @param calibration
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input, ExecutorService es, final Double sigma,
 			final double[] calibration, final IterableInterval<DoubleType> tubeness) {
 		cancelReason = null;
@@ -253,10 +257,6 @@ public class DefaultTubeness<T extends RealType<T>> implements
 }
 
 @Plugin(type = Op.class, name = "filter.tubeness")
-@Parameter(key = "input")
-@Parameter(key = "executorService")
-@Parameter(key = "sigma")
-@Parameter(key = "output")
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
 
@@ -264,6 +264,14 @@ class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 * @param sigma
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> in1, ExecutorService in2, Double in3,
 			IterableInterval<DoubleType> out) {
 		tubenessOp.compute(in1, in2, in3, new double[] {}, out);

@@ -57,9 +57,6 @@ import org.scijava.struct.ItemIO;
  *            type of input
  */
 @Plugin(type = Op.class, name = "filter.partialDerivative")
-@Parameter(key = "input")
-@Parameter(key = "dimension")
-@Parameter(key = "output")
 public class PartialDerivativeRAI<T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> {
 
@@ -173,6 +170,13 @@ public class PartialDerivativeRAI<T extends RealType<T>>
 	}
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param dimension
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> input, final Integer dimension,
 			RandomAccessibleInterval<T> output) {
 		setupConvolves(input, dimension);

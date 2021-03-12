@@ -45,14 +45,18 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "project",
 	priority = Priority.LOW + 1)
-@Parameter(key = "input")
-@Parameter(key = "op")
-@Parameter(key = "dim")
-@Parameter(key = "output")
 public class DefaultProjectParallel<T, V> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, RandomAccessibleInterval<V>>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param op
+	 * @param dim
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, Computers.Arity1<Iterable<T>, V> method, Integer dim,
 		final RandomAccessibleInterval<V> output)

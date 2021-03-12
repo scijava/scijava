@@ -45,14 +45,18 @@ import org.scijava.struct.ItemIO;
  * @author Leon Yang
  */
 @Plugin(type = Op.class, name = "logic.default")
-@Parameter(key = "input")
-@Parameter(key = "defaultValue")
-@Parameter(key = "output")
 public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	Computers.Arity2<I, O, O> 
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param defaultValue
+	 * @param output
+	 */
 	public void compute(final I input, final O defaultVal, final O output) {
 		if (!input.get()) output.set(defaultVal);
 	}

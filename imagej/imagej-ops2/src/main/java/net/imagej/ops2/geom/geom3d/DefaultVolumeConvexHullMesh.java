@@ -42,6 +42,4 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.sizeConvexHull", label = "Geometric (3D): Convex Hull Volume", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "volumeConvexHullMesh")
 public class DefaultVolumeConvexHullMesh extends AbstractSizeConvexHull<Mesh> {}

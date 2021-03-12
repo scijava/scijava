@@ -47,14 +47,18 @@ import org.scijava.struct.ItemIO;
  * @author Curtis Rueden
  */
 @Plugin(type = Op.class, name = "threshold.apply")
-@Parameter(key = "input")
-@Parameter(key = "threshold")
-@Parameter(key = "comparator")
-@Parameter(key = "output")
 public class ApplyThresholdComparator<T> implements Computers.Arity3<T, T, Comparator<? super T>, BitType>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param threshold
+	 * @param comparator
+	 * @param output
+	 */
 	public void compute(T input1, T input2, Comparator<? super T> comparator, BitType out) {
 		out.set(comparator.compare(input1, input2) > 0);
 	}

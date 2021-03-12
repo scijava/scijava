@@ -53,14 +53,18 @@ import org.scijava.struct.ItemIO;
  *            BooleanType
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
-@Parameter(key = "iterableRegion")
-@Parameter(key = "inertiaTensor")
 public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Function<IterableRegion<B>, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")
 	private Function<IterableRegion<B>, RealLocalizable> centroid;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableRegion
+	 * @param inertiaTensor
+	 */
 	public RealMatrix apply(final IterableRegion<B> input) {
 		// ensure validity of inputs
 		if (input.numDimensions() != 3)

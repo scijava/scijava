@@ -47,13 +47,15 @@ import org.scijava.struct.ItemIO;
  * @author Gabriel Selzer
  */
 @Plugin(type = Op.class, name = "image.fill", priority = Priority.HIGH)
-@Parameter(key = "constant")
-@Parameter(key = "iterableOutput")
 public class FillRAI<T extends Type<T>> implements
 	Computers.Arity1<T, RandomAccessibleInterval<T>> 
 {
 
 	//TODO can we find a way to parallelize this (or use lift?)
+	/**
+	 * @param constant
+	 * @param output
+	 */
 	@Override
 	public void compute(final T constant, final RandomAccessibleInterval<T> output) {
 		LoopBuilder.setImages(output).multiThreaded().forEachPixel(pixel -> pixel.set(constant));

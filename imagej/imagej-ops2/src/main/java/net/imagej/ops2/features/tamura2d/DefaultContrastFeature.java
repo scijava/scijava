@@ -46,8 +46,6 @@ import org.scijava.struct.ItemIO;
  * @author Andreas Graumann (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.tamura.contrast")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 
@@ -59,6 +57,12 @@ public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>
 	private Function<Iterable<I>, O> stdOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(final IterableInterval<I> input, final O output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional images allowed!");

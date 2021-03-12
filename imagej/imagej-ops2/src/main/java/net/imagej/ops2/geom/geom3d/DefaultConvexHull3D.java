@@ -62,8 +62,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.convexHull")
-@Parameter(key = "input")
-@Parameter(key = "convexHull")
 public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 {
 
@@ -81,6 +79,12 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 //	}
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param convexHull
+	 */
 	public Mesh apply(final Mesh input) {
 		Mesh output = new NaiveDoubleMesh();
 		Set<Vertex> vertices = new LinkedHashSet<>();
@@ -612,12 +616,16 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 }
 
 @Plugin(type = Op.class, name = "geom.convexHullEpsilon")
-@Parameter(key = "input")
-@Parameter(key = "epsilon")
 class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param epsilon
+	 */
 	public Double apply(final Mesh input) {
 		Set<Vertex> vertices = new LinkedHashSet<>();
 		for (final net.imagej.mesh.Vertex v : input.vertices()) {

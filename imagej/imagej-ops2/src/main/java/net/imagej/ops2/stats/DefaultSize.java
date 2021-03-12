@@ -46,12 +46,16 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.size")
-@Parameter(key = "interval")
-@Parameter(key = "size")
 public class DefaultSize<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<Interval, O>
 {
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param interval
+	 * @param size
+	 */
 	public void compute(final Interval input, final O output) {
 		output.setOne();
 		for(int i = 0; i < input.numDimensions(); i++) {

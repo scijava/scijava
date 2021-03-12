@@ -42,11 +42,15 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocPY")
-@Parameter(key = "matrix")
-@Parameter(key = "output")
 public class CoocPY implements Function<double[][], double[]> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param matrix
+	 * @return the output
+	 */
 	public double[] apply(final double[][] matrix) {
 		final int nrGrayLevels = matrix.length;
 

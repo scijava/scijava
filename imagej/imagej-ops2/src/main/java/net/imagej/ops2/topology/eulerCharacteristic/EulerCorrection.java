@@ -71,12 +71,16 @@ import org.scijava.struct.ItemIO;
  * NB: Methods are public and static to help testing
  */
 @Plugin(type = Op.class, name = "topology.eulerCorrection")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class EulerCorrection<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
 
     @Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final Traverser<B> traverser = new Traverser<>(interval);

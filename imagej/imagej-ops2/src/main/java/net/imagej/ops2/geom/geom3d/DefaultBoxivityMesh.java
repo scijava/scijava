@@ -43,7 +43,5 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "geom.boxivity",
 	label = "Geometric (3D): Boxivity", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "boxivity")
 public class DefaultBoxivityMesh extends AbstractBoxivity<Mesh> {
 }

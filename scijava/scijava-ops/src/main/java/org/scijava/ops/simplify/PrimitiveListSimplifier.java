@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Simplifies {@link List}s of types extending {@link Number}.
@@ -14,11 +12,13 @@ import org.scijava.struct.ItemIO;
  * @author Gabriel Selzer
  */
 @Plugin(type = Op.class, name = "simplify")
-@Parameter(key = "inList")
-@Parameter(key = "simpleList")
 public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>{
 
 	@Override
+	/*
+	* @param t the input List
+	* @return a List whose elements have been simplified
+	*/
 	public List<Number> apply(List<T> t) {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<Number> numberList = (List) t;

@@ -52,8 +52,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.spareness", label = "Geometric (3D): Spareness", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "spareness")
 public class DefaultSparenessMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
@@ -63,6 +61,12 @@ public class DefaultSparenessMesh implements Computers.Arity1<Mesh, DoubleType> 
 	private Function<Mesh, DoubleType> volume;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param spareness
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 
 		final RealMatrix it = inertiaTensor.apply(input);

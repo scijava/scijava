@@ -55,11 +55,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "filter.bilateral")
-@Parameter(key = "inputRAI", description = "the input data")
-@Parameter(key = "sigmaR", description = "range smoothing param, larger sigma means larger effect of intensity differences.")
-@Parameter(key = "sigmaS", description = "spatial smoothing param, larger sigma means smoother image.")
-@Parameter(key = "radius", description = "defines size of the square of pixels considered at each iteration.")
-@Parameter(key = "outputRAI")
 public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>> {
 
@@ -86,6 +81,15 @@ public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 		return Math.sqrt(distance);
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param inputRAI the input data
+	 * @param sigmaR range smoothing param, larger sigma means larger effect of intensity differences.
+	 * @param sigmaS spatial smoothing param, larger sigma means smoother image.
+	 * @param radius defines size of the square of pixels considered at each iteration.
+	 * @param outputRAI
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final Double sigmaR, final Double sigmaS,
 			final Integer radius, final RandomAccessibleInterval<O> output) {

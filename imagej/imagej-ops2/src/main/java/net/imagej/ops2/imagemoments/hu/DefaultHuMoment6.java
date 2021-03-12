@@ -52,8 +52,6 @@ import org.scijava.struct.ItemIO;
  * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
  */
 @Plugin(type = Op.class, name = "imageMoments.huMoment6", label = "Image Moment: HuMoment6")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>> implements AbstractImageMomentOp<I, O> {
 
 	@OpDependency(name = "imageMoments.normalizedCentralMoment30")
@@ -78,6 +76,12 @@ public class DefaultHuMoment6<I extends RealType<I>, O extends RealType<O>> impl
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment20Func;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O n02 = output.createVariable();
 		normalizedCentralMoment02Func.compute(input, n02);

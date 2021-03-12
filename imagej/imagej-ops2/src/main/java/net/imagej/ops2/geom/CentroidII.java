@@ -47,11 +47,15 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centroid", priority = 1)
-@Parameter(key = "input")
-@Parameter(key = "centroid")
 public class CentroidII implements Function<IterableInterval<?>, RealLocalizable> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centroid
+	 */
 	public RealLocalizable apply(final IterableInterval<?> input) {
 		int numDimensions = input.numDimensions();
 		double[] output = new double[numDimensions];

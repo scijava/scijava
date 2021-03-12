@@ -51,9 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "morphology.extractHoles")
-@Parameter(key = "input")
-@Parameter(key = "structElement")
-@Parameter(key = "output")
 public class ExtractHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
@@ -64,6 +61,13 @@ public class ExtractHoles<T extends BooleanType<T>> implements
 	private Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>> fillHolesComp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param structElement
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape structElement, final RandomAccessibleInterval<T> output)
 	{
@@ -74,8 +78,6 @@ public class ExtractHoles<T extends BooleanType<T>> implements
 }
 
 @Plugin(type = Op.class, name = "morphology.extractHoles")
-@Parameter(key = "input")
-@Parameter(key = "output")
 class SimpleExtractHolesComputer<T extends BooleanType<T>> implements
 	Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {
@@ -83,6 +85,12 @@ class SimpleExtractHolesComputer<T extends BooleanType<T>> implements
 	private Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>> extractOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<T> out) {
 		Shape defaultStructElement = new RectangleShape(1, false);
 		extractOp.compute(in1, defaultStructElement, out);

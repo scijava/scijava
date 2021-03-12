@@ -46,14 +46,18 @@ import org.scijava.struct.ItemIO;
  *
  */
 @Plugin(type = Op.class, name = "features.haralick.maxProbability")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultMaxProbability<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

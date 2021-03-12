@@ -52,11 +52,15 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "copy")
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> {
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param copy
+	 */
 	public void compute(final ArrayImg<T, A> input, final ArrayImg<T, A> output) {
 
 		if (!Intervals.equalDimensions(input, output))
@@ -69,8 +73,6 @@ public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 }
 
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "copy")
 class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Function<ArrayImg<T, A>, ArrayImg<T, A>> {
 
@@ -78,6 +80,12 @@ class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>
 	private Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> copyOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param copy
+	 */
 	public ArrayImg<T, A> apply(ArrayImg<T, A> input) {
 		// NB: Workaround for ArrayImgFactory not overriding create(Dimensions, T).
 		final long[] dims = new long[input.numDimensions()];

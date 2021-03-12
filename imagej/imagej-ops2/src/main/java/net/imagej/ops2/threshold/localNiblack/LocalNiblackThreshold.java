@@ -55,12 +55,6 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "threshold.localNiblack",
 	priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "inputNeighborhoodShape")
-@Parameter(key = "c")
-@Parameter(key = "k")
-@Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output")
 public class LocalNiblackThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
@@ -75,6 +69,16 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	@OpDependency(name = "threshold.localNiblack")
 	private Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdIntegralOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param c
+	 * @param k
+	 * @param outOfBoundsFactory (required = false)
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c, final Double k,

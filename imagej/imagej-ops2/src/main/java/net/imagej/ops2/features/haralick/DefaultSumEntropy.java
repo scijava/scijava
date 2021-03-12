@@ -50,11 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.sumEntropy")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultSumEntropy<T extends RealType<T>> extends
 		AbstractHaralickFeature<T> {
 
@@ -65,6 +60,15 @@ public class DefaultSumEntropy<T extends RealType<T>> extends
 	private Function<double[][], double[]> coocPXPlusFunc;
 	
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

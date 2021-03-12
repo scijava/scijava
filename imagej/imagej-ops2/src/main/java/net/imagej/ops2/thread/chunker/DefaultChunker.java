@@ -49,14 +49,18 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "thread.chunker")
-@Parameter(key = "chunk")
-@Parameter(key = "numberOfElements")
-@Parameter(key = "executorService")
 public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorService> {
 
 	private final int STEP_SIZE = 1;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param chunk
+	 * @param numberOfElements
+	 * @param executorService
+	 */
 	public void mutate(final Chunk chunk, final Long numberOfElements, final ExecutorService es) {
 
 		// TODO: is there a better way to determine the optimal chunk size?

@@ -53,8 +53,6 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
-@Parameter(key = "input")
-@Parameter(key = "minorMajorAxisPair")
 public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleType, DoubleType>> {
 
 	/**
@@ -193,6 +191,12 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 	}
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param minorMajorAxisPair
+	 */
 	public Pair<DoubleType, DoubleType> apply(final Polygon2D input) {
 		
 		List<RealLocalizable> points = new ArrayList<>(GeomUtils.vertices(input));

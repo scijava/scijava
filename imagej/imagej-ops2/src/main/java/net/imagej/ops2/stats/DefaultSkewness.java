@@ -51,8 +51,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.skewness")
-@Parameter(key = "iterableInput")
-@Parameter(key = "skewness")
 public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.moment3AboutMean")
@@ -61,6 +59,12 @@ public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> imple
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> stdDevComputer;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param skewness
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O moment3 = output.createVariable();
 		moment3AboutMeanComputer.compute(input, moment3);

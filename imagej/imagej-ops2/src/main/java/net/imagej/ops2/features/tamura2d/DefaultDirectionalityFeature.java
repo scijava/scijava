@@ -60,9 +60,6 @@ import org.scijava.struct.ItemIO;
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = Op.class, name = "features.tamura.directionality")
-@Parameter(key = "input")
-@Parameter(key = "histogramSize")
-@Parameter(key = "output")
 public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
 
@@ -75,6 +72,13 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param histogramSize
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<I> input,
 		Integer histogramSize, final O output)
 	{

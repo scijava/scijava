@@ -50,8 +50,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "imageMoments.normalizedCentralMoment12",
 	label = "Image Moment: NormalizedCentralMoment12")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultNormalizedCentralMoment12<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

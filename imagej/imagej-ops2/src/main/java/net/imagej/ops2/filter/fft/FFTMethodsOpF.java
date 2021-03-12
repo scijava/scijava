@@ -57,12 +57,6 @@ import org.scijava.struct.ItemIO;
  *            TODO Documentation
  */
 @Plugin(type = Op.class, name = "filter.fft", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "borderSize", description = "the size of border to apply in each dimension")
-@Parameter(key = "fast", description = "whether to perform a fast FFT; default true")
-@Parameter(key = "fftType", description = "the complex type of the output")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
 
@@ -83,6 +77,16 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 * supported.
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param borderSize the size of border to apply in each dimension
+	 * @param fast whether to perform a fast FFT; default true
+	 * @param fftType the complex type of the output
+	 * @param executorService
+	 * @return the output
+	 */
 	public RandomAccessibleInterval<C> apply(final RandomAccessibleInterval<T> input, final long[] borderSize,
 			final Boolean fast, final C fftType, final ExecutorService es) {
 		// calculate the padded size

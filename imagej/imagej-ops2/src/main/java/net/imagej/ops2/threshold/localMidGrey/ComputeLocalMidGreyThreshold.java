@@ -52,10 +52,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.localMidGrey",
 	priority = Priority.LOW)
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "c")
-@Parameter(key = "output")
 public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
 	Computers.Arity3<Iterable<T>, T, Double, BitType>
 {
@@ -63,6 +59,14 @@ public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "stats.minMax")
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param c
+	 * @param output
+	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double c, final BitType output)

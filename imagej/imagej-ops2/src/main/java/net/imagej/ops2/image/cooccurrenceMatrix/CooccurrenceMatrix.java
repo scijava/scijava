@@ -22,11 +22,6 @@ import org.scijava.struct.ItemIO;
  * @param <T> - the input {@link RealType}.
  */
 @Plugin(type = Op.class, name = "image.cooccurrenceMatrix")
-@Parameter(key = "iterableInput")
-@Parameter(key = "nrGreyLevels", min = "0", max = "128", stepSize = "1", initializer = "32")
-@Parameter(key = "distance", min = "0", max = "128", stepSize = "1", initializer = "1")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "cooccurrenceMatrix")
 public class CooccurrenceMatrix<T extends RealType<T>>
 		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 
@@ -34,6 +29,15 @@ public class CooccurrenceMatrix<T extends RealType<T>>
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param nrGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @param cooccurrenceMatrix
+	 */
 	public double[][] apply(RandomAccessibleInterval<T> input, Integer nrGreyLevels, Integer distance,
 			MatrixOrientation orientation) {
 		if (input.numDimensions() == 3 && orientation.isCompatible(3)) {

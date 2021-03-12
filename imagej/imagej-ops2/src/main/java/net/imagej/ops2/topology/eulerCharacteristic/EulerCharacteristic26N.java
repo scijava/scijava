@@ -69,8 +69,6 @@ import org.scijava.struct.ItemIO;
  * @author David Legland  - original MatLab implementation
  */
 @Plugin(type = Op.class, name = "topology.eulerCharacteristic26N")
-@Parameter(key = "interval")
-@Parameter(key = "output")
 public class EulerCharacteristic26N<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */
@@ -94,6 +92,12 @@ public class EulerCharacteristic26N<B extends BooleanType<B>>
     };
 
     @Override
+	/**
+	 * TODO
+	 *
+	 * @param interval
+	 * @param output
+	 */
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final RandomAccess<B> access = interval.randomAccess();

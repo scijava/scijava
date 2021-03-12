@@ -56,10 +56,6 @@ import org.scijava.struct.ItemIO;
  * @param <I>
  */
 @Plugin(type = Op.class, name = "features.lbp2d")
-@Parameter(key = "input")
-@Parameter(key = "distance")
-@Parameter(key = "histogramSize")
-@Parameter(key = "output")
 public class DefaultLBP2D<I extends RealType<I>>
 		implements Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
 
@@ -67,6 +63,14 @@ public class DefaultLBP2D<I extends RealType<I>>
 	private BiFunction<ArrayList<LongType>, Integer, Histogram1d<LongType>> histOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param distance
+	 * @param histogramSize
+	 * @return the output
+	 */
 	public ArrayList<LongType> apply(RandomAccessibleInterval<I> input, Integer distance, Integer histogramSize) {
 		ArrayList<LongType> output = new ArrayList<>();
 

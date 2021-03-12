@@ -56,8 +56,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "imageMoments.centralMoment30", label = "Image Moment: CentralMoment30")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultCentralMoment30<I extends RealType<I>, O extends RealType<O>>
 		implements AbstractImageMomentOp<I, O> {
 
@@ -71,6 +69,12 @@ public class DefaultCentralMoment30<I extends RealType<I>, O extends RealType<O>
 	private Computers.Arity2<O, Integer, O> powerOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{

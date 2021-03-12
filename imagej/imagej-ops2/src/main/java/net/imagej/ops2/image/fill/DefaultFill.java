@@ -46,14 +46,18 @@ import org.scijava.struct.ItemIO;
  * @author Leon Yang
  */
 @Plugin(type = Op.class, name = "image.fill")
-@Parameter(key = "constant")
-@Parameter(key = "iterableOutput")
 public class DefaultFill<T extends Type<T>> implements
 	Computers.Arity1<T, Iterable<T>> 
 {
 
 	//TODO can we find a way to parallelize this (or use lift?)
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param constant
+	 * @param iterableOutput
+	 */
 	public void compute(final T constant, final Iterable<T> output) {
 		Iterator<T> iterator = output.iterator();
 		while(iterator.hasNext()) iterator.next().set(constant);

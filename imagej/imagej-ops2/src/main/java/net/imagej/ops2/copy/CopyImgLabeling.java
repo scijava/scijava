@@ -51,8 +51,6 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "copy, copy.imgLabeling")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
 		implements Computers.Arity1<ImgLabeling<L, T>, ImgLabeling<L, T>> {
 
@@ -62,6 +60,12 @@ public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
 	private Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> mappingCopyOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(final ImgLabeling<L, T> input, final ImgLabeling<L, T> output) {
 		if (!Intervals.equalDimensions(input, output))
 			throw new IllegalArgumentException("input and output must be of the same size!");

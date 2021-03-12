@@ -65,18 +65,6 @@ import org.scijava.struct.ItemIO;
  * @param <C>
  */
 @Plugin(type = Op.class, name = "deconvolve.richardsonLucy", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "borderSize")
-@Parameter(key = "obfInput")
-@Parameter(key = "obfKernel")
-@Parameter(key = "outType")
-@Parameter(key = "fftType")
-@Parameter(key = "maxIterations", description = "max number of iterations")
-@Parameter(key = "nonCirculant", description = "indicates whether to use non-circulant edge handling")
-@Parameter(key = "accelerate", description = "indicates whether or not to use acceleration")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
 		Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
@@ -195,6 +183,22 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	}
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param borderSize
+	 * @param obfInput
+	 * @param obfKernel
+	 * @param outType
+	 * @param fftType
+	 * @param maxIterations max number of iterations
+	 * @param nonCirculant indicates whether to use non-circulant edge handling
+	 * @param accelerate indicates whether or not to use acceleration
+	 * @param executorService
+	 * @return the output
+	 */
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			long[] borderSize, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
 			OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel, O outType, C complexType,

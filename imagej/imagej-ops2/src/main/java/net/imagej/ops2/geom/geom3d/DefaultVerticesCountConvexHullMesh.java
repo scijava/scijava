@@ -46,14 +46,18 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.verticesCountConvexHull", label = "Geometric (3D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "verticesCountConvexHull")
 public class DefaultVerticesCountConvexHullMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Mesh, Mesh> convexHullFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param verticesCountConvexHull
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 		output.set(convexHullFunc.apply(input).vertices().size());
 	}

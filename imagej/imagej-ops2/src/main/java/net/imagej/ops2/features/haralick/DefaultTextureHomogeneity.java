@@ -46,14 +46,18 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.textureHomogeneity")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultTextureHomogeneity<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

@@ -53,10 +53,6 @@ import org.scijava.struct.ItemIO;
  *            Output Type
  */
 @Plugin(type = Op.class, name = "features.zernike.phase")
-@Parameter(key = "input")
-@Parameter(key = "order")
-@Parameter(key = "repetition")
-@Parameter(key = "output")
 public class DefaultPhaseFeature<T extends RealType<T>>
 		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, DoubleType> {
 
@@ -64,6 +60,14 @@ public class DefaultPhaseFeature<T extends RealType<T>>
 	private Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> zernikeOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param order
+	 * @param repetition
+	 * @param output
+	 */
 	public void compute(IterableInterval<T> input, Integer order, Integer repetition, DoubleType output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional inputs allowed!");

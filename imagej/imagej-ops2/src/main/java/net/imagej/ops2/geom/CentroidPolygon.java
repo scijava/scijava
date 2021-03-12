@@ -48,14 +48,18 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Center of Gravity")
-@Parameter(key = "input")
-@Parameter(key = "centroid")
 public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")
 	private Function<Polygon2D, DoubleType> sizeFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centroid
+	 */
 	public RealLocalizable apply(final Polygon2D input) {
 
 		double area = sizeFunc.apply(input).get();

@@ -53,13 +53,17 @@ import org.scijava.struct.ItemIO;
  * @param <T> - the {@link RealType} of the output image
  */
 @Plugin(type = Op.class, name = "image.distanceTransform")
-@Parameter(key = "binaryInput")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param binaryInput
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<B> in, ExecutorService es, RandomAccessibleInterval<T> out) {
 		// make sure that the output type is suitable to be able to hold the maximum
 		// possible distance (replaces Conforms)

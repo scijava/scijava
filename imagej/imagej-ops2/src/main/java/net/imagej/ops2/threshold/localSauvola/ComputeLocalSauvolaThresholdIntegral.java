@@ -64,11 +64,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.localSauvola",
 	priority = Priority.LOW - 1)
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "k", required = false)
-@Parameter(key = "r", required = false)
-@Parameter(key = "output")
 public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>
@@ -83,6 +78,15 @@ public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	@OpDependency(name = "stats.integralVariance")
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<DoubleType>>, DoubleType> integralVarianceOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param k (required = false)
+	 * @param r (required = false)
+	 * @param output
+	 */
 	@Override
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<DoubleType>> inputNeighborhood,

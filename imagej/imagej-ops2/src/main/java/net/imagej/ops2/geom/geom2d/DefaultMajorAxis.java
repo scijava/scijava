@@ -48,14 +48,18 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.majorAxis", label = "Geometric (2D): Major Axis")
-@Parameter(key = "input")
-@Parameter(key = "majorAxis")
 public class DefaultMajorAxis implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Polygon2D, Pair<DoubleType, DoubleType>> minorMajorAxisFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param majorAxis
+	 */
 	public void compute(final Polygon2D input, final DoubleType output) {
 		output.set(minorMajorAxisFunc.apply(input).getB());
 	}

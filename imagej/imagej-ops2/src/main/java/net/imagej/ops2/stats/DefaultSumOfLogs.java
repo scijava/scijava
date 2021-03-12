@@ -55,8 +55,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.sumOfLogs", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "sumOfLogs")
 public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 	
 	@OpDependency(name = "create.img")
@@ -69,6 +67,12 @@ public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>> impl
 	private Computers.Arity1<RandomAccessibleInterval<DoubleType>, O> sumOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param sumOfLogs
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		RandomAccessibleInterval<DoubleType> logImg = imgCreator.apply(input, new DoubleType());
 		logOp.compute(input, logImg);

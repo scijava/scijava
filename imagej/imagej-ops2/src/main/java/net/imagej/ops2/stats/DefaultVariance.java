@@ -61,8 +61,6 @@ import org.scijava.struct.ItemIO;
  *      Wikipedia </a>
  */
 @Plugin(type = Op.class, name = "stats.variance", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "variance")
 public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.mean")
@@ -72,6 +70,12 @@ public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> imple
 	private Computers.Arity1<RandomAccessibleInterval<I>, LongType> sizeOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param variance
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 
 		final DoubleType mean = new DoubleType();

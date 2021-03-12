@@ -47,8 +47,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocStdY")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CoocStdY implements Function<double[][], DoubleType> {
 
 	@OpDependency(name = "features.haralick.coocMeanY")
@@ -57,6 +55,12 @@ public class CoocStdY implements Function<double[][], DoubleType> {
 	private Function<double[][], double[]> coocPYFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	public DoubleType apply(double[][] input) {
 		double res = 0;
 

@@ -50,11 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.icm2")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultICM2<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocHXY")
@@ -63,6 +58,15 @@ public class DefaultICM2<T extends RealType<T>> extends AbstractHaralickFeature<
 	private Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, DoubleType> entropy;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

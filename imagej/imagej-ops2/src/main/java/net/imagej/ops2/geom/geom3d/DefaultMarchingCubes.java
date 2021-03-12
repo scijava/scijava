@@ -61,10 +61,6 @@ import org.scijava.struct.ItemIO;
  *            BooleanType
  */
 @Plugin(type = Op.class, name = "geom.marchingCubes")
-@Parameter(key = "input")
-@Parameter(key = "isolevel")
-@Parameter(key = "interpolatorClass")
-@Parameter(key = "output")
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
@@ -76,6 +72,14 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param isolevel
+	 * @param interpolatorClass
+	 * @return the output
+	 */
 	public Mesh apply(final RandomAccessibleInterval<T> input, Double isolevel, VertexInterpolator interpolatorClass) {
 
 		// ensure validity of inputs
@@ -557,8 +561,6 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 }
 
 @Plugin(type = Op.class, name = "geom.marchingCubes")
-@Parameter(key = "input")
-@Parameter(key = "output")
 class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	
@@ -566,6 +568,12 @@ class SimpleMarchingCubes<T extends BooleanType<T>>
 	private Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	public Mesh apply(RandomAccessibleInterval<T> t) {
 		return marchingOp.apply(t, null, null);
 	}

@@ -50,8 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.sphericity", label = "Geometric (3D): Sphericity", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "sphericity")
 public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.size")
@@ -60,6 +58,12 @@ public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 	private Function<Mesh, DoubleType> areaFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sphericity
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 		final double sphereArea = Math.pow(Math.PI, 1 / 3d) * Math.pow(6 * volumeFunc.apply(input).get(), 2 / 3d);
 		output.set(sphereArea / areaFunc.apply(input).get());

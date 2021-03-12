@@ -76,13 +76,17 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "coloc.kendallTau")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "output")
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @return the output
+	 */
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {
 		if (!ColocUtil.sameIterationOrder(image1, image2))
 			throw new IllegalArgumentException("Input and output must be of the same iteration order!");

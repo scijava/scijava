@@ -54,8 +54,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.sumOfInverses", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "sumOfInverses")
 public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, O, O> {
 	
 	@OpDependency(name = "create.img")
@@ -69,6 +67,12 @@ public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> 
 	private Computers.Arity1<RandomAccessibleInterval<O>, O> sumOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param sumOfInverses
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O dbzValue, final O output) {
 		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
 		//TODO: Can we lift this? Would require making a RAI of Doubles.

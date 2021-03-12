@@ -47,11 +47,15 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centroid", priority = 2)
-@Parameter(key = "input")
-@Parameter(key = "centroid")
 public class CentroidLabelRegion implements Function<LabelRegion<?>, RealLocalizable> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centroid
+	 */
 	public RealLocalizable apply(final LabelRegion<?> input) {
 
 		return new RealPoint(input.getCenterOfMass());

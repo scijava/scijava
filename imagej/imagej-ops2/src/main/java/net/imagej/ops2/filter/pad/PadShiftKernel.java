@@ -55,9 +55,6 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "filter.padShiftKernel")
-@Parameter(key = "kernel")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "output")
 public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	implements BiFunction<I, Dimensions, O> 
 {
@@ -70,6 +67,13 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 
 	@Override
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param kernel
+	 * @param paddedDimensions
+	 * @return the output
+	 */
 	public O apply(final I kernel, final Dimensions paddedDimensions) {
 
 		Dimensions paddedFFTInputDimensions;

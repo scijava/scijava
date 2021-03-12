@@ -59,10 +59,6 @@ import Jama.Matrix;
  * @author Gabe Selzer
  */
 @Plugin(type = Op.class, name = "filter.frangiVesselness")
-@Parameter(key = "input")
-@Parameter(key = "spacing", description = "physicl distance between data points")
-@Parameter(key = "scale", description = "size of vessels to search for")
-@Parameter(key = "output")
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
 
@@ -102,6 +98,14 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	}
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param spacing physicl distance between data points
+	 * @param scale size of vessels to search for
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input, final double[] spacing, final Integer scale,
 			final RandomAccessibleInterval<U> output) {
 

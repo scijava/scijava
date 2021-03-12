@@ -50,14 +50,18 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.maximumFeret")
-@Parameter(key = "input")
-@Parameter(key = "maximumFeret")
 public class DefaultMaximumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param maximumFeret
+	 */
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));
 

@@ -54,9 +54,6 @@ import org.scijava.struct.ItemIO;
  * @param <C>
  */
 @Plugin(type = Op.class, name = "filter.fft", priority = Priority.NORMAL)
-@Parameter(key = "input")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	implements Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>>
 {
@@ -65,6 +62,13 @@ public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	 * Computes an ND FFT using FFTMethods
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input,
 		final ExecutorService es, final RandomAccessibleInterval<C> output)
 	{

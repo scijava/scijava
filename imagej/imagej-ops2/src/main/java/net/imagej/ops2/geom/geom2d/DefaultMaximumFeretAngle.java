@@ -43,8 +43,6 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "geom.maximumFeretsAngle")
-@Parameter(key = "input")
-@Parameter(key = "maxFeretsAngle")
 public class DefaultMaximumFeretAngle implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.maximumFeret")
@@ -53,6 +51,12 @@ public class DefaultMaximumFeretAngle implements Computers.Arity1<Polygon2D, Dou
 	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretAngle;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param maxFeretsAngle
+	 */
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(feretAngle.apply(maxFeret.apply(input)).get());
 	}

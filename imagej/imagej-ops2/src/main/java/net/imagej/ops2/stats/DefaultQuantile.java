@@ -56,14 +56,18 @@ import static java.util.Collections.swap;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.quantile")
-@Parameter(key = "iterableInput")
-@Parameter(key = "quantile", min = "0.0", max = "1.0")
-@Parameter(key = "output")
 public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
 implements Computers.Arity2<Iterable<I>, Double, O>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param quantile
+	 * @param output
+	 */
 	public void compute(final Iterable<I> input, final Double quantile,
 		final O output)
 	{

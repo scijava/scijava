@@ -51,8 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Barry DeZonia
  */
 @Plugin(type = Op.class, name = "threshold.maxLikelihood")
-@Parameter(key = "inputHistogram")
-@Parameter(key = "output")
 public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {
@@ -60,6 +58,12 @@ public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	private static final int MAX_ATTEMPTS = 10000;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param inputHistogram
+	 * @param output
+	 */
 	public long computeBin(final Histogram1d<T> hist) {
 		final long[] histogram = hist.toLongArray();
 		return computeBin(histogram);

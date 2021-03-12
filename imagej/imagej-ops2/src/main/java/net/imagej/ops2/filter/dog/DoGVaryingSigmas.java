@@ -51,12 +51,6 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "filter.DoG")
-@Parameter(key = "input")
-@Parameter(key = "sigmas1")
-@Parameter(key = "sigmas2")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -70,6 +64,16 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 
 	//TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sigmas1
+	 * @param sigmas2
+	 * @param outOfBoundsFactory
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> t, final double[] sigmas1, //
 			final double[] sigmas2, final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac,
 			final ExecutorService es, final RandomAccessibleInterval<T> output) {
@@ -87,12 +91,6 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 }
 
 @Plugin(type = Op.class, name = "filter.DoG")
-@Parameter(key = "input")
-@Parameter(key = "sigma1")
-@Parameter(key = "sigma2")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -101,6 +99,16 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> dogOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sigma1
+	 * @param sigma2
+	 * @param outOfBoundsFactory
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> in1, Double in2, Double in3,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> in4, ExecutorService in5,
 			RandomAccessibleInterval<T> out) {

@@ -46,14 +46,18 @@ import org.scijava.struct.ItemIO;
  * @author Andreas Graumann (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.zernike.computer")
-@Parameter(key = "input")
-@Parameter(key = "order")
-@Parameter(key = "repetition")
-@Parameter(key = "zernikeMoment")
 public class ZernikeComputer<T extends RealType<T>>
 		implements Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param order
+	 * @param repetition
+	 * @param zernikeMoment
+	 */
 	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order, final Integer repetition) {
 
 		final double width2 = (ii.dimension(0) - 1) / 2.0;

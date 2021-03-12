@@ -43,8 +43,6 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "geom.minimumFeretsAngle")
-@Parameter(key = "input")
-@Parameter(key = "minFeretAngle")
 public class DefaultMinimumFeretAngle implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minimumFeret")
@@ -53,6 +51,12 @@ public class DefaultMinimumFeretAngle implements Computers.Arity1<Polygon2D, Dou
 	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretAngle;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param minFeretAngle
+	 */
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(feretAngle.apply(minFeret.apply(input)).get());
 	}

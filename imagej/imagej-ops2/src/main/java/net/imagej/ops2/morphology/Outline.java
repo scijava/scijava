@@ -57,9 +57,6 @@ import org.scijava.struct.ItemIO;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 @Plugin(type = Op.class, name = "morphology.outline")
-@Parameter(key = "input")
-@Parameter(key = "excludeEdges")
-@Parameter(key = "output")
 public class Outline<B extends BooleanType<B>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
 
@@ -83,6 +80,13 @@ public class Outline<B extends BooleanType<B>>
 	 *            outlines of the objects in interval
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param excludeEdges
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<B> input, final Boolean excludeEdges,
 			final RandomAccessibleInterval<BitType> output) {
 		if (!Intervals.equalDimensions(input, output))

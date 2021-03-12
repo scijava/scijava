@@ -49,10 +49,6 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.localContrast")
-@Parameter(key = "input")
-@Parameter(key = "inputNeighborhoodShape")
-@Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output")
 public class LocalContrastThreshold<T extends RealType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {
@@ -61,6 +57,14 @@ public class LocalContrastThreshold<T extends RealType<T>> implements
 	private Computers.Arity2<Iterable<T>, T, BitType> computeThresholdOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param outOfBoundsFactory
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,

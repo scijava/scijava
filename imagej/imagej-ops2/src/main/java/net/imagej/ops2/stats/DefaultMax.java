@@ -50,14 +50,18 @@ import org.scijava.struct.ItemIO;
  * @param <T> input type
  */
 @Plugin(type = Op.class, name = "stats.max", priority = Priority.HIGH)
-@Parameter(key = "iterableInput")
-@Parameter(key = "max")
 public class DefaultMax<T extends RealType<T>> implements Computers.Arity1<RandomAccessibleInterval<T>, T> {
 	
 	@OpDependency(name = "stats.minMax")
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minMaxOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param max
+	 */
 	public void compute(final RandomAccessibleInterval<T> input, final T output) {
 		output.set(minMaxOp.apply(input).getB());
 	}

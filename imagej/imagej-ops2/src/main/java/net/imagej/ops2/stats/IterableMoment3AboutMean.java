@@ -50,8 +50,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.moment3AboutMean")
-@Parameter(key = "iterableInput")
-@Parameter(key = "moment3AboutMean")
 public class IterableMoment3AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.mean")
@@ -60,6 +58,12 @@ public class IterableMoment3AboutMean<I extends RealType<I>, O extends RealType<
 	private Computers.Arity1<Iterable<I>, O> sizeComputer;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param moment3AboutMean
+	 */
 	public void compute(final Iterable<I> input, final O output) {
 		final O mean = output.createVariable();
 		meanComputer.compute(input, mean);

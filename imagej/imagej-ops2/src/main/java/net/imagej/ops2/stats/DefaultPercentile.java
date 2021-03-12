@@ -50,9 +50,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.percentile")
-@Parameter(key = "iterableInput")
-@Parameter(key = "percent", min="0", max="100")
-@Parameter(key = "percentile")
 public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity2<Iterable<I>, Double, O> {
 
@@ -60,6 +57,13 @@ public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 	private Computers.Arity2<Iterable<I>, Double, O> op;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param percent
+	 * @param percentile
+	 */
 	public void compute(final Iterable<I> input, final Double percent, final O output) {
 		op.compute(input, percent / 100, output);
 	}

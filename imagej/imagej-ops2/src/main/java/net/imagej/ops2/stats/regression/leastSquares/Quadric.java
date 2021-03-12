@@ -59,8 +59,6 @@ import org.scijava.struct.ItemIO;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 @Plugin(type = Op.class, name = "stats.leastSquares")
-@Parameter(key = "vectorCollection")
-@Parameter(key = "outputMatrix")
 public class Quadric implements
 	Function<Collection<Vector3d>, Matrix4d> 
 {
@@ -72,6 +70,12 @@ public class Quadric implements
 	public static final int MIN_DATA = 9;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param vectorCollection
+	 * @return the outputMatrix
+	 */
 	public Matrix4d apply(final Collection<Vector3d> points) {
 		if (points.size() < MIN_DATA)
 			throw new IllegalArgumentException("Must pass more points in order to fit a quadric equation!");

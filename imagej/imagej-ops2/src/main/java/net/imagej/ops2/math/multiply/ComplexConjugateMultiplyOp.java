@@ -39,9 +39,6 @@ import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "math.complexConjugateMultiply", priority = Priority.LOW)
-@Parameter(key = "input1")
-@Parameter(key = "input2")
-@Parameter(key = "output")
 public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements Computers.Arity2<T, T, T> {
 
 	// TODO: extend common abstract base class which implements Contingent
@@ -50,6 +47,13 @@ public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements Com
 	// operators.
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input1
+	 * @param input2
+	 * @param output
+	 */
 	public void compute(final T input1, final T input2, final T output) {
 		T temp = input2.copy();
 		temp.complexConjugate();

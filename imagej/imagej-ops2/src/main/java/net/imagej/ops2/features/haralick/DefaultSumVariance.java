@@ -52,11 +52,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.sumVariance")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXPlusY")
@@ -66,6 +61,15 @@ public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickF
 	private Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, RealType> sumEntropyFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

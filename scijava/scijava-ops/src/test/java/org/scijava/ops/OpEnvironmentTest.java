@@ -77,7 +77,6 @@ public class OpEnvironmentTest extends AbstractTestEnvironment{
  *
  * @author Gabriel Selzer
  */
-@Parameter(key = "output")
 class OpifyOp implements Producer<String> {
 
 	@Override

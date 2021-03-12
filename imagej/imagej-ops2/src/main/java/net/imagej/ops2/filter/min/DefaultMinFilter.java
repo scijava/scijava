@@ -49,10 +49,6 @@ import org.scijava.struct.ItemIO;
  *            type
  */
 @Plugin(type = Op.class, name = "filter.min")
-@Parameter(key = "input")
-@Parameter(key = "shape")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "output")
 public class DefaultMinFilter<T, V> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>> {
 
@@ -63,6 +59,14 @@ public class DefaultMinFilter<T, V> implements
 	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity1<Iterable<T>, V>, RandomAccessibleInterval<V>> mapper;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param shape
+	 * @param outOfBoundsFactory
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 			final RandomAccessibleInterval<V> output) {

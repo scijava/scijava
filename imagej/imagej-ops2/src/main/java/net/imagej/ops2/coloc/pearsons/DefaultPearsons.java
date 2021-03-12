@@ -47,14 +47,18 @@ import org.scijava.struct.ItemIO;
  * @author Ellen T Arena
  */
 @Plugin(type = Op.class, name = "coloc.pearsons")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "output")
 public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> implements
 	BiFunction<Iterable<T>, Iterable<U>, Double> 
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @return the output
+	 */
 	public Double apply(final Iterable<T> image1,
 		final Iterable<U> image2)
 	{

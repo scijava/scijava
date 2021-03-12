@@ -45,11 +45,15 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric3D: Surface Vertices Count", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "verticesCountMesh")
 public class DefaultVerticesCountMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param verticesCountMesh
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 		output.set(input.vertices().size());
 	}

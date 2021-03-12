@@ -42,6 +42,4 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.boundarySizeConvexHull", label = "Geometric (2D): Perimeter Convex Hull", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "boundarySizeConvexHull")
 public class DefaultBoundarySizeConvexHullPolygon extends AbstractBoundarySizeConvexHull<Polygon2D> {}

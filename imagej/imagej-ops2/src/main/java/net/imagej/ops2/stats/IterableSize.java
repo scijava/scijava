@@ -47,13 +47,17 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.size", priority = Priority.LOW)
-@Parameter(key = "iterableInput")
-@Parameter(key = "size")
 public class IterableSize<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<Iterable<I>, O>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param size
+	 */
 	public void compute(final Iterable<I> input, final O output) {
 		double size = 0;
 

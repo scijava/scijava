@@ -42,6 +42,4 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.solidity", label = "Geometric (3D): Solidity", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "solidity")
 public class DefaultSolidityMesh extends AbstractSolidity<Mesh> {}

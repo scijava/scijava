@@ -56,15 +56,6 @@ import org.scijava.struct.ItemIO;
  * @param <C>
  */
 @Plugin(type = Op.class, name = "filter.linearFilter", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "fftInput")
-@Parameter(key = "fftKernel")
-@Parameter(key = "performInputFFT")
-@Parameter(key = "performKernelFFT")
-@Parameter(key = "executorService")
-@Parameter(key = "frequencyOp")
-@Parameter(key = "output")
 public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> {
 
@@ -84,6 +75,19 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	 * Perform convolution by multiplying the FFTs in the frequency domain
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param fftInput
+	 * @param fftKernel
+	 * @param performInputFFT
+	 * @param performKernelFFT
+	 * @param executorService
+	 * @param frequencyOp
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
 			final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel,
 			final Boolean performInputFFT, final Boolean performKernelFFT, final ExecutorService es,

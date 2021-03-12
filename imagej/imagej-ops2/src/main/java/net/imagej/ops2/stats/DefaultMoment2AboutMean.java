@@ -51,14 +51,18 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.moment2AboutMean", priority = Priority.HIGH)
-@Parameter(key = "iterableInput")
-@Parameter(key = "moment2AboutMean")
 public class DefaultMoment2AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.momentNAboutMean")
 	private Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> momentComputer;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param moment2AboutMean
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		momentComputer.compute(input, 2, output);
 	}

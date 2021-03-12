@@ -64,11 +64,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.localNiblack",
 	priority = Priority.LOW - 1)
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "c")
-@Parameter(key = "k")
-@Parameter(key = "output")
 public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U extends RealType<U>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<U>>, T, Double, Double, BitType>
@@ -80,6 +75,15 @@ public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U exten
 	@OpDependency(name = "stats.integralVariance")
 	private Computers.Arity1<RectangleNeighborhood<? extends Composite<U>>, DoubleType> integralVarianceOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param c
+	 * @param k
+	 * @param output
+	 */
 	@Override
 	public void compute(
 		final RectangleNeighborhood<? extends Composite<U>> inputNeighborhood,

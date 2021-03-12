@@ -54,8 +54,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.compactness", label = "Geometric (3D): Compactness", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "compactness")
 public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.boundarySize")
@@ -65,6 +63,12 @@ public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 	private Function<Mesh, DoubleType> volume;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param compactness
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 		final double s3 = Math.pow(surfaceArea.apply(input).get(), 3);
 		final double v2 = Math.pow(volume.apply(input).get(), 2);

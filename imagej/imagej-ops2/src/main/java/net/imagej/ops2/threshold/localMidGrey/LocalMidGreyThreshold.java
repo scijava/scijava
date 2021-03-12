@@ -51,11 +51,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.localMidGrey",
 	priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "inputNeighborhoodShape")
-@Parameter(key = "c")
-@Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output")
 public class LocalMidGreyThreshold<T extends RealType<T>> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {
@@ -63,6 +58,15 @@ public class LocalMidGreyThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "threshold.localMidGrey")
 	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param c
+	 * @param outOfBoundsFactory (required = false)
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c,

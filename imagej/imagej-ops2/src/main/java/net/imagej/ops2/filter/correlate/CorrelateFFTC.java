@@ -52,14 +52,6 @@ import org.scijava.struct.ItemIO;
  * @param <C>
  */
 @Plugin(type = Op.class, name = "filter.correlate")
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "fftInput")
-@Parameter(key = "fftKernel")
-@Parameter(key = "performInputFFT")
-@Parameter(key = "performKernelFFT")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
 
@@ -78,6 +70,18 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 	 * Call the linear filter that is set up to perform correlation
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param fftInput
+	 * @param fftKernel
+	 * @param performInputFFT
+	 * @param performKernelFFT
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {

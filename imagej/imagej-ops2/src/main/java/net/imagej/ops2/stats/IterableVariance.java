@@ -53,11 +53,15 @@ import org.scijava.struct.ItemIO;
  *      Wikipedia</a>
  */
 @Plugin(type = Op.class, name = "stats.variance")
-@Parameter(key = "iterableInput")
-@Parameter(key = "variance")
 public class IterableVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param variance
+	 */
 	public void compute(final Iterable<I> input, final O output) {
 		int n = 0;
 		double mean = 0.0;

@@ -53,8 +53,6 @@ public class MatchingWithGCSTTest extends AbstractTestEnvironment {
 	}
 
 	@OpField(names = "test.listTypeReification")
-	@Parameter(key = "input")
-	@Parameter(key = "output")
 	public static final Function<List<? extends Thing>, List<Double>> fooOP = (in) -> {
 		List<Double> returnList = new ArrayList<>();
 		returnList.add(0.);

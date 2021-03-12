@@ -60,10 +60,6 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "labeling.merge")
-@Parameter(key = "labeling1")
-@Parameter(key = "labeling2")
-@Parameter(key = "mask")
-@Parameter(key = "combinedLabeling")
 public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
 
@@ -75,6 +71,14 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param labeling1
+	 * @param labeling2
+	 * @param mask
+	 * @param combinedLabeling
+	 */
 	public ImgLabeling<L, I> apply(final ImgLabeling<L, I> input1, final ImgLabeling<L, I> input2,
 			final RandomAccessibleInterval<B> mask) {
 		final ImgLabeling<L, I> output = imgLabelingCreator.apply(input1,
@@ -112,9 +116,6 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 }
 
 @Plugin(type = Op.class, name = "labeling.merge")
-@Parameter(key = "labeling1")
-@Parameter(key = "labeling2")
-@Parameter(key = "combinedLabeling")
 class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements BiFunction<ImgLabeling<L, I>, ImgLabeling<L, I>, ImgLabeling<L, I>> {
 
@@ -122,6 +123,13 @@ class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B
 	private Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> mergeOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param labeling1
+	 * @param labeling2
+	 * @param combinedLabeling
+	 */
 	public ImgLabeling<L, I> apply(ImgLabeling<L, I> t, ImgLabeling<L, I> u) {
 		return mergeOp.apply(t, u, null);
 	}

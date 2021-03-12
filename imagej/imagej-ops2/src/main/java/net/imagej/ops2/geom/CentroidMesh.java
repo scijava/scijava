@@ -50,14 +50,18 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Centroid")
-@Parameter(key = "input")
-@Parameter(key = "centroid")
 public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> sizeFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centroid
+	 */
 	public RealLocalizable apply(final Mesh input) {
 
 		double c_x = 0;

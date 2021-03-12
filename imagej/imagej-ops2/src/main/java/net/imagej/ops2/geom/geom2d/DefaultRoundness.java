@@ -49,8 +49,6 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.roundness", label = "Geometric (2D): Roundness")
-@Parameter(key = "input")
-@Parameter(key = "roundness")
 public class DefaultRoundness implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")
@@ -59,6 +57,12 @@ public class DefaultRoundness implements Computers.Arity1<Polygon2D, DoubleType>
 	private Function<Polygon2D, DoubleType> majorAxisFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param roundness
+	 */
 	public void compute(final Polygon2D input, final DoubleType output) {
 		output.set(4 * (areaFunc.apply(input).getRealDouble()
 				/ (Math.PI * Math.pow(majorAxisFunc.apply(input).getRealDouble(), 2))));

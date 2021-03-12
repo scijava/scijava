@@ -53,8 +53,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.median")
-@Parameter(key = "iterableInput")
-@Parameter(key = "median")
 public class DefaultMedian<I extends RealType<I>, O extends RealType<O>> 
 		implements Computers.Arity1<Iterable<I>, O> {
 
@@ -62,6 +60,12 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 	private Computers.Arity2<Iterable<I>, Double, O> quantileOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param median
+	 */
 	public void compute(final Iterable<I> input, final O output) {
 		final ArrayList<Double> statistics = new ArrayList<>();
 

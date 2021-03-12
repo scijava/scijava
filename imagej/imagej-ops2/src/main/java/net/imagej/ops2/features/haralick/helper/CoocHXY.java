@@ -45,8 +45,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocHXY")
-@Parameter(key = "matix")
-@Parameter(key = "output")
 public class CoocHXY implements Function<double[][], double[]> {
 
 	private static final double EPSILON = Double.MIN_NORMAL;
@@ -57,6 +55,12 @@ public class CoocHXY implements Function<double[][], double[]> {
 	private Function<double[][], double[]> coocPYFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param matix
+	 * @return the output
+	 */
 	public double[] apply(double[][] matrix) {
 		double hx = 0.0d;
 		double hy = 0.0d;

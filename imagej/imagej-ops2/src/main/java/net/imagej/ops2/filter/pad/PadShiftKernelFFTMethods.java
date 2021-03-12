@@ -55,9 +55,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "filter.padShiftKernelFFTMethods",
 	priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "output")
 public class PadShiftKernelFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	extends PadShiftKernel<T, I, O>
 {

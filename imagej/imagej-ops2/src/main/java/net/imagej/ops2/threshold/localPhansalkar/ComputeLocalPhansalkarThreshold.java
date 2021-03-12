@@ -69,11 +69,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "threshold.localPhansalkar",
 	priority = Priority.LOW)
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "k", required = false)
-@Parameter(key = "r", required = false)
-@Parameter(key = "output")
 public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
@@ -90,6 +85,15 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "stats.stdDev")
 	private Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param k (required = false)
+	 * @param r (required = false)
+	 * @param output
+	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double k, final Double r,

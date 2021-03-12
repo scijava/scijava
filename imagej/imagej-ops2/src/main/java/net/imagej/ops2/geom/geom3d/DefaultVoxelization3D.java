@@ -63,11 +63,6 @@ import org.scijava.struct.ItemIO;
  * @author Kyle Harrington (University of Idaho)
  */
 @Plugin(type = Op.class, name = "geom.voxelization")
-@Parameter(key = "input")
-@Parameter(key = "width", required = false)
-@Parameter(key = "height", required = false)
-@Parameter(key = "depth", required = false)
-@Parameter(key = "voxelizedImage")
 public class DefaultVoxelization3D
 		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 
@@ -84,6 +79,15 @@ public class DefaultVoxelization3D
 	private BiFunction<Dimensions, BitType, Img<BitType>> imgCreator;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param width
+	 * @param height
+	 * @param depth
+	 * @param voxelizedImage
+	 */
 	public RandomAccessibleInterval<BitType> apply(Mesh input, Integer width, Integer height, Integer depth) {
 		if (width == null)
 			width = 10;

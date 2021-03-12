@@ -55,8 +55,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "filter.hessian")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class HessianRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 
@@ -67,6 +65,12 @@ public class HessianRAI<T extends RealType<T>>
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> createRAI;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	public CompositeIntervalView<T, RealComposite<T>> apply(RandomAccessibleInterval<T> input) {
 		List<RandomAccessibleInterval<T>> derivatives = new ArrayList<>();
 		for (int i = 0; i < input.numDimensions(); i++) {

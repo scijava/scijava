@@ -64,20 +64,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "deconvolve.richardsonLucy", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "fftInput")
-@Parameter(key = "fftKernel")
-@Parameter(key = "performInputFFT")
-@Parameter(key = "performKernelFFT")
-@Parameter(key = "complexType")
-@Parameter(key = "maxIterations")
-@Parameter(key = "accelerator")
-@Parameter(key = "updateOp", description = "by default, this should be RichardsonLucyUpdate")
-@Parameter(key = "raiExtendedEstimate")
-@Parameter(key = "iterativePostProcessingOps")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
@@ -135,6 +121,24 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy2Op;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param fftInput
+	 * @param fftKernel
+	 * @param performInputFFT
+	 * @param performKernelFFT
+	 * @param complexType
+	 * @param maxIterations
+	 * @param accelerator
+	 * @param updateOp by default, this should be RichardsonLucyUpdate
+	 * @param raiExtendedEstimate
+	 * @param iterativePostProcessingOps
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, C complexType, Integer maxIterations,

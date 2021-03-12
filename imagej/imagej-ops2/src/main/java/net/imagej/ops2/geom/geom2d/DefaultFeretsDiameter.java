@@ -45,11 +45,15 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.feretsDiameter", label = "Geometric (2D): Ferets Diameter")
-@Parameter(key = "points")
-@Parameter(key = "feretsDiameter")
 public class DefaultFeretsDiameter implements Computers.Arity1<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param points
+	 * @param feretsDiameter
+	 */
 	public void compute(final Pair<RealLocalizable, RealLocalizable> input, final DoubleType output) {
 
 		final RealLocalizable p1 = input.getA();

@@ -41,7 +41,6 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -54,14 +53,16 @@ import org.scijava.plugin.Plugin;
 public class ComputersToFunctionsViaFunction {
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer1ToFunction1ViaFunction<I, O>
 			implements Function<Computers.Arity1<I, O>, Function<I, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Function<I, O> apply(Computers.Arity1<I, O> computer) {
 			return (in) -> {
@@ -74,14 +75,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer2ToFunction2ViaFunction<I1, I2, O>
 			implements Function<Computers.Arity2<I1, I2, O>, BiFunction<I1, I2, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public BiFunction<I1, I2, O> apply(Computers.Arity2<I1, I2, O> computer) {
 			return (in1, in2) -> {
@@ -94,14 +97,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer3ToFunction3ViaFunction<I1, I2, I3, O>
 			implements Function<Computers.Arity3<I1, I2, I3, O>, Functions.Arity3<I1, I2, I3, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity3<I1, I2, I3, O> apply(Computers.Arity3<I1, I2, I3, O> computer) {
 			return (in1, in2, in3) -> {
@@ -114,14 +119,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer4ToFunction4ViaFunction<I1, I2, I3, I4, O>
 			implements Function<Computers.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<I1, I2, I3, I4, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity4<I1, I2, I3, I4, O> apply(Computers.Arity4<I1, I2, I3, I4, O> computer) {
 			return (in1, in2, in3, in4) -> {
@@ -134,14 +141,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer5ToFunction5ViaFunction<I1, I2, I3, I4, I5, O>
 			implements Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<I1, I2, I3, I4, I5, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> apply(Computers.Arity5<I1, I2, I3, I4, I5, O> computer) {
 			return (in1, in2, in3, in4, in5) -> {
@@ -154,14 +163,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer6ToFunction6ViaFunction<I1, I2, I3, I4, I5, I6, O>
 			implements Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> apply(Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer) {
 			return (in1, in2, in3, in4, in5, in6) -> {
@@ -174,14 +185,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer7ToFunction7ViaFunction<I1, I2, I3, I4, I5, I6, I7, O>
 			implements Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> apply(Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7) -> {
@@ -194,14 +207,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer8ToFunction8ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, O>
 			implements Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> apply(Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8) -> {
@@ -214,14 +229,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer9ToFunction9ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>
 			implements Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> apply(Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> {
@@ -234,14 +251,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer10ToFunction10ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>
 			implements Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> apply(Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> {
@@ -254,14 +273,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer11ToFunction11ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>
 			implements Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> apply(Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> {
@@ -274,14 +295,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer12ToFunction12ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>
 			implements Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> apply(Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> {
@@ -294,14 +317,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer13ToFunction13ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>
 			implements Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> apply(Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> {
@@ -314,14 +339,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer14ToFunction14ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>
 			implements Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> apply(Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> {
@@ -334,14 +361,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer15ToFunction15ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>
 			implements Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> apply(Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> {
@@ -354,14 +383,16 @@ public class ComputersToFunctionsViaFunction {
 	}
 
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer16ToFunction16ViaFunction<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>
 			implements Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I1, O> creator;
 
+		/**
+		 * @param computer the Computer to adapt
+		 * @return computer, adapted into a Function
+		 */
 		@Override
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> apply(Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer) {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> {

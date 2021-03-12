@@ -52,8 +52,6 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "threshold.renyiEntropy",
 	priority = Priority.HIGH)
-@Parameter(key = "inputHistogram")
-@Parameter(key = "output")
 public class ComputeRenyiEntropyThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

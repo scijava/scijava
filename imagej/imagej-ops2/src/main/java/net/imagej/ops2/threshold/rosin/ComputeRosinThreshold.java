@@ -51,11 +51,15 @@ import org.scijava.struct.ItemIO;
  * @author Hadrien Mary
  */
 @Plugin(type = Op.class, name = "threshold.rosin", priority = Priority.HIGH)
-@Parameter(key = "inputHistogram")
-@Parameter(key = "output")
 public class ComputeRosinThreshold<T extends RealType<T>> extends AbstractComputeThresholdHistogram<T> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param inputHistogram
+	 * @param output
+	 */
 	public long computeBin(final Histogram1d<T> histo) {
 		final long[] hist = histo.toLongArray();
 		return computeBin(hist);

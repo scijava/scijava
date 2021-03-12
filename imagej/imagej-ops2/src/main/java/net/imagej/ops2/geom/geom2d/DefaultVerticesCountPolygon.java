@@ -43,11 +43,15 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric (2D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "verticesCount")
 public class DefaultVerticesCountPolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param verticesCount
+	 */
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(input.numVertices());
 	}

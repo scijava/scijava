@@ -68,10 +68,6 @@ import org.scijava.util.IntArray;
  * @author Curtis Rueden
  */
 @Plugin(type = Op.class, name = "coloc.maxTKendallTau")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "seed")
-@Parameter(key = "output")
 public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	implements Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
 {
@@ -87,6 +83,14 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	private Computers.Arity1<Histogram1d<U>, U> thresholdOpU;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @param seed
+	 * @return the output
+	 */
 	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, final Long seed) {
 		// check image sizes
 		// TODO: Add these checks to conforms().
@@ -248,9 +252,6 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 }
 
 @Plugin(type = Op.class, name = "coloc.maxTKendallTau")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "output")
 class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 	implements BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> 
 {
@@ -261,6 +262,13 @@ class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 	private long seed = 0x89302341;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @return the output
+	 */
 	public Double apply(RandomAccessibleInterval<T> image1, RandomAccessibleInterval<U> image2) {
 		return colocOp.apply(image1, image2, seed);
 	}

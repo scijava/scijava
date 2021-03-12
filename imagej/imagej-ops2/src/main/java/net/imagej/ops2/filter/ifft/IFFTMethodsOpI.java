@@ -50,8 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "filter.ifft")
-@Parameter(key = "input")
-@Parameter(key = "executorService")
 public class IFFTMethodsOpI<C extends ComplexType<C>>
 		implements Inplaces.Arity2_1<RandomAccessibleInterval<C>, ExecutorService> {
 
@@ -59,6 +57,12 @@ public class IFFTMethodsOpI<C extends ComplexType<C>>
 	 * Compute an ND inverse FFT
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 */
 	public void mutate(final RandomAccessibleInterval<C> inout, final ExecutorService es) {
 		if (!conforms(inout))
 			throw new IllegalArgumentException("The input size does not conform to a supported FFT size!");

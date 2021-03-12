@@ -49,8 +49,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.harmonicMean")
-@Parameter(key = "iterableInput")
-@Parameter(key = "harmonicMean")
 public class DefaultHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
@@ -62,6 +60,12 @@ public class DefaultHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> sumOfInversesComputer;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param harmonicMean
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O area = output.createVariable();
 		sizeComputer.compute(input, area);

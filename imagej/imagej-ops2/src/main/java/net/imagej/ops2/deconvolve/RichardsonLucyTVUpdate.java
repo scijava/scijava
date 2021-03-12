@@ -63,10 +63,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "deconvolve.richardsonLucyUpdate",
 	priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "regularizationFactor")
-@Parameter(key = "variation")
-@Parameter(key = "output")
 public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I extends RandomAccessibleInterval<T>>
 	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I> 
 {
@@ -76,6 +72,11 @@ public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I ext
 
 	/**
 	 * performs update step of the Richardson Lucy with Total Variation Algorithm
+	 *
+	 * @param input
+	 * @param regularizationFactor
+	 * @param variation
+	 * @param output
 	 */
 	@Override
 	public void compute(final I correction, final Float regularizationFactor, RandomAccessibleInterval<T> variation, final I estimate) {

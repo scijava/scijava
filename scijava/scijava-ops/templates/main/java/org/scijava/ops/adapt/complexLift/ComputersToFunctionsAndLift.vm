@@ -76,7 +76,6 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -89,8 +88,6 @@ public class ComputersToFunctionsAndLift {
 
 #foreach($arity in [1..$maxArity])
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer${arity}ToFunction${arity}AndLiftViaSource$generics.call($arity)
 			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> {
 
@@ -99,6 +96,10 @@ public class ComputersToFunctionsAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
+		/**
+		 * @param computer the Computer to convert
+		 * @return {@code computer} as a Function
+		 */
 		@Override
 		public $functionArity.call($arity)$iterableGenerics.call($arity) apply($computerArity.call($arity)$generics.call($arity) computer) {
 			return lifter.apply(adaptor.apply(computer));

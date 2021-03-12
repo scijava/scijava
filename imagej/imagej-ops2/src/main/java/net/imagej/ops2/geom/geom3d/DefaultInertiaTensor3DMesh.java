@@ -50,14 +50,18 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
-@Parameter(key = "input")
-@Parameter(key = "inertiaTensor")
 public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")
 	private Function<Mesh, RealLocalizable> centroid;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inertiaTensor
+	 */
 	public RealMatrix apply(final Mesh input) {
 		// ensure validity of inputs
 		if (input == null)

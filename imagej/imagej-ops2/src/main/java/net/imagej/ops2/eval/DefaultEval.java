@@ -50,14 +50,18 @@ import org.scijava.struct.ItemIO;
  * @see OpEvaluator
  */
 @Plugin(type = Op.class, name = "eval")
-@Parameter(key = "input")
-@Parameter(key = "vars")
-@Parameter(key = "opService")
-@Parameter(key = "output")
 public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpService, Object>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param vars
+	 * @param opService
+	 * @return the output
+	 */
 	public Object apply(final String input, final Map<String, Object> vars, final OpService ops) {
 		OpEvaluator e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);

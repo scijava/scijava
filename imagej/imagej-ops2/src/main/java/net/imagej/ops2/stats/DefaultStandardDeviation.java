@@ -49,8 +49,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.stdDev", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "stdDev")
 public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
@@ -62,6 +60,12 @@ public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<
 	private Computers.Arity1<O, O> sqrtComputer;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param stdDev
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		O variance = output.createVariable();
 		varianceComputer.compute(input, variance);

@@ -54,11 +54,6 @@ import org.scijava.struct.ItemIO;
  * @param <T> input type
  */
 @Plugin(type = Op.class, name = "threshold.localBernsen")
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "contrastThreshold")
-@Parameter(key = "halfMaxValue")
-@Parameter(key = "output")
 public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
@@ -67,6 +62,15 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param contrastThreshold
+	 * @param halfMaxValue
+	 * @param output
+	 */
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double contrastThreshold,
 		final Double halfMaxValue, final BitType output)

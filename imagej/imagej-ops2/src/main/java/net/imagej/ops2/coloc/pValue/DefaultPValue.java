@@ -62,18 +62,22 @@ import org.scijava.struct.ItemIO;
  * Statistical Approach".
  */
 @Plugin(type = Op.class, name = "coloc.pValue")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "op")
-@Parameter(key = "nrRandomizations")
-@Parameter(key = "psfSize")
-@Parameter(key = "seed")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @param op
+	 * @param nrRandomizations
+	 * @param psfSize
+	 * @param seed
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2,
 			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op,
 			final Integer nrRandomizations, final Dimensions psfSize, final Long seed, final ExecutorService es,
@@ -191,12 +195,6 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 }
 
 @Plugin(type = Op.class, name = "coloc.pValue")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "op")
-@Parameter(key = "nrRandomizations")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, ExecutorService, PValueResult> {
 
@@ -204,6 +202,16 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 	private Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> pValueOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @param op
+	 * @param nrRandomizations
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
 			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, Integer in4,
 			ExecutorService in5, PValueResult out) {
@@ -214,11 +222,6 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 }
 
 @Plugin(type = Op.class, name = "coloc.pValue")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "op")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, ExecutorService, PValueResult> {
 
@@ -226,6 +229,15 @@ class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 	private Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, ExecutorService, PValueResult> pValueOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @param op
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
 			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, ExecutorService in4,
 			PValueResult out) {

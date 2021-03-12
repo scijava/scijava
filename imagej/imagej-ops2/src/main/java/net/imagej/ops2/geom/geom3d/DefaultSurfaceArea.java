@@ -47,11 +47,15 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (3D): Surface Area", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "boundarySize")
 public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param boundarySize
+	 */
 	public void compute(final Mesh input, final DoubleType output) {
 		double total = 0;
 		for (final Triangle tri : input.triangles()) {

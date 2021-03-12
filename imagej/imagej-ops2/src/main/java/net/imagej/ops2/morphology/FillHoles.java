@@ -51,20 +51,23 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "morphology.fillHoles")
-@Parameter(key = "input")
-@Parameter(key = "structElement")
-@Parameter(key = "output")
 public class FillHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
 
-//	@Parameter(required = false)
 //	private Shape structElement = new RectangleShape(1, false);
 
 	@OpDependency(name = "morphology.floodFill")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> floodFillComp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param structElement
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> op,
 		final Shape structElement, final RandomAccessibleInterval<T> r)
 	{

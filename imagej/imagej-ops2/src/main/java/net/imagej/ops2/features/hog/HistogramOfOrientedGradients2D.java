@@ -80,11 +80,6 @@ import org.scijava.struct.ItemIO;
  * @author Simon Schmid (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.hog")
-@Parameter(key = "input")
-@Parameter(key = "numOrientations")
-@Parameter(key = "spanOfNeighborhood")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -100,6 +95,15 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numOrientations
+	 * @param spanOfNeighborhood
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(RandomAccessibleInterval<T> in, Integer numOrientations, Integer spanOfNeighborhood,
 			ExecutorService es, RandomAccessibleInterval<T> out) {
 		Interval imgOpInterval = new FinalInterval(in.dimension(0), in.dimension(1));
@@ -274,11 +278,6 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 }
 
 @Plugin(type = Op.class, name = "features.hog")
-@Parameter(key = "input")
-@Parameter(key = "numOrientations")
-@Parameter(key = "spanOfNeighborhood")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -289,6 +288,15 @@ class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 	private Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> hogOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numOrientations
+	 * @param spanOfNeighborhood
+	 * @param executorService
+	 * @return the output
+	 */
 	public RandomAccessibleInterval<T> apply(final RandomAccessibleInterval<T> input, final Integer numOrientations,
 			final Integer spanOfNeighborhood, final ExecutorService es) {
 		final T inType = Util.getTypeFromInterval(input);

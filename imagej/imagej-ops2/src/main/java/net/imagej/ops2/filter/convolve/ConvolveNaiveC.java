@@ -48,9 +48,6 @@ import org.scijava.struct.ItemIO;
  * Convolves an image naively.
  */
 @Plugin(type = Op.class, name = "filter.convolve")
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "output")
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
 		implements Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
 	// TODO: should this be binary so we can use different kernels?? Not sure.. what
@@ -58,6 +55,13 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 	// with a big kernel that should be matched with ConvolveFFT
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param output
+	 */
 	public void compute(final RandomAccessible<I> input, final RandomAccessibleInterval<K> kernel,
 			final RandomAccessibleInterval<O> output) {
 		// conforms only if the kernel is sufficiently small

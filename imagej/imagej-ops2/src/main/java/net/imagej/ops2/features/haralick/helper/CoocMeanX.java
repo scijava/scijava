@@ -45,14 +45,18 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocMeanX")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CoocMeanX implements Function<double[][], DoubleType> {
 
 	@OpDependency(name = "features.haralick.coocPX")
 	private Function<double[][], double[]> coocPXFunc;
 	
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	public DoubleType apply(double[][] input) {
 
 		double res = 0;

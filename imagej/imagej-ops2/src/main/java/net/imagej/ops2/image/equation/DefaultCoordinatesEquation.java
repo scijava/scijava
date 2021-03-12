@@ -49,12 +49,16 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "image.equation")
-@Parameter(key = "op")
-@Parameter(key = "output")
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
 		implements Computers.Arity1<Function<long[], N>, IterableInterval<T>> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param op
+	 * @param output
+	 */
 	public void compute(final Function<long[], N> op, final IterableInterval<T> output) {
 
 		final Cursor<T> c = output.localizingCursor();

@@ -46,13 +46,17 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.sum")
-@Parameter(key = "iterableInput")
-@Parameter(key = "sum")
 public class IterableSum<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<Iterable<I>, O>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param sum
+	 */
 	public void compute(final Iterable<I> input, final O output) {
 		double sum = 0;
 		for (final I in : input) {

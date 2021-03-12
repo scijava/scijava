@@ -56,8 +56,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "filter.partialDerivative")
-@Parameter(key = "input")
-@Parameter(key = "outputComposite")
 public class PartialDerivativesRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 
@@ -68,6 +66,12 @@ public class PartialDerivativesRAI<T extends RealType<T>>
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> imgCreator;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the outputComposite
+	 */
 	public CompositeIntervalView<T, RealComposite<T>> apply(RandomAccessibleInterval<T> input) {
 		List<RandomAccessibleInterval<T>> derivatives = new ArrayList<>();
 		for (int i = 0; i < input.numDimensions(); i++) {

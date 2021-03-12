@@ -61,10 +61,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "deconvolve.firstGuess", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "outType")
-@Parameter(key = "k")
-@Parameter(key = "output")
 public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
 	Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>
@@ -83,6 +79,14 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	 * normalization factor
 	 */
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param outType
+	 * @param k
+	 * @return the output
+	 */
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> in, final O outType, final Dimensions k) {
 
 		final Img<O> firstGuess = create.apply(in, outType);

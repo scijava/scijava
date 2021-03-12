@@ -50,15 +50,19 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.feretsDiameter")
-@Parameter(key = "input")
-@Parameter(key = "angle")
-@Parameter(key = "feretsDiameter")
 public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D, Double, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param angle
+	 * @param feretsDiameter
+	 */
 	public void compute(Polygon2D input, final Double angle, DoubleType output) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));
 

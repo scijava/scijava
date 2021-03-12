@@ -102,12 +102,6 @@ import org.scijava.struct.ItemIO;
  * @author Simon Schmid (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "seeds")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "mask")
-@Parameter(key = "output")
 public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -134,6 +128,16 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param seeds
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param mask
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> in, final ImgLabeling<Integer, IntType> seeds,
 			final Boolean useEightConnectivity, final Boolean drawWatersheds,
 			final RandomAccessibleInterval<B> maskInput, final ImgLabeling<Integer, IntType> out) {
@@ -389,11 +393,6 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 // Convenience Ops
 
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "seeds")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling")
 class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -401,6 +400,15 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 	private Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param seeds
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param outputLabeling
+	 */
 	public void compute(RandomAccessibleInterval<T> in, ImgLabeling<Integer, IntType> seeds,
 			Boolean useEightConnectivity, Boolean drawWatersheds,
 			ImgLabeling<Integer, IntType> outputLabeling) {
@@ -410,11 +418,6 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 }
 
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "seeds")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "outputLabeling")
 class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -424,6 +427,15 @@ class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanTy
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param seeds
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @return the outputLabeling
+	 */
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, ImgLabeling<Integer, IntType> seeds,
 			Boolean useEightConnectivity, Boolean drawWatersheds) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());
@@ -433,12 +445,6 @@ class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanTy
 }
 
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "seeds")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "mask")
-@Parameter(key = "outputLabeling")
 class WatershedSeededFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -448,6 +454,16 @@ class WatershedSeededFunction<T extends RealType<T>, B extends BooleanType<B>> i
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param seeds
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param mask
+	 * @return the outputLabeling
+	 */
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, ImgLabeling<Integer, IntType> seeds,
 			Boolean useEightConnectivity, Boolean drawWatersheds, RandomAccessibleInterval<B> mask) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());

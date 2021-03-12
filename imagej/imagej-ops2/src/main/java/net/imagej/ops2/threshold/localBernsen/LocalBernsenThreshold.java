@@ -50,12 +50,6 @@ import org.scijava.struct.ItemIO;
  * @param <T> input type
  */
 @Plugin(type = Op.class, name = "threshold.localBernsen")
-@Parameter(key = "input")
-@Parameter(key = "inputNeighborhoodShape")
-@Parameter(key = "contrastThreshold")
-@Parameter(key = "halfMaxValue")
-@Parameter(key = "outOfBoundsFactory", required = false)
-@Parameter(key = "output")
 public class LocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {
@@ -64,6 +58,16 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 	private Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inputNeighborhoodShape
+	 * @param contrastThreshold
+	 * @param halfMaxValue
+	 * @param outOfBoundsFactory
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double contrastThreshold,
 		final Double halfMaxValue,

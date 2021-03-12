@@ -50,13 +50,17 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.sum", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "sum")
 public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
 	Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param sum
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setZero();
 		List<O> chunkSums = LoopBuilder.setImages(input).multiThreaded()

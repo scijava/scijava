@@ -64,8 +64,6 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "features.tamura.coarseness")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
@@ -75,6 +73,12 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional images allowed!");

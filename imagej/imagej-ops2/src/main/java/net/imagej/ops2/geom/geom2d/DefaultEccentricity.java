@@ -50,8 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.eccentricity", label = "Geometric (2D): Eccentricity")
-@Parameter(key = "input")
-@Parameter(key = "eccentricity")
 public class DefaultEccentricity implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minorAxis")
@@ -60,6 +58,12 @@ public class DefaultEccentricity implements Computers.Arity1<Polygon2D, DoubleTy
 	private Function<Polygon2D, DoubleType> majorAxisFunc;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param eccentricity
+	 */
 	public void compute(final Polygon2D input, final DoubleType output) {
 
 		final double a = majorAxisFunc.apply(input).get() / 2.0;

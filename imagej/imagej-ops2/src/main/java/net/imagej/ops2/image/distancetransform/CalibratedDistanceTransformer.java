@@ -55,14 +55,18 @@ import org.scijava.struct.ItemIO;
  *            - the {@link RealType} of the output image
  */
 @Plugin(type = Op.class, name = "image.distanceTransform")
-@Parameter(key = "binaryInput")
-@Parameter(key = "calibration")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param binaryInput
+	 * @param calibration
+	 * @param executorService
+	 * @param output
+	 */
 	public void compute(final RandomAccessibleInterval<B> in, final double[] calibration, final ExecutorService es,
 			final RandomAccessibleInterval<T> out) {
 		// make sure that the output type is suitable to be able to hold the maximum

@@ -55,8 +55,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.momentNAboutMean", priority = Priority.HIGH)
-@Parameter(key = "iterableInput")
-@Parameter(key = "moment3AboutMean")
 public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
 
 	@OpDependency(name = "stats.mean")
@@ -67,6 +65,12 @@ public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O
 	private Computers.Arity2<DoubleType, Integer, DoubleType> powOp;
 
 	@Override
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param moment3AboutMean
+	 */
 	public void compute(final RandomAccessibleInterval<I> input, final Integer n, final O output) {
 		final DoubleType mean = new DoubleType();
 		meanComputer.compute(input, mean);

@@ -60,7 +60,6 @@ public class FillHoles<T extends BooleanType<T>> implements
 	@OpDependency(name = "morphology.floodFill")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> floodFillComp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -68,6 +67,7 @@ public class FillHoles<T extends BooleanType<T>> implements
 	 * @param structElement
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> op,
 		final Shape structElement, final RandomAccessibleInterval<T> r)
 	{

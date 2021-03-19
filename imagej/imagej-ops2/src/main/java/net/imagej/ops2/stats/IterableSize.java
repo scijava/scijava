@@ -51,13 +51,13 @@ public class IterableSize<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<Iterable<I>, O>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param size
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double size = 0;
 

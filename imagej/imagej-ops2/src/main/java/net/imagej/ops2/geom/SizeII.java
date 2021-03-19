@@ -47,13 +47,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric: Size", priority = Priority.VERY_HIGH)
 public class SizeII implements Function<IterableInterval<?>, DoubleType> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param size
 	 */
+	@Override
 	public DoubleType apply(IterableInterval<?> input) {
 		return new DoubleType(input.size());
 	}

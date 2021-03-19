@@ -71,7 +71,6 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	private VertexInterpolator interpolatorClass;
 
 	@SuppressWarnings({ "unchecked" })
-	@Override
 	/**
 	 * TODO
 	 *
@@ -80,6 +79,7 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	 * @param interpolatorClass
 	 * @return the output
 	 */
+	@Override
 	public Mesh apply(final RandomAccessibleInterval<T> input, Double isolevel, VertexInterpolator interpolatorClass) {
 
 		// ensure validity of inputs
@@ -567,13 +567,13 @@ class SimpleMarchingCubes<T extends BooleanType<T>>
 	@OpDependency(name = "geom.marchingCubes")
 	private Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public Mesh apply(RandomAccessibleInterval<T> t) {
 		return marchingOp.apply(t, null, null);
 	}

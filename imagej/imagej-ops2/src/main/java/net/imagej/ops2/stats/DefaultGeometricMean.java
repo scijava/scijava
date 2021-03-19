@@ -59,13 +59,13 @@ public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> 
 	@OpDependency(name = "stats.sumOfLogs")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> sumOfLogsComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param geometricMean
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O size = output.createVariable();
 		sizeComputer.compute(input, size);

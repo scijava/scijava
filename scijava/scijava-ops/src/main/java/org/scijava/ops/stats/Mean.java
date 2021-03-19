@@ -25,12 +25,12 @@ public class Mean {
 		 * @param iterable the set of data to operate on
 		 * @return the mean of the data
 		 */
-		@Override
-		/**
+			/**
 		 * TODO
 		 * 
 		 * @param iterable
 		 */
+	@Override
 		public O apply(Iterable<N> iterable) {
 			return divFunc.apply(sumFunc.apply(iterable), sizeFunc.apply(iterable));
 		}

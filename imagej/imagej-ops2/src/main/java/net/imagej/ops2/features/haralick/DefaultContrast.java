@@ -54,7 +54,6 @@ public class DefaultContrast<T extends RealType<T>> extends AbstractHaralickFeat
 	@OpDependency(name = "features.haralick.coocPXMinusY")
 	private Function<double[][], double[]> coocPXMinusYFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -64,6 +63,7 @@ public class DefaultContrast<T extends RealType<T>> extends AbstractHaralickFeat
 	 * @param matrixOrientation
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

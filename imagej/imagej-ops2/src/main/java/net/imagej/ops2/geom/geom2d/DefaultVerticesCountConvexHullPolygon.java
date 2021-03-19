@@ -51,13 +51,13 @@ public class DefaultVerticesCountConvexHullPolygon implements Computers.Arity1<P
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> convexHullFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param verticesCountConvexHull
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(convexHullFunc.apply(input).numVertices());
 	}

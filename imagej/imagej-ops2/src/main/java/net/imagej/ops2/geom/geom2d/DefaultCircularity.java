@@ -56,13 +56,13 @@ public class DefaultCircularity implements Computers.Arity1<Polygon2D, DoubleTyp
 	@OpDependency(name = "geom.boundarySize")
 	private Function<Polygon2D, DoubleType> perimeterFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param circularity
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(4 * Math.PI
 				* (areaFunc.apply(input).getRealDouble() / Math.pow(perimeterFunc.apply(input).getRealDouble(), 2)));

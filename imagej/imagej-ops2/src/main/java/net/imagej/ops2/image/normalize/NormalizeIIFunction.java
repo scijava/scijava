@@ -63,7 +63,6 @@ public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "image.normalize")
 	private Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> normalizer;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -74,6 +73,7 @@ public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
 	 * @param targetMax
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<O> apply(
 		final RandomAccessibleInterval<I> input, final I sourceMin,
 		final I sourceMax, final O targetMin, final O targetMax)

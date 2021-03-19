@@ -52,7 +52,6 @@ public class DefaultEntropy<T extends RealType<T>> extends AbstractHaralickFeatu
 	// Avoid log 0
 	private static final double EPSILON = Double.MIN_NORMAL;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -62,6 +61,7 @@ public class DefaultEntropy<T extends RealType<T>> extends AbstractHaralickFeatu
 	 * @param matrixOrientation
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

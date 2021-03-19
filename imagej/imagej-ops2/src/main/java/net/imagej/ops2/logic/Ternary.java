@@ -50,7 +50,6 @@ public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Com
 
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -59,6 +58,7 @@ public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Com
 	 * @param ifFalseVal
 	 * @param output
 	 */
+	@Override
 	public void compute(final I input, final O ifTrueVal, final O ifFalseVal, final O output) {
 		output.set(input.get() ? ifTrueVal : ifFalseVal);
 	}

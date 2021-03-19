@@ -65,7 +65,6 @@ import org.scijava.struct.ItemIO;
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -78,6 +77,7 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2,
 			final BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> op,
 			final Integer nrRandomizations, final Dimensions psfSize, final Long seed, final ExecutorService es,
@@ -201,7 +201,6 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 	@OpDependency(name = "coloc.pValue")
 	private Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> pValueOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -212,6 +211,7 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
 			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, Integer in4,
 			ExecutorService in5, PValueResult out) {
@@ -228,7 +228,6 @@ class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 	@OpDependency(name = "coloc.pValue")
 	private Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, ExecutorService, PValueResult> pValueOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -238,6 +237,7 @@ class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in1, RandomAccessibleInterval<U> in2,
 			BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> in3, ExecutorService in4,
 			PValueResult out) {

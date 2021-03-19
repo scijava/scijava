@@ -182,7 +182,6 @@ public class DefaultContour<B extends BooleanType<B>>
 		}
 	}
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -190,6 +189,7 @@ public class DefaultContour<B extends BooleanType<B>>
 	 * @param useJacobs Set this flag to use refined Jacobs stopping criteria
 	 * @param contour
 	 */
+	@Override
 	public Polygon2D apply(final RandomAccessibleInterval<B> input, final Boolean useJacobs) {
 
 		// ensure validity of inputs

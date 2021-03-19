@@ -120,7 +120,6 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	@OpDependency(name = "copy.rai")
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy2Op;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -139,6 +138,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, C complexType, Integer maxIterations,

@@ -59,13 +59,13 @@ public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "stats.moment4AboutMean")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment4AboutMeanComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param kurtosis
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setReal(Double.NaN);
 

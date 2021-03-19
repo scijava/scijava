@@ -50,13 +50,13 @@ public class DefaultMaximumFeretAngle implements Computers.Arity1<Polygon2D, Dou
 	@OpDependency(name = "geom.feretsAngle")
 	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretAngle;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param maxFeretsAngle
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(feretAngle.apply(maxFeret.apply(input)).get());
 	}

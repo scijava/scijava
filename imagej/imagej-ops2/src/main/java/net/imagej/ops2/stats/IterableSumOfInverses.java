@@ -51,13 +51,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.sumOfInverses")
 public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<Iterable<I>, O, O> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param sumOfInverses
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O dbzValue,
 		final O output)
 	{

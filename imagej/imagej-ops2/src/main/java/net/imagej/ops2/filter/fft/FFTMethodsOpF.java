@@ -76,7 +76,6 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 * FFT implementation the input will be extended to the nearest size that is
 	 * supported.
 	 */
-	@Override
 	/**
 	 * TODO
 	 *
@@ -87,6 +86,7 @@ public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> impl
 	 * @param executorService
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<C> apply(final RandomAccessibleInterval<T> input, final long[] borderSize,
 			final Boolean fast, final C fftType, final ExecutorService es) {
 		// calculate the padded size

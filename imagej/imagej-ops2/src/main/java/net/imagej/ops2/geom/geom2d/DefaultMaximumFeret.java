@@ -54,13 +54,13 @@ public class DefaultMaximumFeret implements Function<Polygon2D, Pair<RealLocaliz
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param maximumFeret
 	 */
+	@Override
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));
 

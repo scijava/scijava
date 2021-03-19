@@ -57,13 +57,13 @@ public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 	@OpDependency(name = "geom.boundarySize")
 	private Function<Mesh, DoubleType> areaFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param sphericity
 	 */
+	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		final double sphereArea = Math.pow(Math.PI, 1 / 3d) * Math.pow(6 * volumeFunc.apply(input).get(), 2 / 3d);
 		output.set(sphereArea / areaFunc.apply(input).get());

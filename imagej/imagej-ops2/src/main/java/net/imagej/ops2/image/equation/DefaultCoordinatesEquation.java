@@ -52,13 +52,13 @@ import org.scijava.struct.ItemIO;
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
 		implements Computers.Arity1<Function<long[], N>, IterableInterval<T>> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param op
 	 * @param output
 	 */
+	@Override
 	public void compute(final Function<long[], N> op, final IterableInterval<T> output) {
 
 		final Cursor<T> c = output.localizingCursor();

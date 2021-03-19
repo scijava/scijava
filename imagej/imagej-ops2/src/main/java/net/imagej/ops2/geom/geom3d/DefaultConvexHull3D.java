@@ -77,13 +77,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 //		return epsilon;
 //	}
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param convexHull
 	 */
+	@Override
 	public Mesh apply(final Mesh input) {
 		Mesh output = new NaiveDoubleMesh();
 		Set<Vertex> vertices = new LinkedHashSet<>();
@@ -618,13 +618,13 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param epsilon
 	 */
+	@Override
 	public Double apply(final Mesh input) {
 		Set<Vertex> vertices = new LinkedHashSet<>();
 		for (final net.imagej.mesh.Vertex v : input.vertices()) {

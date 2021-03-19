@@ -66,13 +66,13 @@ public class DefaultSumOfLogs<I extends RealType<I>, O extends RealType<O>> impl
 	@OpDependency(name = "stats.sum")
 	private Computers.Arity1<RandomAccessibleInterval<DoubleType>, O> sumOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param raiInput
 	 * @param sumOfLogs
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		RandomAccessibleInterval<DoubleType> logImg = imgCreator.apply(input, new DoubleType());
 		logOp.compute(input, logImg);

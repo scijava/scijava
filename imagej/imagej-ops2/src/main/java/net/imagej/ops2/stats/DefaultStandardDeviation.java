@@ -59,13 +59,13 @@ public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<
 	@OpDependency(name = "math.sqrt")
 	private Computers.Arity1<O, O> sqrtComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param raiInput
 	 * @param stdDev
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		O variance = output.createVariable();
 		varianceComputer.compute(input, variance);

@@ -98,13 +98,13 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 		return new DefaultWritablePolygon2D(out);
 	}
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param smallestEnclosingBoundingBox
 	 */
+	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		// ensure validity of inputs
 		if (input == null)

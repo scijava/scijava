@@ -74,7 +74,6 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	/**
 	 * Perform convolution by multiplying the FFTs in the frequency domain
 	 */
-	@Override
 	/**
 	 * TODO
 	 *
@@ -88,6 +87,7 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	 * @param frequencyOp
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
 			final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel,
 			final Boolean performInputFFT, final Boolean performKernelFFT, final ExecutorService es,

@@ -65,13 +65,13 @@ public class PartialDerivativesRAI<T extends RealType<T>>
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> imgCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the outputComposite
 	 */
+	@Override
 	public CompositeIntervalView<T, RealComposite<T>> apply(RandomAccessibleInterval<T> input) {
 		List<RandomAccessibleInterval<T>> derivatives = new ArrayList<>();
 		for (int i = 0; i < input.numDimensions(); i++) {

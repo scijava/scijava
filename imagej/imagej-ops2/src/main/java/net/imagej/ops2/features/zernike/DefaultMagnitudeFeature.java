@@ -57,7 +57,6 @@ public class DefaultMagnitudeFeature<T extends RealType<T>>
 	@OpDependency(name = "features.zernike.computer")
 	private Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> zernikeOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -66,6 +65,7 @@ public class DefaultMagnitudeFeature<T extends RealType<T>>
 	 * @param repetition
 	 * @param output
 	 */
+	@Override
 	public void compute(IterableInterval<T> input, Integer order, Integer repetition, DoubleType output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional inputs allowed!");

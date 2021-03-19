@@ -62,13 +62,13 @@ public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> volume;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param compactness
 	 */
+	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		final double s3 = Math.pow(surfaceArea.apply(input).get(), 3);
 		final double v2 = Math.pow(volume.apply(input).get(), 2);

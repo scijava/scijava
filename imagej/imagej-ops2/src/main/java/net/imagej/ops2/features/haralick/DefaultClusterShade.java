@@ -55,7 +55,6 @@ public class DefaultClusterShade<T extends RealType<T>> extends AbstractHaralick
 	@OpDependency(name = "features.haralick.coocMeanY")
 	private Function<double[][], DoubleType> coocMeanYFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -65,6 +64,7 @@ public class DefaultClusterShade<T extends RealType<T>> extends AbstractHaralick
 	 * @param matrixOrientation
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

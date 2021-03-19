@@ -61,7 +61,6 @@ public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	/**
 	 * Computes an ND FFT using FFTMethods
 	 */
-	@Override
 	/**
 	 * TODO
 	 *
@@ -69,6 +68,7 @@ public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final ExecutorService es, final RandomAccessibleInterval<C> output)
 	{

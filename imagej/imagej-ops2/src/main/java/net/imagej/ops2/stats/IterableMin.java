@@ -50,13 +50,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.min")
 public class IterableMin<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param min
 	 */
+	@Override
 	public void compute(final Iterable<T> input, final T output) {
 		// Re-use output to compare against
 		output.setReal(output.getMaxValue());

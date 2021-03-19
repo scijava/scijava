@@ -62,13 +62,13 @@ public class NormalizeIILazyFunction<I extends RealType<I>>
 	@OpDependency(name = "image.normalize")
 	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> normalizer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<I> apply(RandomAccessibleInterval<I> img) {
 		RandomAccessibleInterval<I> output = createFunc.apply(img);
 		normalizer.compute(img, output);

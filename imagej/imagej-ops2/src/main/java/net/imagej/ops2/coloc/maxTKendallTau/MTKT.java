@@ -82,7 +82,6 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	@OpDependency(name = "threshold.otsu")
 	private Computers.Arity1<Histogram1d<U>, U> thresholdOpU;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -91,6 +90,7 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	 * @param seed
 	 * @return the output
 	 */
+	@Override
 	public Double apply(final RandomAccessibleInterval<T> image1, final RandomAccessibleInterval<U> image2, final Long seed) {
 		// check image sizes
 		// TODO: Add these checks to conforms().
@@ -261,7 +261,6 @@ class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 	
 	private long seed = 0x89302341;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -269,6 +268,7 @@ class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 	 * @param image2
 	 * @return the output
 	 */
+	@Override
 	public Double apply(RandomAccessibleInterval<T> image1, RandomAccessibleInterval<U> image2) {
 		return colocOp.apply(image1, image2, seed);
 	}

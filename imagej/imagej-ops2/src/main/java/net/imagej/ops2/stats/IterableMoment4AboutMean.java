@@ -57,13 +57,13 @@ public class IterableMoment4AboutMean<I extends RealType<I>, O extends RealType<
 	@OpDependency(name = "stats.size")
 	private Computers.Arity1<Iterable<I>, O> sizeComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param moment4AboutMean
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 
 		final O mean = output.createVariable();

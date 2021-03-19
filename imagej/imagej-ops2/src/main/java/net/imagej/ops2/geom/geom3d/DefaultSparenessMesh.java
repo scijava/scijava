@@ -60,13 +60,13 @@ public class DefaultSparenessMesh implements Computers.Arity1<Mesh, DoubleType> 
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> volume;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param spareness
 	 */
+	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 
 		final RealMatrix it = inertiaTensor.apply(input);

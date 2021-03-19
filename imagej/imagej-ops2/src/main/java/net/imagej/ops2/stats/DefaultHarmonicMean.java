@@ -59,13 +59,13 @@ public class DefaultHarmonicMean<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "stats.sumOfInverses")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> sumOfInversesComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param harmonicMean
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O area = output.createVariable();
 		sizeComputer.compute(input, area);

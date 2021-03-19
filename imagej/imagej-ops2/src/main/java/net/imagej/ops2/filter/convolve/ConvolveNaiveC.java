@@ -54,7 +54,6 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 	// if someone tried to re-use
 	// with a big kernel that should be matched with ConvolveFFT
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -62,6 +61,7 @@ public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O exte
 	 * @param kernel
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessible<I> input, final RandomAccessibleInterval<K> kernel,
 			final RandomAccessibleInterval<O> output) {
 		// conforms only if the kernel is sufficiently small

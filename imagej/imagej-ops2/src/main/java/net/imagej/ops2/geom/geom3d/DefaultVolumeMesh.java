@@ -48,13 +48,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric3D: Volume", priority = Priority.VERY_HIGH - 1)
 public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param volume
 	 */
+	@Override
 	public DoubleType apply(final Mesh input) {
 		double volume = 0;
 		for (final Triangle triangle : input.triangles()) {

@@ -64,13 +64,13 @@ public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "image.normalize")
 	private Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> normalizerFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<I> img, RandomAccessibleInterval<O> output) {
 		Pair<I, I> sourceMinMax = minMaxFunc.apply(img);
 		O min = Util.getTypeFromInterval(output).createVariable();

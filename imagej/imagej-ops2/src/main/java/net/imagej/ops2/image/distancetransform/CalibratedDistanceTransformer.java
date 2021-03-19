@@ -58,7 +58,6 @@ import org.scijava.struct.ItemIO;
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -67,6 +66,7 @@ public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends R
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<B> in, final double[] calibration, final ExecutorService es,
 			final RandomAccessibleInterval<T> out) {
 		// make sure that the output type is suitable to be able to hold the maximum

@@ -69,13 +69,13 @@ public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> imple
 	@OpDependency(name = "stats.size")
 	private Computers.Arity1<RandomAccessibleInterval<I>, LongType> sizeOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param raiInput
 	 * @param variance
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 
 		final DoubleType mean = new DoubleType();

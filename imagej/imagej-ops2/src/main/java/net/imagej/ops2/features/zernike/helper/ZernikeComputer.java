@@ -49,7 +49,6 @@ import org.scijava.struct.ItemIO;
 public class ZernikeComputer<T extends RealType<T>>
 		implements Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -58,6 +57,7 @@ public class ZernikeComputer<T extends RealType<T>>
 	 * @param repetition
 	 * @param zernikeMoment
 	 */
+	@Override
 	public ZernikeMoment apply(final IterableInterval<T> ii, final Integer order, final Integer repetition) {
 
 		final double width2 = (ii.dimension(0) - 1) / 2.0;

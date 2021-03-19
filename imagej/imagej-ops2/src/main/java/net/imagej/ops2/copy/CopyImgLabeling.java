@@ -59,13 +59,13 @@ public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
 	@OpDependency(name = "copy.labelingMapping")
 	private Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> mappingCopyOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final ImgLabeling<L, T> input, final ImgLabeling<L, T> output) {
 		if (!Intervals.equalDimensions(input, output))
 			throw new IllegalArgumentException("input and output must be of the same size!");

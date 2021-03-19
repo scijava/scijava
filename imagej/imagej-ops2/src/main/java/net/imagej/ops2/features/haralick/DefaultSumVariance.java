@@ -60,7 +60,6 @@ public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickF
 	@OpDependency(name = "features.haralick.sumEntropy")
 	private Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, RealType> sumEntropyFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -70,6 +69,7 @@ public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickF
 	 * @param matrixOrientation
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

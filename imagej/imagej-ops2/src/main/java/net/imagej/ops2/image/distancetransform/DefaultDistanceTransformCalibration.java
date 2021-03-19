@@ -311,7 +311,6 @@ class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
 @Plugin(type = Op.class, name = "image.distanceTransform", priority = Priority.LAST)
 class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>>{
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -320,6 +319,7 @@ class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<B> in, double[] calibration, ExecutorService es,
 			RandomAccessibleInterval<T> out) {
 		DefaultDistanceTransformCalibration.compute(in, calibration, es, out);

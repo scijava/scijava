@@ -101,7 +101,6 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity4<RandomAccessibleInterval<FloatType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -113,6 +112,7 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 	 * @param executorService
 	 * @param outputLabeling
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> in, final Boolean useEightConnectivity,
 			final Boolean drawWatersheds, final double[] sigma, final RandomAccessibleInterval<B> mask,
 			final ExecutorService es, final ImgLabeling<Integer, IntType> out) {
@@ -151,7 +151,6 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -162,6 +161,7 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 	 * @param executorService
 	 * @param outputLabeling
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
 			double[] sigma, ExecutorService es, ImgLabeling<Integer, IntType> outputLabeling) {
 		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, null, es, outputLabeling);
@@ -178,7 +178,6 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -190,6 +189,7 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 	 * @param executorService
 	 * @return the outputLabeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds, double[] sigma, RandomAccessibleInterval<B> mask, ExecutorService es) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());
@@ -207,7 +207,6 @@ class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends Boolea
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -218,6 +217,7 @@ class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends Boolea
 	 * @param executorService
 	 * @return the outputLabeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds, double[] sigma, ExecutorService es) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());

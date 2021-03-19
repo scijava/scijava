@@ -56,13 +56,13 @@ public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>
 	@OpDependency(name = "stats.stdDev")
 	private Function<Iterable<I>, O> stdOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final IterableInterval<I> input, final O output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional images allowed!");

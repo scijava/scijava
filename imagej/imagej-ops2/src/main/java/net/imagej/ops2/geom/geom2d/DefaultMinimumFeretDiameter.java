@@ -50,13 +50,13 @@ public class DefaultMinimumFeretDiameter implements Computers.Arity1<Polygon2D, 
 	@OpDependency(name = "geom.feretsDiameter")
 	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretDiameter;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param minFeretDiameter
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(feretDiameter.apply(minFeret.apply(input)).get());
 	}

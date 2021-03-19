@@ -55,7 +55,6 @@ import org.scijava.struct.ItemIO;
 public class SliceRAI2RAI<I, O> implements
 		Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>, int[], Boolean, RandomAccessibleInterval<O>> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -65,6 +64,7 @@ public class SliceRAI2RAI<I, O> implements
 	 * @param dropSingleDimensions
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input,
 			final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> op, final int[] axisIndices,
 			final Boolean dropSingleDimensions, final RandomAccessibleInterval<O> output) {

@@ -331,7 +331,6 @@ class DefaultBoxCount<B extends BooleanType<B>> implements
 	Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -342,6 +341,7 @@ class DefaultBoxCount<B extends BooleanType<B>> implements
 	 * @param gridMoves
 	 * @return the output
 	 */
+	@Override
 	public List<ValuePair<DoubleType, DoubleType>> apply(
 		RandomAccessibleInterval<B> input, Long maxSize, Long minSize,
 		Double scaling, Long gridMoves)

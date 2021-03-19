@@ -63,7 +63,6 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 			Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 
 	//TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
-	@Override
 	/**
 	 * TODO
 	 *
@@ -74,6 +73,7 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> t, final double[] sigmas1, //
 			final double[] sigmas2, final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac,
 			final ExecutorService es, final RandomAccessibleInterval<T> output) {
@@ -98,7 +98,6 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	private Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> dogOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -109,6 +108,7 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in1, Double in2, Double in3,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> in4, ExecutorService in5,
 			RandomAccessibleInterval<T> out) {

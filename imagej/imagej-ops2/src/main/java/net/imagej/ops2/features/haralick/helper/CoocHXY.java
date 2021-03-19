@@ -53,13 +53,13 @@ public class CoocHXY implements Function<double[][], double[]> {
 	@OpDependency(name = "features.haralick.coocPY")
 	private Function<double[][], double[]> coocPYFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param matix
 	 * @return the output
 	 */
+	@Override
 	public double[] apply(double[][] matrix) {
 		double hx = 0.0d;
 		double hy = 0.0d;

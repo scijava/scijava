@@ -54,13 +54,13 @@ public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> sizeFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param centroid
 	 */
+	@Override
 	public RealLocalizable apply(final Mesh input) {
 
 		double c_x = 0;

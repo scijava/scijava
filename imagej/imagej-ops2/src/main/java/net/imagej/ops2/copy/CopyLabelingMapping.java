@@ -51,13 +51,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.labelingMapping", priority = Priority.VERY_HIGH)
 public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final LabelingMapping<L> input, final LabelingMapping<L> output) {
 
 		final LabelingMappingSerializationAccess<L> access = new LabelingMappingSerializationAccess<>(output);

@@ -100,7 +100,6 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity4<RandomAccessibleInterval<FloatType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -112,6 +111,7 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 	 * @param executorService
 	 * @param outputLabeling
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> in, final Boolean useEightConnectivity,
 			final Boolean drawWatersheds, final Double sigma, final RandomAccessibleInterval<B> mask,
 			final ExecutorService es, final ImgLabeling<Integer, IntType> out) {
@@ -146,7 +146,6 @@ class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends Boolea
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -157,6 +156,7 @@ class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends Boolea
 	 * @param executorService
 	 * @param outputLabeling
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
 			Double sigma, ExecutorService es, ImgLabeling<Integer, IntType> outputLabeling) {
 		watershedOp.compute(in, useEightConnectivity, drawWatersheds, sigma, null, es, outputLabeling);
@@ -173,7 +173,6 @@ class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends Boolea
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -185,6 +184,7 @@ class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends Boolea
 	 * @param executorService
 	 * @return the outputLabeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
 			Double sigma, RandomAccessibleInterval<B> mask, ExecutorService es) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());
@@ -202,7 +202,6 @@ class WatershedBinarySigngleSigmaFunctionMaskless<T extends RealType<T>, B exten
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -213,6 +212,7 @@ class WatershedBinarySigngleSigmaFunctionMaskless<T extends RealType<T>, B exten
 	 * @param executorService
 	 * @return the outputLabeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds, Double sigma, ExecutorService es) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());

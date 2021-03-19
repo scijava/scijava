@@ -46,13 +46,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.type")
 public class CopyType<T extends Type<T>> implements Computers.Arity1<T, T> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param copy
 	 */
+	@Override
 	public void compute(final T input, final T output) {
 		output.set(input);
 	}

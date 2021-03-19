@@ -80,7 +80,6 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	@OpDependency(name = "filter.correlate")
 	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlateOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -94,6 +93,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 * @param executorService
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
 			final OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,

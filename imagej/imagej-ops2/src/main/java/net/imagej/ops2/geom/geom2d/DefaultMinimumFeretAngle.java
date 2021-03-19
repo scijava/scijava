@@ -50,13 +50,13 @@ public class DefaultMinimumFeretAngle implements Computers.Arity1<Polygon2D, Dou
 	@OpDependency(name = "geom.feretsAngle")
 	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretAngle;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param minFeretAngle
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(feretAngle.apply(minFeret.apply(input)).get());
 	}

@@ -57,7 +57,6 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	Computers.Arity3<T, T, Comparator<? super T>, BitType> applyThreshold;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
-	@Override
 	/**
 	 * TODO
 	 *
@@ -66,6 +65,7 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	 * @param comparator
 	 * @param output
 	 */
+	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Comparator<T> comparator,
 			final Iterable<BitType> output) {
 		Computers.Arity1<T, BitType> thresholdComputer = Adapt.ComputerAdapt.asComputer(applyThreshold, input2, comparator);
@@ -87,7 +87,6 @@ class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.A
 	Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> applyThreshold;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
-	@Override
 	/**
 	 * TODO
 	 *
@@ -95,6 +94,7 @@ class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.A
 	 * @param threshold
 	 * @param output
 	 */
+	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Iterable<BitType> output) {
 
 		applyThreshold.compute(input1, input2, (in1, in2) -> in1.compareTo(in2), output);

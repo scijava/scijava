@@ -54,13 +54,13 @@ public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 	@OpDependency(name = "geom.centroid")
 	private Function<Mesh, RealLocalizable> centroid;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param inertiaTensor
 	 */
+	@Override
 	public RealMatrix apply(final Mesh input) {
 		// ensure validity of inputs
 		if (input == null)

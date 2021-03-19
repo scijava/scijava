@@ -275,7 +275,6 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 * TODO
 	 *
@@ -284,6 +283,7 @@ public class DefaultDerivativeGauss<T extends RealType<T>>
 	 * @param derivatives the value at each index indicates the derivative to take in each dimension of the image.
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final double[] sigma, final int[] derivatives, final RandomAccessibleInterval<DoubleType> output) {
 
 		// throw exception if not enough derivative values were given

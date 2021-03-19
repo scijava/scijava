@@ -51,13 +51,13 @@ public class DefaultVerticesCountConvexHullMesh implements Computers.Arity1<Mesh
 	@OpDependency(name = "geom.convexHull")
 	private Function<Mesh, Mesh> convexHullFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param verticesCountConvexHull
 	 */
+	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		output.set(convexHullFunc.apply(input).vertices().size());
 	}

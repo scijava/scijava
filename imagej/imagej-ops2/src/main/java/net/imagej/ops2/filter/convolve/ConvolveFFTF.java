@@ -83,7 +83,6 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	@OpDependency(name = "filter.convolve")
 	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> convolveOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -96,6 +95,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	 * @param executorService
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
 			final OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
@@ -175,8 +175,7 @@ class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealTy
 		@OpDependency(name = "filter.convolve")
 		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, FloatType, ComplexFloatType, ExecutorService, RandomAccessibleInterval<FloatType>> convolveOp;
 
-		@Override
-	/**
+		/**
 	 * TODO
 	 *
 	 * @param input
@@ -184,6 +183,7 @@ class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealTy
 	 * @param executorService
 	 * @return the output
 	 */
+	@Override
 		public RandomAccessibleInterval<FloatType> apply(RandomAccessibleInterval<I> t, RandomAccessibleInterval<K> u, ExecutorService es) {
 			OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput = new OutOfBoundsConstantValueFactory<>(Util
 					.getTypeFromInterval(t).createVariable());

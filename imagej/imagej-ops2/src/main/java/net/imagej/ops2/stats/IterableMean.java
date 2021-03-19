@@ -51,13 +51,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.mean", priority = Priority.VERY_HIGH)
 public class IterableMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param mean
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 
 		double sum = 0;

@@ -51,13 +51,13 @@ public class DefaultFill<T extends Type<T>> implements
 {
 
 	//TODO can we find a way to parallelize this (or use lift?)
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param constant
 	 * @param iterableOutput
 	 */
+	@Override
 	public void compute(final T constant, final Iterable<T> output) {
 		Iterator<T> iterator = output.iterator();
 		while(iterator.hasNext()) iterator.next().set(constant);

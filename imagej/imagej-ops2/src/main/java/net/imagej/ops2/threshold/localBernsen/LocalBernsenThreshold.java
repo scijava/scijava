@@ -57,7 +57,6 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "threshold.localBernsen")
 	private Computers.Arity4<Iterable<T>, T, Double, Double, BitType> computeThresholdOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -68,6 +67,7 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 	 * @param outOfBoundsFactory
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double contrastThreshold,
 		final Double halfMaxValue,

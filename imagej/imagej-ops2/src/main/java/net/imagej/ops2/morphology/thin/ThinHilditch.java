@@ -45,13 +45,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "morphology.thinHilditch")
 public class ThinHilditch extends AbstractThin {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<BitType> input, //
 			final RandomAccessibleInterval<BitType> output) {
 		m_strategy = new HilditchThinningStrategy();

@@ -4,5 +4,6 @@
 #perl -0777 -i -pe 's/ \*\/\n([\s]*[\*])/\1/igs' **/*.java
 #perl -0777 -i -pe 's/ \*\/\n([\s]*\@Parameter)/\1/igs' **/*.java
 #perl -0777 -i -pe 's/ \*\/\n([\s]*\/\/[\s]*\*)/\1/igs' **/*.java
-perl -0777 -i -pe 's/ \* \@param output([^\n]*\n[\s]*\*\/\n[\s]*public[^\(]*apply\()/ \* \@return the output\1/igs' **/*.java
+#perl -0777 -i -pe 's/ \* \@param output([^\n]*\n[\s]*\*\/\n[\s]*public[^\(]*apply\()/ \* \@return the output\1/igs' **/*.java
+perl -0777 -i -pe 's/(\s\@Override[^\n]*)\n([\s]*\/\*\*[^\/]*\/)/\2\n\1/igs' **/*.java
 

@@ -62,7 +62,6 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 	private BiFunction<Dimensions, IntType, ImgLabeling<L, IntType>> imgLabelingCreator;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 * TODO
 	 *
@@ -72,6 +71,7 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 	 * @param labelGenerator
 	 * @param labeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(final RandomAccessibleInterval<T> input, ExecutorService es,
 			StructuringElement se, Iterator<Integer> labelGenerator) {
 		ImgLabeling<Integer, IntType> output = (ImgLabeling<Integer, IntType>) imgLabelingCreator.apply(input,
@@ -89,7 +89,6 @@ class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implement
 	private Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 * TODO
 	 *
@@ -98,6 +97,7 @@ class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implement
 	 * @param structuringElement
 	 * @param labeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> input, ExecutorService es,
 			StructuringElement structuringElement) {
 		DefaultLabelIterator defaultLabelIterator = new DefaultLabelIterator();

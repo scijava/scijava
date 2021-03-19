@@ -50,7 +50,6 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> imple
 	BiFunction<Iterable<T>, Iterable<U>, Double> 
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -58,6 +57,7 @@ public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> imple
 	 * @param image2
 	 * @return the output
 	 */
+	@Override
 	public Double apply(final Iterable<T> image1,
 		final Iterable<U> image2)
 	{

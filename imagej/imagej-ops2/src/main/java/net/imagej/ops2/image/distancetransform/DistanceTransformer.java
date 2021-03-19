@@ -56,7 +56,6 @@ import org.scijava.struct.ItemIO;
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -64,6 +63,7 @@ public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<B> in, ExecutorService es, RandomAccessibleInterval<T> out) {
 		// make sure that the output type is suitable to be able to hold the maximum
 		// possible distance (replaces Conforms)

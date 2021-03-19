@@ -54,13 +54,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> {
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param copy
 	 */
+	@Override
 	public void compute(final ArrayImg<T, A> input, final ArrayImg<T, A> output) {
 
 		if (!Intervals.equalDimensions(input, output))
@@ -79,13 +79,13 @@ class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>
 	@OpDependency(name = "copy.img")
 	private Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> copyOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param copy
 	 */
+	@Override
 	public ArrayImg<T, A> apply(ArrayImg<T, A> input) {
 		// NB: Workaround for ArrayImgFactory not overriding create(Dimensions, T).
 		final long[] dims = new long[input.numDimensions()];

@@ -59,13 +59,13 @@ public class DefaultMedian<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "stats.quantile")
 	private Computers.Arity2<Iterable<I>, Double, O> quantileOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param median
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		final ArrayList<Double> statistics = new ArrayList<>();
 

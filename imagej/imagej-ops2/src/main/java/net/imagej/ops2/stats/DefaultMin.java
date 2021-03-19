@@ -55,13 +55,13 @@ public class DefaultMin<T extends RealType<T>> implements Computers.Arity1<Rando
 	@OpDependency(name = "stats.minMax")
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minMaxOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param max
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final T output) {
 		output.set(minMaxOp.apply(input).getA());
 	}

@@ -94,7 +94,6 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 	private Converter<GenericComposite<FloatType>, FloatType> converterGetMax;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 * TODO
 	 *
@@ -104,6 +103,7 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in, Integer numOrientations, Integer spanOfNeighborhood,
 			ExecutorService es, RandomAccessibleInterval<T> out) {
 		Interval imgOpInterval = new FinalInterval(in.dimension(0), in.dimension(1));
@@ -287,7 +287,6 @@ class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 	@OpDependency(name = "features.hog")
 	private Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> hogOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -297,6 +296,7 @@ class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 	 * @param executorService
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<T> apply(final RandomAccessibleInterval<T> input, final Integer numOrientations,
 			final Integer spanOfNeighborhood, final ExecutorService es) {
 		final T inType = Util.getTypeFromInterval(input);

@@ -50,13 +50,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric (2D): Size", priority = Priority.VERY_HIGH - 1)
 public class DefaultSizePolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param size
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		double sum = 0;
 		final int numVertices = input.numVertices();

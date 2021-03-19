@@ -50,13 +50,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (2D): Perimeter")
 public class DefaultPerimeterLength implements Computers.Arity1<Polygon2D, DoubleType> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param boundarySize
 	 */
+	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 		double perimeter = 0;
 		final List<? extends RealLocalizable> vertices = GeomUtils.vertices(input);

@@ -68,7 +68,6 @@ public class DefaultEquation<T extends RealType<T>> implements
 	Computers.Arity2<String, ScriptService, IterableInterval<T>> 
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -76,6 +75,7 @@ public class DefaultEquation<T extends RealType<T>> implements
 	 * @param scriptService
 	 * @param output
 	 */
+	@Override
 	public void compute(final String input, final ScriptService scriptService, final IterableInterval<T> output) {
 		final String equation = input + ";";
 

@@ -54,13 +54,13 @@ public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>,
 	@OpDependency(name = "copy")
 	private Computers.Arity1<T, T> mapComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param copy
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final RandomAccessibleInterval<T> output) {
 		if (!Intervals.equalDimensions(input, output))
 			throw new IllegalArgumentException("input and output must be of the same dimensionality!");

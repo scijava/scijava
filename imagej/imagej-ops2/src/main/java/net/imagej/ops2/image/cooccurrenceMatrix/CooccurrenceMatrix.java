@@ -28,7 +28,6 @@ public class CooccurrenceMatrix<T extends RealType<T>>
 	@OpDependency(name = "stats.minMax")
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -38,6 +37,7 @@ public class CooccurrenceMatrix<T extends RealType<T>>
 	 * @param matrixOrientation
 	 * @param cooccurrenceMatrix
 	 */
+	@Override
 	public double[][] apply(RandomAccessibleInterval<T> input, Integer nrGreyLevels, Integer distance,
 			MatrixOrientation orientation) {
 		if (input.numDimensions() == 3 && orientation.isCompatible(3)) {

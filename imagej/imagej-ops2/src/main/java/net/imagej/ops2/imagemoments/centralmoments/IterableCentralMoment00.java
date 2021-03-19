@@ -54,13 +54,13 @@ import org.scijava.struct.ItemIO;
 public class IterableCentralMoment00<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final IterableInterval<I> input, final O output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only two-dimensional inputs allowed!");

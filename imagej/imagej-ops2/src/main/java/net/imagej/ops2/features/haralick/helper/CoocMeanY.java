@@ -51,13 +51,13 @@ public class CoocMeanY implements Function<double[][], DoubleType> {
 	private Function<double[][], double[]> coocPYFunc;
 
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(double[][] input) {
 
 		double res = 0;

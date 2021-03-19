@@ -189,13 +189,13 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 		return input.vertex(i).getDoublePosition(0);
 	}
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param minorMajorAxisPair
 	 */
+	@Override
 	public Pair<DoubleType, DoubleType> apply(final Polygon2D input) {
 		
 		List<RealLocalizable> points = new ArrayList<>(GeomUtils.vertices(input));

@@ -50,13 +50,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.sumOfLogs")
 public class IterableSumOfLogs<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param sumOfLogs
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double res = 0.0;
 		for (final I in : input) {

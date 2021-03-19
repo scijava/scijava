@@ -111,7 +111,6 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 	/** Default label for mask */
 	private static final int MASK = -3;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -121,6 +120,7 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 	 * @param mask
 	 * @param outputLabeling
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> in, final Boolean useEightConnectivity,
 			final Boolean drawWatersheds, final RandomAccessibleInterval<B> mask,
 			final ImgLabeling<Integer, IntType> out) {
@@ -395,7 +395,6 @@ class WatershedMaskless<T extends RealType<T>, B extends BooleanType<B>> impleme
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -404,6 +403,7 @@ class WatershedMaskless<T extends RealType<T>, B extends BooleanType<B>> impleme
 	 * @param drawWatersheds
 	 * @param outputLabeling
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
 			ImgLabeling<Integer, IntType> outputLabeling) {
 		watershedOp.compute(in, useEightConnectivity, drawWatersheds, null, outputLabeling);
@@ -420,7 +420,6 @@ class WatershedFunction<T extends RealType<T>, B extends BooleanType<B>>
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -430,6 +429,7 @@ class WatershedFunction<T extends RealType<T>, B extends BooleanType<B>>
 	 * @param mask
 	 * @return the outputLabeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds, RandomAccessibleInterval<B> mask) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());
@@ -447,7 +447,6 @@ class WatershedFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>>
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -456,6 +455,7 @@ class WatershedFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>>
 	 * @param drawWatersheds
 	 * @return the outputLabeling
 	 */
+	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds) {
 		ImgLabeling<Integer, IntType> outputLabeling = labelingCreator.apply(in, new IntType());

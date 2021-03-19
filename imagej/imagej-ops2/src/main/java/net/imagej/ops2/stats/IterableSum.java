@@ -50,13 +50,13 @@ public class IterableSum<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<Iterable<I>, O>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param sum
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double sum = 0;
 		for (final I in : input) {

@@ -52,13 +52,13 @@ public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 	@OpDependency(name = "geom.size")
 	private Function<Polygon2D, DoubleType> sizeFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param centroid
 	 */
+	@Override
 	public RealLocalizable apply(final Polygon2D input) {
 
 		double area = sizeFunc.apply(input).get();

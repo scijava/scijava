@@ -48,13 +48,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.centroid", priority = 2)
 public class CentroidLabelRegion implements Function<LabelRegion<?>, RealLocalizable> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param centroid
 	 */
+	@Override
 	public RealLocalizable apply(final LabelRegion<?> input) {
 
 		return new RealPoint(input.getCenterOfMass());

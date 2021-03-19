@@ -58,7 +58,6 @@ public class DefaultSumEntropy<T extends RealType<T>> extends
 	@OpDependency(name = "features.haralick.coocPXPlusY")
 	private Function<double[][], double[]> coocPXPlusFunc;
 	
-	@Override
 	/**
 	 * TODO
 	 *
@@ -68,6 +67,7 @@ public class DefaultSumEntropy<T extends RealType<T>> extends
 	 * @param matrixOrientation
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {
 		final double[][] matrix = getCooccurrenceMatrix(input, numGreyLevels, distance, orientation);

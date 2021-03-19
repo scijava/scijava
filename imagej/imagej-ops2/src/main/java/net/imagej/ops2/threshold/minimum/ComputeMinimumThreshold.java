@@ -53,13 +53,13 @@ public class ComputeMinimumThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param inputHistogram
 	 * @param output
 	 */
+	@Override
 	public long computeBin(final Histogram1d<T> hist) {
 		final long[] histogram = hist.toLongArray();
 		return computeBin(histogram);

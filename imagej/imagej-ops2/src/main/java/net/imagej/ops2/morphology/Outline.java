@@ -79,7 +79,6 @@ public class Outline<B extends BooleanType<B>>
 	 * @param output
 	 *            outlines of the objects in interval
 	 */
-	@Override
 	/**
 	 * TODO
 	 *
@@ -87,6 +86,7 @@ public class Outline<B extends BooleanType<B>>
 	 * @param excludeEdges
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<B> input, final Boolean excludeEdges,
 			final RandomAccessibleInterval<BitType> output) {
 		if (!Intervals.equalDimensions(input, output))

@@ -56,13 +56,13 @@ import org.scijava.struct.ItemIO;
 public class DefaultMoment1AboutMean<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param moment1AboutMean
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setZero();
 	}

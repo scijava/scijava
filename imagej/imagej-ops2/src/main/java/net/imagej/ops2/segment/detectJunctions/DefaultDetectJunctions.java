@@ -96,7 +96,6 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 		return new RealPoint(input);
 	}
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -104,6 +103,7 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 	 * @param threshold Maximum distance between polylines to be considered a junction
 	 * @param junctions
 	 */
+	@Override
 	public List<RealPoint> apply(final List<? extends WritablePolyline> input, final Double threshold) {
 
 		// check arguments for validity
@@ -325,13 +325,13 @@ class SimpleDetectJunctions implements Function<List<? extends WritablePolyline>
 	@OpDependency(name = "segment.detectJunctions")
 	private BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> junctionDetector;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param lines
 	 * @param junctions
 	 */
+	@Override
 	public List<RealPoint> apply(List<? extends WritablePolyline> t) {
 		return junctionDetector.apply(t, null);
 	}

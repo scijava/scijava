@@ -70,7 +70,6 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	private Function<Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>, Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>>> adaptor;
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
-	@Override
 	/**
 	 * TODO
 	 *
@@ -79,6 +78,7 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	 * @param mask
 	 * @param combinedLabeling
 	 */
+	@Override
 	public ImgLabeling<L, I> apply(final ImgLabeling<L, I> input1, final ImgLabeling<L, I> input2,
 			final RandomAccessibleInterval<B> mask) {
 		final ImgLabeling<L, I> output = imgLabelingCreator.apply(input1,
@@ -122,7 +122,6 @@ class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B
 	@OpDependency(name = "labeling.merge")
 	private Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> mergeOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -130,6 +129,7 @@ class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B
 	 * @param labeling2
 	 * @param combinedLabeling
 	 */
+	@Override
 	public ImgLabeling<L, I> apply(ImgLabeling<L, I> t, ImgLabeling<L, I> u) {
 		return mergeOp.apply(t, u, null);
 	}

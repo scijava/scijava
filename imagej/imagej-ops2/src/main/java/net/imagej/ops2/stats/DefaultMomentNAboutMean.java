@@ -64,13 +64,13 @@ public class DefaultMomentNAboutMean<I extends RealType<I>, O extends RealType<O
 	@OpDependency(name = "math.power")
 	private Computers.Arity2<DoubleType, Integer, DoubleType> powOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param moment3AboutMean
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final Integer n, final O output) {
 		final DoubleType mean = new DoubleType();
 		meanComputer.compute(input, mean);

@@ -72,13 +72,13 @@ public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<
 			OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<I>> meanOp;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional images allowed!");

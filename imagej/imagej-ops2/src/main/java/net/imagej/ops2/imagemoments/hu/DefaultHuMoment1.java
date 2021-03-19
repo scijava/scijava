@@ -60,13 +60,13 @@ public class DefaultHuMoment1<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "imageMoments.normalizedCentralMoment02")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> normalizedCentralMoment02Func;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		final O n20 = output.createVariable();
 		normalizedCentralMoment20Func.compute(input, n20);

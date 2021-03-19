@@ -61,7 +61,6 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	@OpDependency(name = "map.neighborhood")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity2<Iterable<T>, T, V>, RandomAccessibleInterval<V>> mapper;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -72,6 +71,7 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 	 * @param minPixelFraction
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory, final Double range,
 			final Double minPixelFraction, final RandomAccessibleInterval<V> output) {

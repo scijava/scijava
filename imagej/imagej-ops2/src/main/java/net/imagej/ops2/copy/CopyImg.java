@@ -54,13 +54,13 @@ public class CopyImg<T extends NativeType<T>> implements Computers.Arity1<Img<T>
 	@OpDependency(name = "copy.iterableInterval")
 	private Computers.Arity1<Iterable<T>, Iterable<T>> copyComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final Img<T> input, final Img<T> output) {
 		if (!input.iterationOrder().equals(output.iterationOrder()))
 			throw new IllegalArgumentException("input and output must have the same iteration order!");
@@ -77,13 +77,13 @@ class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T
 	@OpDependency(name = "create.img")
 	private Function<Img<T>, Img<T>> createFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public Img<T> apply(Img<T> input) {
 		Img<T> output = createFunc.apply(input);
 		copyComputer.compute(input, output);

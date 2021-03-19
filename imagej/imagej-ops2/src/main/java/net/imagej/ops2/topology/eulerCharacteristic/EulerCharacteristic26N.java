@@ -91,13 +91,13 @@ public class EulerCharacteristic26N<B extends BooleanType<B>>
              0, -1, -1,  0, -1,  0,  2,  1, -1,  2,  0,  1,  0,  1,  1,  0
     };
 
-    @Override
-	/**
+   	/**
 	 * TODO
 	 *
 	 * @param interval
 	 * @param output
 	 */
+ @Override
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final RandomAccess<B> access = interval.randomAccess();

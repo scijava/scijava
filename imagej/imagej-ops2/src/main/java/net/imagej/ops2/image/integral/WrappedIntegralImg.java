@@ -56,13 +56,13 @@ public class WrappedIntegralImg<I extends RealType<I>>
 
 	private IntegralImg<I, DoubleType> integralImg;
 
-	@Override
 		/**
 		 * TODO
 		 *
 		 * @param input
 		 * @return the output
 		 */
+	@Override
 	public RandomAccessibleInterval<DoubleType> apply(
 		final RandomAccessibleInterval<I> input)
 	{

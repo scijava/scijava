@@ -55,13 +55,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.minMax", priority = Priority.HIGH)
 public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAccessibleInterval<I>, Pair<I, I>> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param minMax
 	 */
+	@Override
 	public Pair<I, I> apply(final RandomAccessibleInterval<I> input) {
 		// set minVal to the largest possible value and maxVal to the smallest possible.
 		final I minVal = Util.getTypeFromInterval(input).createVariable();

@@ -77,7 +77,6 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 	@OpDependency(name = "threshold.localMean")
 	private Computers.Arity3<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, BitType> computeThresholdIntegralOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -87,6 +86,7 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 	 * @param outOfBoundsFactory
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,

@@ -51,13 +51,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.boundingBox")
 public class DefaultBoundingBox implements Function<Polygon2D, Polygon2D> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		double min_x = Double.POSITIVE_INFINITY;
 		double max_x = Double.NEGATIVE_INFINITY;

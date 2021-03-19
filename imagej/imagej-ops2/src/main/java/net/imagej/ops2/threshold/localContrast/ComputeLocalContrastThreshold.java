@@ -57,7 +57,6 @@ public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "stats.minMax")
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -65,6 +64,7 @@ public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	 * @param inputCenterPixel
 	 * @param output
 	 */
+	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final BitType output)
 	{

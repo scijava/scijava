@@ -54,7 +54,6 @@ public class ComputeLocalMedianThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "stats.median")
 	private Computers.Arity1<Iterable<T>, DoubleType> medianOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -63,6 +62,7 @@ public class ComputeLocalMedianThreshold<T extends RealType<T>> implements
 	 * @param c
 	 * @param output
 	 */
+	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double c, final BitType output)
 	{

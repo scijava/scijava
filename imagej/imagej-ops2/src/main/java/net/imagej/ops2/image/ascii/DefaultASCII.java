@@ -60,7 +60,6 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	@OpDependency(name = "stats.minMax")
 	private Function<IterableInterval<T>, Pair<T, T>> minMaxFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -69,6 +68,7 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	 * @param max
 	 * @param ASCIIArt
 	 */
+	@Override
 	public String apply(final IterableInterval<T> input, T min, T max) {
 		if (min == null || max == null) {
 			final Pair<T, T> minMax = minMaxFunc.apply(input);

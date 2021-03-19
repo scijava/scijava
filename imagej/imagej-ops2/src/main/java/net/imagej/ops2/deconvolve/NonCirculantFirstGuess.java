@@ -78,7 +78,6 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	 * image before extension, k is required to calculate the non-circulant
 	 * normalization factor
 	 */
-	@Override
 	/**
 	 * TODO
 	 *
@@ -87,6 +86,7 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	 * @param k
 	 * @return the output
 	 */
+	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> in, final O outType, final Dimensions k) {
 
 		final Img<O> firstGuess = create.apply(in, outType);

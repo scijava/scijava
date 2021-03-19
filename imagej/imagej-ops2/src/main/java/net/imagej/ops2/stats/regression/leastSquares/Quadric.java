@@ -68,13 +68,13 @@ public class Quadric implements
 	 */
 	public static final int MIN_DATA = 9;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param vectorCollection
 	 * @return the outputMatrix
 	 */
+	@Override
 	public Matrix4d apply(final Collection<Vector3d> points) {
 		if (points.size() < MIN_DATA)
 			throw new IllegalArgumentException("Must pass more points in order to fit a quadric equation!");

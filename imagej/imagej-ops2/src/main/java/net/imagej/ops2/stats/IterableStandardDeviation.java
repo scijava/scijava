@@ -52,13 +52,13 @@ import org.scijava.struct.ItemIO;
 public class IterableStandardDeviation<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<Iterable<I>, O> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param stdDev
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double sum = 0;
 		double sumSqr = 0;

@@ -64,13 +64,13 @@ public class HessianRAI<T extends RealType<T>>
 	@OpDependency(name = "create.img")
 	private Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> createRAI;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public CompositeIntervalView<T, RealComposite<T>> apply(RandomAccessibleInterval<T> input) {
 		List<RandomAccessibleInterval<T>> derivatives = new ArrayList<>();
 		for (int i = 0; i < input.numDimensions(); i++) {

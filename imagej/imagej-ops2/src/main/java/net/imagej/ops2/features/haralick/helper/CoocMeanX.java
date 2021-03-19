@@ -49,13 +49,13 @@ public class CoocMeanX implements Function<double[][], DoubleType> {
 	@OpDependency(name = "features.haralick.coocPX")
 	private Function<double[][], double[]> coocPXFunc;
 	
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public DoubleType apply(double[][] input) {
 
 		double res = 0;

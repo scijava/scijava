@@ -57,13 +57,13 @@ public class DefaultEccentricity implements Computers.Arity1<Polygon2D, DoubleTy
 	@OpDependency(name = "geom.majorAxis")
 	private Function<Polygon2D, DoubleType> majorAxisFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param eccentricity
 	 */
+	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 
 		final double a = majorAxisFunc.apply(input).get() / 2.0;

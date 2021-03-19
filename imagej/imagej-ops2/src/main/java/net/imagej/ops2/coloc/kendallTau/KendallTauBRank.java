@@ -78,7 +78,6 @@ import org.scijava.struct.ItemIO;
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -86,6 +85,7 @@ public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 	 * @param image2
 	 * @return the output
 	 */
+	@Override
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {
 		if (!ColocUtil.sameIterationOrder(image1, image2))
 			throw new IllegalArgumentException("Input and output must be of the same iteration order!");

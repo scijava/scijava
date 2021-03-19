@@ -57,13 +57,13 @@ public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Functio
 	@OpDependency(name = "geom.centroid")
 	private Function<IterableRegion<B>, RealLocalizable> centroid;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableRegion
 	 * @param inertiaTensor
 	 */
+	@Override
 	public RealMatrix apply(final IterableRegion<B> input) {
 		// ensure validity of inputs
 		if (input.numDimensions() != 3)

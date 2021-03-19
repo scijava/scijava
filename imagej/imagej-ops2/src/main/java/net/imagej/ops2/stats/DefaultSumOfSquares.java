@@ -64,13 +64,13 @@ public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "stats.sum")
 	private Computers.Arity1<RandomAccessibleInterval<O>, O> sumOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param raiInput
 	 * @param sumOfSquares
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		RandomAccessibleInterval<O> tmpImg = imgCreator.apply(input, output);
 		sqrOp.compute(input, tmpImg);

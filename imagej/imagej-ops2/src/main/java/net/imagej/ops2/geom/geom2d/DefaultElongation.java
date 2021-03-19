@@ -57,13 +57,13 @@ public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")
 	private Function<Polygon2D, Polygon2D> minimumBoundingBoxFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param elongation
 	 */
+	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 		final List<? extends RealLocalizable> minBB = GeomUtils.vertices(minimumBoundingBoxFunc.apply(input));
 

@@ -69,7 +69,6 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 	/**
 	 * Call the linear filter that is set up to perform correlation
 	 */
-	@Override
 	/**
 	 * TODO
 	 *
@@ -82,6 +81,7 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 	 * @param executorService
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {

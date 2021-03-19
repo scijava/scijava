@@ -49,7 +49,6 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "filter.fftSize")
 public class DefaultComputeFFTSize implements BiFunction<Dimensions, Boolean, long[][]> {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -57,6 +56,7 @@ public class DefaultComputeFFTSize implements BiFunction<Dimensions, Boolean, lo
 	 * @param powerOfTwo
 	 * @return the outputSizes
 	 */
+	@Override
 	public long[][] apply(Dimensions inputDimensions, Boolean powerOfTwo) {
 
 		long[][] size = new long[2][];

@@ -58,13 +58,13 @@ public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> imple
 	@OpDependency(name = "stats.stdDev")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> stdDevComputer;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param skewness
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O moment3 = output.createVariable();
 		moment3AboutMeanComputer.compute(input, moment3);

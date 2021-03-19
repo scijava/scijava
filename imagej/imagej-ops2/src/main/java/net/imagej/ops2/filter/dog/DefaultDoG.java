@@ -63,7 +63,6 @@ public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 	@OpDependency(name = "math.subtract")
 	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> subtractor;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -72,6 +71,7 @@ public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 	 * @param gauss2
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 			final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1,
 			final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss2,

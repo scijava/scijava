@@ -16,13 +16,13 @@ public class Size {
 		 * @param iterable the data to operate over
 		 * @return the size of the dataset
 		 */
-		@Override
-		/**
+			/**
 		 * TODO
 		 * 
 		 * @param iterable
 		 * @param size
 		 */
+	@Override
 		public Long apply(Iterable<T> iterable) {
 			return StreamSupport.stream(iterable.spliterator(), false).count();
 		}
@@ -31,13 +31,13 @@ public class Size {
 	   @Plugin(type = Op.class, name = "stats.size")
 	    public static class StatsSizeFunctionDouble<T> implements Function<Iterable<T>, Double>{
 
-	        @Override
-	        /**
+	       	        /**
 	         * TODO
 	         * 
 	         * @param iterable
 	         * @param size
 	         */
+ @Override
 	        public Double apply(Iterable<T> iterable) {
 	            return (double) StreamSupport.stream(iterable.spliterator(), false).count();
 	        }

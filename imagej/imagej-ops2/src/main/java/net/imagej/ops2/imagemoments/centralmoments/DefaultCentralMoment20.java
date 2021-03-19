@@ -64,13 +64,13 @@ public class DefaultCentralMoment20<I extends RealType<I>, O extends RealType<O>
 	@OpDependency(name = "imageMoments.moment10")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment10Func;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void computeMoment(final RandomAccessibleInterval<I> input,
 		final O output)
 	{

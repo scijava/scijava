@@ -60,7 +60,6 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<Iterable<U>, DoubleType> meanUOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -70,6 +69,7 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	 * @param mean2
 	 * @return the output
 	 */
+	@Override
 	public Double apply(final Iterable<T> image1, final Iterable<U> image2, final DoubleType mean1, final DoubleType mean2) {
 
 		if (!ColocUtil.sameIterationOrder(image1, image2))
@@ -129,7 +129,6 @@ class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealTy
 	@OpDependency(name = "coloc.icq")
 	private Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> colocOp;
 	
-	@Override
 	/**
 	 * TODO
 	 *
@@ -137,6 +136,7 @@ class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealTy
 	 * @param image2
 	 * @return the output
 	 */
+	@Override
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {
 		return colocOp.apply(image1, image2, null, null);
 	}

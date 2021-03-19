@@ -55,7 +55,6 @@ public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -63,6 +62,7 @@ public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D
 	 * @param angle
 	 * @param feretsDiameter
 	 */
+	@Override
 	public void compute(Polygon2D input, final Double angle, DoubleType output) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));
 

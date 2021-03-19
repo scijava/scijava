@@ -49,13 +49,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (3D): Surface Area", priority = Priority.VERY_HIGH)
 public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param boundarySize
 	 */
+	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		double total = 0;
 		for (final Triangle tri : input.triangles()) {

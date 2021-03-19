@@ -60,7 +60,6 @@ public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
 implements Computers.Arity2<Iterable<I>, Double, O>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -68,6 +67,7 @@ implements Computers.Arity2<Iterable<I>, Double, O>
 	 * @param quantile
 	 * @param output
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final Double quantile,
 		final O output)
 	{

@@ -49,7 +49,6 @@ public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	Computers.Arity2<I, O, O> 
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -57,6 +56,7 @@ public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	 * @param defaultValue
 	 * @param output
 	 */
+	@Override
 	public void compute(final I input, final O defaultVal, final O output) {
 		if (!input.get()) output.set(defaultVal);
 	}

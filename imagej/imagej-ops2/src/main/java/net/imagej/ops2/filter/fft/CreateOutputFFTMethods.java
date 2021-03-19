@@ -53,7 +53,6 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, Img<T>> create;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -62,6 +61,7 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 	 * @param fast
 	 * @return the output
 	 */
+	@Override
 	public Img<T> apply(Dimensions paddedDimensions, T outType, Boolean fast) {
 
 		Dimensions paddedFFTMethodsFFTDimensions = FFTMethodsUtility.getFFTDimensionsRealToComplex(fast,
@@ -77,7 +77,6 @@ class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, T, Boolean, Img<T>> create;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -85,6 +84,7 @@ class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T
 	 * @param outType
 	 * @return the output
 	 */
+	@Override
 	public Img<T> apply(Dimensions paddedDimensions, T outType) {
 		return create.apply(paddedDimensions, outType, true);
 	}

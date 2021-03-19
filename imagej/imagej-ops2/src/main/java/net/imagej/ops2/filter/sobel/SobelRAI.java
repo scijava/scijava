@@ -68,13 +68,13 @@ public class SobelRAI<T extends RealType<T>>
 	@OpDependency(name = "filter.partialDerivative")
 	private Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> derivativeComputer;
 	
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output) {
 
 		for (int i = 0; i < input.numDimensions(); i++) {

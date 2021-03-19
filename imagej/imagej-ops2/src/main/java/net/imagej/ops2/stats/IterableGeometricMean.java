@@ -51,13 +51,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "stats.geometricMean", priority = Priority.VERY_HIGH)
 public class IterableGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterableInput
 	 * @param geometricMean
 	 */
+	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double size = 0;
 		double sumOfLogs = 0;

@@ -56,7 +56,6 @@ public class LocalMedianThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "threshold.localMedian")
 	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -66,6 +65,7 @@ public class LocalMedianThreshold<T extends RealType<T>> implements
 	 * @param outOfBoundsFactory
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c,
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,

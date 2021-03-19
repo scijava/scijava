@@ -43,13 +43,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "features.haralick.coocPY")
 public class CoocPY implements Function<double[][], double[]> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param matrix
 	 * @return the output
 	 */
+	@Override
 	public double[] apply(final double[][] matrix) {
 		final int nrGrayLevels = matrix.length;
 

@@ -61,7 +61,6 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "stats.minMax")
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -71,6 +70,7 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	 * @param halfMaxValue
 	 * @param output
 	 */
+	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double contrastThreshold,
 		final Double halfMaxValue, final BitType output)

@@ -44,12 +44,12 @@ import org.scijava.struct.ItemIO;
 public class DefaultIdentity<A> implements Inplaces.Arity1<A>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param io
 	 */
+	@Override
 	public void mutate(final A input) {
 		// NB: No implementation needed.
 	}

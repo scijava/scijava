@@ -53,13 +53,13 @@ public class DefaultMajorAxis implements Computers.Arity1<Polygon2D, DoubleType>
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Polygon2D, Pair<DoubleType, DoubleType>> minorMajorAxisFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param majorAxis
 	 */
+	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 		output.set(minorMajorAxisFunc.apply(input).getB());
 	}

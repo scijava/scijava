@@ -56,13 +56,13 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 	@OpDependency(name = "copy.type")
 	private Computers.Arity1<T, T> copyOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param output
 	 */
+	@Override
 	public void compute(final IterableInterval<T> input, final IterableInterval<T> output) {
 		if (!input.iterationOrder().equals(output.iterationOrder()))
 			throw new IllegalArgumentException("input and output must be of the same dimensions!");
@@ -79,13 +79,13 @@ class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterva
 	@OpDependency(name = "copy.iterableInterval")
 	private Computers.Arity1<IterableInterval<T>, IterableInterval<T>> copyOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @return the output
 	 */
+	@Override
 	public IterableInterval<T> apply(IterableInterval<T> input) {
 		IterableInterval<T> output = imgCreator.apply(input, input.firstElement());
 		copyOp.compute(input, output);

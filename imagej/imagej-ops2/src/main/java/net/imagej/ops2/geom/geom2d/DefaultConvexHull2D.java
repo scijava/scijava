@@ -52,13 +52,13 @@ import org.scijava.struct.ItemIO;
 @Plugin(type = Op.class, name = "geom.convexHull")
 public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param convexHull
 	 */
+	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		// create a copy of points because se will get resorted, etc.
 		List<? extends RealLocalizable> RealPoints = new ArrayList<>(GeomUtils.vertices(input));

@@ -15,14 +15,14 @@ public class Normalize {
 	@Plugin(type = Op.class, name = NAMES)
 	public static class MathMinMaxNormalizeFunction implements Functions.Arity3<double[], Double, Double, double[]> {
 
-		@Override
-		/**
+			/**
 		 * TODO
 		 * 
 		 * @param numbers
 		 * @param newMin
 		 * @param newMax
 		 */
+	@Override
 		public double[] apply(double[] t, Double newMin, Double newMax) {
 			if (newMax == null) {
 				newMax = 1.0;

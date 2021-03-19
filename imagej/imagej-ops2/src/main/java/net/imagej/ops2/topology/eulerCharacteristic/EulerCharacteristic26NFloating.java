@@ -213,13 +213,13 @@ public class EulerCharacteristic26NFloating
     }
     //endregion
 
-    @Override
-	/**
+   	/**
 	 * TODO
 	 *
 	 * @param interval
 	 * @param output
 	 */
+ @Override
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final Octant<B> octant = new Octant<>(interval);

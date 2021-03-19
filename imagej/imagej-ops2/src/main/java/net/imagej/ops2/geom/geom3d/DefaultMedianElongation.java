@@ -59,13 +59,13 @@ public class DefaultMedianElongation implements Computers.Arity1<Mesh, DoubleTyp
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Mesh, RealMatrix> inertiaTensor;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param medianElongation
 	 */
+	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		final RealMatrix it = inertiaTensor.apply(input);
 		final EigenDecomposition ed = new EigenDecomposition(it);

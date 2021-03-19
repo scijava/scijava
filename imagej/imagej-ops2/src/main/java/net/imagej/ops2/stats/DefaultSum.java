@@ -54,13 +54,13 @@ public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
 	Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param raiInput
 	 * @param sum
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setZero();
 		List<O> chunkSums = LoopBuilder.setImages(input).multiThreaded()

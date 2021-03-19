@@ -58,7 +58,6 @@ public class DefaultMedianFilter<T, V> implements
 	@OpDependency(name = "map.neighborhood")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Shape, Computers.Arity1<Iterable<T>, V>, RandomAccessibleInterval<V>> mapper;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -67,6 +66,7 @@ public class DefaultMedianFilter<T, V> implements
 	 * @param outOfBoundsFactory
 	 * @param output
 	 */
+	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
 			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 			final RandomAccessibleInterval<V> output) {

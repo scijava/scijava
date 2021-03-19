@@ -62,7 +62,6 @@ public class DefaultLBP2D<I extends RealType<I>>
 	@OpDependency(name = "image.histogram")
 	private BiFunction<ArrayList<LongType>, Integer, Histogram1d<LongType>> histOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -71,6 +70,7 @@ public class DefaultLBP2D<I extends RealType<I>>
 	 * @param histogramSize
 	 * @return the output
 	 */
+	@Override
 	public ArrayList<LongType> apply(RandomAccessibleInterval<I> input, Integer distance, Integer histogramSize) {
 		ArrayList<LongType> output = new ArrayList<>();
 

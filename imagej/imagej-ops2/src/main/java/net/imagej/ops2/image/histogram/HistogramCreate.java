@@ -54,7 +54,6 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 	@OpDependency(name = "stats.minMax")
 	private Function<Iterable<T>, Pair<T, T>> minMaxFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
@@ -62,6 +61,7 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 	 * @param numBins
 	 * @param histogram
 	 */
+	@Override
 	public Histogram1d<T> apply(final Iterable<T> input, Integer numBins) {
 		if (numBins == null)
 			numBins = DEFAULT_NUM_BINS;
@@ -84,13 +84,13 @@ class HistogramCreateSimple<T extends RealType<T>> implements Function<Iterable<
 	@OpDependency(name = "image.histogram")
 	private BiFunction<Iterable<T>, Integer, Histogram1d<T>> histogramOp;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param iterable
 	 * @param histogram
 	 */
+	@Override
 	public Histogram1d<T> apply(final Iterable<T> input) {
 		return histogramOp.apply(input, null);
 	}

@@ -56,13 +56,13 @@ public class DefaultRoundness implements Computers.Arity1<Polygon2D, DoubleType>
 	@OpDependency(name = "geom.majorAxis")
 	private Function<Polygon2D, DoubleType> majorAxisFunc;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param roundness
 	 */
+	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 		output.set(4 * (areaFunc.apply(input).getRealDouble()
 				/ (Math.PI * Math.pow(majorAxisFunc.apply(input).getRealDouble(), 2))));

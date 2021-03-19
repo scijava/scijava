@@ -50,13 +50,13 @@ public class DefaultMaximumFeretDiameter implements Computers.Arity1<Polygon2D, 
 	@OpDependency(name = "geom.feretsDiameter")
 	private Function<Pair<RealLocalizable, RealLocalizable>, DoubleType> feretDiameter;
 
-	@Override
 	/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param maxFeretsDiameter
 	 */
+	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(feretDiameter.apply(maxFeret.apply(input)).get());
 	}

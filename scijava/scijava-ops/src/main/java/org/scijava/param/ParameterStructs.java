@@ -131,22 +131,15 @@ public final class ParameterStructs {
 		// NB: Reject abstract classes.
 		checkModifiers(type.getName() + ": ", problems, type.getModifiers(), true, Modifier.ABSTRACT);
 
-		// obatin a parameterData (preferably one that scrapes the javadoc)
-		final Class<?> paramsClass = findParametersDeclaration(type);
+		// obtain a parameterData (preferably one that scrapes the javadoc)
 		ParameterData paramData;
 		try {
-			paramData = new JavadocParameterData(paramsClass);
+			paramData = new JavadocParameterData(type);
 		} catch(NullPointerException | IllegalArgumentException e) {
 			paramData = new SynthesizedParameterData();
 		}
 
-		// Parse class level (i.e., generic) @Parameter annotations.
-		if (paramsClass != null) {
-			parseFunctionalParameters(items, names, problems, paramsClass, paramData);
-		}
-		else {
-			parseFunctionalParameters(items, names, problems, type, paramData);
-		}
+		parseFunctionalParameters(items, names, problems, type, paramData);
 
 		// Parse field level @OpDependency annotations.
 		parseFieldOpDependencies(items, problems, type);

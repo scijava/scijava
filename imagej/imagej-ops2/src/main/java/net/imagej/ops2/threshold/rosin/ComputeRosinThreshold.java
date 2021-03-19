@@ -36,7 +36,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Implements Rosin's threshold method. From : Rosin, Paul L. "Unimodal

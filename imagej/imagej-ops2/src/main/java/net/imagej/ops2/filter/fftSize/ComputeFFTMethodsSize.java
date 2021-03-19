@@ -36,7 +36,6 @@ import org.scijava.function.Functions;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op that calculates FFT sizes.

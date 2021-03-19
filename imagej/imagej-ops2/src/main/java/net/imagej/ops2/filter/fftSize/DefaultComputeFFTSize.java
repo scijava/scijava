@@ -35,7 +35,6 @@ import net.imglib2.Dimensions;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op that calculates FFT fast sizes according to the following logic.

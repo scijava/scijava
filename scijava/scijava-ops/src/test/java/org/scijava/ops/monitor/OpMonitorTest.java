@@ -16,7 +16,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.util.FunctionUtils;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 
 /**

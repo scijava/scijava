@@ -40,6 +40,7 @@ import java.util.Map;
 
 import org.scijava.struct.ItemIO;
 
+
 /**
  * Default {@link MutableParameterMember} implementation.
  * 

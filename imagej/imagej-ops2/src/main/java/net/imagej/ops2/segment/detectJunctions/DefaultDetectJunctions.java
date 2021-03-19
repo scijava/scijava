@@ -47,7 +47,6 @@ import net.imglib2.util.Intervals;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Finds the junctions between a {@link ArrayList} of {@link WritablePolyline},

@@ -37,7 +37,6 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * A class that represents the mean calculation of the two source images in the

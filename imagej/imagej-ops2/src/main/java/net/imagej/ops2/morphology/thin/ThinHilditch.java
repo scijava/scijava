@@ -34,7 +34,6 @@ import net.imglib2.type.logic.BitType;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Thinning Operation

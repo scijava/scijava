@@ -37,7 +37,6 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 // This plugin code ported from the original MatLab code of the max likelihood
 // threshold method (th_maxlik) as written in Antti Niemisto's 1.03 version of

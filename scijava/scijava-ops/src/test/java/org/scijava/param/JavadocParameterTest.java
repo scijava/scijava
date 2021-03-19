@@ -20,7 +20,6 @@ import org.scijava.ops.OpMethod;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Tests the ability of a Javadoc parser to scrape an Op's parameters out of its

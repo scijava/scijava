@@ -40,7 +40,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Maps;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Applies the given threshold value to every element along the given

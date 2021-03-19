@@ -36,7 +36,6 @@ import org.scijava.function.Producer;
 import org.scijava.ops.core.Op;
 import org.scijava.types.Nil;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 public class OpPriorityTest extends AbstractTestEnvironment {
 	

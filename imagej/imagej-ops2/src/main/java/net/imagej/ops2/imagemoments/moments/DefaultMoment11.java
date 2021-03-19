@@ -41,7 +41,6 @@ import net.imglib2.util.Intervals;
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.moment11}.

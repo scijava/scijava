@@ -38,7 +38,6 @@ import net.imglib2.util.ValuePair;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.minMax}.

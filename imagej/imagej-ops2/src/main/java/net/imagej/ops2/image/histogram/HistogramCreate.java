@@ -40,7 +40,6 @@ import net.imglib2.util.Pair;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * @author Martin Horn (University of Konstanz)

@@ -41,7 +41,6 @@ import net.imglib2.type.numeric.ComplexType;
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to calculate and return a centered padding interval given an input

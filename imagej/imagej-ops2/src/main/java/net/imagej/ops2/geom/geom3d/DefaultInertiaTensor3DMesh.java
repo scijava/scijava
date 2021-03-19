@@ -41,7 +41,6 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This {@link Op} computes the 2nd multi variate of a {@link Mesh} (Label).

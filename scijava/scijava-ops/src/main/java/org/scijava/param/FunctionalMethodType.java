@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import org.scijava.struct.ItemIO;
 
+
 /**
  * Wrapper to pair a type of a method signature with its {@link ItemIO}.
  * 

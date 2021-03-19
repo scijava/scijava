@@ -36,7 +36,6 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Gets documentation for the given name.

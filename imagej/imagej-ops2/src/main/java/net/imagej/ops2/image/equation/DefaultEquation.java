@@ -47,7 +47,6 @@ import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.script.ScriptService;
-import org.scijava.struct.ItemIO;
 
 /**
  * Computes an image using an equation.

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.matcher.OpClassInfo;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
 

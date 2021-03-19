@@ -35,7 +35,6 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 //NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
 //plugin found in Fiji (version 1.14).

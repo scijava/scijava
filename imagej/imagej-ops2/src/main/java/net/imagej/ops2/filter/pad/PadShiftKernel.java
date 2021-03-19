@@ -43,7 +43,6 @@ import net.imglib2.view.Views;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to pad a kernel and shift the center of the kernel to the origin

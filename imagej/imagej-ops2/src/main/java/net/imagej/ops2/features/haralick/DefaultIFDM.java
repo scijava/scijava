@@ -35,7 +35,6 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Implementation of Inverse Difference Moment Haralick Feature based on

@@ -38,7 +38,6 @@ import org.apache.commons.math3.util.MathArrays;
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Size}.

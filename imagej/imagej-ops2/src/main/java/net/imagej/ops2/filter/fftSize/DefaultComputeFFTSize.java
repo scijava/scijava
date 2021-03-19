@@ -34,7 +34,6 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 

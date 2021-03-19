@@ -38,7 +38,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.Priority;
 import org.scijava.ops.OpExecutionException;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 

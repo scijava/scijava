@@ -140,6 +140,26 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		Assert.assertEquals("the output", outputDescription);
 	}
 
+	@Test
+	public void opStringRegressionTest() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.method").iterator();
+
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+		}
+		String expected =
+			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
+				"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+				"	 Inputs:\n" +
+				"		java.util.List<java.lang.String> foo -> the first input\n" +
+				"		java.util.List<java.lang.String> bar -> the second input\n" +
+				"	 Outputs:\n" +
+				"		java.util.List<java.lang.Long> output1 -> foo + bar\n" + ")\n";
+		String actual = info.toString();
+		Assert.assertEquals(expected, actual);
+
+	}
 }
 
 /**

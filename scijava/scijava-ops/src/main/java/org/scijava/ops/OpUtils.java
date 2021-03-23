@@ -414,6 +414,10 @@ public final class OpUtils {
 			sb.append(arg.getType().getTypeName());
 			sb.append(" ");
 			sb.append(arg.getKey());
+			if (!arg.getDescription().isEmpty()) {
+				sb.append(" -> ");
+				sb.append(arg.getDescription());
+			}
 			sb.append("\n");
 		}
 		sb.append("\t Outputs:\n");
@@ -422,6 +426,10 @@ public final class OpUtils {
 		sb.append(arg.getType().getTypeName());
 		sb.append(" ");
 		sb.append(arg.getKey());
+		if (!arg.getDescription().isEmpty()) {
+			sb.append(" -> ");
+			sb.append(arg.getDescription());
+		}
 		sb.append("\n");
 		sb.append(")\n");
 		return sb.toString();

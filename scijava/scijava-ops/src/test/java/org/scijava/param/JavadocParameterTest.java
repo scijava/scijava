@@ -17,6 +17,7 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
+import org.scijava.ops.OpUtils;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.plugin.Plugin;
@@ -148,6 +149,8 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		if (infos.hasNext()) {
 			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
+
+		// test standard op string
 		String expected =
 			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
 				"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
@@ -159,7 +162,16 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		String actual = info.toString();
 		Assert.assertEquals(expected, actual);
 
+		// test special op string
+		expected = "(java.util.List<java.lang.Long> output1 -> foo + bar) =\n" +
+			"	public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
+			"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+			"		java.util.List<java.lang.String> foo -> the first input,\n" +
+			"==>		java.util.List<java.lang.String> bar -> the second input)";
+		actual = OpUtils.opString(info, info.inputs().get(1));
+		Assert.assertEquals(expected, actual);
 	}
+
 }
 
 /**

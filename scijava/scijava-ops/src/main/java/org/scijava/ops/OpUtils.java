@@ -382,7 +382,7 @@ public final class OpUtils {
 
 	/**
 	 * As {@link #paramString(Iterable, Member, String)} with a toggle to
-	 * control if inputs are types only or include the names.
+	 * control if inputs are types only or include the names/descriptions.
 	 */
 	private static String paramString(final Iterable<Member<?>> items, final Member<?> special, final String delim,
 			final boolean typeOnly) {
@@ -401,6 +401,7 @@ public final class OpUtils {
 
 			if (!typeOnly) {
 				sb.append(" " + item.getKey());
+				sb.append(" -> " + item.getDescription());
 			}
 		}
 		return sb.toString();

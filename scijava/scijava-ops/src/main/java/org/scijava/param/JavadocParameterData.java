@@ -91,8 +91,6 @@ public class JavadocParameterData implements ParameterData {
 		}
 	}
 
-	// TODO: consider if we want to add more data to the {@link OpInfo}
-	// 
 	public JavadocParameterData(OpInfo info, Type newType) {
 		paramNames = new ArrayList<>();
 		paramDescriptions = new ArrayList<>();
@@ -119,10 +117,8 @@ public class JavadocParameterData implements ParameterData {
 		}
 		for(Member<?> m : inputs) {
 			paramNames.add(m.getKey());
-			// TODO: Add member support for descriptions
 			paramDescriptions.add(m.getDescription());
 		}
-		// TODO: Add member support for descriptions
 		returnDescription = output.getDescription();
 	}
 
@@ -183,7 +179,7 @@ public class JavadocParameterData implements ParameterData {
 	public List<Parameter> synthesizeAnnotations(List<FunctionalMethodType> fmts) {
 		List<Parameter> params = new ArrayList<>();
 		int ins = 0;
-		int outs = 1;
+		int outs = 0;
 
 		Map<String, Object> paramValues = new HashMap<>();
 		for (FunctionalMethodType fmt : fmts) {
@@ -200,7 +196,7 @@ public class JavadocParameterData implements ParameterData {
 				break;
 			case OUTPUT:
 				// NB the @return tag does not provide a name, only a comment
-				key = "output" + outs; 
+				key = "output" + (outs == 0 ? "" : outs); 
 				description = returnDescription;
 				outs++;
 				break;
@@ -230,7 +226,6 @@ public class JavadocParameterData implements ParameterData {
 						+ "most likely an implementation error.", e);
 			}
 		}
-		// TODO: consider if some error should be thrown when there are 2+ outputs
 		return params;
 	}
 

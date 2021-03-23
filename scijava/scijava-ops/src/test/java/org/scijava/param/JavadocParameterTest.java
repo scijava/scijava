@@ -65,7 +65,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output1", outputName);
+		Assert.assertEquals("output", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
@@ -103,7 +103,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output1", outputName);
+		Assert.assertEquals("output", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
@@ -134,7 +134,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output1", outputName);
+		Assert.assertEquals("output", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
@@ -158,12 +158,12 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 				"		java.util.List<java.lang.String> foo -> the first input\n" +
 				"		java.util.List<java.lang.String> bar -> the second input\n" +
 				"	 Outputs:\n" +
-				"		java.util.List<java.lang.Long> output1 -> foo + bar\n" + ")\n";
+				"		java.util.List<java.lang.Long> output -> foo + bar\n" + ")\n";
 		String actual = info.toString();
 		Assert.assertEquals(expected, actual);
 
 		// test special op string
-		expected = "(java.util.List<java.lang.Long> output1 -> foo + bar) =\n" +
+		expected = "(java.util.List<java.lang.Long> output -> foo + bar) =\n" +
 			"	public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
 			"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
 			"		java.util.List<java.lang.String> foo -> the first input,\n" +

@@ -7,6 +7,7 @@ module org.scijava.ops {
 	exports org.scijava.ops.hints;
 	exports org.scijava.ops.matcher;
 	exports org.scijava.ops.provenance;
+	exports org.scijava.ops.math;
 	exports org.scijava.ops.simplify;
 	exports org.scijava.ops.conversionLoss;
 	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)

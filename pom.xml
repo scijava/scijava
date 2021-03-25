@@ -50,6 +50,7 @@
 		<module>scijava/scijava-persist</module>
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-ops</module>
+		<module>scijava/scijava-taglets</module>
 		<module>scijava/scijava-testutil</module>
 		<module>scijava/scijava-types</module>
 	</modules>
@@ -77,9 +78,6 @@
 		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
 		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
 
-		<!-- NB: Javadoc has issues with JPMS... for now we skip it. -->
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<javadoc.skip>true</javadoc.skip>
 		<doclint>none</doclint>
 
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->
@@ -104,6 +102,21 @@
 							<version>${scijava-common.version}</version>
 						</path>
 					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<tagletArtifacts>
+						<tagletArtifact>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-taglets</artifactId>
+							<version>${project.version}</version>
+						</tagletArtifact>
+					</tagletArtifacts>
+					<links>
+						<link>https://javadoc.scijava.org/Java11</link>
+					</links>
 				</configuration>
 			</plugin>
 		</plugins>

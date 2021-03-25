@@ -163,11 +163,14 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		Assert.assertEquals(expected, actual);
 
 		// test special op string
-		expected = "(java.util.List<java.lang.Long> output -> foo + bar) =\n" +
-			"	public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
-			"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
-			"		java.util.List<java.lang.String> foo -> the first input,\n" +
-			"==>		java.util.List<java.lang.String> bar -> the second input)";
+		expected =
+			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
+				"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+				"	 Inputs:\n" +
+				"		java.util.List<java.lang.String> foo -> the first input\n" +
+				"==> 	java.util.List<java.lang.String> bar -> the second input\n" +
+				"	 Outputs:\n" +
+				"		java.util.List<java.lang.Long> output -> foo + bar\n" + ")\n";
 		actual = OpUtils.opString(info, info.inputs().get(1));
 		Assert.assertEquals(expected, actual);
 	}

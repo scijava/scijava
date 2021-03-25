@@ -344,86 +344,27 @@ public final class OpUtils {
 		return sb.toString();
 	}
 
-	/**
-	 * Gets a string describing the given op, highlighting the specific
-	 * parameter.
-	 * 
-	 * @param info
-	 *            The {@link OpInfo} metadata which describes the op.
-	 * @param special
-	 *            A parameter of particular interest when describing the op.
-	 * @return A string describing the op.
-	 */
-	public static String opString(final OpInfo info, final Member<?> special) {
-		final StringBuilder sb = new StringBuilder();
-		final String outputString = paramString(outputs(info.struct()), null).trim();
-		if (!outputString.isEmpty())
-			sb.append("(" + outputString + ") =\n\t");
-		sb.append(info.implementationName());
-		sb.append("(" + paramString(inputs(info.struct()), special) + ")");
-		return sb.toString();
-	}
-
-	/**
-	 * Helper method of {@link #opString(OpInfo, Member)} which parses a set of
-	 * items with a default delimiter of ","
-	 */
-	private static String paramString(final Iterable<Member<?>> items, final Member<?> special) {
-		return paramString(items, special, ",");
-	}
-
-	/**
-	 * As {@link #paramString(Iterable, Member, String)} with an optional
-	 * delimiter.
-	 */
-	private static String paramString(final Iterable<Member<?>> items, final Member<?> special, final String delim) {
-		return paramString(items, special, delim, false);
-	}
-
-	/**
-	 * As {@link #paramString(Iterable, Member, String)} with a toggle to
-	 * control if inputs are types only or include the names/descriptions.
-	 */
-	private static String paramString(final Iterable<Member<?>> items, final Member<?> special, final String delim,
-			final boolean typeOnly) {
-		final StringBuilder sb = new StringBuilder();
-		boolean first = true;
-		for (final Member<?> item : items) {
-			if (first)
-				first = false;
-			else
-				sb.append(delim);
-			sb.append("\n");
-			if (item == special)
-				sb.append("==>"); // highlight special item
-			sb.append("\t\t");
-			sb.append(item.getType().getTypeName());
-
-			if (!typeOnly) {
-				sb.append(" " + item.getKey());
-				sb.append(" -> " + item.getDescription());
-			}
-		}
-		return sb.toString();
-	}
-
 	public static String opString(final OpInfo info) {
+		return opString(info, null);
+	}
+
+	public static String opString(final OpInfo info, final Member<?> special) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(info.implementationName() + "(\n\t Inputs:\n");
 		for (final Member<?> arg : info.inputs()) {
-			sb.append("\t\t");
-			sb.append(arg.getType().getTypeName());
-			sb.append(" ");
-			sb.append(arg.getKey());
-			if (!arg.getDescription().isEmpty()) {
-				sb.append(" -> ");
-				sb.append(arg.getDescription());
-			}
-			sb.append("\n");
+			appendParam(sb, arg, special);
 		}
 		sb.append("\t Outputs:\n");
-		final Member<?> arg = info.output();
-		sb.append("\t\t");
+		appendParam(sb, info.output(), special);
+		sb.append(")\n");
+		return sb.toString();
+	}
+
+	private static void appendParam(final StringBuilder sb, final Member<?> arg,
+		final Member<?> special)
+	{
+		if (arg == special) sb.append("==> \t"); // highlight special item
+		else sb.append("\t\t");
 		sb.append(arg.getType().getTypeName());
 		sb.append(" ");
 		sb.append(arg.getKey());
@@ -432,8 +373,7 @@ public final class OpUtils {
 			sb.append(arg.getDescription());
 		}
 		sb.append("\n");
-		sb.append(")\n");
-		return sb.toString();
+		return;
 	}
 
 	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {

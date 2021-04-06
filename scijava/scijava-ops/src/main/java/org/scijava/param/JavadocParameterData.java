@@ -1,6 +1,7 @@
 
 package org.scijava.param;
 
+import com.github.therapi.runtimejavadoc.Comment;
 import com.github.therapi.runtimejavadoc.FieldJavadoc;
 import com.github.therapi.runtimejavadoc.MethodJavadoc;
 import com.github.therapi.runtimejavadoc.OtherJavadoc;
@@ -61,34 +62,12 @@ public class JavadocParameterData implements ParameterData {
 	 * @param f the field
 	 */
 	public JavadocParameterData(Field f) {
-		paramNames = new ArrayList<>();
-		paramDescriptions = new ArrayList<>();
-		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(f);
-		for (OtherJavadoc other : doc.getOther()) {
-			switch (other.getName()) {
-				case "input":
-					String param = other.getComment().toString();
-					paramNames.add(param.substring(0, param.indexOf(" ")));
-					paramDescriptions.add(param.substring(param.indexOf(" ") + 1));
-					break;
-				case "output":
-					if (returnDescription != null) throw new IllegalArgumentException(
-						"Op cannot have multiple returns!");
-					returnDescription = other.getComment().toString();
-					break;
-			}
-		}
-
-		// ensure non-null description
-		if (returnDescription == null) returnDescription = "";
-
-		// ensure that f has enough @parameter annotations
 		Method sam = ParameterStructs.singularAbstractMethod(f.getType());
-		int numParams = sam.getParameterCount();
-		if (numParams != paramNames.size()) {
-			throw new IllegalArgumentException("Field " + f +
-				" does not have one @param annotation for each parameter of the Op!");
-		}
+		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(f);
+		if (hasCustomJavadoc(doc.getOther(), sam)) populateViaCustomTaglets(doc
+			.getOther());
+		else throw new IllegalArgumentException("Field " + f +
+			" does not have enough taglets to generate OpInfo documentation!");
 	}
 
 	public JavadocParameterData(OpInfo info, Type newType) {
@@ -163,16 +142,80 @@ public class JavadocParameterData implements ParameterData {
 	 */
 	private void parseMethod(Method m) {
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
-		List<ParamJavadoc> params = doc.getParams();
-		if (params.size() != m.getParameterCount())
-			throw new IllegalArgumentException("Method " + m +
-				" does not have valid @param tags for each of its inputs!");
-		paramNames = params.stream().map(param -> param.getName() != null ? param
-			.getName() : null).collect(Collectors.toList());
-		paramDescriptions = params.stream().map(param -> param.getComment()
-			.toString()).collect(Collectors.toList());
-		returnDescription = doc.getReturns().toString();
-		if (returnDescription == null) returnDescription = "";
+		if (hasVanillaJavadoc(doc, m))
+			populateViaParamAndReturn(doc.getParams(), doc.getReturns());
+		else if (hasCustomJavadoc(doc.getOther(), m))
+			populateViaCustomTaglets(doc.getOther());
+		else throw new IllegalArgumentException("Method " + m +
+			" has no suitable tag(lets) to scrape documentation from");
+	}
+
+	private boolean hasVanillaJavadoc(MethodJavadoc doc, Method m) {
+		// We require a @param tag for each of the method parameters
+		boolean sufficientParams = doc.getParams().size() == m.getParameterCount();
+		// We require a @return tag for the method return iff not null
+		boolean sufficientReturn = !((doc.getReturns() != null) ^ (m
+			.getReturnType() != void.class));
+		return sufficientParams && sufficientReturn;
+	}
+
+	private boolean hasCustomJavadoc(List<OtherJavadoc> doc, Method m) {
+		int ins = 0, outs = 0;
+		for (OtherJavadoc other : doc) {
+			switch (other.getName()) {
+				case "input":
+					ins++;
+					break;
+				case "container":
+				case "mutable":
+					ins++;
+					outs++;
+					break;
+				case "output":
+					outs++;
+					break;
+			}
+		}
+		// We require as many input/container/mutable taglets as there are parameters
+		boolean sufficientIns = ins == m.getParameterCount();
+		// We require one container/mutable/output taglet
+		boolean sufficientOuts = outs == 1;
+		return sufficientIns && sufficientOuts;
+	}
+
+	private void populateViaParamAndReturn(List<ParamJavadoc> params, Comment returnDoc) {
+		paramNames = params.stream().map(param -> param.getName()).collect(Collectors.toList());
+		paramDescriptions = params.stream().map(param -> param.getComment().toString()).collect(Collectors.toList());
+		returnDescription = returnDoc.toString();
+	}
+
+	private void populateViaCustomTaglets(List<OtherJavadoc> doc) {
+		paramNames = new ArrayList<>();
+		paramDescriptions = new ArrayList<>();
+		for (OtherJavadoc other : doc) {
+			String name = other.getName();
+			if (!validParameterTag(name)) continue;
+			// add to params if not a pure output
+			if (!name.equals("output")) {
+				String param = other.getComment().toString();
+				paramNames.add(param.substring(0, param.indexOf(" ")));
+				paramDescriptions.add(param.substring(param.indexOf(" ") + 1));
+			}
+			// add return description if an I/O 
+			if (!name.equals("input")) {
+				if (returnDescription != null) throw new IllegalArgumentException(
+					"Op cannot have multiple returns!");
+				returnDescription = other.getComment().toString();
+			}
+		}
+	}
+
+	private boolean validParameterTag(String tagType) {
+		if (tagType.equals("input")) return true;
+		if (tagType.equals("mutable")) return true;
+		if (tagType.equals("container")) return true;
+		if (tagType.equals("output")) return true;
+		return false;
 	}
 
 	@Override

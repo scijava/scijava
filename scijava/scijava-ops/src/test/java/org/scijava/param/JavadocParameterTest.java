@@ -32,12 +32,44 @@ import org.scijava.plugin.Plugin;
 public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	/**
+	 * Tests javadoc scraping with param (P) and return (R)
+	 * 
 	 * @param foo the first input
 	 * @param bar the second input
 	 * @return foo + bar
 	 */
-	@OpMethod(names = "test.javadoc.method", type = BiFunction.class)
-	public static List<Long> OpMethodFoo(List<String> foo, List<String> bar) {
+	@OpMethod(names = "test.javadoc.methodPR", type = BiFunction.class)
+	public static List<Long> OpMethodPR(List<String> foo, List<String> bar) {
+		BiFunction<String, String, Long> func = (s1, s2) -> Long.parseLong(s1) +
+			Long.parseLong(s2);
+		return Streams.zip(foo.stream(), bar.stream(), func).collect(Collectors
+			.toList());
+	}
+
+	/**
+	 * Tests javadoc scraping with input (I) and output (O)
+	 * 
+	 * @input foo the first input
+	 * @input bar the second input
+	 * @output foo + bar
+	 */
+	@OpMethod(names = "test.javadoc.methodIO", type = BiFunction.class)
+	public static List<Long> OpMethodIO(List<String> foo, List<String> bar) {
+		BiFunction<String, String, Long> func = (s1, s2) -> Long.parseLong(s1) +
+			Long.parseLong(s2);
+		return Streams.zip(foo.stream(), bar.stream(), func).collect(Collectors
+			.toList());
+	}
+
+	/**
+	 * Tests javadoc scraping with input (I) and return (R)
+	 * 
+	 * @input foo the first input
+	 * @input bar the second input
+	 * @return foo + bar
+	 */
+	@OpMethod(names = "test.javadoc.methodIR", type = BiFunction.class)
+	public static List<Long> OpMethodIR(List<String> foo, List<String> bar) {
 		BiFunction<String, String, Long> func = (s1, s2) -> Long.parseLong(s1) +
 			Long.parseLong(s2);
 		return Streams.zip(foo.stream(), bar.stream(), func).collect(Collectors
@@ -45,14 +77,50 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	}
 
 	@Test
-	public void testJavadocMethod() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.method").iterator();
+	public void testJavadocMethodPR() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodPR").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
 			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
+		isSuitableScrapedOpMethodInfo(info);
+	}
 
+	@Test
+	public void testJavadocMethodIO() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodIO").iterator();
+
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+		}
+		isSuitableScrapedOpMethodInfo(info);
+	}
+
+	@Test
+	public void testJavadocMethodIR() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodIR").iterator();
+
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+		}
+		isSuitableGenericOpMethodInfo(info);
+	}
+	
+	/**
+	 * Asserts that the {@link OpInfo} has as inputs:
+	 * <ul>
+	 * <li> foo - the first input
+	 * <li> bar - the second input
+	 * </ul>
+	 * and as output:
+	 * <ul>
+	 * <li> output - foo + bar
+	 * </ul>
+	 */
+	private void isSuitableScrapedOpMethodInfo(OpInfo info) {
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
@@ -73,22 +141,65 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	}
 
 	/**
+	 * Asserts that the {@link OpInfo} has as inputs:
+	 * <ul>
+	 * <li> input1
+	 * <li> input2
+	 * </ul>
+	 * and as output:
+	 * <ul>
+	 * <li> output1
+	 * </ul>
+	 */
+	private void isSuitableGenericOpMethodInfo(OpInfo info) {
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(inputNames, new String[] { "input1", "input2" });
+
+		// assert input descriptions
+		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(inputDescriptions, new String[] { "", "" });
+
+		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("output1", outputName);
+
+		// assert output description
+		String outputDescription = info.output().getDescription();
+		Assert.assertEquals("", outputDescription);
+	}
+
+	/**
 	 * @input in the input
 	 * @output the output
 	 */
-	@OpField(names = "test.javadoc.field")
+	@OpField(names = "test.javadoc.fieldF")
 	public final Function<Double, Double> javadocFieldOp = (in) -> in + 1;
 
+	/**
+	 * @input inList the input
+	 * @container outList the preallocated output
+	 */
+	@OpField(names = "test.javadoc.fieldC")
+	public final Computers.Arity1<List<Double>, List<Double>> javadocFieldOpComputer = (in, out) -> {
+		out.clear();
+		for(Double d :in) {
+			out.add(d + 1);
+		}
+	};
+
 	@Test
-	public void testJavadocField() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.field").iterator();
+	public void testJavadocFieldF() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.fieldF").iterator();
 
 		if (!infos.hasNext()) {
-			Assert.fail("No OpInfos with name \"test.javadoc.field\"");
+			Assert.fail("No OpInfos with name \"test.javadoc.fieldF\"");
 		}
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.field\"");
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.fieldF\"");
 		}
 
 		// assert input names
@@ -108,6 +219,37 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		// assert output description
 		String outputDescription = info.output().getDescription();
 		assertEquals("the output", outputDescription);
+	}
+	
+	@Test
+	public void testJavadocFieldC() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.fieldC").iterator();
+
+		if (!infos.hasNext()) {
+			Assert.fail("No OpInfos with name \"test.javadoc.fieldC\"");
+		}
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.fieldC\"");
+		}
+
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(new String[] { "inList", "outList" }, inputNames);
+
+		// assert input descriptions
+		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(new String[] { "the input", "the preallocated output" }, inputDescriptions);
+
+		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("outList", outputName);
+
+		// assert output description
+		String outputDescription = info.output().getDescription();
+		assertEquals("the preallocated output", outputDescription);
 	}
 
 	@Test
@@ -143,7 +285,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void opStringRegressionTest() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.method").iterator();
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodPR").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -153,7 +295,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		// test standard op string
 		String expected =
 			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
-				"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+				"OpMethodPR(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
 				"	 Inputs:\n" +
 				"		java.util.List<java.lang.String> foo -> the first input\n" +
 				"		java.util.List<java.lang.String> bar -> the second input\n" +
@@ -165,7 +307,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		// test special op string
 		expected =
 			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
-				"OpMethodFoo(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+				"OpMethodPR(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
 				"	 Inputs:\n" +
 				"		java.util.List<java.lang.String> foo -> the first input\n" +
 				"==> 	java.util.List<java.lang.String> bar -> the second input\n" +

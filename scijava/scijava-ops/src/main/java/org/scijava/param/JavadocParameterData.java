@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.simplify.SimplificationUtils;
 import org.scijava.struct.Member;
@@ -64,7 +65,9 @@ public class JavadocParameterData implements ParameterData {
 	public JavadocParameterData(Field f) {
 		Method sam = ParameterStructs.singularAbstractMethod(f.getType());
 		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(f);
-		if (hasCustomJavadoc(doc.getOther(), sam)) populateViaCustomTaglets(doc
+		long numIns = sam.getParameterCount();
+		long numOuts = 1; // There is always one output
+		if (hasCustomJavadoc(doc.getOther(), numIns, numOuts)) populateViaCustomTaglets(doc
 			.getOther());
 		else throw new IllegalArgumentException("Field " + f +
 			" does not have enough taglets to generate OpInfo documentation!");
@@ -142,24 +145,33 @@ public class JavadocParameterData implements ParameterData {
 	 */
 	private void parseMethod(Method m) {
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
-		if (hasVanillaJavadoc(doc, m))
+		long numOpParams = getOpParams(m);
+		long numReturns = m.getReturnType() == void.class ? 0 : 1;
+		if (hasVanillaJavadoc(doc, numOpParams, numReturns))
 			populateViaParamAndReturn(doc.getParams(), doc.getReturns());
-		else if (hasCustomJavadoc(doc.getOther(), m))
+		else if (hasCustomJavadoc(doc.getOther(), numOpParams, 1))
 			populateViaCustomTaglets(doc.getOther());
 		else throw new IllegalArgumentException("Method " + m +
 			" has no suitable tag(lets) to scrape documentation from");
 	}
 
-	private boolean hasVanillaJavadoc(MethodJavadoc doc, Method m) {
+	private long getOpParams(Method m) {
+		return Arrays //
+			.stream(m.getParameters()) //
+			.filter(param -> param.getAnnotation(OpDependency.class) == null).count();
+	}
+
+	private boolean hasVanillaJavadoc(MethodJavadoc doc, long numParams, long numReturns) {
 		// We require a @param tag for each of the method parameters
-		boolean sufficientParams = doc.getParams().size() == m.getParameterCount();
+		boolean sufficientParams = doc.getParams().size() == numParams;
 		// We require a @return tag for the method return iff not null
-		boolean sufficientReturn = !((doc.getReturns() != null) ^ (m
-			.getReturnType() != void.class));
+		boolean javadocReturn = doc.getReturns() != null;
+		boolean methodReturn = numReturns == 1;
+		boolean sufficientReturn = javadocReturn == methodReturn;
 		return sufficientParams && sufficientReturn;
 	}
 
-	private boolean hasCustomJavadoc(List<OtherJavadoc> doc, Method m) {
+	private boolean hasCustomJavadoc(List<OtherJavadoc> doc, long numIns, long numOuts) {
 		int ins = 0, outs = 0;
 		for (OtherJavadoc other : doc) {
 			switch (other.getName()) {
@@ -177,9 +189,9 @@ public class JavadocParameterData implements ParameterData {
 			}
 		}
 		// We require as many input/container/mutable taglets as there are parameters
-		boolean sufficientIns = ins == m.getParameterCount();
+		boolean sufficientIns = ins == numIns;
 		// We require one container/mutable/output taglet
-		boolean sufficientOuts = outs == 1;
+		boolean sufficientOuts = outs == numOuts;
 		return sufficientIns && sufficientOuts;
 	}
 

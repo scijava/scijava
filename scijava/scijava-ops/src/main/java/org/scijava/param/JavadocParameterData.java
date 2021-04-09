@@ -165,6 +165,18 @@ public class JavadocParameterData implements ParameterData {
 			.filter(param -> param.getAnnotation(OpDependency.class) == null).count();
 	}
 
+	/**
+	 * Determines whether {@code doc} has enough {@code @param} tags to satisfy
+	 * the number of inputs to the Op ({@code numParams}), as well as enough
+	 * {@code @return} taglets to satisfy the number of Op outputs
+	 * ({@code numReturns}).
+	 * 
+	 * @param doc the {@link OtherJavadoc}s found by the javadoc parser.
+	 * @param numParams the desired number of inputs
+	 * @param numReturns the desired number of outputs
+	 * @return true iff there are {@code numParams} inputs and {@code numReturns}
+	 *         outputs
+	 */
 	private boolean hasVanillaJavadoc(MethodJavadoc doc, long numParams, long numReturns) {
 		// We require a @param tag for each of the method parameters
 		boolean sufficientParams = doc.getParams().size() == numParams;
@@ -175,6 +187,19 @@ public class JavadocParameterData implements ParameterData {
 		return sufficientParams && sufficientReturn;
 	}
 
+	/**
+	 * Determines whether {@code doc} has enough
+	 * {@code @input/@container/@mutable} tags to satisfy the number of inputs to
+	 * the Op ({@code numIns}), as well as enough
+	 * {@code @container/@mutable/@output} taglets to satisfy the number of Op
+	 * outputs ({@code numOuts}).
+	 * 
+	 * @param doc the {@link OtherJavadoc}s found by the javadoc parser.
+	 * @param numIns the desired number of inputs
+	 * @param numOuts the desired number of outputs
+	 * @return true iff there are {@code numIns} inputs and {@code numOuts}
+	 *         outputs
+	 */
 	private boolean hasCustomJavadoc(List<OtherJavadoc> doc, long numIns, long numOuts) {
 		int ins = 0, outs = 0;
 		for (OtherJavadoc other : doc) {
@@ -199,12 +224,29 @@ public class JavadocParameterData implements ParameterData {
 		return sufficientIns && sufficientOuts;
 	}
 
+	/**
+	 * Populates {@link JavadocParameterData#paramNames} and
+	 * {@link JavadocParameterData#paramDescriptions} using {@code params}, and
+	 * {@link JavadocParameterData#returnDescription} using {@code returnDoc}.
+	 * 
+	 * @param params the {@code @param} tags on the method of interest
+	 * @param returnDoc the string following {@code @return}
+	 */
 	private void populateViaParamAndReturn(List<ParamJavadoc> params, Comment returnDoc) {
 		paramNames = params.stream().map(param -> param.getName()).collect(Collectors.toList());
 		paramDescriptions = params.stream().map(param -> param.getComment().toString()).collect(Collectors.toList());
 		returnDescription = returnDoc.toString();
 	}
 
+	/**
+	 * Populates {@link JavadocParameterData#paramNames},
+	 * {@link JavadocParameterData#paramDescriptions}, and, and
+	 * {@link JavadocParameterData#returnDescription} using
+	 * {@code @input/@output/@container/@mutable} taglets.
+	 * 
+	 * @param doc the {@link List} of {@link OtherJavadoc}s containing all of the
+	 *          taglets we need to parse
+	 */
 	private void populateViaCustomTaglets(List<OtherJavadoc> doc) {
 		paramNames = new ArrayList<>();
 		paramDescriptions = new ArrayList<>();
@@ -226,6 +268,13 @@ public class JavadocParameterData implements ParameterData {
 		}
 	}
 
+	/**
+	 * Determines if {@code tagType} is one of the tags that we are interested in
+	 * scraping.
+	 * 
+	 * @param tagType the tag we might need to scrape
+	 * @return true iff it is interesting to us
+	 */
 	private boolean validParameterTag(String tagType) {
 		if (tagType.equals("input")) return true;
 		if (tagType.equals("mutable")) return true;
@@ -234,6 +283,12 @@ public class JavadocParameterData implements ParameterData {
 		return false;
 	}
 
+	/**
+	 * Synthesizes a set of {@link Parameter}s using the data present in the
+	 * javadoc, as well as {@code fmts}.
+	 * 
+	 * @param fmts the list of inputs, outputs, and other types required by the Op
+	 */
 	@Override
 	public List<Parameter> synthesizeAnnotations(List<FunctionalMethodType> fmts) {
 		List<Parameter> params = new ArrayList<>();

@@ -144,13 +144,17 @@ public class JavadocParameterData implements ParameterData {
 	 * @param m the method whose javadoc has tags we want to parse
 	 */
 	private void parseMethod(Method m) {
+		// determine the Op inputs/outputs
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
 		long numOpParams = getOpParams(m);
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
+		// scrape the conventional javadoc tags iff present
 		if (hasVanillaJavadoc(doc, numOpParams, numReturns))
 			populateViaParamAndReturn(doc.getParams(), doc.getReturns());
+		// scrape our custom javadoc taglets iff present
 		else if (hasCustomJavadoc(doc.getOther(), numOpParams, 1))
 			populateViaCustomTaglets(doc.getOther());
+		// give up if neither is fully present
 		else throw new IllegalArgumentException("Method " + m +
 			" has no suitable tag(lets) to scrape documentation from");
 	}

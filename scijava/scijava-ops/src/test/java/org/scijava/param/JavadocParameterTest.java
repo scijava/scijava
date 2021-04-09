@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
@@ -77,6 +79,20 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 			.toList());
 	}
 
+	/**
+	 * Tests javadoc scraping with input (I) ONLY
+	 * 
+	 * @input foo the first input
+	 * @input bar the second input
+	 */
+	@OpMethod(names = "test.javadoc.methodI", type = BiFunction.class)
+	public static List<Long> OpMethodI(List<String> foo, List<String> bar) {
+		BiFunction<String, String, Long> func = (s1, s2) -> Long.parseLong(s1) +
+			Long.parseLong(s2);
+		return Streams.zip(foo.stream(), bar.stream(), func).collect(Collectors
+			.toList());
+	}
+
 	@Test
 	public void testJavadocMethodPR() {
 		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodPR").iterator();
@@ -110,6 +126,101 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		isSuitableGenericOpMethodInfo(info);
 	}
 	
+	@Test
+	public void testJavadocMethodI() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodI").iterator();
+
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+		}
+		isSuitableGenericOpMethodInfo(info);
+	}
+
+	/**
+	 * Tests javadoc scraping of mutable taglet
+	 * 
+	 * @mutable foo the i/o argument
+	 */
+	@OpMethod(names = "test.javadoc.methodInplaceI", type = Inplaces.Arity1.class)
+	public static void OpMethodInplaceI(List<String> foo) {
+		for (int i = 0; i < foo.size(); i++) {
+			foo.set(i, foo.get(i) + " foo");
+		}
+	}
+
+	/**
+	 * Tests javadoc scraping of mutable taglet
+	 * 
+	 * @dependency inplace the Op being wrapped
+	 * @mutable foo the i/o argument
+	 */
+	@OpMethod(names = "test.javadoc.methodDependency", type = Inplaces.Arity1.class)
+	public static void OpMethodInplaceI(@OpDependency(
+		name = "test.javadoc.methodInplaceI") Inplaces.Arity1<List<String>> inplace,
+		List<String> foo)
+	{
+		inplace.mutate(foo);
+	}
+
+	@Test
+	public void testJavadocMethodInplaceI() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodInplaceI").iterator();
+
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+		}
+
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(inputNames, new String[] { "foo" });
+
+		// assert input descriptions
+		String[] inputDescriptions = info.inputs().stream().map(m -> m
+			.getDescription()).toArray(String[]::new);
+		Assert.assertArrayEquals(inputDescriptions, new String[] {
+			"the i/o argument"});
+
+		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("foo", outputName);
+
+		// assert output description
+		String outputDescription = info.output().getDescription();
+		Assert.assertEquals("the i/o argument", outputDescription);
+	}
+	
+	@Test
+	public void testJavadocMethodInplaceWithDepedency() {
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodDependency").iterator();
+
+		OpInfo info = infos.next();
+		if (infos.hasNext()) {
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.methodDependency\"");
+		}
+
+		// assert input names
+		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
+			String[]::new);
+		Assert.assertArrayEquals(inputNames, new String[] { "foo" });
+
+		// assert input descriptions
+		String[] inputDescriptions = info.inputs().stream().map(m -> m
+			.getDescription()).toArray(String[]::new);
+		Assert.assertArrayEquals(inputDescriptions, new String[] {
+			"the i/o argument"});
+
+		// assert output name
+		String outputName = info.output().getKey();
+		Assert.assertEquals("foo", outputName);
+
+		// assert output description
+		String outputDescription = info.output().getDescription();
+		Assert.assertEquals("the i/o argument", outputDescription);
+	}
+
 	/**
 	 * Asserts that the {@link OpInfo} has as inputs:
 	 * <ul>

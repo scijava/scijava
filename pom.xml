@@ -48,6 +48,7 @@
 		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej-testutil</module>
 		<module>scijava/scijava-persist</module>
+		<module>scijava/scijava-functions</module>
 		<module>scijava/scijava-ops</module>
 		<module>scijava/scijava-testutil</module>
 		<module>scijava/scijava-types</module>

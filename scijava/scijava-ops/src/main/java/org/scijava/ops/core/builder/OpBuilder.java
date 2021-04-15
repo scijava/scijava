@@ -38,8 +38,9 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.functions.Computers;
 import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
@@ -505,7 +506,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(env, opName, outType);
+			return ComputerUtils.match(env, opName, outType);
 		}
 
 		public O create() {
@@ -513,7 +514,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer(Hints hints) {
-			return Computers.match(env, opName, outType, hints);
+			return ComputerUtils.match(env, opName, outType, hints);
 		}
 
 		public O create(Hints hints) {
@@ -537,7 +538,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(env, opName, type(out));
+			return ComputerUtils.match(env, opName, type(out));
 		}
 
 		public void compute() {
@@ -545,7 +546,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(out), hints);
+			return ComputerUtils.match(env, opName, type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -581,11 +582,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity1<I1, O> computer() {
-			return Computers.match(env, opName, in1Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, outType);
 		}
 
 		public Computers.Arity1<I1, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, outType, hints);
 		}
 
 		public Inplaces.Arity1<I1> inplace() {
@@ -658,11 +659,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity1<I1, O> computer() {
-			return Computers.match(env, opName, type(in1), outType);
+			return ComputerUtils.match(env, opName, type(in1), outType);
 		}
 
 		public Computers.Arity1<I1, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), outType, hints);
 		}
 	
 		public O apply() {
@@ -756,7 +757,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity1<I1, O> computer() {
-			return Computers.match(env, opName, type(in1), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(out));
 		}
 
 		public void compute() {
@@ -764,7 +765,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity1<I1, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -803,11 +804,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity2<I1, I2, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, outType);
 		}
 
 		public Computers.Arity2<I1, I2, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, outType, hints);
 		}
 
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
@@ -894,11 +895,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity2<I1, I2, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), outType);
 		}
 
 		public Computers.Arity2<I1, I2, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), outType, hints);
 		}
 	
 		public O apply() {
@@ -1016,7 +1017,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity2<I1, I2, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(out));
 		}
 
 		public void compute() {
@@ -1024,7 +1025,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity2<I1, I2, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -1066,11 +1067,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, outType);
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, outType, hints);
 		}
 
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
@@ -1171,11 +1172,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity3<I1, I2, I3, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), outType);
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), outType, hints);
 		}
 	
 		public O apply() {
@@ -1317,7 +1318,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(out));
 		}
 
 		public void compute() {
@@ -1325,7 +1326,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -1370,11 +1371,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType);
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType, hints);
 		}
 
 		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
@@ -1489,11 +1490,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType);
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType, hints);
 		}
 	
 		public O apply() {
@@ -1659,7 +1660,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(out));
 		}
 
 		public void compute() {
@@ -1667,7 +1668,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -1715,11 +1716,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType, hints);
 		}
 
 		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
@@ -1848,11 +1849,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType, hints);
 		}
 	
 		public O apply() {
@@ -2042,7 +2043,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out));
 		}
 
 		public void compute() {
@@ -2050,7 +2051,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -2101,11 +2102,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType, hints);
 		}
 
 		public Inplaces.Arity6_1<I1, I2, I3, I4, I5, I6> inplace1() {
@@ -2248,11 +2249,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType, hints);
 		}
 	
 		public O apply() {
@@ -2466,7 +2467,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(out));
 		}
 
 		public void compute() {
@@ -2474,7 +2475,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -2528,11 +2529,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType, hints);
 		}
 
 		public Inplaces.Arity7_1<I1, I2, I3, I4, I5, I6, I7> inplace1() {
@@ -2689,11 +2690,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType, hints);
 		}
 	
 		public O apply() {
@@ -2931,7 +2932,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(out));
 		}
 
 		public void compute() {
@@ -2939,7 +2940,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -2996,11 +2997,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType, hints);
 		}
 
 		public Inplaces.Arity8_1<I1, I2, I3, I4, I5, I6, I7, I8> inplace1() {
@@ -3171,11 +3172,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType, hints);
 		}
 	
 		public O apply() {
@@ -3437,7 +3438,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(out));
 		}
 
 		public void compute() {
@@ -3445,7 +3446,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -3505,11 +3506,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType, hints);
 		}
 
 		public Inplaces.Arity9_1<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace1() {
@@ -3694,11 +3695,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType, hints);
 		}
 	
 		public O apply() {
@@ -3984,7 +3985,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(out));
 		}
 
 		public void compute() {
@@ -3992,7 +3993,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -4055,11 +4056,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType, hints);
 		}
 
 		public Inplaces.Arity10_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace1() {
@@ -4258,11 +4259,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType, hints);
 		}
 	
 		public O apply() {
@@ -4572,7 +4573,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(out));
 		}
 
 		public void compute() {
@@ -4580,7 +4581,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -4646,11 +4647,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType, hints);
 		}
 
 		public Inplaces.Arity11_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace1() {
@@ -4863,11 +4864,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType, hints);
 		}
 	
 		public O apply() {
@@ -5201,7 +5202,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(out));
 		}
 
 		public void compute() {
@@ -5209,7 +5210,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -5278,11 +5279,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType, hints);
 		}
 
 		public Inplaces.Arity12_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace1() {
@@ -5509,11 +5510,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType, hints);
 		}
 	
 		public O apply() {
@@ -5871,7 +5872,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(out));
 		}
 
 		public void compute() {
@@ -5879,7 +5880,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -5951,11 +5952,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType, hints);
 		}
 
 		public Inplaces.Arity13_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace1() {
@@ -6196,11 +6197,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType, hints);
 		}
 	
 		public O apply() {
@@ -6582,7 +6583,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(out));
 		}
 
 		public void compute() {
@@ -6590,7 +6591,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -6665,11 +6666,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType, hints);
 		}
 
 		public Inplaces.Arity14_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace1() {
@@ -6924,11 +6925,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType, hints);
 		}
 	
 		public O apply() {
@@ -7334,7 +7335,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(out));
 		}
 
 		public void compute() {
@@ -7342,7 +7343,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -7420,11 +7421,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType, hints);
 		}
 
 		public Inplaces.Arity15_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace1() {
@@ -7693,11 +7694,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType, hints);
 		}
 	
 		public O apply() {
@@ -8127,7 +8128,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(out));
 		}
 
 		public void compute() {
@@ -8135,7 +8136,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -8216,11 +8217,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer(final Hints hints) {
-			return Computers.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType, hints);
+			return ComputerUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType, hints);
 		}
 
 		public Inplaces.Arity16_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace1() {
@@ -8503,11 +8504,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType, hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType, hints);
 		}
 	
 		public O apply() {
@@ -8961,7 +8962,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), type(out));
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), type(out));
 		}
 
 		public void compute() {
@@ -8969,7 +8970,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), type(out), hints);
+			return ComputerUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {

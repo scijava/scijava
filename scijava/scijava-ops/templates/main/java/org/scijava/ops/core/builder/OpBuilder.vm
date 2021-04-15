@@ -38,8 +38,9 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.functions.Computers;
 import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
@@ -237,7 +238,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(env, opName, outType);
+			return ComputerUtils.match(env, opName, outType);
 		}
 
 		public O create() {
@@ -245,7 +246,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer(Hints hints) {
-			return Computers.match(env, opName, outType, hints);
+			return ComputerUtils.match(env, opName, outType, hints);
 		}
 
 		public O create(Hints hints) {
@@ -269,7 +270,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer() {
-			return Computers.match(env, opName, type(out));
+			return ComputerUtils.match(env, opName, type(out));
 		}
 
 		public void compute() {
@@ -277,7 +278,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity0<O> computer(final Hints hints) {
-			return Computers.match(env, opName, type(out), hints);
+			return ComputerUtils.match(env, opName, type(out), hints);
 		}
 
 		public void compute(final Hints hints) {
@@ -320,11 +321,11 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity${arity}$generics.call($arity) computer() {
-			return Computers.match(env, opName, $inputTypesWithOutput.call($arity));
+			return ComputerUtils.match(env, opName, $inputTypesWithOutput.call($arity));
 		}
 
 		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
-			return Computers.match(env, opName, $inputTypesWithOutput.call($arity), hints);
+			return ComputerUtils.match(env, opName, $inputTypesWithOutput.call($arity), hints);
 		}
 
 #foreach($a in [1..$arity])
@@ -413,11 +414,11 @@ public class OpBuilder {
 		}
 	
 		public Computers.Arity${arity}$generics.call($arity) computer() {
-			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), outType);
+			return ComputerUtils.match(env, opName, $inputTypesFromArgs.call($arity), outType);
 		}
 
 		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
-			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
+			return ComputerUtils.match(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
 		}
 	
 		public O apply() {
@@ -531,7 +532,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
-			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), type(out));
+			return ComputerUtils.match(env, opName, $inputTypesFromArgs.call($arity), type(out));
 		}
 
 		public void compute() {
@@ -539,7 +540,7 @@ public class OpBuilder {
 		}
 
 		public Computers.Arity${arity}${generics.call($arity)} computer(final Hints hints) {
-			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), type(out), hints);
+			return ComputerUtils.match(env, opName, $inputTypesFromArgs.call($arity), type(out), hints);
 		}
 
 		public void compute(final Hints hints) {

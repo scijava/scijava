@@ -38,10 +38,10 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.functions.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

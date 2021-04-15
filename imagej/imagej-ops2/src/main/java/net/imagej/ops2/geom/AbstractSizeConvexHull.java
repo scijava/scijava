@@ -34,7 +34,7 @@ import java.util.function.Function;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.SizeConvexHull}

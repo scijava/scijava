@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
-import org.scijava.param.Mutable;
+import org.scijava.functions.annotations.Mutable;
 import org.scijava.types.Types;
 
 /**

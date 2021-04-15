@@ -12,7 +12,8 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
@@ -182,7 +183,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer1() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity1<double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -190,7 +191,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer2() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity2<double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -198,7 +199,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer3() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity3<double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -206,7 +207,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer4() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity4<double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -214,7 +215,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer5() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity5<double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -222,7 +223,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer6() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity6<double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -230,7 +231,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer7() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity7<double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -238,7 +239,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer8() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity8<double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -246,7 +247,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer9() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity9<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -254,7 +255,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer10() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity10<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -262,7 +263,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer11() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity11<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -270,7 +271,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer12() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity12<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -278,7 +279,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer13() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity13<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -286,7 +287,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer14() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity14<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -294,7 +295,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer15() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity15<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -302,7 +303,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer16() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		Computers.Arity16<double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[], double[]> op = //
-			Computers.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
+			ComputerUtils.match(ops.env(), "test.addArrays", nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 

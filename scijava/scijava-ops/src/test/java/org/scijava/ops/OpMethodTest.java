@@ -40,7 +40,7 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 import org.scijava.param.Parameter;

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 import org.scijava.struct.Member;
 import org.scijava.util.Types;
 

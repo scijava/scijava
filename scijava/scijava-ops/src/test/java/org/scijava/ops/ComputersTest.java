@@ -30,7 +30,8 @@
 package org.scijava.ops;
 
 import org.junit.Test;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.types.Nil;
 
 public class ComputersTest extends AbstractTestEnvironment {
@@ -40,7 +41,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryComputers() {
-		Computers.Arity1<double[], double[]> sqrtComputer = Computers.match(ops.env(),
+		Computers.Arity1<double[], double[]> sqrtComputer = ComputerUtils.match(ops.env(),
 			"math.sqrt", nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];
@@ -51,7 +52,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 	@Test
 	public void testBinaryComputers() {
 		Computers.Arity2<double[], double[], double[]> addComputer = //
-			Computers.match(ops.env(), "math.add", nilDoubleArray, nilDoubleArray,
+			ComputerUtils.match(ops.env(), "math.add", nilDoubleArray, nilDoubleArray,
 				nilDoubleArray);
 
 		double[] result = new double[3];

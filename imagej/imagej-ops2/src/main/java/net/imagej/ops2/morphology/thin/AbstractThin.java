@@ -43,7 +43,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 
 /**
  * Thinning Operation

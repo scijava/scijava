@@ -51,7 +51,7 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 

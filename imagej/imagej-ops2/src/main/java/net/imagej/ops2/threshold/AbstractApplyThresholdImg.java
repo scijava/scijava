@@ -36,7 +36,7 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 
 /**
  * @author Curtis Rueden

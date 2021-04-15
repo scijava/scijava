@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 import org.scijava.ops.function.Inplaces;
 
 /**

@@ -38,7 +38,8 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.Functions;
 import org.scijava.types.Nil;
 import org.scijava.ops.util.Maps;
@@ -71,7 +72,7 @@ public class LiftTest extends AbstractTestEnvironment {
 	@Test
 	public void testliftComputer() {
 
-		Computers.Arity1<double[], double[]> powComputer = Computers.match(ops.env(), "test.liftComputer", nilDoubleArray, nilDoubleArray);
+		Computers.Arity1<double[], double[]> powComputer = ComputerUtils.match(ops.env(), "test.liftComputer", nilDoubleArray, nilDoubleArray);
 
 		Computers.Arity1<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.ComputerMaps.Iterables
 				.liftBoth(powComputer);

@@ -42,7 +42,8 @@ import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.types.Nil;
 
 /**
@@ -527,7 +528,7 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 		final DoubleType out = new DoubleType();
 		final long seed = 0xcafebabe12345678L;
 		final Random rng = new Random(seed);
-		final Computers.Arity2<DoubleType, Random, DoubleType> op = Computers.match(ops.env(), "math.randomGaussian",
+		final Computers.Arity2<DoubleType, Random, DoubleType> op = ComputerUtils.match(ops.env(), "math.randomGaussian",
 				new Nil<DoubleType>() {}, new Nil<Random>() {}, new Nil<DoubleType>() {});
 		op.compute(in, rng, out);
 		assertEquals(o, out.get(), 0);
@@ -548,7 +549,7 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 		final DoubleType out = new DoubleType();
 		final long seed = 0xcafebabe12345678L;
 		final Random rng = new Random(seed);
-		final Computers.Arity2<DoubleType, Random, DoubleType> op = Computers.match(ops.env(), "math.randomUniform",
+		final Computers.Arity2<DoubleType, Random, DoubleType> op = ComputerUtils.match(ops.env(), "math.randomUniform",
 				new Nil<DoubleType>() {}, new Nil<Random>() {}, new Nil<DoubleType>() {});
 		op.compute(in, rng, out);
 		assertEquals(o, out.get(), 0);

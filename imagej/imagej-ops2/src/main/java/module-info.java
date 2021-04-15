@@ -138,5 +138,6 @@ module net.imagej.ops2 {
 	requires jama;
 	requires imglib2.algorithm.fft;
 	requires mines.jtk;
+	requires org.scijava.functions;
 
 }

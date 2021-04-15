@@ -9,6 +9,8 @@ import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.functions.Computers;
+import org.scijava.functions.annotations.Container;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -555,7 +557,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(O out) //
+				public void compute(@Container O out) //
 				{
 					op.compute(out);
 				}
@@ -586,7 +588,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I in, O out) //
+				public void compute(I in, @Container O out) //
 				{
 					op.compute(in, out);
 				}
@@ -617,7 +619,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, O out) //
+				public void compute(I1 in1, I2 in2, @Container O out) //
 				{
 					op.compute(in1, in2, out);
 				}
@@ -648,7 +650,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, @Container O out) //
 				{
 					op.compute(in1, in2, in3, out);
 				}
@@ -679,7 +681,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, out);
 				}
@@ -710,7 +712,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, out);
 				}
@@ -741,7 +743,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, out);
 				}
@@ -772,7 +774,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, out);
 				}
@@ -803,7 +805,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
 				}
@@ -834,7 +836,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 				}
@@ -865,7 +867,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
 				}
@@ -896,7 +898,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
 				}
@@ -927,7 +929,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
 				}
@@ -958,7 +960,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
 				}
@@ -989,7 +991,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
 				}
@@ -1020,7 +1022,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
 				}
@@ -1051,7 +1053,7 @@ public class OpWrappers {
 			{
 
 				@Override
-				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, O out) //
+				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Container O out) //
 				{
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
 				}

@@ -32,7 +32,7 @@ package net.imagej.ops2.image.normalize;
 import net.imglib2.converter.Converter;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 
 /**
  * Simple {@link UnaryComputerOp} and {@link Converter} to perform a

@@ -11,13 +11,12 @@ import com.google.common.collect.ImmutableBiMap;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.scijava.functions.Computers;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
-import org.scijava.param.Container;
 import org.scijava.types.Types;
 
 /**
@@ -38,13 +37,11 @@ import org.scijava.types.Types;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public final class Computers {
+public final class ComputerUtils {
 
-	private Computers() {
+	private ComputerUtils() {
 		// NB: Prevent instantiation of utility class.
 	}
-
-	// -- BEGIN TEMP --
 
 	/**
 	 * All known computer types and their arities. The entries are sorted by
@@ -55,7 +52,7 @@ public final class Computers {
 	static {
 		final Map<Class<?>, Integer> computers = new HashMap<>();
 #foreach($arity in $arities)
-		computers.put(Arity${arity}.class, $arity);
+		computers.put(Computers.Arity${arity}.class, $arity);
 #end
 		ALL_COMPUTERS = ImmutableBiMap.copyOf(computers);
 	}
@@ -114,25 +111,4 @@ public final class Computers {
 		nils[nils.length - 1] = outType;
 		return (T) env.op(opName, Nil.of(specialType), nils, outType, hints);
 	}
-
-	// -- END TEMP --
-#foreach($arity in $arities)
-#set($rawClass = "Arity$arity")
-#set($genericParams = $generics.call($arity))
-#set($gClass = "$rawClass$genericParams")
-
-	@FunctionalInterface
-	public interface $gClass extends
-		$consumerArity.call($arity)$genericParams
-	{
-
-		void compute($computeParams.call($arity));
-
-		@Override
-		default void accept($acceptParams.call($arity))
-		{
-			compute($computeArgs.call($arity));
-		}
-	}
-#end##foreach($arity)
 }

@@ -12,7 +12,8 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
+import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
@@ -50,7 +51,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer$arity() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$computerArity.call($arity)$doubleArrayTypeParams.call($arity) op = //
-			Computers.match(ops.env(), "test.addArrays", $nilDoubleList.call($arity));
+			ComputerUtils.match(ops.env(), "test.addArrays", $nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
 

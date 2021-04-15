@@ -54,7 +54,7 @@ import net.imglib2.view.composite.GenericComposite;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpExecutionException;
-import org.scijava.ops.function.Computers;
+import org.scijava.functions.Computers;
 
 /**
  * Apply a local thresholding method to an image using integral images for speed

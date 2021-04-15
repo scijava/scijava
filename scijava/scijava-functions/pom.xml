@@ -83,7 +83,7 @@
 	</ciManagement>
 
 	<properties>
-		<main-class>org.scijava.ops.Main</main-class>
+		<main-class>org.scijava.functions.Main</main-class>
 		<package-name>org.scijava.functions</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>

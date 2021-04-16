@@ -74,53 +74,54 @@ public final class Functions {
 	}
 
 #end
-	public interface ArityN<O> {
-
-		O apply(Object... ins);
-
-		Object getOp();
-	}
-
-	protected static class Arity0AsN<O> implements ArityN<O> {
-
-		Producer<O> func;
-
-		public Arity0AsN(Producer<O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.create();
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
+	// TODO: clean
+//	public interface ArityN<O> {
+//
+//		O apply(Object... ins);
+//
+//		Object getOp();
+//	}
+//
+//	protected static class Arity0AsN<O> implements ArityN<O> {
+//
+//		Producer<O> func;
+//
+//		public Arity0AsN(Producer<O> func) {
+//			this.func = func;
+//		}
+//
+//		@Override
+//		public O apply(Object... ins) {
+//			return func.create();
+//		}
+//
+//		@Override
+//		public Object getOp() {
+//			return func;
+//		}
+//
+//	}
 
 #foreach($arity in [1..$maxArity])
-	protected static class Arity${arity}AsN<O> implements ArityN<O> {
-
-		$functionArity.call($arity)$objectGenerics.call($arity) func;
-
-		public Arity${arity}AsN($functionArity.call($arity)$objectGenerics.call($arity) func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply($insArgs.call($arity));
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
+//	protected static class Arity${arity}AsN<O> implements ArityN<O> {
+//
+//		$functionArity.call($arity)$objectGenerics.call($arity) func;
+//
+//		public Arity${arity}AsN($functionArity.call($arity)$objectGenerics.call($arity) func) {
+//			this.func = func;
+//		}
+//
+//		@Override
+//		public O apply(Object... ins) {
+//			return func.apply($insArgs.call($arity));
+//		}
+//
+//		@Override
+//		public Object getOp() {
+//			return func;
+//		}
+//
+//	}
 
 #end
 }

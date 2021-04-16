@@ -13,8 +13,9 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.functions.Computers;
+import org.scijava.functions.Functions;
 import org.scijava.ops.function.ComputerUtils;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.FunctionUtils;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 import org.scijava.types.GenericTyped;
@@ -31,7 +32,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	@Test
 	public void testWrapProducer() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
-		Producer<Double> op = Functions.match(ops.env(), "test.addDoubles", nilDouble);
+		Producer<Double> op = FunctionUtils.match(ops.env(), "test.addDoubles", nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -40,7 +41,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction$arity() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		$functionArity.call($arity)$doubleTypeParams.call($arity) op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				$nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}

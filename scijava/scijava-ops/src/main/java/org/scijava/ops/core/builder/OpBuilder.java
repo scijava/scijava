@@ -41,7 +41,8 @@ import java.util.function.Function;
 import org.scijava.functions.Computers;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.function.ComputerUtils;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.FunctionUtils;
+import org.scijava.functions.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 import org.scijava.ops.hints.Hints;
@@ -574,11 +575,11 @@ public class OpBuilder {
 		}
 
 		public Function<I1, O> function() {
-			return Functions.match(env, opName, in1Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, outType);
 		}
 
 		public Function<I1, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, outType, hints);
 		}
 
 		public Computers.Arity1<I1, O> computer() {
@@ -619,11 +620,11 @@ public class OpBuilder {
 		}
 
 		public Function<I1, ?> function() {
-			return Functions.match(env, opName, in1Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, Nil.of(Object.class));
 		}
 
 		public Function<I1, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity1<I1> inplace() {
@@ -651,11 +652,11 @@ public class OpBuilder {
 		}
 
 		public Function<I1, O> function() {
-			return Functions.match(env, opName, type(in1), outType);
+			return FunctionUtils.match(env, opName, type(in1), outType);
 		}
 	
 		public Function<I1, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), outType, hints);
 		}
 	
 		public Computers.Arity1<I1, O> computer() {
@@ -704,11 +705,11 @@ public class OpBuilder {
 		}
 
 		public Function<I1, ?> function() {
-			return Functions.match(env, opName, type(in1), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), Nil.of(Object.class));
 		}
 
 		public Function<I1, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity1<I1> inplace() {
@@ -796,11 +797,11 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, outType);
 		}
 
 		public BiFunction<I1, I2, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, outType, hints);
 		}
 
 		public Computers.Arity2<I1, I2, O> computer() {
@@ -848,11 +849,11 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, Nil.of(Object.class));
 		}
 
 		public BiFunction<I1, I2, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
@@ -887,11 +888,11 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), outType);
 		}
 	
 		public BiFunction<I1, I2, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), outType, hints);
 		}
 	
 		public Computers.Arity2<I1, I2, O> computer() {
@@ -943,11 +944,11 @@ public class OpBuilder {
 		}
 
 		public BiFunction<I1, I2, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), Nil.of(Object.class));
 		}
 
 		public BiFunction<I1, I2, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity2_1<I1, I2> inplace1() {
@@ -1059,11 +1060,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, outType);
 		}
 
 		public Functions.Arity3<I1, I2, I3, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, outType, hints);
 		}
 
 		public Computers.Arity3<I1, I2, I3, O> computer() {
@@ -1118,11 +1119,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
@@ -1164,11 +1165,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), outType);
 		}
 	
 		public Functions.Arity3<I1, I2, I3, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), outType, hints);
 		}
 	
 		public Computers.Arity3<I1, I2, I3, O> computer() {
@@ -1223,11 +1224,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), Nil.of(Object.class));
 		}
 
 		public Functions.Arity3<I1, I2, I3, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity3_1<I1, I2, I3> inplace1() {
@@ -1363,11 +1364,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType);
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, outType, hints);
 		}
 
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
@@ -1429,11 +1430,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
@@ -1482,11 +1483,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType);
 		}
 	
 		public Functions.Arity4<I1, I2, I3, I4, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), outType, hints);
 		}
 	
 		public Computers.Arity4<I1, I2, I3, I4, O> computer() {
@@ -1544,11 +1545,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class));
 		}
 
 		public Functions.Arity4<I1, I2, I3, I4, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity4_1<I1, I2, I3, I4> inplace1() {
@@ -1708,11 +1709,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType);
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, outType, hints);
 		}
 
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
@@ -1781,11 +1782,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
@@ -1841,11 +1842,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType);
 		}
 	
 		public Functions.Arity5<I1, I2, I3, I4, I5, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), outType, hints);
 		}
 	
 		public Computers.Arity5<I1, I2, I3, I4, I5, O> computer() {
@@ -1906,11 +1907,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class));
 		}
 
 		public Functions.Arity5<I1, I2, I3, I4, I5, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity5_1<I1, I2, I3, I4, I5> inplace1() {
@@ -2094,11 +2095,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType);
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, outType, hints);
 		}
 
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
@@ -2174,11 +2175,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity6_1<I1, I2, I3, I4, I5, I6> inplace1() {
@@ -2241,11 +2242,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType);
 		}
 	
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), outType, hints);
 		}
 	
 		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> computer() {
@@ -2309,11 +2310,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class));
 		}
 
 		public Functions.Arity6<I1, I2, I3, I4, I5, I6, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity6_1<I1, I2, I3, I4, I5, I6> inplace1() {
@@ -2521,11 +2522,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType);
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, outType, hints);
 		}
 
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
@@ -2608,11 +2609,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity7_1<I1, I2, I3, I4, I5, I6, I7> inplace1() {
@@ -2682,11 +2683,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType);
 		}
 	
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), outType, hints);
 		}
 	
 		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> computer() {
@@ -2753,11 +2754,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class));
 		}
 
 		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity7_1<I1, I2, I3, I4, I5, I6, I7> inplace1() {
@@ -2989,11 +2990,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType);
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, outType, hints);
 		}
 
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
@@ -3083,11 +3084,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity8_1<I1, I2, I3, I4, I5, I6, I7, I8> inplace1() {
@@ -3164,11 +3165,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType);
 		}
 	
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), outType, hints);
 		}
 	
 		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> computer() {
@@ -3238,11 +3239,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class));
 		}
 
 		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity8_1<I1, I2, I3, I4, I5, I6, I7, I8> inplace1() {
@@ -3498,11 +3499,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType);
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, outType, hints);
 		}
 
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
@@ -3599,11 +3600,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity9_1<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace1() {
@@ -3687,11 +3688,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType);
 		}
 	
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), outType, hints);
 		}
 	
 		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> computer() {
@@ -3764,11 +3765,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class));
 		}
 
 		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity9_1<I1, I2, I3, I4, I5, I6, I7, I8, I9> inplace1() {
@@ -4048,11 +4049,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType);
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, outType, hints);
 		}
 
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
@@ -4156,11 +4157,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity10_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace1() {
@@ -4251,11 +4252,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType);
 		}
 	
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), outType, hints);
 		}
 	
 		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> computer() {
@@ -4331,11 +4332,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class));
 		}
 
 		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity10_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inplace1() {
@@ -4639,11 +4640,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType);
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, outType, hints);
 		}
 
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
@@ -4754,11 +4755,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity11_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace1() {
@@ -4856,11 +4857,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType);
 		}
 	
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), outType, hints);
 		}
 	
 		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> computer() {
@@ -4939,11 +4940,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class));
 		}
 
 		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity11_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inplace1() {
@@ -5271,11 +5272,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType);
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, outType, hints);
 		}
 
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
@@ -5393,11 +5394,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity12_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace1() {
@@ -5502,11 +5503,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType);
 		}
 	
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), outType, hints);
 		}
 	
 		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> computer() {
@@ -5588,11 +5589,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class));
 		}
 
 		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity12_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inplace1() {
@@ -5944,11 +5945,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType);
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, outType, hints);
 		}
 
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
@@ -6073,11 +6074,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity13_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace1() {
@@ -6189,11 +6190,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType);
 		}
 	
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), outType, hints);
 		}
 	
 		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> computer() {
@@ -6278,11 +6279,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class));
 		}
 
 		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity13_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inplace1() {
@@ -6658,11 +6659,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType);
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, outType, hints);
 		}
 
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
@@ -6794,11 +6795,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity14_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace1() {
@@ -6917,11 +6918,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType);
 		}
 	
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), outType, hints);
 		}
 	
 		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> computer() {
@@ -7009,11 +7010,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class));
 		}
 
 		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity14_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inplace1() {
@@ -7413,11 +7414,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType);
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, outType, hints);
 		}
 
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
@@ -7556,11 +7557,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity15_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace1() {
@@ -7686,11 +7687,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType);
 		}
 	
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), outType, hints);
 		}
 	
 		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> computer() {
@@ -7781,11 +7782,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class));
 		}
 
 		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity15_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inplace1() {
@@ -8209,11 +8210,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType);
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType, hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, outType, hints);
 		}
 
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
@@ -8359,11 +8360,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class));
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function(final Hints hints) {
-			return Functions.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type, Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity16_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace1() {
@@ -8496,11 +8497,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType);
 		}
 	
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType, hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), outType, hints);
 		}
 	
 		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> computer() {
@@ -8594,11 +8595,11 @@ public class OpBuilder {
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function() {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class));
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class));
 		}
 
 		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, ?> function(final Hints hints) {
-			return Functions.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class), hints);
+			return FunctionUtils.match(env, opName, type(in1), type(in2), type(in3), type(in4), type(in5), type(in6), type(in7), type(in8), type(in9), type(in10), type(in11), type(in12), type(in13), type(in14), type(in15), type(in16), Nil.of(Object.class), hints);
 		}
 
 		public Inplaces.Arity16_1<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inplace1() {

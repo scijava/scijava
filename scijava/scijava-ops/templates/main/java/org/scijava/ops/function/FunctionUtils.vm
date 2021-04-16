@@ -11,10 +11,10 @@ import com.google.common.collect.ImmutableBiMap;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.functions.Functions;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
@@ -35,13 +35,11 @@ import org.scijava.types.Types;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public final class Functions {
+public final class FunctionUtils {
 
-	private Functions() {
+	private FunctionUtils() {
 		// NB: Prevent instantiation of utility class.
 	}
-
-	// -- BEGIN TEMP --
 
 	/**
 	 * All known function types and their arities. The entries are sorted by
@@ -85,7 +83,7 @@ public final class Functions {
 
 #end
 	@SuppressWarnings({ "unchecked" })
-	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
+	public static <O, T> ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
 	{
 		Object op = matchHelper(env, opName, ALL_FUNCTIONS.get(inTypes.length),
@@ -126,50 +124,6 @@ public final class Functions {
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);
 	}
 
-#foreach($arity in $arities)
-	/**
-	 * A ${arity}-arity specialization of {@link Function}.
-	 *
-#foreach($a in [1..$arity])
-	 * @param <I${a}> the type of argument $a to the function
-#end
-	 * @param <O> the type of the output of the function
-	 * @see Function
-	 */
-	@FunctionalInterface
-	public interface Arity${arity}$generics.call($arity) {
-
-		/**
-		 * Applies this function to the given arguments.
-		 *
-#foreach($a in [1..$arity])
-		 * @param in$a function argument $a
-#end
-		 * @return the function output
-		 */
-		O apply($applyParams.call($arity));
-
-		/**
-		 * Returns a composed function that first applies this function to its
-		 * input, and then applies the {@code after} function to the result. If
-		 * evaluation of either function throws an exception, it is relayed to the
-		 * caller of the composed function.
-		 *
-		 * @param <O2> the type of output of the {@code after} function, and of the
-		 *          composed function
-		 * @param after the function to apply after this function is applied
-		 * @return a composed function that first applies this function and then
-		 *         applies the {@code after} function
-		 * @throws NullPointerException if after is null
-		 */
-		default <O2> Arity${arity}$genericsO2.call($arity) andThen(Function<? super O, ? extends O2> after)
-		{
-			Objects.requireNonNull(after);
-			return ($applyParams.call($arity)) -> after.apply(apply($applyArgs.call($arity)));
-		}
-	}
-
-#end
 	public interface ArityN<O> {
 
 		O apply(Object... ins);

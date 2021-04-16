@@ -13,8 +13,9 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.functions.Computers;
+import org.scijava.functions.Functions;
 import org.scijava.ops.function.ComputerUtils;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.FunctionUtils;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 import org.scijava.types.GenericTyped;
@@ -31,7 +32,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	@Test
 	public void testWrapProducer() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
-		Producer<Double> op = Functions.match(ops.env(), "test.addDoubles", nilDouble);
+		Producer<Double> op = FunctionUtils.match(ops.env(), "test.addDoubles", nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -39,7 +40,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction1() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Function<Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -48,7 +49,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction2() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		BiFunction<Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -57,7 +58,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction3() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity3<Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -66,7 +67,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction4() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity4<Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -75,7 +76,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction5() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity5<Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -84,7 +85,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction6() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity6<Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -93,7 +94,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction7() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity7<Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -102,7 +103,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction8() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity8<Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -111,7 +112,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction9() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity9<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -120,7 +121,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction10() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity10<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -129,7 +130,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction11() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity11<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -138,7 +139,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction12() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity12<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -147,7 +148,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction13() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity13<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -156,7 +157,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction14() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity14<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -165,7 +166,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction15() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity15<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -174,7 +175,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction16() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		Functions.Arity16<Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double, Double> op = //
-			Functions.match(ops.env(), "test.addDoubles", //
+			FunctionUtils.match(ops.env(), "test.addDoubles", //
 				nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble, nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}

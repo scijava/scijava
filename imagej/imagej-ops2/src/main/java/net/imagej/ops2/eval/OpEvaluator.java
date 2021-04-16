@@ -37,7 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.ops.OpService;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.FunctionUtils;
+import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.parsington.Operator;
@@ -148,7 +149,7 @@ public class OpEvaluator extends AbstractStandardStackEvaluator {
 		Nil<Object> outType = new Nil<>() {};
 
 		// Try executing the op.
-		Functions.ArityN<Object> func = Functions.matchN(ops.env(), opName, outType, inTypes);
+		FunctionUtils.ArityN<Object> func = FunctionUtils.matchN(ops.env(), opName, outType, inTypes);
 		return func.apply(argValues);
 	}
 

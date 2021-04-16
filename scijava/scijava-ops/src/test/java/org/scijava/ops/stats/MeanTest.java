@@ -8,7 +8,8 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.FunctionUtils;
+import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
 
 public class MeanTest <N extends Number> extends AbstractTestEnvironment{
@@ -16,7 +17,7 @@ public class MeanTest <N extends Number> extends AbstractTestEnvironment{
 	@Test
 	public void regressionTest() {
 
-		Function<Iterable<Integer>, Double> goodFunc = Functions.match(ops.env(), "stats.mean", new Nil<Iterable<Integer>>() {}, new Nil<Double>() {});
+		Function<Iterable<Integer>, Double> goodFunc = FunctionUtils.match(ops.env(), "stats.mean", new Nil<Iterable<Integer>>() {}, new Nil<Double>() {});
 
 		List<Integer> goodNums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		double expected = 5.5;

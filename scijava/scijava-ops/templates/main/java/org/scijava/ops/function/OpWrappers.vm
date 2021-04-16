@@ -10,6 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.functions.Computers;
+import org.scijava.functions.Functions;
 import org.scijava.functions.annotations.Container;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;

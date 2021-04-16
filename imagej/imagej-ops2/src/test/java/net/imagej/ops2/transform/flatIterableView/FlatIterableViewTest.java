@@ -43,7 +43,8 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.FlatIterableView} ops.
@@ -63,7 +64,7 @@ public class FlatIterableViewTest extends AbstractOpTest {
 
 	@Test
 	public void defaultFlatIterableTest() {
-		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc = Functions
+		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc = FunctionUtils
 				.match(ops.env(), "transform.flatIterableView", raiNil, iiNil);
 
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

@@ -44,7 +44,7 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.function.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.InvertAxisView} ops.
@@ -66,7 +66,7 @@ public class InvertAxisViewTest extends AbstractOpTest {
 	@Test
 	public void defaultInvertAxisTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, Integer, MixedTransformView<DoubleType>> invertFunc = Functions
+		BiFunction<RandomAccessible<DoubleType>, Integer, MixedTransformView<DoubleType>> invertFunc = FunctionUtils
 				.match(ops.env(), "transform.invertAxisView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
@@ -88,7 +88,7 @@ public class InvertAxisViewTest extends AbstractOpTest {
 	@Test
 	public void intervalInvertAxisTest() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, Integer, IntervalView<DoubleType>> invertFunc = Functions
+		BiFunction<RandomAccessibleInterval<DoubleType>, Integer, IntervalView<DoubleType>> invertFunc = FunctionUtils
 				.match(ops.env(), "transform.invertAxisView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {

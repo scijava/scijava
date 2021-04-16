@@ -43,7 +43,8 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ExtendZeroView} ops.
@@ -62,7 +63,7 @@ public class ExtendZeroViewTest extends AbstractOpTest {
 
 	@Test
 	public void extendZeroTest() {
-		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = Functions
+		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = FunctionUtils
 				.match(ops.env(), "transform.extendZeroView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});

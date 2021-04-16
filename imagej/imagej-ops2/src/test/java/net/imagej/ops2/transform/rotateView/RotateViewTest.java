@@ -42,9 +42,10 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.RotateView} ops.
@@ -66,7 +67,7 @@ public class RotateViewTest extends AbstractOpTest {
 	@Test
 	public void testDefaultRotate() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = Functions
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = FunctionUtils
 				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -89,7 +90,7 @@ public class RotateViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalRotate() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = FunctionUtils
 				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
@@ -116,7 +117,7 @@ public class RotateViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalRotateInterval() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = Functions
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = FunctionUtils
 				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {

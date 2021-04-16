@@ -40,7 +40,7 @@ import java.util.List;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
 
 /**

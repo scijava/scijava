@@ -42,7 +42,8 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ZeroMinView} ops.
@@ -60,7 +61,7 @@ public class ZeroMinViewTest extends AbstractOpTest {
 	public void defaultZeroMinTest() {
 
 		Function<IntervalView<DoubleType>, IntervalView<DoubleType>> zeroMinFunc =
-			Functions.match(ops.env(), "transform.zeroMinView",
+			FunctionUtils.match(ops.env(), "transform.zeroMinView",
 				new Nil<IntervalView<DoubleType>>()
 				{}, new Nil<IntervalView<DoubleType>>() {});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

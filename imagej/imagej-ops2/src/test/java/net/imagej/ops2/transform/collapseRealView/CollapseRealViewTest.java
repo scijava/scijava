@@ -46,7 +46,8 @@ import net.imglib2.view.composite.RealComposite;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.CollapseRealView} ops.
@@ -65,7 +66,7 @@ public class CollapseRealViewTest extends AbstractOpTest {
 
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
-		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, RealComposite<DoubleType>>> collapseFunc = Functions
+		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, RealComposite<DoubleType>>> collapseFunc = FunctionUtils
 				.match(ops.env(), "transform.collapseRealView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<CompositeIntervalView<DoubleType, RealComposite<DoubleType>>>() {
 				});
@@ -76,7 +77,7 @@ public class CollapseRealViewTest extends AbstractOpTest {
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
-		BiFunction<RandomAccessible<DoubleType>, Integer, CompositeView<DoubleType, RealComposite<DoubleType>>> collapseFuncRA = Functions
+		BiFunction<RandomAccessible<DoubleType>, Integer, CompositeView<DoubleType, RealComposite<DoubleType>>> collapseFuncRA = FunctionUtils
 				.match(ops.env(), "transform.collapseRealView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<CompositeView<DoubleType, RealComposite<DoubleType>>>() {

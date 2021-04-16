@@ -44,9 +44,10 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -66,7 +67,7 @@ public class IntervalViewTest extends AbstractOpTest {
 	@Test
 	public void defaultIntervalTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc = Functions
+		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc = FunctionUtils
 				.match(ops.env(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<IntervalView<DoubleType>>() {
@@ -93,7 +94,7 @@ public class IntervalViewTest extends AbstractOpTest {
 	@Test
 	public void intervalMinMaxTest() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = Functions
+		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = FunctionUtils
 				.match(ops.env(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {

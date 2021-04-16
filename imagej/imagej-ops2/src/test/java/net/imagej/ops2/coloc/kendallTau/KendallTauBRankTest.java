@@ -50,7 +50,8 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.function.Functions;
+import org.scijava.functions.Functions;
+import org.scijava.ops.function.FunctionUtils;
 import org.scijava.types.Nil;
 import org.scijava.thread.ThreadService;
 
@@ -127,7 +128,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 				0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
 		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = Functions.match(ops.env(),
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = FunctionUtils.match(ops.env(),
 				"coloc.kendallTau", nilRAI, nilRAI, new Nil<Double>() {});
 //		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
 //				"transform.raiToIterable").input(op).outType(

@@ -37,7 +37,7 @@ import org.scijava.ops.core.OpCollection;
 import org.scijava.functions.Computers;
 import org.scijava.functions.Functions;
 import org.scijava.functions.Inplaces;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

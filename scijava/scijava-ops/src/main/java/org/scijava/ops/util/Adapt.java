@@ -15,7 +15,7 @@ import org.scijava.ops.core.Op;
 import org.scijava.functions.Computers;
 import org.scijava.functions.Functions;
 import org.scijava.functions.Inplaces;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 
 /**
  * Utility providing adaptation between {@link Op} types.

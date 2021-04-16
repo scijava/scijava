@@ -42,7 +42,7 @@ import org.scijava.ops.adapt.functional.ComputersToFunctionsViaSource;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.functions.Computers;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

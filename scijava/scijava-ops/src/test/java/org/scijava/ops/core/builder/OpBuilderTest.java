@@ -41,7 +41,7 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.functions.Computers;
 import org.scijava.functions.Functions;
 import org.scijava.functions.Inplaces;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 
 /**
  * Tests {@link OpBuilder}. For each arity, we test the following matches and

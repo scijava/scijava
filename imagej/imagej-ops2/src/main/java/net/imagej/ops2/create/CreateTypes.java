@@ -20,7 +20,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

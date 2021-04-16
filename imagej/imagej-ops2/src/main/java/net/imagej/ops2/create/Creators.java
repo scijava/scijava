@@ -52,7 +52,7 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.functions.Functions;
 import org.scijava.functions.Functions;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

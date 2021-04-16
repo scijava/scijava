@@ -15,10 +15,11 @@ import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.functions.Computers;
 import org.scijava.functions.Functions;
 import org.scijava.functions.Inplaces;
+import org.scijava.functions.Producer;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.FunctionUtils;
 import org.scijava.ops.function.InplaceUtils;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
 

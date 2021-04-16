@@ -15,6 +15,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.functions.Functions;
+import org.scijava.functions.Producer;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;

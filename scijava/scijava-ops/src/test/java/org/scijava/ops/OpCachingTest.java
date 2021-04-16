@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Assertions;
 import org.scijava.Context;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Producer;
+import org.scijava.functions.Producer;
 import org.scijava.ops.impl.DefaultOpEnvironment;
 import org.scijava.ops.impl.MatchingConditions;
 import org.scijava.ops.matcher.OpRef;

@@ -1,7 +1,7 @@
 .include Globals.list
 arities = (1..maxArity).collect()
 
-[Inplaces.java]
+[InplaceUtils.java]
 simplifiedClass = ```
 { arity, num ->
   simplifiedInplace(arity, num) + '.class'

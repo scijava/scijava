@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.scijava.functions.Inplaces;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
@@ -50,13 +51,11 @@ import org.scijava.types.Types;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public final class Inplaces {
+public final class InplaceUtils {
 
-	private Inplaces() {
+	private InplaceUtils() {
 		// NB: Prevent instantiation of container class.
 	}
-
-	// -- BEGIN TEMP --
 
 	/**
 	 * All known inplace types and their arities and mutable positions. The
@@ -87,7 +86,7 @@ public final class Inplaces {
 	}
 
 	public static List<Class<?>> getInplacesOfArity(final int arity) {
-		return Inplaces.ALL_INPLACES.entrySet().stream() //
+		return ALL_INPLACES.entrySet().stream() //
 			.filter(e -> e.getValue().arity() == arity) //
 			.map(Entry<Class<?>, InplaceInfo>::getKey) //
 			.collect(Collectors.toList());
@@ -96,9 +95,9 @@ public final class Inplaces {
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity, $a) $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))
+	public static $generics.call($arity, $a) $inplaceType.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))
 	{
-		return matchHelper(env, opName, ${simplifiedInplace.call($arity, $a)}.class, ioType, new Nil[] {${basicParams.call($arity, $a)}});
+		return matchHelper(env, opName, ${inplaceClass.call($arity, $a)}, ioType, new Nil[] {${basicParams.call($arity, $a)}});
 	}
 
 #end
@@ -107,9 +106,9 @@ public final class Inplaces {
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity, $a) $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a), final Hints hints)
+	public static $generics.call($arity, $a) $inplaceType.call($arity, $a)$generics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a), final Hints hints)
 	{
-		return matchHelper(env, opName, hints, ${simplifiedInplace.call($arity, $a)}.class, ioType, new Nil[] {${basicParams.call($arity, $a)}});
+		return matchHelper(env, opName, hints, ${inplaceType.call($arity, $a)}.class, ioType, new Nil[] {${basicParams.call($arity, $a)}});
 	}
 
 #end
@@ -155,43 +154,4 @@ public final class Inplaces {
 		}
 	}
 
-	// -- END TEMP --
-
-	@FunctionalInterface
-	public interface Arity1<IO> extends Consumer<IO> {
-
-		void mutate(@Mutable IO io);
-
-		@Override
-		default void accept(IO io) {
-			mutate(io);
-		}
-	}
-
-#foreach($arity in [2..$maxArity])
-#set($cArity = $arity - 1)
-	@FunctionalInterface
-	public interface Arity${arity}$allMutableGenerics.call($arity) extends ${consumerArity.call($cArity)}$allMutableGenerics.call($arity)
-	{
-
-		void mutate($allMutableMutateParams.call($arity));
-
-		@Override
-		default void accept($allMutableMutateParams.call($arity))
-		{
-			mutate($allMutableMutateArgs.call($arity));
-		}
-	}
-
-#foreach($a in [1..$arity])
-	@FunctionalInterface
-	public interface $simplifiedInplace.call($arity, $a)$generics.call($arity, $a) extends Arity${arity}$generics.call($arity, $a)
-	{
-
-		@Override
-		void mutate($mutateArgs.call($arity, $a));
-	}
-
-#end
-#end
 }

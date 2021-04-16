@@ -39,11 +39,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.functions.Computers;
+import org.scijava.functions.Functions;
+import org.scijava.functions.Inplaces;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.functions.Functions;
-import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.InplaceUtils;
 import org.scijava.ops.function.Producer;
 import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
@@ -331,7 +332,7 @@ public class OpBuilder {
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
+			return InplaceUtils.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
 		}
 
 #end
@@ -376,7 +377,7 @@ public class OpBuilder {
 
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
+			return InplaceUtils.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
 		}
 
 #end
@@ -476,14 +477,14 @@ public class OpBuilder {
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity));
+			return InplaceUtils.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity));
 		}
 
 #end
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
 			checkInplaceRefs($a, $inputObjects.call($arity));
-			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity), hints);
+			return InplaceUtils.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity), hints);
 		}
 
 #end

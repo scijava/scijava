@@ -47,7 +47,7 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.functions.Functions;
-import org.scijava.ops.function.Inplaces;
+import org.scijava.functions.Inplaces;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;

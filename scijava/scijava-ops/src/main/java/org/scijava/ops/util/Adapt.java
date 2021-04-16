@@ -14,7 +14,7 @@ import org.scijava.ops.core.OneToOneCommand;
 import org.scijava.ops.core.Op;
 import org.scijava.functions.Computers;
 import org.scijava.functions.Functions;
-import org.scijava.ops.function.Inplaces;
+import org.scijava.functions.Inplaces;
 import org.scijava.ops.function.Producer;
 
 /**

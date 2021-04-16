@@ -14,9 +14,10 @@ import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.functions.Computers;
 import org.scijava.functions.Functions;
+import org.scijava.functions.Inplaces;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.ops.function.Inplaces;
+import org.scijava.ops.function.InplaceUtils;
 import org.scijava.ops.function.Producer;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
@@ -64,7 +65,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapInplace$inplaceSuffix.call($arity, $a)() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$inplaceType.call($arity, $a)$doubleArrayTypeParams.call($t) op = //
-			Inplaces.$matchName.call($arity, $a)(ops.env(), "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
+			InplaceUtils.$matchName.call($arity, $a)(ops.env(), "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
 		assertTrue(op instanceof GenericTyped);
 	}
 

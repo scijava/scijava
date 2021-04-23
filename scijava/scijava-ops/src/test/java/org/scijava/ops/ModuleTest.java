@@ -1,0 +1,77 @@
+
+package org.scijava.ops;
+
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.Test;
+
+public class ModuleTest extends AbstractTestEnvironment {
+
+	String moduleBaseDirectory = "src/main/java/org/scijava";
+
+	/**
+	 * Recursively finds the name of each package within the module
+	 * org.scijava.ops
+	 * 
+	 * @param set the set that will be populated with the module names
+	 * @param dirName the starting directory
+	 */
+	private void findPackageNames(Set<String> set, String dirName) {
+		File directory = new File(dirName);
+		// get all the files from a directory
+		File[] fList = directory.listFiles();
+		for (File file : fList) {
+			if (file.isFile()) {
+				String path = file.getPath();
+				String packName = path.substring(path.indexOf("org"), path.lastIndexOf(File.separatorChar));
+				set.add(packName.replace(File.separatorChar, '.'));
+			}
+			else if (file.isDirectory()) {
+				findPackageNames(set, file.getAbsolutePath());
+			}
+		}
+	}
+
+	private Set<String> getPackagesExported(String path) {
+		try {
+			Stream<String> stream = Files.lines(Paths.get(path));
+			// remove outside whitespace
+			Set<String> exportedPackages = stream.map(str -> str.trim())
+				// consider only opens
+				.filter(str -> str.startsWith("opens"))
+				// consider only opens to therapi
+				.filter(str -> str.contains("therapi.runtime.javadoc"))
+				// get the package from the opens
+				.map(str -> str.split(" ")[1]).collect(Collectors.toSet());
+			return exportedPackages;
+		}
+		catch (IOException e) {
+			throw new RuntimeException();
+		}
+	}
+
+	@Test
+	public void testTherapiExports() {
+		Set<String> packages = new HashSet<>();
+		findPackageNames(packages, moduleBaseDirectory);
+
+		Set<String> exportedPackages = getPackagesExported(
+			"src/main/java/module-info.java");
+
+		assertTrue(
+			"module-info.java does not export all packages to therapi.runtime.javadoc," +
+				" use bin/generate-groovy.sh to update the list!", packages.equals(
+					exportedPackages));
+	}
+
+}

@@ -11,9 +11,9 @@ import java.util.Set;
 		if (file.isFile()) {
 			String path = file.getPath();
 			int begin = path.indexOf("org");
-			int end = path.lastIndexOf('/');
+			int end = path.lastIndexOf(File.separator);
 			String packName = path.substring(begin, end);
-			set.add(packName.replace('/', '.'));
+			set.add(packName.replace(File.separator, '.'));
 		}
 		else if (file.isDirectory()) {
 			findPackageNames(set, file.getAbsolutePath());

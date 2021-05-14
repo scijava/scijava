@@ -33,8 +33,8 @@ public class ModuleTest extends AbstractTestEnvironment {
 		for (File file : fList) {
 			if (file.isFile()) {
 				String path = file.getPath();
-				String packName = path.substring(path.indexOf("org"), path.lastIndexOf(File.separatorChar));
-				set.add(packName.replace(File.separatorChar, '.'));
+				String packName = path.substring(path.indexOf("org"), path.lastIndexOf(File.separator));
+				set.add(packName.replace(File.separator, "."));
 			}
 			else if (file.isDirectory()) {
 				findPackageNames(set, file.getAbsolutePath());

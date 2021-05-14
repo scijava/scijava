@@ -148,15 +148,12 @@ public class JavadocParameterData implements ParameterData {
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
 		long numOpParams = getOpParams(m);
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
-		// scrape the conventional javadoc tags iff present
-		if (hasVanillaJavadoc(doc, numOpParams, numReturns))
-			populateViaParamAndReturn(doc.getParams(), doc.getReturns());
-		// scrape our custom javadoc taglets iff present
-		else if (hasCustomJavadoc(doc.getOther(), numOpParams, 1))
-			populateViaCustomTaglets(doc.getOther());
-		// give up if neither is fully present
-		else throw new IllegalArgumentException("Method " + m +
-			" has no suitable tag(lets) to scrape documentation from");
+		// ensure the method declares a complete set of tags
+		if (!hasVanillaJavadoc(doc, numOpParams, numReturns))
+			throw new IllegalArgumentException("Method " + m +
+				" has no suitable tag(lets) to scrape documentation from");
+		// scrape the conventional javadoc tags
+		populateViaParamAndReturn(doc.getParams(), doc.getReturns());
 	}
 
 	private long getOpParams(Method m) {
@@ -181,7 +178,7 @@ public class JavadocParameterData implements ParameterData {
 		// We require a @param tag for each of the method parameters
 		boolean sufficientParams = doc.getParams().size() == numParams;
 		// We require a @return tag for the method return iff not null
-		boolean javadocReturn = doc.getReturns() != null;
+		boolean javadocReturn = !doc.getReturns().toString().isEmpty();
 		boolean methodReturn = numReturns == 1;
 		boolean sufficientReturn = javadocReturn == methodReturn;
 		return sufficientParams && sufficientReturn;

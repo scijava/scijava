@@ -112,7 +112,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		if (infos.hasNext()) {
 			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
-		isSuitableScrapedOpMethodInfo(info);
+		isSuitableGenericOpMethodInfo(info);
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	/**
 	 * Tests javadoc scraping of mutable taglet
 	 * 
-	 * @mutable foo the i/o argument
+	 * @param foo the i/o argument
 	 */
 	@OpMethod(names = "test.javadoc.methodInplaceI", type = Inplaces.Arity1.class)
 	public static void OpMethodInplaceI(List<String> foo) {
@@ -153,7 +153,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	 * Tests javadoc scraping of mutable taglet
 	 * 
 	 * @dependency inplace the Op being wrapped
-	 * @mutable foo the i/o argument
+	 * @param foo the i/o argument
 	 */
 	@OpMethod(names = "test.javadoc.methodDependency", type = Inplaces.Arity1.class)
 	public static void OpMethodInplaceI(@OpDependency(

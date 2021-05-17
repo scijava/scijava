@@ -1,4 +1,4 @@
-package org.scijava.functions.annotations;
+package org.scijava.function;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

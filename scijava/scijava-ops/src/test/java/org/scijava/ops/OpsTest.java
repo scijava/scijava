@@ -33,8 +33,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.functions.Computers;
-import org.scijava.functions.Inplaces;
+import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
 import org.scijava.types.Nil;
 
 public class OpsTest extends AbstractTestEnvironment {

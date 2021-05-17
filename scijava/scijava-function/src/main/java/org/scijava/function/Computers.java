@@ -3,12 +3,10 @@
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-package org.scijava.functions;
+package org.scijava.function;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import org.scijava.functions.annotations.Container;
 
 /**
  * Container class for computer-style functional interfaces at various

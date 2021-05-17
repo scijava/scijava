@@ -32,8 +32,8 @@ package net.imagej.ops2.filter.fftSize;
 import net.imglib2.Dimensions;
 import net.imglib2.algorithm.fft2.FFTMethods;
 
+import org.scijava.function.Functions;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

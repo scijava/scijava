@@ -22,8 +22,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.scijava.functions.annotations.Container;
-import org.scijava.functions.annotations.Mutable;
+import org.scijava.function.Container;
+import org.scijava.function.Mutable;
 import org.scijava.ops.FieldOpDependencyMember;
 import org.scijava.ops.MethodParameterOpDependencyMember;
 import org.scijava.ops.OpDependency;

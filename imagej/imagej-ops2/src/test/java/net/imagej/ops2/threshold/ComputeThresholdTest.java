@@ -34,7 +34,7 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.functions.Computers;
+import org.scijava.function.Computers;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.types.Nil;
 

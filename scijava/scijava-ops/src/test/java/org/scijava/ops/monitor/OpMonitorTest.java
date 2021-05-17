@@ -10,10 +10,10 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.scijava.function.Functions;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.functions.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

@@ -42,7 +42,7 @@ import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
-import org.scijava.functions.Computers;
+import org.scijava.function.Computers;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.types.Nil;
 

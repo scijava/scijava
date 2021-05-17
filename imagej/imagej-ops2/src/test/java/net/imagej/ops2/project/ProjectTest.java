@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.functions.Computers;
+import org.scijava.function.Computers;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.types.Nil;
 

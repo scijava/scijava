@@ -39,9 +39,9 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Computers;
-import org.scijava.functions.Functions;
-import org.scijava.functions.Producer;
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.function.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 

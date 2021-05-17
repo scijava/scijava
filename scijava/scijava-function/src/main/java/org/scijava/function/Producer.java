@@ -1,4 +1,4 @@
-package org.scijava.functions;
+package org.scijava.function;
 
 import java.util.function.Supplier;
 

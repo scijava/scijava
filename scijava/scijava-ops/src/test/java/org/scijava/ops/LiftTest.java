@@ -38,10 +38,10 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.functions.Computers;
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
 import org.scijava.ops.util.Maps;
 

@@ -3,7 +3,7 @@
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-package org.scijava.functions;
+package org.scijava.function;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;

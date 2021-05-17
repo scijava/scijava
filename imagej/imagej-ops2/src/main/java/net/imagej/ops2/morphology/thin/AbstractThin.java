@@ -42,8 +42,8 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.OpDependency;
-import org.scijava.functions.Computers;
 
 /**
  * Thinning Operation

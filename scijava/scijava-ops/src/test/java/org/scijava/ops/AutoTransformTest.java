@@ -37,8 +37,8 @@ import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 import org.junit.Test;
+import org.scijava.function.Computers;
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.functions.Computers;
 import org.scijava.types.Nil;
 
 //TODO: think about removing this class

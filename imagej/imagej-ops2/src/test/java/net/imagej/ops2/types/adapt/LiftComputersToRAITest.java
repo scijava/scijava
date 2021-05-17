@@ -10,9 +10,9 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.functions.Computers;
 import org.scijava.types.Nil;
 import org.scijava.plugin.Plugin;
 

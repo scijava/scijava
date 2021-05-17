@@ -34,8 +34,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.scijava.Priority;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Inplaces;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

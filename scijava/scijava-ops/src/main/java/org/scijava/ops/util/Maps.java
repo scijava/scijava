@@ -7,7 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.scijava.functions.Computers;
+
+import org.scijava.function.Computers;
 
 public class Maps {
 

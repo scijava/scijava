@@ -31,9 +31,9 @@ package net.imagej.ops2.stats;
 
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

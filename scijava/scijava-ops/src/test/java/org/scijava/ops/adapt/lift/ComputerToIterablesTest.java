@@ -42,7 +42,7 @@ import java.util.List;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.functions.Computers;
+import org.scijava.function.Computers;
 
 /**
  * Tests the adaptation of {@link Computers} running on a type into

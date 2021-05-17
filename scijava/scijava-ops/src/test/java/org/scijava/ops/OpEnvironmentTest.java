@@ -6,7 +6,7 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.Priority;
-import org.scijava.functions.Producer;
+import org.scijava.function.Producer;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.param.Parameter;
 import org.scijava.struct.ItemIO;

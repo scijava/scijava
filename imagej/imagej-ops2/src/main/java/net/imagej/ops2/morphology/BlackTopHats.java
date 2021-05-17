@@ -11,11 +11,11 @@ import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.functions.Computers;
-import org.scijava.functions.Functions;
-import org.scijava.functions.Inplaces;
 import org.scijava.plugin.Plugin;
 
 /**

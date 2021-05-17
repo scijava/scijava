@@ -36,9 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.scijava.function.Functions;
 import org.scijava.ops.OpService;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.parsington.Operator;

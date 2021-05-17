@@ -48,11 +48,10 @@ import net.imglib2.view.Views;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.scijava.Priority;
+import org.scijava.function.Functions;
+import org.scijava.function.Producer;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.functions.Functions;
-import org.scijava.functions.Functions;
-import org.scijava.functions.Producer;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

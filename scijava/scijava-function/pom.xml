@@ -9,7 +9,7 @@
 		<relativePath>../..</relativePath>
 	</parent>
 
-	<artifactId>scijava-functions</artifactId>
+	<artifactId>scijava-function</artifactId>
 
 	<name>SciJava Functions</name>
 	<description>SciJava Functions: a collection of functional interfaces.</description>
@@ -63,7 +63,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-functions</archive>
+			<archive>https://forum.image.sc/tags/scijava-function</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -75,7 +75,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/scijava/scijava-functions/issues</url>
+		<url>https://github.com/scijava/scijava-function/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Travis CI</system>
@@ -83,8 +83,8 @@
 	</ciManagement>
 
 	<properties>
-		<main-class>org.scijava.functions.Main</main-class>
-		<package-name>org.scijava.functions</package-name>
+		<main-class>org.scijava.function.Main</main-class>
+		<package-name>org.scijava.function</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>

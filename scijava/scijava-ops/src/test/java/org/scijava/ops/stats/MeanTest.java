@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.scijava.function.Functions;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
 
 public class MeanTest <N extends Number> extends AbstractTestEnvironment{

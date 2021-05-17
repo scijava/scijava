@@ -40,9 +40,9 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.functions.Computers;
-import org.scijava.functions.Inplaces;
-import org.scijava.functions.Producer;
+import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
+import org.scijava.function.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

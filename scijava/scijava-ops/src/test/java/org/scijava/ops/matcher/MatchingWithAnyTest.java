@@ -8,10 +8,10 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.Priority;
+import org.scijava.function.Computers;
+import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Computers;
-import org.scijava.functions.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Any;

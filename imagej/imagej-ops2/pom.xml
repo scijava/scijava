@@ -277,7 +277,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-functions</artifactId>
+			<artifactId>scijava-function</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

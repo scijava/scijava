@@ -7,8 +7,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.functions.Computers;
-import org.scijava.functions.Inplaces;
+import org.scijava.function.Computers;
+import org.scijava.function.Inplaces;
 
 /**
  * Confirms the capabilities of the lambdaizer to convert methods into their

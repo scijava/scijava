@@ -33,8 +33,8 @@ import net.imglib2.RealLocalizable;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

@@ -32,8 +32,8 @@ package net.imagej.ops2.imagemoments;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.OpService;
-import org.scijava.functions.Computers;
 
 /**
  * Abstract {@code ImageMomentOp}. Provides {@link OpService} and create the

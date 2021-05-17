@@ -51,6 +51,8 @@ import org.scijava.AbstractContextual;
 import org.scijava.Context;
 import org.scijava.InstantiableException;
 import org.scijava.Priority;
+import org.scijava.function.Computers;
+import org.scijava.function.Computers.Arity1;
 import org.scijava.log.LogService;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;

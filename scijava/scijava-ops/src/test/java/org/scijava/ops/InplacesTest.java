@@ -30,7 +30,7 @@
 package org.scijava.ops;
 
 import org.junit.Test;
-import org.scijava.functions.Inplaces;
+import org.scijava.function.Inplaces;
 import org.scijava.ops.function.InplaceUtils;
 import org.scijava.types.Nil;
 

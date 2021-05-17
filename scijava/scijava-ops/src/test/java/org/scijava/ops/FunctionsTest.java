@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.functions.Functions;
+import org.scijava.function.Functions;
 import org.scijava.ops.function.FunctionUtils;
 import org.scijava.types.Nil;
 

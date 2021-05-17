@@ -2,10 +2,10 @@ package org.scijava.ops.simplify;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.scijava.function.Computers;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.functions.Computers;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

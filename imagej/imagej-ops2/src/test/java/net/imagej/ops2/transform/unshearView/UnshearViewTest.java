@@ -44,11 +44,10 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
-import org.scijava.functions.Functions;
+
+import org.scijava.function.Functions;
 import org.scijava.ops.function.FunctionUtils;
-import org.scijava.functions.Functions;
 import org.scijava.types.Nil;
-import org.scijava.functions.Functions;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.UnshearView} ops.

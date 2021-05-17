@@ -30,7 +30,7 @@
 package org.scijava.ops;
 
 import org.junit.Test;
-import org.scijava.functions.Computers;
+import org.scijava.function.Computers;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.types.Nil;
 

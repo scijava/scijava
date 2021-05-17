@@ -34,9 +34,9 @@ import java.util.Comparator;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.functions.Computers;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Maps;
 import org.scijava.param.Parameter;

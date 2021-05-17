@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+
 /**
  * Container class for
  * higher-<a href="https://en.wikipedia.org/wiki/Arity">arity</a>
@@ -16,7 +17,7 @@ import java.util.function.Function;
  * method {@code apply} with a number of arguments corresponding to the arity.
  * <ul>
  * <li>For 0-arity (nullary) functions, use {@link Producer} (and notice the
- * functional method there is named {@link Producer\#create()}).</li>
+ * functional method there is named {@link Producer#create()}).</li>
  * <li>For 1-arity (unary) functions, use {@link Function}.</li>
  * <li>For 2-arity (binary) functions, use {@link BiFunction}.</li>
  * </ul>
@@ -807,344 +808,475 @@ public final class Functions {
 		Object getOp();
 	}
 
-	protected static class Arity0AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link org.scijava.function.Producer} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link org.scijava.function.Producer}
+	 * @param f the {@link org.scijava.function.Producer} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link org.scijava.function.Producer}
+	 */
+	public static <O> Functions.ArityN<O> nary(Producer<O> f) {
 
-		Producer<O> func;
+		return new ArityN<>() {
 
-		public Arity0AsN(Producer<O> func) {
-			this.func = func;
-		}
+			@Override
+			public O apply(Object... ins) {
+				return f.create();
+			}
 
-		@Override
-		public O apply(Object... ins) {
-			return func.create();
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Producer<O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity1AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link java.util.function.Function} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link java.util.function.Function}
+	 * @param f the {@link java.util.function.Function} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link java.util.function.Function}
+	 */
+	public static <O> Functions.ArityN<O> nary(Function<?, O> f) {
 
-		Function<Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Function<Object, O> func =
+			(Function<Object, O>) f;
 
-		public Arity1AsN(Function<Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Function<?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity2AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link java.util.function.BiFunction} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link java.util.function.BiFunction}
+	 * @param f the {@link java.util.function.BiFunction} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link java.util.function.BiFunction}
+	 */
+	public static <O> Functions.ArityN<O> nary(BiFunction<?, ?, O> f) {
 
-		BiFunction<Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		BiFunction<Object, Object, O> func =
+			(BiFunction<Object, Object, O>) f;
 
-		public Arity2AsN(BiFunction<Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public BiFunction<?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity3AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity3} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity3}
+	 * @param f the {@link Arity3} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity3}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity3<?, ?, ?, O> f) {
 
-		Functions.Arity3<Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity3<Object, Object, Object, O> func =
+			(Functions.Arity3<Object, Object, Object, O>) f;
 
-		public Arity3AsN(Functions.Arity3<Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity3<?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity4AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity4} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity4}
+	 * @param f the {@link Arity4} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity4}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity4<?, ?, ?, ?, O> f) {
 
-		Functions.Arity4<Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity4<Object, Object, Object, Object, O> func =
+			(Functions.Arity4<Object, Object, Object, Object, O>) f;
 
-		public Arity4AsN(Functions.Arity4<Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity4<?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity5AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity5} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity5}
+	 * @param f the {@link Arity5} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity5}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity5<?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity5<Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity5<Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity5<Object, Object, Object, Object, Object, O>) f;
 
-		public Arity5AsN(Functions.Arity5<Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity5<?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity6AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity6} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity6}
+	 * @param f the {@link Arity6} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity6}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity6<?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity6<Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity6<Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity6AsN(Functions.Arity6<Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity6<?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity7AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity7} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity7}
+	 * @param f the {@link Arity7} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity7}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity7<?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity7AsN(Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity7<?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity8AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity8} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity8}
+	 * @param f the {@link Arity8} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity8}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity8<?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity8AsN(Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity8<?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity9AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity9} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity9}
+	 * @param f the {@link Arity9} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity9}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity9<?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity9AsN(Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity9<?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity10AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity10} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity10}
+	 * @param f the {@link Arity10} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity10}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity10AsN(Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity10<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity11AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity11} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity11}
+	 * @param f the {@link Arity11} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity11}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity11AsN(Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity12AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity12} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity12}
+	 * @param f the {@link Arity12} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity12}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity12<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity12AsN(Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity12<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity13AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity13} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity13}
+	 * @param f the {@link Arity13} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity13}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity13<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity13AsN(Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity13<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity14AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity14} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity14}
+	 * @param f the {@link Arity14} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity14}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity14AsN(Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity14<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity15AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity15} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity15}
+	 * @param f the {@link Arity15} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity15}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity15AsN(Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity15<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
-	protected static class Arity16AsN<O> implements ArityN<O> {
+	/**
+	 * Converts a {@link Arity16} to a {@link ArityN}.
+	 * 
+	 * @param <O> the type variable linked the output of the {@link Arity16}
+	 * @param f the {@link Arity16} to be converted into a {@link ArityN}
+	 * @return a {@link ArityN} created from the {@link Arity16}
+	 */
+	public static <O> Functions.ArityN<O> nary(Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> f) {
 
-		Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
+		// NB f must be cast to accept a set of input Objects for apply
+		@SuppressWarnings("unchecked")
+		Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func =
+			(Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) f;
 
-		public Arity16AsN(Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
+		return new ArityN<>() {
 
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14], ins[15]);
-		}
+			@Override
+			public O apply(Object... ins) {
+				return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14], ins[15]);
+			}
 
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
+			@Override
+			public Functions.Arity16<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, O> getOp() {
+				return f;
+			}
+		};
 	}
 
 }

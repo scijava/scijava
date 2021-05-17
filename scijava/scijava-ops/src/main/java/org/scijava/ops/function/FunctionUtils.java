@@ -22,16 +22,7 @@ import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
 /**
- * Container class for
- * higher-<a href="https://en.wikipedia.org/wiki/Arity">arity</a>
- * {@link Function}-style functional interfaces&mdash;i.e. with functional
- * method {@code apply} with a number of arguments corresponding to the arity.
- * <ul>
- * <li>For 0-arity (nullary) functions, use {@link Producer} (and notice the
- * functional method there is named {@link Producer\#create()}).</li>
- * <li>For 1-arity (unary) functions, use {@link Function}.</li>
- * <li>For 2-arity (binary) functions, use {@link BiFunction}.</li>
- * </ul>
+ * Utility class designed to match {@code Function}s of various arities.
  *
  * @author Curtis Rueden
  * @author Gabriel Selzer
@@ -286,60 +277,60 @@ public final class FunctionUtils {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public static <O, T> ArityN<O> matchN(final OpEnvironment env,
+	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
 	{
 		Object op = matchHelper(env, opName, ALL_FUNCTIONS.get(inTypes.length),
 			outType, inTypes);
 		if (op instanceof Producer) {
-			return new Arity0AsN<>((Producer<O>) op);
+			return Functions.nary((Producer<O>) op);
 		}
 		else if (op instanceof Function) {
-			return new Arity1AsN<>((Function<Object, O>) op);
+			return Functions.nary((Function<Object, O>) op);
 		}
 		else if (op instanceof BiFunction) {
-			return new Arity2AsN<>((BiFunction<Object, Object, O>) op);
+			return Functions.nary((BiFunction<Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity3) {
-			return new Arity3AsN<>((Functions.Arity3<Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity3<Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity4) {
-			return new Arity4AsN<>((Functions.Arity4<Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity4<Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity5) {
-			return new Arity5AsN<>((Functions.Arity5<Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity5<Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity6) {
-			return new Arity6AsN<>((Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity6<Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity7) {
-			return new Arity7AsN<>((Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity8) {
-			return new Arity8AsN<>((Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity9) {
-			return new Arity9AsN<>((Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity10) {
-			return new Arity10AsN<>((Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity11) {
-			return new Arity11AsN<>((Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity12) {
-			return new Arity12AsN<>((Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity13) {
-			return new Arity13AsN<>((Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity14) {
-			return new Arity14AsN<>((Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
 		else if (op instanceof Functions.Arity15) {
-			return new Arity15AsN<>((Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+			return Functions.nary((Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 		}
-		return new Arity16AsN<>((Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
+		return Functions.nary((Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O>) op);
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -364,353 +355,6 @@ public final class FunctionUtils {
 		types[types.length - 1] = outType.getType();
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);
-	}
-
-	public interface ArityN<O> {
-
-		O apply(Object... ins);
-
-		Object getOp();
-	}
-
-	protected static class Arity0AsN<O> implements ArityN<O> {
-
-		Producer<O> func;
-
-		public Arity0AsN(Producer<O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.create();
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity1AsN<O> implements ArityN<O> {
-
-		Function<Object, O> func;
-
-		public Arity1AsN(Function<Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity2AsN<O> implements ArityN<O> {
-
-		BiFunction<Object, Object, O> func;
-
-		public Arity2AsN(BiFunction<Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity3AsN<O> implements ArityN<O> {
-
-		Functions.Arity3<Object, Object, Object, O> func;
-
-		public Arity3AsN(Functions.Arity3<Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity4AsN<O> implements ArityN<O> {
-
-		Functions.Arity4<Object, Object, Object, Object, O> func;
-
-		public Arity4AsN(Functions.Arity4<Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity5AsN<O> implements ArityN<O> {
-
-		Functions.Arity5<Object, Object, Object, Object, Object, O> func;
-
-		public Arity5AsN(Functions.Arity5<Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity6AsN<O> implements ArityN<O> {
-
-		Functions.Arity6<Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity6AsN(Functions.Arity6<Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity7AsN<O> implements ArityN<O> {
-
-		Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity7AsN(Functions.Arity7<Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity8AsN<O> implements ArityN<O> {
-
-		Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity8AsN(Functions.Arity8<Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity9AsN<O> implements ArityN<O> {
-
-		Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity9AsN(Functions.Arity9<Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity10AsN<O> implements ArityN<O> {
-
-		Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity10AsN(Functions.Arity10<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity11AsN<O> implements ArityN<O> {
-
-		Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity11AsN(Functions.Arity11<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity12AsN<O> implements ArityN<O> {
-
-		Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity12AsN(Functions.Arity12<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity13AsN<O> implements ArityN<O> {
-
-		Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity13AsN(Functions.Arity13<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity14AsN<O> implements ArityN<O> {
-
-		Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity14AsN(Functions.Arity14<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity15AsN<O> implements ArityN<O> {
-
-		Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity15AsN(Functions.Arity15<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
-	}
-
-	protected static class Arity16AsN<O> implements ArityN<O> {
-
-		Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func;
-
-		public Arity16AsN(Functions.Arity16<Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, O> func) {
-			this.func = func;
-		}
-
-		@Override
-		public O apply(Object... ins) {
-			return func.apply(ins[0], ins[1], ins[2], ins[3], ins[4], ins[5], ins[6], ins[7], ins[8], ins[9], ins[10], ins[11], ins[12], ins[13], ins[14], ins[15]);
-		}
-
-		@Override
-		public Object getOp() {
-			return func;
-		}
-
 	}
 
 }

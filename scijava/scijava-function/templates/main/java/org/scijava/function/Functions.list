@@ -25,11 +25,32 @@ nilArgs = ```
 ```
 objectGenerics = ```
 { arity -> 
+  arity == 0 ? '<O>' :
   '<' + String.join(', ', (1..arity).stream().map{a -> "Object"}.collect()) + ', O>'
 }
 ```
 insArgs = ```
 { arity ->
+  arity == 0 ? "" :
   String.join(', ', (0..(arity-1)).stream().map{a -> 'ins[' + a + ']'}.collect())
+}
+```
+javadocLink = ```
+{ arity ->
+  arity == 0 ? "org.scijava.function.Producer" :
+  arity == 1 ? "java.util.function.Function" :
+  arity == 2 ? "java.util.function.BiFunction" :
+  "Arity" + arity
+}
+```
+wildcardGenerics = ```
+{ arity -> 
+  arity == 0 ? '<O>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "?"}.collect()) + ', O>'
+}
+```
+fMethod = ```
+{ arity -> 
+  arity == 0 ? "create" : "apply"
 }
 ```

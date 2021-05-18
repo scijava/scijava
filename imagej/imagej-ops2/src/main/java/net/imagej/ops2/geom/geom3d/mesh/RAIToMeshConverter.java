@@ -43,7 +43,7 @@ import org.scijava.convert.ConversionRequest;
 import org.scijava.convert.Converter;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpService;
-import org.scijava.ops.function.FunctionUtils;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.types.Nil;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;

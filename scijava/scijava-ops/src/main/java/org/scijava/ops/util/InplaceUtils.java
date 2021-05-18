@@ -3,7 +3,7 @@
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-package org.scijava.ops.function;
+package org.scijava.ops.util;
 
 import java.lang.reflect.Type;
 import java.util.Collections;

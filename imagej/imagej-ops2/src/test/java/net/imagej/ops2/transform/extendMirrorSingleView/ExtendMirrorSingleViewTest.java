@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
 import org.scijava.function.Functions;
-import org.scijava.ops.function.FunctionUtils;
+import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ExtendMirrorSingleView} ops.

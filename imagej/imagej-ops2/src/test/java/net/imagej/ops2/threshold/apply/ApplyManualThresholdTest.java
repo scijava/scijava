@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.function.ComputerUtils;
+import org.scijava.ops.util.ComputerUtils;
 import org.scijava.types.Nil;
 
 /**

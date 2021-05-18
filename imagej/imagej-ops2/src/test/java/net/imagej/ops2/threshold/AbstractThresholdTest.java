@@ -47,7 +47,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.scijava.function.Functions;
-import org.scijava.ops.function.FunctionUtils;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.types.Nil;
 import org.scijava.util.ListUtils;
 

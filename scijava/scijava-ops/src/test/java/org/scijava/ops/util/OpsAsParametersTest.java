@@ -12,7 +12,6 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.ops.function.FunctionUtils;
 import org.scijava.types.Nil;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;

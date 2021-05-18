@@ -40,8 +40,8 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.function.FunctionUtils;
 import org.scijava.types.Nil;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.thread.ThreadService;
 
 /**

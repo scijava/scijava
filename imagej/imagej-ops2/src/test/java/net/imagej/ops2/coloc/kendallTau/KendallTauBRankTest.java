@@ -51,7 +51,7 @@ import net.imglib2.util.Pair;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.function.FunctionUtils;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.types.Nil;
 import org.scijava.thread.ThreadService;
 

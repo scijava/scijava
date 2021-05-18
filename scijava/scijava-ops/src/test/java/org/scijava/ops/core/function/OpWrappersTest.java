@@ -16,9 +16,9 @@ import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.function.ComputerUtils;
-import org.scijava.ops.function.FunctionUtils;
-import org.scijava.ops.function.InplaceUtils;
+import org.scijava.ops.util.ComputerUtils;
+import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.util.InplaceUtils;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
 

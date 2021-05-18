@@ -1,4 +1,4 @@
-.include Globals.list
+.include ../util/Globals.list
 arities = (0..maxArity).collect()
 
 [OpWrappers.java]

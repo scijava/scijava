@@ -69,7 +69,7 @@ public final class FunctionUtils {
 	 * @throws NullPointerException If {@code type} is {@code null}.
 	 */
 	public static boolean isFunction(Type type) {
-		return ALL_FUNCTIONS.containsKey(Types.raw(type));
+		return ALL_FUNCTIONS.containsValue(Types.raw(type));
 	}
 
 	@SuppressWarnings({ "unchecked" })

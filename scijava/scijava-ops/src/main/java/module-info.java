@@ -2,7 +2,6 @@ module org.scijava.ops {
 	
 	//TODO: rearrange packages to export only needed classes
 	exports org.scijava.ops; //contains OpDependency interface
-	exports org.scijava.ops.function; // contains functional inferfaces
 	exports org.scijava.ops.core; // contains OpCollection, Op interfaces
 	exports org.scijava.ops.core.builder; // contains OpBuilder classes
 	exports org.scijava.ops.hints;

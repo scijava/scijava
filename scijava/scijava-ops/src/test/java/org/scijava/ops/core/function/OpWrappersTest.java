@@ -11,11 +11,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.function.ComputerUtils;
 import org.scijava.ops.function.FunctionUtils;
 import org.scijava.ops.function.InplaceUtils;

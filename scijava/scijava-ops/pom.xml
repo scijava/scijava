@@ -115,26 +115,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<debug>true</debug>
-					<optimize>true</optimize>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>com.github.therapi</groupId>
-							<artifactId>therapi-runtime-javadoc-scribe</artifactId>
-							<version>0.12.0</version>
-						</path>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-common</artifactId>
-							<version>2.83.3</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>

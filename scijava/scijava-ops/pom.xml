@@ -118,10 +118,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<annotationProcessors>
-						<annotationProcessor>com.github.therapi.runtimejavadoc.internal.JavadocAnnotationProcessor</annotationProcessor>
-						<annotationProcessor>org.scijava.annotations.AnnotationProcessor</annotationProcessor>
-					</annotationProcessors>
 					<debug>true</debug>
 					<optimize>true</optimize>
 					<compilerArguments>

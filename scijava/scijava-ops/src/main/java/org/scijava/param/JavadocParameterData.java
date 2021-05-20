@@ -66,7 +66,7 @@ public class JavadocParameterData implements ParameterData {
 		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(f);
 		for (OtherJavadoc other : doc.getOther()) {
 			switch (other.getName()) {
-				case "param":
+				case "input":
 					String param = other.getComment().toString();
 					paramNames.add(param.substring(0, param.indexOf(" ")));
 					paramDescriptions.add(param.substring(param.indexOf(" ") + 1));

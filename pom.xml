@@ -94,8 +94,6 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<debug>true</debug>
-					<optimize>true</optimize>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>com.github.therapi</groupId>

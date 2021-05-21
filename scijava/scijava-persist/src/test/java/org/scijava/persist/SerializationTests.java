@@ -1,43 +1,42 @@
 package org.scijava.persist;
 
 import com.google.gson.Gson;
-import net.imagej.ImageJ;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.scijava.Context;
 import org.scijava.persist.testobjects.Circle;
 import org.scijava.persist.testobjects.Shape;
 import org.scijava.persist.testobjects.Shapes;
 
 public class SerializationTests {
-    static ImageJ ij;
+    static Context context;
     static Gson gson;
 
     public static void main(String... args) {
-        ij = new ImageJ();
-        ij.ui().showUI();
-        if (ij.context()==null) {
+    		context = new Context(IObjectScijavaAdapterService.class);
+        if (context==null) {
             System.out.println("Null context");
         }
-        gson = ScijavaGsonHelper.getGson(ij.context());
+        gson = ScijavaGsonHelper.getGson(context);
     }
 
     @Before
     public void openFiji() {
         // Initializes static SourceService and Display Service and plugins for serialization
-        ij = new ImageJ();
-        ij.ui().showUI();
-        if (ij.context()==null) {
+    		context = new Context(IObjectScijavaAdapterService.class);
+        if (context==null) {
             System.out.println("Null context");
         }
-        gson = ScijavaGsonHelper.getGson(ij.context(), true);
+        gson = ScijavaGsonHelper.getGson(context, true);
     }
 
     @After
     public void closeFiji() throws Exception {
-        // Closes ij context
-        ij.context().close(); //TODO : understand why this is not working
+    	context.dispose();
+    	context = null;
+    	gson = null;
     }
 
     /**

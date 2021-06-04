@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import org.junit.Test;
@@ -50,53 +51,49 @@ import static org.junit.Assume.assumeTrue;
  *
  * @author Matthias Arzt
  */
-public class ParallelizationTest
-{
+public class ParallelizationTest {
 
 	@Test
-	public void testSingleThreaded()
-	{
-		int parallelism = Parallelization.runSingleThreaded(
-				() -> Parallelization.getTaskExecutor().getParallelism() );
-		assertEquals( 1, parallelism );
+	public void testSingleThreaded() {
+		int parallelism = Parallelization.runSingleThreaded(() -> Parallelization
+			.getTaskExecutor().getParallelism());
+		assertEquals(1, parallelism);
 	}
 
 	@Test
-	public void testSingleThreadedWithRunnable()
-	{
+	public void testSingleThreadedWithRunnable() {
 		AtomicInteger parallelism = new AtomicInteger();
-		Parallelization.runSingleThreaded(
-				() -> parallelism.set( Parallelization.getTaskExecutor().getParallelism() ) );
-		assertEquals( 1, parallelism.get() );
+		Parallelization.runSingleThreaded(() -> parallelism.set(Parallelization
+			.getTaskExecutor().getParallelism()));
+		assertEquals(1, parallelism.get());
 	}
 
 	@Test
-	public void testMultiThreaded()
-	{
-		assumeTrue( ForkJoinPool.commonPool().getParallelism() > 1 );
-		int parallelism = Parallelization.runMultiThreaded(
-				() -> Parallelization.getTaskExecutor().getParallelism() );
-		assertTrue( parallelism > 1 );
+	public void testMultiThreaded() {
+		assumeTrue(ForkJoinPool.commonPool().getParallelism() > 1);
+		int parallelism = Parallelization.runMultiThreaded(() -> Parallelization
+			.getTaskExecutor().getParallelism());
+		assertTrue(parallelism > 1);
 	}
 
 	@Test
-	public void testWithExecutor()
-	{
-		ExecutorService executor = Executors.newFixedThreadPool( 2 );
-		ExecutorService result = Parallelization.runWithExecutor( executor,
-				() -> Parallelization.getTaskExecutor().getExecutorService() );
-		assertEquals( executor, result );
+	public void testWithExecutor() {
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+		ExecutorService result = Parallelization.runWithExecutor(executor,
+			() -> Parallelization.getTaskExecutor().getExecutorService());
+		assertEquals(executor, result);
 	}
 
 	@Test
-	public void testSetExecutorService()
-	{
+	public void testSetExecutorService() {
 		TaskExecutor outside = Parallelization.getTaskExecutor();
-		TaskExecutor inside = TaskExecutors.forExecutorService( new SequentialExecutorService() );
-		try (Parallelization.Frame frame = Parallelization.setExecutorRequiresReset( inside ))
+		TaskExecutor inside = TaskExecutors.forExecutorService(
+			new SequentialExecutorService());
+		try (Parallelization.Frame frame = Parallelization.setExecutorRequiresReset(
+			inside))
 		{
-			assertSame( inside, Parallelization.getTaskExecutor() );
+			assertSame(inside, Parallelization.getTaskExecutor());
 		}
-		assertSame( outside, Parallelization.getTaskExecutor() );
+		assertSame(outside, Parallelization.getTaskExecutor());
 	}
 }

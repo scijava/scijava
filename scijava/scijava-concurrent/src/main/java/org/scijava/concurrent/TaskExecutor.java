@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.List;
@@ -40,10 +41,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * {@link TaskExecutor} is recommended to be used in image
- * processing algorithms instead of {@link ExecutorService}.
- * It's simpler to use, and allows single threaded execution.
+ * {@link TaskExecutor} is recommended to be used in image processing algorithms
+ * instead of {@link ExecutorService}. It's simpler to use, and allows single
+ * threaded execution.
  * <p>
+ * 
  * <pre>
  * {@code
  *
@@ -66,8 +68,7 @@ import java.util.function.Function;
  * }
  * </pre>
  */
-public interface TaskExecutor extends AutoCloseable
-{
+public interface TaskExecutor extends AutoCloseable {
 
 	/**
 	 * Get the number of threads that are used for execution.
@@ -75,42 +76,40 @@ public interface TaskExecutor extends AutoCloseable
 	int getParallelism();
 
 	/**
-	 * If there is a big task that could be split into sub tasks
-	 * for parallelization, this method gives you a reasonable number
-	 * of sub tasks.
+	 * If there is a big task that could be split into sub tasks for
+	 * parallelization, this method gives you a reasonable number of sub tasks.
 	 * <p>
-	 * A single threaded {@link TaskExecutor} will return 1.
-	 * A multi threaded {@link TaskExecutor} will usually return 4 times
-	 * the number of threads.
+	 * A single threaded {@link TaskExecutor} will return 1. A multi threaded
+	 * {@link TaskExecutor} will usually return 4 times the number of threads.
 	 */
 	int suggestNumberOfTasks();
 
 	/**
-	 * This method will execute the given list of tasks. A single
-	 * threaded {@link TaskExecutor} will execute the tasks one after the
-	 * other. A multi threaded {@link TaskExecutor} will distribute the
-	 * tasks to the threads. The method blocks until all tasks are completed.
+	 * This method will execute the given list of tasks. A single threaded
+	 * {@link TaskExecutor} will execute the tasks one after the other. A multi
+	 * threaded {@link TaskExecutor} will distribute the tasks to the threads. The
+	 * method blocks until all tasks are completed.
 	 */
-	void runAll( List< Runnable > tasks );
+	void runAll(List<Runnable> tasks);
 
 	/**
-	 * Like {@link #runAll(List)} but - instead of a list of tasks - it takes
-	 * a list of parameters and a function that is called for each of
-	 * the parameters.
+	 * Like {@link #runAll(List)} but - instead of a list of tasks - it takes a
+	 * list of parameters and a function that is called for each of the
+	 * parameters.
 	 */
-	< T > void forEach( List< ? extends T > parameters, Consumer< ? super T > task );
+	<T> void forEach(List<? extends T> parameters, Consumer<? super T> task);
 
 	/**
 	 * Like {@link #forEach(List, Consumer)} but collects the results.
 	 */
-	< T, R > List< R > forEachApply( List< ? extends T > parameters, Function< ? super T, ? extends R > task );
+	<T, R> List<R> forEachApply(List<? extends T> parameters,
+		Function<? super T, ? extends R> task);
 
 	/**
-	 * Get the underlying {@link ExecutorService}. This is not always a
-	 * fully functional {@link ExecutorService}: Especially the methods
+	 * Get the underlying {@link ExecutorService}. This is not always a fully
+	 * functional {@link ExecutorService}: Especially the methods
 	 * {@link ExecutorService#shutdown()} and
-	 * {@link ExecutorService#awaitTermination(long, TimeUnit)} must not be
-	 * used.
+	 * {@link ExecutorService#awaitTermination(long, TimeUnit)} must not be used.
 	 */
 	ExecutorService getExecutorService();
 

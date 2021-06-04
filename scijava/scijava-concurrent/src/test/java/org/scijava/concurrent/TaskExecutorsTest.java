@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import org.junit.Test;
@@ -46,57 +47,53 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Matthias Arzt
  */
-public class TaskExecutorsTest
-{
+public class TaskExecutorsTest {
 
 	@Test
-	public void testSingleThreaded()
-	{
+	public void testSingleThreaded() {
 		TaskExecutor executor = TaskExecutors.singleThreaded();
-		assertTrue( executor instanceof SequentialTaskExecutor );
+		assertTrue(executor instanceof SequentialTaskExecutor);
 	}
 
 	@Test
-	public void testMultiThreaded()
-	{
+	public void testMultiThreaded() {
 		TaskExecutor executor = TaskExecutors.multiThreaded();
-		assertTrue( executor.getExecutorService() instanceof ForkJoinExecutorService );
+		assertTrue(executor
+			.getExecutorService() instanceof ForkJoinExecutorService);
 	}
 
 	@Test
-	public void testNumThreads()
-	{
-		TaskExecutor executor = TaskExecutors.numThreads( 2 );
-		assertEquals( 2, executor.getParallelism() );
+	public void testNumThreads() {
+		TaskExecutor executor = TaskExecutors.numThreads(2);
+		assertEquals(2, executor.getParallelism());
 		executor.getExecutorService().shutdown();
 	}
 
 	@Test
-	public void testForExecutorService()
-	{
-		ExecutorService executorService = Executors.newFixedThreadPool( 2 );
-		TaskExecutor executor = TaskExecutors.forExecutorService( executorService );
-		assertEquals( executorService, executor.getExecutorService() );
+	public void testForExecutorService() {
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		TaskExecutor executor = TaskExecutors.forExecutorService(executorService);
+		assertEquals(executorService, executor.getExecutorService());
 		executorService.shutdown();
 	}
 
 	@Test
-	public void testForExecutorServiceAndNumThreads()
-	{
-		ExecutorService executorService = Executors.newFixedThreadPool( 2 );
-		TaskExecutor executor = TaskExecutors.forExecutorServiceAndNumThreads( executorService, 42 );
-		assertEquals( executorService, executor.getExecutorService() );
-		assertEquals( 42, executor.getParallelism() );
+	public void testForExecutorServiceAndNumThreads() {
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		TaskExecutor executor = TaskExecutors.forExecutorServiceAndNumThreads(
+			executorService, 42);
+		assertEquals(executorService, executor.getExecutorService());
+		assertEquals(42, executor.getParallelism());
 		executorService.shutdown();
 	}
 
 	@Test
-	public void testForExecutorServiceAndNumTasks()
-	{
-		ExecutorService executorService = Executors.newFixedThreadPool( 2 );
-		TaskExecutor executor = TaskExecutors.forExecutorServiceAndNumTasks( executorService, 42 );
-		assertEquals( executorService, executor.getExecutorService() );
-		assertEquals( 2, executor.getParallelism() );
-		assertEquals( 42, executor.suggestNumberOfTasks() );
+	public void testForExecutorServiceAndNumTasks() {
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		TaskExecutor executor = TaskExecutors.forExecutorServiceAndNumTasks(
+			executorService, 42);
+		assertEquals(executorService, executor.getExecutorService());
+		assertEquals(2, executor.getParallelism());
+		assertEquals(42, executor.suggestNumberOfTasks());
 	}
 }

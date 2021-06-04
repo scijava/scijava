@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.concurrent.ExecutorService;
@@ -42,133 +43,137 @@ import java.util.function.Supplier;
 /**
  * Utility class, with methods to create {@link TaskExecutor}s.
  */
-public final class TaskExecutors
-{
+public final class TaskExecutors {
 
-	private TaskExecutors()
-	{
+	private TaskExecutors() {
 		// prevent from instantiation
 	}
 
 	/**
 	 * {@link TaskExecutor} for single threaded execution.
 	 */
-	public static TaskExecutor singleThreaded()
-	{
+	public static TaskExecutor singleThreaded() {
 		return SequentialTaskExecutor.getInstance();
 	}
 
 	/**
-	 * {@link TaskExecutor} for multi-threaded execution.
-	 * {@link ForkJoinPool} is used.
+	 * {@link TaskExecutor} for multi-threaded execution. {@link ForkJoinPool} is
+	 * used.
 	 */
-	public static TaskExecutor multiThreaded()
-	{
+	public static TaskExecutor multiThreaded() {
 		return FORK_JOIN_TASK_EXECUTOR;
 	}
 
 	private static final TaskExecutor FORK_JOIN_TASK_EXECUTOR =
-			new DefaultTaskExecutor( new ForkJoinExecutorService() );
+		new DefaultTaskExecutor(new ForkJoinExecutorService());
 
 	/**
-	 * {@link TaskExecutor} that uses the given number or threads.
-	 * The {@link TaskExecutor} needs to be closed by calling {@link TaskExecutor#close()}.
+	 * {@link TaskExecutor} that uses the given number or threads. The
+	 * {@link TaskExecutor} needs to be closed by calling
+	 * {@link TaskExecutor#close()}.
 	 */
-	public static TaskExecutor numThreads( int numThreads )
-	{
-		numThreads = Math.max( 1, numThreads );
-		return forExecutorService( new ForkJoinPool( numThreads ) );
+	public static TaskExecutor numThreads(int numThreads) {
+		numThreads = Math.max(1, numThreads);
+		return forExecutorService(new ForkJoinPool(numThreads));
 	}
 
 	/**
-	 * Creates a {@link TaskExecutor} that wraps around given {@link ExecutorService}.
+	 * Creates a {@link TaskExecutor} that wraps around given
+	 * {@link ExecutorService}.
 	 */
-	public static TaskExecutor forExecutorService( ExecutorService executorService )
+	public static TaskExecutor forExecutorService(
+		ExecutorService executorService)
 	{
-		return new DefaultTaskExecutor( executorService );
+		return new DefaultTaskExecutor(executorService);
 	}
 
 	/**
-	 * Creates a {@link TaskExecutor} that wraps around given {@link ExecutorService},
-	 * and will return the given parallelism.
+	 * Creates a {@link TaskExecutor} that wraps around given
+	 * {@link ExecutorService}, and will return the given parallelism.
 	 */
-	public static TaskExecutor forExecutorServiceAndNumThreads( ExecutorService executorService, int numThreads )
+	public static TaskExecutor forExecutorServiceAndNumThreads(
+		ExecutorService executorService, int numThreads)
 	{
-		return new DefaultTaskExecutor( executorService )
-		{
+		return new DefaultTaskExecutor(executorService) {
+
 			@Override
-			public int getParallelism()
-			{
+			public int getParallelism() {
 				return numThreads;
 			}
 		};
 	}
 
 	/**
-	 * Creates a {@link TaskExecutor} that wraps around given {@link ExecutorService},
-	 * and will suggest the given number of tasks when asked.
+	 * Creates a {@link TaskExecutor} that wraps around given
+	 * {@link ExecutorService}, and will suggest the given number of tasks when
+	 * asked.
 	 */
-	public static TaskExecutor forExecutorServiceAndNumTasks( ExecutorService executorService, int numTasks )
+	public static TaskExecutor forExecutorServiceAndNumTasks(
+		ExecutorService executorService, int numTasks)
 	{
-		return new DefaultTaskExecutor( executorService )
-		{
+		return new DefaultTaskExecutor(executorService) {
+
 			@Override
-			public int suggestNumberOfTasks()
-			{
+			public int suggestNumberOfTasks() {
 				return numTasks;
 			}
 		};
 	}
 
 	/**
-	 * Returns a {@link TaskExecutor} that uses a fixed thread pool with the
-	 * given number of threads.
+	 * Returns a {@link TaskExecutor} that uses a fixed thread pool with the given
+	 * number of threads.
 	 */
-	public static TaskExecutor fixedThreadPool( int numThreads )
-	{
-		ThreadFactory threadFactory = threadFactory( () -> singleThreaded() );
-		return forExecutorService( Executors.newFixedThreadPool( numThreads, threadFactory ) );
+	public static TaskExecutor fixedThreadPool(int numThreads) {
+		ThreadFactory threadFactory = threadFactory(() -> singleThreaded());
+		return forExecutorService(Executors.newFixedThreadPool(numThreads,
+			threadFactory));
 	}
 
 	/**
-	 * Returns a {@link TaskExecutor} that uses a fixed thread pool with the
-	 * given number of threads. But that's not the end of the story.
+	 * Returns a {@link TaskExecutor} that uses a fixed thread pool with the given
+	 * number of threads. But that's not the end of the story.
 	 * <p>
-	 * Each of the threads uses itself a fixed thread pool with the given
-	 * number of sub threads.
+	 * Each of the threads uses itself a fixed thread pool with the given number
+	 * of sub threads.
 	 * <p>
-	 * This {@link TaskExecutor} is useful for nested parallelization,
-	 * when detailed control for the level of parallelism is needed.
+	 * This {@link TaskExecutor} is useful for nested parallelization, when
+	 * detailed control for the level of parallelism is needed.
 	 */
-	public static TaskExecutor nestedFixedThreadPool( int numThreads, int numSubThreads )
+	public static TaskExecutor nestedFixedThreadPool(int numThreads,
+		int numSubThreads)
 	{
-		ThreadFactory threadFactory = threadFactory( () -> fixedThreadPool( numSubThreads ) );
-		return forExecutorService( Executors.newFixedThreadPool( numThreads, threadFactory ) );
+		ThreadFactory threadFactory = threadFactory(() -> fixedThreadPool(
+			numSubThreads));
+		return forExecutorService(Executors.newFixedThreadPool(numThreads,
+			threadFactory));
 	}
 
 	/**
-	 * Returns a {@link ThreadFactory}. Whenever this thread factory is used
-	 * to create a thread, a {@link TaskExecutor} will is create and assigned
-	 * to the thread. The {@link TaskExecutor} is created using the given supplier.
+	 * Returns a {@link ThreadFactory}. Whenever this thread factory is used to
+	 * create a thread, a {@link TaskExecutor} will is create and assigned to the
+	 * thread. The {@link TaskExecutor} is created using the given supplier.
 	 */
-	public static ThreadFactory threadFactory( Supplier< TaskExecutor > taskExecutorFactory )
+	public static ThreadFactory threadFactory(
+		Supplier<TaskExecutor> taskExecutorFactory)
 	{
-		return applyTaskExecutorToThreadFactory( taskExecutorFactory, Executors.defaultThreadFactory() );
+		return applyTaskExecutorToThreadFactory(taskExecutorFactory, Executors
+			.defaultThreadFactory());
 	}
 
 	/**
-	 * Returns a {@link ThreadFactory}. Whenever this thread factory is used
-	 * to create a thread, a {@link TaskExecutor} will is create and assigned
-	 * to the thread. The threads created, are using the given thread factory,
-	 * and the {@link TaskExecutors} are create using the given supplier.
+	 * Returns a {@link ThreadFactory}. Whenever this thread factory is used to
+	 * create a thread, a {@link TaskExecutor} will is create and assigned to the
+	 * thread. The threads created, are using the given thread factory, and the
+	 * {@link TaskExecutors} are create using the given supplier.
 	 */
-	public static ThreadFactory applyTaskExecutorToThreadFactory( Supplier< TaskExecutor > taskExecutorFactory, ThreadFactory threadFactory )
+	public static ThreadFactory applyTaskExecutorToThreadFactory(
+		Supplier<TaskExecutor> taskExecutorFactory, ThreadFactory threadFactory)
 	{
-		return runnable -> threadFactory.newThread( () -> {
-			try (TaskExecutor taskExecutor = taskExecutorFactory.get())
-			{
-				Parallelization.runWithExecutor( taskExecutor, runnable );
+		return runnable -> threadFactory.newThread(() -> {
+			try (TaskExecutor taskExecutor = taskExecutorFactory.get()) {
+				Parallelization.runWithExecutor(taskExecutor, runnable);
 			}
-		} );
+		});
 	}
 }

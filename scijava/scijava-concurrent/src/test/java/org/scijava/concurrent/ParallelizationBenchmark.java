@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.Arrays;
@@ -56,45 +57,43 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
- * Demonstrates how to use {@link Parallelization} to execute a algorithm
- * single threaded / multi threaded ....
- * And shows the execution time.
+ * Demonstrates how to use {@link Parallelization} to execute a algorithm single
+ * threaded / multi threaded .... And shows the execution time.
  */
-@Fork( 1 )
-@Warmup( iterations = 5, time = 200, timeUnit = TimeUnit.MILLISECONDS )
-@Measurement( iterations = 5, time = 200, timeUnit = TimeUnit.MILLISECONDS )
-@State( Scope.Benchmark )
-@BenchmarkMode( { Mode.AverageTime } )
-public class ParallelizationBenchmark
-{
+@Fork(1)
+@Warmup(iterations = 5, time = 200, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 5, time = 200, timeUnit = TimeUnit.MILLISECONDS)
+@State(Scope.Benchmark)
+@BenchmarkMode({ Mode.AverageTime })
+public class ParallelizationBenchmark {
 
 	private final int[][][] image = generateRandomImage(42, 100, 500, 500);
 
 	/**
-	 * If the image is one dimensional: run simple calculate sum.
-	 * If the image is at least 2D: cut the image into slices.
-	 * Use {@link TaskExecutor#forEach } to call
-	 * {@link #calculateSum} for each slice, and sum up the results.
+	 * If the image is one dimensional: run simple calculate sum. If the image is
+	 * at least 2D: cut the image into slices. Use {@link TaskExecutor#forEach }
+	 * to call {@link #calculateSum} for each slice, and sum up the results.
 	 */
-	private static long calculateSum( int[][][] image )
-	{
-		List<int[][]> slices = Arrays.asList( image );
+	private static long calculateSum(int[][][] image) {
+		List<int[][]> slices = Arrays.asList(image);
 		AtomicLong result = new AtomicLong();
-		Parallelization.getTaskExecutor().forEach( slices, slice -> result.addAndGet( calculateSum( slice ) ) );
+		Parallelization.getTaskExecutor().forEach(slices, slice -> result.addAndGet(
+			calculateSum(slice)));
 		return result.get();
 	}
 
 	private static long calculateSum(int[][] slice) {
-		List<int[]> rows = Arrays.asList(slice );
+		List<int[]> rows = Arrays.asList(slice);
 		AtomicLong result = new AtomicLong();
-		Parallelization.getTaskExecutor().forEach( rows, row -> result.addAndGet( simpleCalculateSum( row ) ) );
+		Parallelization.getTaskExecutor().forEach(rows, row -> result.addAndGet(
+			simpleCalculateSum(row)));
 		return result.get();
 	}
 
 	private static int[][][] generateRandomImage(long seed, int x, int y, int z) {
 		Random r = new Random(seed);
 		int[][][] arr = new int[x][y][z];
-		for(int i = 0; i < arr.length; i++) {
+		for (int i = 0; i < arr.length; i++) {
 			for (int j = 0; i < arr[i].length; j++) {
 				for (int k = 0; k < arr[i][j].length; k++) {
 					arr[i][j][k] = r.nextInt();
@@ -104,8 +103,7 @@ public class ParallelizationBenchmark
 		return arr;
 	}
 
-	private static long simpleCalculateSum( int[][][] image )
-	{
+	private static long simpleCalculateSum(int[][][] image) {
 		long result = 0;
 		for (int[][] slice : image)
 			result += simpleCalculateSum(slice);
@@ -127,54 +125,47 @@ public class ParallelizationBenchmark
 	}
 
 	@Benchmark
-	public Long fixedThreadPool()
-	{
-		final ExecutorService executor = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() );
-		Long sum = Parallelization.runWithExecutor( executor,
-				() -> calculateSum( image )
-		);
+	public Long fixedThreadPool() {
+		final ExecutorService executor = Executors.newFixedThreadPool(Runtime
+			.getRuntime().availableProcessors());
+		Long sum = Parallelization.runWithExecutor(executor, () -> calculateSum(
+			image));
 		executor.shutdown();
 		return sum;
 	}
 
 	@Benchmark
-	public Long twoThreadsForkJoinPool()
-	{
-		ForkJoinPool executor = new ForkJoinPool( 2 );
-		Long sum = Parallelization.runWithExecutor( executor, () -> calculateSum( image ) );
+	public Long twoThreadsForkJoinPool() {
+		ForkJoinPool executor = new ForkJoinPool(2);
+		Long sum = Parallelization.runWithExecutor(executor, () -> calculateSum(
+			image));
 		executor.shutdown();
 		return sum;
 	}
 
 	@Benchmark
-	public Long multiThreaded()
-	{
-		return Parallelization.runMultiThreaded( () -> calculateSum( image ) );
+	public Long multiThreaded() {
+		return Parallelization.runMultiThreaded(() -> calculateSum(image));
 	}
 
 	@Benchmark
-	public Long singleThreaded()
-	{
-		return Parallelization.runSingleThreaded( () -> calculateSum( image ) );
+	public Long singleThreaded() {
+		return Parallelization.runSingleThreaded(() -> calculateSum(image));
 	}
 
 	@Benchmark
-	public Long defaultBehavior()
-	{
-		return calculateSum( image );
+	public Long defaultBehavior() {
+		return calculateSum(image);
 	}
 
 	@Benchmark
-	public Long singleThreadedBaseline()
-	{
-		return calculateSum( image );
+	public Long singleThreadedBaseline() {
+		return calculateSum(image);
 	}
 
-	public static void main( String... args ) throws RunnerException
-	{
-		Options options = new OptionsBuilder()
-				.include( ParallelizationBenchmark.class.getName() )
-				.build();
-		new Runner( options ).run();
+	public static void main(String... args) throws RunnerException {
+		Options options = new OptionsBuilder().include(
+			ParallelizationBenchmark.class.getName()).build();
+		new Runner(options).run();
 	}
 }

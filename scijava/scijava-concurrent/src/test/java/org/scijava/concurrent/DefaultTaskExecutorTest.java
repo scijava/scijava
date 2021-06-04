@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import org.junit.Test;
@@ -51,92 +52,87 @@ import static org.junit.Assert.fail;
 /**
  * Tests {@link DefaultTaskExecutor}.
  */
-public class DefaultTaskExecutorTest
-{
+public class DefaultTaskExecutorTest {
 
-	private final DefaultTaskExecutor sequential = new DefaultTaskExecutor( new SequentialExecutorService() );
+	private final DefaultTaskExecutor sequential = new DefaultTaskExecutor(
+		new SequentialExecutorService());
 
-	private final DefaultTaskExecutor twoThreads = new DefaultTaskExecutor( new ForkJoinPool( 2 ) );
-
-	@Test
-	public void testGetParallelism()
-	{
-		testGetParallelism( 1, new SequentialExecutorService() );
-		testGetParallelism( 2, Executors.newFixedThreadPool( 2 ) );
-		testGetParallelism( 3, new ForkJoinPool( 3 ) );
-		testGetParallelism( 1, Executors.newCachedThreadPool() );
-		testGetParallelism( ForkJoinPool.commonPool().getParallelism(), new ForkJoinExecutorService() );
-	}
-
-	private void testGetParallelism( int expectedParallelism, ExecutorService executorService )
-	{
-		TaskExecutor taskExecutor = new DefaultTaskExecutor( executorService );
-		assertEquals( expectedParallelism, taskExecutor.getParallelism() );
-	}
+	private final DefaultTaskExecutor twoThreads = new DefaultTaskExecutor(
+		new ForkJoinPool(2));
 
 	@Test
-	public void testSuggestNumberOfTasks()
+	public void testGetParallelism() {
+		testGetParallelism(1, new SequentialExecutorService());
+		testGetParallelism(2, Executors.newFixedThreadPool(2));
+		testGetParallelism(3, new ForkJoinPool(3));
+		testGetParallelism(1, Executors.newCachedThreadPool());
+		testGetParallelism(ForkJoinPool.commonPool().getParallelism(),
+			new ForkJoinExecutorService());
+	}
+
+	private void testGetParallelism(int expectedParallelism,
+		ExecutorService executorService)
 	{
-		assertEquals( 1, sequential.suggestNumberOfTasks() );
-		assertEquals( 8, twoThreads.suggestNumberOfTasks() );
+		TaskExecutor taskExecutor = new DefaultTaskExecutor(executorService);
+		assertEquals(expectedParallelism, taskExecutor.getParallelism());
 	}
 
 	@Test
-	public void testForEach()
-	{
+	public void testSuggestNumberOfTasks() {
+		assertEquals(1, sequential.suggestNumberOfTasks());
+		assertEquals(8, twoThreads.suggestNumberOfTasks());
+	}
+
+	@Test
+	public void testForEach() {
 		AtomicInteger sum = new AtomicInteger();
-		List< Integer > parameters = Arrays.asList( 1, 2, 3 );
-		twoThreads.forEach( parameters, sum::addAndGet );
-		assertEquals( 6, sum.get() );
+		List<Integer> parameters = Arrays.asList(1, 2, 3);
+		twoThreads.forEach(parameters, sum::addAndGet);
+		assertEquals(6, sum.get());
 	}
 
 	@Test
-	public void testForEachApply()
-	{
-		List< Integer > parameters = Arrays.asList( 1, 2, 3 );
-		List< Integer > squared = twoThreads.forEachApply( parameters, i -> i * i );
-		assertEquals( Arrays.asList( 1, 4, 9 ), squared );
+	public void testForEachApply() {
+		List<Integer> parameters = Arrays.asList(1, 2, 3);
+		List<Integer> squared = twoThreads.forEachApply(parameters, i -> i * i);
+		assertEquals(Arrays.asList(1, 4, 9), squared);
 	}
 
 	@Test
-	public void testRunAll()
-	{
+	public void testRunAll() {
 		AtomicInteger sum = new AtomicInteger();
-		List< Runnable > tasks = Arrays.asList( () -> sum.addAndGet( 1 ),
-				() -> sum.addAndGet( 2 ), () -> sum.addAndGet( 3 ) );
-		twoThreads.runAll( tasks );
-		assertEquals( 6, sum.get() );
+		List<Runnable> tasks = Arrays.asList(() -> sum.addAndGet(1), () -> sum
+			.addAndGet(2), () -> sum.addAndGet(3));
+		twoThreads.runAll(tasks);
+		assertEquals(6, sum.get());
 	}
-
 
 	@Test
 	public void testExceptionHandling() {
-		try
-		{
-			twoThreads.runAll( Collections.singletonList( () -> throwDummyException() ) );
-			fail( "DefaultTaskExecutor.runAll() failed to rethrow the DummyException." );
+		try {
+			twoThreads.runAll(Collections.singletonList(() -> throwDummyException()));
+			fail(
+				"DefaultTaskExecutor.runAll() failed to rethrow the DummyException.");
 		}
-		catch ( DummyException e ) // expected exception
+		catch (DummyException e) // expected exception
 		{
-			assertStackTraceContainsMethod( e, "testExceptionHandling" );
-			assertStackTraceContainsMethod( e, "runAll" );
-			assertStackTraceContainsMethod( e, "throwDummyException" );
+			assertStackTraceContainsMethod(e, "testExceptionHandling");
+			assertStackTraceContainsMethod(e, "runAll");
+			assertStackTraceContainsMethod(e, "throwDummyException");
 		}
 	}
 
-	public void assertStackTraceContainsMethod( Exception e, String methodName )
-	{
+	public void assertStackTraceContainsMethod(Exception e, String methodName) {
 		StackTraceElement[] stack = e.getStackTrace();
-		assertTrue( Stream.of( stack ).anyMatch( stackTraceElement -> stackTraceElement.getMethodName().equals( methodName ) ) );
+		assertTrue(Stream.of(stack).anyMatch(stackTraceElement -> stackTraceElement
+			.getMethodName().equals(methodName)));
 	}
 
-	public void throwDummyException()
-	{
+	public void throwDummyException() {
 		throw new DummyException();
 	}
 
-	private static class DummyException extends RuntimeException
-	{
+	private static class DummyException extends RuntimeException {
 
 	}
 }

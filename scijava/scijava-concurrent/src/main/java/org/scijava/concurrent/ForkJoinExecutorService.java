@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.ArrayList;
@@ -46,120 +47,115 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The {@link ForkJoinExecutorService} is an {@link ExecutorService},
- * for efficient nested parallelization.
+ * The {@link ForkJoinExecutorService} is an {@link ExecutorService}, for
+ * efficient nested parallelization.
  * <p>
- * The {@link ForkJoinPool} is an ExecutorService that provides
- * an entry point to a technique called work-steeling.
- * Work-steeling allows good performance for nested parallelization.
- * But calling {@link ForkJoinPool#submit} or {@link ForkJoinPool#invokeAll}
- * alone, won't result in any work-steeling and performance boost.
- * It's necessary to use {@link ForkJoinTask}s and their methods
- * {@link ForkJoinTask#fork fork} or {@link ForkJoinTask#invokeAll
+ * The {@link ForkJoinPool} is an ExecutorService that provides an entry point
+ * to a technique called work-steeling. Work-steeling allows good performance
+ * for nested parallelization. But calling {@link ForkJoinPool#submit} or
+ * {@link ForkJoinPool#invokeAll} alone, won't result in any work-steeling and
+ * performance boost. It's necessary to use {@link ForkJoinTask}s and their
+ * methods {@link ForkJoinTask#fork fork} or {@link ForkJoinTask#invokeAll
  * invokeAll} to benefit from work-steeling.
  * <p>
- * ForkJoinExecutorService is an ExecutorService that internally
- * calls ForkJoinTask.fork() and ForkJoinTask.invokeAll(...) and
- * therefore directly achieves good performance by work-steeling.
+ * ForkJoinExecutorService is an ExecutorService that internally calls
+ * ForkJoinTask.fork() and ForkJoinTask.invokeAll(...) and therefore directly
+ * achieves good performance by work-steeling.
  * <p>
- * ForkJoinExecutorService is not a fully functional ExecutorService.
- * Methods like {@link #shutdownNow()}, {@link #awaitTermination(long, TimeUnit)}
- * and {@link #invokeAll(Collection, long, TimeUnit)} are not implemented.
+ * ForkJoinExecutorService is not a fully functional ExecutorService. Methods
+ * like {@link #shutdownNow()}, {@link #awaitTermination(long, TimeUnit)} and
+ * {@link #invokeAll(Collection, long, TimeUnit)} are not implemented.
  */
-public class ForkJoinExecutorService extends AbstractExecutorService
-{
+public class ForkJoinExecutorService extends AbstractExecutorService {
 
-	public int getParallelism()
-	{
+	public int getParallelism() {
 		return getPool().getParallelism();
 	}
 
 	@Override
-	public void shutdown()
-	{
+	public void shutdown() {}
+
+	@Override
+	public List<Runnable> shutdownNow() {
+		throw new UnsupportedOperationException(
+			"ForkJoinExecutorService, shutdownNow is not implemented.");
 	}
 
 	@Override
-	public List< Runnable > shutdownNow()
-	{
-		throw new UnsupportedOperationException( "ForkJoinExecutorService, shutdownNow is not implemented." );
-	}
-
-	@Override
-	public boolean isShutdown()
-	{
+	public boolean isShutdown() {
 		return false;
 	}
 
 	@Override
-	public boolean isTerminated()
-	{
+	public boolean isTerminated() {
 		return false;
 	}
 
 	@Override
-	public boolean awaitTermination( long l, TimeUnit timeUnit ) throws
-			InterruptedException
+	public boolean awaitTermination(long l, TimeUnit timeUnit)
+		throws InterruptedException
 	{
-		// NB: it's possible to implement this method. One might use a set of weak references to collect all tasks submitted.
-		// And this method call ForkJoinTask.get( long, timeUnit), to get the timing correct.
-		// But doing so introduces reduced performance, as the set of tasks needs to be managed.
+		// NB: it's possible to implement this method. One might use a set of weak
+		// references to collect all tasks submitted.
+		// And this method call ForkJoinTask.get( long, timeUnit), to get the timing
+		// correct.
+		// But doing so introduces reduced performance, as the set of tasks needs to
+		// be managed.
 		// It's simpler to not use await termination at all.
 		// Alternative is to collect the futures and call get on them.
-		throw new UnsupportedOperationException( "ForkJoinExecutorService, awaitTermination is not implemented." );
+		throw new UnsupportedOperationException(
+			"ForkJoinExecutorService, awaitTermination is not implemented.");
 	}
 
 	@Override
-	public < T > List< Future< T > > invokeAll( Collection< ? extends Callable< T > > collection ) throws
-			InterruptedException
+	public <T> List<Future<T>> invokeAll(
+		Collection<? extends Callable<T>> collection) throws InterruptedException
 	{
 		// TODO: Revisit if we ever drop support for Java 8.
-		//  For Java 11, the code below could be replaced by
-		//    return getPool().invokeAll( collection );
-		//  For Java 8, this throws
-		//    RejectedExecutionException: Thread limit exceeded replacing blocked worker
-		//  Also revisit the submit/execute methods below.
-		//  See https://github.com/imglib/imglib2/pull/269#discussion_r326855353
-		List< ForkJoinTask< T > > futures = new ArrayList<>( collection.size() );
-		for ( Callable< T > callable : collection )
-			futures.add( ForkJoinTask.adapt( callable ) );
-		ForkJoinTask.invokeAll( futures );
-		return Collections.unmodifiableList( futures );
+		// For Java 11, the code below could be replaced by
+		// return getPool().invokeAll( collection );
+		// For Java 8, this throws
+		// RejectedExecutionException: Thread limit exceeded replacing blocked
+		// worker
+		// Also revisit the submit/execute methods below.
+		// See https://github.com/imglib/imglib2/pull/269#discussion_r326855353
+		List<ForkJoinTask<T>> futures = new ArrayList<>(collection.size());
+		for (Callable<T> callable : collection)
+			futures.add(ForkJoinTask.adapt(callable));
+		ForkJoinTask.invokeAll(futures);
+		return Collections.unmodifiableList(futures);
 	}
 
 	@Override
-	public < T > List< Future< T > > invokeAll( Collection< ? extends Callable< T > > collection, long l, TimeUnit timeUnit ) throws
-			InterruptedException
+	public <T> List<Future<T>> invokeAll(
+		Collection<? extends Callable<T>> collection, long l, TimeUnit timeUnit)
+		throws InterruptedException
 	{
-		throw new UnsupportedOperationException( "ForkJoinExecutorService, invokeAll with timeout is not implemented." );
+		throw new UnsupportedOperationException(
+			"ForkJoinExecutorService, invokeAll with timeout is not implemented.");
 	}
 
 	@Override
-	public Future< ? > submit( Runnable runnable )
-	{
-		return ForkJoinTask.adapt( runnable ).fork();
+	public Future<?> submit(Runnable runnable) {
+		return ForkJoinTask.adapt(runnable).fork();
 	}
 
 	@Override
-	public < T > Future< T > submit( Runnable runnable, T t )
-	{
-		return ForkJoinTask.adapt( runnable, t ).fork();
+	public <T> Future<T> submit(Runnable runnable, T t) {
+		return ForkJoinTask.adapt(runnable, t).fork();
 	}
 
 	@Override
-	public < T > Future< T > submit( Callable< T > callable )
-	{
-		return ForkJoinTask.adapt( callable ).fork();
+	public <T> Future<T> submit(Callable<T> callable) {
+		return ForkJoinTask.adapt(callable).fork();
 	}
 
 	@Override
-	public void execute( Runnable runnable )
-	{
-		ForkJoinTask.adapt( runnable ).fork();
+	public void execute(Runnable runnable) {
+		ForkJoinTask.adapt(runnable).fork();
 	}
 
-	private ForkJoinPool getPool()
-	{
+	private ForkJoinPool getPool() {
 		ForkJoinPool pool = ForkJoinTask.getPool();
 		return pool != null ? pool : ForkJoinPool.commonPool();
 	}

@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.Arrays;
@@ -39,50 +40,45 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * This demo shows how to use {@link Parallelization} to write a
- * algorithm, that can be run single threaded or multi threaded,
- * or with a given number of threads.
+ * This demo shows how to use {@link Parallelization} to write a algorithm, that
+ * can be run single threaded or multi threaded, or with a given number of
+ * threads.
  */
-public class ParallelizationDemo
-{
-	public static void main( String... args )
-	{
-		System.out.println( "\nSingle Threaded:\n================" );
-		Parallelization.runSingleThreaded( () -> exampleAlgorithm() );
+public class ParallelizationDemo {
 
-		System.out.println( "\nMulti Threaded:\n===============" );
-		Parallelization.runMultiThreaded( () -> exampleAlgorithm() );
+	public static void main(String... args) {
+		System.out.println("\nSingle Threaded:\n================");
+		Parallelization.runSingleThreaded(() -> exampleAlgorithm());
 
-		System.out.println( "\nTwo Threads:\n===============" );
-		ExecutorService executor = Executors.newFixedThreadPool( 2 );
-		Parallelization.runWithExecutor( executor, () -> exampleAlgorithm() );
+		System.out.println("\nMulti Threaded:\n===============");
+		Parallelization.runMultiThreaded(() -> exampleAlgorithm());
+
+		System.out.println("\nTwo Threads:\n===============");
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+		Parallelization.runWithExecutor(executor, () -> exampleAlgorithm());
 		executor.shutdown();
 	}
 
-	private static void exampleAlgorithm()
-	{
+	private static void exampleAlgorithm() {
 		TaskExecutor taskExecutor = Parallelization.getTaskExecutor();
 
-		System.out.println( "Parallelism Level: " + taskExecutor.getParallelism() );
+		System.out.println("Parallelism Level: " + taskExecutor.getParallelism());
 
-		List< Integer > list = Arrays.asList( 1, 2, 3, 4 );
+		List<Integer> list = Arrays.asList(1, 2, 3, 4);
 
-		taskExecutor.forEach( list, index -> {
-			System.out.println( "task " + index + " start");
+		taskExecutor.forEach(list, index -> {
+			System.out.println("task " + index + " start");
 			waitOneSecond();
-			System.out.println( "task " + index + " finish");
-		} );
+			System.out.println("task " + index + " finish");
+		});
 	}
 
-	private static void waitOneSecond()
-	{
-		try
-		{
-			Thread.sleep( 1000 );
+	private static void waitOneSecond() {
+		try {
+			Thread.sleep(1000);
 		}
-		catch ( InterruptedException e )
-		{
-			throw new RuntimeException( e );
+		catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

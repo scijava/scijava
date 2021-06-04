@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.Collections;
@@ -42,47 +43,41 @@ import java.util.concurrent.TimeUnit;
 /**
  * A {@link ExecutorService} that is single-threaded, it never uses threads.
  */
-public class SequentialExecutorService extends AbstractExecutorService
-{
-	public int getParallelism()
-	{
+public class SequentialExecutorService extends AbstractExecutorService {
+
+	public int getParallelism() {
 		return 1;
 	}
 
 	@Override
-	public void shutdown()
-	{
+	public void shutdown() {
 		// do nothing
 	}
 
 	@Override
-	public List< Runnable > shutdownNow()
-	{
+	public List<Runnable> shutdownNow() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public boolean isShutdown()
-	{
+	public boolean isShutdown() {
 		return false;
 	}
 
 	@Override
-	public boolean isTerminated()
+	public boolean isTerminated() {
+		return true;
+	}
+
+	@Override
+	public boolean awaitTermination(long l, TimeUnit timeUnit)
+		throws InterruptedException
 	{
 		return true;
 	}
 
 	@Override
-	public boolean awaitTermination( long l, TimeUnit timeUnit ) throws
-			InterruptedException
-	{
-		return true;
-	}
-
-	@Override
-	public void execute( Runnable runnable )
-	{
+	public void execute(Runnable runnable) {
 		runnable.run();
 	}
 }

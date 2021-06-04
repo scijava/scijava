@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.concurrent.Callable;
@@ -41,11 +42,13 @@ import java.util.concurrent.ExecutorService;
  * <p>
  * The algorithm needs to use the {@link TaskExecutor} returned by
  * {@link Parallelization#getTaskExecutor()} to implement the parallelization.
- * Alternatively it can use {@link Parallelization#getExecutorService()}.
- * But {@link TaskExecutor} is simpler and better suited for image precessing algorithms.
+ * Alternatively it can use {@link Parallelization#getExecutorService()}. But
+ * {@link TaskExecutor} is simpler and better suited for image precessing
+ * algorithms.
  * <p>
- * The algorithm can be executed singleThreaded, multiThreaded or by
- * using a specified {@link ExecutorService} or {@link TaskExecutor}:
+ * The algorithm can be executed singleThreaded, multiThreaded or by using a
+ * specified {@link ExecutorService} or {@link TaskExecutor}:
+ * 
  * <pre>
  *     {@code
  *
@@ -79,28 +82,25 @@ import java.util.concurrent.ExecutorService;
  *     }
  * </pre>
  */
-public final class Parallelization
-{
+public final class Parallelization {
 
-	private Parallelization()
-	{
+	private Parallelization() {
 		// prevent from instantiation
 	}
 
-	private static final ThreadLocal< TaskExecutor > executor = ThreadLocal.withInitial( () -> TaskExecutors.multiThreaded() );
+	private static final ThreadLocal<TaskExecutor> executor = ThreadLocal
+		.withInitial(() -> TaskExecutors.multiThreaded());
 
 	// Methods to support the implementation of an multi-threaded algorithm
 
 	/**
 	 * Returns the {@link TaskExecutor} that was set for this thread.
 	 */
-	public static TaskExecutor getTaskExecutor()
-	{
+	public static TaskExecutor getTaskExecutor() {
 		return executor.get();
 	}
 
-	public static ExecutorService getExecutorService()
-	{
+	public static ExecutorService getExecutorService() {
 		return getTaskExecutor().getExecutorService();
 	}
 
@@ -111,9 +111,8 @@ public final class Parallelization
 	 * <p>
 	 * {@code Parallelization.runSingleThreaded( () -> myAlgorithm( input ) );}
 	 */
-	public static void runSingleThreaded( Runnable action )
-	{
-		runWithExecutor( TaskExecutors.singleThreaded(), action );
+	public static void runSingleThreaded(Runnable action) {
+		runWithExecutor(TaskExecutors.singleThreaded(), action);
 	}
 
 	/**
@@ -121,9 +120,8 @@ public final class Parallelization
 	 * <p>
 	 * {@code output = Parallelization.runSingleThreaded( () -> myAlgorithm( input ) );}
 	 */
-	public static < T > T runSingleThreaded( Callable< T > action )
-	{
-		return runWithExecutor( TaskExecutors.singleThreaded(), action );
+	public static <T> T runSingleThreaded(Callable<T> action) {
+		return runWithExecutor(TaskExecutors.singleThreaded(), action);
 	}
 
 	/**
@@ -131,9 +129,8 @@ public final class Parallelization
 	 * <p>
 	 * {@code Parallelization.runMultiThreaded( () -> myAlgorithm( input ) );}
 	 */
-	public static void runMultiThreaded( Runnable action )
-	{
-		runWithExecutor( TaskExecutors.multiThreaded(), action );
+	public static void runMultiThreaded(Runnable action) {
+		runWithExecutor(TaskExecutors.multiThreaded(), action);
 	}
 
 	/**
@@ -141,9 +138,8 @@ public final class Parallelization
 	 * <p>
 	 * {@code output = Parallelization.runMultiThreaded( () -> myAlgorithm( input ) );}
 	 */
-	public static < T > T runMultiThreaded( Callable< T > action )
-	{
-		return runWithExecutor( TaskExecutors.multiThreaded(), action );
+	public static <T> T runMultiThreaded(Callable<T> action) {
+		return runWithExecutor(TaskExecutors.multiThreaded(), action);
 	}
 
 	/**
@@ -151,11 +147,9 @@ public final class Parallelization
 	 * <p>
 	 * {@code Parallelization.runWithNumThreads( numThreads, () -> myAlgorithm( input ) );}
 	 */
-	public static void runWithNumThreads( int numThreads, Runnable action )
-	{
-		try (TaskExecutor taskExecutor = TaskExecutors.numThreads( numThreads ))
-		{
-			runWithExecutor( taskExecutor, action );
+	public static void runWithNumThreads(int numThreads, Runnable action) {
+		try (TaskExecutor taskExecutor = TaskExecutors.numThreads(numThreads)) {
+			runWithExecutor(taskExecutor, action);
 		}
 	}
 
@@ -164,11 +158,9 @@ public final class Parallelization
 	 * <p>
 	 * {@code output = Parallelization.runWithNumThreads( numThreads, () -> myAlgorithm( input ) );}
 	 */
-	public static < R > R runWithNumThreads( int numThreads, Callable< R > action )
-	{
-		try (TaskExecutor taskExecutor = TaskExecutors.numThreads( numThreads ))
-		{
-			return runWithExecutor( taskExecutor, action );
+	public static <R> R runWithNumThreads(int numThreads, Callable<R> action) {
+		try (TaskExecutor taskExecutor = TaskExecutors.numThreads(numThreads)) {
+			return runWithExecutor(taskExecutor, action);
 		}
 	}
 
@@ -176,28 +168,31 @@ public final class Parallelization
 	 * Executes the given {@link Runnable} with the given {@link ExecutorService},
 	 * and waits for the execution to finish.
 	 */
-	public static void runWithExecutor( ExecutorService executorService, Runnable action )
+	public static void runWithExecutor(ExecutorService executorService,
+		Runnable action)
 	{
-		runWithExecutor( TaskExecutors.forExecutorService( executorService ), action );
+		runWithExecutor(TaskExecutors.forExecutorService(executorService), action);
 	}
 
 	/**
 	 * Executes the given {@link Callable} with the given {@link ExecutorService},
 	 * waits for the execution to finish and returns the result.
 	 */
-	public static < R > R runWithExecutor( ExecutorService executorService, Callable< R > action )
+	public static <R> R runWithExecutor(ExecutorService executorService,
+		Callable<R> action)
 	{
-		return runWithExecutor( TaskExecutors.forExecutorService( executorService ), action );
+		return runWithExecutor(TaskExecutors.forExecutorService(executorService),
+			action);
 	}
 
 	/**
 	 * Executes the given {@link Runnable} with the given {@link TaskExecutor},
 	 * and waits for the execution to finish.
 	 */
-	public static void runWithExecutor( TaskExecutor taskExecutor, Runnable action )
+	public static void runWithExecutor(TaskExecutor taskExecutor,
+		Runnable action)
 	{
-		try (Frame frame = setExecutorRequiresReset( taskExecutor ))
-		{
+		try (Frame frame = setExecutorRequiresReset(taskExecutor)) {
 			action.run();
 		}
 	}
@@ -206,27 +201,27 @@ public final class Parallelization
 	 * Executes the given {@link Callable} with the given {@link TaskExecutor},
 	 * waits for the execution to finish and returns the result.
 	 */
-	public static < T > T runWithExecutor( TaskExecutor taskExecutor, Callable< T > action )
+	public static <T> T runWithExecutor(TaskExecutor taskExecutor,
+		Callable<T> action)
 	{
-		try (Frame frame = setExecutorRequiresReset( taskExecutor ))
-		{
+		try (Frame frame = setExecutorRequiresReset(taskExecutor)) {
 			return action.call();
 		}
-		catch ( Exception e )
-		{
-			throw new RuntimeException( e );
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
 	/**
-	 * This method can be used to execute an algorithm with a given {@link TaskExecutor}.
-	 * But it's easier to use {@link #runWithExecutor}.
+	 * This method can be used to execute an algorithm with a given
+	 * {@link TaskExecutor}. But it's easier to use {@link #runWithExecutor}.
 	 * <p>
-	 * This method sets the {@link TaskExecutor} for the current thread.
-	 * This can be used to execute a certain part of your code with the given
+	 * This method sets the {@link TaskExecutor} for the current thread. This can
+	 * be used to execute a certain part of your code with the given
 	 * {@link TaskExecutor}. It's mandatory to call the {@code close()} of the
 	 * return {@link Frame frame} afterwards. This could be done using an
 	 * try-with-resources statement.
+	 * 
 	 * <pre>
 	 * {@code
 	 *
@@ -236,33 +231,35 @@ public final class Parallelization
 	 * }
 	 * }
 	 * </pre>
+	 * 
 	 * Or by explicitly calling {@code frame.close()} in the finally block.
+	 * 
 	 * <pre>
-	 * {@code
+	 * 
+	 * {
+	 * 	&#64;code
 	 *
-	 * Parallelization.Frame frame = Parallelization.setExecutorRequiresReset( taskExecutor );
-	 * try
-	 * {
-	 *     myAlgorithm(input);
-	 * }
-	 * finally
-	 * {
-	 *     frame.close();
-	 * }
+	 * 	Parallelization.Frame frame = Parallelization.setExecutorRequiresReset(
+	 * 		taskExecutor);
+	 * 	try {
+	 * 		myAlgorithm(input);
+	 * 	}
+	 * 	finally {
+	 * 		frame.close();
+	 * 	}
 	 * }
 	 * </pre>
 	 */
 	// NB: package-private to allow testing
-	static Frame setExecutorRequiresReset( TaskExecutor taskExecutor )
-	{
+	static Frame setExecutorRequiresReset(TaskExecutor taskExecutor) {
 		final TaskExecutor old = executor.get();
-		executor.set( taskExecutor );
-		return () -> executor.set( old );
+		executor.set(taskExecutor);
+		return () -> executor.set(old);
 	}
 
 	// NB: package-private to allow testing
-	interface Frame extends AutoCloseable
-	{
+	interface Frame extends AutoCloseable {
+
 		@Override
 		void close(); // NB: Throws no exceptions
 	}

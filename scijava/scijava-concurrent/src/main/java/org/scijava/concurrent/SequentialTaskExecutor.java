@@ -31,6 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.concurrent;
 
 import java.util.ArrayList;
@@ -42,69 +43,65 @@ import java.util.function.Function;
 /**
  * A {@link TaskExecutor} for single threaded execution.
  */
-class SequentialTaskExecutor implements TaskExecutor
-{
-	private static final SequentialTaskExecutor INSTANCE = new SequentialTaskExecutor();
+class SequentialTaskExecutor implements TaskExecutor {
 
-	private final ExecutorService executorService = new SequentialExecutorService();
+	private static final SequentialTaskExecutor INSTANCE =
+		new SequentialTaskExecutor();
 
-	private SequentialTaskExecutor()
-	{
+	private final ExecutorService executorService =
+		new SequentialExecutorService();
+
+	private SequentialTaskExecutor() {
 		// Only one instance of the sequential task executor is needed.
 	}
 
-	public static TaskExecutor getInstance()
-	{
+	public static TaskExecutor getInstance() {
 		return INSTANCE;
 	}
 
 	@Override
-	public ExecutorService getExecutorService()
-	{
+	public ExecutorService getExecutorService() {
 		return executorService;
 	}
 
 	@Override
-	public int suggestNumberOfTasks()
-	{
+	public int suggestNumberOfTasks() {
 		return 1;
 	}
 
 	@Override
-	public int getParallelism()
-	{
+	public int getParallelism() {
 		return 1;
 	}
 
 	@Override
-	public void runAll( List< Runnable > tasks )
-	{
-		for ( Runnable task : tasks )
+	public void runAll(List<Runnable> tasks) {
+		for (Runnable task : tasks)
 			task.run();
 	}
 
 	@Override
-	public < T > void forEach( List< ? extends T > parameters, Consumer< ? super T > task )
+	public <T> void forEach(List<? extends T> parameters,
+		Consumer<? super T> task)
 	{
-		for( T value : parameters )
-			task.accept( value );
+		for (T value : parameters)
+			task.accept(value);
 	}
 
 	@Override
-	public < T, R > List< R > forEachApply( List< ? extends T > parameters, Function< ? super T, ? extends R > task )
+	public <T, R> List<R> forEachApply(List<? extends T> parameters,
+		Function<? super T, ? extends R> task)
 	{
-		final List< R > results = new ArrayList<>( parameters.size() );
-		for ( final T value : parameters )
-		{
-			R result = task.apply( value );
-			results.add( result );
+		final List<R> results = new ArrayList<>(parameters.size());
+		for (final T value : parameters) {
+			R result = task.apply(value);
+			results.add(result);
 		}
 		return results;
 	}
 
 	@Override
-	public void close()
-	{
+	public void close() {
 		// no resources that need to be cleaned up
 	}
 }

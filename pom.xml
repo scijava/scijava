@@ -52,6 +52,7 @@
 		<module>imagej/imagej2-legacy</module>
 		<module>scijava/scijava-collections</module>
 		<module>scijava/scijava-common3</module>
+		<module>scijava/scijava-concurrent</module>
 		<module>scijava/scijava-discovery</module>
 		<module>scijava/scijava-discovery-therapi</module>
 		<module>scijava/scijava-discovery-test</module>

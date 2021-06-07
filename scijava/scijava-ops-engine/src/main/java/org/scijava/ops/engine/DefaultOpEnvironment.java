@@ -35,6 +35,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
@@ -323,6 +324,35 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				.filter(g -> g.canGenerateFrom(o)) //
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //
 				.collect(Collectors.toSet());
+	}
+
+	@Override
+	public Collection<String> descriptions() {
+		return descriptions(infos());
+	}
+
+	@Override
+	public Collection<String> descriptions(String name) {
+		return descriptions(infos(name));
+	}
+
+	/**
+	 * Helper method to get the descriptions for each {@link OpInfo} in
+	 * {@code infos}
+	 * <p>
+	 * NB we return a {@link List} here to preserve multiple instances of the same
+	 * {@link OpInfo}. This is consistent with {@link DefaultOpEnvironment#infos}
+	 * returning multiple instances of the same {@link OpInfo}. The duplicate
+	 * {@link OpInfo}s are created when Ops have multiple names.
+	 *
+	 * @param infos
+	 * @return a set of {@link String}s, one describing each {@link OpInfo} in
+	 *         {@code infos}.
+	 */
+	private List<String> descriptions(Iterable<OpInfo> infos) {
+		return StreamSupport.stream(infos.spliterator(), true) //
+				.map(OpInfo::toString) //
+				.collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("unchecked")

@@ -31,6 +31,7 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 
 import org.scijava.types.Nil;
 
@@ -266,5 +267,21 @@ public interface OpEnvironment {
 	 * @return a {@link Hints} with all {@code startingHints} as hints.
 	 */
 	Hints createHints(String... startingHints);
+
+	/**
+	 * Returns the descriptions for all Ops contained within this
+	 * {@link OpEnvironment}
+	 *
+	 * @return a {@link Collection} of descriptions
+	 */
+	Collection<String> descriptions();
+
+	/**
+	 * Returns the descriptions for all Ops identifiable by a given name within
+	 * this {@link OpEnvironment}
+	 *
+	 * @return a {@link Collection} of descriptions
+	 */
+	Collection<String> descriptions(String name);
 
 }

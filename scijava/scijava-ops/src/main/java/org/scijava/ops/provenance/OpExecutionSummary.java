@@ -1,8 +1,8 @@
 package org.scijava.ops.provenance;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.scijava.ops.OpInfo;
 
@@ -11,7 +11,7 @@ public class OpExecutionSummary implements ExecutionSummary<OpInstance> {
 	private final OpInstance instance;
 	private final List<Object> arguments;
 	private Object output;
-	private ReadWriteLock lock;
+	private final ReadWriteLock lock;
 
 	private boolean started;
 	private boolean completed;
@@ -21,6 +21,7 @@ public class OpExecutionSummary implements ExecutionSummary<OpInstance> {
 		this.arguments = arguments;
 		this.started = false;
 		this.completed = false;
+		this.lock = new ReentrantReadWriteLock();
 	}
 
 	@Override

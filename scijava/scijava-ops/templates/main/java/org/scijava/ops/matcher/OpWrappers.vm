@@ -6,6 +6,8 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -14,6 +16,9 @@ import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.ops.OpInfo;
+import org.scijava.ops.provenance.OpExecutionSummary;
+import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -26,12 +31,21 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final Type reifiedType) {
+		public Producer<T> wrap(final Producer<T> op, final OpInfo info, final Type reifiedType) {
 			class GenericTypedProducer implements Producer<T>, GenericTyped {
 
 				@Override
 				public T create() {
-					return op.create();
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op);
+					OpHistory.addExecution(e);
+
+					// Call the op
+					T out = op.create();
+
+					// Record the execution's completion
+					e.recordCompletion(out);
+					return out;
 				}
 
 				@Override
@@ -56,6 +70,7 @@ public class OpWrappers {
 		@Override
 		public $fg wrap( //
 			final $fg op, //
+			final OpInfo info, //
 			final Type reifiedType)
 		{
 			class GenericTypedFunction${arity} implements //
@@ -66,7 +81,16 @@ public class OpWrappers {
 				@Override
 				public O apply($applyParams.call($arity)) //
 				{
-					return op.apply($applyArgs.call($arity));
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op);
+					OpHistory.addExecution(e);
+
+					// Call the op
+					O out = op.apply($applyArgs.call($arity));
+
+					// Record the execution's completion
+					e.recordCompletion(out);
+					return out;
 				}
 
 				@Override
@@ -92,6 +116,7 @@ public class OpWrappers {
 		@Override
 		public $cg wrap( //
 			final $cg op, //
+			final OpInfo info, //
 			final Type reifiedType)
 		{
 			class GenericTypedComputer${arity} implements //
@@ -102,7 +127,15 @@ public class OpWrappers {
 				@Override
 				public void compute($computeParams.call($arity)) //
 				{
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op);
+					OpHistory.addExecution(e);
+
+					// Call the op
 					op.compute($computeArgs.call($arity));
+
+					// Record the execution's completion
+					e.recordCompletion(out);
 				}
 
 				@Override
@@ -129,6 +162,7 @@ public class OpWrappers {
 		@Override
 		public $ig wrap( //
 			final $ig op, //
+			final OpInfo info, //
 			final Type reifiedType)
 		{
 			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
@@ -139,7 +173,15 @@ public class OpWrappers {
 				@Override
 				public void mutate($mutateParams.call($arity, $a)) //
 				{
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op);
+					OpHistory.addExecution(e);
+
+					// Call the op
 					op.mutate($mutateArgs.call($arity, $a));
+
+					// Record the execution's completion
+					e.recordCompletion(ioType);
 				}
 
 				@Override

@@ -1,7 +1,11 @@
 package org.scijava.ops.conversionLoss;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
+import org.scijava.ops.OpInfo;
+import org.scijava.ops.provenance.OpExecutionSummary;
+import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -25,6 +29,7 @@ public class LossReporterWrapper<I, O> //
 	@Override
 	public LossReporter<I, O> wrap( //
 		final LossReporter<I, O> op, //
+		final OpInfo info, //
 		final Type reifiedType)
 	{
 		class GenericTypedLossReporter implements //
@@ -35,7 +40,16 @@ public class LossReporterWrapper<I, O> //
 			@Override
 			public Double apply(Nil<I> from, Nil<O> to) //
 			{
-				return op.apply(from, to);
+				// Log a new execution
+				OpExecutionSummary e = new OpExecutionSummary(info, op);
+				OpHistory.addExecution(e);
+
+				// Call the op
+				Double output = op.apply(from, to);
+
+				// Record the execution's completion
+				e.recordCompletion(output);
+				return output;
 			}
 
 			@Override

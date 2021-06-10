@@ -1,8 +1,10 @@
 
 package org.scijava.ops.provenance;
 
+import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
@@ -15,8 +17,8 @@ import org.scijava.ops.OpInfo;
  */
 public class OpHistory {
 
-	private static final Queue<OpExecutionSummary> history =
-		new ConcurrentLinkedQueue<>();
+	private static final Deque<OpExecutionSummary> history =
+		new ConcurrentLinkedDeque<>();
 
 	/**
 	 * Logs a {@link OpExecutionSummary}
@@ -25,7 +27,8 @@ public class OpHistory {
 	 * @return true iff {@code e} was successfully logged
 	 */
 	public static boolean addExecution(OpExecutionSummary e) {
-		return history.add(e);
+		history.addLast(e);
+		return true;
 	}
 
 	/**
@@ -61,8 +64,12 @@ public class OpHistory {
 	 */
 	public static List<OpExecutionSummary> executionsUpon(Object o) {
 		return history.stream() //
-			.filter(e -> e.isInput(o) || e.isOutput(o)) //
+			.filter(e -> e.isOutput(o)) //
 			.collect(Collectors.toList());
+	}
+
+	public static void resetHistory() {
+		history.clear();
 	}
 
 }

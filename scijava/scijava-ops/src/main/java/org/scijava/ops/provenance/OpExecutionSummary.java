@@ -1,6 +1,5 @@
 package org.scijava.ops.provenance;
 
-import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -9,24 +8,17 @@ import org.scijava.ops.OpInfo;
 public class OpExecutionSummary implements ExecutionSummary<OpInstance> {
 
 	private final OpInstance instance;
-	private final List<Object> arguments;
 	private Object output;
 	private final ReadWriteLock lock;
 
 	private boolean started;
 	private boolean completed;
 
-	public OpExecutionSummary(OpInfo info, Object op, List<Object> arguments) {
+	public OpExecutionSummary(OpInfo info, Object op) {
 		this.instance = new OpInstance(info, op);
-		this.arguments = arguments;
 		this.started = false;
 		this.completed = false;
 		this.lock = new ReentrantReadWriteLock();
-	}
-
-	@Override
-	public List<Object> arugments() {
-		return arguments;
 	}
 
 	@Override
@@ -63,12 +55,6 @@ public class OpExecutionSummary implements ExecutionSummary<OpInstance> {
 	public void recordCompletion(Object o) {
 		setOutput(o);
 		completed = true;
-	}
-
-	@Override
-	public boolean isInput(Object o) {
-		// TODO: consider whether this is fine for primitives
-		return arguments.stream().anyMatch(a -> a == o);
 	}
 
 	@Override

@@ -1,78 +1,36 @@
 package org.scijava.ops.provenance;
 
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import org.scijava.ops.OpInfo;
 
-public class OpExecutionSummary implements ExecutionSummary<OpInstance> {
+public class OpExecutionSummary implements ExecutionSummary<Object> {
 
-	private final OpInstance instance;
-	private Object output;
-	private final ReadWriteLock lock;
+	private final OpInfo info;
+	private final Object instance;
+	private final Object output;
 
-	private boolean started;
-	private boolean completed;
-
-	public OpExecutionSummary(OpInfo info, Object op) {
-		this.instance = new OpInstance(info, op);
-		this.started = false;
-		this.completed = false;
-		this.lock = new ReentrantReadWriteLock();
-	}
-
-	@Override
-	public boolean hasOutput() {
-		return getOutput() != null;
+	public OpExecutionSummary(OpInfo info, Object op, Object output) {
+		this.info = info;
+		this.instance = op;
+		this.output = output;
 	}
 
 	@Override
 	public Object output() {
-		return getOutput();
+		return output;
 	}
 
 	@Override
-	public OpInstance executor() {
+	public Object executor() {
 		return instance;
 	}
 
 	@Override
-	public boolean hasStarted() {
-		return started;
-	}
-
-	@Override
-	public boolean hasCompleted() {
-		return completed;
-	}
-
-	@Override
-	public void recordStart() {
-		started = true;
-	}
-
-	@Override
-	public void recordCompletion(Object o) {
-		setOutput(o);
-		completed = true;
-	}
-
-	@Override
 	public boolean isOutput(Object o) {
-		return getOutput() == o;
+		return output == o;
 	}
 
-	private void setOutput(Object o) {
-		lock.writeLock().lock();
-		output = o;
-		lock.writeLock().unlock();
-	}
-
-	private Object getOutput() {
-		lock.readLock().lock();
-		Object o = output;
-		lock.readLock().unlock();
-		return o;
+	public OpInfo info() {
+		return info;
 	}
 
 }

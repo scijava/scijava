@@ -6,8 +6,6 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -36,15 +34,13 @@ public class OpWrappers {
 
 				@Override
 				public T create() {
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
 
 					// Call the op
 					T out = op.create();
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -79,15 +75,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I in) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -120,15 +113,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -161,15 +151,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -202,15 +189,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -243,15 +227,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -284,15 +265,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -325,15 +303,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -366,15 +341,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -407,15 +379,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -448,15 +417,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -489,15 +455,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -530,15 +493,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -571,15 +531,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -612,15 +569,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -653,15 +607,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -694,15 +645,12 @@ public class OpWrappers {
 				@Override
 				public O apply(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -737,15 +685,12 @@ public class OpWrappers {
 				@Override
 				public void compute(@Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -777,15 +722,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I in, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -817,15 +759,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -857,15 +796,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -897,15 +833,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -937,15 +870,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -977,15 +907,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1017,15 +944,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1057,15 +981,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1097,15 +1018,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1137,15 +1055,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1177,15 +1092,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1217,15 +1129,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1257,15 +1166,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1297,15 +1203,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1337,15 +1240,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1377,15 +1277,12 @@ public class OpWrappers {
 				@Override
 				public void compute(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, I16 in16, @Container O out) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1419,15 +1316,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1459,15 +1353,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1499,15 +1390,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1539,15 +1427,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1579,15 +1464,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1619,15 +1501,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1659,15 +1538,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1699,15 +1575,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1739,15 +1612,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1779,15 +1649,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1819,15 +1686,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1859,15 +1723,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1899,15 +1760,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1939,15 +1797,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -1979,15 +1834,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2019,15 +1871,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2059,15 +1908,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2099,15 +1945,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2139,15 +1982,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2179,15 +2019,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2219,15 +2056,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2259,15 +2093,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2299,15 +2130,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2339,15 +2167,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2379,15 +2204,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2419,15 +2241,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2459,15 +2278,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2499,15 +2315,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2539,15 +2352,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2579,15 +2389,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2619,15 +2426,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2659,15 +2463,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2699,15 +2500,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2739,15 +2537,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2779,15 +2574,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2819,15 +2611,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2859,15 +2648,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2899,15 +2685,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2939,15 +2722,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -2979,15 +2759,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3019,15 +2796,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3059,15 +2833,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3099,15 +2870,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3139,15 +2907,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3179,15 +2944,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3219,15 +2981,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3259,15 +3018,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3299,15 +3055,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3339,15 +3092,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3379,15 +3129,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3419,15 +3166,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3459,15 +3203,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3499,15 +3240,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3539,15 +3277,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3579,15 +3314,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3619,15 +3351,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3659,15 +3388,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3699,15 +3425,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3739,15 +3462,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3779,15 +3499,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3819,15 +3536,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3859,15 +3573,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3899,15 +3610,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3939,15 +3647,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -3979,15 +3684,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4019,15 +3721,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4059,15 +3758,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4099,15 +3795,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4139,15 +3832,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4179,15 +3869,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4219,15 +3906,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4259,15 +3943,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4299,15 +3980,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4339,15 +4017,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4379,15 +4054,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4419,15 +4091,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4459,15 +4128,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4499,15 +4165,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4539,15 +4202,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4579,15 +4239,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4619,15 +4276,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4659,15 +4313,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4699,15 +4350,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4739,15 +4387,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4779,15 +4424,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4819,15 +4461,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4859,15 +4498,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4899,15 +4535,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4939,15 +4572,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -4979,15 +4609,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5019,15 +4646,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5059,15 +4683,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5099,15 +4720,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5139,15 +4757,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5179,15 +4794,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5219,15 +4831,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5259,15 +4868,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5299,15 +4905,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5339,15 +4942,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5379,15 +4979,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5419,15 +5016,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5459,15 +5053,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5499,15 +5090,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5539,15 +5127,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5579,15 +5164,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5619,15 +5201,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5659,15 +5238,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5699,15 +5275,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5739,15 +5312,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5779,15 +5349,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5819,15 +5386,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5859,15 +5423,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5899,15 +5460,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5939,15 +5497,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -5979,15 +5534,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6019,15 +5571,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6059,15 +5608,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6099,15 +5645,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6139,15 +5682,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType, I15 in15Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6179,15 +5719,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6219,15 +5756,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(IO ioType, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(ioType, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6259,15 +5793,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, IO ioType, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, ioType, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6299,15 +5830,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, IO ioType, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, ioType, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6339,15 +5867,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, IO ioType, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, ioType, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6379,15 +5904,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, IO ioType, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, ioType, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6419,15 +5941,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, IO ioType, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, ioType, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6459,15 +5978,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, IO ioType, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, ioType, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6499,15 +6015,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, IO ioType, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, ioType, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6539,15 +6052,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, IO ioType, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, ioType, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6579,15 +6089,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, IO ioType, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, ioType, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6619,15 +6126,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, IO ioType, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, ioType, in12Type, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6659,15 +6163,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, IO ioType, I13 in13Type, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, ioType, in13Type, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6699,15 +6200,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, IO ioType, I14 in14Type, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, ioType, in14Type, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6739,15 +6237,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, IO ioType, I15 in15Type, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, ioType, in15Type, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6779,15 +6274,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, IO ioType, I16 in16Type) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, ioType, in16Type);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -6819,15 +6311,12 @@ public class OpWrappers {
 				@Override
 				public void mutate(I1 in1Type, I2 in2Type, I3 in3Type, I4 in4Type, I5 in5Type, I6 in6Type, I7 in7Type, I8 in8Type, I9 in9Type, I10 in10Type, I11 in11Type, I12 in12Type, I13 in13Type, I14 in14Type, I15 in15Type, IO ioType) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, ioType);
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override

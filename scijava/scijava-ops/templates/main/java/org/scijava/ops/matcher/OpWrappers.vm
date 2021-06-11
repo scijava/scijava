@@ -6,8 +6,6 @@
 package org.scijava.ops.matcher;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -36,15 +34,13 @@ public class OpWrappers {
 
 				@Override
 				public T create() {
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
 
 					// Call the op
 					T out = op.create();
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -81,15 +77,12 @@ public class OpWrappers {
 				@Override
 				public O apply($applyParams.call($arity)) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					O out = op.apply($applyArgs.call($arity));
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 					return out;
 				}
 
@@ -127,15 +120,12 @@ public class OpWrappers {
 				@Override
 				public void compute($computeParams.call($arity)) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.compute($computeArgs.call($arity));
 
-					// Record the execution's completion
-					e.recordCompletion(out);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, out);
+					OpHistory.addExecution(e);
 				}
 
 				@Override
@@ -173,15 +163,12 @@ public class OpWrappers {
 				@Override
 				public void mutate($mutateParams.call($arity, $a)) //
 				{
-					// Log a new execution
-					OpExecutionSummary e = new OpExecutionSummary(info, op);
-					OpHistory.addExecution(e);
-
 					// Call the op
 					op.mutate($mutateArgs.call($arity, $a));
 
-					// Record the execution's completion
-					e.recordCompletion(ioType);
+					// Log a new execution
+					OpExecutionSummary e = new OpExecutionSummary(info, op, ioType);
+					OpHistory.addExecution(e);
 				}
 
 				@Override

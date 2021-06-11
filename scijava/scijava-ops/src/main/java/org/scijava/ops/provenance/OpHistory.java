@@ -3,9 +3,7 @@ package org.scijava.ops.provenance;
 
 import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.OpInfo;
@@ -39,7 +37,7 @@ public class OpHistory {
 	 */
 	public static List<OpExecutionSummary> executionsOf(OpInfo info) {
 		return history.stream() //
-			.filter(e -> e.executor().getInfo().equals(info)) //
+			.filter(e -> e.info().equals(info)) //
 			.collect(Collectors.toList());
 	}
 
@@ -51,7 +49,7 @@ public class OpHistory {
 	 */
 	public static List<OpExecutionSummary> executionsOf(Object op) {
 		return history.stream() //
-			.filter(e -> e.executor().getOp().equals(op)) //
+			.filter(e -> e.executor().equals(op)) //
 			.collect(Collectors.toList());
 	}
 

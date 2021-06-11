@@ -7,20 +7,10 @@ package org.scijava.ops.provenance;
  */
 public interface ExecutionSummary<T> {
 
-	boolean hasOutput();
-
 	Object output();
 
 	T executor();
 
-	boolean hasStarted();
-
-	boolean hasCompleted();
-
-	void recordStart();
-
-	void recordCompletion(Object output);
-	
 	boolean isOutput(Object o);
 
 }

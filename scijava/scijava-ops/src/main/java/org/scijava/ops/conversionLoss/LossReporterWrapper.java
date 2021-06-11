@@ -1,7 +1,6 @@
 package org.scijava.ops.conversionLoss;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.provenance.OpExecutionSummary;
@@ -40,15 +39,12 @@ public class LossReporterWrapper<I, O> //
 			@Override
 			public Double apply(Nil<I> from, Nil<O> to) //
 			{
-				// Log a new execution
-				OpExecutionSummary e = new OpExecutionSummary(info, op);
-				OpHistory.addExecution(e);
-
 				// Call the op
 				Double output = op.apply(from, to);
 
-				// Record the execution's completion
-				e.recordCompletion(output);
+				// Log a new execution
+				OpExecutionSummary e = new OpExecutionSummary(info, op, output);
+				OpHistory.addExecution(e);
 				return output;
 			}
 

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 
 /**
@@ -16,7 +17,7 @@ import org.scijava.ops.hints.BaseOpHints.Simplification;
 public class DefaultHints extends AbstractHints {
 
 	public DefaultHints() {
-		super(new String[] {Simplification.ALLOWED, Adaptation.ALLOWED});
+		super(new String[] {Simplification.ALLOWED, Adaptation.ALLOWED, DependencyMatching.NOT_IN_PROGRESS});
 	}
 
 	public DefaultHints(Map<String, String> hints) {

@@ -9,12 +9,14 @@ public class OpExecutionSummary implements ExecutionSummary<Object> {
 	private final UUID executionHash;
 	private final OpInfo info;
 	private final Object instance;
+	private final Object wrappedInstance;
 	private final Object output;
 
-	public OpExecutionSummary(UUID executionHash, OpInfo info, Object op, Object output) {
+	public OpExecutionSummary(UUID executionHash, OpInfo info, Object op, Object wrappedOp, Object output) {
 		this.executionHash = executionHash;
 		this.info = info;
 		this.instance = op;
+		this.wrappedInstance = wrappedOp;
 		this.output = output;
 	}
 
@@ -26,6 +28,10 @@ public class OpExecutionSummary implements ExecutionSummary<Object> {
 	@Override
 	public Object executor() {
 		return instance;
+	}
+
+	public Object wrappedExecutor() {
+		return wrappedInstance;
 	}
 
 	@Override

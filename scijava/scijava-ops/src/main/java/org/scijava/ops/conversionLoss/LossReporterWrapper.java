@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 
 import org.scijava.ops.OpInfo;
+import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.provenance.OpExecutionSummary;
 import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.util.OpWrapper;
@@ -30,6 +32,7 @@ public class LossReporterWrapper<I, O> //
 	public LossReporter<I, O> wrap( //
 		final LossReporter<I, O> op, //
 		final OpInfo info, //
+		final Hints hints, //
 		final UUID executionID, //
 		final Type reifiedType)
 	{
@@ -45,8 +48,10 @@ public class LossReporterWrapper<I, O> //
 				Double output = op.apply(from, to);
 
 				// Log a new execution
-				OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, output);
-				OpHistory.addExecution(e);
+					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
+						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, output);
+						OpHistory.addExecution(e);
+					}
 				return output;
 			}
 

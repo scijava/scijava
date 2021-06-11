@@ -1,6 +1,10 @@
 package org.scijava.ops.provenance;
 
+import com.google.common.graph.Graph;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
@@ -9,8 +13,13 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpField;
+import org.scijava.ops.OpInfo;
+import org.scijava.ops.OpMethod;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.hints.impl.DefaultHints;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)
@@ -60,6 +69,93 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Assert.assertEquals(baz, history1.get(0).executor());
 		Assert.assertEquals(1, history2.size());
 		Assert.assertEquals(bar, history2.get(0).executor());
+	}
+
+	@OpField(names = "test.provenanceMapped")
+	public final Function<Double, Thing> mappedFunc = in -> new Thing(in);
+
+	@OpMethod(names = "test.provenanceMapper", type = Function.class)
+	public static Thing mapperFunc(@OpDependency(name = "test.provenanceMapped") Function<Double, Thing> func, Double[] arr) {
+		return Arrays.stream(arr).map(func).reduce((t1, t2) -> t1.append(t2)).orElseGet(() -> null);
+	}
+
+	class Thing {
+		private Double d;
+		public Thing(Double d) {
+			this.d = d;
+		}
+		private Thing append(Thing other) {
+			d += other.getDouble();
+			return this;
+		}
+		public Double getDouble() {
+			return d;
+		}
+	}
+
+	@Test
+	public void testMappingProvenance() {
+		// Run the mapper
+		int length = 200;
+		Double[] array = new Double[length];
+		Arrays.fill(array, 1.);
+		Thing out = ops.op("test.provenanceMapper").input(array).outType(Thing.class).apply();
+
+		// Assert only one execution upon this Object
+		List<OpExecutionSummary> history = OpHistory.executionsUpon(out);
+		Assert.assertEquals(1, history.size());
+	}
+
+	@Test
+	public void testMappingExecutionChain() {
+		// Run an Op call
+		int length = 200;
+		Double[] array = new Double[length];
+		Arrays.fill(array, 1.);
+		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").input(array).outType(Thing.class).function();
+
+		// Get the Op execution chain associated with the above call
+		Graph<OpInfo> executionChain = OpHistory.opExecutionChain(mapper);
+
+		// Assert only two Ops are called (the Op we asked for, and its dependency)
+		Assert.assertEquals(2, executionChain.nodes().size());
+		// Assert the mapper is in the execution chain
+		Iterator<OpInfo> mapperInfos = ops.env().infos("test.provenanceMapper").iterator();
+		Assert.assertTrue(mapperInfos.hasNext());
+		OpInfo mapperInfo = mapperInfos.next();
+		Assert.assertFalse(mapperInfos.hasNext());
+		Assert.assertTrue(executionChain.nodes().contains(mapperInfo));
+		// Assert mapped is in the execution chain
+		Iterator<OpInfo> mappedInfos = ops.env().infos("test.provenanceMapped").iterator();
+		Assert.assertTrue(mappedInfos.hasNext());
+		OpInfo mappedInfo = mappedInfos.next();
+		Assert.assertFalse(mappedInfos.hasNext());
+		Assert.assertTrue(executionChain.nodes().contains(mappedInfo));
+		// Assert that there is an edge from the mapper OpInfo to the mapped OpInfo
+		Assert.assertEquals(1, executionChain.edges().size());
+		Assert.assertTrue(executionChain.hasEdgeConnecting(mapperInfo, mappedInfo));
+	}
+
+	@Test
+	public void testMappingProvenanceAndCaching() {
+		// call (and run) the Op
+		Hints hints = new DefaultHints();
+		int length = 200;
+		Double[] array = new Double[length];
+		Arrays.fill(array, 1.);
+		Thing out = ops.op("test.provenanceMapper").input(array).outType(Thing.class).apply(hints);
+
+		// Assert only one run of the Base Op
+		List<OpExecutionSummary> history = OpHistory.executionsUpon(out);
+		Assert.assertEquals(1, history.size());
+
+		// Run the mapped Op, assert still one run on the mapper
+		Thing out1 = ops.op("test.provenanceMapped").input(2.).outType(Thing.class).apply(hints);
+		history = OpHistory.executionsUpon(out);
+		Assert.assertEquals(1, history.size());
+		// Assert one run on the mapped Op as well
+		history = OpHistory.executionsUpon(out1);
+		Assert.assertEquals(1, history.size());
 
 	}
 

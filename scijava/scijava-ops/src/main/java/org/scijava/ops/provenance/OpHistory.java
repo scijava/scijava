@@ -61,6 +61,8 @@ public class OpHistory {
 	 * @return a {@link List} of all executions upon {@code o}
 	 */
 	public static List<OpExecutionSummary> executionsUpon(Object o) {
+		if (o.getClass().isPrimitive()) throw new IllegalArgumentException(
+			"Cannot determine the executions upon a primitive as they are passed by reference!");
 		return history.stream() //
 			.filter(e -> e.isOutput(o)) //
 			.collect(Collectors.toList());

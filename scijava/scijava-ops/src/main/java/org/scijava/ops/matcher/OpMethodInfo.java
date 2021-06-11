@@ -228,7 +228,7 @@ public class OpMethodInfo implements OpInfo {
 
 	private String formClassName(Method m) {
 		// package name
-		String packageName = this.getClass().getPackageName();
+		String packageName = OpMethodInfo.class.getPackageName();
 
 		// class name -> OwnerName_MethodName_Params_ReturnType
     List<String> nameElements = new ArrayList<>();
@@ -323,7 +323,7 @@ public class OpMethodInfo implements OpInfo {
 		// Object[] to ObjectArr. This is not truly extensible, since someone
 		// could create an ObjectArr class which might conflict, so it would be
 		// best to find a better solution.
-		return  c.getComponentType() + "Arr";
+		return  c.getComponentType().getSimpleName() + "Arr";
 	}
 
 	@Override

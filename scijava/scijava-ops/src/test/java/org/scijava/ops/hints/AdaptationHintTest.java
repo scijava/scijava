@@ -40,7 +40,26 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 		} catch( IllegalArgumentException e) {
 			assertTrue(e.getCause() instanceof OpMatchingException);
 		}
-		
+	}
+
+	@Test
+	public void testAdaptationPerCallHints() {
+		// make sure we can find the Op when adaptation is allowed
+		Hints hints = new DefaultHints();
+		hints.setHint(Adaptation.ALLOWED);
+		@SuppressWarnings("unused")
+		Computers.Arity1<Double[], Double[]> adaptable = ops.op(
+			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
+			.computer(hints);
+		// make sure we cannot find the Op when adaptation is not allowed
+		hints.setHint(Adaptation.FORBIDDEN);
+		try {
+			ops.op("test.adaptation.hints").inType(Double[].class).outType(
+				Double[].class).computer(hints);
+			throw new IllegalStateException("This op call should not match!");
+		} catch( IllegalArgumentException e) {
+			assertTrue(e.getCause() instanceof OpMatchingException);
+		}
 	}
 
 	@OpHints(hints = {Adaptation.FORBIDDEN})
@@ -66,7 +85,26 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 		} catch( IllegalArgumentException e) {
 			assertTrue(e.getCause() instanceof OpMatchingException);
 		}
-		
+	}
+
+	@Test
+	public void testNonAdaptableOpPerCallHints() {
+		// make sure we can find the Op when adaptation is allowed
+		Hints hints = new DefaultHints();
+		hints.setHint(Adaptation.ALLOWED);
+		@SuppressWarnings("unused")
+		Function<Double[], Double[]> adaptable = ops.op(
+			"test.adaptation.unadaptable").inType(Double[].class).outType(Double[].class)
+			.function(hints);
+		// make sure that we cannot match the Op via adaptation even when adaptation
+		// is allowed (since it declares itself to be unadaptable)
+		try {
+			ops.op("test.adaptation.unadaptable").inType(Double[].class).outType(
+				Double[].class).computer(hints);
+			throw new IllegalStateException("This op call should not match!");
+		} catch( IllegalArgumentException e) {
+			assertTrue(e.getCause() instanceof OpMatchingException);
+		}
 	}
 
 }

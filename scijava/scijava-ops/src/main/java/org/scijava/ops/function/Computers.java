@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
 import org.scijava.param.Container;
 import org.scijava.types.Types;
@@ -186,6 +187,108 @@ public final class Computers {
 		return matchHelper(env, opName, Computers.Arity16.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <O> Computers.Arity0<O> match(final OpEnvironment env, final String opName, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity0.class, outType);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I, O> Computers.Arity1<I, O> match(final OpEnvironment env, final String opName, final Nil<I> inType, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity1.class, outType, inType);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, O> Computers.Arity2<I1, I2, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity2.class, outType, in1Type, in2Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, O> Computers.Arity3<I1, I2, I3, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity3.class, outType, in1Type, in2Type, in3Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, O> Computers.Arity4<I1, I2, I3, I4, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity4.class, outType, in1Type, in2Type, in3Type, in4Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, O> Computers.Arity5<I1, I2, I3, I4, I5, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity5.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, O> Computers.Arity6<I1, I2, I3, I4, I5, I6, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity6.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, O> Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity7.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, O> Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity8.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, O> Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity9.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity10.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity11.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity12.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity13.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity14.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity15.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> match(final OpEnvironment env, final String opName, final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type, final Nil<O> outType, final Hints hints)
+	{
+		return matchHelper(env, opName, hints, Computers.Arity16.class, outType, in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	private static <T> T matchHelper(final OpEnvironment env, final String opName, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
 	{
@@ -198,6 +301,20 @@ public final class Computers {
 		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
 		nils[nils.length - 1] = outType;
 		return (T) env.op(opName, Nil.of(specialType), nils, outType);
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	private static <T> T matchHelper(final OpEnvironment env, final String opName, final Hints hints, final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
+	{
+		final Type[] types = new Type[inTypes.length + 1];
+		for (int i = 0; i < inTypes.length; i++)
+			types[i] = inTypes[i].getType();
+		types[types.length - 1] = outType.getType();
+		final Type specialType = Types.parameterize(opClass, types);
+		final Nil<?>[] nils = new Nil[inTypes.length + 1];
+		System.arraycopy(inTypes, 0, nils, 0, inTypes.length);
+		nils[nils.length - 1] = outType;
+		return (T) env.op(opName, Nil.of(specialType), nils, outType, hints);
 	}
 
 	// -- END TEMP --

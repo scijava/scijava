@@ -56,6 +56,7 @@ import org.scijava.types.Nil;
  * </ul>
  * 
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
 public interface OpEnvironment {
 
@@ -70,13 +71,66 @@ public interface OpEnvironment {
 
 	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
-	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
+	/**
+	 * Returns an Op fitting the provided arguments. NB implementations of this
+	 * method likely depend on the {@link Hints} set by
+	 * {@link OpEnvironment#setHints(Hints)}, which provides no guarantee of
+	 * thread-safety. Users interested in parallel Op matching should consider
+	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
+	 *
+	 * @param <T> the {@link Type} of the Op
+	 * @param opName the name of the Op
+	 * @param specialType the generic {@link Type} of the Op
+	 * @param inTypes the arguments (inputs) to the Op
+	 * @param outType the return of the Op (note that it may also be an argument)
+	 * @return an instance of an Op aligning with the search parameters
+	 */
+	<T> T op(final String opName, final Nil<T> specialType,
+		final Nil<?>[] inTypes, final Nil<?> outType);
 
+	/**
+	 * Returns an Op fitting the provided arguments. NB implementations of this
+	 * method likely depend on the {@link Hints} set by
+	 * {@link OpEnvironment#setHints(Hints)}, which provides no guarantee of
+	 * thread-safety. Users interested in parallel Op matching should consider
+	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
+	 *
+	 * @param <T> the {@link Type} of the Op
+	 * @param info the {@link OpInfo}
+	 * @param specialType the generic {@link Type} of the Op
+	 * @param inTypes the arguments (inputs) to the Op
+	 * @param outType the return of the Op (note that it may also be an argument)
+	 * @return an instance of an Op aligning with the search parameters
+	 */
 	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType);
 
-	<T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
+	/**
+	 * Returns an Op fitting the provided arguments.
+	 *
+	 * @param <T> the {@link Type} of the Op
+	 * @param opName the name of the Op
+	 * @param specialType the generic {@link Type} of the Op
+	 * @param inTypes the arguments (inputs) to the Op
+	 * @param outType the return of the Op (note that it may also be an argument)
+	 * @param hints the {@link Hints} that should guide this matching call
+	 * @return an instance of an Op aligning with the search parameters
+	 */
+	<T> T op(final String opName, final Nil<T> specialType,
+		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType, Hints hints);
+	/**
+	 * Returns an Op fitting the provided arguments.
+	 *
+	 * @param <T> the {@link Type} of the Op
+	 * @param info the {@link OpInfo}
+	 * @param specialType the generic {@link Type} of the Op
+	 * @param inTypes the arguments (inputs) to the Op
+	 * @param outType the return of the Op (note that it may also be an argument)
+	 * @param hints the {@link Hints} that should guide this matching call
+	 * @return an instance of an Op aligning with the search parameters
+	 */
+	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType,
+		Hints hints);
 
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
@@ -155,6 +209,12 @@ public interface OpEnvironment {
 	 * same {@link Hints}). In the case that <b>no {@link Hints} have been
 	 * given</b> to the Environment before {@code op} is called, the
 	 * implementation will create a suitable stand-in.
+	 * <p>
+	 * Note that this method does not inherently provide <b>any</b> guarantees
+	 * pertaining to thread-safety; this API is provided purely for convenience.
+	 * Any calls to {@link OpEnvironment#op(String, Nil, Nil[], Nil)} that require
+	 * a specific {@Hints} should <not> use this method, instead opting for
+	 * {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)}.
 	 * 
 	 * @param hints
 	 */

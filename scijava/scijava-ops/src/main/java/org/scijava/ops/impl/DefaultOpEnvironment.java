@@ -749,6 +749,16 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return Collections.unmodifiableSet(ops);
 	}
 
+	/**
+	 * Sets the default {@Hints} used for finding Ops.
+	 * <p>
+	 * Note that this method is <b>not</b> thread safe and is provided for
+	 * convenience. If the user wishes to use {@Hints} in a thread-safe manner,
+	 * they should use
+	 * {@link DefaultOpEnvironment#op(String, Nil, Nil[], Nil, Hints)} if using
+	 * different {@Hint}s for different calls. Alternatively, this method can be
+	 * called before all Ops called in parallel without issues.
+	 */
 	@Override
 	public void setHints(Hints hints) {
 		this.environmentHints = hints.getCopy();

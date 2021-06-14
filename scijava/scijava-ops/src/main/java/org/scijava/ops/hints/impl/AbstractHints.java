@@ -7,9 +7,10 @@ import java.util.NoSuchElementException;
 import org.scijava.ops.hints.Hints;
 
 /**
- * Default Implementation of 
- * @author G
- *
+ * Abstract class containing behavior common to most {@link Hints}
+ * implementations
+ * 
+ * @author Gabriel Selzer
  */
 public abstract class AbstractHints implements Hints {
 

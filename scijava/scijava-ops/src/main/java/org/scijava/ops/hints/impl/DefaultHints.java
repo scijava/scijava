@@ -8,9 +8,9 @@ import org.scijava.ops.hints.BaseOpHints.Adaptation;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 
 /**
- * Default Implementation of 
- * @author G
+ * Default Implementation of {@link Hints}
  *
+ * @author Gabriel Selzer
  */
 public class DefaultHints extends AbstractHints {
 

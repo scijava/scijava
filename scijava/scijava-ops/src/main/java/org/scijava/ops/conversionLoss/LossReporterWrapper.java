@@ -1,6 +1,7 @@
 package org.scijava.ops.conversionLoss;
 
 import java.lang.reflect.Type;
+import java.util.UUID;
 
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.provenance.OpExecutionSummary;
@@ -29,6 +30,7 @@ public class LossReporterWrapper<I, O> //
 	public LossReporter<I, O> wrap( //
 		final LossReporter<I, O> op, //
 		final OpInfo info, //
+		final UUID executionID, //
 		final Type reifiedType)
 	{
 		class GenericTypedLossReporter implements //
@@ -43,7 +45,7 @@ public class LossReporterWrapper<I, O> //
 				Double output = op.apply(from, to);
 
 				// Log a new execution
-				OpExecutionSummary e = new OpExecutionSummary(info, op, output);
+				OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, output);
 				OpHistory.addExecution(e);
 				return output;
 			}

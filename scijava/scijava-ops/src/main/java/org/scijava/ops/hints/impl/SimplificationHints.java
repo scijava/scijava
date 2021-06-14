@@ -3,18 +3,19 @@ package org.scijava.ops.hints.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 
 public class SimplificationHints extends AbstractHints {
 
-	private SimplificationHints(Map<String, String> map) {
-		super(map);
+	private SimplificationHints(UUID historyHash, Map<String, String> map) {
+		super(historyHash, map);
 		setHint(Simplification.IN_PROGRESS);
 	}
 
-	public static SimplificationHints generateHints(Hints hints) {
+	public static SimplificationHints generateHints(Hints hints, boolean generateID) {
 		// collect all old hints that are not Adaptable
 		Map<String, String> map = new HashMap<>();
 		hints.getHints().entrySet().parallelStream().filter(e -> e
@@ -22,21 +23,26 @@ public class SimplificationHints extends AbstractHints {
 				.getValue()));
 
 		// add Simplifiable.NO
-		SimplificationHints newHints = new SimplificationHints(map);
+		UUID id = generateID ? UUID.randomUUID() : hints.executionChainID();
+		SimplificationHints newHints = new SimplificationHints(id, map);
 
 		return newHints;
 	}
 
 	@Override
 	public String setHint(String hint) {
-		if (hint.equals(Simplification.ALLOWED)) throw new IllegalArgumentException(
-			"We cannot allow simplification during simplification; this would cause a recursive loop!");
+		if (hint.equals(Simplification.ALLOWED))
+			throw new IllegalArgumentException(
+				"We cannot allow simplification during simplification; this would cause a recursive loop!");
+		if (hint.equals(Simplification.FORBIDDEN))
+			throw new IllegalArgumentException(
+				"We cannot forbid simplification during simplification; to forbid simplification, use another Hint implementation!");
 		return super.setHint(hint);
 	}
 
 	@Override
-	public Hints getCopy() {
-		return SimplificationHints.generateHints(this);
+	public Hints getCopy(boolean generateID) {
+		return SimplificationHints.generateHints(this, generateID);
 	}
 
 }

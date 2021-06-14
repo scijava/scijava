@@ -3,6 +3,7 @@ package org.scijava.ops.hints.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.BaseOpHints.Adaptation;
@@ -14,12 +15,12 @@ import org.scijava.ops.hints.BaseOpHints.Adaptation;
  */
 public class AdaptationHints extends AbstractHints {
 
-	private AdaptationHints(Map<String, String> map) {
-		super(map);
+	private AdaptationHints(UUID historyHash, Map<String, String> map) {
+		super(historyHash, map);
 		setHint(Adaptation.IN_PROGRESS);
 	}
 
-	public static AdaptationHints generateHints(Hints hints) {
+	public static AdaptationHints generateHints(Hints hints, boolean generateID) {
 		// collect all old hints that are not Adaptable
 		Map<String, String> map = new HashMap<>();
 		hints.getHints().entrySet().parallelStream().filter(e -> e
@@ -27,7 +28,8 @@ public class AdaptationHints extends AbstractHints {
 				.getValue()));
 
 		// add Adaptation.NO
-		AdaptationHints newHints = new AdaptationHints(map);
+		UUID id = generateID ? UUID.randomUUID() : hints.executionChainID();
+		AdaptationHints newHints = new AdaptationHints(id, map);
 
 		return newHints;
 	}
@@ -38,8 +40,8 @@ public class AdaptationHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints getCopy() {
-		return AdaptationHints.generateHints(this);
+	public Hints getCopy(boolean generateID) {
+		return AdaptationHints.generateHints(this, generateID);
 	}
 
 }

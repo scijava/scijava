@@ -2,6 +2,7 @@ package org.scijava.ops.hints.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.scijava.ops.hints.Hints;
 
@@ -23,14 +24,25 @@ public class ImmutableHints extends AbstractHints {
 		super(h);
 	}
 
+	public ImmutableHints(Map<String, String> h, UUID historyHash) {
+		super(historyHash, h);
+		
+	}
+
 	@Override
 	public String setHint(String hint) {
 		throw new UnsupportedOperationException("ImmutableHints cannot alter the original set of Hints!");
 	}
 
 	@Override
-	public Hints getCopy() {
-		return new ImmutableHints(new HashMap<>(getHints()));
+	public UUID executionChainID() {
+		return historyHash;
+	}
+
+	@Override
+	public Hints getCopy(boolean generateID) {
+		UUID id = generateID ? UUID.randomUUID() : historyHash;
+		return new ImmutableHints(new HashMap<>(getHints()), id);
 	}
 
 }

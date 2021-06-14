@@ -33,14 +33,13 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.OpHints;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -61,7 +60,7 @@ public class OpClassInfo implements OpInfo {
 	private Struct struct;
 	private ValidityException validityException;
 	private final double priority;
-	private final List<String> hints;
+	private final Hints hints;
 
 	public OpClassInfo(final Class<?> opClass) {
 		this(opClass, priorityFromAnnotation(opClass));
@@ -95,7 +94,7 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	@Override
-	public List<String> declaredHints() {
+	public Hints declaredHints() {
 		return hints;
 	}
 

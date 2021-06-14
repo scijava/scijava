@@ -48,6 +48,7 @@ import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.OpHints;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.ParameterStructs;
@@ -78,7 +79,7 @@ public class OpMethodInfo implements OpInfo {
 	private Struct struct;
 	private final ValidityException validityException;
 
-	private final List<String> hints;
+	private final Hints hints;
 
 	public OpMethodInfo(final Method method) {
 		final List<ValidityProblem> problems = new ArrayList<>();
@@ -127,7 +128,7 @@ public class OpMethodInfo implements OpInfo {
 	}
 
 	@Override
-	public List<String> declaredHints() {
+	public Hints declaredHints() {
 		return hints;
 	}
 

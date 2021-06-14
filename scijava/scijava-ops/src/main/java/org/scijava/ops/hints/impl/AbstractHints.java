@@ -50,7 +50,7 @@ public abstract class AbstractHints implements Hints {
 		return hints.get(prefix);
 	}
 
-	private String getPrefix(String hint) {
+	protected String getPrefix(String hint) {
 		return hint.split("\\.")[0];
 	}
 

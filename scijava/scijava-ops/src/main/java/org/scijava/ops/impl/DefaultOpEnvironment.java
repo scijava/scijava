@@ -175,9 +175,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		if (!(adapting || simplifying)) return infos;
 		return infos.parallelStream() //
 				// filter out unadaptable ops
-				.filter(info -> !adapting || !info.declaredHints().contains(Adaptation.FORBIDDEN)) //
+				.filter(info -> !adapting || !info.declaredHints().containsHint(Adaptation.FORBIDDEN)) //
 				// filter out unadaptable ops
-				.filter(info -> !simplifying || !info.declaredHints().contains(Simplification.FORBIDDEN)) //
+				.filter(info -> !simplifying || !info.declaredHints().containsHint(Simplification.FORBIDDEN)) //
 				.collect(Collectors.toSet());
 	}
 

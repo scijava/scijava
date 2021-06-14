@@ -40,6 +40,7 @@ import org.scijava.Priority;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.OpHints;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -60,7 +61,7 @@ public class OpFieldInfo implements OpInfo {
 	private Struct struct;
 	private ValidityException validityException;
 
-	private final List<String> hints;
+	private final Hints hints;
 
 	public OpFieldInfo(final Object instance, final Field field) {
 		this.instance = instance;
@@ -115,7 +116,7 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	@Override
-	public List<String> declaredHints() {
+	public Hints declaredHints() {
 		return hints;
 	}
 

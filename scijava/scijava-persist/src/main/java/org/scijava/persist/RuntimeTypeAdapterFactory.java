@@ -48,10 +48,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.Streams;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -316,7 +316,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 
 			@Override
 			public R read(JsonReader in) throws IOException {
-				JsonElement jsonElement = Streams.parse(in);
+				JsonElement jsonElement = JsonParser.parseReader(in);
 				JsonElement labelJsonElement;
 				if (maintainType) {
 					labelJsonElement = jsonElement.getAsJsonObject().get(typeFieldName);
@@ -357,7 +357,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 				JsonObject jsonObject = delegate.toJsonTree(value).getAsJsonObject();
 
 				if (maintainType) {
-					Streams.write(jsonObject, out);
+					gson.toJson(jsonObject, out);
 					return;
 				}
 
@@ -372,7 +372,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 				for (Map.Entry<String, JsonElement> e : jsonObject.entrySet()) {
 					clone.add(e.getKey(), e.getValue());
 				}
-				Streams.write(clone, out);
+				gson.toJson(clone, out);
 			}
 		}.nullSafe();
 	}

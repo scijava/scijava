@@ -1,4 +1,4 @@
+
 package org.scijava.persist.testobjects;
 
-public interface Shape {
-}
+public interface Shape {}

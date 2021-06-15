@@ -21,6 +21,9 @@ public class OpHistory {
 	private static final Map<UUID, ConcurrentLinkedDeque<OpExecutionSummary>> history =
 		new ConcurrentHashMap<>();
 
+	private static final Map<UUID, Map<Object, List<Object>>> dependencyChain =
+		new ConcurrentHashMap<>();
+
 	/**
 	 * Logs a {@link OpExecutionSummary}
 	 * 
@@ -75,8 +78,8 @@ public class OpHistory {
 		if (o.getClass().isPrimitive()) throw new IllegalArgumentException(
 			"Cannot determine the executions upon a primitive as they are passed by reference!");
 		return history.values().stream() //
+			.filter(deque -> deque.parallelStream().anyMatch(e -> e.isOutput(o))) //
 			.flatMap(Deque::stream) //
-			.filter(e -> e.isOutput(o)) //
 			.collect(Collectors.toList());
 	}
 

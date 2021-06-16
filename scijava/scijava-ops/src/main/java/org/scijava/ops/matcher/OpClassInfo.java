@@ -39,7 +39,8 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.simplify.Unsimplifiable;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.hints.OpHints;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
@@ -59,14 +60,13 @@ public class OpClassInfo implements OpInfo {
 	private Struct struct;
 	private ValidityException validityException;
 	private final double priority;
-	
-	private final boolean simplifiable;
+	private final Hints hints;
 
 	public OpClassInfo(final Class<?> opClass) {
-		this(opClass, priorityFromAnnotation(opClass), simplifiableFromAnnotation(opClass));
+		this(opClass, priorityFromAnnotation(opClass));
 	}
 
-	public OpClassInfo(final Class<?> opClass, final double priority, final boolean simplifiable) {
+	public OpClassInfo(final Class<?> opClass, final double priority) {
 		this.opClass = opClass;
 		try {
 			struct = ParameterStructs.structOf(opClass);
@@ -75,7 +75,8 @@ public class OpClassInfo implements OpInfo {
 			validityException = e;
 		} 
 		this.priority = priority;
-		this.simplifiable = simplifiable;
+
+		hints = formHints(opClass.getAnnotation(OpHints.class));
 	}
 
 	// -- OpInfo methods --
@@ -90,6 +91,11 @@ public class OpClassInfo implements OpInfo {
 	@Override
 	public Struct struct() {
 		return struct;
+	}
+
+	@Override
+	public Hints declaredHints() {
+		return hints;
 	}
 
 	@Override
@@ -184,13 +190,4 @@ public class OpClassInfo implements OpInfo {
 		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
 	}
 
-	private static boolean simplifiableFromAnnotation(Class<?> annotationBearer) {
-		final Unsimplifiable opAnnotation = annotationBearer.getAnnotation(Unsimplifiable.class);
-		return opAnnotation == null ? true : false;
-	}
-
-	@Override
-	public boolean isSimplifiable() {
-		return simplifiable;
-	}
 }

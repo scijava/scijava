@@ -42,13 +42,10 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.scijava.AbstractContextual;
 import org.scijava.Context;
@@ -64,10 +61,13 @@ import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers.Arity1;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.hints.impl.AdaptationHints;
+import org.scijava.ops.hints.impl.DefaultHints;
+import org.scijava.ops.hints.impl.SimplificationHints;
 import org.scijava.ops.matcher.DefaultOpMatcher;
-import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.DependencyMatchingException;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
@@ -79,11 +79,7 @@ import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpMethodInfo;
 import org.scijava.ops.matcher.OpRef;
-import org.scijava.ops.simplify.InfoSimplificationGenerator;
-import org.scijava.ops.simplify.SimplificationUtils;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
-import org.scijava.ops.simplify.SimplifiedOpRef;
-import org.scijava.ops.simplify.Unsimplifiable;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.FunctionalMethodType;
 import org.scijava.param.ParameterStructs;
@@ -123,13 +119,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private Map<String, Set<OpInfo>> opDirectory;
 
 	/**
-	 * Map containing pairs of {@link OpRef} op requests and the {@code Op}s that
-	 * matched those requests. Used to quickly return Ops when an {@OpRef} matches
-	 * a previous call.
+	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRef}
+	 * and {@Hints} used to find an Op) and the {@code Op}s that matched those
+	 * requests. Used to quickly return Ops when the matching conditions are
+	 * identical to those of a previous call.
 	 *
 	 * @see OpRef#equals(Object)
 	 */
-	private Map<OpRef, Object> opCache;
+	private Map<MatchingConditions, Object> opCache;
 
 	/**
 	 * Data structure storing all known {@link OpWrapper}s. Each {@link OpWrapper}
@@ -137,28 +134,57 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 */
 	private Map<Class<?>, OpWrapper<?>> wrappers;
 
+	/**
+	 * Data structure storing this Environment's {@link Hints}. NB whenever this
+	 * Object is used, <b>a copy should be made</b> to prevent concurrency issues.
+	 */
+	private Hints environmentHints = null;
+
 	public DefaultOpEnvironment(final Context context) {
 		context.inject(this);
 		matcher = new DefaultOpMatcher(log);
 	}
 
 	@Override
-	public Iterable<OpInfo> infos() {
+	public Set<OpInfo> infos() {
 		if (opDirectory == null) initOpDirectory();
-		return opDirectory.values().stream().flatMap(list -> list.stream()).collect(Collectors.toList());
+		return opDirectory.values().stream().flatMap(list -> list.stream()).collect(Collectors.toSet());
 	}
 
 	@Override
-	public Iterable<OpInfo> infos(String name) {
+	public Set<OpInfo> infos(String name) {
 		if (opDirectory == null) initOpDirectory();
 		if (name == null || name.isEmpty()) return infos();
 		return opsOfName(name);
 	}
 
 	@Override
+	public Set<OpInfo> infos(Hints hints) {
+		return filterInfos(infos(), hints);
+	}
+
+	@Override
+	public Set<OpInfo> infos(String name, Hints hints) {
+		return filterInfos(infos(name), hints);
+	}
+
+	private Set<OpInfo> filterInfos(Set<OpInfo> infos, Hints hints) {
+		boolean adapting = hints.containsHint(Adaptation.IN_PROGRESS);
+		boolean simplifying = hints.containsHint(Simplification.IN_PROGRESS);
+		// if we aren't doing any 
+		if (!(adapting || simplifying)) return infos;
+		return infos.parallelStream() //
+				// filter out unadaptable ops
+				.filter(info -> !adapting || !info.declaredHints().containsHint(Adaptation.FORBIDDEN)) //
+				// filter out unadaptable ops
+				.filter(info -> !simplifying || !info.declaredHints().containsHint(Simplification.FORBIDDEN)) //
+				.collect(Collectors.toSet());
+	}
+
+	@Override
 	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
 		try {
-			return findOpInstance(opName, specialType, inTypes, outType);
+			return findOpInstance(opName, specialType, inTypes, outType, getHints());
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -170,7 +196,28 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		try {
 			Type[] types = Arrays.stream(inTypes).map(nil -> nil.getType()).toArray(Type[]::new);
 			OpRef ref = OpRef.fromTypes(specialType.getType(), outType.getType(), types);
-			return (T) findOpInstance(ref, info);
+			return (T) findOpInstance(ref, info, getHints());
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	@Override
+	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
+		try {
+			return findOpInstance(opName, specialType, inTypes, outType, hints);
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T op(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
+		try {
+			Type[] types = Arrays.stream(inTypes).map(nil -> nil.getType()).toArray(Type[]::new);
+			OpRef ref = OpRef.fromTypes(specialType.getType(), outType.getType(), types);
+			return (T) findOpInstance(ref, info, hints);
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -196,7 +243,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@Override
 	public OpInfo opify(final Class<?> opClass, final double priority) {
-		return new OpClassInfo(opClass, priority, opClass.getAnnotation(Unsimplifiable.class) == null);
+		return new OpClassInfo(opClass, priority);
 	}
 
 	@Override
@@ -207,10 +254,10 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@SuppressWarnings("unchecked")
 	private <T> T findOpInstance(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?> outType) throws OpMatchingException {
+			final Nil<?> outType, Hints hints) throws OpMatchingException {
 		final OpRef ref = OpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
-		return (T) findOpInstance(ref, true, true);
+		return (T) findOpInstance(ref, hints);
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -225,7 +272,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @return an Op created from {@code info}
 	 * @throws OpMatchingException
 	 */
-	private Object findOpInstance(final OpRef ref, final OpInfo info) throws OpMatchingException {
+	private Object findOpInstance(final OpRef ref, final OpInfo info, Hints hints) throws OpMatchingException {
 		// create new OpCandidate from ref and info
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 		if (!ref.typesMatch(info.opType(), typeVarAssigns))
@@ -237,14 +284,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		if (!matcher.typesMatch(candidate)) throw new OpMatchingException(
 			"The given OpRef and OpInfo are not compatible!");
 		// obtain Op instance (with dependencies)
-		Object op = instantiateOp(candidate);
+		Object op = instantiateOp(candidate, hints);
 
 		// wrap Op
 		Object wrappedOp = wrapOp(op, candidate.opInfo(), candidate
 			.typeVarAssigns());
 
-		// cache instance
-		opCache.putIfAbsent(ref, wrappedOp);
+		MatchingConditions conditions = new MatchingConditions(ref, hints);
+		cacheOp(conditions, wrappedOp);
 
 		return wrappedOp;
 	}
@@ -257,60 +304,64 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * that the Op returned is of multiple types).
 	 * 
 	 * @param ref
-	 * @param adaptable
+	 * @param hints - the {@link Hints} to use for matching
 	 * @return an Op satisfying the request described by {@code ref}.
 	 * @throws OpMatchingException
 	 */
 	private Object findOpInstance(final OpRef ref,
-		boolean adaptable, boolean simplifiable) throws OpMatchingException
+		Hints hints) throws OpMatchingException
 	{
 		// see if the ref has been matched already
-		Object cachedOp = checkCacheForRef(ref);
+		MatchingConditions conditions = new MatchingConditions(ref, hints);
+		Object cachedOp = checkCacheForRef(conditions);
 		if (cachedOp != null) return cachedOp;
 
 		// obtain suitable OpCandidate
-		OpCandidate candidate = findOpCandidate(ref, adaptable, simplifiable);
+		OpCandidate candidate = findOpCandidate(ref, hints);
 
 		// obtain Op instance (with dependencies)
-		Object op = instantiateOp(candidate);
+		Object op = instantiateOp(candidate, hints);
 		
 		// wrap Op
 		Object wrappedOp = wrapOp(op, candidate.opInfo(), candidate.typeVarAssigns());
 
 		// cache instance
-		opCache.putIfAbsent(ref, wrappedOp);
+		cacheOp(conditions, wrappedOp);
 
 		return wrappedOp;
 	}
 
-	private Object checkCacheForRef(OpRef ref) {
+	private void cacheOp(MatchingConditions conditions, Object op) {
+		opCache.putIfAbsent(conditions, op);
+	}
+
+	private Object checkCacheForRef(MatchingConditions conditions) {
 		if (opCache == null) {
 			opCache = new HashMap<>();
 		}
-		if (opCache.containsKey(ref))
-			return opCache.get(ref);
+		if (opCache.containsKey(conditions))
+			return opCache.get(conditions);
 		return null;
 	}
 	
-	private OpCandidate findOpCandidate(OpRef ref, boolean adaptable, boolean simplifiable) throws OpMatchingException{
+	private OpCandidate findOpCandidate(OpRef ref, Hints hints) throws OpMatchingException{
 		try {
 			// attempt to find a direct match
-			return matcher.findSingleMatch(this, ref);
+			return matcher.findSingleMatch(this, ref, hints);
 		}
 		catch (OpMatchingException e1) {
 			// no direct match; find an adapted match
 			try {
-				if (!adaptable) throw new OpMatchingException(
-					"No matching Op for request: " + ref + "\n(adaptation is disabled)",
-					e1);
-				return adaptOp(ref);
+				if (hints.containsHint(Adaptation.ALLOWED)) return adaptOp(ref, hints);
+				throw new OpMatchingException("No matching Op for request: " + ref +
+					"\n(adaptation is disabled)", e1);
 			}
 			catch (OpMatchingException e2) {
 				try {
-				if (!simplifiable) throw new OpMatchingException(
-					"No matching Op for request: " + ref + "\n(simplification is disabled)",
-					e1);
-					return findSimplifiedOp(ref);
+					if (hints.containsHint(Simplification.ALLOWED)) return findSimplifiedOp(
+						ref, hints);
+					throw new OpMatchingException("No matching Op for request: " + ref +
+						"\n(simplification is disabled)", e1);
 				}
 				catch (OpMatchingException e3) {
 					// NB: It is important that the adaptation and simplification errors be
@@ -328,67 +379,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		}
 	}
 
-	private OpCandidate findSimplifiedOp(OpRef ref) throws OpMatchingException {
-		// obtain simplifications for ref
-		SimplifiedOpRef simplifiedRef = getSimplifiedRef(ref);
-		List<OpCandidate> candidates = generateSimplifiedCandidates(simplifiedRef);
-		return findSimplifiedMatch(ref, candidates);
-	}
-
-	private SimplifiedOpRef getSimplifiedRef(OpRef ref)
-		throws OpMatchingException
-	{
-		Class<?> opType = Types.raw(ref.getType());
-		int mutableIndex = SimplificationUtils.findMutableArgIndex(opType);
-		if (mutableIndex == -1) return new SimplifiedOpRef(ref, this);
-
-		// if the Op's output is mutable, we will also need a copy Op for it.
-		Computers.Arity1<?, ?> copyOp = simplifierCopyOp(ref
-			.getArgs()[mutableIndex]);
-		return new SimplifiedOpRef(ref, this, copyOp);
-	}
-
-	private List<OpCandidate> generateSimplifiedCandidates(SimplifiedOpRef ref) {
-		Class<?> functionalType = Types.raw(ref.getType());
-		Stream<OpInfo> infoStream = StreamSupport.stream(infos(ref.getName()).spliterator(), true);
-		List<OpCandidate> candidates = infoStream.filter(info -> Types
-			.isAssignable(Types.raw(info.opType()), functionalType))//
-			.map(info -> generateSimpleInfo(ref, info))
-			.filter(optional -> optional.isPresent())
-			.map(optional -> optional.get())
-			.filter(info -> info.getValidityException() == null)
-			.map(info -> new OpCandidate(this, log, ref, info, new HashMap<>()))
-			.collect(Collectors.toList());
-		return candidates;
-	}
-
-	private Optional<OpInfo> generateSimpleInfo(SimplifiedOpRef ref, OpInfo info) {
-		InfoSimplificationGenerator gen = new InfoSimplificationGenerator(info, this);
-		try {
-			return Optional.of(gen.generateSuitableInfo(ref));
-		} catch (IllegalArgumentException e) {
-			return Optional.empty();
-		}
-	}
-
-	private OpCandidate findSimplifiedMatch(OpRef ref, List<OpCandidate> candidates) throws OpMatchingException {
-//		List<OpCandidate> matches = candidates.parallelStream()
-//			.filter(candidate -> candidate.getStatusCode() == StatusCode.MATCH)
-//			.collect(Collectors.toList());
-		List<OpCandidate> matches = matcher.filterMatches(candidates);
-		return new MatchingResult(candidates, matches, Collections.singletonList(ref)).singleMatch();
-	}
-
-	// WARNING: If no copy Computers.Arity1 exists for copyType (i.e. a
-	// Computers.Arity1<copyType, copyType>) then this method will result in an
-	// infinite recursive loop. This problem can be immediately solved by ensuring
-	// that a copy Op Computers.Arity1<copyType, copyType> exists, and will be
-	// permanently fixed with the introduction of hints (see
-	// scijava/scijava-ops#43)
-	private Computers.Arity1<?, ?> simplifierCopyOp(Type copyType) throws OpMatchingException{
-			Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {copyType, copyType});
-			OpRef copierRef = inferOpRef(copierType, "copy", new HashMap<>());
-			return (Arity1<?, ?>) findOpInstance(copierRef, false, false);
+	private OpCandidate findSimplifiedOp(OpRef ref, Hints hints) throws OpMatchingException {
+		Hints simplificationHints = SimplificationHints.generateHints(hints);
+		return matcher.findSingleMatch(this, ref, simplificationHints);
 	}
 
 	/**
@@ -399,10 +392,10 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @return an Op with all needed dependencies
 	 * @throws OpMatchingException
 	 */
-	private Object instantiateOp(final OpCandidate candidate)
+	private Object instantiateOp(final OpCandidate candidate, Hints hints)
 		throws OpMatchingException
 	{
-		final List<Object> dependencies = resolveOpDependencies(candidate);
+		final List<Object> dependencies = resolveOpDependencies(candidate, hints);
 		return candidate.createOp(dependencies);
 	}
 
@@ -469,8 +462,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return list;
 	}
 
-	private List<Object> resolveOpDependencies(OpCandidate candidate) throws OpMatchingException {
-		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns());
+	private List<Object> resolveOpDependencies(OpCandidate candidate, Hints hints) throws OpMatchingException {
+		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns(), hints);
 	}
 
 	private void initWrappers() {
@@ -493,7 +486,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 *           functional, if the Op matching the functional type and the name
 	 *           could not be found, if an exception occurs during injection
 	 */
-	private List<Object> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) throws OpMatchingException {
+	private List<Object> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints) throws OpMatchingException {
 
 		final List<OpDependencyMember<?>> dependencies = info.dependencies();
 		final List<Object> resolvedDependencies = new ArrayList<>(dependencies.size());
@@ -501,7 +494,12 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		for (final OpDependencyMember<?> dependency : dependencies) {
 			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
 			try {
-				resolvedDependencies.add(findOpInstance(dependencyRef, dependency.isAdaptable(), false));
+				Hints hintCopy = hints.getCopy();
+				hintCopy.setHint(Simplification.FORBIDDEN);
+				if(!dependency.isAdaptable()) {
+					hintCopy.setHint(Adaptation.FORBIDDEN);
+				}
+				resolvedDependencies.add(findOpInstance(dependencyRef, hintCopy));
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
@@ -534,7 +532,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 *         the the ref type (if one exists).
 	 * @throws OpMatchingException
 	 */
-	private OpCandidate adaptOp(OpRef ref) throws OpMatchingException {
+	private OpCandidate adaptOp(OpRef ref, Hints hints) throws OpMatchingException {
 
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : infos("adapt")) {
@@ -554,7 +552,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 			try {
 				// resolve adaptor dependencies
-				final List<Object> dependencies = resolveOpDependencies(adaptor, map);
+				final List<Object> dependencies = resolveOpDependencies(adaptor, map, hints);
 
 				@SuppressWarnings("unchecked")
 				Function<Object, Object> adaptorOp = //
@@ -567,7 +565,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0)
 					.getType(), map);
 				final OpRef srcOpRef = inferOpRef(srcOpType, ref.getName(), map);
-				final OpCandidate srcCandidate = findOpCandidate(srcOpRef, false, true);
+				final OpCandidate srcCandidate = findAdaptationCandidate(srcOpRef, hints);
 				map.putAll(srcCandidate.typeVarAssigns());
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
 					.getType(), map);
@@ -595,6 +593,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			sb.append("\n\n" + d.getMessage());
 		}
 		throw new DependencyMatchingException(sb.toString());
+	}
+
+	private OpCandidate findAdaptationCandidate(final OpRef srcOpRef, final Hints hints)
+		throws OpMatchingException
+	{
+		Hints adaptationHints = AdaptationHints.generateHints(hints);
+		final OpCandidate srcCandidate = findOpCandidate(srcOpRef, adaptationHints);
+		return srcCandidate;
 	}
 
 	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo, Map<TypeVariable<?>, Type> map, OpRef ref) {
@@ -741,6 +747,35 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private Set<OpInfo> opsOfName(final String name) {
 		final Set<OpInfo> ops = opDirectory.getOrDefault(name, Collections.emptySet());
 		return Collections.unmodifiableSet(ops);
+	}
+
+	/**
+	 * Sets the default {@Hints} used for finding Ops.
+	 * <p>
+	 * Note that this method is <b>not</b> thread safe and is provided for
+	 * convenience. If the user wishes to use {@Hints} in a thread-safe manner,
+	 * they should use
+	 * {@link DefaultOpEnvironment#op(String, Nil, Nil[], Nil, Hints)} if using
+	 * different {@Hint}s for different calls. Alternatively, this method can be
+	 * called before all Ops called in parallel without issues.
+	 */
+	@Override
+	public void setHints(Hints hints) {
+		this.environmentHints = hints.getCopy();
+	}
+
+	/**
+	 * Obtains some {@link Hints} to be used for finding Ops. This {@code Hints} can be either:
+	 * <ul>
+	 * <li> some {@link Hints} given to this environment via {@link #setHints(Hints)}
+	 * <li> a {@link DefaultHints}
+	 * </li>
+	 * TODO: Consider concurrency issues
+	 * @return a {@link Hints}
+	 */
+	private Hints getHints() {
+		if(this.environmentHints != null) return this.environmentHints;
+		return new DefaultHints();
 	}
 
 }

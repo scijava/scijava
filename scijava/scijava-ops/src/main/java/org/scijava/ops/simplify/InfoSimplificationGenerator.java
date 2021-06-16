@@ -12,6 +12,9 @@ import java.util.Optional;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.matcher.OpMatchingException;
+import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Types;
 
 
@@ -43,6 +46,11 @@ public class InfoSimplificationGenerator {
 
 	public OpInfo srcInfo() {
 		return info;
+	}
+
+	public OpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) throws OpMatchingException {
+		SimplifiedOpRef simpleRef = SimplifiedOpRef.simplificationOf(env, originalRef, hints);
+		return generateSuitableInfo(simpleRef);
 	}
 
 	public OpInfo generateSuitableInfo(SimplifiedOpRef ref) {

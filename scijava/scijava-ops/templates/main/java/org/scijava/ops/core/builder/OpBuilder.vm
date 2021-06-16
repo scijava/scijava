@@ -43,8 +43,8 @@ import org.scijava.ops.function.Computers;
 import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
+import org.scijava.ops.hints.Hints;
 import org.scijava.types.Nil;
-import org.scijava.types.TypeService;
 import org.scijava.types.Types;
 
 /**
@@ -176,8 +176,25 @@ public class OpBuilder {
 				Object.class));
 		}
 
+		public Producer<?> producer(final Hints hints) {
+			final Nil<Producer<Object>> specialType = new Nil<>() {
+
+				@Override
+				public Type getType() {
+					return Types.parameterize(Producer.class, new Type[] {
+						Object.class });
+				}
+			};
+			return env.op(opName, specialType, new Nil<?>[0], Nil.of(
+				Object.class, hints));
+		}
+
 		public Object create() {
 			return producer().create();
+		}
+
+		public Object create(final Hints hints) {
+			return producer(hints).create();
 		}
 	}
 
@@ -207,12 +224,32 @@ public class OpBuilder {
 			return env.op(opName, specialType, new Nil<?>[0], outType);
 		}
 
+		public Producer<O> producer(final Hints hints) {
+			final Nil<Producer<O>> specialType = new Nil<>() {
+
+				@Override
+				public Type getType() {
+					return Types.parameterize(Producer.class, new Type[] { outType
+						.getType() });
+				}
+			};
+			return env.op(opName, specialType, new Nil<?>[0], outType, hints);
+		}
+
 		public Computers.Arity0<O> computer() {
 			return Computers.match(env, opName, outType);
 		}
 
 		public O create() {
 			return producer().create();
+		}
+
+		public Computers.Arity0<O> computer(Hints hints) {
+			return Computers.match(env, opName, outType, hints);
+		}
+
+		public O create(Hints hints) {
+			return producer(hints).create();
 		}
 
 	}
@@ -237,6 +274,14 @@ public class OpBuilder {
 
 		public void compute() {
 			computer().compute(out);
+		}
+
+		public Computers.Arity0<O> computer(final Hints hints) {
+			return Computers.match(env, opName, type(out), hints);
+		}
+
+		public void compute(final Hints hints) {
+			computer(hints).compute(out);
 		}
 
 	}
@@ -270,8 +315,16 @@ public class OpBuilder {
 			return Functions.match(env, opName, $inputTypesWithOutput.call($arity));
 		}
 
+		public $functionArity.call($arity)$generics.call($arity) function(final Hints hints) {
+			return Functions.match(env, opName, $inputTypesWithOutput.call($arity), hints);
+		}
+
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return Computers.match(env, opName, $inputTypesWithOutput.call($arity));
+		}
+
+		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
+			return Computers.match(env, opName, $inputTypesWithOutput.call($arity), hints);
 		}
 
 #foreach($a in [1..$arity])
@@ -315,6 +368,10 @@ public class OpBuilder {
 			return Functions.match(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
 		}
 
+		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function(final Hints hints) {
+			return Functions.match(env, opName, $inputTypes.call($arity), Nil.of(Object.class), hints);
+		}
+
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypes.call($arity));
@@ -351,12 +408,24 @@ public class OpBuilder {
 			return Functions.match(env, opName, $inputTypesFromArgs.call($arity), outType);
 		}
 	
+		public $functionArity.call($arity)$generics.call($arity) function(final Hints hints) {
+			return Functions.match(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
+		}
+	
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), outType);
+		}
+
+		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
+			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
 		}
 	
 		public O apply() {
 			return function().apply($inputObjects.call($arity));
+		}
+
+		public O apply(final Hints hints) {
+			return function(hints).apply($inputObjects.call($arity));
 		}
 	}
 
@@ -398,6 +467,10 @@ public class OpBuilder {
 			return Functions.match(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
 		}
 
+		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function(final Hints hints) {
+			return Functions.match(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class), hints);
+		}
+
 #foreach($a in [1..$arity])
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
@@ -405,13 +478,30 @@ public class OpBuilder {
 		}
 
 #end
+#foreach($a in [1..$arity])
+		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
+			checkInplaceRefs($a, $inputObjects.call($arity));
+			return Inplaces.match${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity), hints);
+		}
+
+#end
 		public Object apply() {
 			return function().apply($inputObjects.call($arity));
+		}
+
+		public Object apply(final Hints hints) {
+			return function(hints).apply($inputObjects.call($arity));
 		}
 
 #foreach($a in [1..$arity])
 		public void mutate${inplaceMatchNumber.call($arity, $a)}() {
 			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputObjects.call($arity));
+		}
+
+#end
+#foreach($a in [1..$arity])
+		public void mutate${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
+			inplace${inplaceMatchNumber.call($arity, $a)}(hints).mutate($inputObjects.call($arity));
 		}
 
 #end
@@ -446,6 +536,14 @@ public class OpBuilder {
 
 		public void compute() {
 			computer().compute($inputObjects.call($arity), out);
+		}
+
+		public Computers.Arity${arity}${generics.call($arity)} computer(final Hints hints) {
+			return Computers.match(env, opName, $inputTypesFromArgs.call($arity), type(out), hints);
+		}
+
+		public void compute(final Hints hints) {
+			computer(hints).compute($inputObjects.call($arity), out);
 		}
 
 	}

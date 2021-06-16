@@ -2,12 +2,19 @@ package org.scijava.ops.matcher;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.hints.OpHints;
+import org.scijava.ops.hints.impl.ImmutableHints;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Struct;
@@ -24,6 +31,7 @@ public class OpAdaptationInfo implements OpInfo {
 	private OpInfo srcInfo;
 	private Type type;
 	private Function<Object, Object> adaptor;
+	private final Hints hints;
 
 	private Struct struct;
 	private ValidityException validityException;
@@ -41,8 +49,22 @@ public class OpAdaptationInfo implements OpInfo {
 		} catch (ValidityException e) {
 			validityException = e;
 		}
+
+		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
+		hintList.remove(Adaptation.ALLOWED);
+		hintList.add(Adaptation.FORBIDDEN);
+		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
 	}
-	
+
+	@Override
+	public Hints formHints(OpHints h) {
+		// NB we don't use Arrays.toList() here because we cannot add to that list!
+		List<String> hintList = Arrays.stream(h.hints()).collect(Collectors.toList());
+		hintList.remove(Adaptation.ALLOWED);
+		hintList.add(Adaptation.FORBIDDEN);
+		return new ImmutableHints(hintList.toArray(String[]::new));
+	}
+
 	@Override
 	public List<OpDependencyMember<?>> dependencies() {
 		return srcInfo.dependencies();
@@ -56,6 +78,11 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public Struct struct() {
 		return struct;
+	}
+
+	@Override
+	public Hints declaredHints() {
+		return hints;
 	}
 
 	// we want the original op to have priority over this one.
@@ -93,16 +120,6 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return srcInfo.getAnnotationBearer();
-	}
-
-	/**
-	 * TODO: consider whether we could simplify {@link OpAdaptationInfo}s.
-	 * Currently, the system doesn't even store them outside of caching, so they
-	 * cannot be simplified. But maybe it would be useful.
-	 */
-	@Override
-	public boolean isSimplifiable() {
-		return false;
 	}
 
 }

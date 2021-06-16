@@ -13,7 +13,14 @@ import java.util.Optional;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.function.Computers;
+import org.scijava.ops.function.Computers.Arity1;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.types.Nil;
+import org.scijava.types.Types;
 
 public class SimplifiedOpRef extends OpRef {
 
@@ -22,14 +29,14 @@ public class SimplifiedOpRef extends OpRef {
 	private final List<OpInfo> outputFocusers;
 	private final Optional<Computers.Arity1<?, ?>> copyOp;
 
-	public SimplifiedOpRef(String name, Type type, Type outType,
+	private SimplifiedOpRef(String name, Type type, Type outType,
 		Type[] args)
 	{
 		super(name, type, outType, args);
 		throw new UnsupportedOperationException("Simplified OpRef requires original OpRef!");
 	}
 
-	public SimplifiedOpRef(OpRef ref, OpEnvironment env) {
+	private SimplifiedOpRef(OpRef ref, OpEnvironment env) {
 		// TODO: this is probably incorrect
 		super(ref.getName(), ref.getType(), ref.getOutType(), ref.getArgs());
 		this.srcRef = ref;
@@ -38,7 +45,7 @@ public class SimplifiedOpRef extends OpRef {
 		this.copyOp = Optional.empty();
 	}
 
-	public SimplifiedOpRef(OpRef ref, OpEnvironment env, Computers.Arity1<?, ?> copyOp) {
+	private SimplifiedOpRef(OpRef ref, OpEnvironment env, Computers.Arity1<?, ?> copyOp) {
 		// TODO: this is probably incorrect
 		super(ref.getName(), ref.getType(), ref.getOutType(), ref.getArgs());
 		this.srcRef = ref;
@@ -63,108 +70,50 @@ public class SimplifiedOpRef extends OpRef {
 		return copyOp;
 	}
 
-}
+	public static SimplifiedOpRef simplificationOf(OpEnvironment env, OpRef ref, Hints hints) throws OpMatchingException {
+		Class<?> opType = Types.raw(ref.getType());
+		int mutableIndex = SimplificationUtils.findMutableArgIndex(opType);
+		if (mutableIndex == -1) return new SimplifiedOpRef(ref, env);
 
-//class TypePair {
-//
-//	private final Type a;
-//	private final Type b;
-//
-//	public TypePair(Type a, Type b) {
-//		this.a = a;
-//		this.b = b;
-//	}
-//
-//	public Type getA() {
-//		return a;
-//	}
-//
-//	public Type getB() {
-//		return b;
-//	}
-//
-//	@Override
-//	public boolean equals(Object that) {
-//		if (!(that instanceof TypePair)) return false;
-//		TypePair thatPair = (TypePair) that;
-//		return a.equals(thatPair.getA()) && b.equals(thatPair.getB());
-//	}
-//
-//	@Override
-//	public int hashCode() {
-//		return Arrays.hashCode(new Type[] { a, b });
-//	}
-//}
-//
-//class ChainCluster {
-//
-//	private final List<MutatorChain> chains;
-//	private final TypePair typeConversion;
-//
-//	public ChainCluster(TypePair typeConversion) {
-//		this.chains = new ArrayList<>();
-//		this.typeConversion = typeConversion;
-//	}
-//	
-//	public static ChainCluster generateCluster(TypePair pairing, List<OpInfo> simplifiers, List<OpInfo> focusers) {
-//		ChainCluster cluster = new ChainCluster(pairing);
-//		List<List<OpInfo>> chains = Lists.cartesianProduct(simplifiers, focusers);
-//
-//		for(List<OpInfo> chain : chains) {
-//				OpInfo simplifier = chain.get(0);
-//				Type simplifierInput = simplifier.inputs().stream().filter(m -> !m
-//					.isOutput()).findFirst().get().getType();
-//				Type simplifierOutput = simplifier.output().getType();
-//				Type simpleType = SimplificationUtils.resolveMutatorTypeArgs(
-//					pairing.getA(), simplifierInput, simplifierOutput);
-//				OpInfo focuser = chain.get(1);
-//				Type focuserOutput = focuser.output().getType();
-//				Type focuserInput = focuser.inputs().stream().filter(m -> !m
-//					.isOutput()).findFirst().get().getType();
-//				Type unfocusedType = SimplificationUtils.resolveMutatorTypeArgs(
-//					pairing.getB(), focuserOutput, focuserInput);
-//
-//				if (Types.isAssignable(simpleType, unfocusedType)) cluster.addChain(
-//					new MutatorChain(simplifier, focuser));
-//		}
-//		return cluster;
-//}
-//
-//	public boolean addChain(MutatorChain chain) {
-//		return chains.add(chain);
-//	}
-//
-//	public Type originalArg() {
-//		return typeConversion.getA();
-//	}
-//
-//	public Type originalParam() {
-//		return typeConversion.getB();
-//	}
-//
-//	public List<MutatorChain> getChains() {
-//		return chains;
-//	}
-//}
-//
-//class MutatorChain {
-//
-//	private final OpInfo simplifier;
-//	private final OpInfo focuser;
-//
-//	public MutatorChain(OpInfo simplifier,
-//		OpInfo focuser)
-//	{
-//		this.simplifier = simplifier;
-//		this.focuser = focuser;
-//	}
-//
-//	public OpInfo simplifier() {
-//		return simplifier;
-//	}
-//
-//	public OpInfo focuser() {
-//		return focuser;
-//	}
-//
-//}
+		// if the Op's output is mutable, we will also need a copy Op for it.
+		Computers.Arity1<?, ?> copyOp = simplifierCopyOp(env, ref
+			.getArgs()[mutableIndex], hints);
+		return new SimplifiedOpRef(ref, env, copyOp);
+	}
+
+	/**
+	 * Finds a {@code copy} Op designed to copy an Op's output (of {@link Type}
+	 * {@code copyType}) back into the preallocated output during simplification.
+	 * <p>
+	 * NB Simplification is forbidden here because we are asking for a
+	 * {@code Computers.Arity1<T, T>} copy Op (for some {@link Type}
+	 * {@code type}). Suppose that no direct match existed, and we tried to find a
+	 * simplified version. This simplified version, because it is a
+	 * Computers.Arity1, would need a {@lnk Computers.Arity<T, T>} copy Op to copy
+	 * the output of the simplified Op back into the preallocated output. But this
+	 * call is already identical to the Op we asked for, and we know that there is
+	 * no direct match, thus we go again into simplification. This thus causes an
+	 * infinite loop (and eventually a {@link StackOverflowError}. This means that
+	 * we cannot find a simplified copy Op <b>unless a direct match can be
+	 * found</b>, at which point we might as well just use the direct match.
+	 * <p>
+	 * Adaptation is similarly forbidden, as to convert most Op types to
+	 * {@link Arity1} you would need an identical copy Op.
+	 * 
+	 * @param copyType - the {@link Type} that we need to be able to copy
+	 * @param hints
+	 * @return an {@code Op} able to copy data between {@link Object}s of
+	 *         {@link Type} {@code copyType}
+	 * @throws OpMatchingException
+	 */
+	private static Computers.Arity1<?, ?> simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
+			Hints hintsCopy = hints.getCopy();
+			hintsCopy.setHint(Adaptation.FORBIDDEN);
+			hintsCopy.setHint(Simplification.FORBIDDEN);
+
+			Nil<?> copyNil = Nil.of(copyType);
+			Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {copyType, copyType});
+			return (Arity1<?, ?>) env.op("copy", Nil.of(copierType), new Nil<?>[] {copyNil, copyNil}, copyNil, hintsCopy);
+	}
+
+}

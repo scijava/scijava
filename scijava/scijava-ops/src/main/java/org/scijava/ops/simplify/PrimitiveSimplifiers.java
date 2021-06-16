@@ -5,6 +5,8 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.hints.OpHints;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -16,57 +18,57 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = OpCollection.class)
 public class PrimitiveSimplifiers {
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<Byte, Number> byteSimplifier = b -> b;
 	
 	// TODO: move to separate class
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<Number, Byte> numberByteFocuser = n -> n.byteValue();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<Integer, Number> integerSimplifier = i -> i;
 	
 	// TODO: move to separate class
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<Number, Integer> numberIntegerFocuser = n -> n.intValue();
 	
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<Short, Number> shortSimplifier = s -> s;
 	
 	// TODO: move to separate class
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<Number, Short> numberShortFocuser = n -> n.shortValue();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<Long, Number> longSimplifier = l -> l;
 
 	// TODO: move to separate class
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<Number, Long> numberLongFocuser = n -> n.longValue();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<Float, Number> floatSimplifier = f -> f;
 
 	// TODO: move to separate class
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<Number, Float> numberFloatFocuser = n -> n.floatValue();
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")
 	public final Function<Double, Number> doubleSimplifier = d -> d;
 
 	// TODO: move to separate class
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "focus")
 	public final Function<Number, Double> numberDoubleFocuser = n -> n.doubleValue();
 //	@Plugin(type = Simplifier.class)

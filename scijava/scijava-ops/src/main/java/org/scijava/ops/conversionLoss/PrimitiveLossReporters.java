@@ -3,7 +3,8 @@ package org.scijava.ops.conversionLoss;
 
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.simplify.Unsimplifiable;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.hints.OpHints;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
@@ -29,7 +30,7 @@ public class PrimitiveLossReporters {
 	}
 
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final IntToDecimalReporter<Long, Double> LongDoubleReporter = (from, to) -> {
 		long maxValue = Long.MAX_VALUE - 1;
@@ -37,7 +38,7 @@ public class PrimitiveLossReporters {
 		return (double) Math.abs(maxValue - (long) converted);
 	};
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<Double, Long> DoubleLongReporter = (from, to) -> {
 		double maxValue = Double.MAX_VALUE;
@@ -45,7 +46,7 @@ public class PrimitiveLossReporters {
 		return maxValue - converted;
 	};
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<Long, Integer> LongIntegerReporter = (from, to) -> {
 		long maxValue = Long.MAX_VALUE;
@@ -53,13 +54,13 @@ public class PrimitiveLossReporters {
 		return (double) Math.abs(maxValue - converted);
 	};
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<Integer, Long> IntegerLongReporter = (from, to) -> {
 		return 0.;
 	};
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final IntToDecimalReporter<Integer, Double> IntegerDoubleReporter = (from, to) -> {
 		long maxValue = Integer.MAX_VALUE;
@@ -67,7 +68,7 @@ public class PrimitiveLossReporters {
 		return (double) Math.abs(maxValue - (long) converted);
 	};
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<Double, Integer> DoubleIntegerReporter = (from, to) -> {
 		double maxValue = Double.MAX_VALUE;
@@ -75,12 +76,12 @@ public class PrimitiveLossReporters {
 		return maxValue - converted;
 	};
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<Number, Double> NumberDoubleReporter = (from,
 		to) -> LongDoubleReporter.apply(Nil.of(Long.class), Nil.of(Double.class));
 
-	@Unsimplifiable
+	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")
 	public final LossReporter<Number, Long> NumberLongReporter = (from,
 		to) -> DoubleLongReporter.apply(Nil.of(Double.class), Nil.of(Long.class));

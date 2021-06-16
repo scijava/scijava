@@ -3,8 +3,10 @@ package org.scijava.ops.simplify;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.scijava.Priority;
 import org.scijava.ops.OpEnvironment;
@@ -12,6 +14,11 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.hints.Hints;
+import org.scijava.ops.hints.OpHints;
+import org.scijava.ops.hints.impl.ImmutableHints;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -29,6 +36,7 @@ public class SimplifiedOpInfo implements OpInfo {
 	private final SimplificationMetadata metadata;
 	private final Type opType;
 	private final double priority;
+	private final Hints hints;
 
 	private Struct struct;
 	private ValidityException validityException;
@@ -47,6 +55,19 @@ public class SimplifiedOpInfo implements OpInfo {
 		}
 
 		this.priority = calculatePriority(info, metadata, env);
+		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
+		hintList.remove(Simplification.ALLOWED);
+		hintList.add(Simplification.FORBIDDEN);
+		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
+	}
+
+	@Override
+	public Hints formHints(OpHints h) {
+		// NB we don't use Arrays.toList() here because we cannot add to that list!
+		List<String> hintList = Arrays.stream(h.hints()).collect(Collectors.toList());
+		hintList.remove(Adaptation.ALLOWED);
+		hintList.add(Adaptation.FORBIDDEN);
+		return new ImmutableHints(hintList.toArray(String[]::new));
 	}
 
 	public OpInfo srcInfo() {
@@ -56,6 +77,11 @@ public class SimplifiedOpInfo implements OpInfo {
 	@Override
 	public Type opType() {
 		return opType;
+	}
+
+	@Override
+	public Hints declaredHints() {
+		return hints;
 	}
 
 	@Override
@@ -187,11 +213,6 @@ public class SimplifiedOpInfo implements OpInfo {
 					"\nProvided Op dependencies were: " + Objects.toString(dependencies),
 				ex);
 		}
-	}
-
-	@Override
-	public boolean isSimplifiable() {
-		return false;
 	}
 
 	@Override

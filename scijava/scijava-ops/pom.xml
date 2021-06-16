@@ -95,27 +95,14 @@
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 	</properties>
 
-  	<build>
-        <plugins>
-            <plugin>
-            	<groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>union-metadata-indices</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                        	<goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${basedir}/unionPluginInfo.sh</executable>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.alexecollins.maven.plugin</groupId>
+				<artifactId>script-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 		<!-- SciJava dependencies -->
 		<dependency>

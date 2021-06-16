@@ -1,6 +1,8 @@
 package org.scijava.types;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This {@link Type} represents a Type that can be assigned to any other Type.
@@ -42,6 +44,50 @@ public class Any implements Type {
 
 	public Type[] getLowerBounds() {
 		return lowerBounds;
+	}
+
+	/**
+	 * This method returns true iff:
+	 * <ul>
+	 * <li>{@code obj} is an {@link Any}
+	 * <li>{@code obj.getUpperBounds} is equal to {@code upperBounds}
+	 * (disregarding the order of each array)
+	 * <li>{@code obj.getLowerBounds} is equal to {@code lowerBounds}
+	 * (disregarding the order of each array)
+	 * <p>
+	 * This is a rather strict definition of equality, however it is necessary to
+	 * preserve transitivity.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Any) || obj == null) return false;
+		Any other = (Any) obj;
+
+		return equalBounds(upperBounds, other.getUpperBounds()) && equalBounds(
+			lowerBounds, other.getLowerBounds());
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		for (Type t : upperBounds)
+			hash ^= t.hashCode();
+		for (Type t : lowerBounds)
+			hash ^= t.hashCode();
+		return hash;
+	}
+
+	private boolean equalBounds(Type[] ours, Type[] theirs) {
+		if (ours.length != theirs.length) return false;
+
+		List<Type> ourList = Arrays.asList(ours);
+		List<Type> theirList = Arrays.asList(theirs);
+
+		for (Type t : ourList) {
+			if (!theirList.contains(t)) return false;
+		}
+
+		return true;
 	}
 
 }

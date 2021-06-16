@@ -43,36 +43,47 @@ import org.scijava.ops.function.Functions;
 import org.scijava.ops.function.Inplaces;
 import org.scijava.ops.function.Producer;
 
-// @formatter:off
 /**
- * Tests {@link OpBuilder}.
- * 
- * For each arity, we test the following matches and run the following commands 
- * based on the information scenarios.
- * 
- * * Input TYPES are given (IT) 
- * 	1) The output is unspecified (OU): 
- * 		a) match: Function, Inplace
- * 		b) run: none
- * 	2) The output type is given (OT): 
- * 		a) match: Function, Computer
- * 		b) run: none
- *  
- * * Input VALUES are given (IV) (N.B. this case applies for Arity0):
- * 	1) The output is unspecified (OU): 
- * 		a) match: Function, Inplace
- * 		b) run: apply, mutate
- * 	2) The output type is given (OT): 
- * 		a) match: Function, Computer
- * 		b) run: apply
- * 	3) The output value is given (OV): 
- * 		a) match: Computer
- *  	b) run: compute
+ * Tests {@link OpBuilder}. For each arity, we test the following matches and
+ * run the following commands based on the information scenarios.
+ * <p>
+ * Input TYPES are given (IT):
+ * <p>
+ * <ol>
+ * <li>The output is unspecified (OU):
+ * <ol type="a">
+ * <li>match: Function, Inplace
+ * <li>run: none
+ * </ol>
+ * <li>The output type is given (OT):
+ * <ol type="a">
+ * <li>match: Function, Computer
+ * <li>run: none
+ * </ol>
+ * </ol>
+ * Input VALUES are given (IV) (N.B. this case applies for Arity0):
+ * <p>
+ * <ol>
+ * <li>The output is unspecified (OU):
+ * <ol type="a">
+ * <li>match: Function, Inplace
+ * <li>run: apply, mutate
+ * </ol>
+ * <li>The output type is given (OT):
+ * <ol type="a">
+ * <li>match: Function, Computer
+ * <li>run: apply
+ * </ol>
+ * <li>The output value is given (OV):
+ * <ol type="a">
+ * <li>match: Computer
+ * <li>run: compute
+ * </ol>
+ * </ol>
  * 
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-// @formatter:on
 public class OpBuilderTest extends AbstractTestEnvironment {
 
 	final double[] halves = new double[10];

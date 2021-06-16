@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.scijava.ops.matcher.MatchingUtils.TypeInferenceException;
 import org.scijava.ops.matcher.MatchingUtils.TypeMapping;
 import org.scijava.ops.matcher.MatchingUtilsTest.StrangeThing;
 import org.scijava.ops.matcher.MatchingUtilsTest.Thing;
+import org.scijava.types.Any;
 import org.scijava.types.Nil;
 
 public class InferTypeVariablesTest {
@@ -271,4 +273,133 @@ public class InferTypeVariablesTest {
 
 		assertEquals(expected, typeAssigns);
 	}
+
+	@Test
+	public <O extends Number> void testInferOToAny()
+		throws TypeInferenceException
+	{
+		final Type iterableO = new Nil<Iterable<O>>() {}.getType();
+		final Type object = Object.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(iterableO, object, typeAssigns);
+
+		// We expect O = Any
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+
+		assertEquals(expected, typeAssigns);
+	}
+
+	@Test
+	public <O extends Number> void testInferOToAnyWithInterface()
+		throws TypeInferenceException
+	{
+		final Type type = new Nil<ArrayList<O>>() {}.getType();
+		final Type inferFrom = Cloneable.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect O = Any
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+
+		assertEquals(expected, typeAssigns);
+	}
+	
+	@Test
+	public <O extends Number> void testInferOToAnyWithClass()
+		throws TypeInferenceException
+	{
+		final Type type = new Nil<TypedBar<O>>() {}.getType();
+		final Type inferFrom = Bar.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect O = Any
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+
+		assertEquals(expected, typeAssigns);
+	}
+	
+	@Test
+	public <O extends Number> void testInferOToAnyWithRawType()
+		throws TypeInferenceException
+	{
+		final Type type = new Nil<TypedBar<O>>() {}.getType();
+		final Type inferFrom = TypedBar.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect O = Any
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
+
+		assertEquals(expected, typeAssigns);
+	}
+
+	@Test
+	public <O extends Number, I extends O> void testInferTypeVarExtendingTypeVar() {
+		final Type type = new Nil<I>() {}.getType();
+		final Type inferFrom = Double.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect I= Double, O = Double
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		TypeVariable<?> typeVarI = (TypeVariable<?>) new Nil<I>() {}.getType();
+		expected.put(typeVarI, new TypeMapping(typeVarI, Double.class, true));
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		expected.put(typeVarO, new TypeMapping(typeVarO, Double.class, true));
+
+		assertEquals(expected, typeAssigns);
+	}
+	
+	@Test
+	public <O extends RecursiveThing<O>> void testInferRecursiveTypeVar() {
+		final Type type = new Nil<O>() {}.getType();
+		final Type inferFrom = FooThing.class;
+
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> typeAssigns =
+			new HashMap<>();
+		MatchingUtils.inferTypeVariables(type, inferFrom, typeAssigns);
+
+		// We expect O = FooThing
+		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
+		Map<TypeVariable<?>, MatchingUtils.TypeMapping> expected = new HashMap<>();
+		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, false));
+
+		assertEquals(expected, typeAssigns);
+	}
+
+	class Bar {
+		
+	}
+	
+	class TypedBar<E> extends Bar {
+		E type;
+	}
+
+	static abstract class RecursiveThing<T extends RecursiveThing<T>> {
+		
+	}
+	
+	static class FooThing extends RecursiveThing<FooThing> {
+		
+	}
+
 }

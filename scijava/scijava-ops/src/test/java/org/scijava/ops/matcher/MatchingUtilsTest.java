@@ -43,6 +43,7 @@ import java.util.function.Supplier;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -547,7 +548,19 @@ public class MatchingUtilsTest {
 		assertAll(List.class, true, listT, listNumber, listInteger, listExtendsNumber);
 		assertAll(List.class, false, t);
 	}
-	
+
+	@Test
+	public <T extends Number> void testIsAssignableOutputToObject() {
+		final Type fooSource = new Nil<Function<T, List<T>>>() {}.getType();
+		final Type fooFunc = new Nil<Function<Double, Object>>() {}.getType();
+
+		Assertions.assertFalse(MatchingUtils.checkGenericAssignability(fooSource,
+			(ParameterizedType) fooFunc, false));
+		Assertions.assertTrue(MatchingUtils.checkGenericAssignability(fooSource,
+			(ParameterizedType) fooFunc, true));
+
+	}
+
 	class Thing<T> {}
 	
 	class StrangeThing<N extends Number, T> extends Thing<T> {}

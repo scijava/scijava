@@ -550,7 +550,9 @@ public final class MatchingUtils {
 
 	}
 
-	private static void inferTypeVariables(TypeVariable<?> type, Type inferFrom, Map<TypeVariable<?>, TypeMapping> typeMappings, boolean malleable) {
+	private static void inferTypeVariables(TypeVariable<?> type, Type inferFrom,
+		Map<TypeVariable<?>, TypeMapping> typeMappings, boolean malleable)
+	{
 		TypeMapping typeData = typeMappings.get(type);
 		// If current is not null then we have already encountered that
 		// variable. If so, we require them to be exactly the same, and throw a
@@ -560,86 +562,140 @@ public final class MatchingUtils {
 		}
 		else {
 			resolveTypeInMap(type, inferFrom, typeMappings, malleable);
-		}
-
-		// Bounds could also contain type vars, hence possibly go into
-		// recursion
-		for (Type bound : type.getBounds()) {
-			if (bound instanceof TypeVariable && typeMappings.get(bound) != null) {
-				// If the bound of the current var (let's call it A) to
-				// infer is also a var (let's call it B):
-				// If we already encountered B, we check if the current
-				// type to infer from is assignable to
-				// the already inferred type for B. In this case we do
-				// not require equality as one var is
-				// bounded by another and it is not the same. E.g.
-				// assume we want to infer the types of vars:
-				// - - - A extends Number, B extends A
-				// From types:
-				// - - - Number, Double
-				// First A is bound to Number, next B to Double. Then we
-				// check the bounds for B. We encounter A,
-				// for which we already inferred Number. Hence, it
-				// suffices to check whether Double can be assigned
-				// to Number, it does not have to be equal as it is just
-				// a transitive bound for B.
-				Type typeAssignForBound = typeMappings.get(bound).getType();
-				if (!Types.isAssignable(inferFrom, typeAssignForBound)) {
-					throw new TypeInferenceException();
+			// Bounds could also contain type vars, hence possibly go into
+			// recursion
+			for (Type bound : type.getBounds()) {
+				if (bound instanceof TypeVariable && typeMappings.get(bound) != null) {
+					// If the bound of the current var (let's call it A) to
+					// infer is also a var (let's call it B):
+					// If we already encountered B, we check if the current
+					// type to infer from is assignable to
+					// the already inferred type for B. In this case we do
+					// not require equality as one var is
+					// bounded by another and it is not the same. E.g.
+					// assume we want to infer the types of vars:
+					// - - - A extends Number, B extends A
+					// From types:
+					// - - - Number, Double
+					// First A is bound to Number, next B to Double. Then we
+					// check the bounds for B. We encounter A,
+					// for which we already inferred Number. Hence, it
+					// suffices to check whether Double can be assigned
+					// to Number, it does not have to be equal as it is just
+					// a transitive bound for B.
+					Type typeAssignForBound = typeMappings.get(bound).getType();
+					if (!Types.isAssignable(inferFrom, typeAssignForBound)) {
+						throw new TypeInferenceException();
+					}
 				}
-			} else {
-				// Else go into recursion as we encountered a new var.
-				inferTypeVariables( bound, inferFrom, typeMappings);
-			}	
+				else {
+					// Else go into recursion as we encountered a new var.
+					inferTypeVariables(bound, inferFrom, typeMappings);
+				}
+			}
+
 		}
 	}
 
-	private static void inferTypeVariables(ParameterizedType type, Type inferFrom, Map<TypeVariable<?>, TypeMapping> typeMappings) {
-		// Recursively follow parameterized types
-		if (inferFrom instanceof ParameterizedType) {
-			// Finding the supertype here is really important. Suppose that we are
-			// inferring from a StrangeThing<Long> extends Thing<Double> and our
-			// Op requires a Thing<T>. We need to ensure that T gets
-			// resolved to a Double and NOT a Long.
-			ParameterizedType paramInferFrom = (ParameterizedType) Types
-				.getExactSuperType(inferFrom, Types.raw(type));
-			if (paramInferFrom == null) {
-				// this means that inferFrom is NOT a superType of type. There is,
-				// however, one more thing that we can try. It is possible for inferFrom
-				// to be a subType of type (this can often happen when
-				// checkGenericAssignability is working with Functions). In this case,
-				// it is possible that inferFrom has information about the typeVariables
-				// of type.
-				ParameterizedType superTypeOfType = (ParameterizedType) Types
-					.getExactSuperType(type, Types.raw(inferFrom));
-				if (superTypeOfType == null) throw new TypeInferenceException(
-					inferFrom + " cannot be implicitly cast to " + type +
-						", thus it is impossible to infer type variables for " + inferFrom);
-				inferTypeVariables(superTypeOfType.getActualTypeArguments(),
-					((ParameterizedType) inferFrom).getActualTypeArguments(),
-					typeMappings, false);
-			}
-			else {
-				inferTypeVariables(type.getActualTypeArguments(), paramInferFrom
-					.getActualTypeArguments(), typeMappings, false);
-			}
+	private static void inferTypeVariables(ParameterizedType type, Type inferFrom,
+		Map<TypeVariable<?>, TypeMapping> typeMappings)
+	{
+		if (inferFrom instanceof WildcardType) {
+			inferFrom = getInferrableBound((WildcardType) inferFrom);
 		}
-		else {
-			if (inferFrom instanceof WildcardType) {
-				WildcardType inferFromWildcard = (WildcardType) inferFrom;
-				if (inferFromWildcard.getUpperBounds().length == 1) inferFrom = inferFromWildcard.getUpperBounds()[0];
-			}
+		if (inferFrom instanceof Any) {
+			Any any = (Any) inferFrom;
+			mapTypeVarsToAny(type, any, typeMappings);
+			return;
+		}
+		// Finding the supertype here is really important. Suppose that we are
+		// inferring from a StrangeThing<Long> extends Thing<Double> and our
+		// Op requires a Thing<T>. We need to ensure that T gets
+		// resolved to a Double and NOT a Long.
+		Type superInferFrom = Types.getExactSuperType(inferFrom, Types.raw(type));
+		if (superInferFrom instanceof ParameterizedType) {
+			ParameterizedType paramInferFrom = (ParameterizedType) superInferFrom;
+			inferTypeVariables(type.getActualTypeArguments(), paramInferFrom
+				.getActualTypeArguments(), typeMappings, false);
+		}
+		else if (superInferFrom instanceof Class) {
 			TypeVarAssigns typeVarAssigns = new TypeVarAssigns(typeMappings);
 			Type mappedType = Types.mapVarToTypes(type, typeVarAssigns);
 			// Use isAssignable to attempt to infer the type variables present in type
-			if (!Types.isAssignable(inferFrom, mappedType, typeVarAssigns)) {
+			if (!Types.isAssignable(superInferFrom, mappedType, typeVarAssigns)) {
 				throw new TypeInferenceException(inferFrom +
 					" cannot be implicitly cast to " + mappedType +
 					", thus it is impossible to infer type variables for " + inferFrom);
 			}
+			// for all remaining unmapped type vars, map to Any
+			mapTypeVarsToAny(type, typeMappings);
+		}
+		// -- edge cases -> do our best -- //
+		else if (superInferFrom == null) {
+			// edge case 1: if inferFrom is an Object, superInferFrom will be null
+			// when type is some interface.
+			if (Object.class.equals(inferFrom)) {
+				mapTypeVarsToAny(type, typeMappings);
+				return;
+			}
+			// edge case 2: if inferFrom is a superType of type, we can get (some of)
+			// the types of type by finding the exact superType of type w.r.t.
+			// inferFrom.
+			Type superTypeOfType = Types.getExactSuperType(type, Types.raw(
+				inferFrom));
+			if (superTypeOfType == null) {
+				throw new TypeInferenceException(inferFrom +
+					" cannot be implicitly cast to " + type +
+					", thus it is impossible to infer type variables for " + inferFrom);
+			}
+			inferTypeVariables(superTypeOfType, inferFrom, typeMappings, false);
+			mapTypeVarsToAny(type, typeMappings);
+		}
+		// TODO: elaborate
+		else throw new IllegalStateException(superInferFrom +
+			" is the supertype of " + inferFrom + " with respect to " + type +
+			", however this cannot be (since " + type +
+			" is a ParamterizedType)! (Only a ParameterizedType, Class, or null " +
+			"can be returned from Types.getExactSuperType when it is called with a ParameterizedType!)");
+	}
+
+	private static void mapTypeVarsToAny(Type type,
+		Map<TypeVariable<?>, TypeMapping> typeMappings)
+	{
+		mapTypeVarsToAny(type, new Any(), typeMappings);
+	}
+
+	private static void mapTypeVarsToAny(Type type, Any any,
+		Map<TypeVariable<?>, TypeMapping> typeMappings)
+	{
+		if (!Types.containsTypeVars(type)) return;
+
+		if (type instanceof TypeVariable) {
+			if (typeMappings.containsKey(type)) return;
+			TypeVariable<?> typeVar = (TypeVariable<?>) type;
+			typeMappings.put(typeVar, suitableTypeMapping(typeVar, any, true));
+		}
+		else if (type instanceof ParameterizedType) {
+			ParameterizedType pType = (ParameterizedType) type;
+			Type[] typeParams = pType.getActualTypeArguments();
+			for (Type typeParam : typeParams) {
+				mapTypeVarsToAny(typeParam, typeMappings);
+			}
+		}
+		else if (type instanceof WildcardType) {
+			WildcardType wildcard = (WildcardType) type;
+			for (Type lowerBound : wildcard.getLowerBounds())
+				mapTypeVarsToAny(lowerBound, typeMappings);
+			for (Type upperBound : wildcard.getUpperBounds())
+				mapTypeVarsToAny(upperBound, typeMappings);
+		}
+		else if (type instanceof Class) {
+			Class<?> clazz = (Class<?>) type;
+			for (Type typeParam : clazz.getTypeParameters())
+				mapTypeVarsToAny(typeParam, typeMappings);
 		}
 	}
-	
+
 	private static void inferTypeVariables(WildcardType type, Type inferFrom, Map<TypeVariable<?>, TypeMapping> typeMappings) {
 		Type inferrableBound = getInferrableBound(type);
 		if (inferFrom instanceof WildcardType) {

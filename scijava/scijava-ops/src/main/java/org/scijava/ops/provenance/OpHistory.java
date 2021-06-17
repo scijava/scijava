@@ -47,32 +47,6 @@ public class OpHistory {
 	}
 
 	/**
-	 * Parses all executions of {@link OpInfo} {@code info} from the history
-	 * 
-	 * @param info the {@link OpInfo} of interest
-	 * @return a {@link List} of all executions of {@code info}
-	 */
-	public static List<OpExecutionSummary> executionsOf(OpInfo info) {
-		return history.values().stream() //
-			.flatMap(Deque::stream) //
-			.filter(e -> e.info().equals(info)) //
-			.collect(Collectors.toList());
-	}
-
-	/**
-	 * Parses all executions of {@link Object} {@code op} from the history
-	 * 
-	 * @param op the {@link Object} of interest
-	 * @return a {@link List} of all executions of {@code op}
-	 */
-	public static List<OpExecutionSummary> executionsOf(Object op) {
-		return history.values().stream() //
-			.flatMap(Deque::stream) //
-			.filter(e -> e.executor().equals(op)) //
-			.collect(Collectors.toList());
-	}
-
-	/**
 	 * Parses all executions that operated on {@link Object} {@code o} from the
 	 * history
 	 * 

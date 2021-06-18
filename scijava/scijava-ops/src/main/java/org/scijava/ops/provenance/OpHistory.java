@@ -13,41 +13,63 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpInfo;
 
 /**
- * Log describing each execution of an Op.
+ * Log describing each execution of an Op. This class is designed to answer two
+ * questions:
+ * <ol>
+ * <li>Given an {@link Object} output (e.g. a {@code List<String>}), what Op(s)
+ * mutated that output?
+ * <li>Given an {@link Object} op, what {@link OpInfo}s were utilized to
+ * implement that Op's functionality?
+ * </ol>
+ * The answers to these two questions allow users to produce an entire
+ * {@code List<Graph<OpInfo>>}, containing all of the information needed to
+ * reproduce any {@link Object} output.
+ * <p>
+ * Note that SciJava Ops is responsible for logging the returns to <b>any</b>
+ * matching calls here, but with some effort the user or other applications
+ * could also contribute their algorithms to the history.
  *
  * @author Gabe Selzer
  */
 public class OpHistory {
 
+	// -- DATA STRCUTURES -- //
+
+	/**
+	 * {@link Map} responsible for recording the execution of an Op returned by a
+	 * <b>matching call</b>
+	 */
 	private static final Map<UUID, ConcurrentLinkedDeque<OpExecutionSummary>> history =
 		new ConcurrentHashMap<>();
 
+	/**
+	 * {@link Map} responsible for recording the {@link Graph} of {@link OpInfo}s
+	 * involved to produce the result of a particular matching call
+	 */
 	private static final Map<UUID, MutableGraph<OpInfo>> dependencyChain =
 		new ConcurrentHashMap<>();
-	private static final Map<UUID, Object> opRecord = new ConcurrentHashMap<>();
-	private static final Map<UUID, Object> wrapperRecord = new ConcurrentHashMap<>();
 
 	/**
-	 * Logs a {@link OpExecutionSummary}
-	 * 
-	 * @param e the {@link OpExecutionSummary}
-	 * @return true iff {@code e} was successfully logged
+	 * {@link Map} responsible for recording the "top-level" {@link Object}
+	 * produced by a matching call
 	 */
-	public static boolean addExecution(OpExecutionSummary e) {
-		if (!history.containsKey(e.executionTreeHash())) generateDeque(e.executionTreeHash());
-		history.get(e.executionTreeHash()).addLast(e);
-		return true;
-	}
-
-	private static synchronized void generateDeque(UUID executionTreeHash) {
-		history.putIfAbsent(executionTreeHash, new ConcurrentLinkedDeque<OpExecutionSummary>());
-	}
+	private static final Map<UUID, Object> opRecord = new ConcurrentHashMap<>();
 
 	/**
-	 * Parses all executions that operated on {@link Object} {@code o} from the
+	 * {@link Map} responsible for recording the <b>wrapper</b> of the "top-level"
+	 * {@link Object} produced by a matching call
+	 */
+	private static final Map<UUID, Object> wrapperRecord =
+		new ConcurrentHashMap<>();
+
+	// -- USER API -- //
+
+	/**
+	 * Returns the list of executions on {@link Object} {@code o} recorded in the
 	 * history
 	 * 
 	 * @param o the {@link Object} of interest
@@ -62,46 +84,65 @@ public class OpHistory {
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 * Returns the {@link Graph} of {@link OpInfo}s describing the dependency
+	 * chain of the {@link Object} {@code op}.
+	 * 
+	 * @param op the {@Obect} returned by a matching call. NB {@code op}
+	 *          <b>must</b> be the {@link Object} returned by the outermost
+	 *          matching call, as the dependency {@link Object}s are not recorded.
+	 * @return the {@link Graph} describing the dependency chain
+	 */
 	public static Graph<OpInfo> opExecutionChain(Object op) {
-		UUID opExecutionID = findUUIDInOpRecord(op);
-		UUID wrapperExecutionID = findUUIDInWrapperRecord(op);
-		if (opExecutionID != null && wrapperExecutionID != null) {
-			throw new IllegalStateException("op is recorded in both the OpRecord and the WrapperRecord!");
-		}
-		if (opExecutionID == null && wrapperExecutionID == null) {
-			throw new IllegalArgumentException("No record of op being returned in a matching Execution!");
-		}
-		UUID id = opExecutionID != null ? opExecutionID : wrapperExecutionID;
+		// return dependency chain if op was an Op or wrapped an Op
+		UUID opID = findUUIDInOpRecord(op);
+		if (opID != null) return dependencyChain.get(opID);
+		UUID wrapperID = findUUIDInWrapperRecord(op);
+		if (wrapperID != null) return dependencyChain.get(wrapperID);
+
+		// op not recorded - throw an exception
+		throw new IllegalArgumentException(
+			"No record of op being returned in a matching Execution!");
+	}
+
+	/**
+	 * Returns the {@link Graph} of {@link OpInfo}s describing the dependency
+	 * chain of the Op call fufilled with {@link UUID} {@code id}
+	 * 
+	 * @param id the {@link UUID} associated with a particular matching call
+	 * @return the {@link Graph} describing the dependency chain
+	 */
+	public static Graph<OpInfo> opExecutionChain(UUID id) {
+		if (!dependencyChain.containsKey(id)) throw new IllegalArgumentException(
+			"UUID " + id + " has not been registered to an Op execution chain");
 		return dependencyChain.get(id);
 	}
 
-	private static UUID findUUIDInOpRecord(Object op) {
-		List<UUID> opExecutionIDs = opRecord.entrySet().parallelStream() //
-				.filter(e -> e.getValue() == op) //
-				.map(e -> e.getKey()) //
-				.collect(Collectors.toList());
-		if (opExecutionIDs.size() > 1) throw new IllegalArgumentException(
-			"Multiple Op Execution chains found for Op " + op);
-		if (opExecutionIDs.size() == 0) return null;
-		return opExecutionIDs.get(0);
+	// -- HISTORY MAINTENANCE API -- //
+
+	/**
+	 * Logs a {@link OpExecutionSummary} in the history
+	 * 
+	 * @param e the {@link OpExecutionSummary}
+	 * @return true iff {@code e} was successfully logged
+	 */
+	public static boolean addExecution(OpExecutionSummary e) {
+		if (!history.containsKey(e.executionTreeHash())) generateDeque(e
+			.executionTreeHash());
+		history.get(e.executionTreeHash()).addLast(e);
+		return true;
 	}
 
-	private static UUID findUUIDInWrapperRecord(Object op) {
-		List<UUID> opExecutionIDs = wrapperRecord.entrySet().parallelStream() //
-				.filter(e -> e.getValue() == op) //
-				.map(e -> e.getKey()) //
-				.collect(Collectors.toList());
-		if (opExecutionIDs.size() > 1) throw new IllegalArgumentException(
-			"Multiple Op Execution chains found for Op " + op);
-		if (opExecutionIDs.size() == 0) return null;
-		return opExecutionIDs.get(0);
-	}
-
-	public static void resetHistory() {
-		history.clear();
-		dependencyChain.clear();
-	}
-
+	/**
+	 * Logs the {@link List} of {@link OpInfo} dependencies under the
+	 * {@link OpInfo} {@code info}
+	 * 
+	 * @param executionChainID the {@link UUID} identifying a particular matching
+	 *          call.
+	 * @param info the {@link OpInfo} depending on {@code dependencies}
+	 * @param dependencies the {@link OpInfo}s used to fulfill the
+	 *          {@link OpDependency} requests of the Op specified by {@code info}
+	 */
 	public static void logDependencies(UUID executionChainID, OpInfo info,
 		List<OpInfo> dependencies)
 	{
@@ -114,20 +155,74 @@ public class OpHistory {
 		});
 	}
 
+	/**
+	 * Logs the "top-level" Op for a particular matching call. {@code op} is the
+	 * {@link Object} returned to the user (save for Op wrapping)
+	 * 
+	 * @param executionChainID the {@link UUID} identifying a particular matching
+	 *          call
+	 * @param op the {@link Object} returned from the matching call identifiable
+	 *          by {@code executionChainID}.
+	 */
 	public static void logTopLevelOp(UUID executionChainID, Object op) {
 		Object former = opRecord.putIfAbsent(executionChainID, op);
 		if (former != null) throw new IllegalArgumentException("Execution ID " +
 			executionChainID + " has already logged a Top-Level Op!");
 	}
 
+	/**
+	 * Logs the <b>wrapper</b> of the "top-level" Op for a particular matching
+	 * call. {@code wrapper} is the {@link Object} returned to the user when Op
+	 * wrapping is perfomed
+	 * 
+	 * @param executionChainID the {@link UUID} identifying a particular matching
+	 *          call
+	 * @param wrapper the {@link Object} returned from the matching call
+	 *          identifiable by {@code executionChainID}.
+	 */
 	public static void logTopLevelWrapper(UUID executionChainID, Object wrapper) {
 		Object former = wrapperRecord.putIfAbsent(executionChainID, wrapper);
 		if (former != null) throw new IllegalArgumentException("Execution ID " +
 			executionChainID + " has already logged a Top-Level Op!");
 	}
 
+	// -- HELPER METHODS -- //
+
 	private static MutableGraph<OpInfo> buildGraph() {
 		return GraphBuilder.directed().allowsSelfLoops(false).build();
+	}
+
+	private static UUID findUUIDInOpRecord(Object op) {
+		return keyForV(opRecord, op);
+	}
+
+	private static UUID findUUIDInWrapperRecord(Object op) {
+		return keyForV(wrapperRecord, op);
+	}
+
+	private static synchronized void generateDeque(UUID executionTreeHash) {
+		history.putIfAbsent(executionTreeHash,
+			new ConcurrentLinkedDeque<OpExecutionSummary>());
+	}
+
+	private static <T, V> T keyForV(Map<T, V> map, V value) {
+		List<T> keys = keysForV(map, value);
+		if (keys.size() > 1) throw new IllegalArgumentException("Map " + map +
+			" has multiple keys for value " + value);
+		if (keys.size() == 0) return null;
+		return keys.get(0);
+	}
+
+	private static <T, V> List<T> keysForV(Map<T, V> map, V value) {
+		return map.entrySet().parallelStream() //
+			.filter(e -> e.getValue() == value) //
+			.map(e -> e.getKey()) //
+			.collect(Collectors.toList());
+	}
+
+	public static void resetHistory() {
+		history.clear();
+		dependencyChain.clear();
 	}
 
 }

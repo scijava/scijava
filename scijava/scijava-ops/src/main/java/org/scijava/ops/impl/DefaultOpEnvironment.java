@@ -205,7 +205,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	@Override
 	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
 		try {
-			return findOp(opName, specialType, inTypes, outType, hints.getCopy(true));
+			return findOp(opName, specialType, inTypes, outType, hints);
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -252,8 +252,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			final Nil<?> outType, Hints hints) throws OpMatchingException {
 		final OpRef ref = OpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
-		generateOpInstance(ref, hints);
-		return (T) wrapViaCache(new MatchingConditions(ref, hints), hints.executionChainID());
+		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
+		generateOpInstance(conditions);
+		return (T) wrapViaCache(conditions, conditions.hints().executionChainID());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -262,10 +263,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	{
 		OpRef ref = OpRef.fromTypes(specialType.getType(), outType.getType(),
 			toTypes(inTypes));
-		Hints hintsCopy = hints.getCopy(true);
-		generateOpInstance(ref, info, hintsCopy);
-		return (T) wrapViaCache(new MatchingConditions(ref, hintsCopy), hintsCopy
-			.executionChainID());
+		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
+		generateOpInstance(conditions, info);
+		return (T) wrapViaCache(conditions, conditions.hints().executionChainID());
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -274,30 +274,30 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	/**
 	 * Creates an Op instance from an {@link OpInfo} with the provided
-	 * {@link OpRef} as a template. This Op instance is put into the
-	 * {@code opCache}, and is retrievable via
+	 * {@link MatchingConditions} as the guidelines for {@link OpInfo} selection.
+	 * This Op instance is put into the {@code opCache}, and is retrievable via
 	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions, UUID)}
 	 * 
-	 * @param ref
+	 * @param conditions the {@link MatchingConditions} containing the
+	 *          requirements for the returned Op
 	 * @param info
 	 * @throws OpMatchingException
 	 */
-	private void generateOpInstance(final OpRef ref, final OpInfo info, Hints hints) throws OpMatchingException {
+	private void generateOpInstance(final MatchingConditions conditions, final OpInfo info) throws OpMatchingException {
 		// create new OpCandidate from ref and info
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-		if (!ref.typesMatch(info.opType(), typeVarAssigns))
+		if (!conditions.ref().typesMatch(info.opType(), typeVarAssigns))
 			throw new OpMatchingException(
 				"The given OpRef and OpInfo are not compatible!");
-		OpCandidate candidate = new OpCandidate(this, this.log, ref, info,
+		OpCandidate candidate = new OpCandidate(this, this.log, conditions.ref(), info,
 			typeVarAssigns);
 		// TODO: can this be replaced by simply setting the status code to match?
 		if (!matcher.typesMatch(candidate)) throw new OpMatchingException(
 			"The given OpRef and OpInfo are not compatible!");
 		// obtain Op instance (with dependencies)
-		Object op = instantiateOp(candidate, hints);
+		Object op = instantiateOp(candidate, conditions.hints());
 
 		// cache raw Op
-		MatchingConditions conditions = new MatchingConditions(ref, hints);
 		OpInstance instance = OpInstance.of(op, info, typeVarAssigns);
 		cacheOp(conditions, instance);
 	}
@@ -307,8 +307,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	{
 		OpInstance instance = getInstance(conditions);
 		Object wrappedOp = wrapOp(instance.op(), instance.info(), conditions
-			.getHints(), executionChainID, instance.typeVarAssigns());
-		if (!conditions.getHints().containsHint(DependencyMatching.IN_PROGRESS))
+			.hints(), executionChainID, instance.typeVarAssigns());
+		if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
 			OpHistory.logTopLevelWrapper(executionChainID, wrappedOp);
 		return wrappedOp;
 	}
@@ -321,23 +321,21 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * that T (since the OpRef could require that the Op returned is of multiple
 	 * types).
 	 * 
-	 * @param ref
-	 * @param hints - the {@link Hints} to use for matching
+	 * @param conditions - the {@link MatchingConditions} outlining the
+	 *          requirements that must be fulfilled by the Op returned
 	 * @throws OpMatchingException
 	 */
-	private void generateOpInstance(final OpRef ref,
-		Hints hints) throws OpMatchingException
+	private void generateOpInstance(final MatchingConditions conditions) throws OpMatchingException
 	{
 		// see if the ref has been matched already
-		MatchingConditions conditions = new MatchingConditions(ref, hints);
 		OpInstance cachedOp = getInstance(conditions);
 		if (cachedOp != null) return;
 
 		// obtain suitable OpCandidate
-		OpCandidate candidate = findOpCandidate(ref, hints);
+		OpCandidate candidate = findOpCandidate(conditions.ref(), conditions.hints());
 
 		// obtain Op instance (with dependencies)
-		Object op = instantiateOp(candidate, hints);
+		Object op = instantiateOp(candidate, conditions.hints());
 		
 		// cache instance
 		OpInstance instance = OpInstance.of(op, candidate.opInfo(), candidate.typeVarAssigns());
@@ -346,8 +344,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	private void cacheOp(MatchingConditions conditions, OpInstance op) {
 		opCache.putIfAbsent(conditions, op);
-		if (!conditions.getHints().containsHint(DependencyMatching.NOT_IN_PROGRESS))
-			OpHistory.logTopLevelOp(conditions.getHints().executionChainID(), op
+	if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
+			OpHistory.logTopLevelOp(conditions.hints().executionChainID(), op
 				.op());
 	}
 
@@ -528,8 +526,10 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 				if(!dependency.isAdaptable()) {
 					hintCopy.setHint(Adaptation.FORBIDDEN);
 				}
-				generateOpInstance(dependencyRef, hintCopy);
-				resolvedDependencies.add(new MatchingConditions(dependencyRef, hintCopy));
+
+				MatchingConditions conditions = MatchingConditions.from(dependencyRef, hintCopy, false);
+				generateOpInstance(conditions);
+				resolvedDependencies.add(conditions);
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
@@ -808,7 +808,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @return a {@link Hints}
 	 */
 	private Hints getHints() {
-		if(this.environmentHints != null) return this.environmentHints.getCopy(true);
+		if(this.environmentHints != null) return this.environmentHints.getCopy(false);
 		return new DefaultHints();
 	}
 

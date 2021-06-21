@@ -139,7 +139,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 
 		// assert that complicatedOp is in the cache (
 		Optional<MatchingConditions> complicatedOptional = opCache.keySet().stream().filter(
-			condition -> condition.getRef().getName().equals("test.complicatedOp")).findFirst();
+			condition -> condition.ref().getName().equals("test.complicatedOp")).findFirst();
 		Assertions.assertFalse(complicatedOptional.isEmpty(),
 			"test.complicatedOp not in cache!");
 		Assertions.assertTrue(opCache.get(complicatedOptional.get()).op() instanceof ComplicatedOp,
@@ -147,7 +147,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 
 		// assert that basic Op is also in the cache
 		Optional<MatchingConditions> basicOptional = opCache.keySet().stream().filter(condition -> condition
-			.getRef().getName().equals("test.basicOp")).findFirst();
+			.ref().getName().equals("test.basicOp")).findFirst();
 		Assertions.assertFalse(basicOptional.isEmpty(),
 			"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");
 		Assertions.assertEquals(opCache.get(basicOptional.get()).op(), basicOp,

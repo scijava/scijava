@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.function.Computers;
+import org.scijava.function.Computers;
 
 /**
  * Test for {@link DefaultMapNeighborhood} and

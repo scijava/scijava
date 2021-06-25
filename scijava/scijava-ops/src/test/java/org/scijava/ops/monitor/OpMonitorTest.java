@@ -10,9 +10,10 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.scijava.function.Functions;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
@@ -32,7 +33,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	 */
 	@Test(expected = CancellationException.class)
 	public void testCancellation() {
-		Function<OpMonitor, BigInteger> bigOp = Functions.match(ops.env(), "test.opMonitor", new Nil<OpMonitor>() {},
+		Function<OpMonitor, BigInteger> bigOp = FunctionUtils.match(ops.env(), "test.opMonitor", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {});
 		OpMonitor monitor = new DefaultOpMonitor();
 		monitor.cancel();
@@ -49,7 +50,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	 */
 	@Test(expected = CancellationException.class)
 	public void testCancellationDifferentThread() throws InterruptedException {
-		Function<OpMonitor, BigInteger> bigOp = Functions.match(ops.env(), "test.opMonitor", new Nil<OpMonitor>() {},
+		Function<OpMonitor, BigInteger> bigOp = FunctionUtils.match(ops.env(), "test.opMonitor", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {});
 		OpMonitor monitor = new DefaultOpMonitor();
 		try {
@@ -65,7 +66,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testProgress() throws InterruptedException, ExecutionException{
-		BiFunction<OpMonitor, BigInteger, BigInteger> bigOp = Functions.match(ops.env(), "test.progress", new Nil<OpMonitor>() {},
+		BiFunction<OpMonitor, BigInteger, BigInteger> bigOp = FunctionUtils.match(ops.env(), "test.progress", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {}, new Nil<BigInteger>() {});
 		
 		OpMonitor monitor = new DefaultOpMonitor();

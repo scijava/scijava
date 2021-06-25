@@ -41,8 +41,9 @@ import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
 import org.scijava.convert.Converter;
+import org.scijava.function.Functions;
 import org.scijava.ops.OpService;
-import org.scijava.ops.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.types.Nil;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -67,7 +68,7 @@ public class RAIToMeshConverter <B extends BooleanType<B>> extends
 	@Override
 	public <T> T convert(Object src, Class<T> dest) {
 		if (marchingCubesFunc == null) {
-			marchingCubesFunc = Functions.match(ops.env(), "geom.marchingCubes", new Nil<RandomAccessibleInterval<B>>() {},
+			marchingCubesFunc = FunctionUtils.match(ops.env(), "geom.marchingCubes", new Nil<RandomAccessibleInterval<B>>() {},
 					new Nil<Mesh>() {});
 		}
 		if (src instanceof IterableInterval<?>) {

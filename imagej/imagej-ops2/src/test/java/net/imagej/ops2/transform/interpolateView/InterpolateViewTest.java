@@ -44,7 +44,8 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -64,7 +65,7 @@ public class InterpolateViewTest extends AbstractOpTest {
 	@Test
 	public void defaultInterpolateTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, FloorInterpolatorFactory<DoubleType>, RealRandomAccessible<DoubleType>> interpolateFunc = Functions
+		BiFunction<RandomAccessible<DoubleType>, FloorInterpolatorFactory<DoubleType>, RealRandomAccessible<DoubleType>> interpolateFunc = FunctionUtils
 				.match(ops.env(), "transform.interpolateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<FloorInterpolatorFactory<DoubleType>>() {
 				}, new Nil<RealRandomAccessible<DoubleType>>() {

@@ -39,10 +39,10 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.scijava.function.Functions;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Functions;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 

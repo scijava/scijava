@@ -37,9 +37,9 @@ package org.scijava.ops.adapt.functional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.function.Functions;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Functions;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 

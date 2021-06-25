@@ -1,4 +1,4 @@
-.include templates/main/java/org/scijava/ops/function/Globals.list
+.include templates/main/java/org/scijava/ops/util/Globals.list
 arities = (1..maxArity).collect()
 
 [FunctionToArrays.java]

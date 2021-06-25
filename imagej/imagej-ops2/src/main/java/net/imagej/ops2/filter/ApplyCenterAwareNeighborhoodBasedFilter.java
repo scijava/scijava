@@ -37,7 +37,7 @@ import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.function.Computers;
+import org.scijava.function.Computers;
 
 public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 

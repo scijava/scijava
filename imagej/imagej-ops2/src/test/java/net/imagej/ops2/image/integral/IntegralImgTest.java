@@ -48,7 +48,8 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.function.Computers;
+import org.scijava.function.Computers;
+import org.scijava.ops.util.ComputerUtils;
 import org.scijava.types.Nil;
 
 /**
@@ -77,7 +78,7 @@ public class IntegralImgTest extends AbstractOpTest {
 	@Test
 	public void testIntegralImageSimilarity() {
 		// should match DefaultIntegralImg
-		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = Computers
+		Computers.Arity1<RandomAccessibleInterval<ByteType>, RandomAccessibleInterval<DoubleType>> defaultOp = ComputerUtils
 				.match(ops.env(), "image.integral", new Nil<RandomAccessibleInterval<ByteType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

@@ -32,7 +32,7 @@ package net.imagej.ops2.threshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.function.Computers;
+import org.scijava.function.Computers;
 
 /**
  * Abstract superclass of {@link ComputeThresholdHistogram} implementations.

@@ -43,7 +43,8 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ExtendMirrorDoubleView} ops.
@@ -62,7 +63,7 @@ public class ExtendMirrorDoubleViewTest extends AbstractOpTest {
 
 	@Test
 	public void extendMirrorDoubleTest() {
-		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = Functions
+		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = FunctionUtils
 				.match(ops.env(), "transform.extendMirrorDoubleView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});

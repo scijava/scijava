@@ -32,8 +32,8 @@ package org.scijava.ops;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
-import org.scijava.ops.function.Computers;
 import org.scijava.types.Nil;
+import org.scijava.function.Computers;
 import org.scijava.ops.util.Adapt;
 
 public class AdaptersTest extends AbstractTestEnvironment {

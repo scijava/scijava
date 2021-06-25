@@ -39,7 +39,8 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.function.Computers;
+import org.scijava.function.Computers;
+import org.scijava.ops.util.ComputerUtils;
 import org.scijava.types.Nil;
 
 public class ProjectTest extends AbstractOpTest {
@@ -70,7 +71,7 @@ public class ProjectTest extends AbstractOpTest {
 		out1 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 		out2 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 
-		op = Computers.match(ops.env(), "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
+		op = ComputerUtils.match(ops.env(), "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
 				new Nil<UnsignedByteType>() {});
 	}
 

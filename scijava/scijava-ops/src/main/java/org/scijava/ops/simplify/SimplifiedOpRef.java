@@ -1,23 +1,20 @@
 
 package org.scijava.ops.simplify;
 
-import com.google.common.collect.Streams;
-
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers.Arity1;
-import org.scijava.ops.hints.Hints;
 import org.scijava.ops.hints.BaseOpHints.Adaptation;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.hints.Hints;
 import org.scijava.ops.matcher.OpMatchingException;
+import org.scijava.function.Computers;
+import org.scijava.function.Computers.Arity1;
+import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpInfo;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;

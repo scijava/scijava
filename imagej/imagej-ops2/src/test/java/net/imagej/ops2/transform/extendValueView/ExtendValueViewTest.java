@@ -43,7 +43,8 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ExtendValueView} ops.
@@ -62,7 +63,7 @@ public class ExtendValueViewTest extends AbstractOpTest {
 
 	@Test
 	public void extendValueTest() {
-		BiFunction<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessible<DoubleType>> extendFunc = Functions
+		BiFunction<RandomAccessibleInterval<DoubleType>, DoubleType, RandomAccessible<DoubleType>> extendFunc = FunctionUtils
 				.match(ops.env(), "transform.extendValueView", raiNil, new Nil<DoubleType>() {
 				}, new Nil<RandomAccessible<DoubleType>>() {
 				});

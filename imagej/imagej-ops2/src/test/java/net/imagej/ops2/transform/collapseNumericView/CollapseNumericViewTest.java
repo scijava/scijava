@@ -45,7 +45,9 @@ import net.imglib2.view.composite.NumericComposite;
 
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
-import org.scijava.ops.function.Functions;
+
+import org.scijava.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.types.Nil;
 
 /**
@@ -79,7 +81,7 @@ public class CollapseNumericViewTest extends AbstractOpTest {
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
-		BiFunction<RandomAccessible<NativeARGBDoubleType>, Integer, CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFuncRA = Functions
+		BiFunction<RandomAccessible<NativeARGBDoubleType>, Integer, CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFuncRA = FunctionUtils
 				.match(ops.env(), "transform.collapseNumericView",
 						new Nil<RandomAccessible<NativeARGBDoubleType>>() {
 				}, new Nil<Integer>() {

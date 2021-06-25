@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.scijava.function.Computers;
+import org.scijava.function.Container;
+import org.scijava.function.Mutable;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.function.Computers;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.util.AnnotationUtils;
-import org.scijava.param.Container;
-import org.scijava.param.Mutable;
 import org.scijava.param.ParameterStructs;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;

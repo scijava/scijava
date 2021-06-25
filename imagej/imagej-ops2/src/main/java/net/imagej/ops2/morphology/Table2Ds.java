@@ -20,9 +20,9 @@ import net.imglib2.algorithm.morphology.table2d.Vbreak;
 import net.imglib2.img.Img;
 import net.imglib2.type.BooleanType;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;

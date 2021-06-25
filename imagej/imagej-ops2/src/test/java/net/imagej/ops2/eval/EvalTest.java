@@ -37,8 +37,8 @@ import java.util.Map;
 import net.imagej.ops2.AbstractOpTest;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Functions;
 import org.scijava.ops.OpService;
-import org.scijava.ops.function.Functions;
 import org.scijava.types.Nil;
 
 /**

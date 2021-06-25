@@ -2,9 +2,9 @@ package org.scijava.ops.math;
 
 import java.util.stream.IntStream;
 
+import org.scijava.function.Computers;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.function.Computers;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 

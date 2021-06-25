@@ -40,8 +40,9 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
+
+import org.scijava.ops.util.FunctionUtils;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.DropSingletonDimensionsView} ops.
@@ -58,7 +59,7 @@ public class DropSingletonDimensionsViewTest extends AbstractOpTest {
 	@Test
 	public void dropSingletonDimensionsTest() {
 
-		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc = Functions
+		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc = FunctionUtils
 				.match(ops.env(), "transform.dropSingletonDimensionsView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

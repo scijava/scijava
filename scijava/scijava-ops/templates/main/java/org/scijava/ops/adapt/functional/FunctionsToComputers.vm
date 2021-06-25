@@ -37,11 +37,11 @@ package org.scijava.ops.adapt.functional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.function.Producer;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Functions;
-import org.scijava.ops.function.Producer;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 

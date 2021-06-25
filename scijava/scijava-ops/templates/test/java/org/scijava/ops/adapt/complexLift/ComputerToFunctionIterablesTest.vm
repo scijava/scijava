@@ -40,9 +40,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.scijava.function.Computers;
 import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.ops.function.Computers;
 import org.scijava.types.Nil;
 
 /**

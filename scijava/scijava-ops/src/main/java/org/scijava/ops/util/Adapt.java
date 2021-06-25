@@ -10,12 +10,12 @@ import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.function.Computers;
+import org.scijava.function.Functions;
+import org.scijava.function.Inplaces;
+import org.scijava.function.Producer;
 import org.scijava.ops.core.OneToOneCommand;
 import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Functions;
-import org.scijava.ops.function.Inplaces;
-import org.scijava.ops.function.Producer;
 
 /**
  * Utility providing adaptation between {@link Op} types.

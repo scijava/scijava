@@ -45,7 +45,8 @@ import net.imglib2.view.composite.GenericComposite;
 import org.junit.jupiter.api.Test;
 import net.imagej.ops2.AbstractOpTest;
 import org.scijava.types.Nil;
-import org.scijava.ops.function.Functions;
+import org.scijava.function.Functions;
+import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.CollapseView} ops.
@@ -63,7 +64,7 @@ public class CollapseViewTest extends AbstractOpTest {
 	public void defaultCollapseTest() {
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
-		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = Functions
+		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = FunctionUtils
 				.match(ops.env(), "transform.collapseView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<CompositeIntervalView<DoubleType, ? extends GenericComposite<DoubleType>>>() {
 				});
@@ -79,7 +80,7 @@ public class CollapseViewTest extends AbstractOpTest {
 
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10, 10 });
 
-		Function<RandomAccessible<DoubleType>, CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = Functions
+		Function<RandomAccessible<DoubleType>, CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>> collapseFunc = FunctionUtils
 				.match(ops.env(), "transform.collapseView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<CompositeView<DoubleType, ? extends GenericComposite<DoubleType>>>() {
 				});

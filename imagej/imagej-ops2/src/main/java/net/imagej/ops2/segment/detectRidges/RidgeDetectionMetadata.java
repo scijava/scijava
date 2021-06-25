@@ -42,8 +42,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.function.Computers;
-import org.scijava.ops.function.Computers;
+import org.scijava.function.Computers;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;

@@ -8,9 +8,9 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
 import org.scijava.ops.conversionLoss.LossReporter;
-import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 import org.scijava.ops.hints.OpHints;
 import org.scijava.plugin.Plugin;

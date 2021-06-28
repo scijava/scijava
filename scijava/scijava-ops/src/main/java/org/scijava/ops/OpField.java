@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.scijava.Priority;
-import org.scijava.ops.core.OpCollection;
 
 /** Annotates an op declared as a field in an {@link OpCollection}. */
 @Retention(RetentionPolicy.RUNTIME)

@@ -40,7 +40,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.scijava.Context;
 import org.scijava.function.Producer;
-import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.impl.DefaultOpEnvironment;
 import org.scijava.ops.impl.MatchingConditions;
 import org.scijava.ops.provenance.OpHistoryService;

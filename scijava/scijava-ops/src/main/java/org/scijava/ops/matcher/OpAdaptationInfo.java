@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpDependencyMember;
+import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.BaseOpHints.Adaptation;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.OpHints;
-import org.scijava.ops.hints.impl.ImmutableHints;
+import org.scijava.ops.BaseOpHints.Adaptation;
+import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Struct;

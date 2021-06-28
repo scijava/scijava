@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.Hints;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Types;

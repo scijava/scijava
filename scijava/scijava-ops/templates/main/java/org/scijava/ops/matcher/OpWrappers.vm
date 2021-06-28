@@ -15,11 +15,11 @@ import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.ops.BaseOpHints.DependencyMatching;
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
-import org.scijava.ops.hints.Hints;
 import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistoryService;
+import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -32,7 +32,7 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final OpInfo info, final Hints hints, final OpHistoryService history, final UUID executionID, final Type reifiedType) {
+		public Producer<T> wrap(final Producer<T> op, final OpInfo info, final Hints hints, final OpHistory history, final UUID executionID, final Type reifiedType) {
 			class GenericTypedProducer implements Producer<T>, GenericTyped {
 
 				@Override
@@ -73,7 +73,7 @@ public class OpWrappers {
 			final $fg op, //
 			final OpInfo info, //
 			final Hints hints, //
-			final OpHistoryService history, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -121,7 +121,7 @@ public class OpWrappers {
 			final $cg op, //
 			final OpInfo info, //
 			final Hints hints, //
-			final OpHistoryService history, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -169,7 +169,7 @@ public class OpWrappers {
 			final $ig op, //
 			final OpInfo info, //
 			final Hints hints, //
-			final OpHistoryService history, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{

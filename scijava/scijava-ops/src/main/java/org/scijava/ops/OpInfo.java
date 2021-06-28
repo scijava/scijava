@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.log.Logger;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.OpHints;
-import org.scijava.ops.hints.impl.ImmutableHints;
+import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ValidityException;

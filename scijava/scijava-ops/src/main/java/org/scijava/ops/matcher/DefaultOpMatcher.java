@@ -44,12 +44,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.scijava.log.Logger;
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.BaseOpHints.Simplification;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.impl.DefaultHints;
+import org.scijava.ops.BaseOpHints.Simplification;
+import org.scijava.ops.hint.DefaultHints;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.simplify.InfoSimplificationGenerator;
 import org.scijava.service.AbstractService;

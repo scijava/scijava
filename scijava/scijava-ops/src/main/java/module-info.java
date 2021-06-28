@@ -19,7 +19,7 @@ module org.scijava.ops {
 	opens org.scijava.ops.conversionLoss to therapi.runtime.javadoc;
 	opens org.scijava.ops.log to therapi.runtime.javadoc;
 	opens org.scijava.ops.copy to therapi.runtime.javadoc;
-	opens org.scijava.ops.hints to therapi.runtime.javadoc;
+	opens org.scijava.ops.hint to therapi.runtime.javadoc;
 	opens org.scijava.ops.adapt.complexLift to therapi.runtime.javadoc;
 	opens org.scijava.ops.math to therapi.runtime.javadoc;
 	opens org.scijava.ops.adapt.lift to therapi.runtime.javadoc;
@@ -27,7 +27,6 @@ module org.scijava.ops {
 	opens org.scijava.ops.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.monitor to therapi.runtime.javadoc;
 	opens org.scijava.ops.provenance to therapi.runtime.javadoc;
-	opens org.scijava.ops.hints.impl to therapi.runtime.javadoc;
 	opens org.scijava.ops.adapt.functional to therapi.runtime.javadoc;
 	opens org.scijava.ops to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.util to therapi.runtime.javadoc;

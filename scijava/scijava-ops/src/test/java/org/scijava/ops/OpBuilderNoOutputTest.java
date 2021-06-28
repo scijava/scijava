@@ -1,5 +1,5 @@
 
-package org.scijava.ops.core.builder;
+package org.scijava.ops;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.OpBuilder;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;

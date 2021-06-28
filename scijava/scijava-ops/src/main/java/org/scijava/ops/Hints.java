@@ -1,11 +1,11 @@
 
-package org.scijava.ops.hints;
+package org.scijava.ops;
 
 import java.util.Deque;
 import java.util.Map;
 import java.util.UUID;
 
-import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.BaseOpHints.Simplification;
 import org.scijava.ops.provenance.OpHistory;
 
 /**

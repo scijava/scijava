@@ -43,13 +43,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.Priority;
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
+import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.OpHints;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

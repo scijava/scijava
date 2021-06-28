@@ -7,11 +7,13 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
-import org.scijava.ops.hints.BaseOpHints.Adaptation;
-import org.scijava.ops.hints.BaseOpHints.Simplification;
-import org.scijava.ops.hints.impl.DefaultHints;
+import org.scijava.ops.OpHints;
+import org.scijava.ops.BaseOpHints.Adaptation;
+import org.scijava.ops.BaseOpHints.Simplification;
+import org.scijava.ops.hint.DefaultHints;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.plugin.Plugin;
 

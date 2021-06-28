@@ -17,7 +17,7 @@ import java.util.function.Function;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.hints.Hints;
+import org.scijava.ops.Hints;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 

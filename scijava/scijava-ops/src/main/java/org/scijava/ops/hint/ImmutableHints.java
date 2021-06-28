@@ -1,10 +1,10 @@
-package org.scijava.ops.hints.impl;
+package org.scijava.ops.hint;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.scijava.ops.hints.Hints;
+import org.scijava.ops.Hints;
 
 /**
  * A {@link Hints} not modifiable after creation.

@@ -31,8 +31,8 @@ package org.scijava.ops.matcher;
 
 import java.util.List;
 
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.hints.Hints;
 
 /**
  * Finds Ops which match an {@link OpRef}.

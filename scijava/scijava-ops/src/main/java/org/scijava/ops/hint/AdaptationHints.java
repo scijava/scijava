@@ -1,12 +1,12 @@
 
-package org.scijava.ops.hints.impl;
+package org.scijava.ops.hint;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.BaseOpHints.Adaptation;
+import org.scijava.ops.Hints;
+import org.scijava.ops.BaseOpHints.Adaptation;
 
 /**
  * A set of {@link Hints} governing Adaptation procedures.

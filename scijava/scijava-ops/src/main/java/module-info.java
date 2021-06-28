@@ -7,8 +7,6 @@ module org.scijava.ops {
 
 	//TODO: rearrange packages to export only needed classes
 	exports org.scijava.ops; //contains OpDependency interface
-	exports org.scijava.ops.core; // contains OpCollection, Op interfaces
-	exports org.scijava.ops.core.builder; // contains OpBuilder classes
 	exports org.scijava.ops.matcher;
 	exports org.scijava.ops.math;
 	exports org.scijava.ops.simplify;
@@ -20,7 +18,6 @@ module org.scijava.ops {
 
 	opens org.scijava.ops.conversionLoss to therapi.runtime.javadoc;
 	opens org.scijava.ops.log to therapi.runtime.javadoc;
-	opens org.scijava.ops.core.builder to therapi.runtime.javadoc;
 	opens org.scijava.ops.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.hints to therapi.runtime.javadoc;
 	opens org.scijava.ops.adapt.complexLift to therapi.runtime.javadoc;

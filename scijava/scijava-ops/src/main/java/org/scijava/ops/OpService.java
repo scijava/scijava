@@ -28,7 +28,6 @@
  */
 package org.scijava.ops;
 
-import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.ops.impl.DefaultOpEnvironment;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;

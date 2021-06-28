@@ -44,7 +44,7 @@ import net.imagej.ops2.geom.geom3d.DefaultConvexHull3D;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 
 /**
  * This class tests the {@link DefaultConvexHull3D} implementation. The number

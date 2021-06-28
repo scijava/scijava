@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.core.builder;
+package org.scijava.ops;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

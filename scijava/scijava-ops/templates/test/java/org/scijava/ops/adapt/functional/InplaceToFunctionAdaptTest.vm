@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {

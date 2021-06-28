@@ -37,7 +37,7 @@ package org.scijava.ops.adapt.functional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 
 public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 

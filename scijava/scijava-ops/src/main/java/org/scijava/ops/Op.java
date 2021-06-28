@@ -1,4 +1,4 @@
-package org.scijava.ops.core;
+package org.scijava.ops;
 
 import org.scijava.plugin.SciJavaPlugin;
 

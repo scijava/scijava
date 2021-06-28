@@ -9,11 +9,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.Priority;
+import org.scijava.ops.Op;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.conversionLoss.LossReporter;
-import org.scijava.ops.core.Op;
 import org.scijava.ops.hints.BaseOpHints.Adaptation;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 import org.scijava.ops.hints.Hints;

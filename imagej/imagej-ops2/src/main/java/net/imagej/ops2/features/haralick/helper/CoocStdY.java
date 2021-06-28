@@ -33,8 +33,8 @@ import java.util.function.Function;
 
 import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.ops.Op;
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
 
 /**

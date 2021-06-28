@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.Op;
+import org.scijava.ops.Op;
 import org.scijava.ops.util.FunctionUtils;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;

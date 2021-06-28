@@ -3,8 +3,8 @@ package org.scijava.ops.stats;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.ops.Op;
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
 
 public class Mean {

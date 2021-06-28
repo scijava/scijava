@@ -35,8 +35,8 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
+import org.scijava.ops.Op;
 import org.scijava.ops.OpExecutionException;
-import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
 
 // NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold

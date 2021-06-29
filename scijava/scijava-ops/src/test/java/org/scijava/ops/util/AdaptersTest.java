@@ -27,13 +27,14 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.util;
 
 import java.util.function.BiFunction;
 
 import org.junit.Test;
 import org.scijava.types.Nil;
 import org.scijava.function.Computers;
+import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.ops.util.Adapt;
 
 public class AdaptersTest extends AbstractTestEnvironment {

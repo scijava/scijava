@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.util;
 
 import com.google.common.collect.Streams;
 
@@ -39,11 +39,8 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.function.Functions;
+import org.scijava.ops.AbstractTestEnvironment;
 import org.scijava.types.Nil;
-import org.scijava.ops.util.ComputerUtils;
-import org.scijava.ops.util.FunctionUtils;
-import org.scijava.ops.util.Maps;
 
 public class LiftTest extends AbstractTestEnvironment {
 

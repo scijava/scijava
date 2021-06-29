@@ -57,15 +57,6 @@ public class OpAdaptationInfo implements OpInfo {
 	}
 
 	@Override
-	public Hints formHints(OpHints h) {
-		// NB we don't use Arrays.toList() here because we cannot add to that list!
-		List<String> hintList = Arrays.stream(h.hints()).collect(Collectors.toList());
-		hintList.remove(Adaptation.ALLOWED);
-		hintList.add(Adaptation.FORBIDDEN);
-		return new ImmutableHints(hintList.toArray(String[]::new));
-	}
-
-	@Override
 	public List<OpDependencyMember<?>> dependencies() {
 		return srcInfo.dependencies();
 	}

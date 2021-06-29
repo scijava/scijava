@@ -34,11 +34,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Gets the hints declared in the {@link OpHints} annotation */
 	Hints declaredHints();
 
-	default Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
-	}
-
 	/** Gets the op's input parameters. */
 	default List<Member<?>> inputs() {
 		return OpUtils.inputs(struct());

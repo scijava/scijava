@@ -50,6 +50,7 @@ import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.util.Adapt;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -359,4 +360,10 @@ public class OpMethodInfo implements OpInfo {
 		return method;
 	}
 
+	// -- Helper methods -- //
+
+	private Hints formHints(OpHints h) {
+		if (h == null) return new ImmutableHints(new String[0]);
+		return new ImmutableHints(h.hints());
+	}
 }

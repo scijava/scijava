@@ -27,18 +27,25 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.impl;
 
-import org.scijava.service.SciJavaService;
+import org.scijava.ops.OpBuilder;
+import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpService;
+import org.scijava.plugin.Plugin;
+import org.scijava.service.AbstractService;
+import org.scijava.service.Service;
 
 /**
  * Service to provide a list of available ops structured in a prefix tree and to
  * search for ops matching specified types.
  *
- * @author Gabriel Selzer
  * @author David Kolb
  */
-public interface OpService extends SciJavaService {
+@Plugin(type = Service.class)
+public class DefaultOpService extends AbstractService implements OpService {
+
+	private OpEnvironment env;
 
 	/**
 	 * Begins declaration of an op matching request for locating an op with a
@@ -50,9 +57,22 @@ public interface OpService extends SciJavaService {
 	 * @return An {@link OpBuilder} for refining the search criteria for an op.
 	 * @see OpBuilder
 	 */
-	public OpBuilder op(final String opName);
+	@Override
+	public OpBuilder op(final String opName) {
+		return env().op(opName);
+	}
 
 	/** Retrieves the motherlode of available ops. */
-	public OpEnvironment env();
+	@Override
+	public OpEnvironment env() {
+		if (env == null) initEnv();
+		return env;
+	}
 
+	// -- Helper methods - lazy initialization --
+
+	private synchronized void initEnv() {
+		if (env != null) return;
+		env = new DefaultOpEnvironment(context());
+	}
 }

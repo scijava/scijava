@@ -41,6 +41,7 @@ import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
 import org.scijava.plugin.Plugin;
@@ -188,6 +189,11 @@ public class OpClassInfo implements OpInfo {
 	private static double priorityFromAnnotation(Class<?> annotationBearer) {
 		final Plugin opAnnotation = annotationBearer.getAnnotation(Plugin.class);
 		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
+	}
+
+	private Hints formHints(OpHints h) {
+		if (h == null) return new ImmutableHints(new String[0]);
+		return new ImmutableHints(h.hints());
 	}
 
 }

@@ -20,7 +20,7 @@ nilDoubleList = ```
 ```
 matchName = ```
 { arity, num ->
-  arity == 1 ? "match" :
-  "match${num}"
+  arity == 1 ? "matchInplace" :
+  "matchInplace${num}"
 }
 ```

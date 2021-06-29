@@ -48,6 +48,7 @@ inputClassesToTypes = ```
 ```
 inputTypesArgs = ```
 { arity ->
+  arity == 0 ? '' : 
   String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect())
 }
 ```
@@ -58,16 +59,73 @@ inputTypesFromArgs = ```
 ```
 inputTypesArgsWithOutput = ```
 { arity ->
+  arity == 0 ? 'final Nil<O> outType' : 
   String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect()) + ', final Nil<O> outType'
 }
 ```
 inputTypes = ```
 { arity ->
+  arity == 0 ? '' : 
   String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect())
 }
 ```
 inputTypesWithOutput = ```
 { arity ->
+  arity == 0 ? 'outType' : 
   String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect()) + ', outType'
+}
+```
+simplifiedClass = ```
+{ arity, num ->
+  simplifiedInplace(arity, num) + '.class'
+}
+```
+inplaceClass = ```
+{ arity, num ->
+  inplaceType(arity, num) + '.class'
+}
+```
+matchName = ```
+{ arity, num ->
+  arity == 1 ? "matchInplace" :
+  "matchInplace${num}"
+}
+```
+inplaceTypeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+inplaceGenericsList = ```
+{ arity, io ->
+  inplaceTypeVarNums(arity, io).stream().map{a -> "I$a"}.collect()
+}
+```
+inplaceGenerics = ```
+{ arity, io ->
+  '<' + String.join(', ', inplaceGenericsList(arity, io)) + '>'
+}
+```
+matchParams = ```
+{ arity, io ->
+  String.join(', ', inplaceGenericsList(arity, io).stream().map{a -> 
+    a.charAt(1) == 'O'? 
+	"final Nil<$a> ${a.toLowerCase()}Type"  :
+	"final Nil<$a> in${a.substring(1)}Type"}.collect())
+}
+```
+typeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+basicParamsList = ```
+{ arity, io -> 
+	typeVarNums(arity, io).stream().map{a -> a == 'O' ? "ioType" : "in${a}Type"}.collect()
+}
+```
+basicParams = ```
+{ arity, io ->
+  String.join(', ', basicParamsList(arity, io))
 }
 ```

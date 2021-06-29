@@ -16,9 +16,7 @@ import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.util.ComputerUtils;
-import org.scijava.ops.util.FunctionUtils;
-import org.scijava.ops.util.InplaceUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
 
@@ -33,7 +31,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	@Test
 	public void testWrapProducer() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
-		Producer<Double> op = FunctionUtils.match(ops.env(), "test.addDoubles", nilDouble);
+		Producer<Double> op = OpBuilder.matchFunction(ops.env(), "test.addDoubles", nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -42,7 +40,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction$arity() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		$functionArity.call($arity)$doubleTypeParams.call($arity) op = //
-			FunctionUtils.match(ops.env(), "test.addDoubles", //
+			OpBuilder.matchFunction(ops.env(), "test.addDoubles", //
 				$nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -53,7 +51,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer$arity() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$computerArity.call($arity)$doubleArrayTypeParams.call($arity) op = //
-			ComputerUtils.match(ops.env(), "test.addArrays", $nilDoubleList.call($arity));
+			OpBuilder.matchComputer(ops.env(), "test.addArrays", $nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -65,7 +63,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapInplace$inplaceSuffix.call($arity, $a)() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$inplaceType.call($arity, $a)$doubleArrayTypeParams.call($t) op = //
-			InplaceUtils.$matchName.call($arity, $a)(ops.env(), "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
+			OpBuilder.$matchName.call($arity, $a)(ops.env(), "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
 		assertTrue(op instanceof GenericTyped);
 	}
 

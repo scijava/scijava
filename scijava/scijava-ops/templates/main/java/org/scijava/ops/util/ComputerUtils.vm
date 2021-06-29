@@ -5,12 +5,7 @@
 
 package org.scijava.ops.util;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import org.scijava.function.Computers;
@@ -41,31 +36,6 @@ public final class ComputerUtils {
 
 	private ComputerUtils() {
 		// NB: Prevent instantiation of utility class.
-	}
-
-	/**
-	 * All known computer types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
-	 */
-	public static final BiMap<Class<?>, Integer> ALL_COMPUTERS;
-
-	static {
-		final Map<Class<?>, Integer> computers = new HashMap<>();
-#foreach($arity in $arities)
-		computers.put(Computers.Arity${arity}.class, $arity);
-#end
-		ALL_COMPUTERS = ImmutableBiMap.copyOf(computers);
-	}
-
-	/**
-	 * @return {@code true} if the given type is a {@link #ALL_COMPUTERS known}
-	 *         computer type, {@code false} otherwise. <br>
-	 *         Note that only the type itself and not its type hierarchy is
-	 *         considered.
-	 * @throws NullPointerException If {@code type} is {@code null}.
-	 */
-	public static boolean isComputer(Type type) {
-		return ALL_COMPUTERS.containsKey(Types.raw(type));
 	}
 
 #foreach($arity in [0..$maxArity])

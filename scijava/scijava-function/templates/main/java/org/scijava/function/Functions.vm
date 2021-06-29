@@ -5,6 +5,7 @@
 
 package org.scijava.function;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -30,6 +31,30 @@ public final class Functions {
 
 	private Functions() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	/**
+	 * All known function types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 */
+	public static final HashMap<Integer, Class<?>> ALL_FUNCTIONS;
+
+	static {
+		ALL_FUNCTIONS = new HashMap<>(10);
+#foreach($arity in [0..$maxArity])
+		ALL_FUNCTIONS.put($arity, ${functionArity.call($arity)}.class);
+#end
+	}
+
+	/**
+	 * @return {@code true} if the given type is a known
+	 *         function type, {@code false} otherwise.<br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code c} is {@code null}.
+	 */
+	public static boolean isFunction(Class<?> c) {
+		return ALL_FUNCTIONS.containsValue(c);
 	}
 
 #foreach($arity in $arities)

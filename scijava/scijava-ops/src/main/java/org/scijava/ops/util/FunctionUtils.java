@@ -5,11 +5,7 @@
 
 package org.scijava.ops.util;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -31,45 +27,6 @@ public final class FunctionUtils {
 
 	private FunctionUtils() {
 		// NB: Prevent instantiation of utility class.
-	}
-
-	/**
-	 * All known function types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
-	 */
-	public static final BiMap<Integer, Class<?>> ALL_FUNCTIONS;
-
-	static {
-		final Map<Integer, Class<?>> functions = new HashMap<>(10);
-		functions.put(0, Producer.class);
-		functions.put(1, Function.class);
-		functions.put(2, BiFunction.class);
-		functions.put(3, Functions.Arity3.class);
-		functions.put(4, Functions.Arity4.class);
-		functions.put(5, Functions.Arity5.class);
-		functions.put(6, Functions.Arity6.class);
-		functions.put(7, Functions.Arity7.class);
-		functions.put(8, Functions.Arity8.class);
-		functions.put(9, Functions.Arity9.class);
-		functions.put(10, Functions.Arity10.class);
-		functions.put(11, Functions.Arity11.class);
-		functions.put(12, Functions.Arity12.class);
-		functions.put(13, Functions.Arity13.class);
-		functions.put(14, Functions.Arity14.class);
-		functions.put(15, Functions.Arity15.class);
-		functions.put(16, Functions.Arity16.class);
-		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
-	}
-
-	/**
-	 * @return {@code true} if the given type is a {@link #ALL_FUNCTIONS known}
-	 *         function type, {@code false} otherwise.<br>
-	 *         Note that only the type itself and not its type hierarchy is
-	 *         considered.
-	 * @throws NullPointerException If {@code type} is {@code null}.
-	 */
-	public static boolean isFunction(Type type) {
-		return ALL_FUNCTIONS.containsValue(Types.raw(type));
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -280,8 +237,11 @@ public final class FunctionUtils {
 	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
 	{
-		Object op = matchHelper(env, opName, ALL_FUNCTIONS.get(inTypes.length),
-			outType, inTypes);
+		Map.Entry<Integer, Class<?>> c = Functions.ALL_FUNCTIONS //
+			.entrySet().stream() //
+			.filter(e -> e.getKey() == inTypes.length) //
+			.findAny().get();
+		Object op = matchHelper(env, opName, c.getValue(), outType, inTypes);
 		if (op instanceof Producer) {
 			return Functions.nary((Producer<O>) op);
 		}

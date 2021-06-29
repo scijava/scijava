@@ -6,18 +6,15 @@
 package org.scijava.ops.util;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
+import org.scijava.function.Computers;
+import org.scijava.function.Consumers;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Mutable;
-import org.scijava.ops.OpEnvironment;
+import org.scijava.function.Producer;
 import org.scijava.ops.Hints;
+import org.scijava.ops.OpEnvironment;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -56,40 +53,6 @@ public final class InplaceUtils {
 		// NB: Prevent instantiation of container class.
 	}
 
-	/**
-	 * All known inplace types and their arities and mutable positions. The
-	 * entries are sorted by arity and mutable position.
-	 */
-	public static final Map<Class<?>, InplaceInfo> ALL_INPLACES;
-
-	static {
-		final Map<Class<?>, InplaceInfo> inplaces = new LinkedHashMap<>(22);
-#foreach($arity in $arities)
-#foreach($a in [1..$arity])
-#set($inplaceIndex = $a - 1)
-		inplaces.put($inplaceClass.call($arity, $a), new InplaceInfo(${arity}, $inplaceIndex));
-#end
-#end
-		ALL_INPLACES = Collections.unmodifiableMap(inplaces);
-	}
-
-	/**
-	 * @return {@code true} if the given type is a {@link #ALL_INPLACES known}
-	 *         inplace type, {@code false} otherwise. <br>
-	 *         Note that only the type itself and not its type hierarchy is
-	 *         considered.
-	 * @throws NullPointerException If {@code type} is {@code null}.
-	 */
-	public static boolean isInplace(Type type) {
-		return ALL_INPLACES.containsKey(Types.raw(type));
-	}
-
-	public static List<Class<?>> getInplacesOfArity(final int arity) {
-		return ALL_INPLACES.entrySet().stream() //
-			.filter(e -> e.getValue().arity() == arity) //
-			.map(Entry<Class<?>, InplaceInfo>::getKey) //
-			.collect(Collectors.toList());
-	}
 
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])

@@ -5,6 +5,7 @@
 
 package org.scijava.function;
 
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -30,6 +31,32 @@ public final class Computers {
 
 	private Computers() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	// -- Static Utility Methods -- //
+
+	/**
+	 * All known computer types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 */
+	public static final HashMap<Class<?>, Integer> ALL_COMPUTERS;
+
+	static {
+		ALL_COMPUTERS = new HashMap<>();
+#foreach($arity in $arities)
+		ALL_COMPUTERS.put(Computers.Arity${arity}.class, $arity);
+#end
+	}
+
+	/**
+	 * @return {@code true} if the given type is a known
+	 *         computer type, {@code false} otherwise. <br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code c} is {@code null}.
+	 */
+	public static boolean isComputer(Class<?> c) {
+		return ALL_COMPUTERS.containsKey(c);
 	}
 
 #foreach($arity in $arities)

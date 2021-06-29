@@ -1,5 +1,7 @@
 package org.scijava.ops.matcher;
 
+import org.scijava.ops.OpRef;
+
 /**
  * Indicates that no op matching a given {@link OpRef} could be found.
  * 

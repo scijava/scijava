@@ -37,6 +37,7 @@ import java.util.Map;
 import org.scijava.log.Logger;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
+import org.scijava.ops.OpRef;
 import org.scijava.ops.OpUtils;
 import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;

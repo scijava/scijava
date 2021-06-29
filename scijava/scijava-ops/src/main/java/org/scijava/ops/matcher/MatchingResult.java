@@ -3,6 +3,7 @@ package org.scijava.ops.matcher;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.scijava.ops.OpRef;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
 

@@ -31,7 +31,6 @@ package org.scijava.ops;
 
 import java.lang.reflect.Type;
 
-import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Nil;
 
 /**

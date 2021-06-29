@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops;
+package org.scijava.ops.impl;
 
 import static org.junit.Assert.fail;
 
@@ -40,8 +40,14 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.scijava.Context;
 import org.scijava.function.Producer;
-import org.scijava.ops.impl.DefaultOpEnvironment;
-import org.scijava.ops.impl.MatchingConditions;
+import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.Op;
+import org.scijava.ops.OpCollection;
+import org.scijava.ops.OpDependency;
+import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpField;
+import org.scijava.ops.OpInstance;
+import org.scijava.ops.OpService;
 import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;

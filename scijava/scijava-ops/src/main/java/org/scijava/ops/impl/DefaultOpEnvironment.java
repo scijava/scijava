@@ -66,11 +66,13 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpInstance;
 import org.scijava.ops.OpMethod;
+import org.scijava.ops.OpRef;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.hint.AdaptationHints;
 import org.scijava.ops.hint.DefaultHints;
 import org.scijava.ops.hint.SimplificationHints;
 import org.scijava.ops.matcher.DefaultOpMatcher;
+import org.scijava.ops.matcher.DefaultOpRef;
 import org.scijava.ops.matcher.DependencyMatchingException;
 import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
@@ -81,7 +83,6 @@ import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpMethodInfo;
-import org.scijava.ops.matcher.OpRef;
 import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
 import org.scijava.ops.util.OpWrapper;
@@ -198,7 +199,11 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	
 	@Override
 	public <T> T op(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
-		return op(info, specialType, inTypes, outType, getHints());
+		try {
+			return findOp(info, specialType, inTypes, outType, getHints());
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	@Override
@@ -249,7 +254,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	@SuppressWarnings("unchecked")
 	private <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType, Hints hints) throws OpMatchingException {
-		final OpRef ref = OpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
+		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
 		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
 		generateOpInstance(conditions);
@@ -260,7 +265,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private <T> T findOp(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes,
 		final Nil<?> outType, Hints hints) throws OpMatchingException
 	{
-		OpRef ref = OpRef.fromTypes(specialType.getType(), outType.getType(),
+		OpRef ref = DefaultOpRef.fromTypes(specialType.getType(), outType.getType(),
 			toTypes(inTypes));
 		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
 		generateOpInstance(conditions, info);
@@ -717,7 +722,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			error += ". This is not supported.";
 			throw new OpMatchingException(error);
 		}
-		return new OpRef(name, type, mappedOutputs[0], mappedInputs);
+		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
 	}
 
 	private void initOpDirectory() {

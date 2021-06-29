@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.scijava.ops.Hints;
 import org.scijava.ops.OpEnvironment;
+import org.scijava.ops.OpRef;
 
 /**
  * Finds Ops which match an {@link OpRef}.

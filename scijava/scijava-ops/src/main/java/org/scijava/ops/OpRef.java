@@ -27,20 +27,15 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.scijava.log.Logger;
-import org.scijava.ops.Op;
-import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.OpInfo;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.types.Types;
 
 /**
@@ -54,133 +49,56 @@ import org.scijava.types.Types;
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
  */
-public class OpRef {
-
-	/** Name of the op, or null for any name. */
-	private final String name;
-
-	/** Type which the op must match. */
-	private final Type type;
-
-	/** The op's output parameter types, or null for no constraints. */
-	private final Type outType;
-
-	/** Arguments to be passed to the op. */
-	private final Type[] args;
-
-	// -- Static construction methods --
-
-	public static OpRef fromTypes(final Type type, final Type outType, final Type... args) {
-		return new OpRef(null, type, outType, filterNulls(args));
-	}
-
-	public static OpRef fromTypes(final String name, final Type type, final Type outType, final Type... args) {
-		return new OpRef(name, type, outType, filterNulls(args));
-	}
-
-	// -- Constructor --
-
-	/**
-	 * Creates a new op reference.
-	 *
-	 * @param name
-	 *            name of the op, or null for any name.
-	 * @param type
-	 *            type which the ops must match.
-	 * @param outType
-	 *            the op's required output type.
-	 * @param args
-	 *            arguments to the op.
-	 */
-	public OpRef(final String name, final Type type, final Type outType, final Type[] args) {
-		this.name = name;
-		this.type = type;
-		this.outType = outType;
-		this.args = args;
-	}
+public interface OpRef {
 
 	// -- OpRef methods --
 
 	/** Gets the name of the op. */
-	public String getName() {
-		return name;
-	}
+	public String getName();
 
 	/** Gets the type which the op must match. */
-	public Type getType() {
-		return type;
-	}
+	public Type getType();
 
 	/**
 	 * Gets the op's output type constraint, or null for no constraint.
 	 */
-	public Type getOutType() {
-		return outType;
-	}
+	public Type getOutType();
 
 	/** Gets the op's arguments. */
-	public Type[] getArgs() {
-		return args.clone();
-	}
+	public Type[] getArgs();
 
 	/**
 	 * Gets a label identifying the op's scope (i.e., its name and/or types).
 	 */
-	public String getLabel() {
-		final StringBuilder sb = new StringBuilder();
-		append(sb, name);
-		if (type != null) {
-			append(sb, Types.name(type));
-		}
-		return sb.toString();
-	}
+	public String getLabel();
 
-	public boolean typesMatch(final Type opType) {
-		return typesMatch(opType, new HashMap<>());
-	}
+	public boolean typesMatch(final Type opType);
 
 	/**
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
-	public boolean typesMatch(final Type opType, final Map<TypeVariable<?>, Type> typeVarAssigns) {
-		if (type == null) return true;
-		if (type instanceof ParameterizedType) {
-			if (!MatchingUtils.checkGenericAssignability(opType,
-				(ParameterizedType) type, typeVarAssigns, true))
-			{
-				return false;
-			}
-		}
-		else {
-			if (!Types.isAssignable(opType, type)) {
-				return false;
-			}
-		}
-		return true;
-	}
+	public boolean typesMatch(final Type opType, final Map<TypeVariable<?>, Type> typeVarAssigns);
 
 	// -- Object methods --
 
-	@Override
-	public String toString() {
-		String n = name == null ? "" : "Name: \"" + name + "\", Types: ";
-		n += type + "\n";
+	default String refString() {
+		String n = getName() == null ? "" : "Name: \"" + getName() + "\", Types: ";
+		n += getType() + "\n";
 		n += "Input Types: \n";
-		for (Type arg : args) {
+		for (Type arg : getArgs()) {
 			n += "\t\t* ";
 			n += arg == null ? "" : arg.getTypeName();
 			n += "\n";
 		}
 		n += "Output Type: \n";
 		n += "\t\t* ";
-		n += outType == null ? "" : outType.getTypeName();
+		n += getOutType() == null ? "" : getOutType().getTypeName();
 		n += "\n";
 		return n.substring(0, n.length() - 1);
 	}
 
-	@Override
-	public boolean equals(final Object obj) {
+	default boolean refEquals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -188,20 +106,19 @@ public class OpRef {
 		if (getClass() != obj.getClass())
 			return false;
 		final OpRef other = (OpRef) obj;
-		if (!Objects.equals(name, other.name))
+		if (!Objects.equals(getName(), other.getName()))
 			return false;
-		if (!Objects.equals(type, other.type))
+		if (!Objects.equals(getType(), other.getType()))
 			return false;
-		if (!Objects.equals(outType, other.outType))
+		if (!Objects.equals(getOutType(), other.getOutType()))
 			return false;
-		if (!Arrays.equals(args, other.args))
+		if (!Arrays.equals(getArgs(), other.getArgs()))
 			return false;
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
-		return Arrays.deepHashCode(new Object[] {name, type, outType, args});
+	default int refHashCode() {
+		return Arrays.deepHashCode(new Object[] {getName(), getType(), getOutType(), getArgs()});
 	}
 
 	// -- Utility methods --
@@ -213,7 +130,7 @@ public class OpRef {
 
 	// -- Helper methods --
 
-	private void append(final StringBuilder sb, final String s) {
+	static void append(final StringBuilder sb, final String s) {
 		if (s == null)
 			return;
 		if (sb.length() > 0)

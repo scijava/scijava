@@ -1,6 +1,8 @@
 
 package org.scijava.ops.matcher;
 
+import org.scijava.ops.OpRef;
+
 /**
  * An {@link OpMatchingException} caused by another {@code OpMatchingException}
  * thrown when resolving dependencies. We illustrate the need for

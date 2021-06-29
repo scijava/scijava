@@ -40,7 +40,6 @@ import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
 import org.scijava.ops.matcher.OpMatcher;
-import org.scijava.ops.matcher.OpRef;
 import org.scijava.param.ParameterMember;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

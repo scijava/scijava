@@ -4,7 +4,7 @@ package org.scijava.ops.impl;
 import java.util.Objects;
 
 import org.scijava.ops.Hints;
-import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.OpRef;
 
 public class MatchingConditions {
 

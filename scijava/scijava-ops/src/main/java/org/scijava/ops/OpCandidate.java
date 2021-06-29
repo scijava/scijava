@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -35,10 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.log.Logger;
-import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.OpInfo;
-import org.scijava.ops.OpRef;
-import org.scijava.ops.OpUtils;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -214,19 +211,18 @@ public class OpCandidate {
 		return info.toString();
 	}
 
-	public StructInstance<?> createOpInstance(List<?> dependencies) throws OpMatchingException
+	public StructInstance<?> createOpInstance(List<?> dependencies)
 	{
-		if (!getStatusCode().equals(StatusCode.MATCH)) {
-			throw new OpMatchingException(
-					"Status of candidate to create op from indicates a problem: " + getStatus());
+		if (getStatusCode().equals(StatusCode.MATCH)) {
+			return opInfo().createOpInstance(dependencies);
 		}
 
-		StructInstance<?> inst = opInfo().createOpInstance(dependencies);
-		return inst;
+		throw new IllegalStateException(
+			"Status of candidate to create op from indicates a problem: " +
+				getStatus());
 	}
 
 	public Object createOp(List<?> dependencies)
-		throws OpMatchingException
 	{
 		return createOpInstance(dependencies).object();
 	}

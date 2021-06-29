@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.log.Logger;
-import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;

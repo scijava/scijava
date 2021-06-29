@@ -36,10 +36,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.matcher.MatchingResult;
-import org.scijava.ops.matcher.OpCandidate;
-import org.scijava.ops.matcher.OpCandidate.StatusCode;
-import org.scijava.ops.matcher.OpMatcher;
+import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.param.ParameterMember;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;
@@ -255,11 +252,10 @@ public final class OpUtils {
 	 * several matches that do not have equal output types, the output type may not
 	 * completely match the request as only raw type assignability will be checked
 	 * at the moment.
-	 * @see OpMatcher#typesMatch(OpCandidate)
 	 * @param matches
 	 * @return
 	 */
-	private static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
+	public static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
 		Type outputType = null;
 		for (OpCandidate match : matches) {
 			Type ts = output(match).getType();
@@ -275,72 +271,6 @@ public final class OpUtils {
 
 	public static Type[] getTypes(List<Member<?>> members) {
 		return members.stream().map(m -> m.getType()).toArray(Type[]::new);
-	}
-
-	/**
-	 * Gets a string with an analysis of a particular match request failure.
-	 * <p>
-	 * This method is used to generate informative exception messages when no
-	 * matches, or too many matches, are found.
-	 * </p>
-	 * 
-	 * @param res
-	 *            The result of type matching
-	 * @return A multi-line string describing the situation: 1) the type of
-	 *         match failure; 2) the list of matching ops (if any); 3) the
-	 *         request itself; and 4) the list of candidates including status
-	 *         (i.e., whether it matched, and if not, why not).
-	 */
-	public static String matchInfo(final MatchingResult res) {
-		final StringBuilder sb = new StringBuilder();
-
-		List<OpCandidate> candidates = res.getCandidates();
-		List<OpCandidate> matches = res.getMatches();
-
-		final OpRef ref = res.getOriginalQueries().get(0);
-		if (matches.isEmpty()) {
-			// no matches
-			sb.append("No matching '" + ref.getLabel() + "' op\n");
-		} else {
-			// multiple matches
-			final double priority = getPriority(matches.get(0));
-			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " + priority + ":\n");
-			if (typeCheckingIncomplete(matches)) {
-				sb.append("Incomplete output type checking may have occured!\n");
-			}
-			int count = 0;
-			for (final OpCandidate match : matches) {
-				sb.append(++count + ". ");
-				sb.append(match.toString() + "\n");
-			}
-		}
-
-		// fail, with information about the request and candidates
-		sb.append("\n");
-		sb.append("Request:\n");
-		sb.append("-\t" + ref.toString() + "\n");
-		sb.append("\n");
-		sb.append("Candidates:\n");
-		if (candidates.isEmpty()) {
-			sb.append("-\t No candidates found!");
-		}
-		int count = 0;
-		for (final OpCandidate candidate : candidates) {
-			sb.append(++count + ". ");
-			sb.append("\t" + opString(candidate.opInfo(), candidate.getStatusItem()) + "\n");
-			final String status = candidate.getStatus();
-			if (status != null)
-				sb.append("\t" + status + "\n");
-			if (candidate.getStatusCode() == StatusCode.DOES_NOT_CONFORM) {
-				// TODO: Conformity not yet implemented
-				// // show argument values when a contingent op rejects them
-				// for (final ModuleItem<?> item : inputs(info)) {
-				// final Object value = item.getValue(candidate.getModule());
-				// sb.append("\t\t" + item.getName() + " = " + value + "\n");
-				// }
-			}
-		}
-		return sb.toString();
 	}
 
 	public static String opString(final OpInfo info) {

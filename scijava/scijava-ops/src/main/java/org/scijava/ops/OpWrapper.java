@@ -1,4 +1,4 @@
-package org.scijava.ops.util;
+package org.scijava.ops;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

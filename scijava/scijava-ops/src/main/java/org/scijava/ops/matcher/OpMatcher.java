@@ -43,9 +43,9 @@ import org.scijava.ops.OpRef;
 //TODO javadoc
 public interface OpMatcher {
 
-	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref) throws OpMatchingException;
+	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref);
 
-	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref, Hints hints) throws OpMatchingException;
+	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref, Hints hints);
 
 	MatchingResult findMatch(OpEnvironment env, OpRef ref);
 

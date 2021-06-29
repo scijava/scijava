@@ -253,7 +253,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	@SuppressWarnings("unchecked")
 	private <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
-			final Nil<?> outType, Hints hints) throws OpMatchingException {
+			final Nil<?> outType, Hints hints) {
 		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
 		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
@@ -287,7 +287,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @param info
 	 * @throws OpMatchingException
 	 */
-	private void generateOpInstance(final MatchingConditions conditions, final OpInfo info) throws OpMatchingException {
+	private void generateOpInstance(final MatchingConditions conditions, final OpInfo info) {
 		// create new OpCandidate from ref and info
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 		if (!conditions.ref().typesMatch(info.opType(), typeVarAssigns))
@@ -327,9 +327,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * 
 	 * @param conditions - the {@link MatchingConditions} outlining the
 	 *          requirements that must be fulfilled by the Op returned
-	 * @throws OpMatchingException
 	 */
-	private void generateOpInstance(final MatchingConditions conditions) throws OpMatchingException
+	private void generateOpInstance(final MatchingConditions conditions) 
 	{
 		// see if the ref has been matched already
 		OpInstance cachedOp = getInstance(conditions);
@@ -360,7 +359,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return opCache.get(conditions);
 	}
 	
-	private OpCandidate findOpCandidate(OpRef ref, Hints hints) throws OpMatchingException{
+	private OpCandidate findOpCandidate(OpRef ref, Hints hints) {
 		try {
 			// attempt to find a direct match
 			return matcher.findSingleMatch(this, ref, hints);
@@ -395,7 +394,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		}
 	}
 
-	private OpCandidate findSimplifiedOp(OpRef ref, Hints hints) throws OpMatchingException {
+	private OpCandidate findSimplifiedOp(OpRef ref, Hints hints) {
 		Hints simplificationHints = SimplificationHints.generateHints(hints, false);
 		return matcher.findSingleMatch(this, ref, simplificationHints);
 	}
@@ -406,10 +405,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * 
 	 * @param candidate
 	 * @return an Op with all needed dependencies
-	 * @throws OpMatchingException
 	 */
 	private Object instantiateOp(final OpCandidate candidate, Hints hints)
-		throws OpMatchingException
 	{
 		final List<MatchingConditions> instances = resolveOpDependencies(candidate, hints);
 		Object op = candidate.createOp(wrappedDeps(instances, hints.executionChainID()));
@@ -491,7 +488,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		return list;
 	}
 
-	private List<MatchingConditions> resolveOpDependencies(OpCandidate candidate, Hints hints) throws OpMatchingException {
+	private List<MatchingConditions> resolveOpDependencies(OpCandidate candidate, Hints hints) {
 		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns(), hints);
 	}
 
@@ -511,11 +508,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 *          injected
 	 * @param typeVarAssigns - the mapping of {@link TypeVariable}s in the
 	 *          {@code OpInfo} to {@link Type}s given in the request.
-	 * @throws OpMatchingException if the type of the specified object is not
-	 *           functional, if the Op matching the functional type and the name
-	 *           could not be found, if an exception occurs during injection
 	 */
-	private List<MatchingConditions> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints) throws OpMatchingException {
+	private List<MatchingConditions> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints) {
 
 		final List<OpDependencyMember<?>> dependencies = info.dependencies();
 		final List<MatchingConditions> resolvedDependencies = new ArrayList<>(dependencies.size());
@@ -564,9 +558,8 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @param ref - the type of Op that we are looking to adapt to.
 	 * @return {@link OpCandidate} - an Op that has been adapted to conform
 	 *         the the ref type (if one exists).
-	 * @throws OpMatchingException
 	 */
-	private OpCandidate adaptOp(OpRef ref, Hints hints) throws OpMatchingException {
+	private OpCandidate adaptOp(OpRef ref, Hints hints) {
 
 		List<DependencyMatchingException> depExceptions = new ArrayList<>();
 		for (final OpInfo adaptor : infos("adapt")) {
@@ -634,7 +627,6 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	private OpCandidate findAdaptationCandidate(final OpRef srcOpRef, final Hints hints)
-		throws OpMatchingException
 	{
 		Hints adaptationHints = AdaptationHints.generateHints(hints, false);
 		final OpCandidate srcCandidate = findOpCandidate(srcOpRef, adaptationHints);
@@ -658,7 +650,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	private OpRef inferOpRef(OpDependencyMember<?> dependency,
-		Map<TypeVariable<?>, Type> typeVarAssigns) throws OpMatchingException
+		Map<TypeVariable<?>, Type> typeVarAssigns) 
 	{
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
 			dependency.getType() }, typeVarAssigns)[0];
@@ -696,7 +688,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 * @return null if the specified type has no functional method
 	 */
 	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns)
-			throws OpMatchingException {
+			{
 		List<FunctionalMethodType> fmts = ParameterStructs.findFunctionalMethodTypes(type);
 		if (fmts == null)
 			return null;

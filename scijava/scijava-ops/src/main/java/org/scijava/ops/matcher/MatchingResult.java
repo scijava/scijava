@@ -43,7 +43,7 @@ public class MatchingResult {
 		return matches;
 	}
 
-	public OpCandidate singleMatch() throws OpMatchingException {
+	public OpCandidate singleMatch() {
 		if (matches.size() == 1) {
 			// if (log.isDebug()) {
 			// log.debug("Selected '" + match.getRef().getLabel() + "' op: " +

@@ -14,7 +14,6 @@ import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpRef;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.types.Types;
 
 
@@ -48,7 +47,7 @@ public class InfoSimplificationGenerator {
 		return info;
 	}
 
-	public OpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) throws OpMatchingException {
+	public OpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) {
 		SimplifiedOpRef simpleRef = SimplifiedOpRef.simplificationOf(env, originalRef, hints);
 		return generateSuitableInfo(simpleRef);
 	}

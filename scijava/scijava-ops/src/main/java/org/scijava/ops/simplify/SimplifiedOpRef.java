@@ -78,7 +78,7 @@ public class SimplifiedOpRef implements OpRef {
 	}
 
 	public static SimplifiedOpRef simplificationOf(OpEnvironment env, OpRef ref,
-		Hints hints) throws OpMatchingException
+		Hints hints)
 	{
 		Class<?> opType = Types.raw(ref.getType());
 		int mutableIndex = SimplificationUtils.findMutableArgIndex(opType);

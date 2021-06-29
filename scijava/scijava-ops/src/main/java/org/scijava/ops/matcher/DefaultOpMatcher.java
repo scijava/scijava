@@ -73,12 +73,12 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 	}
 
 	@Override
-	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref) throws OpMatchingException {
+	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref) {
 		return findMatch(env, ref).singleMatch();
 	}
 
 	@Override
-	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref, final Hints hints) throws OpMatchingException {
+	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref, final Hints hints) {
 		return findMatch(env, ref, hints).singleMatch();
 	}
 

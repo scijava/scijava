@@ -7,7 +7,7 @@ import org.scijava.ops.OpRef;
  * 
  * @author David Kolb
  */
-public class OpMatchingException extends Exception {
+public class OpMatchingException extends RuntimeException {
 	
 	private static final long serialVersionUID = 2334342967056340218L;
 	

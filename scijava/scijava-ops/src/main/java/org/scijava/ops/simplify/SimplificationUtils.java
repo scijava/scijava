@@ -29,6 +29,7 @@ import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.param.ParameterStructs;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -72,12 +73,12 @@ public class SimplificationUtils {
 
 			// solve input types
 			Type[] genericParameterTypes = paramTypesFromOpType(opType, fMethod);
-			MatchingUtils.inferTypeVariables(genericParameterTypes, newArgs, typeVarAssigns);
+			GenericAssignability.inferTypeVariables(genericParameterTypes, newArgs, typeVarAssigns);
 
 			// solve output type
 			Type genericReturnType = returnTypeFromOpType(opType, fMethod);
 			if (genericReturnType != void.class) {
-				MatchingUtils.inferTypeVariables(new Type[] {genericReturnType}, new Type[] {newOutType}, typeVarAssigns);
+				GenericAssignability.inferTypeVariables(new Type[] {genericReturnType}, new Type[] {newOutType}, typeVarAssigns);
 			}
 
 			// build new (read: simplified) Op type
@@ -109,7 +110,7 @@ public class SimplificationUtils {
 		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
 		Type genericClass = Types.parameterizeRaw(opType);
 		Type superGenericClass = Types.getExactSuperType(genericClass, declaringClass);
-		MatchingUtils.inferTypeVariables(new Type[] {genericDeclaringClass}, new Type[] {superGenericClass}, map);
+		GenericAssignability.inferTypeVariables(new Type[] {genericDeclaringClass}, new Type[] {superGenericClass}, map);
 
 		return Types.mapVarToTypes(types, map);
 	}
@@ -163,7 +164,7 @@ public class SimplificationUtils {
 	public static Type resolveMutatorTypeArgs(Type inferFrom, Type mutatorInferFrom, Type unresolvedType) {
 		if(!Types.containsTypeVars(unresolvedType)) return unresolvedType;
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
-		MatchingUtils.inferTypeVariables(new Type[] {mutatorInferFrom}, new Type[] {inferFrom}, map);
+		GenericAssignability.inferTypeVariables(new Type[] {mutatorInferFrom}, new Type[] {inferFrom}, map);
 		return Types.mapVarToTypes(unresolvedType, map);
 	}
 

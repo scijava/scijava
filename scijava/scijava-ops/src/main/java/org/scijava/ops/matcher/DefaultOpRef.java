@@ -38,6 +38,7 @@ import java.util.Map;
 import org.scijava.ops.Op;
 import org.scijava.ops.OpRef;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
 
 /**
  * Data structure which identifies an op by name and/or type(s) and/or argument
@@ -153,7 +154,7 @@ public class DefaultOpRef implements OpRef {
 	{
 		if (type == null) return true;
 		if (type instanceof ParameterizedType) {
-			if (!MatchingUtils.checkGenericAssignability(opType,
+			if (!GenericAssignability.checkGenericAssignability(opType,
 				(ParameterizedType) type, typeVarAssigns, true))
 			{
 				return false;

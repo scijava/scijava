@@ -4,7 +4,6 @@ package org.scijava.param;
 import io.leangen.geantyref.AnnotationFormatException;
 import io.leangen.geantyref.TypeFactory;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,7 +29,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
-import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.simplify.Simplifier;
 import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.struct.ItemIO;
@@ -38,6 +36,7 @@ import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
 import org.scijava.util.ClassUtils;
 
 /**
@@ -302,9 +301,9 @@ public final class ParameterStructs {
 		// map params of OpMethod to type variables of abstract method of functional
 		// interface (along with return type if applicable)
 		// TODO: not sure how this handles when there are type variables.
-		MatchingUtils.inferTypeVariables(typeMethodParams, getOpParamTypes(opMethodParams), typeVarAssigns);
+		GenericAssignability.inferTypeVariables(typeMethodParams, getOpParamTypes(opMethodParams), typeVarAssigns);
 		if (abstractMethod.getReturnType() != void.class) {
-			MatchingUtils.inferTypeVariables(new Type[] {abstractMethod.getGenericReturnType()}, new Type[] {opMethod.getGenericReturnType()}, typeVarAssigns);
+			GenericAssignability.inferTypeVariables(new Type[] {abstractMethod.getGenericReturnType()}, new Type[] {opMethod.getGenericReturnType()}, typeVarAssigns);
 		}
 		
 		// parameterize opClass 

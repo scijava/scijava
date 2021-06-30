@@ -77,7 +77,6 @@ import org.scijava.ops.hint.SimplificationHints;
 import org.scijava.ops.matcher.DefaultOpMatcher;
 import org.scijava.ops.matcher.DefaultOpRef;
 import org.scijava.ops.matcher.DependencyMatchingException;
-import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
@@ -95,6 +94,7 @@ import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
 import org.scijava.util.ClassUtils;
 
 /**
@@ -637,7 +637,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		Type opType = ref.getType();
 		// TODO: clean this logic -- can this just be ref.typesMatch() ?
 		if (opType instanceof ParameterizedType) {
-			if (!MatchingUtils.checkGenericAssignability(adaptTo,
+			if (!GenericAssignability.checkGenericAssignability(adaptTo,
 				(ParameterizedType) opType, map, true))
 			{
 				return false;

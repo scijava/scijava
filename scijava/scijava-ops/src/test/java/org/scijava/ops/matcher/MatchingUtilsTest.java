@@ -46,6 +46,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
 
 public class MatchingUtilsTest {
 
@@ -58,7 +59,7 @@ public class MatchingUtilsTest {
 	private void assertAll(Class<?> from, boolean condition, Type... tos) {
 		for (Type to : tos) {
 			if (to instanceof ParameterizedType) {
-				assertTrue(MatchingUtils.checkGenericAssignability(from, (ParameterizedType) to, false) == condition);
+				assertTrue(GenericAssignability.checkGenericAssignability(from, (ParameterizedType) to, false) == condition);
 			} else {
 				assertTrue(Types.isAssignable(from, to, new HashMap<TypeVariable<?>, Type>()) == condition);
 			}
@@ -508,7 +509,7 @@ public class MatchingUtilsTest {
 
 		// unfortunately we cannot use assertAll since it is impossible to create a
 		// Class implementing List<? super T>
-		boolean success = MatchingUtils.checkGenericAssignability(listT.getType(),
+		boolean success = GenericAssignability.checkGenericAssignability(listT.getType(),
 			(ParameterizedType) listWildcard.getType(), false);
 		Assert.assertTrue(success);
 	}
@@ -519,22 +520,22 @@ public class MatchingUtilsTest {
 		final Nil<Function<Double[], Double[]>> doubleFunc = new Nil<>() {};
 		final Nil<Function<Integer[], Integer[]>> integerFunc = new Nil<>() {};
 
-		boolean successDouble = MatchingUtils.checkGenericAssignability(fooFunc
+		boolean successDouble = GenericAssignability.checkGenericAssignability(fooFunc
 			.getClass(), (ParameterizedType) doubleFunc.getType(), false);
 		Assert.assertTrue(successDouble);
-		boolean successInteger = MatchingUtils.checkGenericAssignability(fooFunc
+		boolean successInteger = GenericAssignability.checkGenericAssignability(fooFunc
 			.getClass(), (ParameterizedType) integerFunc.getType(), false);
 		Assert.assertTrue(successInteger);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableNullToNull() {
-		MatchingUtils.checkGenericAssignability(null, null, false);
+		GenericAssignability.checkGenericAssignability(null, null, false);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testIsAssignableClassToNull() {
-		MatchingUtils.checkGenericAssignability(Object.class, null, false);
+		GenericAssignability.checkGenericAssignability(Object.class, null, false);
 	}
 
 	@Test
@@ -554,9 +555,9 @@ public class MatchingUtilsTest {
 		final Type fooSource = new Nil<Function<T, List<T>>>() {}.getType();
 		final Type fooFunc = new Nil<Function<Double, Object>>() {}.getType();
 
-		Assertions.assertFalse(MatchingUtils.checkGenericAssignability(fooSource,
+		Assertions.assertFalse(GenericAssignability.checkGenericAssignability(fooSource,
 			(ParameterizedType) fooFunc, false));
-		Assertions.assertTrue(MatchingUtils.checkGenericAssignability(fooSource,
+		Assertions.assertTrue(GenericAssignability.checkGenericAssignability(fooSource,
 			(ParameterizedType) fooFunc, true));
 
 	}

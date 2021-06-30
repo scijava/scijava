@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.scijava.ops.OpBuilder;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
@@ -33,9 +32,11 @@ public class OpBuilderNoOutputTest<T extends Number> extends
 	// private wrapper class
 	private static class WrappedList<E> extends ArrayList<E> {}
 
+	/**
+	 * @input in
+	 * @output out
+	 */
 	@OpField(names = opName)
-	@Parameter(key = "in", itemIO = ItemIO.INPUT)
-	@Parameter(key = "out", itemIO = ItemIO.OUTPUT)
 	public final Function<T, WrappedList<T>> func = in -> {
 
 		WrappedList<T> out = new WrappedList<>();

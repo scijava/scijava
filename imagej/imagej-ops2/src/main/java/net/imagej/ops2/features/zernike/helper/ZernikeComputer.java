@@ -35,7 +35,6 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**

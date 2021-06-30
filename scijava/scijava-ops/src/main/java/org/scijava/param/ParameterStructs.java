@@ -244,7 +244,7 @@ public final class ParameterStructs {
 			parseFunctionalParameters(items, names, problems, functionalType, paramData);
 
 			// Parse method level @OpDependency annotations.
-			parseMethodOpDependencies(items, problems, c, method);
+			parseMethodOpDependencies(items, method);
 
 			// Fail if there were any problems.
 			if (!problems.isEmpty()) throw new ValidityException(problems);
@@ -423,61 +423,6 @@ public final class ParameterStructs {
 			}
 		}
 	}
-	
-	/**
-	 * Create new instances of {@link Parameter} annotations having default names (key) and the {@link ItemIO}
-	 * from the specified list of {@link FunctionalMethodType}s. Default names will be:<br><br>
-	 * 'input{index}' for {@link ItemIO#INPUT}<br>
-	 * 'output{index}' for {@link ItemIO#OUTPUT}<br>
-	 * 'container{index}' for {@link ItemIO#CONTAINER}<br>
-	 * 'mutable{index}' for {@link ItemIO#MUTABLE}<br><br>
-	 * with {index} being counted individually.
-	 * 
-	 * This is used to infer the annotations for {@link FunctionalParameterMember}s if the {@link Parameter} is not
-	 * explicitly specified by a user and should thus be inferred from the functional method type.
-	 * 
-	 * @param fmts
-	 * @return
-	 */
-	private static Parameter[] synthesizeParameterAnnotations(final List<FunctionalMethodType> fmts, JavadocParameterData data) {
-		List<Parameter> params = new ArrayList<>();
-		
-		int ins, outs, containers, mutables;
-		ins = outs = containers = mutables = 1;
-		for (FunctionalMethodType fmt : fmts) {
-			Map<String, Object> paramValues = new HashMap<>();
-			paramValues.put(Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
-			
-			String key;
-			switch (fmt.itemIO()) {
-			case INPUT:
-				key = "input" + ins++;
-				break;
-			case OUTPUT:
-				key = "output" + outs++;
-				break;
-			case CONTAINER:
-				key = "container" + containers++;
-				break;
-			case MUTABLE:
-				key = "mutable" + mutables++;
-				break;
-			default:
-				throw new RuntimeException("Unexpected ItemIO type encountered!");
-			}
-			
-			paramValues.put(Parameter.KEY_FIELD_NAME, key);
-			
-			try {
-				params.add(TypeFactory.annotation(Parameter.class, paramValues));
-			} catch (AnnotationFormatException e) {
-				throw new RuntimeException("Error during Parameter annotation synthetization. This is "
-						+ "most likely an implementation error.", e);
-			}
-		}
-		
-		return params.toArray(new Parameter[params.size()]);
-	}
 
 	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
 			Type type, ParameterData data) {
@@ -492,30 +437,19 @@ public final class ParameterStructs {
 			return;
 		}
 
-		// Get parameter annotations (may not be present)
-		// TODO: remove Parameter annotations from all ops and remove logic below.
-		// TODO: grab names from OpClass/OpField annotations.
-		Parameter[] annotations = data.synthesizeAnnotations(fmts).toArray(Parameter[]::new);
+		// Synthesize members
+		List<Member<?>> fmtMembers = data.synthesizeMembers(fmts);
 
-		for (int i=0; i<annotations.length; i++) {
-			String key = annotations[i].key();
-			final Type itemType = fmts.get(i).type();
-			
-			final boolean valid = checkValidity(annotations[i], key, Types.raw(itemType), false,
-					names, problems);
+		for (Member<?> m : fmtMembers) {
+			String key = m.getKey();
+			final Type itemType = m.getType();
+
+			final boolean valid = checkValidity(m, key, Types.raw(itemType), false,
+				names, problems);
 			if (!valid) continue;
-			
-			try {
-				final ParameterMember<?> item = //
-						new FunctionalParameterMember<>(itemType, annotations[i]);
-				names.add(key);
-				items.add(item);
-			}
-			catch (final ValidityException exc) {
-				problems.addAll(exc.problems());
-			}
+			items.add(m);
+			names.add(m.getKey());
 		}
-		
 	}
 
 	private static void parseFieldOpDependencies(final List<Member<?>> items,
@@ -541,7 +475,6 @@ public final class ParameterStructs {
 	}
 
 	private static void parseMethodOpDependencies(final List<Member<?>> items,
-		final List<ValidityProblem> problems, final Class<?> enclosingclass,
 		final Method annotatedMethod)
 	{
 		final java.lang.reflect.Parameter[] methodParams = annotatedMethod
@@ -565,25 +498,6 @@ public final class ParameterStructs {
 	}
 
 	/**
-	 * Finds the class declaring {@code @Parameter} annotations. They might be on
-	 * this type, on a supertype, or an implemented interface.
-	 */
-	private static Class<?> findParametersDeclaration(final Class<?> type) {
-		if (type == null) return null;
-		final Deque<Class<?>> types = new ArrayDeque<>();
-		types.add(type);
-		while (!types.isEmpty()) {
-			final Class<?> candidate = types.pop();
-			if (candidate.getAnnotation(Parameters.class) != null || 
-					candidate.getAnnotation(Parameter.class) != null) return candidate;
-			final Class<?> superType = candidate.getSuperclass() ;
-			if (superType != null) types.add(superType);
-			types.addAll(Arrays.asList(candidate.getInterfaces()));
-		}
-		return null;
-	}
-
-	/**
 	 * Searches for a {@code @FunctionalInterface} annotated interface in the 
 	 * class hierarchy of the specified type. The first one that is found will
 	 * be returned. If no such interface can be found, null will be returned.
@@ -601,19 +515,11 @@ public final class ParameterStructs {
 		return findFunctionalInterface(type.getSuperclass());
 	}
 
-	private static boolean checkValidity(Parameter param, String name,
+	private static boolean checkValidity(Member<?> m, String name,
 		Class<?> type, boolean isFinal, Set<String> names,
 		ArrayList<ValidityProblem> problems)
 	{
 		boolean valid = true;
-
-		final boolean isMessage = param.visibility() == ItemVisibility.MESSAGE;
-		if (isFinal && !isMessage) {
-			// NB: Final parameters are bad because they cannot be modified.
-			final String error = "Invalid final parameter: " + name;
-			problems.add(new ValidityProblem(error));
-			valid = false;
-		}
 
 		if (names.contains(name)) {
 			// NB: Shadowed parameters are bad because they are ambiguous.
@@ -622,11 +528,11 @@ public final class ParameterStructs {
 			valid = false;
 		}
 
-		if ((param.itemIO() == ItemIO.MUTABLE || param.itemIO() == ItemIO.CONTAINER) && isImmutable(type)) {
+		if ((m.getIOType() == ItemIO.MUTABLE || m.getIOType() == ItemIO.CONTAINER) && isImmutable(type)) {
 			// NB: The MUTABLE and CONTAINER types signify that the parameter
 			// will be written to, but immutable parameters cannot be changed in
 			// such a manner, so it makes no sense to label them as such.
-			final String error = "Immutable " + param.itemIO() + " parameter: " + name + " (" + type.getName() + " is immutable)";
+			final String error = "Immutable " + m.getIOType() + " parameter: " + name + " (" + type.getName() + " is immutable)";
 			problems.add(new ValidityProblem(error));
 			valid = false;
 		}

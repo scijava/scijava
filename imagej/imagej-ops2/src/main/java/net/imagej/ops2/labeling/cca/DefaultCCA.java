@@ -44,7 +44,6 @@ import net.imglib2.type.numeric.integer.IntType;
 import org.scijava.function.Functions;
 import org.scijava.ops.Op;
 import org.scijava.ops.OpDependency;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**

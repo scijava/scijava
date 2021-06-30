@@ -38,7 +38,6 @@ import net.imglib2.util.Pair;
 import org.scijava.function.Computers;
 import org.scijava.ops.Op;
 import org.scijava.ops.OpDependency;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**

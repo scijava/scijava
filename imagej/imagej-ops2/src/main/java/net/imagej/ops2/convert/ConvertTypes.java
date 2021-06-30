@@ -54,7 +54,6 @@ import net.imglib2.type.numeric.real.FloatType;
 import org.scijava.function.Computers;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -13,7 +13,6 @@ import org.scijava.function.Inplaces;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.ExceptionUtils;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

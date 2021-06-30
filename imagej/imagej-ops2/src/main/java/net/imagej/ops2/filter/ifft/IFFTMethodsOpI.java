@@ -37,7 +37,6 @@ import net.imglib2.type.numeric.ComplexType;
 
 import org.scijava.function.Inplaces;
 import org.scijava.ops.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -7,6 +7,7 @@ module org.scijava.ops {
 
 	//TODO: rearrange packages to export only needed classes
 	exports org.scijava.ops; //contains OpDependency interface
+	exports org.scijava.ops.core; // contains ExceptionUtils
 	exports org.scijava.ops.matcher;
 	exports org.scijava.ops.math;
 	exports org.scijava.ops.simplify;

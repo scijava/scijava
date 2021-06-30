@@ -38,7 +38,6 @@ import net.imglib2.util.Intervals;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.util.ArrayUtils;
 import org.scijava.util.DoubleArray;

@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -39,9 +40,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -59,8 +58,8 @@ public class DropSingletonDimensionsViewTest extends AbstractOpTest {
 	@Test
 	public void dropSingletonDimensionsTest() {
 
-		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc = FunctionUtils
-				.match(ops.env(), "transform.dropSingletonDimensionsView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.dropSingletonDimensionsView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
 

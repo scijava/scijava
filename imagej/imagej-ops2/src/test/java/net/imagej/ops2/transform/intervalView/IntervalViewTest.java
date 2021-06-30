@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.BiFunction;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.Interval;
 import net.imglib2.RandomAccess;
@@ -43,10 +44,8 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -67,8 +66,8 @@ public class IntervalViewTest extends AbstractOpTest {
 	@Test
 	public void defaultIntervalTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc = FunctionUtils
-				.match(ops.env(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
+		BiFunction<RandomAccessible<DoubleType>, Interval, IntervalView<DoubleType>> intervalFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
@@ -94,8 +93,8 @@ public class IntervalViewTest extends AbstractOpTest {
 	@Test
 	public void intervalMinMaxTest() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = FunctionUtils
-				.match(ops.env(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
+		Functions.Arity3<RandomAccessible<DoubleType>, long[], long[], IntervalView<DoubleType>> intervalFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.intervalView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

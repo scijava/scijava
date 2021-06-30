@@ -35,7 +35,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.util.ComputerUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -182,7 +182,7 @@ public class ComputeThresholdTest extends AbstractThresholdTest {
 	private Computers.Arity1<Histogram1d<UnsignedShortType>, UnsignedShortType>
 		getComputeThresholdOp(final String name)
 	{
-		return ComputerUtils.match(ops.env(), name,
+		return OpBuilder.matchComputer(ops.env(), name,
 			new Nil<Histogram1d<UnsignedShortType>>()
 			{}, new Nil<UnsignedShortType>() {});
 	}

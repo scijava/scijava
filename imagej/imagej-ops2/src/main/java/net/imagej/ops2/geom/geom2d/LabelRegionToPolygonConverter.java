@@ -41,12 +41,11 @@ import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
 import org.scijava.convert.Converter;
-import org.scijava.function.Functions;
+import org.scijava.ops.OpBuilder;
 import org.scijava.ops.OpService;
-import org.scijava.ops.util.FunctionUtils;
-import org.scijava.types.Nil;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.Nil;
 
 /**
  * Converts a {@link LabelRegion} to a polygon
@@ -67,7 +66,7 @@ public class LabelRegionToPolygonConverter extends
 	@Override
 	public <T> T convert(final Object src, final Class<T> dest) {
 		if (contourFunc == null) {
-			contourFunc = FunctionUtils.match(ops.env(), "geom.contour", new Nil<RandomAccessibleInterval<BoolType>>() {}, new Nil<Boolean>() {},
+			contourFunc = OpBuilder.matchFunction(ops.env(), "geom.contour", new Nil<RandomAccessibleInterval<BoolType>>() {}, new Nil<Boolean>() {},
 					new Nil<Polygon2D>() {});
 		}
 		// FIXME: can we make this faster?

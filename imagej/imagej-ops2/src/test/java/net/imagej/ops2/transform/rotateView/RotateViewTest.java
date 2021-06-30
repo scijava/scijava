@@ -30,6 +30,7 @@ package net.imagej.ops2.transform.rotateView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -41,10 +42,8 @@ import net.imglib2.view.MixedTransformView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -67,8 +66,8 @@ public class RotateViewTest extends AbstractOpTest {
 	@Test
 	public void testDefaultRotate() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = FunctionUtils
-				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessible<DoubleType>>() {
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, MixedTransformView<DoubleType>> rotateFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.rotateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
@@ -90,8 +89,8 @@ public class RotateViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalRotate() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = FunctionUtils
-				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {
@@ -117,8 +116,8 @@ public class RotateViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalRotateInterval() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = FunctionUtils
-				.match(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Integer, IntervalView<DoubleType>> rotateFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.rotateView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {

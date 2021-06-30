@@ -29,9 +29,9 @@
 
 package net.imagej.ops2.coloc.kendallTau;
 
+import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.Assume.assumeTrue;
 
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
@@ -50,10 +50,9 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
-import org.scijava.types.Nil;
+import org.scijava.ops.OpBuilder;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Coloc.KendallTau}.
@@ -128,7 +127,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 				0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
 		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};
-		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = FunctionUtils.match(ops.env(),
+		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = OpBuilder.matchFunction(ops.env(),
 				"coloc.kendallTau", nilRAI, nilRAI, new Nil<Double>() {});
 //		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> raiOp = op(
 //				"transform.raiToIterable").input(op).outType(

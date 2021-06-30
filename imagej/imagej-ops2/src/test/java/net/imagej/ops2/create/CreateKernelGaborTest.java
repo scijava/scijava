@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.BiFunction;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imagej.ops2.create.kernel.DefaultCreateKernelGabor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -42,10 +43,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -62,28 +61,28 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		final double[] period = { 4.0, 1.0 };
 
 		// define functions used in the test
-		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = FunctionUtils.match(ops.env(),
+		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = OpBuilder.matchFunction(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<C>() {
 				}, new Nil<RandomAccessibleInterval<C>>() {
 				});
-		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma = FunctionUtils
-				.match(ops.env(), "create.kernelGabor", new Nil<Double>() {
+		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma = OpBuilder
+				.matchFunction(ops.env(), "create.kernelGabor", new Nil<Double>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = FunctionUtils.match(ops.env(),
+		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = OpBuilder.matchFunction(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = FunctionUtils.match(ops.env(),
+		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = OpBuilder.matchFunction(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<FloatType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = FunctionUtils.match(ops.env(),
+		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = OpBuilder.matchFunction(ops.env(),
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {

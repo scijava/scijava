@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.BiFunction;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.img.Img;
@@ -45,10 +46,8 @@ import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.util.Intervals;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -70,7 +69,7 @@ public class CreateLabelingTest extends AbstractOpTest {
 		final MersenneTwisterFast randomGenerator = new MersenneTwisterFast(SEED);
 
 		// TODO can we keep this?
-		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = FunctionUtils.match(ops.env(),
+		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = OpBuilder.matchFunction(ops.env(),
 				"create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgLabeling<String, IntType>>() {
@@ -100,8 +99,8 @@ public class CreateLabelingTest extends AbstractOpTest {
 
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
-		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = FunctionUtils
-				.match(ops.env(), "create.imgLabeling", new Nil<Dimensions>() {
+		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = OpBuilder
+				.matchFunction(ops.env(), "create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgFactory<IntType>>() {
 				}, new Nil<ImgLabeling<String, IntType>>() {
@@ -136,7 +135,7 @@ public class CreateLabelingTest extends AbstractOpTest {
 	@SuppressWarnings("unchecked")
 	private <I> ImgLabeling<I, ?> createLabelingWithType(final I type) {
 
-		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = FunctionUtils.match(ops.env(),
+		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = OpBuilder.matchFunction(ops.env(),
 				"create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgLabeling<I, IntType>>() {

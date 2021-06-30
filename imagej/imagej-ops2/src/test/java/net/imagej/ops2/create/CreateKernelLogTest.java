@@ -34,14 +34,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@code CreateKernelLogDoubleType} and
@@ -57,7 +56,7 @@ public class CreateKernelLogTest extends AbstractOpTest {
 		final double sigma = 5.0;
 		final double[] sigmas = { sigma, sigma };
 
-		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = FunctionUtils.match(ops.env(),
+		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = OpBuilder.matchFunction(ops.env(),
 				"create.kernelLog", new Nil<Double>() {
 				}, new Nil<Integer>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
@@ -66,7 +65,7 @@ public class CreateKernelLogTest extends AbstractOpTest {
 		final RandomAccessibleInterval<DoubleType> logKernel = //
 				func1.apply(sigma, sigmas.length);
 
-		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = FunctionUtils.match(ops.env(), "create.kernelLog",
+		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = OpBuilder.matchFunction(ops.env(), "create.kernelLog",
 				new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

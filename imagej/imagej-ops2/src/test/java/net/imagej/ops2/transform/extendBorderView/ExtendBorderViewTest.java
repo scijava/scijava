@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -41,10 +42,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ExtendBorderView} ops.
@@ -63,8 +62,8 @@ public class ExtendBorderViewTest extends AbstractOpTest {
 
 	@Test
 	public void extendBorderTest() {
-		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = FunctionUtils
-				.match(ops.env(), "transform.extendBorderView", raiNil,
+		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.extendBorderView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

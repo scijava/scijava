@@ -30,6 +30,7 @@ package net.imagej.ops2.transform.extendRandomView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -39,10 +40,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -64,8 +63,8 @@ public class ExtendRandomViewTest extends AbstractOpTest {
 
 	@Test
 	public void extendRandomTest() {
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc = FunctionUtils
-				.match(ops.env(), "transform.extendRandomView", raiNil, doubleNil, doubleNil,
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.extendRandomView", raiNil, doubleNil, doubleNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

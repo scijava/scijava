@@ -47,10 +47,9 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
-import org.scijava.types.Nil;
+import org.scijava.ops.OpBuilder;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Coloc.MaxTKendallTau}.
@@ -209,7 +208,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			FunctionUtils.match(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(vImage1, vImage2, op, 5, es).output(value).compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
@@ -229,7 +228,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			FunctionUtils.match(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(vImage1, vImage2, op, 5, es).output(value).compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
@@ -247,7 +246,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			FunctionUtils.match(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(ch1, ch2, op, 10, es).output(value).compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
@@ -262,7 +261,7 @@ public class MTKTTest extends ColocalisationTest {
 		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		BiFunction<RandomAccessibleInterval<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>, Double> op =
-			FunctionUtils.match(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
 		final int[] blockSize = new int[cropCh1.numDimensions()];
 		for (int d = 0; d < blockSize.length; d++) {
 			final long size = (long) Math.floor(Math.sqrt(cropCh1.dimension(d)));

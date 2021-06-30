@@ -29,22 +29,6 @@ public final class FunctionUtils {
 		// NB: Prevent instantiation of utility class.
 	}
 
-#foreach($arity in [0..$maxArity])
-	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpEnvironment env, final String opName, $matchParams.call($arity))
-	{
-		return matchHelper(env, opName, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
-	}
-
-#end
-#foreach($arity in [0..$maxArity])
-	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpEnvironment env, final String opName, $matchParams.call($arity), final Hints hints)
-	{
-		return matchHelper(env, opName, hints, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
-	}
-
-#end
 	@SuppressWarnings({ "unchecked" })
 	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
@@ -77,17 +61,4 @@ public final class FunctionUtils {
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}
-
-	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpEnvironment env, final String opName, final Hints hints,
-		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
-	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
-		final Type specialType = Types.parameterize(opClass, types);
-		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);
-	}
-
 }

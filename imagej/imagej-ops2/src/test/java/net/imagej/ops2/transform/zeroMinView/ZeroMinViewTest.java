@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -40,10 +41,8 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.ZeroMinView} ops.
@@ -61,7 +60,7 @@ public class ZeroMinViewTest extends AbstractOpTest {
 	public void defaultZeroMinTest() {
 
 		Function<IntervalView<DoubleType>, IntervalView<DoubleType>> zeroMinFunc =
-			FunctionUtils.match(ops.env(), "transform.zeroMinView",
+			OpBuilder.matchFunction(ops.env(), "transform.zeroMinView",
 				new Nil<IntervalView<DoubleType>>()
 				{}, new Nil<IntervalView<DoubleType>>() {});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

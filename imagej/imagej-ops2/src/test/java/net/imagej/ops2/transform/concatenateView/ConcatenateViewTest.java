@@ -49,7 +49,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -108,8 +108,8 @@ public class ConcatenateViewTest extends AbstractOpTest {
 
 	@Test
 	public void defaultConcatenateTest() {
-		BiFunction<Integer, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = FunctionUtils
-				.match(ops.env(), "transform.concatenateView", new Nil<Integer>() {
+		BiFunction<Integer, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.concatenateView", new Nil<Integer>() {
 				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {
 				}, new Nil<RandomAccessibleInterval<ByteType>>() {
 				});
@@ -123,8 +123,8 @@ public class ConcatenateViewTest extends AbstractOpTest {
 
 	@Test
 	public void concatenateWithAccessModeTest() {
-		Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = FunctionUtils
-				.match(ops.env(), "transform.concatenateView", new Nil<Integer>() {
+		Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<ByteType>> concatFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.concatenateView", new Nil<Integer>() {
 				}, new Nil<StackAccessMode>() {
 				}, new Nil<List<RandomAccessibleInterval<ByteType>>>() {
 				}, new Nil<RandomAccessibleInterval<ByteType>>() {

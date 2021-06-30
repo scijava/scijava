@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
@@ -41,10 +42,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.FlatIterableView} ops.
@@ -64,8 +63,8 @@ public class FlatIterableViewTest extends AbstractOpTest {
 
 	@Test
 	public void defaultFlatIterableTest() {
-		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc = FunctionUtils
-				.match(ops.env(), "transform.flatIterableView", raiNil, iiNil);
+		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.flatIterableView", raiNil, iiNil);
 
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 

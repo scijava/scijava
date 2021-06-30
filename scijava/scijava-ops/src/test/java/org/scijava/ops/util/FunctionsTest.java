@@ -33,9 +33,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.function.Functions;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 public class FunctionsTest extends AbstractTestEnvironment {
@@ -45,19 +44,19 @@ public class FunctionsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testUnaryFunctions() {
-		Function<Double, Double> sqrtFunction = FunctionUtils.match(ops.env(), "math.sqrt", nilDouble, nilDouble);
+		Function<Double, Double> sqrtFunction = OpBuilder.matchFunction(ops.env(), "math.sqrt", nilDouble, nilDouble);
 		double answer = sqrtFunction.apply(16.0);
 		assert 4.0 == answer;
 	}
 
 	@Test
 	public void testBinaryFunctions() {
-		BiFunction<Double, Double, Double> addFunction = FunctionUtils.match(ops.env(), "math.add", nilDouble, nilDouble,
+		BiFunction<Double, Double, Double> addFunction = OpBuilder.matchFunction(ops.env(), "math.add", nilDouble, nilDouble,
 				nilDouble);
 		double answer = addFunction.apply(16.0, 14.0);
 		assert 30.0 == answer;
 
-		BiFunction<Double, Double, Double> powerFunction = FunctionUtils.match(ops.env(), "math.pow", nilDouble,
+		BiFunction<Double, Double, Double> powerFunction = OpBuilder.matchFunction(ops.env(), "math.pow", nilDouble,
 				nilDouble, nilDouble);
 		answer = powerFunction.apply(2.0, 10.0);
 		assert 1024.0 == answer;

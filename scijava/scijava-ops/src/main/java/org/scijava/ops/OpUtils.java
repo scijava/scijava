@@ -37,6 +37,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.OpCandidate.StatusCode;
+import org.scijava.ops.struct.SynthesizedParameterMember;
 import org.scijava.param.ParameterMember;
 import org.scijava.param.ParameterStructs;
 import org.scijava.param.ValidityException;

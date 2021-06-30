@@ -1,5 +1,5 @@
 
-package org.scijava.param;
+package org.scijava.ops.struct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.scijava.struct.Member;
 public class SynthesizedParameterData implements ParameterData {
 
 	@Override
-	public List<Member<?>> synthesizeMembers(List<FunctionalMethodType> fmts) {
-		List<Member<?>> params = new ArrayList<>();
+	public List<SynthesizedParameterMember<?>> synthesizeMembers(List<FunctionalMethodType> fmts) {
+		List<SynthesizedParameterMember<?>> params = new ArrayList<>();
 
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;

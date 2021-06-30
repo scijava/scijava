@@ -1,5 +1,5 @@
 
-package org.scijava.param;
+package org.scijava.ops.struct;
 
 import com.github.therapi.runtimejavadoc.Comment;
 import com.github.therapi.runtimejavadoc.FieldJavadoc;
@@ -296,8 +296,8 @@ public class JavadocParameterData implements ParameterData {
 	 * @param fmts the list of inputs, outputs, and other types required by the Op
 	 */
 	@Override
-	public List<Member<?>> synthesizeMembers(List<FunctionalMethodType> fmts) {
-		List<Member<?>> params = new ArrayList<>();
+	public List<SynthesizedParameterMember<?>> synthesizeMembers(List<FunctionalMethodType> fmts) {
+		List<SynthesizedParameterMember<?>> params = new ArrayList<>();
 		int ins = 0;
 		int outs = 0;
 

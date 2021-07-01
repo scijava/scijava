@@ -20,7 +20,6 @@ module org.scijava.ops {
 	exports org.scijava.ops.provenance;
 	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)
 	exports org.scijava.ops.util; // contains OpWrapper interface
-	exports org.scijava.param;
 
 #foreach($package in $packages)
 	opens $package to $opensToString.call($package, $scijavaPackages, $therapiPackages);

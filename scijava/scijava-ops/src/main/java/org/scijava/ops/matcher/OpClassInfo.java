@@ -33,17 +33,21 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.Priority;
+import org.scijava.ValidityProblem;
 import org.scijava.ops.Hints;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
+import org.scijava.ops.struct.ClassOpDependencyMemberParser;
+import org.scijava.ops.struct.ClassParameterMemberParser;
+import org.scijava.ops.struct.Structs;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -69,8 +73,10 @@ public class OpClassInfo implements OpInfo {
 
 	public OpClassInfo(final Class<?> opClass, final double priority) {
 		this.opClass = opClass;
+		List<ValidityProblem> problems = new ArrayList<>();
 		try {
-			struct = ParameterStructs.structOf(opClass);
+			struct = Structs.from(opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
+//			struct = ParameterStructs.structOf(opClass);
 			OpUtils.checkHasSingleOutput(struct);
 		} catch (ValidityException e) {
 			validityException = e;

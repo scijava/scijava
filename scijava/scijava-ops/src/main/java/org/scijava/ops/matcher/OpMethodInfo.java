@@ -43,6 +43,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.Priority;
+import org.scijava.ValidityProblem;
 import org.scijava.ops.Hints;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
@@ -50,15 +51,18 @@ import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
+import org.scijava.ops.struct.MethodOpDependencyMemberParser;
+import org.scijava.ops.struct.MethodParameterMemberParser;
+import org.scijava.ops.struct.Structs;
 import org.scijava.ops.util.Adapt;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
-import org.scijava.param.ValidityProblem;
+import org.scijava.ops.util.OpMethodUtils;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
+import org.scijava.types.inference.InterfaceInference;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -101,15 +105,13 @@ public class OpMethodInfo implements OpInfo {
 		// determine the functional interface this Op should implement
 		final OpMethod methodAnnotation = method.getAnnotation(OpMethod.class);
 		try {
-			opType = ParameterStructs.getOpMethodType(methodAnnotation.type(),
+			opType = OpMethodUtils.getOpMethodType(methodAnnotation.type(),
 				method);
-			struct = ParameterStructs.structOf(method.getDeclaringClass(), method);
+			struct = Structs.from(method, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
+//			struct = ParameterStructs.structOf(method.getDeclaringClass(), method);
 		}
 		catch (IllegalArgumentException e) {
 			problems.add(new ValidityProblem(e));
-		}
-		catch (final ValidityException e) {
-			problems.addAll(e.problems());
 		}
 		validityException = problems.isEmpty() ? null : new ValidityException(
 			problems);
@@ -278,7 +280,7 @@ public class OpMethodInfo implements OpInfo {
 		StringBuilder sb = new StringBuilder();
 
 		// determine the name of the functional method
-		String methodName = ParameterStructs.singularAbstractMethod(Types.raw(
+		String methodName = InterfaceInference.singularAbstractMethod(Types.raw(
 			opType)).getName();
 
 		// method modifiers
@@ -366,4 +368,5 @@ public class OpMethodInfo implements OpInfo {
 		if (h == null) return new ImmutableHints(new String[0]);
 		return new ImmutableHints(h.hints());
 	}
+
 }

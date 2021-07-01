@@ -4,7 +4,7 @@ package org.scijava.ops.struct;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.struct.Member;
+import org.scijava.struct.FunctionalMethodType;
 
 public class SynthesizedParameterData implements ParameterData {
 

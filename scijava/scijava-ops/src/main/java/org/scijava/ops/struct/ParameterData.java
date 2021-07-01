@@ -2,7 +2,7 @@ package org.scijava.ops.struct;
 
 import java.util.List;
 
-import org.scijava.param.FunctionalMethodType;
+import org.scijava.struct.FunctionalMethodType;
 
 public interface ParameterData {
 

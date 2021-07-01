@@ -37,15 +37,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.Priority;
+import org.scijava.ValidityProblem;
 import org.scijava.ops.Hints;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
-import org.scijava.param.ValidityProblem;
+import org.scijava.ops.struct.FieldParameterMemberParser;
+import org.scijava.ops.struct.Structs;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 
@@ -90,7 +91,8 @@ public class OpFieldInfo implements OpInfo {
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
 		try {
-			struct = ParameterStructs.structOf(field);
+			struct = Structs.from(field, problems, new FieldParameterMemberParser());
+//			struct = ParameterStructs.structOf(field);
 			OpUtils.checkHasSingleOutput(struct);
 			// NB: Contextual parameters not supported for now.
 		} catch (ValidityException e) {

@@ -19,9 +19,11 @@ import java.util.stream.Collectors;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.simplify.SimplificationUtils;
+import org.scijava.ops.OpUtils;
+import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
+import org.scijava.types.inference.InterfaceInference;
 
 /**
  * Class able to scrape Op parameter metadata off the Op's Javadoc.
@@ -56,7 +58,7 @@ public class JavadocParameterData implements ParameterData {
 	 * @param f the field
 	 */
 	public JavadocParameterData(Field f) {
-		Method sam = ParameterStructs.singularAbstractMethod(f.getType());
+		Method sam = InterfaceInference.singularAbstractMethod(f.getType());
 		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(f);
 		long numIns = sam.getParameterCount();
 		long numOuts = 1; // There is always one output
@@ -75,7 +77,7 @@ public class JavadocParameterData implements ParameterData {
 		// this method is called when the op is adapted/simplified. In the case of
 		// adaptation, the op's output might shift from a pure output to an input,
 		// or might shift from a container to a pure output. We
-		Method sam = ParameterStructs.singularAbstractMethod(Types.raw(newType));
+		Method sam = InterfaceInference.singularAbstractMethod(Types.raw(newType));
 		if (sam.getParameterCount() > inputs.size()) {
 			inputs.add(output);
 		}
@@ -123,7 +125,7 @@ public class JavadocParameterData implements ParameterData {
 	 */
 	private Method getOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
-		Method fMethod = SimplificationUtils.findFMethod(c);
+		Method fMethod = OpUtils.findFunctionalMethod(c);
 		Type[] paramTypes = Types.getExactParameterTypes(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);

@@ -34,9 +34,9 @@ import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
 
+import org.scijava.ValidityProblem;
 import org.scijava.log.Logger;
 import org.scijava.ops.matcher.OpMatcher;
-import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;

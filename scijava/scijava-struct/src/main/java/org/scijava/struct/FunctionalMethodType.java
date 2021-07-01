@@ -1,8 +1,6 @@
-package org.scijava.param;
+package org.scijava.struct;
 
 import java.lang.reflect.Type;
-
-import org.scijava.struct.ItemIO;
 
 
 /**

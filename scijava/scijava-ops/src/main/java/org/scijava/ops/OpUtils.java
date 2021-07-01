@@ -29,6 +29,7 @@
 
 package org.scijava.ops;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,12 +37,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.scijava.ValidityProblem;
 import org.scijava.ops.OpCandidate.StatusCode;
-import org.scijava.ops.struct.SynthesizedParameterMember;
-import org.scijava.param.ParameterMember;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
-import org.scijava.param.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
@@ -236,9 +233,18 @@ public final class OpUtils {
 		return paddedArgs;
 	}
 	
+	/**
+	 * Determines whether {@link Member} {@code item} is required.
+	 * <p>
+	 * TODO: This method is a relic of {@link ParameterMember}, and should be
+	 * reconciled with the work in https://github.com/scijava/incubator/pull/32
+	 * 
+	 * @param item the {@link Member} that may or may not be required
+	 * @return true iff {@code item} is required.
+	 */
+	@Deprecated
 	public static boolean isRequired(final Member<?> item) {
-		return item instanceof ParameterMember && //
-				((ParameterMember<?>) item).isRequired();
+		return true;
 	}
 	
 	public static List<Member<?>> injectableMembers(Struct struct) {
@@ -307,11 +313,57 @@ public final class OpUtils {
 	}
 
 	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {
-		final Class<?> functionalInterface = ParameterStructs
+		final Class<?> functionalInterface = OpUtils
 			.findFunctionalInterface(Types.raw(opRef.getType()));
 		if (functionalInterface != null) {
 			return functionalInterface;
 		}
 		return null;
+	}
+
+	/**
+	 * Searches for a {@code @FunctionalInterface} annotated interface in the 
+	 * class hierarchy of the specified type. The first one that is found will
+	 * be returned. If no such interface can be found, null will be returned.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static Class<?> findFunctionalInterface(Class<?> type) {
+		if (type == null) return null;
+		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
+		for (Class<?> iface : type.getInterfaces()) {
+			final Class<?> result = findFunctionalInterface(iface);
+			if (result != null) return result;
+		}
+		return findFunctionalInterface(type.getSuperclass());
+	}
+
+	/**
+	 * Attempts to find the single functional method of the specified
+	 * class, by scanning the for functional interfaces. If there
+	 * is no functional interface, null will be returned.
+	 * 
+	 * @param cls
+	 * @return
+	 */
+	public static Method findFunctionalMethod(Class<?> cls) {
+		Class<?> iFace = findFunctionalInterface(cls);
+		if (iFace == null) {
+			return null;
+		}
+		
+		List<Method> nonDefaults = Arrays.stream(iFace.getMethods())
+				.filter(m -> !m.isDefault()).collect(Collectors.toList());
+		
+		// The single non default method must be the functional one
+		if (nonDefaults.size() != 1) {
+			for (Class<?> i : iFace.getInterfaces()) {
+				final Method result = findFunctionalMethod(i);
+				if (result != null) return result;
+			}
+		}
+		
+		return nonDefaults.get(0);
 	}
 }

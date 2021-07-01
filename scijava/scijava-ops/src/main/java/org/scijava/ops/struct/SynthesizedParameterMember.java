@@ -3,7 +3,6 @@ package org.scijava.ops.struct;
 
 import java.lang.reflect.Type;
 
-import org.scijava.param.ParameterMember;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 
@@ -13,7 +12,7 @@ import org.scijava.struct.Member;
  * @author Gabriel Selzer
  * @param <T>
  */
-public class SynthesizedParameterMember<T> implements ParameterMember<T> {
+public class SynthesizedParameterMember<T> implements Member<T> {
 
 	/** Type, or a subtype thereof, which houses the field. */
 	private final Type itemType;

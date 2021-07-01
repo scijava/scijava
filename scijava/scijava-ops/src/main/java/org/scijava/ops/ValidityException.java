@@ -1,7 +1,9 @@
-package org.scijava.param;
+package org.scijava.ops;
 
 import java.util.Collections;
 import java.util.List;
+
+import org.scijava.ValidityProblem;
 
 /**
  * hasdjf

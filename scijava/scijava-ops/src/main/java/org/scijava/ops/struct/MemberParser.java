@@ -4,6 +4,7 @@ package org.scijava.ops.struct;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.scijava.ops.ValidityException;
 import org.scijava.struct.Member;
 
 /**
@@ -21,7 +22,9 @@ public interface MemberParser<S, M extends Member<?>> {
 	 * 
 	 * @param source the {@link Object} to parse
 	 * @return a {@link List} of {@link Member}s parsed from {@code source}
+	 * @throws {@link ValidityException} when the source of the {@link Member}s is
+	 *           improperly declared, formatted
 	 */
-	List<M> parse(S source);
+	List<M> parse(S source) throws ValidityException;
 
 }

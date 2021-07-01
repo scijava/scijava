@@ -10,16 +10,35 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.scijava.ValidityProblem;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
+import org.scijava.ops.ValidityException;
 import org.scijava.ops.util.AnnotationUtils;
-import org.scijava.param.FunctionalMethodType;
-import org.scijava.param.ValidityProblem;
+import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
+import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
 
 public class Structs {
+
+	@SafeVarargs
+	public static <S> Struct from(S source, List<ValidityProblem> problems,
+		MemberParser<S, ? extends Member<?>>... parsers)
+	{
+		List<Member<?>> members = new ArrayList<>();
+		for (MemberParser<S, ? extends Member<?>> p : parsers) {
+			try {
+				members.addAll(p.parse(source));
+			}
+			catch (ValidityException e) {
+				problems.addAll(e.problems());
+			}
+		}
+		return () -> members;
+	}
 
 	/**
 	 * Helper to check for several modifiers at once.
@@ -64,7 +83,7 @@ public class Structs {
 		// Synthesize members
 		List<SynthesizedParameterMember<?>> fmtMembers = data.synthesizeMembers(fmts);
 
-		for (Member<?> m : fmtMembers) {
+		for (SynthesizedParameterMember<?> m : fmtMembers) {
 			String key = m.getKey();
 			final Type itemType = m.getType();
 
@@ -207,6 +226,24 @@ public class Structs {
 		// wrapper classes, as well as strings, are immutable objects.
 		return Types.isNumber(type) || Types.isText(type) || //
 			Types.isBoolean(type);
+	}
+
+	/**
+	 * Convenience method to call
+	 * {@link Structs#from(Object, List, MemberParser...)} dot
+	 * {@link Struct#createInstance(Object)}
+	 * 
+	 * @param object the {@link Object} from which the {@link StructInstance} is
+	 *          created.
+	 * @return an instance of the {@link Struct} created from {@code object}
+	 * @throws ValidityException
+	 */
+	public static <C> StructInstance<C> create(final C object)
+		throws ValidityException
+	{
+		Struct s = from(object.getClass(), new ArrayList<>(),
+			new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
+		return s.createInstance(object);
 	}
 
 }

@@ -1,7 +1,8 @@
-package org.scijava.param;
+package org.scijava.ops.struct;
 
 import java.lang.reflect.Type;
 
+import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 
@@ -16,10 +17,16 @@ public class ConvertedParameterMember<T> implements Member<T>{
 	
 	final Member<T> original;
 	final Type newType;
+	final ItemIO ioType;
 	
-	public ConvertedParameterMember(Member<T> original, Type newType) {
+	public ConvertedParameterMember(Member<T> original, FunctionalMethodType newType) {
 		this.original = original;
-		this.newType = newType;
+		this.newType = newType.type();
+		this.ioType = newType.itemIO();
+	}
+
+	public static <M> ConvertedParameterMember<M> from(Member<M> original, FunctionalMethodType newType) {
+		return new ConvertedParameterMember<>(original, newType);
 	}
 
 	@Override
@@ -39,7 +46,7 @@ public class ConvertedParameterMember<T> implements Member<T>{
 
 	@Override
 	public ItemIO getIOType() {
-		return original.getIOType();
+		return ioType;
 	}
 
 }

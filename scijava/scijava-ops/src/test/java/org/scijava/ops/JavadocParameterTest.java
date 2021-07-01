@@ -1,5 +1,5 @@
 
-package org.scijava.param;
+package org.scijava.ops;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -406,7 +406,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// test standard op string
 		String expected =
-			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
+			"public static java.util.List<java.lang.Long> org.scijava.ops.JavadocParameterTest." +
 				"OpMethodPR(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
 				"	 Inputs:\n" +
 				"		java.util.List<java.lang.String> foo -> the first input\n" +
@@ -418,7 +418,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// test special op string
 		expected =
-			"public static java.util.List<java.lang.Long> org.scijava.param.JavadocParameterTest." +
+			"public static java.util.List<java.lang.Long> org.scijava.ops.JavadocParameterTest." +
 				"OpMethodPR(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
 				"	 Inputs:\n" +
 				"		java.util.List<java.lang.String> foo -> the first input\n" +

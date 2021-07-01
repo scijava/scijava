@@ -1,22 +1,27 @@
+
 package org.scijava.ops.matcher;
+
+import com.google.common.collect.Streams;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
+import org.scijava.ValidityProblem;
+import org.scijava.ops.BaseOpHints.Adaptation;
 import org.scijava.ops.Hints;
 import org.scijava.ops.OpDependencyMember;
-import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.BaseOpHints.Adaptation;
+import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
+import org.scijava.ops.struct.OpRetypingMemberParser;
+import org.scijava.ops.struct.RetypingRequest;
+import org.scijava.ops.struct.Structs;
+import org.scijava.struct.FunctionalMethodType;
+import org.scijava.struct.ItemIO;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 
@@ -36,21 +41,32 @@ public class OpAdaptationInfo implements OpInfo {
 	private Struct struct;
 	private ValidityException validityException;
 
-	public OpAdaptationInfo(OpInfo srcInfo, Type type, Function<Object, Object> adaptor) {
+	public OpAdaptationInfo(OpInfo srcInfo, Type type,
+		Function<Object, Object> adaptor)
+	{
 		this.srcInfo = srcInfo;
 		this.type = type;
 		this.adaptor = adaptor;
 
-		// NOTE: since the source Op has already been shown to be valid, there is not
+		// NOTE: since the source Op has already been shown to be valid, there is
+		// not
 		// much for us to do here.
+		List<ValidityProblem> problems = new ArrayList<>();
+		List<FunctionalMethodType> fmts = Structs.findFunctionalMethodTypes(type);
+		
+		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
+		struct = Structs.from(r, problems, new OpRetypingMemberParser());
 		try {
-			struct = ParameterStructs.structOf(srcInfo, type);
 			OpUtils.checkHasSingleOutput(struct);
-		} catch (ValidityException e) {
-			validityException = e;
 		}
+		catch (ValidityException exc) {
+			problems.addAll(exc.problems());
+		}
+		if (!problems.isEmpty()) validityException = new ValidityException(
+			problems);
 
-		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
+		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints()
+			.values());
 		hintList.remove(Adaptation.ALLOWED);
 		hintList.add(Adaptation.FORBIDDEN);
 		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
@@ -84,8 +100,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + " adapted to " + type
-			.toString();
+		return srcInfo.implementationName() + " adapted to " + type.toString();
 	}
 
 	/**

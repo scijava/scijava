@@ -1,23 +1,34 @@
 package org.scijava.ops.simplify;
 
+import com.google.common.collect.Streams;
+
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.scijava.Priority;
+import org.scijava.ValidityProblem;
 import org.scijava.ops.BaseOpHints.Simplification;
 import org.scijava.ops.Hints;
 import org.scijava.ops.Op;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
+import org.scijava.ops.ValidityException;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.matcher.OpMatchingException;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
+import org.scijava.ops.struct.OpRetypingMemberParser;
+import org.scijava.ops.struct.RetypingRequest;
+import org.scijava.ops.struct.Structs;
+import org.scijava.struct.FunctionalMethodType;
+import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -38,23 +49,36 @@ public class SimplifiedOpInfo implements OpInfo {
 	private ValidityException validityException;
 
 	public SimplifiedOpInfo(OpInfo info, OpEnvironment env, SimplificationMetadata metadata) {
+		List<ValidityProblem> problems = new ArrayList<>();
 		this.srcInfo = info;
 		this.metadata = metadata;
-		Type[] inputs = metadata.originalInputs();
-		Type output = metadata.focusedOutput();
-		this.opType = SimplificationUtils.retypeOpType(info.opType(), inputs, output);
-		try {
-			this.struct = ParameterStructs.structOf(info, opType);
+		// generate new input fmts
+		Type[] inputTypes = metadata.originalInputs();
+		Type outputType = metadata.focusedOutput();
+		List<Member<?>> ioMembers = info.struct().members();
+		ioMembers.removeIf(m -> m.getIOType() == ItemIO.NONE);
+		int index = 0;
+		List<FunctionalMethodType> fmts = new ArrayList<>();
+		for (Member<?> m : ioMembers) {
+			Type newType = m.isInput() ? inputTypes[index++] : m.isOutput()
+				? outputType : null;
+			fmts.add(new FunctionalMethodType(newType, m.getIOType()));
 		}
-		catch (ValidityException exc) {
-			validityException = exc;
-		}
+		// generate new output fmt
+		this.opType = SimplificationUtils.retypeOpType(info.opType(), inputTypes,
+			outputType);
+		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
+		this.struct = Structs.from(r, problems, new OpRetypingMemberParser());
 
 		this.priority = calculatePriority(info, metadata, env);
 		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
 		hintList.remove(Simplification.ALLOWED);
 		hintList.add(Simplification.FORBIDDEN);
 		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
+
+		if(!problems.isEmpty()) {
+			validityException = new ValidityException(problems);
+		}
 	}
 
 	public OpInfo srcInfo() {

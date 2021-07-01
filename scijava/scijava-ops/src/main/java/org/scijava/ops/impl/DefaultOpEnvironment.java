@@ -85,11 +85,11 @@ import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpMethodInfo;
 import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
-import org.scijava.param.FunctionalMethodType;
-import org.scijava.param.ParameterStructs;
+import org.scijava.ops.struct.Structs;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
+import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
@@ -689,7 +689,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 */
 	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns)
 			{
-		List<FunctionalMethodType> fmts = ParameterStructs.findFunctionalMethodTypes(type);
+		List<FunctionalMethodType> fmts = Structs.findFunctionalMethodTypes(type);
 		if (fmts == null)
 			return null;
 

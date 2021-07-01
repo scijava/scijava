@@ -9,9 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.scijava.param.ValidityException;
-import org.scijava.param.ValidityProblem;
-import org.scijava.struct.Member;
+import org.scijava.ValidityProblem;
+import org.scijava.ops.ValidityException;
 import org.scijava.types.Types;
 
 public class FieldParameterMemberParser implements
@@ -19,9 +18,11 @@ public class FieldParameterMemberParser implements
 {
 
 	@Override
-	public List<SynthesizedParameterMember<?>> parse(Field source) {
+	public List<SynthesizedParameterMember<?>> parse(Field source)
+		throws ValidityException
+	{
+		if (source == null) return null;
 		Class<?> c = source.getDeclaringClass();
-		if (c == null || source == null) return null;
 		// obtain a parameterData (preferably one that scrapes the javadoc)
 		ParameterData paramData;
 		try {
@@ -37,9 +38,10 @@ public class FieldParameterMemberParser implements
 		final Set<String> names = new HashSet<>();
 		final Type fieldType = Types.fieldType(source, c);
 
-		Structs.checkModifiers(source.toString() + ": ", problems, source.getModifiers(),
-			false, Modifier.FINAL);
-		Structs.parseFunctionalParameters(items, names, problems, fieldType, paramData);
+		Structs.checkModifiers(source.toString() + ": ", problems, source
+			.getModifiers(), false, Modifier.FINAL);
+		Structs.parseFunctionalParameters(items, names, problems, fieldType,
+			paramData);
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {
 			throw new ValidityException(problems);

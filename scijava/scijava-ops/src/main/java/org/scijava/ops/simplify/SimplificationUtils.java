@@ -24,12 +24,12 @@ import org.scijava.function.Mutable;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpRef;
-import org.scijava.ops.matcher.MatchingUtils;
+import org.scijava.ops.OpUtils;
 import org.scijava.ops.util.AnnotationUtils;
-import org.scijava.param.ParameterStructs;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.inference.InterfaceInference;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -117,9 +117,9 @@ public class SimplificationUtils {
 
 	// TODO: extract this method to a more general utility class
 	public static Method findFMethod(Class<?> c) {
-			Class<?> fIface = ParameterStructs.findFunctionalInterface(c);
+			Class<?> fIface = OpUtils.findFunctionalInterface(c);
 			if(fIface == null) throw new IllegalArgumentException("Class " + c +" does not implement a functional interface!");
-			return ParameterStructs.singularAbstractMethod(fIface);
+			return InterfaceInference.singularAbstractMethod(fIface);
 	}
 
 	/**
@@ -478,7 +478,7 @@ public class SimplificationUtils {
 		StringBuilder sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Method m = ParameterStructs.singularAbstractMethod(metadata.opType());
+		Method m = InterfaceInference.singularAbstractMethod(metadata.opType());
 		// determine the name of the output:
 		String opOutput = "";
 		int ioIndex = metadata.ioArgIndex();

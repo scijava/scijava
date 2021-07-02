@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops.matcher.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -53,6 +53,8 @@ import org.scijava.ops.OpUtils;
 import org.scijava.ops.BaseOpHints.Simplification;
 import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.ops.hint.DefaultHints;
+import org.scijava.ops.matcher.MatchingResult;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.simplify.InfoSimplificationGenerator;
 import org.scijava.service.AbstractService;
 import org.scijava.struct.Member;

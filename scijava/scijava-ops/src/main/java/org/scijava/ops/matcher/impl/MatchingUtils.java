@@ -30,7 +30,7 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops.matcher.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

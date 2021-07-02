@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops.matcher.impl;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

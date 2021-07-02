@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops.matcher.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -37,6 +37,7 @@ import java.util.Map;
 
 import org.scijava.ops.Op;
 import org.scijava.ops.OpRef;
+import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 

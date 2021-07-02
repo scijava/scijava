@@ -44,6 +44,7 @@ import java.util.function.Supplier;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.scijava.ops.matcher.impl.MatchingUtils;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;

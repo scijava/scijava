@@ -27,11 +27,11 @@
  * #L%
  */
 
-package org.scijava.ops.matcher;
+package org.scijava.ops.matcher.impl;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,60 +39,78 @@ import java.util.List;
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.Hints;
-import org.scijava.ops.OpDependencyMember;
+import org.scijava.ops.OpField;
 import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
 import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
-import org.scijava.ops.struct.ClassOpDependencyMemberParser;
-import org.scijava.ops.struct.ClassParameterMemberParser;
+import org.scijava.ops.struct.FieldParameterMemberParser;
 import org.scijava.ops.struct.Structs;
-import org.scijava.plugin.Plugin;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.types.Types;
 
 /**
- * Metadata about an op implementation defined as a class.
+ * Metadata about an op implementation defined as a field.
  * 
  * @author Curtis Rueden
- * @author David Kolb
  */
-public class OpClassInfo implements OpInfo {
+public class OpFieldInfo implements OpInfo {
 
-	private final Class<?> opClass;
+	private final Object instance;
+	private final Field field;
+
 	private Struct struct;
 	private ValidityException validityException;
-	private final double priority;
+
 	private final Hints hints;
 
-	public OpClassInfo(final Class<?> opClass) {
-		this(opClass, priorityFromAnnotation(opClass));
-	}
+	public OpFieldInfo(final Object instance, final Field field) {
+		this.instance = instance;
+		this.field = field;
 
-	public OpClassInfo(final Class<?> opClass, final double priority) {
-		this.opClass = opClass;
+		if (Modifier.isStatic(field.getModifiers())) {
+			// Field is static; instance must be null.
+			if (instance != null) {
+				// Static field; instance should be null!
+			}
+		}
+		else {
+			// NB: Field is not static; instance must match field.getDeclaringClass().
+			if (!field.getDeclaringClass().isInstance(instance)) {
+				// Mismatch between given object and the class containing the field
+				// But: we need to have proper case logic for the field being static or not.
+			}
+		}
 		List<ValidityProblem> problems = new ArrayList<>();
-		try {
-			struct = Structs.from(opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
-//			struct = ParameterStructs.structOf(opClass);
-			OpUtils.checkHasSingleOutput(struct);
-		} catch (ValidityException e) {
-			validityException = e;
-		} 
-		this.priority = priority;
+		// Reject all non public fields
+		if (!Modifier.isPublic(field.getModifiers())) {
+			problems.add(new ValidityProblem("Field to parse: " + field + " must be public."));
+		}
 
-		hints = formHints(opClass.getAnnotation(OpHints.class));
+		// NB: Subclassing a collection and inheriting its fields is NOT
+		// ALLOWED!
+		try {
+			struct = Structs.from(field, problems, new FieldParameterMemberParser());
+//			struct = ParameterStructs.structOf(field);
+			OpUtils.checkHasSingleOutput(struct);
+			// NB: Contextual parameters not supported for now.
+		} catch (ValidityException e) {
+			problems.addAll(e.problems());
+		}
+		if (!problems.isEmpty()) {
+			validityException = new ValidityException(problems);
+		}
+
+		hints = formHints(field.getAnnotation(OpHints.class));
 	}
 
 	// -- OpInfo methods --
 
 	@Override
 	public Type opType() {
-		// TODO: Check whether this is correct!
-		return Types.parameterizeRaw(opClass);
-		//return opClass;
+		return field.getGenericType();
+		// return Types.fieldType(field, subClass);
 	}
 
 	@Override
@@ -107,59 +125,40 @@ public class OpClassInfo implements OpInfo {
 
 	@Override
 	public double priority() {
-		return priority;
+		final OpField opField = field.getAnnotation(OpField.class);
+		return opField == null ? Priority.NORMAL : opField.priority();
 	}
 
 	@Override
 	public String implementationName() {
-		return opClass.getName();
+		return field.getDeclaringClass().getName() + "." + field.getName();
 	}
 
 	@Override
-	public StructInstance<?> createOpInstance(List<?> dependencies) {
-		final Object op;
+	public StructInstance<?> createOpInstance(List<?> dependencies)
+	{
+		if (dependencies != null && !dependencies.isEmpty())
+			throw new IllegalArgumentException(
+				"Op fields are not allowed to have any Op dependencies.");
+		// NB: In general, there is no way to create a new instance of the field value.
+		// Calling clone() may or may not work; it does not work with e.g. lambdas.
+		// Better to just use the same value directly, rather than trying to copy.
 		try {
-			// TODO: Consider whether this is really the best way to
-			// instantiate the op class here. No framework usage?
-			// E.g., what about pluginService.createInstance?
-			Constructor<?> ctor = opClass.getDeclaredConstructor();
-			ctor.setAccessible(true);
-			op = ctor.newInstance();
+			final Object object = field.get(instance);
+			// TODO: Wrap object in a generic holder with the same interface.
+			return struct().createInstance(object);
+		} catch (final IllegalAccessException exc) {
+			// FIXME
+			exc.printStackTrace();
+			throw new RuntimeException(exc);
 		}
-		catch (final InstantiationException | IllegalAccessException
-				| NoSuchMethodException | SecurityException | IllegalArgumentException
-				| InvocationTargetException e)
-		{
-			// TODO: Think about whether exception handling here should be
-			// different.
-			throw new IllegalStateException("Unable to instantiate op: '" + opClass
-				.getName() + "' Ensure that the Op has a no-args constructor.", e);
-		}
-		final List<OpDependencyMember<?>> dependencyMembers = dependencies();
-		for (int i = 0; i < dependencyMembers.size(); i++) {
-			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
-			try {
-				dependencyMember.createInstance(op).set(dependencies.get(i));
-			}
-			catch (final Exception ex) {
-				// TODO: Improve error message. Used to include exact OpRef of Op
-				// dependency.
-				throw new IllegalStateException(
-					"Exception trying to inject Op dependency field.\n" +
-						"\tOp dependency field to resolve: " + dependencyMember.getKey() +
-						"\n" + "\tFound Op to inject: " + dependencies.get(i).getClass()
-							.getName() + //
-						"\n" + "\tField signature: " + dependencyMember.getType(), ex);
-			}
-		}
-		return struct().createInstance(op);
 	}
 
 	@Override
 	public ValidityException getValidityException() {
 		return validityException;
 	}
-	
+
 	@Override
 	public boolean isValid() {
 		return validityException == null;
@@ -167,14 +166,14 @@ public class OpClassInfo implements OpInfo {
 	
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
-		return opClass;
+		return field;
 	}
-	
+
 	// -- Object methods --
 
 	@Override
 	public boolean equals(final Object o) {
-		if (!(o instanceof OpClassInfo))
+		if (!(o instanceof OpFieldInfo))
 			return false;
 		final OpInfo that = (OpInfo) o;
 		return struct().equals(that.struct());
@@ -190,12 +189,7 @@ public class OpClassInfo implements OpInfo {
 		return OpUtils.opString(this);
 	}
 
-	// -- Helper methods
-
-	private static double priorityFromAnnotation(Class<?> annotationBearer) {
-		final Plugin opAnnotation = annotationBearer.getAnnotation(Plugin.class);
-		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
-	}
+	// -- Helper methods -- //
 
 	private Hints formHints(OpHints h) {
 		if (h == null) return new ImmutableHints(new String[0]);

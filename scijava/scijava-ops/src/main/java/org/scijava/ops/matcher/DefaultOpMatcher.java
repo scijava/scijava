@@ -268,7 +268,7 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 	private boolean missArgs(final OpCandidate candidate, final Type[] paddedArgs) {
 		int i = 0;
 		for (final Member<?> member : OpUtils.inputs(candidate)) {
-			if (paddedArgs[i++] == null && OpUtils.isRequired(member)) {
+			if (paddedArgs[i++] == null && member.isRequired()) {
 				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
 				return true;
 			}

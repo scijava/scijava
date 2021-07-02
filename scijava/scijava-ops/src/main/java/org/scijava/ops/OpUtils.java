@@ -194,7 +194,7 @@ public final class OpUtils {
 		int inputCount = 0, requiredCount = 0;
 		for (final Member<?> item : members) {
 			inputCount++;
-			if (isRequired(item))
+			if (!item.isRequired())
 				requiredCount++;
 		}
 		if (args.length == inputCount) {
@@ -223,7 +223,7 @@ public final class OpUtils {
 		final Object[] paddedArgs = new Object[inputCount];
 		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
 		for (final Member<?> item : members) {
-			if (!isRequired(item) && optionalIndex++ >= optionalsToFill) {
+			if (!item.isRequired() && optionalIndex++ >= optionalsToFill) {
 				// skip this optional parameter (pad with null)
 				paddedIndex++;
 				continue;
@@ -232,21 +232,7 @@ public final class OpUtils {
 		}
 		return paddedArgs;
 	}
-	
-	/**
-	 * Determines whether {@link Member} {@code item} is required.
-	 * <p>
-	 * TODO: This method is a relic of {@link ParameterMember}, and should be
-	 * reconciled with the work in https://github.com/scijava/incubator/pull/32
-	 * 
-	 * @param item the {@link Member} that may or may not be required
-	 * @return true iff {@code item} is required.
-	 */
-	@Deprecated
-	public static boolean isRequired(final Member<?> item) {
-		return true;
-	}
-	
+
 	public static List<Member<?>> injectableMembers(Struct struct) {
 		return struct.members()
 				.stream()

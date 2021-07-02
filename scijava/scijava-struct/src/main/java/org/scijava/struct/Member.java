@@ -54,6 +54,10 @@ public interface Member<T> {
 		return false;
 	}
 
+	default boolean isRequired() {
+		return true;
+	}
+
 	default Struct childStruct() {
 		return null;
 	}

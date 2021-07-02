@@ -15,13 +15,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.Op;
-import org.scijava.ops.OpCollection;
-import org.scijava.ops.OpDependency;
-import org.scijava.ops.OpField;
-import org.scijava.ops.OpInfo;
-import org.scijava.ops.OpMethod;
-import org.scijava.ops.OpUtils;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -4,12 +4,13 @@ package org.scijava.ops.struct;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
+import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
+import org.scijava.struct.ValidityException;
 
 public class OpRetypingMemberParser implements
 	MemberParser<RetypingRequest, Member<?>>

@@ -9,7 +9,8 @@ import java.util.List;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.FieldOpDependencyMember;
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.ValidityException;
+import org.scijava.struct.MemberParser;
+import org.scijava.struct.ValidityException;
 import org.scijava.util.ClassUtils;
 
 public class ClassOpDependencyMemberParser implements
@@ -26,7 +27,7 @@ public class ClassOpDependencyMemberParser implements
 				final ArrayList<ValidityProblem> problems = new ArrayList<>();
 
 				// NB: Reject abstract classes.
-				Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
+				org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
 
 				// Parse field level @OpDependency annotations.
 				parseFieldOpDependencies(items, problems, source);

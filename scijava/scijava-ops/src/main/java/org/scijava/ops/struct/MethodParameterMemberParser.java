@@ -10,8 +10,9 @@ import java.util.Set;
 
 import org.scijava.ValidityProblem;
 import org.scijava.ops.OpMethod;
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.util.OpMethodUtils;
+import org.scijava.struct.MemberParser;
+import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
 public class MethodParameterMemberParser implements
@@ -51,7 +52,7 @@ public class MethodParameterMemberParser implements
 		}
 
 		// Parse method level @Parameter annotations.
-		Structs.parseFunctionalParameters(items, names, problems, functionalType,
+		FunctionalParameters.parseFunctionalParameters(items, names, problems, functionalType,
 			paramData);
 
 		// Fail if there were any problems.

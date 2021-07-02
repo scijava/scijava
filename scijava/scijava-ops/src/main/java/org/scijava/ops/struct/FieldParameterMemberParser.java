@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.scijava.ValidityProblem;
-import org.scijava.ops.ValidityException;
+import org.scijava.struct.MemberParser;
+import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
 public class FieldParameterMemberParser implements
@@ -38,9 +39,9 @@ public class FieldParameterMemberParser implements
 		final Set<String> names = new HashSet<>();
 		final Type fieldType = Types.fieldType(source, c);
 
-		Structs.checkModifiers(source.toString() + ": ", problems, source
+		org.scijava.struct.Structs.checkModifiers(source.toString() + ": ", problems, source
 			.getModifiers(), false, Modifier.FINAL);
-		Structs.parseFunctionalParameters(items, names, problems, fieldType,
+		FunctionalParameters.parseFunctionalParameters(items, names, problems, fieldType,
 			paramData);
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {

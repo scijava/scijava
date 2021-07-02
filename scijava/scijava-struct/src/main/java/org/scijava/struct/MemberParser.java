@@ -1,11 +1,8 @@
 
-package org.scijava.ops.struct;
+package org.scijava.struct;
 
 import java.lang.reflect.Type;
 import java.util.List;
-
-import org.scijava.ops.ValidityException;
-import org.scijava.struct.Member;
 
 /**
  * Parses a set of {@link Member}s from a source {@link Object}

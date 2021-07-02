@@ -11,6 +11,7 @@ import org.scijava.log.Logger;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.ValidityException;
 import org.scijava.util.MiscUtils;
 
 /**

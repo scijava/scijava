@@ -43,12 +43,12 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.struct.FieldParameterMemberParser;
-import org.scijava.ops.struct.Structs;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
+import org.scijava.struct.ValidityException;
 
 /**
  * Metadata about an op implementation defined as a field.

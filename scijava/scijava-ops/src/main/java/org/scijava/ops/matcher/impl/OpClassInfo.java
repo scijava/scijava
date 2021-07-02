@@ -43,14 +43,14 @@ import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.struct.ClassParameterMemberParser;
-import org.scijava.ops.struct.Structs;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
+import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
 /**
@@ -76,7 +76,6 @@ public class OpClassInfo implements OpInfo {
 		List<ValidityProblem> problems = new ArrayList<>();
 		try {
 			struct = Structs.from(opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
-//			struct = ParameterStructs.structOf(opClass);
 			OpUtils.checkHasSingleOutput(struct);
 		} catch (ValidityException e) {
 			validityException = e;

@@ -51,16 +51,16 @@ import org.scijava.ops.OpHints;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.struct.MethodParameterMemberParser;
-import org.scijava.ops.struct.Structs;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.OpMethodUtils;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
+import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
 

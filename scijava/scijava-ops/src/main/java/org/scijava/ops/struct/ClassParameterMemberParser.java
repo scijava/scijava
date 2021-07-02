@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.scijava.ValidityProblem;
-import org.scijava.ops.ValidityException;
+import org.scijava.struct.MemberParser;
+import org.scijava.struct.ValidityException;
 
 public class ClassParameterMemberParser implements
 	MemberParser<Class<?>, SynthesizedParameterMember<?>>
@@ -25,7 +26,7 @@ public class ClassParameterMemberParser implements
 		final Set<String> names = new HashSet<>();
 
 		// NB: Reject abstract classes.
-		Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
+		org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
 
 		// obtain a parameterData (preferably one that scrapes the javadoc)
 		ParameterData paramData;
@@ -35,7 +36,7 @@ public class ClassParameterMemberParser implements
 			paramData = new SynthesizedParameterData();
 		}
 
-		Structs.parseFunctionalParameters(items, names, problems, source, paramData);
+		FunctionalParameters.parseFunctionalParameters(items, names, problems, source, paramData);
 
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) throw new ValidityException(problems);

@@ -24,7 +24,7 @@ import org.scijava.function.Mutable;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpRef;
-import org.scijava.ops.struct.Structs;
+import org.scijava.ops.OpUtils;
 import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
@@ -67,7 +67,7 @@ public class SimplificationUtils {
 			if (!(originalOpType instanceof ParameterizedType))
 				throw new IllegalStateException("We hadn't thought about this yet.");
 			Class<?> opType = Types.raw(originalOpType);
-			Method fMethod = Structs.findFMethod(opType);
+			Method fMethod = OpUtils.findFunctionalMethod(opType);
 
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 
@@ -127,7 +127,7 @@ public class SimplificationUtils {
 	 * @return the index of the mutable argument (or -1 iff the output is returned).
 	 */
 	public static int findMutableArgIndex(Class<?> c) {
-		Method fMethod = Structs.findFMethod(c);
+		Method fMethod = OpUtils.findFunctionalMethod(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
 				Mutable.class) != null) return i;

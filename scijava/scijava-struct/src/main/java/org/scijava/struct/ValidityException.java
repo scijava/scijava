@@ -1,4 +1,4 @@
-package org.scijava.ops;
+package org.scijava.struct;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.scijava.ValidityProblem;
 /**
  * hasdjf
  *
+ * TODO: move upstream with {@link ValidityProblem} 
  * @author Curtis Rueden
  */
 public final class ValidityException extends Exception {
@@ -18,10 +19,11 @@ public final class ValidityException extends Exception {
 		this(Collections.singletonList(new ValidityProblem(message)));
 	}
 
-	public ValidityException(final List<ValidityProblem> problems) {
+	public ValidityException(@SuppressWarnings("exports") final List<ValidityProblem> problems) {
 		this.problems = problems;
 	}
 
+	@SuppressWarnings("exports")
 	public List<ValidityProblem> problems() {
 		return problems;
 	}

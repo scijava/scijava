@@ -15,15 +15,16 @@ import org.scijava.ops.Hints;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.struct.OpRetypingMemberParser;
+import org.scijava.ops.struct.FunctionalParameters;
 import org.scijava.ops.struct.RetypingRequest;
-import org.scijava.ops.struct.Structs;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
+import org.scijava.struct.ValidityException;
 
 /**
  * {@link OpInfo} for ops that have been adapted to some other Op type.
@@ -52,7 +53,7 @@ public class OpAdaptationInfo implements OpInfo {
 		// not
 		// much for us to do here.
 		List<ValidityProblem> problems = new ArrayList<>();
-		List<FunctionalMethodType> fmts = Structs.findFunctionalMethodTypes(type);
+		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
 		
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
 		struct = Structs.from(r, problems, new OpRetypingMemberParser());

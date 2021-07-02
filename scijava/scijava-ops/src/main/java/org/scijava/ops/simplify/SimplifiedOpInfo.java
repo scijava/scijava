@@ -1,16 +1,10 @@
 package org.scijava.ops.simplify;
 
-import com.google.common.collect.Streams;
-
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
@@ -20,18 +14,18 @@ import org.scijava.ops.Op;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.ValidityException;
 import org.scijava.ops.conversionLoss.LossReporter;
 import org.scijava.ops.hint.ImmutableHints;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.struct.OpRetypingMemberParser;
 import org.scijava.ops.struct.RetypingRequest;
-import org.scijava.ops.struct.Structs;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
+import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.util.MiscUtils;

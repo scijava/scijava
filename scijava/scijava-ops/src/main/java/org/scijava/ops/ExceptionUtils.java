@@ -1,4 +1,4 @@
-package org.scijava.ops.core;
+package org.scijava.ops;
 
 public class ExceptionUtils {
 	// For void methods

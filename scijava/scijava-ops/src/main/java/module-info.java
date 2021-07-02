@@ -34,7 +34,6 @@ module org.scijava.ops {
 	opens org.scijava.ops.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.stats to therapi.runtime.javadoc;
-	opens org.scijava.ops.core to therapi.runtime.javadoc;
 	opens org.scijava.ops.provenance.impl to therapi.runtime.javadoc, org.scijava;
 
 	// FIXME: This is a file name and is thus unstable

@@ -24,7 +24,7 @@ import org.scijava.function.Mutable;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpRef;
-import org.scijava.ops.OpUtils;
+import org.scijava.ops.struct.Structs;
 import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
@@ -67,7 +67,7 @@ public class SimplificationUtils {
 			if (!(originalOpType instanceof ParameterizedType))
 				throw new IllegalStateException("We hadn't thought about this yet.");
 			Class<?> opType = Types.raw(originalOpType);
-			Method fMethod = findFMethod(opType);
+			Method fMethod = Structs.findFMethod(opType);
 
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 
@@ -115,13 +115,6 @@ public class SimplificationUtils {
 		return Types.mapVarToTypes(types, map);
 	}
 
-	// TODO: extract this method to a more general utility class
-	public static Method findFMethod(Class<?> c) {
-			Class<?> fIface = OpUtils.findFunctionalInterface(c);
-			if(fIface == null) throw new IllegalArgumentException("Class " + c +" does not implement a functional interface!");
-			return InterfaceInference.singularAbstractMethod(fIface);
-	}
-
 	/**
 	 * Finds the {@link Mutable} or {@link Container} argument of a
 	 * {@link FunctionalInterface}'s singular abstract method. If there is no
@@ -134,7 +127,7 @@ public class SimplificationUtils {
 	 * @return the index of the mutable argument (or -1 iff the output is returned).
 	 */
 	public static int findMutableArgIndex(Class<?> c) {
-		Method fMethod = findFMethod(c);
+		Method fMethod = Structs.findFMethod(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
 				Mutable.class) != null) return i;

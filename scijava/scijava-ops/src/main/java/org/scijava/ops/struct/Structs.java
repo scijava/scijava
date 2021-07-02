@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.scijava.ValidityProblem;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
+import org.scijava.ops.OpUtils;
 import org.scijava.ops.ValidityException;
 import org.scijava.ops.util.AnnotationUtils;
 import org.scijava.struct.FunctionalMethodType;
@@ -21,6 +22,7 @@ import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.types.Types;
+import org.scijava.types.inference.InterfaceInference;
 
 public class Structs {
 
@@ -157,7 +159,7 @@ public class Structs {
 	 * @return
 	 */
 	private static Method findFunctionalMethod(Class<?> cls) {
-		Class<?> iFace = findFunctionalInterface(cls);
+		Class<?> iFace = OpUtils.findFunctionalInterface(cls);
 		if (iFace == null) {
 			return null;
 		}
@@ -174,24 +176,6 @@ public class Structs {
 		}
 
 		return nonDefaults.get(0);
-	}
-
-	/**
-	 * Searches for a {@code @FunctionalInterface} annotated interface in the
-	 * class hierarchy of the specified type. The first one that is found will be
-	 * returned. If no such interface can be found, null will be returned.
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public static Class<?> findFunctionalInterface(Class<?> type) {
-		if (type == null) return null;
-		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
-		for (Class<?> iface : type.getInterfaces()) {
-			final Class<?> result = findFunctionalInterface(iface);
-			if (result != null) return result;
-		}
-		return findFunctionalInterface(type.getSuperclass());
 	}
 
 	private static boolean checkValidity(Member<?> m, String name, Class<?> type,
@@ -244,6 +228,13 @@ public class Structs {
 		Struct s = from(object.getClass(), new ArrayList<>(),
 			new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
 		return s.createInstance(object);
+	}
+
+	// TODO: extract this method to a more general utility class
+	public static Method findFMethod(Class<?> c) {
+			Class<?> fIface = OpUtils.findFunctionalInterface(c);
+			if(fIface == null) throw new IllegalArgumentException("Class " + c +" does not implement a functional interface!");
+			return InterfaceInference.singularAbstractMethod(fIface);
 	}
 
 }

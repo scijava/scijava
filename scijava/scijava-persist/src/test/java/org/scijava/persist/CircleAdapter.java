@@ -1,5 +1,5 @@
 
-package org.scijava.persist.testobjects;
+package org.scijava.persist;
 
 import org.scijava.persist.IClassRuntimeAdapter;
 import org.scijava.plugin.Plugin;

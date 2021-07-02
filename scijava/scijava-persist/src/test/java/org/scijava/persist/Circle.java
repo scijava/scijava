@@ -1,5 +1,5 @@
 
-package org.scijava.persist.testobjects;
+package org.scijava.persist;
 
 public class Circle implements Shape {
 

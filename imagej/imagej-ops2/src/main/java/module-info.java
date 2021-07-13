@@ -22,7 +22,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.features.lbp2d to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.features.tamura2d to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.features.zernike to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.features.zernike.helper to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.filter to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.filter.addNoise to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.filter.bilateral to org.scijava, org.scijava.ops;

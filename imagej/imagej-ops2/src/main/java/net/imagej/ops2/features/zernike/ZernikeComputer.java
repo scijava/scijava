@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.features.zernike.helper;
+package net.imagej.ops2.features.zernike;
 
 import net.imagej.types.BigComplex;
 import net.imglib2.Cursor;

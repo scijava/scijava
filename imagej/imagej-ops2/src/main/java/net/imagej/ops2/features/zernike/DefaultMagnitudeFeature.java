@@ -28,7 +28,6 @@
  */
 package net.imagej.ops2.features.zernike;
 
-import net.imagej.ops2.features.zernike.helper.ZernikeMoment;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;

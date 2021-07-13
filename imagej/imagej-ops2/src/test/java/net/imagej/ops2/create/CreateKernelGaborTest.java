@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelGabor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;

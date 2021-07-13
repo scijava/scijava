@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.create.img;
+package net.imagej.ops2.create;
 
 import net.imglib2.Dimensions;
 import net.imglib2.Interval;

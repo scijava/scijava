@@ -26,7 +26,7 @@
  * #L%
  */
 
-package net.imagej.ops2.create.kernel;
+package net.imagej.ops2.create;
 
 import java.util.function.BiFunction;
 

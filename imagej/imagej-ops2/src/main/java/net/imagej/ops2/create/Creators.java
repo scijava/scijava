@@ -6,14 +6,6 @@ import java.util.function.Function;
 
 import net.imagej.ImgPlus;
 import net.imagej.ImgPlusMetadata;
-import net.imagej.ops2.create.img.Imgs;
-import net.imagej.ops2.create.kernel.DefaultCreateKernel2ndDerivBiGauss;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelBiGauss;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelGabor;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelGauss;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelGibsonLanni;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelLog;
-import net.imagej.ops2.create.kernel.DefaultCreateKernelSobel;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;

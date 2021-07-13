@@ -13,8 +13,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.convert.copy to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.copy to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.create to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.create.img to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.create.kernel to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.deconvolve to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.deconvolve.accelerate to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.eval to org.scijava, org.scijava.ops;

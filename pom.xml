@@ -139,6 +139,19 @@
 							</rules>
 						</configuration>
 					</execution>
+					<execution>
+						<id>enforce-no-subpackage-dependence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoSubpackageDependenceRule
+									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>

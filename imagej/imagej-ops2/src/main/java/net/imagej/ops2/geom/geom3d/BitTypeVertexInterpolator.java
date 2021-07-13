@@ -26,8 +26,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.geom.geom3d.mesh;
+package net.imagej.ops2.geom.geom3d;
 
-public interface Facet {
-	// NB: Marker Interface
+/**
+ * The {@link BitTypeVertexInterpolator} returns the point which is in the
+ * middle of the two input vertices.
+ * 
+ * @author Tim-Oliver Buchholz (University of Konstanz)
+ *
+ */
+public class BitTypeVertexInterpolator extends AbstractVertexInterpolator {
+
+	@Override
+	public void run() {
+		output = new double[3];
+		for (int i = 0; i < 3; i++) {
+			output[i] = (p1[i] + p2[i]) / 2.0;
+		}
+	}
+
+	@Override
+	public void setIsoLevel(double d) {
+		// nothing to do
+	}
+
 }

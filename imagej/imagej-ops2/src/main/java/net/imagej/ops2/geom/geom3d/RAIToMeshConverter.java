@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops2.geom.geom3d.mesh;
+package net.imagej.ops2.geom.geom3d;
 
 import java.lang.reflect.Type;
 import java.util.function.Function;

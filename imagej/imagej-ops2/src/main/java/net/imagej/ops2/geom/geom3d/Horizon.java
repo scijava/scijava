@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.geom.geom3d.mesh;
+package net.imagej.ops2.geom.geom3d;
 
 /**
  * A Horizon is the result of n neighboring {@link TriangularFacet} which are merged.

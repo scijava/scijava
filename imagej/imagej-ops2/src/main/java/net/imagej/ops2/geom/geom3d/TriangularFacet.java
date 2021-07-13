@@ -26,13 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.geom.geom3d.mesh;
+package net.imagej.ops2.geom.geom3d;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import net.imagej.ops2.geom.geom3d.DefaultConvexHull3D;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 

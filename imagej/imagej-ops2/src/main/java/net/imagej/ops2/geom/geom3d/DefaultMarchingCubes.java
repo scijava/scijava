@@ -33,8 +33,6 @@ import java.util.function.Function;
 
 import net.imagej.mesh.Mesh;
 import net.imagej.mesh.naive.NaiveDoubleMesh;
-import net.imagej.ops2.geom.geom3d.mesh.DefaultVertexInterpolator;
-import net.imagej.ops2.geom.geom3d.mesh.VertexInterpolator;
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;

@@ -48,7 +48,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.geom to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.geom.geom2d to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.geom.geom3d to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.geom.geom3d.mesh to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.identity to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.image.ascii to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.image.cooccurrenceMatrix to org.scijava, org.scijava.ops;

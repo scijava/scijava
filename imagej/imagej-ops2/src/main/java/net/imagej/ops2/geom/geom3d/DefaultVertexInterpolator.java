@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-package net.imagej.ops2.geom.geom3d.mesh;
+package net.imagej.ops2.geom.geom3d;
 
 /**
  * Linearly interpolate the position where an isosurface cuts an edge between

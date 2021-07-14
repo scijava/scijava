@@ -3,7 +3,7 @@ package org.scijava.ops.conversionLoss;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
-import org.scijava.ops.OpHistory;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
 import org.scijava.ops.hints.Hints;
@@ -33,7 +33,7 @@ public class LossReporterWrapper<I, O> //
 		final LossReporter<I, O> op, //
 		final OpInfo info, //
 		final Hints hints, //
-		final OpHistory history, //
+		final OpHistoryService history, //
 		final UUID executionID, //
 		final Type reifiedType)
 	{

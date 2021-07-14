@@ -60,7 +60,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 	 */
 	@Before
 	public void setUpEach() {
-		context = new Context(OpService.class, OpHistory.class, PluginService.class,
+		context = new Context(OpService.class, OpHistoryService.class, PluginService.class,
 			TypeService.class);
 		ops = context.getService(OpService.class);
 	}

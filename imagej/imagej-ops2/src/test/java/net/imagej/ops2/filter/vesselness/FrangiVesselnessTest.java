@@ -48,7 +48,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
-import org.scijava.ops.OpHistory;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.builder.OpBuilder;
 import org.scijava.plugin.PluginService;
@@ -68,7 +68,7 @@ public class FrangiVesselnessTest{
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, OpHistory.class, CacheService.class,
+		context = new Context(OpService.class, OpHistoryService.class, CacheService.class,
 			ThreadService.class, ScriptService.class, PluginService.class,
 			TypeService.class);
 		ops = context.service(OpService.class);

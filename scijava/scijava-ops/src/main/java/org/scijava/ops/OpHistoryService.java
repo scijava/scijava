@@ -28,7 +28,7 @@ import org.scijava.service.SciJavaService;
  *
  * @author Gabe Selzer
  */
-public interface OpHistory extends SciJavaService {
+public interface OpHistoryService extends SciJavaService {
 
 	// -- USER API -- //
 

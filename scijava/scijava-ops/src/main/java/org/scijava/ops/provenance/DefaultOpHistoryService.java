@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.OpHistory;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpInfo;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
@@ -40,7 +40,7 @@ import org.scijava.service.Service;
  * @author Gabe Selzer
  */
 @Plugin(type = Service.class)
-public class DefaultOpHistory extends AbstractService implements OpHistory {
+public class DefaultOpHistoryService extends AbstractService implements OpHistoryService {
 
 	// -- DATA STRCUTURES -- //
 

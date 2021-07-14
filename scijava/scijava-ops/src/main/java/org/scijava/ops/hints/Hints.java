@@ -5,7 +5,7 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.UUID;
 
-import org.scijava.ops.OpHistory;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 
 /**
@@ -46,10 +46,10 @@ public interface Hints {
 
 	/**
 	 * Returns the {@link UUID} uniquely identifying the an associated
-	 * {@link Deque} in the {@link OpHistory}
+	 * {@link Deque} in the {@link OpHistoryService}
 	 * 
 	 * @return the {@link UUID} corresponding to the execution chain (logged
-	 *         within the {@link OpHistory}) in which these {@link Hints} are
+	 *         within the {@link OpHistoryService}) in which these {@link Hints} are
 	 *         being used.
 	 */
 	public UUID executionChainID();

@@ -59,7 +59,7 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpField;
-import org.scijava.ops.OpHistory;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpInstance;
 import org.scijava.ops.OpMethod;
@@ -118,7 +118,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private TypeService typeService;
 
 	@Parameter
-	private OpHistory history;
+	private OpHistoryService history;
 
 	/**
 	 * Data structure storing all known Ops, grouped by name. This reduces the

@@ -22,7 +22,7 @@ public abstract class AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class, ThreadService.class, PluginService.class, TypeService.class);
+		context = new Context(OpService.class, OpHistory.class, CacheService.class, ThreadService.class, PluginService.class, TypeService.class);
 		ops = context.service(OpService.class);
 	}
 

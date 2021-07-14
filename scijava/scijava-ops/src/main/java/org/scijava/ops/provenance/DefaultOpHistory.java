@@ -14,7 +14,11 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.OpDependency;
+import org.scijava.ops.OpHistory;
 import org.scijava.ops.OpInfo;
+import org.scijava.plugin.Plugin;
+import org.scijava.service.AbstractService;
+import org.scijava.service.Service;
 
 /**
  * Log describing each execution of an Op. This class is designed to answer two
@@ -35,7 +39,8 @@ import org.scijava.ops.OpInfo;
  *
  * @author Gabe Selzer
  */
-public class OpHistory {
+@Plugin(type = Service.class)
+public class DefaultOpHistory extends AbstractService implements OpHistory {
 
 	// -- DATA STRCUTURES -- //
 
@@ -43,27 +48,27 @@ public class OpHistory {
 	 * {@link Map} responsible for recording the execution of an Op returned by a
 	 * <b>matching call</b>
 	 */
-	private static final Map<UUID, ConcurrentLinkedDeque<OpExecutionSummary>> history =
+	private final Map<UUID, ConcurrentLinkedDeque<OpExecutionSummary>> history =
 		new ConcurrentHashMap<>();
 
 	/**
 	 * {@link Map} responsible for recording the {@link Graph} of {@link OpInfo}s
 	 * involved to produce the result of a particular matching call
 	 */
-	private static final Map<UUID, MutableGraph<OpInfo>> dependencyChain =
+	private final Map<UUID, MutableGraph<OpInfo>> dependencyChain =
 		new ConcurrentHashMap<>();
 
 	/**
 	 * {@link Map} responsible for recording the "top-level" {@link Object}
 	 * produced by a matching call
 	 */
-	private static final Map<UUID, Object> opRecord = new ConcurrentHashMap<>();
+	private final Map<UUID, Object> opRecord = new ConcurrentHashMap<>();
 
 	/**
 	 * {@link Map} responsible for recording the <b>wrapper</b> of the "top-level"
 	 * {@link Object} produced by a matching call
 	 */
-	private static final Map<UUID, Object> wrapperRecord =
+	private final Map<UUID, Object> wrapperRecord =
 		new ConcurrentHashMap<>();
 
 	// -- USER API -- //
@@ -75,7 +80,8 @@ public class OpHistory {
 	 * @param o the {@link Object} of interest
 	 * @return a {@link List} of all executions upon {@code o}
 	 */
-	public static List<OpExecutionSummary> executionsUpon(Object o) {
+	@Override
+	public List<OpExecutionSummary> executionsUpon(Object o) {
 		if (o.getClass().isPrimitive()) throw new IllegalArgumentException(
 			"Cannot determine the executions upon a primitive as they are passed by reference!");
 		return history.values().stream() //
@@ -93,7 +99,8 @@ public class OpHistory {
 	 *          matching call, as the dependency {@link Object}s are not recorded.
 	 * @return the {@link Graph} describing the dependency chain
 	 */
-	public static Graph<OpInfo> opExecutionChain(Object op) {
+	@Override
+	public Graph<OpInfo> opExecutionChain(Object op) {
 		// return dependency chain if op was an Op or wrapped an Op
 		UUID opID = findUUIDInOpRecord(op);
 		if (opID != null) return dependencyChain.get(opID);
@@ -112,7 +119,8 @@ public class OpHistory {
 	 * @param id the {@link UUID} associated with a particular matching call
 	 * @return the {@link Graph} describing the dependency chain
 	 */
-	public static Graph<OpInfo> opExecutionChain(UUID id) {
+	@Override
+	public Graph<OpInfo> opExecutionChain(UUID id) {
 		if (!dependencyChain.containsKey(id)) throw new IllegalArgumentException(
 			"UUID " + id + " has not been registered to an Op execution chain");
 		return dependencyChain.get(id);
@@ -126,7 +134,8 @@ public class OpHistory {
 	 * @param e the {@link OpExecutionSummary}
 	 * @return true iff {@code e} was successfully logged
 	 */
-	public static boolean addExecution(OpExecutionSummary e) {
+	@Override
+	public boolean addExecution(OpExecutionSummary e) {
 		if (!history.containsKey(e.executionTreeHash())) generateDeque(e
 			.executionTreeHash());
 		history.get(e.executionTreeHash()).addLast(e);
@@ -143,8 +152,9 @@ public class OpHistory {
 	 * @param dependencies the {@link OpInfo}s used to fulfill the
 	 *          {@link OpDependency} requests of the Op specified by {@code info}
 	 */
-	public static void logDependencies(UUID executionChainID, OpInfo info,
-		List<OpInfo> dependencies)
+	@Override
+	public void logDependencies(UUID executionChainID, OpInfo info,
+		List<OpInfo> dependencies) 
 	{
 		dependencyChain.putIfAbsent(executionChainID, buildGraph());
 		MutableGraph<OpInfo> depTree = dependencyChain.get(executionChainID);
@@ -164,7 +174,8 @@ public class OpHistory {
 	 * @param op the {@link Object} returned from the matching call identifiable
 	 *          by {@code executionChainID}.
 	 */
-	public static void logTopLevelOp(UUID executionChainID, Object op) {
+	@Override
+	public void logTopLevelOp(UUID executionChainID, Object op) {
 		Object former = opRecord.putIfAbsent(executionChainID, op);
 		if (former != null) throw new IllegalArgumentException("Execution ID " +
 			executionChainID + " has already logged a Top-Level Op!");
@@ -180,7 +191,8 @@ public class OpHistory {
 	 * @param wrapper the {@link Object} returned from the matching call
 	 *          identifiable by {@code executionChainID}.
 	 */
-	public static void logTopLevelWrapper(UUID executionChainID, Object wrapper) {
+	@Override
+	public void logTopLevelWrapper(UUID executionChainID, Object wrapper) {
 		Object former = wrapperRecord.putIfAbsent(executionChainID, wrapper);
 		if (former != null) throw new IllegalArgumentException("Execution ID " +
 			executionChainID + " has already logged a Top-Level Op!");
@@ -188,24 +200,24 @@ public class OpHistory {
 
 	// -- HELPER METHODS -- //
 
-	private static MutableGraph<OpInfo> buildGraph() {
+	private MutableGraph<OpInfo> buildGraph() {
 		return GraphBuilder.directed().allowsSelfLoops(false).build();
 	}
 
-	private static UUID findUUIDInOpRecord(Object op) {
+	private UUID findUUIDInOpRecord(Object op) {
 		return keyForV(opRecord, op);
 	}
 
-	private static UUID findUUIDInWrapperRecord(Object op) {
+	private UUID findUUIDInWrapperRecord(Object op) {
 		return keyForV(wrapperRecord, op);
 	}
 
-	private static synchronized void generateDeque(UUID executionTreeHash) {
+	private synchronized void generateDeque(UUID executionTreeHash) {
 		history.putIfAbsent(executionTreeHash,
 			new ConcurrentLinkedDeque<OpExecutionSummary>());
 	}
 
-	private static <T, V> T keyForV(Map<T, V> map, V value) {
+	private <T, V> T keyForV(Map<T, V> map, V value) {
 		List<T> keys = keysForV(map, value);
 		if (keys.size() > 1) throw new IllegalArgumentException("Map " + map +
 			" has multiple keys for value " + value);
@@ -213,14 +225,14 @@ public class OpHistory {
 		return keys.get(0);
 	}
 
-	private static <T, V> List<T> keysForV(Map<T, V> map, V value) {
+	private <T, V> List<T> keysForV(Map<T, V> map, V value) {
 		return map.entrySet().parallelStream() //
 			.filter(e -> e.getValue() == value) //
 			.map(e -> e.getKey()) //
 			.collect(Collectors.toList());
 	}
 
-	public static void resetHistory() {
+	public void resetHistory() {
 		history.clear();
 		dependencyChain.clear();
 	}

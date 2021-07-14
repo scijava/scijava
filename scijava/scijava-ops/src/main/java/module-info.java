@@ -16,6 +16,7 @@ module org.scijava.ops {
 	// -- Open plugins to scijava-common
 	opens org.scijava.ops to org.scijava;
 	opens org.scijava.ops.impl to org.scijava;
+	opens org.scijava.ops.provenance to org.scijava;
 
   // FIXME: This is a file name and is thus unstable
   requires geantyref;

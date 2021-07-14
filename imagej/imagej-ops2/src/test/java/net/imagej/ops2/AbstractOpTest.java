@@ -50,6 +50,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
+import org.scijava.ops.OpHistory;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
 import org.scijava.plugin.PluginService;
@@ -73,7 +74,7 @@ public abstract class AbstractOpTest{
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
+		context = new Context(OpService.class, OpHistory.class, CacheService.class,
 			ThreadService.class, PluginService.class, TypeService.class);
 		ops = context.service(OpService.class);
 	}

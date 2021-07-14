@@ -19,7 +19,7 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistory;
+import org.scijava.ops.OpHistory;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -32,7 +32,7 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final OpInfo info, final Hints hints, final UUID executionID, final Type reifiedType) {
+		public Producer<T> wrap(final Producer<T> op, final OpInfo info, final Hints hints, final OpHistory history, final UUID executionID, final Type reifiedType) {
 			class GenericTypedProducer implements Producer<T>, GenericTyped {
 
 				@Override
@@ -44,7 +44,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -71,6 +71,7 @@ public class OpWrappers {
 			final Function<I, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -88,7 +89,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -113,6 +114,7 @@ public class OpWrappers {
 			final BiFunction<I1, I2, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -130,7 +132,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -155,6 +157,7 @@ public class OpWrappers {
 			final Functions.Arity3<I1, I2, I3, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -172,7 +175,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -197,6 +200,7 @@ public class OpWrappers {
 			final Functions.Arity4<I1, I2, I3, I4, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -214,7 +218,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -239,6 +243,7 @@ public class OpWrappers {
 			final Functions.Arity5<I1, I2, I3, I4, I5, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -256,7 +261,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -281,6 +286,7 @@ public class OpWrappers {
 			final Functions.Arity6<I1, I2, I3, I4, I5, I6, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -298,7 +304,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -323,6 +329,7 @@ public class OpWrappers {
 			final Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -340,7 +347,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -365,6 +372,7 @@ public class OpWrappers {
 			final Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -382,7 +390,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -407,6 +415,7 @@ public class OpWrappers {
 			final Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -424,7 +433,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -449,6 +458,7 @@ public class OpWrappers {
 			final Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -466,7 +476,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -491,6 +501,7 @@ public class OpWrappers {
 			final Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -508,7 +519,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -533,6 +544,7 @@ public class OpWrappers {
 			final Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -550,7 +562,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -575,6 +587,7 @@ public class OpWrappers {
 			final Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -592,7 +605,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -617,6 +630,7 @@ public class OpWrappers {
 			final Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -634,7 +648,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -659,6 +673,7 @@ public class OpWrappers {
 			final Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -676,7 +691,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -701,6 +716,7 @@ public class OpWrappers {
 			final Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -718,7 +734,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 					return out;
 				}
@@ -745,6 +761,7 @@ public class OpWrappers {
 			final Computers.Arity0<O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -762,7 +779,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -786,6 +803,7 @@ public class OpWrappers {
 			final Computers.Arity1<I, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -803,7 +821,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -827,6 +845,7 @@ public class OpWrappers {
 			final Computers.Arity2<I1, I2, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -844,7 +863,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -868,6 +887,7 @@ public class OpWrappers {
 			final Computers.Arity3<I1, I2, I3, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -885,7 +905,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -909,6 +929,7 @@ public class OpWrappers {
 			final Computers.Arity4<I1, I2, I3, I4, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -926,7 +947,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -950,6 +971,7 @@ public class OpWrappers {
 			final Computers.Arity5<I1, I2, I3, I4, I5, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -967,7 +989,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -991,6 +1013,7 @@ public class OpWrappers {
 			final Computers.Arity6<I1, I2, I3, I4, I5, I6, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1008,7 +1031,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1032,6 +1055,7 @@ public class OpWrappers {
 			final Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1049,7 +1073,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1073,6 +1097,7 @@ public class OpWrappers {
 			final Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1090,7 +1115,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1114,6 +1139,7 @@ public class OpWrappers {
 			final Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1131,7 +1157,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1155,6 +1181,7 @@ public class OpWrappers {
 			final Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1172,7 +1199,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1196,6 +1223,7 @@ public class OpWrappers {
 			final Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1213,7 +1241,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1237,6 +1265,7 @@ public class OpWrappers {
 			final Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1254,7 +1283,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1278,6 +1307,7 @@ public class OpWrappers {
 			final Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1295,7 +1325,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1319,6 +1349,7 @@ public class OpWrappers {
 			final Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1336,7 +1367,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1360,6 +1391,7 @@ public class OpWrappers {
 			final Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1377,7 +1409,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1401,6 +1433,7 @@ public class OpWrappers {
 			final Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1418,7 +1451,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1444,6 +1477,7 @@ public class OpWrappers {
 			final Inplaces.Arity1<IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1461,7 +1495,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1485,6 +1519,7 @@ public class OpWrappers {
 			final Inplaces.Arity2_1<IO, I2> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1502,7 +1537,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1526,6 +1561,7 @@ public class OpWrappers {
 			final Inplaces.Arity2_2<I1, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1543,7 +1579,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1567,6 +1603,7 @@ public class OpWrappers {
 			final Inplaces.Arity3_1<IO, I2, I3> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1584,7 +1621,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1608,6 +1645,7 @@ public class OpWrappers {
 			final Inplaces.Arity3_2<I1, IO, I3> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1625,7 +1663,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1649,6 +1687,7 @@ public class OpWrappers {
 			final Inplaces.Arity3_3<I1, I2, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1666,7 +1705,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1690,6 +1729,7 @@ public class OpWrappers {
 			final Inplaces.Arity4_1<IO, I2, I3, I4> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1707,7 +1747,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1731,6 +1771,7 @@ public class OpWrappers {
 			final Inplaces.Arity4_2<I1, IO, I3, I4> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1748,7 +1789,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1772,6 +1813,7 @@ public class OpWrappers {
 			final Inplaces.Arity4_3<I1, I2, IO, I4> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1789,7 +1831,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1813,6 +1855,7 @@ public class OpWrappers {
 			final Inplaces.Arity4_4<I1, I2, I3, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1830,7 +1873,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1854,6 +1897,7 @@ public class OpWrappers {
 			final Inplaces.Arity5_1<IO, I2, I3, I4, I5> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1871,7 +1915,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1895,6 +1939,7 @@ public class OpWrappers {
 			final Inplaces.Arity5_2<I1, IO, I3, I4, I5> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1912,7 +1957,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1936,6 +1981,7 @@ public class OpWrappers {
 			final Inplaces.Arity5_3<I1, I2, IO, I4, I5> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1953,7 +1999,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -1977,6 +2023,7 @@ public class OpWrappers {
 			final Inplaces.Arity5_4<I1, I2, I3, IO, I5> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -1994,7 +2041,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2018,6 +2065,7 @@ public class OpWrappers {
 			final Inplaces.Arity5_5<I1, I2, I3, I4, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2035,7 +2083,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2059,6 +2107,7 @@ public class OpWrappers {
 			final Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2076,7 +2125,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2100,6 +2149,7 @@ public class OpWrappers {
 			final Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2117,7 +2167,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2141,6 +2191,7 @@ public class OpWrappers {
 			final Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2158,7 +2209,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2182,6 +2233,7 @@ public class OpWrappers {
 			final Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2199,7 +2251,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2223,6 +2275,7 @@ public class OpWrappers {
 			final Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2240,7 +2293,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2264,6 +2317,7 @@ public class OpWrappers {
 			final Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2281,7 +2335,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2305,6 +2359,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2322,7 +2377,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2346,6 +2401,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2363,7 +2419,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2387,6 +2443,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2404,7 +2461,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2428,6 +2485,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2445,7 +2503,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2469,6 +2527,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2486,7 +2545,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2510,6 +2569,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2527,7 +2587,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2551,6 +2611,7 @@ public class OpWrappers {
 			final Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2568,7 +2629,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2592,6 +2653,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2609,7 +2671,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2633,6 +2695,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2650,7 +2713,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2674,6 +2737,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2691,7 +2755,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2715,6 +2779,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2732,7 +2797,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2756,6 +2821,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2773,7 +2839,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2797,6 +2863,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2814,7 +2881,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2838,6 +2905,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2855,7 +2923,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2879,6 +2947,7 @@ public class OpWrappers {
 			final Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2896,7 +2965,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2920,6 +2989,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2937,7 +3007,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -2961,6 +3031,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -2978,7 +3049,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3002,6 +3073,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3019,7 +3091,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3043,6 +3115,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3060,7 +3133,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3084,6 +3157,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3101,7 +3175,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3125,6 +3199,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3142,7 +3217,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3166,6 +3241,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3183,7 +3259,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3207,6 +3283,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3224,7 +3301,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3248,6 +3325,7 @@ public class OpWrappers {
 			final Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3265,7 +3343,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3289,6 +3367,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3306,7 +3385,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3330,6 +3409,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3347,7 +3427,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3371,6 +3451,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3388,7 +3469,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3412,6 +3493,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3429,7 +3511,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3453,6 +3535,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3470,7 +3553,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3494,6 +3577,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3511,7 +3595,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3535,6 +3619,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3552,7 +3637,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3576,6 +3661,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3593,7 +3679,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3617,6 +3703,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3634,7 +3721,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3658,6 +3745,7 @@ public class OpWrappers {
 			final Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3675,7 +3763,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3699,6 +3787,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3716,7 +3805,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3740,6 +3829,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3757,7 +3847,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3781,6 +3871,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3798,7 +3889,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3822,6 +3913,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3839,7 +3931,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3863,6 +3955,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3880,7 +3973,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3904,6 +3997,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3921,7 +4015,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3945,6 +4039,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -3962,7 +4057,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -3986,6 +4081,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4003,7 +4099,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4027,6 +4123,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4044,7 +4141,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4068,6 +4165,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4085,7 +4183,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4109,6 +4207,7 @@ public class OpWrappers {
 			final Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4126,7 +4225,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4150,6 +4249,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4167,7 +4267,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4191,6 +4291,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4208,7 +4309,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4232,6 +4333,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4249,7 +4351,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4273,6 +4375,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4290,7 +4393,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4314,6 +4417,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4331,7 +4435,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4355,6 +4459,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4372,7 +4477,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4396,6 +4501,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4413,7 +4519,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4437,6 +4543,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4454,7 +4561,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4478,6 +4585,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4495,7 +4603,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4519,6 +4627,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4536,7 +4645,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4560,6 +4669,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4577,7 +4687,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4601,6 +4711,7 @@ public class OpWrappers {
 			final Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4618,7 +4729,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4642,6 +4753,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4659,7 +4771,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4683,6 +4795,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4700,7 +4813,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4724,6 +4837,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4741,7 +4855,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4765,6 +4879,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4782,7 +4897,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4806,6 +4921,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4823,7 +4939,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4847,6 +4963,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4864,7 +4981,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4888,6 +5005,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4905,7 +5023,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4929,6 +5047,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4946,7 +5065,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -4970,6 +5089,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -4987,7 +5107,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5011,6 +5131,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5028,7 +5149,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5052,6 +5173,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5069,7 +5191,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5093,6 +5215,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5110,7 +5233,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5134,6 +5257,7 @@ public class OpWrappers {
 			final Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5151,7 +5275,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5175,6 +5299,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5192,7 +5317,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5216,6 +5341,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5233,7 +5359,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5257,6 +5383,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5274,7 +5401,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5298,6 +5425,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5315,7 +5443,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5339,6 +5467,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5356,7 +5485,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5380,6 +5509,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5397,7 +5527,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5421,6 +5551,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5438,7 +5569,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5462,6 +5593,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5479,7 +5611,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5503,6 +5635,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5520,7 +5653,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5544,6 +5677,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5561,7 +5695,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5585,6 +5719,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5602,7 +5737,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5626,6 +5761,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5643,7 +5779,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5667,6 +5803,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5684,7 +5821,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5708,6 +5845,7 @@ public class OpWrappers {
 			final Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5725,7 +5863,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5749,6 +5887,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5766,7 +5905,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5790,6 +5929,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5807,7 +5947,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5831,6 +5971,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5848,7 +5989,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5872,6 +6013,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5889,7 +6031,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5913,6 +6055,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5930,7 +6073,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5954,6 +6097,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -5971,7 +6115,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -5995,6 +6139,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6012,7 +6157,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6036,6 +6181,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6053,7 +6199,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6077,6 +6223,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6094,7 +6241,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6118,6 +6265,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6135,7 +6283,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6159,6 +6307,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6176,7 +6325,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6200,6 +6349,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6217,7 +6367,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6241,6 +6391,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6258,7 +6409,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6282,6 +6433,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6299,7 +6451,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6323,6 +6475,7 @@ public class OpWrappers {
 			final Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6340,7 +6493,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6364,6 +6517,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6381,7 +6535,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6405,6 +6559,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6422,7 +6577,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6446,6 +6601,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6463,7 +6619,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6487,6 +6643,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6504,7 +6661,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6528,6 +6685,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6545,7 +6703,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6569,6 +6727,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6586,7 +6745,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6610,6 +6769,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6627,7 +6787,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6651,6 +6811,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6668,7 +6829,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6692,6 +6853,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6709,7 +6871,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6733,6 +6895,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6750,7 +6913,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6774,6 +6937,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6791,7 +6955,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6815,6 +6979,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6832,7 +6997,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6856,6 +7021,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6873,7 +7039,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6897,6 +7063,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6914,7 +7081,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6938,6 +7105,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6955,7 +7123,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 
@@ -6979,6 +7147,7 @@ public class OpWrappers {
 			final Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> op, //
 			final OpInfo info, //
 			final Hints hints, //
+			final OpHistory history, //
 			final UUID executionID, //
 			final Type reifiedType)
 		{
@@ -6996,7 +7165,7 @@ public class OpWrappers {
 					// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				}
 

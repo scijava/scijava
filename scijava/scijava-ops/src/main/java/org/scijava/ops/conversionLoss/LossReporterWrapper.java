@@ -3,11 +3,11 @@ package org.scijava.ops.conversionLoss;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
+import org.scijava.ops.OpHistory;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -33,6 +33,7 @@ public class LossReporterWrapper<I, O> //
 		final LossReporter<I, O> op, //
 		final OpInfo info, //
 		final Hints hints, //
+		final OpHistory history, //
 		final UUID executionID, //
 		final Type reifiedType)
 	{
@@ -50,7 +51,7 @@ public class LossReporterWrapper<I, O> //
 				// Log a new execution
 					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
 						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, output);
-						OpHistory.addExecution(e);
+						history.addExecution(e);
 					}
 				return output;
 			}

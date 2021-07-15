@@ -5,8 +5,8 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.UUID;
 
-import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.provenance.OpHistoryService;
 
 /**
  * A basic interface for storing and accessing Hints. The general structure for a Hint is

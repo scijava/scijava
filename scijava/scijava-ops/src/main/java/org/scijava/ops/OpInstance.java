@@ -3,11 +3,12 @@ package org.scijava.ops;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Map;
+import java.util.Objects;
 
 /**
+ * An instance of an {@link OpInfo}
  * 
- * @author G
- *
+ * @author Gabriel Selzer
  */
 public class OpInstance {
 
@@ -35,6 +36,21 @@ public class OpInstance {
 
 	public Map<TypeVariable<?>, Type> typeVarAssigns() {
 		return typeVarAssigns;
+	}
+
+	@Override
+	public boolean equals(Object that) {
+		if (!(that instanceof OpInstance)) return false;
+		OpInstance thatInstance = (OpInstance) that;
+		boolean infosEqual = info().equals(thatInstance.info());
+		boolean objectsEqual = op().equals(thatInstance.op());
+		boolean typeVarAssignsEqual = typeVarAssigns().equals(thatInstance.typeVarAssigns());
+		return infosEqual && objectsEqual && typeVarAssignsEqual;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(info(), op(), typeVarAssigns());
 	}
 
 }

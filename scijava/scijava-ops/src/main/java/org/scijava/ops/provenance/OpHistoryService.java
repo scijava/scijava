@@ -1,12 +1,12 @@
 
-package org.scijava.ops;
+package org.scijava.ops.provenance;
 
 import com.google.common.graph.Graph;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.scijava.ops.provenance.OpExecutionSummary;
+import org.scijava.ops.OpInfo;
 import org.scijava.service.SciJavaService;
 
 /**

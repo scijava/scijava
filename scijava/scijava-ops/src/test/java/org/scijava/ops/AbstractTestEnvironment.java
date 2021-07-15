@@ -11,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
 import org.scijava.types.TypeService;

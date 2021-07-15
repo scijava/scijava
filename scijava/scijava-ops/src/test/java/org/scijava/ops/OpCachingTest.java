@@ -45,6 +45,7 @@ import org.scijava.ops.core.OpCollection;
 import org.scijava.ops.impl.DefaultOpEnvironment;
 import org.scijava.ops.impl.MatchingConditions;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;

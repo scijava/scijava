@@ -4,9 +4,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
-import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.hints.Hints;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.types.Types;
 

@@ -51,6 +51,7 @@
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-ops</module>
 		<module>scijava/scijava-struct</module>
+		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-taglets</module>
 		<module>scijava/scijava-testutil</module>
 		<module>scijava/scijava-types</module>

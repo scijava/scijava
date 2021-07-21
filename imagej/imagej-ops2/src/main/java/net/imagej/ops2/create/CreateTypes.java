@@ -21,7 +21,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.OpField;
+import org.scijava.ops.api.OpField;
+import org.scijava.ops.api.OpField;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

@@ -12,7 +12,8 @@ import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpDependency;
 import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.OpField;
+import org.scijava.ops.api.OpField;
+import org.scijava.ops.api.OpField;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 

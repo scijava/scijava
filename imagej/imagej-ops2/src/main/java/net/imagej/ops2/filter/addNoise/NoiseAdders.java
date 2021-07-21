@@ -37,7 +37,8 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.OpCollection;
+import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.OpField;
 import org.scijava.plugin.Plugin;
 

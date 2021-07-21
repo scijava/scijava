@@ -9,6 +9,7 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.plugin.Plugin;
+import org.scijava.ops.api.OpCollection;
 
 @Plugin(type = OpCollection.class)
 public class OpMethodDependencyPositionTest extends AbstractTestEnvironment {

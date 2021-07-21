@@ -38,7 +38,8 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.OpField;
-import org.scijava.ops.OpCollection;
+import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.api.OpCollection;
 import org.scijava.plugin.Plugin;
 
 /**

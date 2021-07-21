@@ -3,7 +3,7 @@ package org.scijava.ops.stats;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.plugin.Plugin;
 

@@ -41,6 +41,7 @@ module org.scijava.ops {
 	requires org.scijava;
 	requires org.scijava.function;
 	requires org.scijava.struct;
+	requires org.scijava.ops.api;
 	requires org.scijava.types;
 	requires javassist;
 	requires java.compiler;

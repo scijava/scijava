@@ -3,7 +3,7 @@ package org.scijava.ops.math;
 import java.util.Arrays;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 public class Normalize {

@@ -32,7 +32,7 @@ package net.imagej.ops2.threshold.apply;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

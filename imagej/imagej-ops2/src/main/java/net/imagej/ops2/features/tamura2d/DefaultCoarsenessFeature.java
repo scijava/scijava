@@ -48,7 +48,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Intervals;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.plugin.Plugin;
 

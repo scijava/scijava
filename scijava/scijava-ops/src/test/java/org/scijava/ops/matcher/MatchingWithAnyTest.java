@@ -11,7 +11,7 @@ import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;

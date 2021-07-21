@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpField;

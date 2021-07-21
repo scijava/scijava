@@ -35,7 +35,7 @@ import net.imagej.ops2.threshold.minimum.ComputeMinimumThreshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 // This plugin code ported from the original MatLab code of the max likelihood

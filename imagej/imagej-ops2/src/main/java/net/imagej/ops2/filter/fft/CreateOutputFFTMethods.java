@@ -35,7 +35,7 @@ import net.imglib2.Dimensions;
 import net.imglib2.img.Img;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.plugin.Plugin;
 

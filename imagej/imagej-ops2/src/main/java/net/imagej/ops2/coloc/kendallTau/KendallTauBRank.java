@@ -38,7 +38,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

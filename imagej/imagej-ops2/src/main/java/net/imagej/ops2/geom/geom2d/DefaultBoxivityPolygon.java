@@ -33,7 +33,7 @@ import net.imagej.ops2.geom.AbstractBoxivity;
 import net.imglib2.roi.geom.real.Polygon2D;
 
 import org.scijava.Priority;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -39,7 +39,7 @@ import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.RealComposite;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.plugin.Plugin;
 

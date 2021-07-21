@@ -57,7 +57,7 @@ import org.scijava.ops.BaseOpHints.Adaptation;
 import org.scijava.ops.BaseOpHints.DependencyMatching;
 import org.scijava.ops.BaseOpHints.Simplification;
 import org.scijava.ops.Hints;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpCandidate;
 import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.ops.OpCollection;

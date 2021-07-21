@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpBuilder;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;

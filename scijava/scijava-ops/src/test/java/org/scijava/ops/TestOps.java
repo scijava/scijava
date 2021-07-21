@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -33,7 +33,7 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.Type;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

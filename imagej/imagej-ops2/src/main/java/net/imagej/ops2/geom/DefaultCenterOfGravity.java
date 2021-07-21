@@ -38,7 +38,7 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

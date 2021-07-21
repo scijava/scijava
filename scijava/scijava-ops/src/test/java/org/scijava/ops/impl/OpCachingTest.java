@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Assertions;
 import org.scijava.Context;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpEnvironment;

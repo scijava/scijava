@@ -35,7 +35,7 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.plugin.Plugin;
 
 /**

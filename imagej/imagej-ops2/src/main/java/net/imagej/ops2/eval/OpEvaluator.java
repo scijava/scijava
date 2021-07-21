@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpService;
 import org.scijava.ops.util.FunctionUtils;
 import org.scijava.parsington.Operator;

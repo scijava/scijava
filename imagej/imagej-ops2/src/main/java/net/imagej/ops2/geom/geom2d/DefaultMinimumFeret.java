@@ -41,7 +41,7 @@ import net.imglib2.util.ValuePair;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Line;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.plugin.Plugin;
 

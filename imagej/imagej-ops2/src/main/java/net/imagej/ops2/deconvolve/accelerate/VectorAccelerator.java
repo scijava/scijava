@@ -46,7 +46,7 @@ import net.imglib2.view.Views;
 import org.scijava.Priority;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.util.Adapt;
 import org.scijava.plugin.Plugin;

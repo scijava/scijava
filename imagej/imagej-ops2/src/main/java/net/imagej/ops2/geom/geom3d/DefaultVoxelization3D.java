@@ -44,7 +44,7 @@ import net.imglib2.type.logic.BitType;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.function.Functions;
-import org.scijava.ops.Op;
+import org.scijava.ops.api.Op;
 import org.scijava.ops.OpDependency;
 import org.scijava.plugin.Plugin;
 

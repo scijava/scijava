@@ -18,9 +18,9 @@ import org.scijava.ops.OpExecutionSummary;
 import org.scijava.ops.OpField;
 import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.OpMethod;
 import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpMethod;
 import org.scijava.ops.hint.DefaultHints;
 import org.scijava.plugin.Plugin;
 

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpMethod;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

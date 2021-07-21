@@ -8,7 +8,8 @@ import java.util.List;
 
 import org.scijava.ValidityProblem;
 import org.scijava.ops.FieldOpDependencyMember;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpDependency;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.ValidityException;
 import org.scijava.util.ClassUtils;

@@ -13,10 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpExecutionSummary;
 import org.scijava.ops.OpHistory;
 import org.scijava.ops.OpInfo;
+import org.scijava.ops.api.OpDependency;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;

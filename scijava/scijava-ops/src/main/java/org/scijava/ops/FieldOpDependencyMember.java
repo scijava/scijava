@@ -32,6 +32,7 @@ package org.scijava.ops;
 
 import java.lang.reflect.Field;
 
+import org.scijava.ops.api.OpDependency;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.struct.ValueAccessibleMemberInstance;

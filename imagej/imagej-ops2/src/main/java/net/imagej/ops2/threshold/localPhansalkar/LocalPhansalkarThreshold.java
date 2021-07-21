@@ -48,7 +48,8 @@ import net.imglib2.view.composite.Composite;
 import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpDependency;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = Op.class, name = "threshold.localPhansalkar",

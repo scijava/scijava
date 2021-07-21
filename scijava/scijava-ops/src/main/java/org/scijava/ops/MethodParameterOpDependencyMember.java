@@ -33,6 +33,8 @@ package org.scijava.ops;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
+import org.scijava.ops.api.OpDependency;
+
 /**
  * @author Marcel Wiedenmann
  */

@@ -40,7 +40,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

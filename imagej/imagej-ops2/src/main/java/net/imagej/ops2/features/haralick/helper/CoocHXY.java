@@ -32,7 +32,8 @@ package net.imagej.ops2.features.haralick.helper;
 import java.util.function.Function;
 
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

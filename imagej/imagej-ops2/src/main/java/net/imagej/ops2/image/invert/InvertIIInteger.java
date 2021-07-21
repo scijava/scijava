@@ -39,7 +39,8 @@
 //import net.imglib2.type.numeric.integer.UnsignedLongType;
 //
 //import org.scijava.Priority;
-//import org.scijava.ops.OpDependency;
+//import org.scijava.ops.api.OpDependency;
+//import org.scijava.ops.api.OpDependency;
 //import org.scijava.ops.core.Op;
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;

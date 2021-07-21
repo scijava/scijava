@@ -44,7 +44,8 @@ import net.imglib2.view.Views;
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.api.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

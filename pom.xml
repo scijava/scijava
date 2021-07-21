@@ -140,6 +140,7 @@
 							</rules>
 						</configuration>
 					</execution>
+					<!--
 					<execution>
 						<id>enforce-no-subpackage-dependence</id>
 						<goals>
@@ -153,6 +154,7 @@
 							</rules>
 						</configuration>
 					</execution>
+					-->
 				</executions>
 			</plugin>
 		</plugins>

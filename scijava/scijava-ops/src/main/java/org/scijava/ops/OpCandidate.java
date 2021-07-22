@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.ValidityProblem;
-import org.scijava.log.Logger;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -63,7 +62,6 @@ public class OpCandidate {
 	}
 
 	private final OpEnvironment env;
-	private final Logger log;
 	private final OpRef ref;
 	private final OpInfo info;
 
@@ -77,11 +75,10 @@ public class OpCandidate {
 	 * If the op does not, this will be the same as {@link #ref}.getArgs(). */
 	private final Type[] paddedArgs;
 
-	public OpCandidate(final OpEnvironment env, final Logger log, final OpRef ref, final OpInfo info,
+	public OpCandidate(final OpEnvironment env, final OpRef ref, final OpInfo info,
 		final Map<TypeVariable<?>, Type> typeVarAssigns)
 	{
 		this.env = env;
-		this.log = log;
 		this.ref = ref;
 		this.info = info;
 		this.typeVarAssigns = typeVarAssigns;

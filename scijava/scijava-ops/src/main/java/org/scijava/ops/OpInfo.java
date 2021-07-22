@@ -7,7 +7,6 @@ import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.log.Logger;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -21,6 +20,9 @@ import org.scijava.util.MiscUtils;
  * @author David Kolb
  */
 public interface OpInfo extends Comparable<OpInfo> {
+
+	/** name(s) of the op. */
+	List<String> names();
 
 	/** Generic type of the op. This will be the parameterized type of the concrete class */
 	Type opType();
@@ -46,8 +48,8 @@ public interface OpInfo extends Comparable<OpInfo> {
 		return OpUtils.dependencies(struct());
 	}
 	
-	default OpCandidate createCandidate(OpEnvironment env, Logger log, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		return new OpCandidate(env, log, ref, this, typeVarAssigns);
+	default OpCandidate createCandidate(OpEnvironment env, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		return new OpCandidate(env, ref, this, typeVarAssigns);
 	}
 
 	/** The op's priority. */

@@ -34,6 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.scijava.Priority;
@@ -60,15 +61,17 @@ public class OpFieldInfo implements OpInfo {
 
 	private final Object instance;
 	private final Field field;
+	private final List<String> names;
 
 	private Struct struct;
 	private ValidityException validityException;
 
 	private final Hints hints;
 
-	public OpFieldInfo(final Object instance, final Field field) {
+	public OpFieldInfo(final Object instance, final Field field, final String... names) {
 		this.instance = instance;
 		this.field = field;
+		this.names = Arrays.asList(names);
 
 		if (Modifier.isStatic(field.getModifiers())) {
 			// Field is static; instance must be null.
@@ -107,6 +110,11 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	// -- OpInfo methods --
+
+	@Override
+	public List<String> names() {
+		return names;
+	}
 
 	@Override
 	public Type opType() {

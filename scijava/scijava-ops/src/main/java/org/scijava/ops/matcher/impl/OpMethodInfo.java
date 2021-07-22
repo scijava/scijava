@@ -38,6 +38,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -82,13 +83,14 @@ import javassist.NotFoundException;
 public class OpMethodInfo implements OpInfo {
 
 	private final Method method;
+	private final List<String> names;
 	private Type opType;
 	private Struct struct;
 	private final ValidityException validityException;
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method) {
+	public OpMethodInfo(final Method method, final String... names) {
 		final List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public methods
 		if (!Modifier.isPublic(method.getModifiers())) {
@@ -103,6 +105,7 @@ public class OpMethodInfo implements OpInfo {
 				" must be static."));
 		}
 		this.method = method;
+		this.names = Arrays.asList(names);
 		this.hints = formHints(method.getAnnotation(OpHints.class));
 		// determine the functional interface this Op should implement
 		final OpMethod methodAnnotation = method.getAnnotation(OpMethod.class);
@@ -120,6 +123,11 @@ public class OpMethodInfo implements OpInfo {
 	}
 
 	// -- OpInfo methods --
+
+	@Override
+	public List<String> names() {
+		return names;
+	}
 
 	@Override
 	public Type opType() {

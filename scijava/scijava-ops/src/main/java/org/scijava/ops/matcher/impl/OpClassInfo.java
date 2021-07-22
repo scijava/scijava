@@ -34,6 +34,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.scijava.Priority;
@@ -61,18 +62,20 @@ import org.scijava.types.Types;
  */
 public class OpClassInfo implements OpInfo {
 
+	private final List<String> names;
 	private final Class<?> opClass;
 	private Struct struct;
 	private ValidityException validityException;
 	private final double priority;
 	private final Hints hints;
 
-	public OpClassInfo(final Class<?> opClass) {
-		this(opClass, priorityFromAnnotation(opClass));
+	public OpClassInfo(final Class<?> opClass, final String... names) {
+		this(opClass, priorityFromAnnotation(opClass), names);
 	}
 
-	public OpClassInfo(final Class<?> opClass, final double priority) {
+	public OpClassInfo(final Class<?> opClass, final double priority, final String... names) {
 		this.opClass = opClass;
+		this.names = Arrays.asList(names);
 		List<ValidityProblem> problems = new ArrayList<>();
 		try {
 			struct = Structs.from(opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
@@ -86,6 +89,11 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	// -- OpInfo methods --
+
+	@Override
+	public List<String> names() {
+		return names;
+	}
 
 	@Override
 	public Type opType() {

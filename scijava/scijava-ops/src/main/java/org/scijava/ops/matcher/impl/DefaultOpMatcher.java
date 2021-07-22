@@ -43,15 +43,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.scijava.log.Logger;
+import org.scijava.ops.BaseOpHints.Simplification;
 import org.scijava.ops.Hints;
 import org.scijava.ops.OpCandidate;
+import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpRef;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.BaseOpHints.Simplification;
-import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.ops.hint.DefaultHints;
 import org.scijava.ops.matcher.MatchingResult;
 import org.scijava.ops.matcher.OpMatcher;
@@ -68,12 +67,6 @@ import org.scijava.types.Types.TypeVarInfo;
  * @author David Kolb
  */
 public class DefaultOpMatcher extends AbstractService implements OpMatcher {
-
-	private final Logger log;
-
-	public DefaultOpMatcher(final Logger log) {
-		this.log = log;
-	}
 
 	@Override
 	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref) {
@@ -134,7 +127,7 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 			for (final OpInfo info : getInfos(env, ref, hints)) {
 				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
-					OpCandidate candidate = info.createCandidate(env, log, ref, typeVarAssigns);
+					OpCandidate candidate = info.createCandidate(env, ref, typeVarAssigns);
 					candidates.add(candidate);
 				}
 			}

@@ -80,6 +80,11 @@ public class SimplifiedOpInfo implements OpInfo {
 	}
 
 	@Override
+	public List<String> names() {
+		return srcInfo().names();
+	}
+
+	@Override
 	public Type opType() {
 		return opType;
 	}

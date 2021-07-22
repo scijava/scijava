@@ -29,9 +29,6 @@
 
 package org.scijava.ops.impl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -45,12 +42,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.scijava.AbstractContextual;
-import org.scijava.Context;
-import org.scijava.InstantiableException;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.ops.BaseOpHints.Adaptation;
@@ -62,16 +57,14 @@ import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.ops.OpDependencyMember;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpHistoryService;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.OpInfo;
+import org.scijava.ops.OpInfoGenerator;
 import org.scijava.ops.OpInstance;
 import org.scijava.ops.OpRef;
-import org.scijava.ops.OpUtils;
 import org.scijava.ops.OpWrapper;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.api.OpMethod;
+import org.scijava.ops.discovery.Discoverer;
 import org.scijava.ops.hint.AdaptationHints;
 import org.scijava.ops.hint.DefaultHints;
 import org.scijava.ops.hint.SimplificationHints;
@@ -82,20 +75,14 @@ import org.scijava.ops.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.matcher.impl.DefaultOpRef;
 import org.scijava.ops.matcher.impl.OpAdaptationInfo;
 import org.scijava.ops.matcher.impl.OpClassInfo;
-import org.scijava.ops.matcher.impl.OpFieldInfo;
-import org.scijava.ops.matcher.impl.OpMethodInfo;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
 import org.scijava.ops.struct.FunctionalParameters;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.PluginInfo;
-import org.scijava.plugin.PluginService;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
-import org.scijava.util.ClassUtils;
 
 /**
  * Default implementation of {@link OpEnvironment}, whose ops and related state
@@ -103,21 +90,22 @@ import org.scijava.util.ClassUtils;
  * 
  * @author Curtis Rueden
  */
-public class DefaultOpEnvironment extends AbstractContextual implements OpEnvironment {
+public class DefaultOpEnvironment implements OpEnvironment {
 
-	@Parameter
-	private PluginService pluginService;
+	private final Discoverer discoverer;
 
 	private OpMatcher matcher;
 
-	@Parameter
 	private LogService log;
 
-	@Parameter
 	private TypeService typeService;
 
-	@Parameter
 	private OpHistoryService history;
+
+	/**
+	 * The {@link OpInfoGenerator}s providing {@link OpInfo}s to this environment
+	 */
+	private List<OpInfoGenerator> infoGenerators;
 
 	/**
 	 * Data structure storing all known Ops, grouped by name. This reduces the
@@ -149,9 +137,13 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	 */
 	private Hints environmentHints = null;
 
-	public DefaultOpEnvironment(final Context context) {
-		context.inject(this);
-		matcher = new DefaultOpMatcher(log);
+	public DefaultOpEnvironment(final Discoverer d, final TypeService typeService, final LogService log, final OpHistoryService history, final List<OpInfoGenerator> infoGenerators) {
+		this.discoverer = d;
+		this.typeService = typeService;
+		this.log = log;
+		this.history = history;
+		this.infoGenerators = infoGenerators;
+		matcher = new DefaultOpMatcher();
 	}
 
 	@Override
@@ -241,14 +233,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	}
 
 	@Override
-	public OpInfo opify(final Class<?> opClass, final double priority) {
-		return new OpClassInfo(opClass, priority);
+	public OpInfo opify(final Class<?> opClass, final double priority, final String... names) {
+		return new OpClassInfo(opClass, priority, names);
 	}
 
 	@Override
-	public void register(final OpInfo info, final String name) {
+	public void register(final OpInfo info) {
 		if (opDirectory == null) initOpDirectory();
-		addToOpIndex(info, name);
+		addToOpIndex.accept(info);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -293,7 +285,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		if (!conditions.ref().typesMatch(info.opType(), typeVarAssigns))
 			throw new OpMatchingException(
 				"The given OpRef and OpInfo are not compatible!");
-		OpCandidate candidate = new OpCandidate(this, this.log, conditions.ref(), info,
+		OpCandidate candidate = new OpCandidate(this, conditions.ref(), info,
 			typeVarAssigns);
 		// TODO: can this be replaced by simply setting the status code to match?
 		if (!matcher.typesMatch(candidate)) throw new OpMatchingException(
@@ -494,7 +486,9 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	private void initWrappers() {
 		wrappers = new HashMap<>();
-		for (OpWrapper<?> wrapper : pluginService.createInstancesOfType(OpWrapper.class)) {
+		Class<?>[] constructorClasses = {};
+		Object[] constructorObjects = {};
+		for (OpWrapper<?> wrapper : discoverer.implementingInstances(OpWrapper.class, constructorClasses, constructorObjects)) {
 			wrappers.put(wrapper.type(), wrapper);
 		}
 	}
@@ -602,7 +596,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 					.getType(), map);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
 					.opInfo(), adapterOpType, adaptorOp);
-				OpCandidate adaptedCandidate = new OpCandidate(this, log, ref, adaptedInfo, map);
+				OpCandidate adaptedCandidate = new OpCandidate(this, ref, adaptedInfo, map);
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;
 			}
@@ -719,45 +713,14 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 
 	private void initOpDirectory() {
 		opDirectory = new HashMap<>();
-
-		// Add regular Ops
-		for (final PluginInfo<Op> pluginInfo : pluginService.getPluginsOfType(Op.class)) {
-			try {
-				final Class<?> opClass = pluginInfo.loadClass();
-				OpInfo opInfo = new OpClassInfo(opClass);
-				addToOpIndex(opInfo, pluginInfo.getName());
-			} catch (InstantiableException exc) {
-				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
-			}
-		}
-		// Add Ops contained in an OpCollection
-		for (final PluginInfo<OpCollection> pluginInfo : pluginService.getPluginsOfType(OpCollection.class)) {
-			try {
-				final Class<? extends OpCollection> c = pluginInfo.loadClass();
-				final List<Field> fields = ClassUtils.getAnnotatedFields(c, OpField.class);
-				Object instance = null;
-				for (Field field : fields) {
-					final boolean isStatic = Modifier.isStatic(field.getModifiers());
-					if (!isStatic && instance == null) {
-						instance = field.getDeclaringClass().newInstance();
-					}
-					OpInfo opInfo = new OpFieldInfo(isStatic ? null : instance, field);
-					addToOpIndex(opInfo, field.getAnnotation(OpField.class).names());
-				}
-				final List<Method> methods = ClassUtils.getAnnotatedMethods(c, OpMethod.class);
-				for (final Method method: methods) {
-					OpInfo opInfo = new OpMethodInfo(method);
-					addToOpIndex(opInfo, method.getAnnotation(OpMethod.class).names());
-				}
-			} catch (InstantiableException | InstantiationException | IllegalAccessException exc) {
-				log.error("Can't load class from plugin info: " + pluginInfo.toString(), exc);
-			}
+		for (final OpInfoGenerator generator : infoGenerators) {
+			List<OpInfo> infos = generator.generateInfos();
+			infos.forEach(addToOpIndex);
 		}
 	}
 
-	private void addToOpIndex(final OpInfo opInfo, final String opNames) {
-		String[] parsedOpNames = OpUtils.parseOpNames(opNames);
-		if (parsedOpNames == null || parsedOpNames.length == 0) {
+	private final Consumer<OpInfo> addToOpIndex = (final OpInfo opInfo) -> {
+		if (opInfo.names() == null || opInfo.names().size() == 0) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" + "Op implementation must provide name.");
 			return;
 		}
@@ -766,13 +729,13 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 					+ opInfo.getValidityException().getMessage());
 			return;
 		}
-		for (String opName : parsedOpNames) {
+		for (String opName : opInfo.names()) {
 			if (!opDirectory.containsKey(opName))
 				opDirectory.put(opName, new TreeSet<>());
 			boolean success = opDirectory.get(opName).add(opInfo);
 			if(!success) System.out.println("Did not add OpInfo "+ opInfo);
 		}
-	}
+	};
 
 	private Set<OpInfo> opsOfName(final String name) {
 		final Set<OpInfo> ops = opDirectory.getOrDefault(name, Collections.emptySet());

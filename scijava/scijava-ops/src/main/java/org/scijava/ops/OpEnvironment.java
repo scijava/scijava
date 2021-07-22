@@ -188,16 +188,16 @@ public interface OpEnvironment {
 	 *
 	 * @param opClass
 	 * @param priority - the assigned priority of the Op.
+	 * @param names - the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
-	OpInfo opify(Class<?> opClass, double priority);
+	OpInfo opify(Class<?> opClass, double priority, String... names);
 
 	/**
-	 * Makes the {@link OpInfo} {@code info} known to this {@link OpEnvironment} under the name {@code name}
-	 * @param info
-	 * @param name
+	 * Makes the {@link OpInfo} {@code info} known to this {@link OpEnvironment}.
+	 * @param info the {@link OpInfo} to be registered
 	 */
-	void register(OpInfo info, String name);
+	void register(OpInfo info);
 
 	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to

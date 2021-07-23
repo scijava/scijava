@@ -273,7 +273,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops</artifactId>
+			<artifactId>scijava-ops-engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

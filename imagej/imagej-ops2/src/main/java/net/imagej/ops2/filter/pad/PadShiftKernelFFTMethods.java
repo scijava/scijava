@@ -40,7 +40,7 @@ import org.scijava.function.Functions;
 import org.scijava.ops.api.Op;
 import org.scijava.ops.api.OpDependency;
 import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.util.Adapt;
+import org.scijava.ops.engine.util.Adapt;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -33,7 +33,7 @@ import java.util.Map;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpService;
+import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.Plugin;
 
 /**

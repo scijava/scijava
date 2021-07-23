@@ -44,7 +44,8 @@ import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.GenericComposite;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
 import org.scijava.types.Nil;
 
 /**

@@ -1,0 +1,22 @@
+package org.scijava.ops.engine.conversionLoss;
+
+import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.api.OpField;
+import org.scijava.ops.engine.OpHints;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.api.OpField;
+import org.scijava.plugin.Plugin;
+
+@Plugin(type = OpCollection.class)
+public class PrimitiveArrayLossReporters {
+	
+	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpField(names = "lossReporter")
+	public final LossReporter<Byte[], Integer[]> bArrIArr = (from, to) -> 0.;
+	
+	@OpHints(hints = {Simplification.FORBIDDEN})
+	@OpField(names = "lossReporter")
+	public final LossReporter<Double[], Integer[]> dArrIArr = (from, to) -> 0.;
+
+}

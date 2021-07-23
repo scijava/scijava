@@ -38,8 +38,8 @@ import java.util.Map;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpService;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.engine.OpService;
+import org.scijava.ops.engine.util.FunctionUtils;
 import org.scijava.parsington.Operator;
 import org.scijava.parsington.Operators;
 import org.scijava.parsington.Variable;

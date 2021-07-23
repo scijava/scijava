@@ -39,7 +39,8 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
-import org.scijava.ops.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
 import org.scijava.thread.ThreadService;
 import org.scijava.util.MersenneTwisterFast;
 

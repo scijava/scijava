@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Op;
-import org.scijava.ops.OpExecutionException;
+import org.scijava.ops.engine.OpExecutionException;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.script.ScriptService;

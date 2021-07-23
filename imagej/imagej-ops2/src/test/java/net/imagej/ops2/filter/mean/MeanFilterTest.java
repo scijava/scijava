@@ -10,7 +10,8 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
 import org.scijava.types.Nil;
 
 public class MeanFilterTest extends AbstractOpTest{

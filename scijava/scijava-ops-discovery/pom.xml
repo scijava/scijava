@@ -13,7 +13,7 @@
 
 	<artifactId>scijava-ops-discovery</artifactId>
 
-	<name>SciJava Ops API</name>
+	<name>SciJava Ops Discovery</name>
 	<description>SciJava Operations Discovery: Discovery mechanisms used by the SciJava Operations framework.</description>
 	<url>https://github.com/scijava/scijava-ops-discovery</url>
 	<inceptionYear>2021</inceptionYear>

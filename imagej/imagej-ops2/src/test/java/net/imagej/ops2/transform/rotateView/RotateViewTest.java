@@ -43,7 +43,8 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.engine.OpBuilder;
 import org.scijava.types.Nil;
 
 /**

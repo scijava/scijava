@@ -10,7 +10,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.ExceptionUtils;
+import org.scijava.ops.engine.ExceptionUtils;
 import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpCollection;
 import org.scijava.ops.api.OpField;

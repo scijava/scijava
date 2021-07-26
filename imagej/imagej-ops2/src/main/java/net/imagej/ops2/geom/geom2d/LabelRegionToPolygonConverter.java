@@ -41,7 +41,7 @@ import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
 import org.scijava.convert.Converter;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;

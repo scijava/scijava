@@ -35,7 +35,7 @@
 package org.scijava.ops.engine.adapt.lift;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpField;
@@ -97,7 +97,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.${mutateMethod.call($arity, $a)}();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals($arity * i, io[i].getNumber());
+			Assert.assertEquals($arity * i, io[i].getNumber());
 		}
 	}
 #end

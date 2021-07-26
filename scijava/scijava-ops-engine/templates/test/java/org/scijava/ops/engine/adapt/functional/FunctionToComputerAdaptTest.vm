@@ -37,7 +37,7 @@ package org.scijava.ops.engine.adapt.functional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 
 public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 #foreach($arity in [1..$maxArity])

@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpHints;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;

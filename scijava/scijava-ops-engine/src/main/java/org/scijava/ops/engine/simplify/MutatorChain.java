@@ -2,7 +2,7 @@ package org.scijava.ops.engine.simplify;
 
 import java.lang.reflect.Type;
 
-import org.scijava.ops.engine.OpInfo;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.util.Types;
 
 public class MutatorChain implements Comparable<MutatorChain>{

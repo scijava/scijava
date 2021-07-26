@@ -43,7 +43,6 @@ import java.util.function.Supplier;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.scijava.ops.engine.matcher.impl.MatchingUtils;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
@@ -556,9 +555,9 @@ public class MatchingUtilsTest {
 		final Type fooSource = new Nil<Function<T, List<T>>>() {}.getType();
 		final Type fooFunc = new Nil<Function<Double, Object>>() {}.getType();
 
-		Assertions.assertFalse(GenericAssignability.checkGenericAssignability(fooSource,
+		Assert.assertFalse(GenericAssignability.checkGenericAssignability(fooSource,
 			(ParameterizedType) fooFunc, false));
-		Assertions.assertTrue(GenericAssignability.checkGenericAssignability(fooSource,
+		Assert.assertTrue(GenericAssignability.checkGenericAssignability(fooSource,
 			(ParameterizedType) fooFunc, true));
 
 	}

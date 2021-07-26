@@ -3,12 +3,12 @@ package org.scijava.ops.engine.conversionLoss;
 import java.lang.reflect.Type;
 import java.util.UUID;
 
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpExecutionSummary;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpExecutionSummary;
-import org.scijava.ops.engine.OpHistory;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;

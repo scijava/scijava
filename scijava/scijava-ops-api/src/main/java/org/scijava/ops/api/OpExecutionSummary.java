@@ -1,9 +1,7 @@
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.util.UUID;
-
-import org.scijava.ops.engine.impl.DefaultOpEnvironment;
 
 /**
  * Describes the execution of an Op
@@ -21,7 +19,7 @@ public class OpExecutionSummary {
 	/** The {@link Object} created by {@code info} */
 	private final Object instance;
 
-	/** The {@link Object} returned by the call to {@link DefaultOpEnvironment} */
+	/** The {@link Object} returned by an {@link OpWrapper} */
 	private final Object wrappedInstance;
 
 	/**

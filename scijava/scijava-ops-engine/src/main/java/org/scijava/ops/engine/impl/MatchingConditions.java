@@ -3,8 +3,8 @@ package org.scijava.ops.engine.impl;
 
 import java.util.Objects;
 
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpRef;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpRef;
 
 public class MatchingConditions {
 

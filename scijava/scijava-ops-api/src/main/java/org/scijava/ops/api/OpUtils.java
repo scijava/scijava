@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.ValidityProblem;
-import org.scijava.ops.engine.OpCandidate.StatusCode;
+import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;

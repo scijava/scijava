@@ -11,9 +11,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.OpEnvironment;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpUtils;
 import org.scijava.struct.Member;
 import org.scijava.util.Types;
 

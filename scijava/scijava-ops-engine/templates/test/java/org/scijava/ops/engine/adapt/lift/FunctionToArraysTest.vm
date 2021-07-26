@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpField;
@@ -89,7 +89,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals($arity * i, output[i].getNumber());
+			Assert.assertEquals($arity * i, output[i].getNumber());
 		}
 	}
 

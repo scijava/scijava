@@ -46,8 +46,8 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.scijava.ops.engine.OpBuilder;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.ListUtils;
 

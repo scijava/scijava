@@ -1,8 +1,6 @@
 
 package org.scijava.ops.engine;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.google.common.collect.Streams;
 
 import java.util.Iterator;
@@ -15,8 +13,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
@@ -329,7 +327,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		assertEquals("the output", outputDescription);
+		Assert.assertEquals("the output", outputDescription);
 	}
 	
 	@Test
@@ -360,7 +358,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		assertEquals("the preallocated output", outputDescription);
+		Assert.assertEquals("the preallocated output", outputDescription);
 	}
 
 	@Test

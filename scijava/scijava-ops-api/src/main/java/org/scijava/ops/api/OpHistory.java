@@ -1,12 +1,10 @@
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import com.google.common.graph.Graph;
 
 import java.util.List;
 import java.util.UUID;
-
-import org.scijava.service.SciJavaService;
 
 /**
  * Log describing each execution of an Op. This class is designed to answer two

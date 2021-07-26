@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ops.engine.OpInfo;
+import org.scijava.ops.api.OpInfo;
 
 public class ChainCluster {
 

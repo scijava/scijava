@@ -43,7 +43,7 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**

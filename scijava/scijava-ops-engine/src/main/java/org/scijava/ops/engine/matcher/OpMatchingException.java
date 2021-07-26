@@ -1,6 +1,6 @@
 package org.scijava.ops.engine.matcher;
 
-import org.scijava.ops.engine.OpRef;
+import org.scijava.ops.api.OpRef;
 
 /**
  * Indicates that no op matching a given {@link OpRef} could be found.

@@ -35,7 +35,7 @@
 package org.scijava.ops.engine.adapt.lift;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpField;
@@ -89,7 +89,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(1 * i, io[i].getNumber());
+			Assert.assertEquals(1 * i, io[i].getNumber());
 		}
 	}
 
@@ -111,7 +111,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(2 * i, io[i].getNumber());
+			Assert.assertEquals(2 * i, io[i].getNumber());
 		}
 	}
 
@@ -133,7 +133,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(2 * i, io[i].getNumber());
+			Assert.assertEquals(2 * i, io[i].getNumber());
 		}
 	}
 
@@ -156,7 +156,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(3 * i, io[i].getNumber());
+			Assert.assertEquals(3 * i, io[i].getNumber());
 		}
 	}
 
@@ -179,7 +179,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(3 * i, io[i].getNumber());
+			Assert.assertEquals(3 * i, io[i].getNumber());
 		}
 	}
 
@@ -202,7 +202,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(3 * i, io[i].getNumber());
+			Assert.assertEquals(3 * i, io[i].getNumber());
 		}
 	}
 
@@ -226,7 +226,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(4 * i, io[i].getNumber());
+			Assert.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -250,7 +250,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(4 * i, io[i].getNumber());
+			Assert.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -274,7 +274,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(4 * i, io[i].getNumber());
+			Assert.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -298,7 +298,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(4 * i, io[i].getNumber());
+			Assert.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -323,7 +323,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(5 * i, io[i].getNumber());
+			Assert.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -348,7 +348,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(5 * i, io[i].getNumber());
+			Assert.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -373,7 +373,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(5 * i, io[i].getNumber());
+			Assert.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -398,7 +398,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(5 * i, io[i].getNumber());
+			Assert.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -423,7 +423,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(5 * i, io[i].getNumber());
+			Assert.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -449,7 +449,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(6 * i, io[i].getNumber());
+			Assert.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -475,7 +475,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(6 * i, io[i].getNumber());
+			Assert.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -501,7 +501,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(6 * i, io[i].getNumber());
+			Assert.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -527,7 +527,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(6 * i, io[i].getNumber());
+			Assert.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -553,7 +553,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(6 * i, io[i].getNumber());
+			Assert.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -579,7 +579,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(6 * i, io[i].getNumber());
+			Assert.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -606,7 +606,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -633,7 +633,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -660,7 +660,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -687,7 +687,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -714,7 +714,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -741,7 +741,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -768,7 +768,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(7 * i, io[i].getNumber());
+			Assert.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -796,7 +796,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -824,7 +824,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -852,7 +852,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -880,7 +880,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -908,7 +908,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -936,7 +936,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -964,7 +964,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -992,7 +992,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(8 * i, io[i].getNumber());
+			Assert.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -1021,7 +1021,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1050,7 +1050,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1079,7 +1079,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1108,7 +1108,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1137,7 +1137,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1166,7 +1166,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1195,7 +1195,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1224,7 +1224,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1253,7 +1253,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(9 * i, io[i].getNumber());
+			Assert.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1283,7 +1283,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1313,7 +1313,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1343,7 +1343,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1373,7 +1373,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1403,7 +1403,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1433,7 +1433,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1463,7 +1463,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1493,7 +1493,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1523,7 +1523,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1553,7 +1553,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(10 * i, io[i].getNumber());
+			Assert.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1584,7 +1584,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1615,7 +1615,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1646,7 +1646,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1677,7 +1677,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1708,7 +1708,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1739,7 +1739,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1770,7 +1770,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1801,7 +1801,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1832,7 +1832,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1863,7 +1863,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1894,7 +1894,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(11 * i, io[i].getNumber());
+			Assert.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1926,7 +1926,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -1958,7 +1958,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -1990,7 +1990,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2022,7 +2022,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2054,7 +2054,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2086,7 +2086,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2118,7 +2118,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2150,7 +2150,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2182,7 +2182,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2214,7 +2214,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2246,7 +2246,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2278,7 +2278,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(12 * i, io[i].getNumber());
+			Assert.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2311,7 +2311,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2344,7 +2344,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2377,7 +2377,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2410,7 +2410,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2443,7 +2443,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2476,7 +2476,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2509,7 +2509,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2542,7 +2542,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2575,7 +2575,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2608,7 +2608,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2641,7 +2641,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2674,7 +2674,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2707,7 +2707,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(13 * i, io[i].getNumber());
+			Assert.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2741,7 +2741,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2775,7 +2775,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2809,7 +2809,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2843,7 +2843,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2877,7 +2877,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2911,7 +2911,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2945,7 +2945,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2979,7 +2979,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3013,7 +3013,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3047,7 +3047,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3081,7 +3081,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3115,7 +3115,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3149,7 +3149,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3183,7 +3183,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(14 * i, io[i].getNumber());
+			Assert.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3218,7 +3218,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3253,7 +3253,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3288,7 +3288,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3323,7 +3323,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3358,7 +3358,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3393,7 +3393,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3428,7 +3428,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3463,7 +3463,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3498,7 +3498,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3533,7 +3533,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3568,7 +3568,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3603,7 +3603,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3638,7 +3638,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3673,7 +3673,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3708,7 +3708,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate15();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(15 * i, io[i].getNumber());
+			Assert.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3744,7 +3744,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3780,7 +3780,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3816,7 +3816,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3852,7 +3852,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3888,7 +3888,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3924,7 +3924,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3960,7 +3960,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3996,7 +3996,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4032,7 +4032,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4068,7 +4068,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4104,7 +4104,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4140,7 +4140,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4176,7 +4176,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4212,7 +4212,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4248,7 +4248,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate15();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4284,7 +4284,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			.mutate16();
 
 		for (int i = 0; i < input.length; i++) {
-			Assertions.assertEquals(16 * i, io[i].getNumber());
+			Assert.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 

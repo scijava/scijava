@@ -35,7 +35,7 @@
 package org.scijava.ops.engine.adapt.lift;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
@@ -86,7 +86,7 @@ public class ComputerToArraysTest extends AbstractTestEnvironment {
 		ops.env().op("test.liftArrayC").input($inputArgs.call($arity)).output(output).compute();
 
 		for(int i = 0; i < output.length; i++) {
-			Assertions.assertEquals($arity * i, output[i].getNumber());
+			Assert.assertEquals($arity * i, output[i].getNumber());
 		}
 	}
 

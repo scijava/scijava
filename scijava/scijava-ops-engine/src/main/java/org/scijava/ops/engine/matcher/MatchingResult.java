@@ -3,10 +3,10 @@ package org.scijava.ops.engine.matcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ops.engine.OpCandidate;
-import org.scijava.ops.engine.OpRef;
-import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.engine.OpCandidate.StatusCode;
+import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.api.OpCandidate.StatusCode;
 
 /**
  * Class representing the result from type matching done by the

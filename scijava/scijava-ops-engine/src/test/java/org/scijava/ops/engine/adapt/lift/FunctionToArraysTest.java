@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpField;
@@ -88,7 +88,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(1 * i, output[i].getNumber());
+			Assert.assertEquals(1 * i, output[i].getNumber());
 		}
 	}
 
@@ -107,7 +107,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(2 * i, output[i].getNumber());
+			Assert.assertEquals(2 * i, output[i].getNumber());
 		}
 	}
 
@@ -126,7 +126,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(3 * i, output[i].getNumber());
+			Assert.assertEquals(3 * i, output[i].getNumber());
 		}
 	}
 
@@ -145,7 +145,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(4 * i, output[i].getNumber());
+			Assert.assertEquals(4 * i, output[i].getNumber());
 		}
 	}
 
@@ -164,7 +164,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(5 * i, output[i].getNumber());
+			Assert.assertEquals(5 * i, output[i].getNumber());
 		}
 	}
 
@@ -183,7 +183,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(6 * i, output[i].getNumber());
+			Assert.assertEquals(6 * i, output[i].getNumber());
 		}
 	}
 
@@ -202,7 +202,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(7 * i, output[i].getNumber());
+			Assert.assertEquals(7 * i, output[i].getNumber());
 		}
 	}
 
@@ -221,7 +221,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(8 * i, output[i].getNumber());
+			Assert.assertEquals(8 * i, output[i].getNumber());
 		}
 	}
 
@@ -240,7 +240,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(9 * i, output[i].getNumber());
+			Assert.assertEquals(9 * i, output[i].getNumber());
 		}
 	}
 
@@ -259,7 +259,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(10 * i, output[i].getNumber());
+			Assert.assertEquals(10 * i, output[i].getNumber());
 		}
 	}
 
@@ -278,7 +278,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(11 * i, output[i].getNumber());
+			Assert.assertEquals(11 * i, output[i].getNumber());
 		}
 	}
 
@@ -297,7 +297,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(12 * i, output[i].getNumber());
+			Assert.assertEquals(12 * i, output[i].getNumber());
 		}
 	}
 
@@ -316,7 +316,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(13 * i, output[i].getNumber());
+			Assert.assertEquals(13 * i, output[i].getNumber());
 		}
 	}
 
@@ -335,7 +335,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(14 * i, output[i].getNumber());
+			Assert.assertEquals(14 * i, output[i].getNumber());
 		}
 	}
 
@@ -354,7 +354,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(15 * i, output[i].getNumber());
+			Assert.assertEquals(15 * i, output[i].getNumber());
 		}
 	}
 
@@ -373,7 +373,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assertions.assertEquals(16 * i, output[i].getNumber());
+			Assert.assertEquals(16 * i, output[i].getNumber());
 		}
 	}
 

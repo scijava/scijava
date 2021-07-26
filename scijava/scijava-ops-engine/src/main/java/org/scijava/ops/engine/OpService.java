@@ -29,6 +29,8 @@
 
 package org.scijava.ops.engine;
 
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.service.SciJavaService;
 
 /**

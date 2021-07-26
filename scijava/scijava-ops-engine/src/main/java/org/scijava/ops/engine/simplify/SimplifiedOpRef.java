@@ -10,12 +10,12 @@ import java.util.Optional;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpRef;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpEnvironment;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpRef;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.types.Nil;

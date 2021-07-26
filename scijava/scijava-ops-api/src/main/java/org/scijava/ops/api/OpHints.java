@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

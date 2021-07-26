@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import org.scijava.ops.engine.Hints;
+import org.scijava.ops.api.Hints;
 
 /**
  * Abstract class containing behavior common to most {@link Hints}

@@ -1,4 +1,4 @@
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.util.List;
 

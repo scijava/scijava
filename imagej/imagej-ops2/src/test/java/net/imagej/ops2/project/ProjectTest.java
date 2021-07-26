@@ -40,8 +40,8 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.OpBuilder;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 public class ProjectTest extends AbstractOpTest {

@@ -35,7 +35,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.scijava.ops.engine.OpRef;
+import org.scijava.ops.api.OpRef;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.spi.Op;
 import org.scijava.types.Types;

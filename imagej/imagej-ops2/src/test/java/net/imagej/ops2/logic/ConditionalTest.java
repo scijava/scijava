@@ -36,8 +36,8 @@ import net.imglib2.type.logic.BoolType;
 import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.engine.OpBuilder;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 
 /**
  * Tests {@link Ternary} and {@link Default}.

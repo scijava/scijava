@@ -45,11 +45,11 @@ import java.util.stream.Collectors;
 
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.OpHints;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;

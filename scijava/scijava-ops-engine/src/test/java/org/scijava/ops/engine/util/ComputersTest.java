@@ -32,7 +32,7 @@ package org.scijava.ops.engine.util;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 public class ComputersTest extends AbstractTestEnvironment {

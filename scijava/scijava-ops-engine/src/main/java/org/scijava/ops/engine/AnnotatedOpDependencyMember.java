@@ -32,6 +32,7 @@ package org.scijava.ops.engine;
 
 import java.lang.reflect.Type;
 
+import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
 
 /**
@@ -63,7 +64,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	public String getDependencyName() {
 		return annotation.name();
 	}
-	
+
 	@Override
 	public boolean isAdaptable() {
 		return annotation.adaptable();

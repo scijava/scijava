@@ -5,6 +5,8 @@ import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.Objects;
 
+import org.scijava.ops.api.OpInfo;
+
 /**
  * An instance of an {@link OpInfo}
  * 

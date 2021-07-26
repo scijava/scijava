@@ -1,11 +1,9 @@
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.util.Deque;
 import java.util.Map;
 import java.util.UUID;
-
-import org.scijava.ops.engine.BaseOpHints.Simplification;
 
 /**
  * A basic interface for storing and accessing Hints. The general structure for a Hint is

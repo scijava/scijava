@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpEnvironment;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpRef;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpUtils;
 import org.scijava.types.Types;
 
 

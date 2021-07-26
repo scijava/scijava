@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.scijava.command.Command;
-import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
 import org.scijava.struct.ItemIO;

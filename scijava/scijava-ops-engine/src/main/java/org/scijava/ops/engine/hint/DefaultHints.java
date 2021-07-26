@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
-import org.scijava.ops.engine.Hints;
 
 /**
  * Default Implementation of {@link Hints}

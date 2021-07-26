@@ -1,7 +1,7 @@
 
 package org.scijava.ops.engine.matcher;
 
-import org.scijava.ops.engine.OpRef;
+import org.scijava.ops.api.OpRef;
 
 /**
  * An {@link OpMatchingException} caused by another {@code OpMatchingException}

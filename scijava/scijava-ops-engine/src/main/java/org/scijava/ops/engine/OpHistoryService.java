@@ -1,5 +1,6 @@
 package org.scijava.ops.engine;
 
+import org.scijava.ops.api.OpHistory;
 import org.scijava.service.SciJavaService;
 
 

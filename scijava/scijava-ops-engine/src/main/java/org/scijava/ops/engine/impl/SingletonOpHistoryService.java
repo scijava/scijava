@@ -1,6 +1,6 @@
 package org.scijava.ops.engine.impl;
 
-import org.scijava.ops.engine.OpHistory;
+import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;

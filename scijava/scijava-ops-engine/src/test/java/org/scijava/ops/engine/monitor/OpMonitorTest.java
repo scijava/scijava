@@ -11,7 +11,7 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.monitor.DefaultOpMonitor;
 import org.scijava.ops.engine.monitor.OpMonitor;
 import org.scijava.ops.spi.Op;

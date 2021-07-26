@@ -59,7 +59,7 @@ import org.scijava.Context;
 import org.scijava.app.StatusService;
 import org.scijava.cache.CacheService;
 import org.scijava.io.location.FileLocation;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.PluginService;

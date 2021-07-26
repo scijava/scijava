@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;

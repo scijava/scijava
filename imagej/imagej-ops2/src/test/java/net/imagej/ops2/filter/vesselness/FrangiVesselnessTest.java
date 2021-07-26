@@ -48,7 +48,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
-import org.scijava.ops.engine.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.PluginService;

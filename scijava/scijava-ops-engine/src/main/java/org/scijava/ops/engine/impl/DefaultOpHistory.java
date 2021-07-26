@@ -13,9 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.engine.OpExecutionSummary;
-import org.scijava.ops.engine.OpHistory;
-import org.scijava.ops.engine.OpInfo;
+import org.scijava.ops.api.OpExecutionSummary;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;

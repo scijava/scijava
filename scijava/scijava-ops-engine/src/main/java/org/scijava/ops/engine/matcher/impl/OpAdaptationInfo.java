@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.ValidityProblem;
-import org.scijava.ops.engine.Hints;
-import org.scijava.ops.engine.OpDependencyMember;
-import org.scijava.ops.engine.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.FunctionalParameters;

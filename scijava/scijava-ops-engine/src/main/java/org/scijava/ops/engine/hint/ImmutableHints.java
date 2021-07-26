@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.scijava.ops.engine.Hints;
+import org.scijava.ops.api.Hints;
 
 /**
  * A {@link Hints} not modifiable after creation.

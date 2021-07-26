@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -35,16 +35,11 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
-import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.types.Types;
 
 /**
  * Data structure which identifies an op by name and/or type(s) and/or argument
  * type(s), along with a list of input arguments.
- * <p>
- * With the help of the {@link OpMatcher}, an {@code OpRef} holds all
- * information needed to create an appropriate {@link Op}.
- * </p>
  *
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden

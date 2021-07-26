@@ -6,11 +6,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 /**

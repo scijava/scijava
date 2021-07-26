@@ -44,9 +44,8 @@ import net.imglib2.roi.geom.real.WritablePolyline;
 import net.imglib2.roi.util.RealLocalizableRealPositionable;
 import net.imglib2.util.Intervals;
 
-import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

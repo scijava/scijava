@@ -40,7 +40,7 @@ import net.imglib2.RealLocalizable;
 import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

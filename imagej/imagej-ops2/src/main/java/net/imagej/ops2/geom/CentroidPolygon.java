@@ -36,9 +36,8 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -35,10 +35,10 @@
 package org.scijava.ops.engine.adapt.functional;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpCollection;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

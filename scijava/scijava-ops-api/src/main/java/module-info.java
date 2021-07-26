@@ -1,6 +1,6 @@
-module org.scijava.ops.api {
+module org.scijava.ops.spi {
 
-	exports org.scijava.ops.api;
+	exports org.scijava.ops.spi;
 
 	requires org.scijava;
 

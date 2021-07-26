@@ -136,6 +136,6 @@ module net.imagej.ops2 {
 	requires imglib2.algorithm.fft;
 	requires mines.jtk;
 	requires org.scijava.function;
-	requires org.scijava.ops.api;
+	requires org.scijava.ops.spi;
 
 }

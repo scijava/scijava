@@ -33,7 +33,7 @@ import net.imagej.mesh.Mesh;
 import net.imagej.ops2.geom.AbstractSolidity;
 
 import org.scijava.Priority;
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -1,9 +1,9 @@
 
 package org.scijava.ops.engine.conversionLoss;
 
-import org.scijava.ops.api.Op;
 import org.scijava.ops.engine.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 

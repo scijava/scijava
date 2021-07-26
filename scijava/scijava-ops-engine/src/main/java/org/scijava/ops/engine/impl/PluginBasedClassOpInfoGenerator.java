@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.InstantiableException;
-import org.scijava.ops.api.Op;
 import org.scijava.ops.engine.OpInfo;
 import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
 

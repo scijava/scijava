@@ -3,9 +3,9 @@ package org.scijava.ops.engine.simplify;
 
 import java.util.function.Function;
 
-import org.scijava.ops.api.Op;
 import org.scijava.ops.engine.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 @OpHints(hints = { Simplification.FORBIDDEN })

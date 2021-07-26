@@ -36,10 +36,10 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpCollection;
 import org.scijava.plugin.Plugin;
 
 /**

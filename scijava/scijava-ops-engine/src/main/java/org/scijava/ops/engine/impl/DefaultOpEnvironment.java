@@ -48,8 +48,6 @@ import java.util.stream.Collectors;
 
 import org.scijava.Priority;
 import org.scijava.log.LogService;
-import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpDependency;
 import org.scijava.ops.discovery.Discoverer;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
@@ -77,6 +75,8 @@ import org.scijava.ops.engine.matcher.impl.OpAdaptationInfo;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;

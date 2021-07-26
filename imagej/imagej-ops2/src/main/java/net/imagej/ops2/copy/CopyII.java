@@ -36,9 +36,9 @@ import net.imglib2.Dimensions;
 import net.imglib2.IterableInterval;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpDependency;
 import org.scijava.ops.engine.util.Maps;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

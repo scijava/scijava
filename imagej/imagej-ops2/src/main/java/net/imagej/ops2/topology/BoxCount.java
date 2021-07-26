@@ -47,7 +47,7 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

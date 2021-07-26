@@ -11,10 +11,8 @@ import java.util.stream.StreamSupport;
 import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

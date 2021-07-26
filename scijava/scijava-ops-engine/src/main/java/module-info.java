@@ -41,7 +41,7 @@ module org.scijava.ops.engine {
 	requires org.scijava;
 	requires org.scijava.function;
 	requires org.scijava.struct;
-	requires org.scijava.ops.api;
+	requires org.scijava.ops.spi;
 	requires org.scijava.ops.discovery;
 	requires org.scijava.types;
 	requires javassist;

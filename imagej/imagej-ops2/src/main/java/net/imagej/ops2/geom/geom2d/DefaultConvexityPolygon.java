@@ -32,7 +32,7 @@ import net.imagej.ops2.geom.AbstractConvexity;
 import net.imglib2.roi.geom.real.Polygon2D;
 
 import org.scijava.Priority;
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

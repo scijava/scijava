@@ -37,14 +37,12 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilder;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaSource;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 /**

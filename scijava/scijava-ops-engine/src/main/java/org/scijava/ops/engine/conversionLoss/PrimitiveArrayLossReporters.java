@@ -1,11 +1,9 @@
 package org.scijava.ops.engine.conversionLoss;
 
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.engine.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

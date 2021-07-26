@@ -35,7 +35,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

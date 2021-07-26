@@ -3,7 +3,7 @@ package org.scijava.ops.engine.simplify;
 import java.util.List;
 import java.util.function.Function;
 
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

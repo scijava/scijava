@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
-import org.scijava.ops.api.Op;
 import org.scijava.ops.engine.Hints;
 import org.scijava.ops.engine.OpEnvironment;
 import org.scijava.ops.engine.OpInfo;
@@ -19,6 +18,7 @@ import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
+import org.scijava.ops.spi.Op;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;

@@ -38,8 +38,8 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpCollection;
+import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpCollection;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 import org.scijava.types.inference.InterfaceInference;

@@ -17,10 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.api.OpDependency;
 import org.scijava.ops.engine.OpInfo;
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.api.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;

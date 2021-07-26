@@ -32,10 +32,8 @@ package net.imagej.ops2.logic;
 import net.imglib2.type.BooleanType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 /**

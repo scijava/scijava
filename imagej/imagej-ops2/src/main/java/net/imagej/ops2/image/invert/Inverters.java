@@ -13,10 +13,8 @@ import net.imglib2.type.numeric.integer.UnsignedLongType;
 import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

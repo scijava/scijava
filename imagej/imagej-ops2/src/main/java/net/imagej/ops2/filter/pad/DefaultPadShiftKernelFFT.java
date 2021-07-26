@@ -37,10 +37,9 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 
 import org.scijava.Priority;
-import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpDependency;
-import org.scijava.ops.api.OpDependency;
 import org.scijava.ops.engine.util.Adapt;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

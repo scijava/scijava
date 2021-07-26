@@ -39,14 +39,13 @@ import java.util.List;
 
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.engine.Hints;
 import org.scijava.ops.engine.OpHints;
 import org.scijava.ops.engine.OpInfo;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpField;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;

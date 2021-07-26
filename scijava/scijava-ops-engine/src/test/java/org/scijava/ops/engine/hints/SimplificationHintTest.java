@@ -6,9 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.Hints;
 import org.scijava.ops.engine.OpHints;
@@ -16,7 +13,8 @@ import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

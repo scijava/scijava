@@ -6,13 +6,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.scijava.ops.api.Op;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilder;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 

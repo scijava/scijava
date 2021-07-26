@@ -44,7 +44,7 @@ import net.imglib2.type.Type;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

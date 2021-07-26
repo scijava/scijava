@@ -6,10 +6,8 @@ import net.imglib2.converter.Converter;
 import net.imglib2.type.Type;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpCollection;
-import org.scijava.ops.api.OpField;
-import org.scijava.ops.api.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

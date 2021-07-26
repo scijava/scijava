@@ -4,7 +4,7 @@ package org.scijava.ops.engine.stats;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 public class Size {

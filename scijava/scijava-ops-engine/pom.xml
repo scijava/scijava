@@ -125,7 +125,7 @@
 		-->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-api</artifactId>
+			<artifactId>scijava-ops-spi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

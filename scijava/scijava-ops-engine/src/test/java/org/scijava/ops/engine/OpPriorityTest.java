@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 

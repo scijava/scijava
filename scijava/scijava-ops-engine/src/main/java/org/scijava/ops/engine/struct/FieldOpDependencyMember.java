@@ -28,63 +28,63 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.engine.struct;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Field;
 
-import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.struct.MemberInstance;
+import org.scijava.struct.ValueAccessible;
+import org.scijava.struct.ValueAccessibleMemberInstance;
+import org.scijava.types.Types;
 
 /**
  * @author Marcel Wiedenmann
  */
-public abstract class AnnotatedOpDependencyMember<T> implements
-	OpDependencyMember<T>
+public class FieldOpDependencyMember<T> extends AnnotatedOpDependencyMember<T>
+	implements ValueAccessible<T>
 {
 
-	private String key;
-	private Type type;
-	private final OpDependency annotation;
+	private final Field field;
 
-	public AnnotatedOpDependencyMember(String key, Type type,
-		final OpDependency annotation)
-	{
-		this.key = key;
-		this.type = type;
-		this.annotation = annotation;
+	public FieldOpDependencyMember(final Field field, final Class<?> structType) {
+		super(field.getName(), Types.fieldType(field, structType), field
+			.getAnnotation(OpDependency.class));
+		this.field = field;
 	}
 
-	public OpDependency getAnnotation() {
-		return annotation;
-	}
-
-	// -- OpDependencyMember methods --
+	// -- ValueAccessible methods --
 
 	@Override
-	public String getDependencyName() {
-		return annotation.name();
+	public T get(Object o) {
+		field.setAccessible(true);
+		try {
+			@SuppressWarnings("unchecked")
+			final T value = (T) field.get(o);
+			return value;
+		}
+		catch (final IllegalAccessException exc) {
+			// FIXME
+			throw new RuntimeException(exc);
+		}
 	}
 
 	@Override
-	public boolean isAdaptable() {
-		return annotation.adaptable();
+	public void set(T value, Object o) {
+		field.setAccessible(true);
+		try {
+			field.set(o, value);
+		}
+		catch (final IllegalAccessException exc) {
+			// FIXME
+			throw new RuntimeException(exc);
+		}
 	}
 
 	// -- Member methods --
 
 	@Override
-	public String getKey() {
-		return key;
-	}
-
-	@Override
-	public String getDescription() {
-		// TODO: consider more implementation here
-		return "";
-	}
-
-	@Override
-	public Type getType() {
-		return type;
+	public MemberInstance<T> createInstance(final Object o) {
+		return new ValueAccessibleMemberInstance<>(this, o);
 	}
 }

@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;

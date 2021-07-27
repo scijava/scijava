@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.ValidityProblem;
-import org.scijava.ops.engine.FieldOpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.ValidityException;

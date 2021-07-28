@@ -21,6 +21,7 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.matcher to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
+	opens org.scijava.ops.engine.conversionLoss.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.adapt.complexLift to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.lift to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;

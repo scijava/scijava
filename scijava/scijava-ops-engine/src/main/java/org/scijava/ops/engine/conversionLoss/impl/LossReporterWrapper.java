@@ -1,4 +1,4 @@
-package org.scijava.ops.engine.conversionLoss;
+package org.scijava.ops.engine.conversionLoss.impl;
 
 import java.lang.reflect.Type;
 import java.util.UUID;
@@ -9,6 +9,7 @@ import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
+import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;

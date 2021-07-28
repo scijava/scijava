@@ -11,8 +11,8 @@ module org.scijava.ops.engine {
 #set($scijavaPackages = ["org.scijava.ops.engine", "org.scijava.ops.engine.impl", "org.scijava.ops.engine.matcher.impl", "org.scijava.ops.engine.conversionLoss.impl"])
 ## Defines the packages that should be exported to therapi.runtime.javadoc
 #set($therapiPackages = $modulePackages.call("src/main/java/org/scijava"))
-	//TODO: rearrange packages to export only needed classes
-	exports org.scijava.ops.engine; //contains OpService interface
+
+	exports org.scijava.ops.engine;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
 

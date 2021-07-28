@@ -5,8 +5,8 @@ module org.scijava.ops.engine {
  * corresponding template in templates/ and rerun bin/generate.groovy.
  */
 
-	//TODO: rearrange packages to export only needed classes
-	exports org.scijava.ops.engine; //contains OpService interface
+
+	exports org.scijava.ops.engine;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
 

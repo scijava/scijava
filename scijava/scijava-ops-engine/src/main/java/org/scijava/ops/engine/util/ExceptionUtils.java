@@ -1,4 +1,6 @@
-package org.scijava.ops.engine;
+package org.scijava.ops.engine.util;
+
+import org.scijava.ops.engine.OpExecutionException;
 
 public class ExceptionUtils {
 	// For void methods

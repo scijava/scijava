@@ -33,7 +33,7 @@
 // File path shortening code adapted from:
 // from: http://www.rgagnon.com/javadetails/java-0661.html
 
-package org.scijava.ops.engine.util;
+package org.scijava.ops.engine.util.internal;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;

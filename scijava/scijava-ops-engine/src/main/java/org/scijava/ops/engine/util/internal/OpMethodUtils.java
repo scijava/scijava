@@ -1,4 +1,4 @@
-package org.scijava.ops.engine.util;
+package org.scijava.ops.engine.util.internal;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;

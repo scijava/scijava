@@ -54,7 +54,7 @@ import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.engine.util.OpMethodUtils;
+import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.struct.Member;

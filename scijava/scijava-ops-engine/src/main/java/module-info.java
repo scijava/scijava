@@ -6,13 +6,9 @@ module org.scijava.ops.engine {
  */
 
 	//TODO: rearrange packages to export only needed classes
-	exports org.scijava.ops.engine; //contains OpDependency interface
-	exports org.scijava.ops.engine.matcher;
-	exports org.scijava.ops.engine.math;
-	exports org.scijava.ops.engine.simplify;
+	exports org.scijava.ops.engine; //contains OpService interface
 	exports org.scijava.ops.engine.conversionLoss;
-	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)
-	exports org.scijava.ops.engine.util; // contains OpWrapper interface
+	exports org.scijava.ops.engine.util;
 
 	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.monitor to therapi.runtime.javadoc;

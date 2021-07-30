@@ -27,32 +27,4 @@ public class StaticDiscoverer implements Discoverer {
 			.collect(Collectors.toList());
 	}
 
-	@Override
-	public <T> List<? extends T> implementingInstances(Class<T> c,
-		Class<?>[] constructorClasses, Object[] constructorArgs)
-	{
-		return implementingClasses(c).stream() //
-			.map(cls -> classToObjectOrNull(cls, constructorClasses, constructorArgs)) //
-			.filter(o -> o != null) //
-			.collect(Collectors.toList());
-	}
-
-	private <T> T classToObjectOrNull(Class<T> c, Class<?>[] constructorClasses, Object[] constructorArgs) {
-			try {
-				return c.getDeclaredConstructor(constructorClasses).newInstance(
-					constructorArgs);
-			}
-			catch (Throwable t)
-			{
-				return null;
-			}
-	}
-
-	@Override
-	public <T> List<Implementation<T>> implementationsOf(Class<T> c) {
-		return implementingClasses(c).stream() //
-				.map(cls -> new Implementation<>(cls, c, names.get(cls))) //
-				.collect(Collectors.toList());
-	}
-
 }

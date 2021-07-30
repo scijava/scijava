@@ -95,8 +95,8 @@ public class DefaultOpService extends AbstractService implements OpService {
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
 			new PluginBasedClassOpInfoGenerator(plugins),
 			new PluginBasedOpCollectionInfoGenerator(plugins));
-		env = new DefaultOpEnvironment(new PluginBasedDiscoverer(context()), types,
-			log, history, infoGenerators);
+		env = new DefaultOpEnvironment(types, log, history,
+			infoGenerators, new PluginBasedDiscoverer(context()));
 	}
 }
 
@@ -122,36 +122,6 @@ class PluginBasedDiscoverer implements Discoverer {
 			.filter(cls -> cls != null).collect(Collectors.toList());
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<? extends T> implementingInstances(Class<T> c,
-		Class<?>[] constructorClasses, Object[] constructorArgs)
-	{
-		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			throw new UnsupportedOperationException(
-				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
-		}
-		List<SciJavaPlugin> instances = p.createInstancesOfType(
-			(Class<SciJavaPlugin>) c);
-		return instances.stream().map(instance -> (T) instance).collect(Collectors
-			.toList());
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<Implementation<T>> implementationsOf(Class<T> c) {
-		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			throw new UnsupportedOperationException(
-				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
-		}
-		List<PluginInfo<SciJavaPlugin>> instances = p.getPluginsOfType(
-			(Class<SciJavaPlugin>) c);
-		return instances.stream() //
-			.map(instance -> makeDiscoveryOrNull(c, instance)) //
-			.filter(d -> d.implementation() != null) //
-			.collect(Collectors.toList());
-	}
-
 	@SuppressWarnings("unchecked")
 	private <T> Class<T> makeClassOrNull(@SuppressWarnings("unused") Class<T> type,
 		PluginInfo<SciJavaPlugin> instance)
@@ -162,13 +132,6 @@ class PluginBasedDiscoverer implements Discoverer {
 		catch (InstantiableException exc) {
 			return null;
 		}
-	}
-
-	private <T> Implementation<T> makeDiscoveryOrNull(Class<T> type,
-		PluginInfo<SciJavaPlugin> instance)
-	{
-		return new Implementation<>(makeClassOrNull(type, instance), type, instance
-			.getName());
 	}
 
 }

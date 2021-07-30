@@ -53,6 +53,7 @@ import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpRef;
@@ -92,7 +93,7 @@ import org.scijava.types.inference.GenericAssignability;
  */
 public class DefaultOpEnvironment implements OpEnvironment {
 
-	private final Discoverer discoverer;
+	private final List<Discoverer> discoverers;
 
 	private OpMatcher matcher;
 
@@ -137,8 +138,17 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private Hints environmentHints = null;
 
-	public DefaultOpEnvironment(final Discoverer d, final TypeService typeService, final LogService log, final OpHistoryService history, final List<OpInfoGenerator> infoGenerators) {
-		this.discoverer = d;
+	public DefaultOpEnvironment(final TypeService typeService, final LogService log, final OpHistoryService history, final List<OpInfoGenerator> infoGenerators, final List<Discoverer> d) {
+		this.discoverers = d;
+		this.typeService = typeService;
+		this.log = log;
+		this.history = history;
+		this.infoGenerators = infoGenerators;
+		matcher = new DefaultOpMatcher();
+	}
+
+	public DefaultOpEnvironment(final TypeService typeService, final LogService log, final OpHistoryService  history, final List<OpInfoGenerator> infoGenerators, final Discoverer... d) {
+		this.discoverers = Arrays.asList(d);
 		this.typeService = typeService;
 		this.log = log;
 		this.history = history;
@@ -486,11 +496,19 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private void initWrappers() {
 		wrappers = new HashMap<>();
-		Class<?>[] constructorClasses = {};
-		Object[] constructorObjects = {};
-		for (OpWrapper<?> wrapper : discoverer.implementingInstances(OpWrapper.class, constructorClasses, constructorObjects)) {
-			wrappers.put(wrapper.type(), wrapper);
-		}
+		for (Discoverer d : discoverers)
+			for (Class<OpWrapper> cls : d.implementingClasses(OpWrapper.class))
+			{
+				OpWrapper<?> wrapper;
+				try {
+					wrapper = cls.getDeclaredConstructor().newInstance();
+					wrappers.put(wrapper.type(), wrapper);
+				}
+				catch (Throwable t)
+				{
+					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
+				}
+			}
 	}
 
 	/**

@@ -40,7 +40,6 @@ import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.discovery.Discoverer;
-import org.scijava.ops.discovery.Implementation;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.Plugin;
@@ -88,15 +87,14 @@ public class DefaultOpService extends AbstractService implements OpService {
 
 	private synchronized void initEnv() {
 		if (env != null) return;
-		PluginService plugins = context().getService(PluginService.class);
 		LogService log = context().getService(LogService.class);
 		TypeService types = context().getService(TypeService.class);
 		OpHistoryService history = context().getService(OpHistoryService.class);
+		Discoverer d = new PluginBasedDiscoverer(context());
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
-			new PluginBasedClassOpInfoGenerator(plugins),
-			new PluginBasedOpCollectionInfoGenerator(plugins));
-		env = new DefaultOpEnvironment(types, log, history,
-			infoGenerators, new PluginBasedDiscoverer(context()));
+			new ClassOpInfoGenerator(d),
+			new OpCollectionInfoGenerator(d));
+		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d);
 	}
 }
 
@@ -110,7 +108,7 @@ class PluginBasedDiscoverer implements Discoverer {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> List<? extends Class<T>> implementingClasses(Class<T> c) {
+	public <T> List<Class<T>> implementingClasses(Class<T> c) {
 		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
 			throw new UnsupportedOperationException(
 				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");

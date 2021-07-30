@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface Discoverer {
 
-	<T> List<? extends Class<T>> implementingClasses(Class<T> c);
+	<T> List<Class<T>> implementingClasses(Class<T> c);
 
 }

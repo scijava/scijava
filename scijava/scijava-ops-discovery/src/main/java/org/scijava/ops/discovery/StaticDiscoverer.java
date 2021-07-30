@@ -20,7 +20,7 @@ public class StaticDiscoverer implements Discoverer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<? extends Class<T>> implementingClasses(Class<T> c) {
+	public <T> List<Class<T>> implementingClasses(Class<T> c) {
 		return names.keySet().stream() //
 			.filter(cls -> cls.isAssignableFrom(c)) //
 			.map(cls -> (Class<T>) cls) //

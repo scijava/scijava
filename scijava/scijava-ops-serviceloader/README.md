@@ -1,5 +1,4 @@
-# SciJava Discovery: A library for the abstraction of service discovery mechanisms
-
-This module provides the `Discoverer` interface, an abstraction for service discovery.
+# SciJava Ops Service Loader: A [`ServiceLoader`](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html)
+This module provides an implementation of `Discoverer`
 
 WIP

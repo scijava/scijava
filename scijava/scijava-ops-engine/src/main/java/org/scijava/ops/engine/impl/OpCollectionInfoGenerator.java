@@ -34,7 +34,6 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	public List<OpInfo> generateInfos() {
 		List<OpInfo> infos = discoverers.stream() //
 			.flatMap(d -> d.implementingClasses(OpCollection.class).stream()) //
-			.filter(cls -> cls.getAnnotation(Plugin.class) != null) //
 			.map(cls -> {
 			try {
 				List<OpInfo> collectionInfos = new ArrayList<>();

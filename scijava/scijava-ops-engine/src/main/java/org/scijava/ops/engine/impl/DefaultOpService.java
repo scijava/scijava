@@ -42,6 +42,7 @@ import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.discovery.Discoverer;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
+import org.scijava.ops.serviceloader.ServiceLoaderDiscoverer;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
@@ -90,11 +91,12 @@ public class DefaultOpService extends AbstractService implements OpService {
 		LogService log = context().getService(LogService.class);
 		TypeService types = context().getService(TypeService.class);
 		OpHistoryService history = context().getService(OpHistoryService.class);
-		Discoverer d = new PluginBasedDiscoverer(context());
+		Discoverer d1 = new PluginBasedDiscoverer(context());
+		Discoverer d2 = new ServiceLoaderDiscoverer();
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
-			new ClassOpInfoGenerator(d),
-			new OpCollectionInfoGenerator(d));
-		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d);
+			new PluginBasedClassOpInfoGenerator(d1, d2),
+			new OpCollectionInfoGenerator(d1, d2));
+		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2);
 	}
 }
 

@@ -13,11 +13,11 @@ import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
-public class ClassOpInfoGenerator implements OpInfoGenerator {
+public class PluginBasedClassOpInfoGenerator implements OpInfoGenerator {
 
 	private final List<Discoverer> discoverers;
 
-	public ClassOpInfoGenerator(Discoverer... d) {
+	public PluginBasedClassOpInfoGenerator(Discoverer... d) {
 		this.discoverers = Arrays.asList(d);
 	}
 

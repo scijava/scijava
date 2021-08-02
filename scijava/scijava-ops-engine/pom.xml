@@ -133,7 +133,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-discovery</artifactId>
+			<artifactId>scijava-discovery</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

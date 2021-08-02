@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.scijava.ops.discovery.Discoverer;
+import org.scijava.discovery.Discoverer;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 

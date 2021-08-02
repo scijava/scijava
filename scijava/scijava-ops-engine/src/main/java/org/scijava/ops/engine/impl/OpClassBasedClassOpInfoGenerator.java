@@ -5,14 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.discovery.Discoverer;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
-import org.scijava.plugin.Plugin;
 
 public class OpClassBasedClassOpInfoGenerator implements OpInfoGenerator {
 

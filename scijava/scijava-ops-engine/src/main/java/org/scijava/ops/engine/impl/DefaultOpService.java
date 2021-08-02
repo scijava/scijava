@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
 
 import org.scijava.Context;
 import org.scijava.InstantiableException;
+import org.scijava.discovery.Discoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.discovery.Discoverer;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
 import org.scijava.ops.serviceloader.ServiceLoaderDiscoverer;

@@ -1,5 +1,5 @@
 
-package org.scijava.ops.discovery;
+package org.scijava.discovery;
 
 import java.util.HashMap;
 import java.util.List;

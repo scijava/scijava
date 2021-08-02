@@ -3,11 +3,10 @@ package org.scijava.ops.serviceloader;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.discovery.Discoverer;
+import org.scijava.discovery.Discoverer;
 
 public class ServiceLoaderDiscoverer implements Discoverer {
 

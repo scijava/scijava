@@ -95,6 +95,7 @@ public class DefaultOpService extends AbstractService implements OpService {
 		Discoverer d2 = new ServiceLoaderDiscoverer();
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
 			new PluginBasedClassOpInfoGenerator(d1, d2),
+			new OpClassBasedClassOpInfoGenerator(d1, d2),
 			new OpCollectionInfoGenerator(d1, d2));
 		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2);
 	}

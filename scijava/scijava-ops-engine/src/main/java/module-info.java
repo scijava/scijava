@@ -47,4 +47,5 @@ module org.scijava.ops.engine {
 
 	uses javax.annotation.processing.Processor;
 	provides org.scijava.ops.spi.OpCollection with org.scijava.ops.engine.copy.CopyOpCollection;
+	provides org.scijava.ops.spi.Op with org.scijava.ops.engine.stats.Mean.MeanFunction;
 }

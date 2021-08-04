@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.scijava.ops.hints.BaseOpHints.Simplification;
-import org.scijava.ops.provenance.OpHistoryService;
+import org.scijava.ops.provenance.OpHistory;
 
 /**
  * A basic interface for storing and accessing Hints. The general structure for a Hint is
@@ -46,10 +46,10 @@ public interface Hints {
 
 	/**
 	 * Returns the {@link UUID} uniquely identifying the an associated
-	 * {@link Deque} in the {@link OpHistoryService}
+	 * {@link Deque} in the {@link OpHistory}
 	 * 
 	 * @return the {@link UUID} corresponding to the execution chain (logged
-	 *         within the {@link OpHistoryService}) in which these {@link Hints} are
+	 *         within the {@link OpHistory}) in which these {@link Hints} are
 	 *         being used.
 	 */
 	public UUID executionChainID();

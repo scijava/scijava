@@ -52,8 +52,6 @@ import org.scijava.AbstractContextual;
 import org.scijava.Context;
 import org.scijava.InstantiableException;
 import org.scijava.Priority;
-import org.scijava.function.Computers;
-import org.scijava.function.Computers.Arity1;
 import org.scijava.log.LogService;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpDependencyMember;
@@ -78,13 +76,13 @@ import org.scijava.ops.matcher.MatchingUtils;
 import org.scijava.ops.matcher.OpAdaptationInfo;
 import org.scijava.ops.matcher.OpCandidate;
 import org.scijava.ops.matcher.OpCandidate.StatusCode;
-import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.ops.matcher.OpClassInfo;
 import org.scijava.ops.matcher.OpFieldInfo;
 import org.scijava.ops.matcher.OpMatcher;
 import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.ops.matcher.OpMethodInfo;
 import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.ops.simplify.SimplifiedOpInfo;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.param.FunctionalMethodType;
@@ -310,7 +308,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 		Object wrappedOp = wrapOp(instance.op(), instance.info(), conditions
 			.hints(), executionChainID, instance.typeVarAssigns());
 		if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
-			history.logTopLevelWrapper(executionChainID, wrappedOp);
+			history.getHistory().logTopLevelWrapper(executionChainID, wrappedOp);
 		return wrappedOp;
 	}
 
@@ -346,7 +344,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	private void cacheOp(MatchingConditions conditions, OpInstance op) {
 		opCache.putIfAbsent(conditions, op);
 	if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
-			history.logTopLevelOp(conditions.hints().executionChainID(), op
+			history.getHistory().logTopLevelOp(conditions.hints().executionChainID(), op
 				.op());
 	}
 
@@ -410,7 +408,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 	{
 		final List<MatchingConditions> instances = resolveOpDependencies(candidate, hints);
 		Object op = candidate.createOp(wrappedDeps(instances, hints.executionChainID()));
-		history.logDependencies(hints.executionChainID(), candidate.opInfo(), infos(instances));
+		history.getHistory().logDependencies(hints.executionChainID(), candidate.opInfo(), infos(instances));
 		return op;
 	}
 
@@ -445,7 +443,7 @@ public class DefaultOpEnvironment extends AbstractContextual implements OpEnviro
 			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
-			return opWrapper.wrap(op, opInfo, hints, history, executionID, reifiedSuperType);
+			return opWrapper.wrap(op, opInfo, hints, history.getHistory(), executionID, reifiedSuperType);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;

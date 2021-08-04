@@ -50,6 +50,7 @@ import org.scijava.Context;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.PluginService;
 import org.scijava.script.ScriptService;

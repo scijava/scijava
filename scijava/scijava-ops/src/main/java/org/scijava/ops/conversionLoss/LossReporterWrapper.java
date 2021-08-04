@@ -7,7 +7,7 @@ import org.scijava.ops.OpInfo;
 import org.scijava.ops.hints.BaseOpHints.DependencyMatching;
 import org.scijava.ops.hints.Hints;
 import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistoryService;
+import org.scijava.ops.provenance.OpHistory;
 import org.scijava.ops.util.OpWrapper;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
@@ -33,7 +33,7 @@ public class LossReporterWrapper<I, O> //
 		final LossReporter<I, O> op, //
 		final OpInfo info, //
 		final Hints hints, //
-		final OpHistoryService history, //
+		final OpHistory history, //
 		final UUID executionID, //
 		final Type reifiedType)
 	{

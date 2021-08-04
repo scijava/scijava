@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistoryService;
+import org.scijava.ops.provenance.OpHistory;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
@@ -41,7 +41,7 @@ import org.scijava.service.Service;
  * @author Gabe Selzer
  */
 @Plugin(type = Service.class)
-public class DefaultOpHistoryService extends AbstractService implements OpHistoryService {
+public class DefaultOpHistory extends AbstractService implements OpHistory {
 
 	// -- DATA STRCUTURES -- //
 

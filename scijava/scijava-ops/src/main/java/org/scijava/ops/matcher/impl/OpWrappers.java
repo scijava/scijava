@@ -17,10 +17,10 @@ import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.BaseOpHints.DependencyMatching;
 import org.scijava.ops.Hints;
+import org.scijava.ops.OpExecutionSummary;
+import org.scijava.ops.OpHistory;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpWrapper;
-import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistory;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
 

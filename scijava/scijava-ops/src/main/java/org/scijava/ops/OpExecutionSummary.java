@@ -1,9 +1,8 @@
 
-package org.scijava.ops.provenance;
+package org.scijava.ops;
 
 import java.util.UUID;
 
-import org.scijava.ops.OpInfo;
 import org.scijava.ops.impl.DefaultOpEnvironment;
 
 /**

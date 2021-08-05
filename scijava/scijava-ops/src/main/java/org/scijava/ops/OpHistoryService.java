@@ -1,4 +1,4 @@
-package org.scijava.ops.provenance;
+package org.scijava.ops;
 
 import org.scijava.service.SciJavaService;
 

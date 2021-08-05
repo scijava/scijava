@@ -1,5 +1,5 @@
 
-package org.scijava.ops.provenance.impl;
+package org.scijava.ops.impl;
 
 import com.google.common.graph.Graph;
 import com.google.common.graph.GraphBuilder;
@@ -14,9 +14,9 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.OpDependency;
+import org.scijava.ops.OpExecutionSummary;
+import org.scijava.ops.OpHistory;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.provenance.OpExecutionSummary;
-import org.scijava.ops.provenance.OpHistory;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;

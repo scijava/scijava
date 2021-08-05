@@ -1,7 +1,7 @@
-package org.scijava.ops.provenance.impl;
+package org.scijava.ops.impl;
 
-import org.scijava.ops.provenance.OpHistory;
-import org.scijava.ops.provenance.OpHistoryService;
+import org.scijava.ops.OpHistory;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 

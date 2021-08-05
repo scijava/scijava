@@ -11,7 +11,6 @@ module org.scijava.ops {
 	exports org.scijava.ops.math;
 	exports org.scijava.ops.simplify;
 	exports org.scijava.ops.conversionLoss;
-	exports org.scijava.ops.provenance;
 	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)
 	exports org.scijava.ops.util; // contains OpWrapper interface
 
@@ -26,7 +25,6 @@ module org.scijava.ops {
 	opens org.scijava.ops.create to therapi.runtime.javadoc;
 	opens org.scijava.ops.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.monitor to therapi.runtime.javadoc;
-	opens org.scijava.ops.provenance to therapi.runtime.javadoc;
 	opens org.scijava.ops.adapt.functional to therapi.runtime.javadoc;
 	opens org.scijava.ops to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.util to therapi.runtime.javadoc;
@@ -34,7 +32,6 @@ module org.scijava.ops {
 	opens org.scijava.ops.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.stats to therapi.runtime.javadoc;
-	opens org.scijava.ops.provenance.impl to therapi.runtime.javadoc, org.scijava;
 
 	// FIXME: This is a file name and is thus unstable
 	requires geantyref;

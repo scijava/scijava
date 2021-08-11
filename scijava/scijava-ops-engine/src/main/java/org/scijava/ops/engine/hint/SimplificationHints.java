@@ -19,7 +19,7 @@ public class SimplificationHints extends AbstractHints {
 		// collect all old hints that are not Adaptable
 		Map<String, String> map = new HashMap<>();
 		hints.getHints().entrySet().parallelStream().filter(e -> e
-			.getKey() != Simplification.prefix).forEach(e -> map.put(e.getKey(), e
+			.getKey() != Simplification.PREFIX).forEach(e -> map.put(e.getKey(), e
 				.getValue()));
 
 		// add Simplifiable.NO

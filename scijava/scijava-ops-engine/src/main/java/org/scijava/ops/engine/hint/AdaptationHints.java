@@ -24,7 +24,7 @@ public class AdaptationHints extends AbstractHints {
 		// collect all old hints that are not Adaptable
 		Map<String, String> map = new HashMap<>();
 		hints.getHints().entrySet().parallelStream().filter(e -> e
-			.getKey() != Adaptation.prefix).forEach(e -> map.put(e.getKey(), e
+			.getKey() != Adaptation.PREFIX).forEach(e -> map.put(e.getKey(), e
 				.getValue()));
 
 		// add Adaptation.NO

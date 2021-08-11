@@ -14,10 +14,7 @@ import org.scijava.ops.api.Hints;
 public class ImmutableHints extends AbstractHints {
 
 	public ImmutableHints(String[] h) {
-		for (String hint : h) {
-			String prefix = getPrefix(hint);
-			hints.put(prefix, hint);
-		}
+		super(h);
 	}
 
 	public ImmutableHints(Map<String, String> h) {

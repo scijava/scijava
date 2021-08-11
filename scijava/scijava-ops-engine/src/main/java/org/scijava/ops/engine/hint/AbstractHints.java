@@ -32,7 +32,7 @@ public abstract class AbstractHints implements Hints {
 	public AbstractHints(final UUID historyHash, final String... startingHints) {
 		hints = new HashMap<>();
 		for(String hint : startingHints)
-			setHint(hint);
+			populateHint(hint);
 		this.historyHash = historyHash != null ? historyHash : UUID.randomUUID();
 	}
 
@@ -41,10 +41,21 @@ public abstract class AbstractHints implements Hints {
 		this.historyHash = historyHash != null ? historyHash : UUID.randomUUID();
 	}
 
-	@Override
-	public String setHint(String hint) {
+	/**
+	 * A protected hint setter, accessible only to the implementation, that
+	 * <i>always</i> works.
+	 * 
+	 * @param hint the hint to be set
+	 * @return the old hint
+	 */
+	protected String populateHint(String hint) {
 		String prefix = getPrefix(hint);
 		return hints.put(prefix, hint);
+	}
+
+	@Override
+	public String setHint(String hint) {
+		return populateHint(hint);
 	}
 
 	@Override

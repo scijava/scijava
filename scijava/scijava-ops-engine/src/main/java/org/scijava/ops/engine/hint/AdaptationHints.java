@@ -36,7 +36,13 @@ public class AdaptationHints extends AbstractHints {
 
 	@Override
 	public String setHint(String hint) {
-		return super.setHint(hint);
+		if (hint.equals(Adaptation.ALLOWED))
+			throw new IllegalArgumentException(
+				"We cannot allow simplification during simplification; this would cause a recursive loop!");
+		if (hint.equals(Adaptation.FORBIDDEN))
+			throw new IllegalArgumentException(
+				"We cannot forbid simplification during simplification; to forbid simplification, use another Hint implementation!");
+		return populateHint(hint);
 	}
 
 	@Override

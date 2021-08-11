@@ -37,7 +37,7 @@ public class SimplificationHints extends AbstractHints {
 		if (hint.equals(Simplification.FORBIDDEN))
 			throw new IllegalArgumentException(
 				"We cannot forbid simplification during simplification; to forbid simplification, use another Hint implementation!");
-		return super.setHint(hint);
+		return populateHint(hint);
 	}
 
 	@Override

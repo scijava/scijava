@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpEnvironment;
 
 /**
  * Abstract class containing behavior common to most {@link Hints}
@@ -21,28 +22,23 @@ public abstract class AbstractHints implements Hints {
 	final Map<String, String> hints;
 
 	public AbstractHints(final String... startingHints) {
-		hints = new HashMap<>();
-		for(String hint : startingHints)
-			setHint(hint);
+		this(null, startingHints);
+	}
 
-		this.historyHash = UUID.randomUUID();
+	AbstractHints(final Map<String, String> hints) {
+		this(null, hints);
 	}
 
 	public AbstractHints(final UUID historyHash, final String... startingHints) {
 		hints = new HashMap<>();
 		for(String hint : startingHints)
 			setHint(hint);
-		this.historyHash = historyHash;
-	}
-
-	AbstractHints(final Map<String, String> hints) {
-		this.hints = hints;
-		this.historyHash = UUID.randomUUID();
+		this.historyHash = historyHash != null ? historyHash : UUID.randomUUID();
 	}
 
 	AbstractHints(final UUID historyHash, final Map<String, String> hints) {
 		this.hints = hints;
-		this.historyHash = historyHash;
+		this.historyHash = historyHash != null ? historyHash : UUID.randomUUID();
 	}
 
 	@Override
@@ -78,10 +74,17 @@ public abstract class AbstractHints implements Hints {
 		return hints;
 	}
 
+	/**
+	 * {@link Hints} should be equal iff their {@link Map}s of hints are equal. We
+	 * do not (and should not) consider the {@link UUID} in equality checking, as
+	 * two calls to the {@link OpEnvironment} should use {@link Hints} with
+	 * different {@code UUID}s. This should not prevent, for matching purposes,
+	 * two {@link Hints} from being equal.
+	 */
 	@Override
 	public boolean equals(Object that) {
-		if(!(that instanceof AbstractHints)) return false;
-		AbstractHints thoseHints = (AbstractHints) that;
+		if(!(that instanceof Hints)) return false;
+		Hints thoseHints = (Hints) that;
 		return getHints().equals(thoseHints.getHints());
 	}
 

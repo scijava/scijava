@@ -42,7 +42,7 @@ public interface Hints {
 	public Hints copy(boolean generateID);
 
 	/**
-	 * Returns the {@link UUID} uniquely identifying the an associated
+	 * Returns the {@link UUID} uniquely identifying the associated
 	 * {@link Deque} in the {@link OpHistory}
 	 * 
 	 * @return the {@link UUID} corresponding to the execution chain (logged

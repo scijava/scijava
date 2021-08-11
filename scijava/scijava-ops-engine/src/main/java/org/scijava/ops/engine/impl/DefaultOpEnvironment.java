@@ -369,13 +369,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		catch (OpMatchingException e1) {
 			// no direct match; find an adapted match
 			try {
-				if (hints.containsHint(Adaptation.ALLOWED)) return adaptOp(ref, hints);
+				if (!hints.containsHintType(Adaptation.PREFIX)) return adaptOp(ref, hints);
 				throw new OpMatchingException("No matching Op for request: " + ref +
 					"\n(adaptation is disabled)", e1);
 			}
 			catch (OpMatchingException e2) {
 				try {
-					if (hints.containsHint(Simplification.ALLOWED)) return findSimplifiedOp(
+					if (!hints.containsHintType(Simplification.PREFIX)) return findSimplifiedOp(
 						ref, hints);
 					throw new OpMatchingException("No matching Op for request: " + ref +
 						"\n(simplification is disabled)", e1);

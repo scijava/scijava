@@ -6,9 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
 
 /**
  * Default Implementation of {@link Hints}
@@ -18,8 +15,7 @@ import org.scijava.ops.engine.BaseOpHints.Simplification;
 public class DefaultHints extends BasicHints {
 
 	public DefaultHints() {
-		super(Simplification.ALLOWED, Adaptation.ALLOWED,
-			DependencyMatching.NOT_IN_PROGRESS);
+		super();
 	}
 
 	public DefaultHints(Map<String, String> hints) {

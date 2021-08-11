@@ -12,14 +12,12 @@ public class BaseOpHints {
 
 	public static class Simplification {
 		public static final String PREFIX = "simplification";
-		public static final String ALLOWED = PREFIX + ".ALLOWED";
 		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";
 		public static final String IN_PROGRESS = PREFIX + ".IN_PROGRESS";
 	}
 
 	public static class Adaptation {
 		public static final String PREFIX = "adaptation";
-		public static final String ALLOWED = PREFIX + ".ALLOWED";
 		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";
 		public static final String IN_PROGRESS = PREFIX + ".IN_PROGRESS";
 	}
@@ -28,7 +26,6 @@ public class BaseOpHints {
 	public static class DependencyMatching {
 		public static final String PREFIX = "dependencyMatching";
 		public static final String IN_PROGRESS = PREFIX + ".IN_PROGRESS";
-		public static final String NOT_IN_PROGRESS = PREFIX + ".NOT_IN_PROGRESS";
 		
 	}
 

@@ -31,9 +31,6 @@ public class SimplificationHints extends AbstractHints {
 
 	@Override
 	public String setHint(String hint) {
-		if (hint.equals(Simplification.ALLOWED))
-			throw new IllegalArgumentException(
-				"We cannot allow simplification during simplification; this would cause a recursive loop!");
 		if (hint.equals(Simplification.FORBIDDEN))
 			throw new IllegalArgumentException(
 				"We cannot forbid simplification during simplification; to forbid simplification, use another Hint implementation!");

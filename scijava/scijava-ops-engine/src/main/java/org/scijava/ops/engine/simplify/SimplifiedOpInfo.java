@@ -66,7 +66,6 @@ public class SimplifiedOpInfo implements OpInfo {
 
 		this.priority = calculatePriority(info, metadata, env);
 		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
-		hintList.remove(Simplification.ALLOWED);
 		hintList.add(Simplification.FORBIDDEN);
 		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
 

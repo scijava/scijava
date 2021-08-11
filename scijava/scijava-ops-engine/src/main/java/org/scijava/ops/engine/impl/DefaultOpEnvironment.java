@@ -64,6 +64,7 @@ import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpInstance;
 import org.scijava.ops.engine.hint.AdaptationHints;
+import org.scijava.ops.engine.hint.BasicHints;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.hint.SimplificationHints;
 import org.scijava.ops.engine.matcher.DependencyMatchingException;
@@ -195,13 +196,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public <T> T op(final String opName, final Nil<T> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType)
 	{
-		return op(opName, specialType, inTypes, outType, getHints());
+		return op(opName, specialType, inTypes, outType, getDefaultHints());
 	}
 	
 	@Override
 	public <T> T op(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
 		try {
-			return findOp(info, specialType, inTypes, outType, getHints());
+			return findOp(info, specialType, inTypes, outType, getDefaultHints());
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -770,22 +771,19 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * called before all Ops called in parallel without issues.
 	 */
 	@Override
-	public void setHints(Hints hints) {
+	public void setDefaultHints(Hints hints) {
 		this.environmentHints = hints.getCopy(false);
 	}
 
-	/**
-	 * Obtains some {@link Hints} to be used for finding Ops. This {@code Hints} can be either:
-	 * <ul>
-	 * <li> some {@link Hints} given to this environment via {@link #setHints(Hints)}
-	 * <li> a {@link DefaultHints}
-	 * </li>
-	 * TODO: Consider concurrency issues
-	 * @return a {@link Hints}
-	 */
-	private Hints getHints() {
+	@Override
+	public Hints getDefaultHints() {
 		if(this.environmentHints != null) return this.environmentHints.getCopy(false);
 		return new DefaultHints();
+	}
+
+	@Override
+	public Hints createHints(String... startingHints) {
+		return new BasicHints(startingHints);
 	}
 
 }

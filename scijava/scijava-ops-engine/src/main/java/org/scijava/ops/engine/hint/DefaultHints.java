@@ -1,3 +1,4 @@
+
 package org.scijava.ops.engine.hint;
 
 import java.util.HashMap;
@@ -14,10 +15,11 @@ import org.scijava.ops.engine.BaseOpHints.Simplification;
  *
  * @author Gabriel Selzer
  */
-public class DefaultHints extends AbstractHints {
+public class DefaultHints extends BasicHints {
 
 	public DefaultHints() {
-		super(new String[] {Simplification.ALLOWED, Adaptation.ALLOWED, DependencyMatching.NOT_IN_PROGRESS});
+		super(Simplification.ALLOWED, Adaptation.ALLOWED,
+			DependencyMatching.NOT_IN_PROGRESS);
 	}
 
 	public DefaultHints(Map<String, String> hints) {

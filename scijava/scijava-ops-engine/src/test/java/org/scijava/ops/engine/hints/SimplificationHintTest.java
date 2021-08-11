@@ -27,14 +27,14 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
 		hints.setHint(Simplification.ALLOWED);
-		ops.env().setHints(hints);
+		ops.env().setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op(
 			"test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints.setHint(Simplification.FORBIDDEN);
-		ops.env().setHints(hints);
+		ops.env().setDefaultHints(hints);
 		try {
 			ops.op("test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function();
@@ -80,7 +80,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
 		hints.setHint(Simplification.ALLOWED);
-		ops.env().setHints(hints);
+		ops.env().setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
 			"test.simplification.unsimplifiable").inType(Double[].class).outType(

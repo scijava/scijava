@@ -71,7 +71,7 @@ public interface OpEnvironment {
 	/**
 	 * Returns an Op fitting the provided arguments. NB implementations of this
 	 * method likely depend on the {@link Hints} set by
-	 * {@link OpEnvironment#setHints(Hints)}, which provides no guarantee of
+	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee of
 	 * thread-safety. Users interested in parallel Op matching should consider
 	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
 	 *
@@ -88,7 +88,7 @@ public interface OpEnvironment {
 	/**
 	 * Returns an Op fitting the provided arguments. NB implementations of this
 	 * method likely depend on the {@link Hints} set by
-	 * {@link OpEnvironment#setHints(Hints)}, which provides no guarantee of
+	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee of
 	 * thread-safety. Users interested in parallel Op matching should consider
 	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
 	 *
@@ -215,5 +215,23 @@ public interface OpEnvironment {
 	 * 
 	 * @param hints
 	 */
-	void setHints(Hints hints);
+	void setDefaultHints(Hints hints);
+
+	/**
+	 * Returns <b>a copy</b> of the default {@link Hints} object.
+	 * 
+	 * @return the default {@link Hints}
+	 */
+	Hints getDefaultHints();
+
+	/**
+	 * Creates a {@link Hints} object using the {@link String}s provided as the
+	 * starting hints.
+	 * 
+	 * @param startingHints the hints existing in the {@link Hints} object from
+	 *          creation time
+	 * @return a {@link Hints} with all {@code startingHints} as hints.
+	 */
+	Hints createHints(String... startingHints);
+
 }

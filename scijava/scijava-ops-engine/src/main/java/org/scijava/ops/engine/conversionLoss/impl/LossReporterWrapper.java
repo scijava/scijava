@@ -50,10 +50,11 @@ public class LossReporterWrapper<I, O> //
 				Double output = op.apply(from, to);
 
 				// Log a new execution
-					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
-						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, output);
-						history.addExecution(e);
-					}
+				if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
+					OpExecutionSummary e = new OpExecutionSummary(executionID, info, op,
+						this, output);
+					history.addExecution(e);
+				}
 				return output;
 			}
 

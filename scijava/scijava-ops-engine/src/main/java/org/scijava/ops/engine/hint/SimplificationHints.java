@@ -23,10 +23,10 @@ public class SimplificationHints extends AbstractHints {
 				.getValue()));
 
 		// add Simplifiable.NO
-		UUID id = generateID ? UUID.randomUUID() : hints.executionChainID();
-		SimplificationHints newHints = new SimplificationHints(id, map);
-
-		return newHints;
+		if (generateID) {
+			return new SimplificationHints(null, map);
+		}
+		return new SimplificationHints(hints.executionChainID(), map);
 	}
 
 	@Override

@@ -41,8 +41,11 @@ public class ImmutableHints extends AbstractHints {
 
 	@Override
 	public Hints copy(boolean generateID) {
-		UUID id = generateID ? UUID.randomUUID() : historyHash;
-		return new ImmutableHints(new HashMap<>(getHints()), id);
+		Map<String, String> mapCopy = new HashMap<>(getHints());
+		if (generateID) {
+			return new ImmutableHints(mapCopy, null);
+		}
+		return new ImmutableHints(mapCopy, historyHash);
 	}
 
 }

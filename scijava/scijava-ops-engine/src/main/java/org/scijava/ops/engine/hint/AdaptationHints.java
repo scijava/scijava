@@ -28,10 +28,10 @@ public class AdaptationHints extends AbstractHints {
 				.getValue()));
 
 		// add Adaptation.NO
-		UUID id = generateID ? UUID.randomUUID() : hints.executionChainID();
-		AdaptationHints newHints = new AdaptationHints(id, map);
-
-		return newHints;
+		if (generateID) {
+			return new AdaptationHints(null, map);
+		}
+		return new AdaptationHints(hints.executionChainID(), map);
 	}
 
 	@Override

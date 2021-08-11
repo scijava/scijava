@@ -31,7 +31,7 @@ public class DefaultHints extends BasicHints {
 	}
 
 	@Override
-	public Hints getCopy(boolean generateID) {
+	public Hints copy(boolean generateID) {
 		if (generateID) {
 			return new DefaultHints(new HashMap<>(getHints()));
 		}

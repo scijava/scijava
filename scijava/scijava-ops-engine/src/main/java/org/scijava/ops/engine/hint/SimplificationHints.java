@@ -41,7 +41,7 @@ public class SimplificationHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints getCopy(boolean generateID) {
+	public Hints copy(boolean generateID) {
 		return SimplificationHints.generateHints(this, generateID);
 	}
 

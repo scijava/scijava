@@ -40,7 +40,7 @@ public class ImmutableHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints getCopy(boolean generateID) {
+	public Hints copy(boolean generateID) {
 		UUID id = generateID ? UUID.randomUUID() : historyHash;
 		return new ImmutableHints(new HashMap<>(getHints()), id);
 	}

@@ -530,7 +530,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
 			try {
 				// TODO: Consider a new Hint implementation
-				Hints hintCopy = hints.getCopy(false);
+				Hints hintCopy = hints.copy(false);
 				hintCopy.setHint(DependencyMatching.IN_PROGRESS);
 				hintCopy.setHint(Simplification.FORBIDDEN);
 				if(!dependency.isAdaptable()) {
@@ -772,12 +772,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	@Override
 	public void setDefaultHints(Hints hints) {
-		this.environmentHints = hints.getCopy(false);
+		this.environmentHints = hints.copy(false);
 	}
 
 	@Override
 	public Hints getDefaultHints() {
-		if(this.environmentHints != null) return this.environmentHints.getCopy(false);
+		if(this.environmentHints != null) return this.environmentHints.copy(false);
 		return new DefaultHints();
 	}
 

@@ -39,7 +39,7 @@ public interface Hints {
 	 * @return a new {@link Hints} Object with the same hints as this
 	 *         {@link Hints}
 	 */
-	public Hints getCopy(boolean generateID);
+	public Hints copy(boolean generateID);
 
 	/**
 	 * Returns the {@link UUID} uniquely identifying the an associated

@@ -40,7 +40,7 @@ public class AdaptationHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints getCopy(boolean generateID) {
+	public Hints copy(boolean generateID) {
 		return AdaptationHints.generateHints(this, generateID);
 	}
 

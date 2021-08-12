@@ -1,7 +1,7 @@
 package org.scijava.ops.engine.conversionLoss.impl;
 
 import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;

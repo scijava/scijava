@@ -20,7 +20,7 @@ import org.scijava.ops.api.OpExecutionSummary;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.BaseOpHints.DependencyMatching;
+import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.GenericTyped;
 

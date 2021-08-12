@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.spi.OpCollection;

@@ -8,11 +8,11 @@ import java.util.Objects;
 
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
-import org.scijava.ops.api.BaseOpHints.Simplification;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;

@@ -1,4 +1,4 @@
-package org.scijava.ops.api;
+package org.scijava.ops.api.features;
 
 import java.lang.annotation.Annotation;
 

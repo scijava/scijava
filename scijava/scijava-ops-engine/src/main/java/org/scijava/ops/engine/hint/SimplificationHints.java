@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 
 public class SimplificationHints extends AbstractHints {
 

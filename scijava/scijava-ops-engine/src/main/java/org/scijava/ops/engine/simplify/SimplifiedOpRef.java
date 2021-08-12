@@ -108,6 +108,16 @@ public class SimplifiedOpRef implements OpRef {
 	 * <p>
 	 * Adaptation is similarly forbidden, as to convert most Op types to
 	 * {@link Arity1} you would need an identical copy Op.
+	 * <p>
+	 * NB We create the {@link Hints} using the construction
+	 * {@code new DefaultHints(hints.getHints())} instead of using the
+	 * construction {@code hints.copy(true)} because we <b>do not</b> want to
+	 * ensure that we are not passing a {@code SimplificationHints} to the
+	 * matcher. We need to forbid simplification to prevent an infinite loop, but
+	 * the Simplification hint type is restricted to
+	 * {@code Simplification.IN_PROGRESS} by the {@code SimplificationHints}. This
+	 * is likely a bug, but would be best fixed by sliming down the {@link Hints}
+	 * implementations.
 	 * 
 	 * @param copyType - the {@link Type} that we need to be able to copy
 	 * @param hints
@@ -116,13 +126,15 @@ public class SimplifiedOpRef implements OpRef {
 	 * @throws OpMatchingException
 	 */
 	private static Computers.Arity1<?, ?> simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
-			Hints hintsCopy = new DefaultHints(hints.getHints());
-			hintsCopy.setHint(Adaptation.FORBIDDEN);
-			hintsCopy.setHint(Simplification.FORBIDDEN);
+		Hints hintsCopy = new DefaultHints(hints.getHints());
+		hintsCopy.setHint(Adaptation.FORBIDDEN);
+		hintsCopy.setHint(Simplification.FORBIDDEN);
 
-			Nil<?> copyNil = Nil.of(copyType);
-			Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {copyType, copyType});
-			return (Arity1<?, ?>) env.op("copy", Nil.of(copierType), new Nil<?>[] {copyNil, copyNil}, copyNil, hintsCopy);
+		Nil<?> copyNil = Nil.of(copyType);
+		Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {
+			copyType, copyType });
+		return (Arity1<?, ?>) env.op("copy", Nil.of(copierType), new Nil<?>[] {
+			copyNil, copyNil }, copyNil, hintsCopy);
 	}
 
 	@Override

@@ -8,17 +8,18 @@ import java.util.Objects;
 
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
+import org.scijava.ops.api.BaseOpHints.Simplification;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpMethod;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -29,9 +30,16 @@ import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.util.MiscUtils;
+import org.scijava.util.VersionUtils;
 
 
 public class SimplifiedOpInfo implements OpInfo {
+
+	private static final String IMPL_DELIMITER = "|Simplification";
+	private static final String INPUT_SIMPLIFIER_DELIMITER = "|InputSimplifier:";
+	private static final String INPUT_FOCUSER_DELIMITER = "|InputFocuser:";
+	private static final String OUTPUT_SIMPLIFIER_DELIMITER = "|OutputSimplifier:";
+	private static final String OUTPUT_FOCUSER_DELIMITER = "|OutputFocuser:";
 
 	private final OpInfo srcInfo;
 	private final SimplificationMetadata metadata;
@@ -181,7 +189,7 @@ public class SimplifiedOpInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName();
+		return srcInfo.implementationName() + " simplified to a " + opType();
 	}
 
 	@Override
@@ -254,6 +262,44 @@ public class SimplifiedOpInfo implements OpInfo {
 		return theseMembers.hashCode() - thoseMembers.hashCode();
 	}
 
+	@Override
+	public String version() {
+		return VersionUtils.getVersion(this.getClass());
+	}
 
-
+	/**
+	 * For a simplified Op, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The implementation name of the source Op
+	 * <li>The implementation name of all input simplifiers
+	 * <li>The implementation name of all input focusers
+	 * <li>The implementation name of the output simplifier
+	 * <li>The implementation name of the output focuser
+	 * </ol>
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		// original Op
+		StringBuilder sb = new StringBuilder(srcInfo.implementationName());
+		sb.append(IMPL_DELIMITER);
+		// input simplifiers
+		for (OpInfo i : metadata.inputSimplifierInfos()) {
+			sb.append(INPUT_SIMPLIFIER_DELIMITER);
+			sb.append(i.implementationName());
+		}
+		// input focusers
+		for (OpInfo i : metadata.inputFocuserInfos()) {
+			sb.append(INPUT_FOCUSER_DELIMITER);
+			sb.append(i.implementationName());
+		}
+		// output simplifier
+		sb.append(OUTPUT_SIMPLIFIER_DELIMITER);
+		sb.append(metadata.outputSimplifierInfo().implementationName());
+		// output focuser
+		sb.append(OUTPUT_FOCUSER_DELIMITER);
+		sb.append(metadata.outputFocuserInfo().implementationName());
+		return sb.toString();
+	}
 }

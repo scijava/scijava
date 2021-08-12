@@ -247,4 +247,20 @@ public class SimplificationMetadata {
 		return info;
 	}
 
+	protected List<OpInfo> inputSimplifierInfos() {
+		return refSimplifiers;
+	}
+
+	protected List<OpInfo> inputFocuserInfos() {
+		return infoFocusers;
+	}
+
+	protected OpInfo outputSimplifierInfo() {
+		return infoSimplifier;
+	}
+
+	protected OpInfo outputFocuserInfo() {
+		return refFocuser;
+	}
+
 }

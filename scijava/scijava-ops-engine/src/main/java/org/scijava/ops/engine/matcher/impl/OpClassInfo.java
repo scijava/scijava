@@ -53,6 +53,7 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
+import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an op implementation defined as a class.
@@ -195,6 +196,30 @@ public class OpClassInfo implements OpInfo {
 	@Override
 	public String toString() {
 		return OpUtils.opString(this);
+	}
+
+	@Override
+	public String version() {
+		return VersionUtils.getVersion(opClass);
+	}
+
+	/**
+	 * For a {@link Class}, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The fully qualified name of the class
+	 * <li>The version of the class containing the field, with a preceding
+	 * {@code @}
+	 * </ol>
+	 * <p>
+	 * For example, for a field class {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return  implementationName() + "@" + version();
 	}
 
 	// -- Helper methods

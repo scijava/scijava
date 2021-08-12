@@ -613,7 +613,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
 					.getType(), map);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
-					.opInfo(), adapterOpType, adaptorOp);
+					.opInfo(), adapterOpType, adaptor, adaptorOp);
 				OpCandidate adaptedCandidate = new OpCandidate(this, ref, adaptedInfo, map);
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;

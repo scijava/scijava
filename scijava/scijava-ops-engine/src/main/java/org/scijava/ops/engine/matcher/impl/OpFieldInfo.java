@@ -40,9 +40,9 @@ import java.util.List;
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpHints;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.spi.OpField;
@@ -50,6 +50,7 @@ import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
+import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an op implementation defined as a field.
@@ -139,7 +140,11 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return field.getDeclaringClass().getName() + "." + field.getName();
+		// Get generic string without modifiers and return type
+		String fullyQualifiedField = field.toGenericString();
+		String packageName = field.getDeclaringClass().getPackageName();
+		int classNameIndex = fullyQualifiedField.indexOf(packageName);
+		return fullyQualifiedField.substring(classNameIndex);
 	}
 
 	@Override
@@ -175,6 +180,32 @@ public class OpFieldInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return field;
+	}
+
+	@Override
+	public String version() {
+		return VersionUtils.getVersion(field.getDeclaringClass());
+	}
+
+	/**
+	 * For an {@link OpField}, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The fully qualified name of the class containing the field
+	 * <li>The method field
+	 * <li>The version of the class containing the field, with a preceding
+	 * {@code @}
+	 * </ol>
+	 * <p>
+	 * For example, for a field {@code baz} in class
+	 * {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar.baz@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return implementationName() + "@" + version();
 	}
 
 	// -- Object methods --

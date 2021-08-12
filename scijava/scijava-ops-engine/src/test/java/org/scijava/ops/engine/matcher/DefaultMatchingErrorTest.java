@@ -93,7 +93,7 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 			Throwable cause = e.getCause();
 			Assert.assertTrue(cause instanceof DependencyMatchingException);
 			String message = cause.getMessage();
-			Assert.assertTrue(message.contains("adapted"));
+			Assert.assertTrue(message.contains("Adaptation"));
 			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 
 		}

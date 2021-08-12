@@ -47,9 +47,9 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpHints;
 import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
@@ -64,6 +64,7 @@ import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
+import org.scijava.util.VersionUtils;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -150,10 +151,11 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		// TODO: This includes all of the modifiers etc. of the method which are not
-		// necessary to identify it. Use something custom? We need to be careful
-		// because of method overloading, so just using the name is not sufficient.
-		return method.toGenericString();
+		// Get generic string without modifiers and return type
+		String fullyQualifiedMethod = method.toGenericString();
+		String packageName = method.getDeclaringClass().getPackageName();
+		int classNameIndex = fullyQualifiedMethod.indexOf(packageName);
+		return fullyQualifiedMethod.substring(classNameIndex);
 	}
 
 	@Override
@@ -344,6 +346,32 @@ public class OpMethodInfo implements OpInfo {
 	@Override
 	public ValidityException getValidityException() {
 		return validityException;
+	}
+
+	@Override
+	public String version() {
+		return VersionUtils.getVersion(method.getDeclaringClass());
+	}
+
+	/**
+	 * For an {@link OpMethod}, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The fully qualified name of the class containing the method
+	 * <li>The method name
+	 * <li>The method parameters
+	 * <li>The version of the class containing the method, with a preceding
+	 * {@code @}
+	 * </ol>
+	 * <p>
+	 * For example, for a method {@code baz(Double in1, String in2)} in class
+	 * {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar.baz(Double in1,String in2)@1.0.0}
+	 */
+	@Override
+	public String id() {
+		return implementationName() + "@" + version();
 	}
 
 	// -- Object methods --

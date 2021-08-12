@@ -34,18 +34,22 @@ import org.scijava.struct.ValidityException;
  */
 public class OpAdaptationInfo implements OpInfo {
 
-	private OpInfo srcInfo;
-	private Type type;
-	private Function<Object, Object> adaptor;
+	private static final String IMPL_DELIMITER = "|Adaptation|";
+
+	private final OpInfo srcInfo;
+	private final OpInfo adaptorInfo;
+	private final Type type;
+	private final Function<Object, Object> adaptor;
 	private final Hints hints;
 
 	private Struct struct;
 	private ValidityException validityException;
 
 	public OpAdaptationInfo(OpInfo srcInfo, Type type,
-		Function<Object, Object> adaptor)
+		OpInfo adaptorInfo, Function<Object, Object> adaptor)
 	{
 		this.srcInfo = srcInfo;
+		this.adaptorInfo = adaptorInfo;
 		this.type = type;
 		this.adaptor = adaptor;
 
@@ -105,7 +109,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + " adapted to " + type.toString();
+		return srcInfo.implementationName() + IMPL_DELIMITER + adaptorInfo.implementationName();
 	}
 
 	/**
@@ -131,6 +135,39 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return srcInfo.getAnnotationBearer();
+	}
+
+	/**
+	 * Returns the version of the adapted Op.
+	 * <p>
+	 * Note that {@code adaptorInfo.version()} is used as the Op returned is an
+	 * inner class of the adaptor Op, and will thus have the same version as the
+	 * adaptor.
+	 */
+	@Override
+	public String version() {
+		return adaptorInfo.version();
+	}
+
+	/**
+	 * For an adapted Op, we define the implementation name as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The implementation name of the <b>original info</b>
+	 * <li>The adaptation delimiter
+	 * <li>The implementation name of the <b>adaptor</b>
+	 * </ol>
+	 * <p>
+	 * For example, for a source {@code com.example.foo.Bar@1.0.0} with adaptor
+	 * {@code com.example.foo.BazAdaptor@1.0.0} with delimiter
+	 * {@code |Adaptation|}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar@1.0.0|Adaptation|com.example.foo.BazAdaptor@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return srcInfo.id() + IMPL_DELIMITER + adaptorInfo.id();
 	}
 
 }

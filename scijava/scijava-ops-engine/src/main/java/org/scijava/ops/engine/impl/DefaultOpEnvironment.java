@@ -49,19 +49,19 @@ import java.util.stream.Collectors;
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
 import org.scijava.log.LogService;
+import org.scijava.ops.api.BaseOpHints.Adaptation;
+import org.scijava.ops.api.BaseOpHints.DependencyMatching;
+import org.scijava.ops.api.BaseOpHints.Simplification;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.BaseOpHints.Adaptation;
-import org.scijava.ops.api.BaseOpHints.DependencyMatching;
-import org.scijava.ops.api.BaseOpHints.Simplification;
-import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpInstance;
 import org.scijava.ops.engine.hint.AdaptationHints;
 import org.scijava.ops.engine.hint.BasicHints;
@@ -101,7 +101,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private TypeService typeService;
 
-	private OpHistoryService history;
+	private OpHistory history;
 
 	/**
 	 * The {@link OpInfoGenerator}s providing {@link OpInfo}s to this environment
@@ -138,7 +138,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private Hints environmentHints = null;
 
-	public DefaultOpEnvironment(final TypeService typeService, final LogService log, final OpHistoryService history, final List<OpInfoGenerator> infoGenerators, final List<Discoverer> d) {
+	public DefaultOpEnvironment(final TypeService typeService, final LogService log, final OpHistory history, final List<OpInfoGenerator> infoGenerators, final List<Discoverer> d) {
 		this.discoverers = d;
 		this.typeService = typeService;
 		this.log = log;
@@ -147,7 +147,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		matcher = new DefaultOpMatcher();
 	}
 
-	public DefaultOpEnvironment(final TypeService typeService, final LogService log, final OpHistoryService  history, final List<OpInfoGenerator> infoGenerators, final Discoverer... d) {
+	public DefaultOpEnvironment(final TypeService typeService, final LogService log, final OpHistory  history, final List<OpInfoGenerator> infoGenerators, final Discoverer... d) {
 		this.discoverers = Arrays.asList(d);
 		this.typeService = typeService;
 		this.log = log;
@@ -315,7 +315,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Object wrappedOp = wrapOp(instance.op(), instance.info(), conditions
 			.hints(), executionChainID, instance.typeVarAssigns());
 		if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
-			history.getHistory().logTopLevelWrapper(executionChainID, wrappedOp);
+			history.logTopLevelWrapper(executionChainID, wrappedOp);
 		return wrappedOp;
 	}
 
@@ -350,7 +350,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private void cacheOp(MatchingConditions conditions, OpInstance op) {
 		opCache.putIfAbsent(conditions, op);
 	if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
-			history.getHistory().logTopLevelOp(conditions.hints().executionChainID(), op
+			history.logTopLevelOp(conditions.hints().executionChainID(), op
 				.op());
 	}
 
@@ -412,7 +412,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		final List<MatchingConditions> instances = resolveOpDependencies(candidate, hints);
 		Object op = candidate.createOp(wrappedDeps(instances, hints.executionChainID()));
-		history.getHistory().logDependencies(hints.executionChainID(), candidate.opInfo(), infos(instances));
+		history.logDependencies(hints.executionChainID(), candidate.opInfo(), infos(instances));
 		return op;
 	}
 
@@ -447,7 +447,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
-			return opWrapper.wrap(op, opInfo, hints, history.getHistory(), executionID, reifiedSuperType);
+			return opWrapper.wrap(op, opInfo, hints, history, executionID, reifiedSuperType);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;

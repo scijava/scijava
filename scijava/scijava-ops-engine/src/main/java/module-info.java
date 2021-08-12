@@ -37,7 +37,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.discovery;
 	requires org.scijava.function;
 	requires org.scijava.struct;
-	requires org.scijava.ops.api;
+	requires transitive org.scijava.ops.api;
 	requires org.scijava.ops.serviceloader;
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;

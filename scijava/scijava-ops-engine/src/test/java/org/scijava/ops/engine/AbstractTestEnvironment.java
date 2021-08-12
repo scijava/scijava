@@ -11,8 +11,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
-import org.scijava.ops.engine.OpService;
-import org.scijava.ops.engine.impl.DefaultOpService;
 import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
 import org.scijava.types.TypeService;
@@ -24,7 +22,7 @@ public abstract class AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void setUp() {
-		context = new Context(OpService.class, OpHistoryService.class, CacheService.class, ThreadService.class, PluginService.class, TypeService.class);
+		context = new Context(OpService.class, CacheService.class, ThreadService.class, PluginService.class, TypeService.class);
 		ops = context.service(OpService.class);
 	}
 

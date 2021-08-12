@@ -42,7 +42,6 @@ import org.scijava.Context;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpInstance;
 import org.scijava.ops.engine.OpService;
 import org.scijava.ops.spi.Op;
@@ -62,7 +61,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 	 */
 	@Before
 	public void setUpEach() {
-		context = new Context(OpService.class, OpHistoryService.class, PluginService.class,
+		context = new Context(OpService.class, PluginService.class,
 			TypeService.class);
 		ops = context.getService(OpService.class);
 	}

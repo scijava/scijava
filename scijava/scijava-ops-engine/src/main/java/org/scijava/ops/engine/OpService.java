@@ -31,6 +31,7 @@ package org.scijava.ops.engine;
 
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
 import org.scijava.service.SciJavaService;
 
 /**
@@ -56,5 +57,8 @@ public interface OpService extends SciJavaService {
 
 	/** Retrieves the motherlode of available ops. */
 	public OpEnvironment env();
+
+	/** Retrieves a log of all Ops executed */
+	public OpHistory history();
 
 }

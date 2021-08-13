@@ -188,7 +188,7 @@ public class SimplificationUtils {
 	
 	public static Function<?, ?> findArgMutator(OpEnvironment env, OpInfo mutatorInfo, Type originalInput, Type mutatedInput){
 			Type opType = Types.parameterize(Function.class, new Type[] {originalInput, mutatedInput});
-			Function<?, ?> mutator = (Function<?, ?>) env.op(mutatorInfo,
+			Function<?, ?> mutator = (Function<?, ?>) env.opFromInfo(mutatorInfo,
 				Nil.of(opType), new Nil<?>[] { Nil.of(originalInput) }, Nil.of(
 					mutatedInput));
 			return mutator;

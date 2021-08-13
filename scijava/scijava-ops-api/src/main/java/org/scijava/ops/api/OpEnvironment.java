@@ -86,22 +86,6 @@ public interface OpEnvironment {
 		final Nil<?>[] inTypes, final Nil<?> outType);
 
 	/**
-	 * Returns an Op fitting the provided arguments. NB implementations of this
-	 * method likely depend on the {@link Hints} set by
-	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee of
-	 * thread-safety. Users interested in parallel Op matching should consider
-	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
-	 *
-	 * @param <T> the {@link Type} of the Op
-	 * @param info the {@link OpInfo}
-	 * @param specialType the generic {@link Type} of the Op
-	 * @param inTypes the arguments (inputs) to the Op
-	 * @param outType the return of the Op (note that it may also be an argument)
-	 * @return an instance of an Op aligning with the search parameters
-	 */
-	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType);
-
-	/**
 	 * Returns an Op fitting the provided arguments.
 	 *
 	 * @param <T> the {@link Type} of the Op
@@ -116,6 +100,22 @@ public interface OpEnvironment {
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
 	/**
+	 * Returns an Op fitting the provided arguments. NB implementations of this
+	 * method likely depend on the {@link Hints} set by
+	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee of
+	 * thread-safety. Users interested in parallel Op matching should consider
+	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
+	 *
+	 * @param <T> the {@link Type} of the Op
+	 * @param info the {@link OpInfo}
+	 * @param specialType the generic {@link Type} of the Op
+	 * @param inTypes the arguments (inputs) to the Op
+	 * @param outType the return of the Op (note that it may also be an argument)
+	 * @return an instance of an Op aligning with the search parameters
+	 */
+	<T> T opFromInfo(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType);
+
+	/**
 	 * Returns an Op fitting the provided arguments.
 	 *
 	 * @param <T> the {@link Type} of the Op
@@ -126,7 +126,7 @@ public interface OpEnvironment {
 	 * @param hints the {@link Hints} that should guide this matching call
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	<T> T op(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType,
+	<T> T opFromInfo(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType,
 		Hints hints);
 
 	default OpBuilder op(final String opName) {

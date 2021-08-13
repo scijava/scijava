@@ -201,7 +201,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 	
 	@Override
-	public <T> T op(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
+	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
 		try {
 			return findOp(info, specialType, inTypes, outType, getDefaultHints());
 		} catch (OpMatchingException e) {
@@ -219,7 +219,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 	
 	@Override
-	public <T> T op(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
+	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
 		try {
 			return findOp(info, specialType, inTypes, outType, hints);
 		} catch (OpMatchingException e) {

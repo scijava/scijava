@@ -32,8 +32,17 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, final OpInfo info, final Hints hints, final OpHistory history, final UUID executionID, final Type reifiedType) {
-			class GenericTypedProducer implements Producer<T>, GenericTyped {
+		public Producer<T> wrap(final Producer<T> op, //
+			final OpInfo info, //
+			final Hints hints, //
+			final OpHistory history, //
+			final UUID executionID, //
+			final Type reifiedType) //
+		{
+			class GenericTypedProducer implements //
+				Producer<T>, //
+				GenericTyped //
+			{
 
 				@Override
 				public T create() {

@@ -82,6 +82,7 @@ import javassist.NotFoundException;
 public class OpMethodInfo implements OpInfo {
 
 	private final Method method;
+	private final String version;
 	private final List<String> names;
 	private Type opType;
 	private Struct struct;
@@ -89,7 +90,7 @@ public class OpMethodInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method, final String... names) {
+	public OpMethodInfo(final Method method, final String version, final String... names) {
 		final List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public methods
 		if (!Modifier.isPublic(method.getModifiers())) {
@@ -104,6 +105,7 @@ public class OpMethodInfo implements OpInfo {
 				" must be static."));
 		}
 		this.method = method;
+		this.version = version;
 		this.names = Arrays.asList(names);
 		this.hints = formHints(method.getAnnotation(OpHints.class));
 		// determine the functional interface this Op should implement
@@ -353,7 +355,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String version() {
-		return VersionUtils.getVersion(method.getDeclaringClass());
+		return version;
 	}
 
 	/**

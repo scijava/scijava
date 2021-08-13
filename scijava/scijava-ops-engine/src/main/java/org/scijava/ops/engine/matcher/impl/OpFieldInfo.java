@@ -61,6 +61,7 @@ public class OpFieldInfo implements OpInfo {
 
 	private final Object instance;
 	private final Field field;
+	private final String version;
 	private final List<String> names;
 
 	private Struct struct;
@@ -68,8 +69,9 @@ public class OpFieldInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpFieldInfo(final Object instance, final Field field, final String... names) {
+	public OpFieldInfo(final Object instance, final Field field, final String version, final String... names) {
 		this.instance = instance;
+		this.version = version;
 		this.field = field;
 		this.names = Arrays.asList(names);
 
@@ -184,7 +186,7 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public String version() {
-		return VersionUtils.getVersion(field.getDeclaringClass());
+		return version;
 	}
 
 	/**

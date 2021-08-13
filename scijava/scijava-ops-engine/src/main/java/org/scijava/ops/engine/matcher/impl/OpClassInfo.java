@@ -65,17 +65,19 @@ public class OpClassInfo implements OpInfo {
 
 	private final List<String> names;
 	private final Class<?> opClass;
+	private final String version;
 	private Struct struct;
 	private ValidityException validityException;
 	private final double priority;
 	private final Hints hints;
 
-	public OpClassInfo(final Class<?> opClass, final String... names) {
-		this(opClass, priorityFromAnnotation(opClass), names);
+	public OpClassInfo(final Class<?> opClass, final String version, final String... names) {
+		this(opClass, version, priorityFromAnnotation(opClass), names);
 	}
 
-	public OpClassInfo(final Class<?> opClass, final double priority, final String... names) {
+	public OpClassInfo(final Class<?> opClass, final String version, final double priority, final String... names) {
 		this.opClass = opClass;
+		this.version = version;
 		this.names = Arrays.asList(names);
 		List<ValidityProblem> problems = new ArrayList<>();
 		try {
@@ -200,7 +202,7 @@ public class OpClassInfo implements OpInfo {
 
 	@Override
 	public String version() {
-		return VersionUtils.getVersion(opClass);
+		return version;
 	}
 
 	/**

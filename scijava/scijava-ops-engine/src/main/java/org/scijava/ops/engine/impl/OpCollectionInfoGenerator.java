@@ -18,6 +18,7 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.util.ClassUtils;
+import org.scijava.util.VersionUtils;
 
 
 public class OpCollectionInfoGenerator implements OpInfoGenerator {
@@ -34,6 +35,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 			.flatMap(d -> d.implementingClasses(OpCollection.class).stream()) //
 			.map(cls -> {
 			try {
+				String version = VersionUtils.getVersion(cls);
 				List<OpInfo> collectionInfos = new ArrayList<>();
 				final List<Field> fields = ClassUtils.getAnnotatedFields(cls, OpField.class);
 				Object instance = null;
@@ -44,14 +46,14 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 					}
 					String unparsedOpNames = field.getAnnotation(OpField.class).names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
-					collectionInfos.add(new OpFieldInfo(isStatic ? null : instance, field,
+					collectionInfos.add(new OpFieldInfo(isStatic ? null : instance, field, version,
 						parsedOpNames));
 				}
 				final List<Method> methods = ClassUtils.getAnnotatedMethods(cls, OpMethod.class);
 				for (final Method method: methods) {
 					String unparsedOpNames = method.getAnnotation(OpMethod.class).names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
-					collectionInfos.add(new OpMethodInfo(method, parsedOpNames));
+					collectionInfos.add(new OpMethodInfo(method, version, parsedOpNames));
 				}
 				return collectionInfos;
 			} catch (InstantiationException | IllegalAccessException exc) {

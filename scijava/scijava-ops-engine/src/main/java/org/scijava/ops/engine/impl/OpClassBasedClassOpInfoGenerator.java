@@ -12,6 +12,7 @@ import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
+import org.scijava.util.VersionUtils;
 
 public class OpClassBasedClassOpInfoGenerator implements OpInfoGenerator {
 
@@ -29,7 +30,8 @@ public class OpClassBasedClassOpInfoGenerator implements OpInfoGenerator {
 			.map(cls -> {
 				OpClass p = cls.getAnnotation(OpClass.class);
 				String[] parsedOpNames = OpUtils.parseOpNames(p.names());
-				return new OpClassInfo(cls, parsedOpNames);
+				String version = VersionUtils.getVersion(cls);
+				return new OpClassInfo(cls, version, parsedOpNames);
 			}) //
 			.collect(Collectors.toList());
 		return infos;

@@ -84,6 +84,7 @@ import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
+import org.scijava.util.VersionUtils;
 
 /**
  * Default implementation of {@link OpEnvironment}, whose ops and related state
@@ -244,7 +245,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public OpInfo opify(final Class<?> opClass, final double priority, final String... names) {
-		return new OpClassInfo(opClass, priority, names);
+		return new OpClassInfo(opClass, VersionUtils.getVersion(opClass), priority, names);
 	}
 
 	@Override

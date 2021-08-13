@@ -20,7 +20,12 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
-public class LambdaTypeBaker {
+public final class LambdaTypeBaker {
+
+	/**
+	 * Prevents instantation of this public utility class
+	 */
+	private LambdaTypeBaker() {}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T bakeLambdaType(T originalOp, Type reifiedType) {

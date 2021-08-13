@@ -68,12 +68,6 @@ public class DefaultOpRef implements OpRef {
 
 	// -- Static construction methods --
 
-	public static DefaultOpRef fromTypes(final Type type, final Type outType,
-		final Type... args)
-	{
-		return new DefaultOpRef(null, type, outType, OpRef.filterNulls(args));
-	}
-
 	public static DefaultOpRef fromTypes(final String name, final Type type,
 		final Type outType, final Type... args)
 	{

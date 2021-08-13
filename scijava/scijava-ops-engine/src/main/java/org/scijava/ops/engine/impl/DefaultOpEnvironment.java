@@ -258,8 +258,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final Nil<?> outType, Hints hints) {
 		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
-		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
-		generateOpInstance(conditions);
+		MatchingConditions conditions = generateCacheHit(ref, hints, true);
 		return (T) wrapViaCache(conditions, conditions.hints().executionChainID());
 	}
 
@@ -267,10 +266,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private <T> T findOp(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes,
 		final Nil<?> outType, Hints hints) throws OpMatchingException
 	{
-		OpRef ref = DefaultOpRef.fromTypes(specialType.getType(), outType.getType(),
+		OpRef ref = DefaultOpRef.fromTypes(null, specialType.getType(), outType.getType(),
 			toTypes(inTypes));
-		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
-		generateOpInstance(conditions, info);
+		MatchingConditions conditions = insertCacheHit(ref, hints, true, info);
 		return (T) wrapViaCache(conditions, conditions.hints().executionChainID());
 	}
 
@@ -284,36 +282,31 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * This Op instance is put into the {@code opCache}, and is retrievable via
 	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions, UUID)}
 	 * 
-	 * @param conditions the {@link MatchingConditions} containing the
-	 *          requirements for the returned Op
-	 * @param info
+	 * @param ref the {@link OpRef} request
+	 * @param hints the {@link Hints} containing matching preferences
+	 * @param generateUUID
+	 * @param info the {@link OpInfo} describing the Op that should match these
+	 *          conditions1
+	 * @return the {@link MatchingConditions} that will return the Op described by
+	 *         {@code info} from the op cache
 	 * @throws OpMatchingException
 	 */
-	private void generateOpInstance(final MatchingConditions conditions, final OpInfo info) {
-		// create new OpCandidate from ref and info
-		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-		if (!conditions.ref().typesMatch(info.opType(), typeVarAssigns))
-			throw new OpMatchingException(
-				"The given OpRef and OpInfo are not compatible!");
-		OpCandidate candidate = new OpCandidate(this, conditions.ref(), info,
-			typeVarAssigns);
-		// TODO: can this be replaced by simply setting the status code to match?
-		if (!matcher.typesMatch(candidate)) throw new OpMatchingException(
-			"The given OpRef and OpInfo are not compatible!");
-		// obtain Op instance (with dependencies)
-		Object op = instantiateOp(candidate, conditions.hints());
+	private MatchingConditions insertCacheHit (final OpRef ref, final Hints hints, final boolean generateUUID, final OpInfo info) {
+		MatchingConditions conditions = MatchingConditions.from(ref, hints, generateUUID);
 
-		// cache raw Op
-		OpInstance instance = OpInstance.of(op, info, typeVarAssigns);
-		cacheOp(conditions, instance);
+		// create new OpCandidate from ref and info
+		OpCandidate candidate = new ManualOpCandidate(this, ref, info, this.matcher);
+
+		instantiateAndCache(conditions, candidate);
+
+		return conditions;
 	}
 	
 	private Object wrapViaCache(MatchingConditions conditions,
 		UUID executionChainID)
 	{
 		OpInstance instance = getInstance(conditions);
-		Object wrappedOp = wrapOp(instance.op(), instance.info(), conditions
-			.hints(), executionChainID, instance.typeVarAssigns());
+		Object wrappedOp = wrapOp(instance.op(), instance.info(), conditions.hints(), executionChainID, instance.typeVarAssigns());
 		if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
 			history.logTopLevelWrapper(executionChainID, wrappedOp);
 		return wrappedOp;
@@ -327,18 +320,30 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * that T (since the OpRef could require that the Op returned is of multiple
 	 * types).
 	 * 
-	 * @param conditions - the {@link MatchingConditions} outlining the
-	 *          requirements that must be fulfilled by the Op returned
+	 * @param ref the {@link OpRef} request
+	 * @param hints the {@link Hints} containing matching preferences
+	 * @param generateUUID
+	 * @return the {@link MatchingConditions} that will return the Op found from
+	 *         the op cache
 	 */
-	private void generateOpInstance(final MatchingConditions conditions) 
+	private MatchingConditions generateCacheHit(OpRef ref, Hints hints, boolean generateUUID) 
 	{
+		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
 		// see if the ref has been matched already
 		OpInstance cachedOp = getInstance(conditions);
-		if (cachedOp != null) return;
+		if (cachedOp != null) return conditions;
 
 		// obtain suitable OpCandidate
 		OpCandidate candidate = findOpCandidate(conditions.ref(), conditions.hints());
 
+		instantiateAndCache(conditions, candidate);
+
+		return conditions;
+	}
+
+	private void instantiateAndCache(MatchingConditions conditions,
+		OpCandidate candidate)
+	{
 		// obtain Op instance (with dependencies)
 		Object op = instantiateOp(candidate, conditions.hints());
 		
@@ -537,8 +542,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					hintCopy.setHint(Adaptation.FORBIDDEN);
 				}
 
-				MatchingConditions conditions = MatchingConditions.from(dependencyRef, hintCopy, false);
-				generateOpInstance(conditions);
+				MatchingConditions conditions = generateCacheHit(dependencyRef, hintCopy, false);
 				resolvedDependencies.add(conditions);
 			}
 			catch (final OpMatchingException e) {

@@ -60,6 +60,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.engine.OpInstance;
@@ -451,9 +452,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			// obtain the generic type of the Op w.r.t. the Wrapper class 
 			Type exactSuperType = Types.getExactSuperType(opType, wrapper);
 			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
+			OpMetadata metadata = new OpMetadata(reifiedSuperType, opInfo, executionID, hints, history);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
-			return opWrapper.wrap(op, opInfo, hints, history, executionID, reifiedSuperType);
+			return opWrapper.wrap(op, metadata);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 			return op;

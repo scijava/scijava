@@ -5,8 +5,6 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.reflect.Type;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -15,14 +13,9 @@ import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpExecutionSummary;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.plugin.Plugin;
-import org.scijava.types.GenericTyped;
 
 public class OpWrappers {
 
@@ -33,35 +26,30 @@ public class OpWrappers {
 
 		@Override
 		public Producer<T> wrap(final Producer<T> op, //
-			final OpInfo info, //
-			final Hints hints, //
-			final OpHistory history, //
-			final UUID executionID, //
-			final Type reifiedType) //
+			final OpMetadata metadata)
 		{
-			class GenericTypedProducer implements //
-				Producer<T>, //
-				GenericTyped //
+			class GenericTypedProducer //
+				extends DefaultRichOp //
+				implements Producer<T>
 			{
+
+				public GenericTypedProducer()
+				{
+					super(op, metadata);
+				}
 
 				@Override
 				public T create() {
+					preprocess();
 
 					// Call the op
 					T out = op.create();
 
-					// Log a new execution
-					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
-						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						history.addExecution(e);
-					}
+					postprocess(out);
+
 					return out;
 				}
 
-				@Override
-				public Type getType() {
-					return reifiedType;
-				}
 			}
 			return new GenericTypedProducer();
 		}
@@ -80,35 +68,30 @@ public class OpWrappers {
 		@Override
 		public $fg wrap( //
 			final $fg op, //
-			final OpInfo info, //
-			final Hints hints, //
-			final OpHistory history, //
-			final UUID executionID, //
-			final Type reifiedType)
+			final OpMetadata metadata)
 		{
-			class GenericTypedFunction${arity} implements //
-				$fg, //
-				GenericTyped //
+			class GenericTypedFunction${arity} //
+				extends DefaultRichOp //
+				implements $fg 
 			{
+
+				public GenericTypedFunction${arity}()
+				{
+					super(op, metadata);
+				}
 
 				@Override
 				public O apply($applyParams.call($arity)) //
 				{
+					preprocess($applyArgs.call($arity));
+
 					// Call the op
 					O out = op.apply($applyArgs.call($arity));
 
-					// Log a new execution
-					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
-						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						history.addExecution(e);
-					}
+					postprocess(out);
 					return out;
 				}
 
-				@Override
-				public Type getType() {
-					return reifiedType;
-				}
 			}
 			return new GenericTypedFunction${arity}();
 		}
@@ -128,34 +111,28 @@ public class OpWrappers {
 		@Override
 		public $cg wrap( //
 			final $cg op, //
-			final OpInfo info, //
-			final Hints hints, //
-			final OpHistory history, //
-			final UUID executionID, //
-			final Type reifiedType)
+			final OpMetadata metadata)
 		{
-			class GenericTypedComputer${arity} implements //
-				$cg, //
-				GenericTyped
+			class GenericTypedComputer${arity} //
+				extends DefaultRichOp //
+				implements $cg 
 			{
+				public GenericTypedComputer${arity}()
+				{
+					super(op, metadata);
+				}
 
 				@Override
 				public void compute($computeParams.call($arity)) //
 				{
+					preprocess($computeArgs.call($arity));
+
 					// Call the op
 					op.compute($computeArgs.call($arity));
 
-					// Log a new execution
-					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
-						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, out);
-						history.addExecution(e);
-					}
+					postprocess(out);
 				}
 
-				@Override
-				public Type getType() {
-					return reifiedType;
-				}
 			}
 			return new GenericTypedComputer${arity}();
 		}
@@ -176,34 +153,29 @@ public class OpWrappers {
 		@Override
 		public $ig wrap( //
 			final $ig op, //
-			final OpInfo info, //
-			final Hints hints, //
-			final OpHistory history, //
-			final UUID executionID, //
-			final Type reifiedType)
+			final OpMetadata metadata)
 		{
 			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
-				implements $ig, //
-				GenericTyped
+				extends DefaultRichOp //
+				implements $ig 
 			{
+				public GenericTypedInplace${inplaceSuffix.call($arity, $a)}()
+				{
+					super(op, metadata);
+				}
 
 				@Override
 				public void mutate($mutateParams.call($arity, $a)) //
 				{
+					preprocess($mutateArgs.call($arity, $a));
+
 					// Call the op
 					op.mutate($mutateArgs.call($arity, $a));
 
 					// Log a new execution
-					if (!hints.containsHint(DependencyMatching.IN_PROGRESS)) {
-						OpExecutionSummary e = new OpExecutionSummary(executionID, info, op, this, ioType);
-						history.addExecution(e);
-					}
+					postprocess(ioType);
 				}
 
-				@Override
-				public Type getType() {
-					return reifiedType;
-				}
 			}
 			return new GenericTypedInplace${inplaceSuffix.call($arity, $a)}();
 		}

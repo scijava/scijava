@@ -36,7 +36,7 @@ public interface OpHistory {
 	 * @param o the {@link Object} of interest
 	 * @return a {@link List} of all executions upon {@code o}
 	 */
-	public List<OpExecutionSummary> executionsUpon(Object o);
+	List<OpExecutionSummary> executionsUpon(Object o);
 
 	/**
 	 * Returns the {@link Graph} of {@link OpInfo}s describing the dependency
@@ -47,7 +47,7 @@ public interface OpHistory {
 	 *          matching call, as the dependency {@link Object}s are not recorded.
 	 * @return the {@link Graph} describing the dependency chain
 	 */
-	public Graph<OpInfo> opExecutionChain(Object op);
+	Graph<OpInfo> opExecutionChain(Object op);
 
 	/**
 	 * Returns the {@link Graph} of {@link OpInfo}s describing the dependency
@@ -56,7 +56,7 @@ public interface OpHistory {
 	 * @param id the {@link UUID} associated with a particular matching call
 	 * @return the {@link Graph} describing the dependency chain
 	 */
-	public Graph<OpInfo> opExecutionChain(UUID id);
+	Graph<OpInfo> opExecutionChain(UUID id);
 
 	// -- HISTORY MAINTENANCE API -- //
 
@@ -66,7 +66,7 @@ public interface OpHistory {
 	 * @param e the {@link OpExecutionSummary}
 	 * @return true iff {@code e} was successfully logged
 	 */
-	public boolean addExecution(OpExecutionSummary e);
+	boolean addExecution(OpExecutionSummary e);
 
 	/**
 	 * Logs the {@link List} of {@link OpInfo} dependencies under the
@@ -78,7 +78,7 @@ public interface OpHistory {
 	 * @param dependencies the {@link OpInfo}s used to fulfill the
 	 *          {@link OpDependency} requests of the Op specified by {@code info}
 	 */
-	public void logDependencies(UUID executionChainID, OpInfo info,
+	void logDependencies(UUID executionChainID, OpInfo info,
 		List<OpInfo> dependencies);
 
 	/**
@@ -90,7 +90,7 @@ public interface OpHistory {
 	 * @param op the {@link Object} returned from the matching call identifiable
 	 *          by {@code executionChainID}.
 	 */
-	public void logTopLevelOp(UUID executionChainID, Object op);
+	void logTopLevelOp(UUID executionChainID, Object op);
 
 	/**
 	 * Logs the <b>wrapper</b> of the "top-level" Op for a particular matching
@@ -102,6 +102,6 @@ public interface OpHistory {
 	 * @param wrapper the {@link Object} returned from the matching call
 	 *          identifiable by {@code executionChainID}.
 	 */
-	public void logTopLevelWrapper(UUID executionChainID, Object wrapper);
+	void logTopLevelWrapper(UUID executionChainID, Object wrapper);
 
 }

@@ -26,15 +26,15 @@ import java.util.UUID;
  */
 public interface Hints {
 
-	public String setHint(String hint);
+	String setHint(String hint);
 
-	public String getHint(String hintType);
+	String getHint(String hintType);
 
-	public boolean containsHint(String hint);
+	boolean containsHint(String hint);
 
-	public boolean containsHintType(String hintType);
+	boolean containsHintType(String hintType);
 
-	public Map<String, String> getHints();
+	Map<String, String> getHints();
 
 	/**
 	 * Generates a new {@link Hints} with identical hints but <b>the same</b>
@@ -43,7 +43,7 @@ public interface Hints {
 	 * @return a new {@link Hints} Object with the same hints as this
 	 *         {@link Hints}
 	 */
-	public Hints copy();
+	Hints copy();
 
 	/**
 	 * Generates a new {@link Hints} with identical hints, and a <b>random</b>
@@ -52,7 +52,7 @@ public interface Hints {
 	 * @return a new {@link Hints} Object with the same hints as this
 	 *         {@link Hints}
 	 */
-	public Hints copyRandomUUID();
+	Hints copyRandomUUID();
 
 	/**
 	 * Returns the {@link UUID} uniquely identifying the associated
@@ -62,6 +62,6 @@ public interface Hints {
 	 *         within the {@link OpHistory}) in which these {@link Hints} are
 	 *         being used.
 	 */
-	public UUID executionChainID();
+	UUID executionChainID();
 
 }

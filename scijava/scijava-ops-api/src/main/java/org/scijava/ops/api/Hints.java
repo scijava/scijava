@@ -6,16 +6,22 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * A basic interface for storing and accessing Hints. The general structure for a Hint is
+ * A basic interface for storing and accessing Hints. The general structure for
+ * a Hint is
  * <p>
  * {@code hint = hintType.option}
  * <p>
  * <ul>
- * <li>{@code hintType} designates the category of hint (for example, {@code Simplification} in {@link Simplification})
- * <li>{@code option} designates the preference within the category (for example, {@code ALLOWED} in {@link Simplification})
- * <li>{@code hint} is the combination of {@code hintType} and {@code option} with a delimiting {@code .}
+ * <li>{@code hintType} designates the category of hint
+ * <li>{@code option} designates the preference within the category
+ * <li>{@code hint} is the combination of {@code hintType} and {@code option}
+ * with a delimiting {@code .}
  * </ul>
- *
+ * <p>
+ * For example, you might want a {@code hintType} to designate preferences on
+ * lossiness (as a tradeoff for performance). That {@code hintType} might be
+ * {@code Lossiness}, with {@option}s {@code LOSSLESS} and {@LOSSY}.
+ * 
  * @author Gabriel Selzer
  */
 public interface Hints {

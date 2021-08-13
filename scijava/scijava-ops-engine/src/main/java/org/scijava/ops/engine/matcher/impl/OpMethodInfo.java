@@ -328,14 +328,17 @@ public class OpMethodInfo implements OpInfo {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns a "simple" name for {@code Class<?> c}.
+	 * <p>
+	 * Since this should be a java identifier, it cannot have illegal characters;
+	 * thus we replace illegal characters with an underscore.
+	 * 
+	 * @param c the {@link Class} for which we need an identifier
+	 * @return a {@link String} that can identify the class
+	 */
 	private String getParameterName(Class<?> c) {
-		if (!c.isArray()) return c.getSimpleName();
-		// TODO: if c is an array, simpleName will include brackets (which is
-		// illegal in a class name). To differentiate Object[] from Object, we map
-		// Object[] to ObjectArr. This is not truly extensible, since someone
-		// could create an ObjectArr class which might conflict, so it would be
-		// best to find a better solution.
-		return  c.getComponentType().getSimpleName() + "Arr";
+		return c.getSimpleName().replaceAll("[^a-zA-Z0-9_]", "_");
 	}
 
 	@Override

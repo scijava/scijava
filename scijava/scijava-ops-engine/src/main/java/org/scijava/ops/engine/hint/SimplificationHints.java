@@ -38,8 +38,13 @@ public class SimplificationHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints copy(boolean generateID) {
-		return SimplificationHints.generateHints(this, generateID);
+	public Hints copy() {
+		return SimplificationHints.generateHints(this, false);
+	}
+
+	@Override
+	public Hints copyRandomUUID() {
+		return SimplificationHints.generateHints(this, true);
 	}
 
 }

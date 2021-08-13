@@ -37,15 +37,22 @@ public interface Hints {
 	public Map<String, String> getHints();
 
 	/**
-	 * Generates a new {@link Hints} with identical hints.
+	 * Generates a new {@link Hints} with identical hints but <b>the same</b>
+	 * {@link UUID}.
 	 * 
-	 * @param generateID designates whether the returned {@link Hints} should
-	 *          designate a new execution chain ID, or whether it should maintain
-	 *          the ID of this {@link Hints}
 	 * @return a new {@link Hints} Object with the same hints as this
 	 *         {@link Hints}
 	 */
-	public Hints copy(boolean generateID);
+	public Hints copy();
+
+	/**
+	 * Generates a new {@link Hints} with identical hints, and a <b>random</b>
+	 * {@link UUID}
+	 * 
+	 * @return a new {@link Hints} Object with the same hints as this
+	 *         {@link Hints}
+	 */
+	public Hints copyRandomUUID();
 
 	/**
 	 * Returns the {@link UUID} uniquely identifying the associated

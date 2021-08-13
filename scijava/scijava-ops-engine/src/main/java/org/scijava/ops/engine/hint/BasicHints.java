@@ -25,9 +25,13 @@ public class BasicHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints copy(boolean generateID) {
-		if (generateID) return new BasicHints(getHints());
+	public Hints copy() {
 		return new BasicHints(executionChainID(), getHints());
+	}
+
+	@Override
+	public Hints copyRandomUUID() {
+		return new BasicHints(getHints());
 	}
 
 }

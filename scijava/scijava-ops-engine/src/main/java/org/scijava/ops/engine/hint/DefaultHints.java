@@ -27,11 +27,13 @@ public class DefaultHints extends BasicHints {
 	}
 
 	@Override
-	public Hints copy(boolean generateID) {
-		if (generateID) {
-			return new DefaultHints(new HashMap<>(getHints()));
-		}
+	public Hints copy() {
 		return new DefaultHints(historyHash, new HashMap<>(getHints()));
+	}
+
+	@Override
+	public Hints copyRandomUUID() {
+		return new DefaultHints(new HashMap<>(getHints()));
 	}
 
 }

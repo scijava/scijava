@@ -43,8 +43,13 @@ public class AdaptationHints extends AbstractHints {
 	}
 
 	@Override
-	public Hints copy(boolean generateID) {
-		return AdaptationHints.generateHints(this, generateID);
+	public Hints copy() {
+		return AdaptationHints.generateHints(this, false);
+	}
+
+	@Override
+	public Hints copyRandomUUID() {
+		return AdaptationHints.generateHints(this, true);
 	}
 
 }

@@ -5,9 +5,9 @@ import java.lang.reflect.Type;
 
 import org.scijava.types.GenericTyped;
 
-public interface RichOp extends GenericTyped {
+public interface RichOp<T> extends GenericTyped {
 
-	Object op();
+	T op();
 
 	OpMetadata metadata();
 

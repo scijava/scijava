@@ -63,6 +63,7 @@ import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.OpInstance;
 import org.scijava.ops.engine.hint.AdaptationHints;
 import org.scijava.ops.engine.hint.BasicHints;
@@ -308,10 +309,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		UUID executionChainID)
 	{
 		OpInstance instance = getInstance(conditions);
-		Object wrappedOp = wrapOp(instance.op(), instance.info(), conditions.hints(), executionChainID, instance.typeVarAssigns());
-		if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
-			history.logTopLevelWrapper(executionChainID, wrappedOp);
-		return wrappedOp;
+		try {
+			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.info(),
+				conditions.hints(), executionChainID, instance.typeVarAssigns());
+			if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
+				history.logTopLevelOp(wrappedOp, executionChainID);
+			return wrappedOp;
+		}
+		catch (IllegalArgumentException e) {
+			return instance;
+		}
 	}
 
 	/**
@@ -356,9 +363,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private void cacheOp(MatchingConditions conditions, OpInstance op) {
 		opCache.putIfAbsent(conditions, op);
-	if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
-			history.logTopLevelOp(conditions.hints().executionChainID(), op
-				.op());
 	}
 
 	private OpInstance getInstance(MatchingConditions conditions) {
@@ -440,7 +444,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @return an {@link Op} wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> T wrapOp(T op, OpInfo opInfo, Hints hints, UUID executionID, Map<TypeVariable<?>, Type> typeVarAssigns) {
+	private <T> RichOp<T> wrapOp(T op, OpInfo opInfo, Hints hints, UUID executionID, Map<TypeVariable<?>, Type> typeVarAssigns) throws IllegalArgumentException {
 		// TODO: synchronize this
 		if (wrappers == null)
 			initWrappers();
@@ -457,11 +461,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
 			return opWrapper.wrap(op, metadata);
 		} catch (IllegalArgumentException | SecurityException exc) {
-			log.error(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
-			return op;
+			throw new IllegalArgumentException(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 		} catch (NullPointerException e) {
-			log.error("No wrapper exists for " + Types.raw(opType).toString() + ".");
-			return op;
+			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(opType).toString() + ".");
 		}
 	}
 

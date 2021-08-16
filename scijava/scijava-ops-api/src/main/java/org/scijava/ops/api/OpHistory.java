@@ -30,13 +30,13 @@ public interface OpHistory {
 	// -- USER API -- //
 
 	/**
-	 * Returns the list of executions on {@link Object} {@code o} recorded in the
+	 * Describes the known executions upon {@link Object} {@code o} recorded in the
 	 * history
 	 * 
 	 * @param o the {@link Object} of interest
 	 * @return a {@link List} of all executions upon {@code o}
 	 */
-	List<OpExecutionSummary> executionsUpon(Object o);
+	List<UUID> executionsUpon(Object o);
 
 	/**
 	 * Returns the {@link Graph} of {@link OpInfo}s describing the dependency
@@ -63,10 +63,11 @@ public interface OpHistory {
 	/**
 	 * Logs a {@link OpExecutionSummary} in the history
 	 * 
-	 * @param e the {@link OpExecutionSummary}
+	 * @param op the Op executed to produce {@code output}
+	 * @param output the output produced by {@code op}
 	 * @return true iff {@code e} was successfully logged
 	 */
-	boolean addExecution(OpExecutionSummary e);
+	boolean addExecution(RichOp op, Object output);
 
 	/**
 	 * Logs the {@link List} of {@link OpInfo} dependencies under the
@@ -85,23 +86,11 @@ public interface OpHistory {
 	 * Logs the "top-level" Op for a particular matching call. {@code op} is the
 	 * {@link Object} returned to the user (save for Op wrapping)
 	 * 
-	 * @param executionChainID the {@link UUID} identifying a particular matching
-	 *          call
 	 * @param op the {@link Object} returned from the matching call identifiable
 	 *          by {@code executionChainID}.
-	 */
-	void logTopLevelOp(UUID executionChainID, Object op);
-
-	/**
-	 * Logs the <b>wrapper</b> of the "top-level" Op for a particular matching
-	 * call. {@code wrapper} is the {@link Object} returned to the user when Op
-	 * wrapping is perfomed
-	 * 
 	 * @param executionChainID the {@link UUID} identifying a particular matching
 	 *          call
-	 * @param wrapper the {@link Object} returned from the matching call
-	 *          identifiable by {@code executionChainID}.
 	 */
-	void logTopLevelWrapper(UUID executionChainID, Object wrapper);
+	void logTopLevelOp(RichOp op, UUID executionChainID);
 
 }

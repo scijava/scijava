@@ -15,6 +15,7 @@ import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.api.RichOp;
 import org.scijava.plugin.Plugin;
 
 public class OpWrappers {
@@ -25,11 +26,11 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, //
+		public RichOp<Producer<T>> wrap(final Producer<T> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedProducer //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Producer<T>> //
 				implements Producer<T>
 			{
 
@@ -64,12 +65,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Function<I, O> wrap( //
+		public RichOp<Function<I, O>> wrap( //
 			final Function<I, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Function<I, O>> //
 				implements Function<I, O> 
 			{
 
@@ -102,12 +103,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public BiFunction<I1, I2, O> wrap( //
+		public RichOp<BiFunction<I1, I2, O>> wrap( //
 			final BiFunction<I1, I2, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<BiFunction<I1, I2, O>> //
 				implements BiFunction<I1, I2, O> 
 			{
 
@@ -140,12 +141,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity3<I1, I2, I3, O> wrap( //
+		public RichOp<Functions.Arity3<I1, I2, I3, O>> wrap( //
 			final Functions.Arity3<I1, I2, I3, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity3<I1, I2, I3, O>> //
 				implements Functions.Arity3<I1, I2, I3, O> 
 			{
 
@@ -178,12 +179,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity4<I1, I2, I3, I4, O> wrap( //
+		public RichOp<Functions.Arity4<I1, I2, I3, I4, O>> wrap( //
 			final Functions.Arity4<I1, I2, I3, I4, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity4<I1, I2, I3, I4, O>> //
 				implements Functions.Arity4<I1, I2, I3, I4, O> 
 			{
 
@@ -216,12 +217,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity5<I1, I2, I3, I4, I5, O> wrap( //
+		public RichOp<Functions.Arity5<I1, I2, I3, I4, I5, O>> wrap( //
 			final Functions.Arity5<I1, I2, I3, I4, I5, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity5<I1, I2, I3, I4, I5, O>> //
 				implements Functions.Arity5<I1, I2, I3, I4, I5, O> 
 			{
 
@@ -254,12 +255,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> wrap( //
+		public RichOp<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> wrap( //
 			final Functions.Arity6<I1, I2, I3, I4, I5, I6, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>> //
 				implements Functions.Arity6<I1, I2, I3, I4, I5, I6, O> 
 			{
 
@@ -292,12 +293,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> wrap( //
+		public RichOp<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> wrap( //
 			final Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> //
 				implements Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> 
 			{
 
@@ -330,12 +331,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> wrap( //
+		public RichOp<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> wrap( //
 			final Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
 				implements Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> 
 			{
 
@@ -368,12 +369,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> wrap( //
+		public RichOp<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> wrap( //
 			final Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
 				implements Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> 
 			{
 
@@ -406,12 +407,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> wrap( //
+		public RichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> wrap( //
 			final Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
 				implements Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> 
 			{
 
@@ -444,12 +445,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> wrap( //
+		public RichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> wrap( //
 			final Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
 				implements Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> 
 			{
 
@@ -482,12 +483,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> wrap( //
+		public RichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> wrap( //
 			final Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
 				implements Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> 
 			{
 
@@ -520,12 +521,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> wrap( //
+		public RichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> wrap( //
 			final Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction13 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
 				implements Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> 
 			{
 
@@ -558,12 +559,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> wrap( //
+		public RichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> wrap( //
 			final Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction14 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
 				implements Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> 
 			{
 
@@ -596,12 +597,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> wrap( //
+		public RichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> wrap( //
 			final Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction15 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
 				implements Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> 
 			{
 
@@ -634,12 +635,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> wrap( //
+		public RichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> wrap( //
 			final Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction16 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
 				implements Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> 
 			{
 
@@ -674,12 +675,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity0<O> wrap( //
+		public RichOp<Computers.Arity0<O>> wrap( //
 			final Computers.Arity0<O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer0 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity0<O>> //
 				implements Computers.Arity0<O> 
 			{
 				public GenericTypedComputer0()
@@ -710,12 +711,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity1<I, O> wrap( //
+		public RichOp<Computers.Arity1<I, O>> wrap( //
 			final Computers.Arity1<I, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity1<I, O>> //
 				implements Computers.Arity1<I, O> 
 			{
 				public GenericTypedComputer1()
@@ -746,12 +747,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity2<I1, I2, O> wrap( //
+		public RichOp<Computers.Arity2<I1, I2, O>> wrap( //
 			final Computers.Arity2<I1, I2, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity2<I1, I2, O>> //
 				implements Computers.Arity2<I1, I2, O> 
 			{
 				public GenericTypedComputer2()
@@ -782,12 +783,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity3<I1, I2, I3, O> wrap( //
+		public RichOp<Computers.Arity3<I1, I2, I3, O>> wrap( //
 			final Computers.Arity3<I1, I2, I3, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity3<I1, I2, I3, O>> //
 				implements Computers.Arity3<I1, I2, I3, O> 
 			{
 				public GenericTypedComputer3()
@@ -818,12 +819,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity4<I1, I2, I3, I4, O> wrap( //
+		public RichOp<Computers.Arity4<I1, I2, I3, I4, O>> wrap( //
 			final Computers.Arity4<I1, I2, I3, I4, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity4<I1, I2, I3, I4, O>> //
 				implements Computers.Arity4<I1, I2, I3, I4, O> 
 			{
 				public GenericTypedComputer4()
@@ -854,12 +855,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity5<I1, I2, I3, I4, I5, O> wrap( //
+		public RichOp<Computers.Arity5<I1, I2, I3, I4, I5, O>> wrap( //
 			final Computers.Arity5<I1, I2, I3, I4, I5, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity5<I1, I2, I3, I4, I5, O>> //
 				implements Computers.Arity5<I1, I2, I3, I4, I5, O> 
 			{
 				public GenericTypedComputer5()
@@ -890,12 +891,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> wrap( //
+		public RichOp<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> wrap( //
 			final Computers.Arity6<I1, I2, I3, I4, I5, I6, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> //
 				implements Computers.Arity6<I1, I2, I3, I4, I5, I6, O> 
 			{
 				public GenericTypedComputer6()
@@ -926,12 +927,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> wrap( //
+		public RichOp<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> wrap( //
 			final Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> //
 				implements Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> 
 			{
 				public GenericTypedComputer7()
@@ -962,12 +963,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> wrap( //
+		public RichOp<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> wrap( //
 			final Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> //
 				implements Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> 
 			{
 				public GenericTypedComputer8()
@@ -998,12 +999,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> wrap( //
+		public RichOp<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> wrap( //
 			final Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> //
 				implements Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> 
 			{
 				public GenericTypedComputer9()
@@ -1034,12 +1035,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> wrap( //
+		public RichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> wrap( //
 			final Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> //
 				implements Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> 
 			{
 				public GenericTypedComputer10()
@@ -1070,12 +1071,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> wrap( //
+		public RichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> wrap( //
 			final Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> //
 				implements Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> 
 			{
 				public GenericTypedComputer11()
@@ -1106,12 +1107,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> wrap( //
+		public RichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> wrap( //
 			final Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> //
 				implements Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> 
 			{
 				public GenericTypedComputer12()
@@ -1142,12 +1143,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> wrap( //
+		public RichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> wrap( //
 			final Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer13 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> //
 				implements Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> 
 			{
 				public GenericTypedComputer13()
@@ -1178,12 +1179,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> wrap( //
+		public RichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> wrap( //
 			final Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer14 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> //
 				implements Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> 
 			{
 				public GenericTypedComputer14()
@@ -1214,12 +1215,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> wrap( //
+		public RichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> wrap( //
 			final Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer15 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> //
 				implements Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> 
 			{
 				public GenericTypedComputer15()
@@ -1250,12 +1251,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> wrap( //
+		public RichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> wrap( //
 			final Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer16 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> //
 				implements Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> 
 			{
 				public GenericTypedComputer16()
@@ -1288,12 +1289,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity1<IO> wrap( //
+		public RichOp<Inplaces.Arity1<IO>> wrap( //
 			final Inplaces.Arity1<IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity1<IO>> //
 				implements Inplaces.Arity1<IO> 
 			{
 				public GenericTypedInplace1()
@@ -1325,12 +1326,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity2_1<IO, I2> wrap( //
+		public RichOp<Inplaces.Arity2_1<IO, I2>> wrap( //
 			final Inplaces.Arity2_1<IO, I2> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace2_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity2_1<IO, I2>> //
 				implements Inplaces.Arity2_1<IO, I2> 
 			{
 				public GenericTypedInplace2_1()
@@ -1362,12 +1363,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity2_2<I1, IO> wrap( //
+		public RichOp<Inplaces.Arity2_2<I1, IO>> wrap( //
 			final Inplaces.Arity2_2<I1, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace2_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity2_2<I1, IO>> //
 				implements Inplaces.Arity2_2<I1, IO> 
 			{
 				public GenericTypedInplace2_2()
@@ -1399,12 +1400,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity3_1<IO, I2, I3> wrap( //
+		public RichOp<Inplaces.Arity3_1<IO, I2, I3>> wrap( //
 			final Inplaces.Arity3_1<IO, I2, I3> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace3_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity3_1<IO, I2, I3>> //
 				implements Inplaces.Arity3_1<IO, I2, I3> 
 			{
 				public GenericTypedInplace3_1()
@@ -1436,12 +1437,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity3_2<I1, IO, I3> wrap( //
+		public RichOp<Inplaces.Arity3_2<I1, IO, I3>> wrap( //
 			final Inplaces.Arity3_2<I1, IO, I3> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace3_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity3_2<I1, IO, I3>> //
 				implements Inplaces.Arity3_2<I1, IO, I3> 
 			{
 				public GenericTypedInplace3_2()
@@ -1473,12 +1474,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity3_3<I1, I2, IO> wrap( //
+		public RichOp<Inplaces.Arity3_3<I1, I2, IO>> wrap( //
 			final Inplaces.Arity3_3<I1, I2, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace3_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity3_3<I1, I2, IO>> //
 				implements Inplaces.Arity3_3<I1, I2, IO> 
 			{
 				public GenericTypedInplace3_3()
@@ -1510,12 +1511,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity4_1<IO, I2, I3, I4> wrap( //
+		public RichOp<Inplaces.Arity4_1<IO, I2, I3, I4>> wrap( //
 			final Inplaces.Arity4_1<IO, I2, I3, I4> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace4_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity4_1<IO, I2, I3, I4>> //
 				implements Inplaces.Arity4_1<IO, I2, I3, I4> 
 			{
 				public GenericTypedInplace4_1()
@@ -1547,12 +1548,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity4_2<I1, IO, I3, I4> wrap( //
+		public RichOp<Inplaces.Arity4_2<I1, IO, I3, I4>> wrap( //
 			final Inplaces.Arity4_2<I1, IO, I3, I4> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace4_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity4_2<I1, IO, I3, I4>> //
 				implements Inplaces.Arity4_2<I1, IO, I3, I4> 
 			{
 				public GenericTypedInplace4_2()
@@ -1584,12 +1585,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity4_3<I1, I2, IO, I4> wrap( //
+		public RichOp<Inplaces.Arity4_3<I1, I2, IO, I4>> wrap( //
 			final Inplaces.Arity4_3<I1, I2, IO, I4> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace4_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity4_3<I1, I2, IO, I4>> //
 				implements Inplaces.Arity4_3<I1, I2, IO, I4> 
 			{
 				public GenericTypedInplace4_3()
@@ -1621,12 +1622,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity4_4<I1, I2, I3, IO> wrap( //
+		public RichOp<Inplaces.Arity4_4<I1, I2, I3, IO>> wrap( //
 			final Inplaces.Arity4_4<I1, I2, I3, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace4_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity4_4<I1, I2, I3, IO>> //
 				implements Inplaces.Arity4_4<I1, I2, I3, IO> 
 			{
 				public GenericTypedInplace4_4()
@@ -1658,12 +1659,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity5_1<IO, I2, I3, I4, I5> wrap( //
+		public RichOp<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> wrap( //
 			final Inplaces.Arity5_1<IO, I2, I3, I4, I5> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace5_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> //
 				implements Inplaces.Arity5_1<IO, I2, I3, I4, I5> 
 			{
 				public GenericTypedInplace5_1()
@@ -1695,12 +1696,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity5_2<I1, IO, I3, I4, I5> wrap( //
+		public RichOp<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> wrap( //
 			final Inplaces.Arity5_2<I1, IO, I3, I4, I5> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace5_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> //
 				implements Inplaces.Arity5_2<I1, IO, I3, I4, I5> 
 			{
 				public GenericTypedInplace5_2()
@@ -1732,12 +1733,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity5_3<I1, I2, IO, I4, I5> wrap( //
+		public RichOp<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> wrap( //
 			final Inplaces.Arity5_3<I1, I2, IO, I4, I5> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace5_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> //
 				implements Inplaces.Arity5_3<I1, I2, IO, I4, I5> 
 			{
 				public GenericTypedInplace5_3()
@@ -1769,12 +1770,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity5_4<I1, I2, I3, IO, I5> wrap( //
+		public RichOp<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> wrap( //
 			final Inplaces.Arity5_4<I1, I2, I3, IO, I5> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace5_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> //
 				implements Inplaces.Arity5_4<I1, I2, I3, IO, I5> 
 			{
 				public GenericTypedInplace5_4()
@@ -1806,12 +1807,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity5_5<I1, I2, I3, I4, IO> wrap( //
+		public RichOp<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> wrap( //
 			final Inplaces.Arity5_5<I1, I2, I3, I4, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace5_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> //
 				implements Inplaces.Arity5_5<I1, I2, I3, I4, IO> 
 			{
 				public GenericTypedInplace5_5()
@@ -1843,12 +1844,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> wrap( //
+		public RichOp<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> wrap( //
 			final Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace6_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> //
 				implements Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> 
 			{
 				public GenericTypedInplace6_1()
@@ -1880,12 +1881,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> wrap( //
+		public RichOp<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> wrap( //
 			final Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace6_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> //
 				implements Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> 
 			{
 				public GenericTypedInplace6_2()
@@ -1917,12 +1918,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> wrap( //
+		public RichOp<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> wrap( //
 			final Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace6_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> //
 				implements Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> 
 			{
 				public GenericTypedInplace6_3()
@@ -1954,12 +1955,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> wrap( //
+		public RichOp<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> wrap( //
 			final Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace6_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> //
 				implements Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> 
 			{
 				public GenericTypedInplace6_4()
@@ -1991,12 +1992,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> wrap( //
+		public RichOp<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> wrap( //
 			final Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace6_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> //
 				implements Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> 
 			{
 				public GenericTypedInplace6_5()
@@ -2028,12 +2029,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> wrap( //
+		public RichOp<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> wrap( //
 			final Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace6_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> //
 				implements Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> 
 			{
 				public GenericTypedInplace6_6()
@@ -2065,12 +2066,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> wrap( //
+		public RichOp<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> wrap( //
 			final Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> //
 				implements Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> 
 			{
 				public GenericTypedInplace7_1()
@@ -2102,12 +2103,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> wrap( //
+		public RichOp<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> wrap( //
 			final Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> //
 				implements Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> 
 			{
 				public GenericTypedInplace7_2()
@@ -2139,12 +2140,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> wrap( //
+		public RichOp<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> wrap( //
 			final Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> //
 				implements Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> 
 			{
 				public GenericTypedInplace7_3()
@@ -2176,12 +2177,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> wrap( //
+		public RichOp<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> wrap( //
 			final Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> //
 				implements Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> 
 			{
 				public GenericTypedInplace7_4()
@@ -2213,12 +2214,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> wrap( //
+		public RichOp<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> wrap( //
 			final Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> //
 				implements Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> 
 			{
 				public GenericTypedInplace7_5()
@@ -2250,12 +2251,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> wrap( //
+		public RichOp<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> wrap( //
 			final Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> //
 				implements Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> 
 			{
 				public GenericTypedInplace7_6()
@@ -2287,12 +2288,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> wrap( //
+		public RichOp<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> wrap( //
 			final Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace7_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> //
 				implements Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> 
 			{
 				public GenericTypedInplace7_7()
@@ -2324,12 +2325,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> wrap( //
+		public RichOp<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> wrap( //
 			final Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> //
 				implements Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> 
 			{
 				public GenericTypedInplace8_1()
@@ -2361,12 +2362,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> wrap( //
+		public RichOp<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> wrap( //
 			final Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> //
 				implements Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> 
 			{
 				public GenericTypedInplace8_2()
@@ -2398,12 +2399,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> wrap( //
+		public RichOp<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> wrap( //
 			final Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> //
 				implements Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> 
 			{
 				public GenericTypedInplace8_3()
@@ -2435,12 +2436,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> wrap( //
+		public RichOp<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> wrap( //
 			final Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> //
 				implements Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> 
 			{
 				public GenericTypedInplace8_4()
@@ -2472,12 +2473,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> wrap( //
+		public RichOp<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> wrap( //
 			final Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> //
 				implements Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> 
 			{
 				public GenericTypedInplace8_5()
@@ -2509,12 +2510,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> wrap( //
+		public RichOp<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> wrap( //
 			final Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> //
 				implements Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> 
 			{
 				public GenericTypedInplace8_6()
@@ -2546,12 +2547,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> wrap( //
+		public RichOp<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> wrap( //
 			final Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> //
 				implements Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> 
 			{
 				public GenericTypedInplace8_7()
@@ -2583,12 +2584,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> wrap( //
+		public RichOp<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> wrap( //
 			final Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace8_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> //
 				implements Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> 
 			{
 				public GenericTypedInplace8_8()
@@ -2620,12 +2621,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> wrap( //
 			final Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> //
 				implements Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> 
 			{
 				public GenericTypedInplace9_1()
@@ -2657,12 +2658,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> wrap( //
 			final Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> //
 				implements Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> 
 			{
 				public GenericTypedInplace9_2()
@@ -2694,12 +2695,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> wrap( //
 			final Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> //
 				implements Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> 
 			{
 				public GenericTypedInplace9_3()
@@ -2731,12 +2732,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> wrap( //
 			final Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> //
 				implements Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> 
 			{
 				public GenericTypedInplace9_4()
@@ -2768,12 +2769,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> wrap( //
 			final Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> //
 				implements Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> 
 			{
 				public GenericTypedInplace9_5()
@@ -2805,12 +2806,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> wrap( //
 			final Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> //
 				implements Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> 
 			{
 				public GenericTypedInplace9_6()
@@ -2842,12 +2843,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> wrap( //
+		public RichOp<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> wrap( //
 			final Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> //
 				implements Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> 
 			{
 				public GenericTypedInplace9_7()
@@ -2879,12 +2880,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> wrap( //
+		public RichOp<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> wrap( //
 			final Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> //
 				implements Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> 
 			{
 				public GenericTypedInplace9_8()
@@ -2916,12 +2917,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> wrap( //
+		public RichOp<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> wrap( //
 			final Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace9_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> //
 				implements Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> 
 			{
 				public GenericTypedInplace9_9()
@@ -2953,12 +2954,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> //
 				implements Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_1()
@@ -2990,12 +2991,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> //
 				implements Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_2()
@@ -3027,12 +3028,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> //
 				implements Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_3()
@@ -3064,12 +3065,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> //
 				implements Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_4()
@@ -3101,12 +3102,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> //
 				implements Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_5()
@@ -3138,12 +3139,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> //
 				implements Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_6()
@@ -3175,12 +3176,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> wrap( //
 			final Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> //
 				implements Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> 
 			{
 				public GenericTypedInplace10_7()
@@ -3212,12 +3213,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> wrap( //
+		public RichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> wrap( //
 			final Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> //
 				implements Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> 
 			{
 				public GenericTypedInplace10_8()
@@ -3249,12 +3250,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> wrap( //
+		public RichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> wrap( //
 			final Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> //
 				implements Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> 
 			{
 				public GenericTypedInplace10_9()
@@ -3286,12 +3287,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> wrap( //
+		public RichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> wrap( //
 			final Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace10_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> //
 				implements Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> 
 			{
 				public GenericTypedInplace10_10()
@@ -3323,12 +3324,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_1()
@@ -3360,12 +3361,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_2()
@@ -3397,12 +3398,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_3()
@@ -3434,12 +3435,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_4()
@@ -3471,12 +3472,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_5()
@@ -3508,12 +3509,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_6()
@@ -3545,12 +3546,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> //
 				implements Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_7()
@@ -3582,12 +3583,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> wrap( //
 			final Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> //
 				implements Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> 
 			{
 				public GenericTypedInplace11_8()
@@ -3619,12 +3620,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> wrap( //
+		public RichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> wrap( //
 			final Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> //
 				implements Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> 
 			{
 				public GenericTypedInplace11_9()
@@ -3656,12 +3657,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> wrap( //
+		public RichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> wrap( //
 			final Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> //
 				implements Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> 
 			{
 				public GenericTypedInplace11_10()
@@ -3693,12 +3694,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> wrap( //
+		public RichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> wrap( //
 			final Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace11_11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> //
 				implements Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> 
 			{
 				public GenericTypedInplace11_11()
@@ -3730,12 +3731,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_1()
@@ -3767,12 +3768,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_2()
@@ -3804,12 +3805,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_3()
@@ -3841,12 +3842,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_4()
@@ -3878,12 +3879,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_5()
@@ -3915,12 +3916,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_6()
@@ -3952,12 +3953,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_7()
@@ -3989,12 +3990,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> //
 				implements Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_8()
@@ -4026,12 +4027,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> wrap( //
 			final Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> //
 				implements Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> 
 			{
 				public GenericTypedInplace12_9()
@@ -4063,12 +4064,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> wrap( //
+		public RichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> wrap( //
 			final Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> //
 				implements Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> 
 			{
 				public GenericTypedInplace12_10()
@@ -4100,12 +4101,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> wrap( //
+		public RichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> wrap( //
 			final Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> //
 				implements Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> 
 			{
 				public GenericTypedInplace12_11()
@@ -4137,12 +4138,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> wrap( //
+		public RichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> wrap( //
 			final Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace12_12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> //
 				implements Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> 
 			{
 				public GenericTypedInplace12_12()
@@ -4174,12 +4175,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_1()
@@ -4211,12 +4212,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_2()
@@ -4248,12 +4249,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_3()
@@ -4285,12 +4286,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_4()
@@ -4322,12 +4323,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_5()
@@ -4359,12 +4360,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_6()
@@ -4396,12 +4397,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_7()
@@ -4433,12 +4434,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_8()
@@ -4470,12 +4471,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> //
 				implements Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_9()
@@ -4507,12 +4508,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> wrap( //
 			final Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> //
 				implements Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> 
 			{
 				public GenericTypedInplace13_10()
@@ -4544,12 +4545,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> wrap( //
+		public RichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> wrap( //
 			final Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> //
 				implements Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> 
 			{
 				public GenericTypedInplace13_11()
@@ -4581,12 +4582,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> wrap( //
+		public RichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> wrap( //
 			final Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> //
 				implements Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> 
 			{
 				public GenericTypedInplace13_12()
@@ -4618,12 +4619,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> wrap( //
+		public RichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> wrap( //
 			final Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace13_13 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> //
 				implements Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> 
 			{
 				public GenericTypedInplace13_13()
@@ -4655,12 +4656,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_1()
@@ -4692,12 +4693,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_2()
@@ -4729,12 +4730,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_3()
@@ -4766,12 +4767,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_4()
@@ -4803,12 +4804,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_5()
@@ -4840,12 +4841,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_6()
@@ -4877,12 +4878,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_7()
@@ -4914,12 +4915,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_8()
@@ -4951,12 +4952,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_9()
@@ -4988,12 +4989,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> //
 				implements Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_10()
@@ -5025,12 +5026,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> wrap( //
 			final Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> //
 				implements Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> 
 			{
 				public GenericTypedInplace14_11()
@@ -5062,12 +5063,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> wrap( //
+		public RichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> wrap( //
 			final Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> //
 				implements Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> 
 			{
 				public GenericTypedInplace14_12()
@@ -5099,12 +5100,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> wrap( //
+		public RichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> wrap( //
 			final Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_13 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> //
 				implements Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> 
 			{
 				public GenericTypedInplace14_13()
@@ -5136,12 +5137,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> wrap( //
+		public RichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> wrap( //
 			final Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace14_14 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> //
 				implements Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> 
 			{
 				public GenericTypedInplace14_14()
@@ -5173,12 +5174,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_1()
@@ -5210,12 +5211,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_2()
@@ -5247,12 +5248,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_3()
@@ -5284,12 +5285,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_4()
@@ -5321,12 +5322,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_5()
@@ -5358,12 +5359,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_6()
@@ -5395,12 +5396,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_7()
@@ -5432,12 +5433,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_8()
@@ -5469,12 +5470,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_9()
@@ -5506,12 +5507,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_10()
@@ -5543,12 +5544,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> //
 				implements Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_11()
@@ -5580,12 +5581,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> wrap( //
 			final Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> //
 				implements Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> 
 			{
 				public GenericTypedInplace15_12()
@@ -5617,12 +5618,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> wrap( //
+		public RichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> wrap( //
 			final Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_13 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> //
 				implements Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> 
 			{
 				public GenericTypedInplace15_13()
@@ -5654,12 +5655,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> wrap( //
+		public RichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> wrap( //
 			final Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_14 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> //
 				implements Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> 
 			{
 				public GenericTypedInplace15_14()
@@ -5691,12 +5692,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> wrap( //
+		public RichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> wrap( //
 			final Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace15_15 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> //
 				implements Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> 
 			{
 				public GenericTypedInplace15_15()
@@ -5728,12 +5729,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_1 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_1()
@@ -5765,12 +5766,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_2 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_2()
@@ -5802,12 +5803,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_3 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_3()
@@ -5839,12 +5840,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_4 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_4()
@@ -5876,12 +5877,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_5 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_5()
@@ -5913,12 +5914,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_6 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_6()
@@ -5950,12 +5951,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_7 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_7()
@@ -5987,12 +5988,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_8 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_8()
@@ -6024,12 +6025,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_9 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_9()
@@ -6061,12 +6062,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_10 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_10()
@@ -6098,12 +6099,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_11 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_11()
@@ -6135,12 +6136,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_12 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> //
 				implements Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_12()
@@ -6172,12 +6173,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> wrap( //
 			final Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_13 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> //
 				implements Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> 
 			{
 				public GenericTypedInplace16_13()
@@ -6209,12 +6210,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> wrap( //
+		public RichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> wrap( //
 			final Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_14 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> //
 				implements Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> 
 			{
 				public GenericTypedInplace16_14()
@@ -6246,12 +6247,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> wrap( //
+		public RichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> wrap( //
 			final Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_15 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> //
 				implements Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> 
 			{
 				public GenericTypedInplace16_15()
@@ -6283,12 +6284,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> wrap( //
+		public RichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> wrap( //
 			final Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace16_16 //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> //
 				implements Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> 
 			{
 				public GenericTypedInplace16_16()

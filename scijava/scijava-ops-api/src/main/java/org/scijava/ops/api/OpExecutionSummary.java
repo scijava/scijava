@@ -1,6 +1,8 @@
 
 package org.scijava.ops.api;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Describes the execution of an Op
  *
@@ -14,12 +16,12 @@ public class OpExecutionSummary {
 	/**
 	 * The {@link Object} produced by this execution of {@code op}
 	 */
-	private final Object output;
+	private final WeakReference<Object> output;
 
 	public OpExecutionSummary(RichOp op, Object output)
 	{
 		this.op = op;
-		this.output = output;
+		this.output = new WeakReference<>(output);
 	}
 
 	public RichOp op() {
@@ -31,7 +33,7 @@ public class OpExecutionSummary {
 	 *
 	 * @return the output of the execution
 	 */
-	public Object output() {
+	public WeakReference<Object> output() {
 		return output;
 	}
 

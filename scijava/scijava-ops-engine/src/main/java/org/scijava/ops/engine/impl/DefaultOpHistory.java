@@ -5,10 +5,12 @@ import com.google.common.graph.Graph;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 import org.scijava.ops.api.OpExecutionSummary;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.RichOp;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
@@ -46,71 +49,39 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	// -- DATA STRCUTURES -- //
 
 	/**
-	 * {@link Map} responsible for recording the execution of an Op returned by a
-	 * <b>matching call</b>
-	 */
-	private final Map<UUID, ConcurrentLinkedDeque<OpExecutionSummary>> history =
-		new ConcurrentHashMap<>();
-
-	/**
 	 * {@link Map} responsible for recording the {@link Graph} of {@link OpInfo}s
 	 * involved to produce the result of a particular matching call
 	 */
 	private final Map<UUID, MutableGraph<OpInfo>> dependencyChain =
 		new ConcurrentHashMap<>();
 
-	/**
-	 * {@link Map} responsible for recording the "top-level" {@link Object}
-	 * produced by a matching call
-	 */
-	private final Map<UUID, Object> opRecord = new ConcurrentHashMap<>();
+	private final Map<Object, ConcurrentLinkedDeque<UUID>> mutationMap =
+		new WeakHashMap<>();
 
-	/**
-	 * {@link Map} responsible for recording the <b>wrapper</b> of the "top-level"
-	 * {@link Object} produced by a matching call
-	 */
-	private final Map<UUID, Object> wrapperRecord =
-		new ConcurrentHashMap<>();
+	private final Map<RichOp, UUID> mutatorMap = new WeakHashMap<>();
 
 	// -- USER API -- //
 
 	/**
 	 * Returns the list of executions on {@link Object} {@code o} recorded in the
 	 * history
+	 * <p>
+	 * The list of executions is described by a {@link UUID}, which points to a
+	 * particular Op execution chain.
 	 * 
 	 * @param o the {@link Object} of interest
-	 * @return a {@link List} of all executions upon {@code o}
+	 * @return an {@link Iterable} of all executions upon {@code o}
 	 */
 	@Override
-	public List<OpExecutionSummary> executionsUpon(Object o) {
+	public ArrayList<UUID> executionsUpon(Object o) {
 		if (o.getClass().isPrimitive()) throw new IllegalArgumentException(
 			"Cannot determine the executions upon a primitive as they are passed by reference!");
-		return history.values().stream() //
-			.filter(deque -> deque.parallelStream().anyMatch(e -> e.isOutput(o))) //
-			.flatMap(Deque::stream) //
-			.collect(Collectors.toList());
+		return new ArrayList<>(mutationMap.get(o));
 	}
 
-	/**
-	 * Returns the {@link Graph} of {@link OpInfo}s describing the dependency
-	 * chain of the {@link Object} {@code op}.
-	 * 
-	 * @param op the {@Obect} returned by a matching call. NB {@code op}
-	 *          <b>must</b> be the {@link Object} returned by the outermost
-	 *          matching call, as the dependency {@link Object}s are not recorded.
-	 * @return the {@link Graph} describing the dependency chain
-	 */
 	@Override
 	public Graph<OpInfo> opExecutionChain(Object op) {
-		// return dependency chain if op was an Op or wrapped an Op
-		UUID opID = findUUIDInOpRecord(op);
-		if (opID != null) return dependencyChain.get(opID);
-		UUID wrapperID = findUUIDInWrapperRecord(op);
-		if (wrapperID != null) return dependencyChain.get(wrapperID);
-
-		// op not recorded - throw an exception
-		throw new IllegalArgumentException(
-			"No record of op being returned in a matching Execution!");
+		return dependencyChain.get(mutatorMap.get(op));
 	}
 
 	/**
@@ -130,17 +101,29 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	// -- HISTORY MAINTENANCE API -- //
 
 	/**
-	 * Logs a {@link OpExecutionSummary} in the history
+	 * Logs an Op execution in the history
+	 * <p>
+	 * TODO: It would be nice if different Objects returned different Objects with
+	 * the same hash code would hash differently. For example, if two Ops return a
+	 * {@link Double} of the same value, they will appear as the same Object, and
+	 * asking for the execution history on either of the {@link Object}s will
+	 * suggest that both executions mutated both {@link Object}s. This would
+	 * really hamper the simplicity of the implementation, however.
 	 * 
-	 * @param e the {@link OpExecutionSummary}
+	 * @param op the {@link RichOp} being executed
+	 * @param output the output of the Op execution
 	 * @return true iff {@code e} was successfully logged
 	 */
 	@Override
-	public boolean addExecution(OpExecutionSummary e) {
-		UUID id = e.op().metadata().executionID();
-		if (!history.containsKey(id)) generateDeque(id);
-		history.get(id).addLast(e);
+	public boolean addExecution(RichOp op, Object output) {
+		if (!mutationMap.containsKey(output)) generateDeque(output);
+		mutationMap.get(output).addLast(op.metadata().executionID());
 		return true;
+	}
+
+	@Override
+	public void logTopLevelOp(RichOp op, UUID executionChainID) {
+		mutatorMap.put(op, executionChainID);
 	}
 
 	/**
@@ -155,7 +138,7 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	 */
 	@Override
 	public void logDependencies(UUID executionChainID, OpInfo info,
-		List<OpInfo> dependencies) 
+		List<OpInfo> dependencies)
 	{
 		dependencyChain.putIfAbsent(executionChainID, buildGraph());
 		MutableGraph<OpInfo> depTree = dependencyChain.get(executionChainID);
@@ -166,75 +149,18 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 		});
 	}
 
-	/**
-	 * Logs the "top-level" Op for a particular matching call. {@code op} is the
-	 * {@link Object} returned to the user (save for Op wrapping)
-	 * 
-	 * @param executionChainID the {@link UUID} identifying a particular matching
-	 *          call
-	 * @param op the {@link Object} returned from the matching call identifiable
-	 *          by {@code executionChainID}.
-	 */
-	@Override
-	public void logTopLevelOp(UUID executionChainID, Object op) {
-		Object former = opRecord.putIfAbsent(executionChainID, op);
-		if (former != null) throw new IllegalArgumentException("Execution ID " +
-			executionChainID + " has already logged a Top-Level Op!");
-	}
-
-	/**
-	 * Logs the <b>wrapper</b> of the "top-level" Op for a particular matching
-	 * call. {@code wrapper} is the {@link Object} returned to the user when Op
-	 * wrapping is perfomed
-	 * 
-	 * @param executionChainID the {@link UUID} identifying a particular matching
-	 *          call
-	 * @param wrapper the {@link Object} returned from the matching call
-	 *          identifiable by {@code executionChainID}.
-	 */
-	@Override
-	public void logTopLevelWrapper(UUID executionChainID, Object wrapper) {
-		Object former = wrapperRecord.putIfAbsent(executionChainID, wrapper);
-		if (former != null) throw new IllegalArgumentException("Execution ID " +
-			executionChainID + " has already logged a Top-Level Op!");
-	}
-
 	// -- HELPER METHODS -- //
 
 	private MutableGraph<OpInfo> buildGraph() {
 		return GraphBuilder.directed().allowsSelfLoops(false).build();
 	}
 
-	private UUID findUUIDInOpRecord(Object op) {
-		return keyForV(opRecord, op);
-	}
-
-	private UUID findUUIDInWrapperRecord(Object op) {
-		return keyForV(wrapperRecord, op);
-	}
-
-	private synchronized void generateDeque(UUID executionTreeHash) {
-		history.putIfAbsent(executionTreeHash,
-			new ConcurrentLinkedDeque<OpExecutionSummary>());
-	}
-
-	private <T, V> T keyForV(Map<T, V> map, V value) {
-		List<T> keys = keysForV(map, value);
-		if (keys.size() > 1) throw new IllegalArgumentException("Map " + map +
-			" has multiple keys for value " + value);
-		if (keys.size() == 0) return null;
-		return keys.get(0);
-	}
-
-	private <T, V> List<T> keysForV(Map<T, V> map, V value) {
-		return map.entrySet().parallelStream() //
-			.filter(e -> e.getValue() == value) //
-			.map(e -> e.getKey()) //
-			.collect(Collectors.toList());
+	private synchronized void generateDeque(Object output) {
+		mutationMap.putIfAbsent(output, new ConcurrentLinkedDeque<UUID>());
 	}
 
 	public void resetHistory() {
-		history.clear();
+		mutationMap.clear();
 		dependencyChain.clear();
 	}
 

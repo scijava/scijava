@@ -15,6 +15,7 @@ import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.api.RichOp;
 import org.scijava.plugin.Plugin;
 
 public class OpWrappers {
@@ -25,11 +26,11 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public Producer<T> wrap(final Producer<T> op, //
+		public RichOp<Producer<T>> wrap(final Producer<T> op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedProducer //
-				extends DefaultRichOp //
+				extends DefaultRichOp<Producer<T>> //
 				implements Producer<T>
 			{
 
@@ -66,12 +67,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public $fg wrap( //
+		public RichOp<$fg> wrap( //
 			final $fg op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction${arity} //
-				extends DefaultRichOp //
+				extends DefaultRichOp<$fg> //
 				implements $fg 
 			{
 
@@ -109,12 +110,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public $cg wrap( //
+		public RichOp<$cg> wrap( //
 			final $cg op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer${arity} //
-				extends DefaultRichOp //
+				extends DefaultRichOp<$cg> //
 				implements $cg 
 			{
 				public GenericTypedComputer${arity}()
@@ -151,12 +152,12 @@ public class OpWrappers {
 	{
 
 		@Override
-		public $ig wrap( //
+		public RichOp<$ig> wrap( //
 			final $ig op, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
-				extends DefaultRichOp //
+				extends DefaultRichOp<$ig> //
 				implements $ig 
 			{
 				public GenericTypedInplace${inplaceSuffix.call($arity, $a)}()

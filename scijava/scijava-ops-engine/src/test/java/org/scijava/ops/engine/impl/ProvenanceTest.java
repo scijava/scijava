@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 
 import org.junit.Assert;
@@ -32,9 +33,13 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	@Test
 	public void testProvenance() {
 		String s = ops.op("test.provenance").input().outType(String.class).create();
-		List<OpExecutionSummary> l = ops.history().executionsUpon(s);
-		Assert.assertEquals(1, l.size());
-		Assert.assertEquals(l.get(0).op().op(), foo);
+		List<UUID> executionsUpon = ops.history().executionsUpon(s);
+		Assert.assertEquals(1, executionsUpon.size());
+		// Assert only one info in the execution hierarchy
+		Graph<OpInfo> executionHierarchy = ops.history().opExecutionChain(executionsUpon.get(0));
+		Assert.assertEquals(1, executionHierarchy.nodes().size());
+		OpInfo info = executionHierarchy.nodes().iterator().next();
+		Assert.assertTrue(info.implementationName().contains(this.getClass().getPackageName()));
 	}
 
 	@OpField(names = "test.provenance")
@@ -57,19 +62,30 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Double out1 = ops.op("test.provenance").input(l1).outType(Double.class).apply();
 
 		List<Long> l2 = new ArrayList<>();
-		l2.add(1l);
-		l2.add(2l);
-		l2.add(3l);
-		l2.add(4l);
+		l2.add(5l);
+		l2.add(6l);
+		l2.add(7l);
+		l2.add(8l);
 		Double out2 = ops.op("test.provenance").input(l2).outType(Double.class).apply();
 
-		Assert.assertEquals(out1, out2);
-		List<OpExecutionSummary> history1 = ops.history().executionsUpon(out1);
-		List<OpExecutionSummary> history2 = ops.history().executionsUpon(out2);
+		List<UUID> history1 = ops.history().executionsUpon(out1);
+		List<UUID> history2 = ops.history().executionsUpon(out2);
+
 		Assert.assertEquals(1, history1.size());
-		Assert.assertEquals(baz, history1.get(0).op().op());
+		Graph<OpInfo> opExecutionChain = ops.history().opExecutionChain(history1.get(0));
+		Assert.assertEquals(1, opExecutionChain.nodes().size());
+		String expected = "public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
+		for (OpInfo i : opExecutionChain.nodes()) {
+			Assert.assertEquals(expected, i.getAnnotationBearer().toString());
+		}
+
 		Assert.assertEquals(1, history2.size());
-		Assert.assertEquals(bar, history2.get(0).op().op());
+		opExecutionChain = ops.history().opExecutionChain(history2.get(0));
+		Assert.assertEquals(1, opExecutionChain.nodes().size());
+		expected = "public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
+		for (OpInfo i : opExecutionChain.nodes()) {
+			Assert.assertEquals(expected, i.getAnnotationBearer().toString());
+		}
 	}
 
 	@OpField(names = "test.provenanceMapped")
@@ -103,8 +119,8 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Thing out = ops.op("test.provenanceMapper").input(array).outType(Thing.class).apply();
 
 		// Assert only one execution upon this Object
-		List<OpExecutionSummary> history = ops.history().executionsUpon(out);
-		Assert.assertEquals(1, history.size());
+		List<UUID> executionsUpon = ops.history().executionsUpon(out);
+		Assert.assertEquals(1, executionsUpon.size());
 	}
 
 	@Test
@@ -147,7 +163,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Thing out = ops.op("test.provenanceMapper").input(array).outType(Thing.class).apply(hints);
 
 		// Assert only one run of the Base Op
-		List<OpExecutionSummary> history = ops.history().executionsUpon(out);
+		List<UUID> history = ops.history().executionsUpon(out);
 		Assert.assertEquals(1, history.size());
 
 		// Run the mapped Op, assert still one run on the mapper

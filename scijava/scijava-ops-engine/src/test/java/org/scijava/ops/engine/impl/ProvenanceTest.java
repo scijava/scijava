@@ -34,7 +34,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		String s = ops.op("test.provenance").input().outType(String.class).create();
 		List<OpExecutionSummary> l = ops.history().executionsUpon(s);
 		Assert.assertEquals(1, l.size());
-		Assert.assertEquals(l.get(0).executor(), foo);
+		Assert.assertEquals(l.get(0).op().op(), foo);
 	}
 
 	@OpField(names = "test.provenance")
@@ -67,9 +67,9 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		List<OpExecutionSummary> history1 = ops.history().executionsUpon(out1);
 		List<OpExecutionSummary> history2 = ops.history().executionsUpon(out2);
 		Assert.assertEquals(1, history1.size());
-		Assert.assertEquals(baz, history1.get(0).executor());
+		Assert.assertEquals(baz, history1.get(0).op().op());
 		Assert.assertEquals(1, history2.size());
-		Assert.assertEquals(bar, history2.get(0).executor());
+		Assert.assertEquals(bar, history2.get(0).op().op());
 	}
 
 	@OpField(names = "test.provenanceMapped")

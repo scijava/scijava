@@ -137,9 +137,9 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	 */
 	@Override
 	public boolean addExecution(OpExecutionSummary e) {
-		if (!history.containsKey(e.executionTreeHash())) generateDeque(e
-			.executionTreeHash());
-		history.get(e.executionTreeHash()).addLast(e);
+		UUID id = e.op().metadata().executionID();
+		if (!history.containsKey(id)) generateDeque(id);
+		history.get(id).addLast(e);
 		return true;
 	}
 

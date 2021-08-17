@@ -29,4 +29,9 @@ public class BaseOpHints {
 		
 	}
 
+	public static class History {
+		public static final String PREFIX = "history";
+		public static final String SKIP_RECORDING = PREFIX + "SKIP_RECORDING";
+	}
+
 }

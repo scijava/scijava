@@ -4,6 +4,7 @@ package org.scijava.ops.engine.matcher.impl;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
+import org.scijava.ops.api.features.BaseOpHints.History;
 
 public abstract class DefaultRichOp<T> implements RichOp<T> {
 
@@ -31,7 +32,7 @@ public abstract class DefaultRichOp<T> implements RichOp<T> {
 	@Override
 	public void postprocess(Object output) {
 		// Log a new execution
-		if (!metadata.hints().containsHint(DependencyMatching.IN_PROGRESS)) {
+		if (!metadata.hints().containsHint(History.SKIP_RECORDING)) {
 			metadata.history().addExecution(this, output);
 		}
 	}

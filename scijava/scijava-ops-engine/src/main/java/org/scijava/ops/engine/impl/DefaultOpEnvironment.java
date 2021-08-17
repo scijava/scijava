@@ -54,6 +54,7 @@ import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
+import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
@@ -312,7 +313,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		try {
 			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.info(),
 				conditions.hints(), executionChainID, instance.typeVarAssigns());
-			if (!conditions.hints().containsHint(DependencyMatching.IN_PROGRESS))
+			if (!conditions.hints().containsHint(History.SKIP_RECORDING))
 				history.logTopLevelOp(wrappedOp, executionChainID);
 			return wrappedOp;
 		}
@@ -445,7 +446,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> RichOp<T> wrapOp(T op, OpInfo opInfo, Hints hints, UUID executionID, Map<TypeVariable<?>, Type> typeVarAssigns) throws IllegalArgumentException {
-		// TODO: synchronize this
 		if (wrappers == null)
 			initWrappers();
 
@@ -504,7 +504,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns(), hints);
 	}
 
-	private void initWrappers() {
+	private synchronized void initWrappers() {
+		if (wrappers != null) return;
 		wrappers = new HashMap<>();
 		for (Discoverer d : discoverers)
 			for (Class<OpWrapper> cls : d.implementingClasses(OpWrapper.class))
@@ -542,6 +543,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				// TODO: Consider a new Hint implementation
 				Hints hintCopy = hints.copy();
 				hintCopy.setHint(DependencyMatching.IN_PROGRESS);
+				hintCopy.setHint(History.SKIP_RECORDING);
 				hintCopy.setHint(Simplification.FORBIDDEN);
 				if(!dependency.isAdaptable()) {
 					hintCopy.setHint(Adaptation.FORBIDDEN);

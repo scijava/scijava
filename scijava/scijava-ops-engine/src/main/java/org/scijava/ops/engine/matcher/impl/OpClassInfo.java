@@ -41,10 +41,10 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
 import org.scijava.plugin.Plugin;
@@ -53,7 +53,6 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
-import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an op implementation defined as a class.
@@ -232,8 +231,8 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
 	}
 
 }

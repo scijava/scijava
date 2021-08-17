@@ -1,6 +1,7 @@
 
 package org.scijava.ops.api;
 
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Map;
 import java.util.UUID;
@@ -26,15 +27,23 @@ import java.util.UUID;
  */
 public interface Hints {
 
-	String setHint(String hint);
+	Hints plus(String... hints);
 
-	String getHint(String hintType);
+	Hints minus(String... hints);
 
-	boolean containsHint(String hint);
+	boolean contains(String hint);
 
-	boolean containsHintType(String hintType);
+	default boolean containsNone(String... hints) {
+		return !containsAny(hints);
+	}
 
-	Map<String, String> getHints();
+	default boolean containsAny(String... hints) {
+		return Arrays.stream(hints).anyMatch(hint -> contains(hint));
+	}
+
+	default boolean containsAll(String... hints) {
+		return Arrays.stream(hints).allMatch(hint -> contains(hint));
+	}
 
 	/**
 	 * Generates a new {@link Hints} with identical hints but <b>the same</b>
@@ -62,6 +71,6 @@ public interface Hints {
 	 *         within the {@link OpHistory}) in which these {@link Hints} are
 	 *         being used.
 	 */
-	UUID executionChainID();
+	UUID uuid();
 
 }

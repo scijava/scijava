@@ -32,7 +32,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
 			.computer();
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints.setHint(Adaptation.FORBIDDEN);
+		hints = hints.plus(Adaptation.FORBIDDEN);
 		ops.env().setDefaultHints(hints);
 		try {
 			ops.op("test.adaptation.hints").inType(Double[].class).outType(
@@ -52,7 +52,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
 			.computer(hints);
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints.setHint(Adaptation.FORBIDDEN);
+		hints = hints.plus(Adaptation.FORBIDDEN);
 		try {
 			ops.op("test.adaptation.hints").inType(Double[].class).outType(
 				Double[].class).computer(hints);

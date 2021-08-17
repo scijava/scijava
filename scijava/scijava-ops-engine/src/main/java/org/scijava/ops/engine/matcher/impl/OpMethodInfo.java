@@ -50,7 +50,7 @@ import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Adapt;
@@ -64,7 +64,6 @@ import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
-import org.scijava.util.VersionUtils;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -406,8 +405,8 @@ public class OpMethodInfo implements OpInfo {
 	// -- Helper methods -- //
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
 	}
 
 }

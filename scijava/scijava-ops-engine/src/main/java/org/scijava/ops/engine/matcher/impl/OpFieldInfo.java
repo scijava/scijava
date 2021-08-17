@@ -43,14 +43,13 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.spi.OpField;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
-import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an op implementation defined as a field.
@@ -233,8 +232,8 @@ public class OpFieldInfo implements OpInfo {
 	// -- Helper methods -- //
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
 	}
 
 }

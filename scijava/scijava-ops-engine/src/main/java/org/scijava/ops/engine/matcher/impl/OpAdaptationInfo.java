@@ -1,8 +1,6 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import com.google.common.collect.Streams;
-
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -15,12 +13,10 @@ import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.struct.FunctionalMethodType;
-import org.scijava.struct.ItemIO;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
@@ -70,10 +66,7 @@ public class OpAdaptationInfo implements OpInfo {
 		if (!problems.isEmpty()) validityException = new ValidityException(
 			problems);
 
-		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints()
-			.values());
-		hintList.add(Adaptation.FORBIDDEN);
-		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
+		this.hints = srcInfo.declaredHints().plus(Adaptation.FORBIDDEN);
 	}
 
 	@Override

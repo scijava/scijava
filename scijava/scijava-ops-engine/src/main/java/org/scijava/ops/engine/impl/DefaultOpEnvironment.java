@@ -52,10 +52,6 @@ import org.scijava.log.LogService;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.features.BaseOpHints.Adaptation;
-import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
-import org.scijava.ops.api.features.BaseOpHints.History;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
@@ -65,11 +61,12 @@ import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.features.BaseOpHints.Adaptation;
+import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
+import org.scijava.ops.api.features.BaseOpHints.History;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.OpInstance;
-import org.scijava.ops.engine.hint.AdaptationHints;
-import org.scijava.ops.engine.hint.BasicHints;
 import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.hint.SimplificationHints;
 import org.scijava.ops.engine.matcher.DependencyMatchingException;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.OpMatchingException;
@@ -184,15 +181,15 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private Set<OpInfo> filterInfos(Set<OpInfo> infos, Hints hints) {
-		boolean adapting = hints.containsHint(Adaptation.IN_PROGRESS);
-		boolean simplifying = hints.containsHint(Simplification.IN_PROGRESS);
+		boolean adapting = hints.contains(Adaptation.IN_PROGRESS);
+		boolean simplifying = hints.contains(Simplification.IN_PROGRESS);
 		// if we aren't doing any 
 		if (!(adapting || simplifying)) return infos;
 		return infos.parallelStream() //
 				// filter out unadaptable ops
-				.filter(info -> !adapting || !info.declaredHints().containsHint(Adaptation.FORBIDDEN)) //
+				.filter(info -> !adapting || !info.declaredHints().contains(Adaptation.FORBIDDEN)) //
 				// filter out unadaptable ops
-				.filter(info -> !simplifying || !info.declaredHints().containsHint(Simplification.FORBIDDEN)) //
+				.filter(info -> !simplifying || !info.declaredHints().contains(Simplification.FORBIDDEN)) //
 				.collect(Collectors.toSet());
 	}
 
@@ -263,7 +260,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
 		MatchingConditions conditions = generateCacheHit(ref, hints, true);
-		return (T) wrapViaCache(conditions, conditions.hints().executionChainID());
+		return (T) wrapViaCache(conditions, conditions.hints().uuid());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -273,7 +270,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpRef ref = DefaultOpRef.fromTypes(null, specialType.getType(), outType.getType(),
 			toTypes(inTypes));
 		MatchingConditions conditions = insertCacheHit(ref, hints, true, info);
-		return (T) wrapViaCache(conditions, conditions.hints().executionChainID());
+		return (T) wrapViaCache(conditions, conditions.hints().uuid());
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -313,7 +310,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		try {
 			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.info(),
 				conditions.hints(), executionChainID, instance.typeVarAssigns());
-			if (!conditions.hints().containsHint(History.SKIP_RECORDING))
+			if (!conditions.hints().contains(History.SKIP_RECORDING))
 				history.logTopLevelOp(wrappedOp, executionChainID);
 			return wrappedOp;
 		}
@@ -381,14 +378,15 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		catch (OpMatchingException e1) {
 			// no direct match; find an adapted match
 			try {
-				if (!hints.containsHintType(Adaptation.PREFIX)) return adaptOp(ref, hints);
+				if (hints.containsNone(Adaptation.IN_PROGRESS, Adaptation.FORBIDDEN)) //
+					return adaptOp(ref, hints);
 				throw new OpMatchingException("No matching Op for request: " + ref +
 					"\n(adaptation is disabled)", e1);
 			}
 			catch (OpMatchingException e2) {
 				try {
-					if (!hints.containsHintType(Simplification.PREFIX)) return findSimplifiedOp(
-						ref, hints);
+					if (hints.containsNone(Simplification.IN_PROGRESS, Simplification.FORBIDDEN)) // 
+						return findSimplifiedOp(ref, hints);
 					throw new OpMatchingException("No matching Op for request: " + ref +
 						"\n(simplification is disabled)", e1);
 				}
@@ -409,7 +407,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private OpCandidate findSimplifiedOp(OpRef ref, Hints hints) {
-		Hints simplificationHints = SimplificationHints.generateHints(hints, false);
+		Hints simplificationHints = hints.plus(Simplification.IN_PROGRESS);
 		return matcher.findSingleMatch(this, ref, simplificationHints);
 	}
 
@@ -423,8 +421,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Object instantiateOp(final OpCandidate candidate, Hints hints)
 	{
 		final List<MatchingConditions> instances = resolveOpDependencies(candidate, hints);
-		Object op = candidate.createOp(wrappedDeps(instances, hints.executionChainID()));
-		history.logDependencies(hints.executionChainID(), candidate.opInfo(), infos(instances));
+		Object op = candidate.createOp(wrappedDeps(instances, hints.uuid()));
+		history.logDependencies(hints.uuid(), candidate.opInfo(), infos(instances));
 		return op;
 	}
 
@@ -541,15 +539,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
 			try {
 				// TODO: Consider a new Hint implementation
-				Hints hintCopy = hints.copy();
-				hintCopy.setHint(DependencyMatching.IN_PROGRESS);
-				hintCopy.setHint(History.SKIP_RECORDING);
-				hintCopy.setHint(Simplification.FORBIDDEN);
+				Hints hintsCopy = hints.plus(DependencyMatching.IN_PROGRESS,
+					History.SKIP_RECORDING, Simplification.FORBIDDEN);
 				if(!dependency.isAdaptable()) {
-					hintCopy.setHint(Adaptation.FORBIDDEN);
+					hintsCopy = hintsCopy.plus(Adaptation.FORBIDDEN);
 				}
 
-				MatchingConditions conditions = generateCacheHit(dependencyRef, hintCopy, false);
+				MatchingConditions conditions = generateCacheHit(dependencyRef, hintsCopy, false);
 				resolvedDependencies.add(conditions);
 			}
 			catch (final OpMatchingException e) {
@@ -605,7 +601,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				final List<MatchingConditions> depConditions = resolveOpDependencies(adaptor,
 					map, hints);
 				final List<Object> dependencies = depConditions.stream() //
-					.map(c -> wrapViaCache(c, hints.executionChainID())) //
+					.map(c -> wrapViaCache(c, hints.uuid())) //
 					.collect(Collectors.toList());
 
 				@SuppressWarnings("unchecked")
@@ -651,7 +647,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private OpCandidate findAdaptationCandidate(final OpRef srcOpRef, final Hints hints)
 	{
-		Hints adaptationHints = AdaptationHints.generateHints(hints, false);
+		Hints adaptationHints = hints.plus(Adaptation.IN_PROGRESS);
 		final OpCandidate srcCandidate = findOpCandidate(srcOpRef, adaptationHints);
 		return srcCandidate;
 	}
@@ -794,7 +790,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public Hints createHints(String... startingHints) {
-		return new BasicHints(startingHints);
+		return new DefaultHints(startingHints);
 	}
 
 }

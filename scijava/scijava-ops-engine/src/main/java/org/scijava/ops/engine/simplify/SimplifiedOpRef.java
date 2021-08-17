@@ -126,9 +126,8 @@ public class SimplifiedOpRef implements OpRef {
 	 * @throws OpMatchingException
 	 */
 	private static Computers.Arity1<?, ?> simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
-		Hints hintsCopy = new DefaultHints(hints.getHints());
-		hintsCopy.setHint(Adaptation.FORBIDDEN);
-		hintsCopy.setHint(Simplification.FORBIDDEN);
+		Hints hintsCopy = hints.copyRandomUUID() //
+			.plus(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);
 
 		Nil<?> copyNil = Nil.of(copyType);
 		Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {

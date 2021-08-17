@@ -14,12 +14,10 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
-import org.scijava.ops.engine.hint.ImmutableHints;
 import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpMethod;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -73,9 +71,7 @@ public class SimplifiedOpInfo implements OpInfo {
 		this.struct = Structs.from(r, problems, new OpRetypingMemberParser());
 
 		this.priority = calculatePriority(info, metadata, env);
-		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
-		hintList.add(Simplification.FORBIDDEN);
-		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
+		this.hints = srcInfo.declaredHints().plus(Simplification.FORBIDDEN);
 
 		if(!problems.isEmpty()) {
 			validityException = new ValidityException(problems);

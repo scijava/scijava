@@ -32,7 +32,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 			"test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints.setHint(Simplification.FORBIDDEN);
+		hints = hints.plus(Simplification.FORBIDDEN);
 		ops.env().setDefaultHints(hints);
 		try {
 			ops.op("test.simplification.hints").inType(Integer[].class).outType(
@@ -55,7 +55,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 			"test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function(hints);
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints.setHint(Simplification.FORBIDDEN);
+		hints = hints.plus(Simplification.FORBIDDEN);
 		try {
 			ops.op("test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function(hints);

@@ -32,7 +32,7 @@ public abstract class DefaultRichOp<T> implements RichOp<T> {
 	@Override
 	public void postprocess(Object output) {
 		// Log a new execution
-		if (!metadata.hints().containsHint(History.SKIP_RECORDING)) {
+		if (!metadata.hints().contains(History.SKIP_RECORDING)) {
 			metadata.history().addExecution(this, output);
 		}
 	}

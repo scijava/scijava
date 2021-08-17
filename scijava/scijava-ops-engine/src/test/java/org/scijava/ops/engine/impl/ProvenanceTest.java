@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpExecutionSummary;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.hint.DefaultHints;

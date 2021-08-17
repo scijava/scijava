@@ -66,7 +66,7 @@ public interface OpHistory {
 	 * @param output the output produced by {@code op}
 	 * @return true iff {@code e} was successfully logged
 	 */
-	boolean addExecution(RichOp op, Object output);
+	boolean addExecution(RichOp<?> op, Object output);
 
 	/**
 	 * Logs the {@link List} of {@link OpInfo} dependencies under the
@@ -90,6 +90,6 @@ public interface OpHistory {
 	 * @param executionChainID the {@link UUID} identifying a particular matching
 	 *          call
 	 */
-	void logTopLevelOp(RichOp op, UUID executionChainID);
+	void logTopLevelOp(RichOp<?> op, UUID executionChainID);
 
 }

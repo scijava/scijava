@@ -6,16 +6,13 @@ import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.stream.Collectors;
 
-import org.scijava.ops.api.OpExecutionSummary;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
@@ -58,7 +55,7 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	private final Map<Object, ConcurrentLinkedDeque<UUID>> mutationMap =
 		new WeakHashMap<>();
 
-	private final Map<RichOp, UUID> mutatorMap = new WeakHashMap<>();
+	private final Map<RichOp<?>, UUID> mutatorMap = new WeakHashMap<>();
 
 	// -- USER API -- //
 
@@ -115,14 +112,14 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	 * @return true iff {@code e} was successfully logged
 	 */
 	@Override
-	public boolean addExecution(RichOp op, Object output) {
+	public boolean addExecution(RichOp<?> op, Object output) {
 		if (!mutationMap.containsKey(output)) generateDeque(output);
 		mutationMap.get(output).addLast(op.metadata().executionID());
 		return true;
 	}
 
 	@Override
-	public void logTopLevelOp(RichOp op, UUID executionChainID) {
+	public void logTopLevelOp(RichOp<?> op, UUID executionChainID) {
 		mutatorMap.put(op, executionChainID);
 	}
 

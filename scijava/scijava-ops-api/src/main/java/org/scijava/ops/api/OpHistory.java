@@ -10,10 +10,9 @@ import java.util.UUID;
  * Log describing each execution of an Op. This class is designed to answer two
  * questions:
  * <ol>
- * <li>Given an {@link Object} output (e.g. a {@code List<String>}), what Op(s)
- * mutated that output?
- * <li>Given an {@link Object} op, what {@link OpInfo}s were utilized to
- * implement that Op's functionality?
+ * <li>What Op(s) produced and/or mutated this output?
+ * <li>Given an {@link Object} op, what {@link OpInfo}s (including dependencies)
+ * were utilized to implement that Op's functionality?
  * </ol>
  * The answers to these two questions allow users to produce an entire
  * {@code List<Graph<OpInfo>>}, containing all of the information needed to

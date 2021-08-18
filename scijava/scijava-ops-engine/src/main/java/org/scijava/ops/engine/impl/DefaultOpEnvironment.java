@@ -117,6 +117,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Map<String, Set<OpInfo>> opDirectory;
 
 	/**
+	 * Data structure storing all known Ops, discoverable using their id.
+	 */
+	private Map<String, OpInfo> idDirectory;
+
+	/**
 	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRef}
 	 * and {@Hints} used to find an Op) and the {@link OpInstance} (wrapping an Op
 	 * with its backing {@link OpInfo}) that matched those requests. Used to
@@ -201,15 +206,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 	
 	@Override
-	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
-		try {
-			return findOp(info, specialType, inTypes, outType, getDefaultHints());
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	@Override
 	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
 		try {
 			return findOp(opName, specialType, inTypes, outType, hints);
@@ -225,6 +221,50 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
+	}
+
+	@Override
+	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
+		try {
+			return findOp(info, specialType, inTypes, outType, getDefaultHints());
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	@Override
+	public <T> T opFromID(final String id, final Nil<T> specialType,
+		final Nil<?>[] inTypes, final Nil<?> outType)
+	{
+		return opFromID(id, specialType, inTypes, outType, getDefaultHints());
+	}
+	
+	@Override
+	public <T> T opFromID(final String id, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
+		OpInfo info = infoFromID(id);
+		return opFromInfo(info, specialType, inTypes, outType, getDefaultHints());
+	}
+
+	private OpInfo infoFromID(String id) {
+		if (idDirectory == null) initIdDirectory();
+
+		// Adapted OpInfo
+		if (id.contains("Adaptation"))
+			return adaptedInfoFromID(id);
+		// Simplified OpInfo
+		if (id.contains("Simplification"))
+			return simplifiedInfoFromID(id);
+			
+		// Plain OpInfo
+			return idDirectory.get(id);
+	}
+
+	private OpInfo adaptedInfoFromID(String id) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	private OpInfo simplifiedInfoFromID(String id) {
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
@@ -736,12 +776,23 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
 	}
 
-	private void initOpDirectory() {
+	private synchronized void initOpDirectory() {
+		if (opDirectory != null) return;
 		opDirectory = new HashMap<>();
 		for (final OpInfoGenerator generator : infoGenerators) {
 			List<OpInfo> infos = generator.generateInfos();
 			infos.forEach(addToOpIndex);
 		}
+	}
+
+	private synchronized void initIdDirectory() {
+		if (idDirectory != null) return;
+		idDirectory = new HashMap<>();
+		if (opDirectory == null) initOpDirectory();
+
+		opDirectory.values().stream().flatMap(c -> c.stream()).forEach(info -> {
+			idDirectory.put(info.id(), info);
+		});
 	}
 
 	private final Consumer<OpInfo> addToOpIndex = (final OpInfo opInfo) -> {

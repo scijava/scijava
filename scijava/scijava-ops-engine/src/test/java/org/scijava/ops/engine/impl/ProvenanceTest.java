@@ -22,6 +22,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.Nil;
 
 @Plugin(type = OpCollection.class)
 public class ProvenanceTest extends AbstractTestEnvironment {
@@ -173,6 +174,19 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		history = ops.history().executionsUpon(out1);
 		Assert.assertEquals(1, history.size());
 
+	}
+
+	@Test
+	public void testDependencylessOpRecoveryFromString() {
+		Hints hints = new DefaultHints();
+		Function<Double, Thing> mapper = ops.op("test.provenanceMapped").input(5.0).outType(Thing.class).function(hints);
+		Graph<OpInfo> g = ops.history().opExecutionChain(mapper);
+		Assert.assertEquals(1, g.nodes().size());
+		OpInfo info = g.nodes().iterator().next();
+		Nil<Function<Double, Thing>> special = new Nil<>() {};
+		Nil<Double> inType = Nil.of(Double.class);
+		Nil<Thing> outType = Nil.of(Thing.class);
+		Function<Double, Thing> actual = ops.env().opFromID(info.id(), special, new Nil[] {inType}, outType);
 	}
 
 }

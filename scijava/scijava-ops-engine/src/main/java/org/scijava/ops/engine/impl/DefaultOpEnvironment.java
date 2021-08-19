@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -50,6 +51,7 @@ import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDependencyMember;
@@ -59,6 +61,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
@@ -80,6 +83,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
+import org.scijava.struct.Member;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.types.Types;
@@ -243,6 +247,24 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public <T> T opFromID(final String id, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
 		OpInfo info = infoFromID(id);
 		return opFromInfo(info, specialType, inTypes, outType, getDefaultHints());
+	}
+
+	@Override
+	public <T> T opFromInfoChain(final InfoChain chain, final Nil<T> specialType) {
+		if (!(specialType.getType() instanceof ParameterizedType)) 
+			throw new IllegalArgumentException("TODO");
+		@SuppressWarnings("unchecked")
+		T op = (T) chain.op();
+		OpInfo info = chain.info();
+		Hints hints = getDefaultHints();
+		UUID id = hints.uuid();
+		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+		GenericAssignability.checkGenericAssignability(info.opType(), (ParameterizedType) specialType.getType(), typeVarAssigns, true);
+		RichOp<T> wrappedOp = wrapOp(op, info, hints, id, typeVarAssigns);
+		if (!hints.contains(History.SKIP_RECORDING))
+			history.logTopLevelOp(wrappedOp, id);
+		return wrappedOp.asOpType();
+		
 	}
 
 	private OpInfo infoFromID(String id) {

@@ -129,6 +129,8 @@ public interface OpEnvironment {
 	<T> T opFromInfo(OpInfo info, Nil<T> specialType, Nil<?>[] inTypes, Nil<?> outType,
 		Hints hints);
 
+	<T> T opFromInfoChain(InfoChain chain, Nil<T> specialType);
+
 	/**
 	 * Returns an Op fitting the provided arguments. NB implementations of this
 	 * method likely depend on the {@link Hints} set by

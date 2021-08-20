@@ -31,10 +31,7 @@ public class InfoChainTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testInfoChainInstantiation() {
-		Iterator<OpInfo> infos = ops.env().infos("test.infoChain").iterator();
-		Assert.assertTrue(infos.hasNext());
-		OpInfo info = infos.next();
-		Assert.assertFalse(infos.hasNext());
+		OpInfo info = singularInfoOfName("test.infoChain");
 		InfoChain chain = new InfoChain(info);
 		Nil<Producer<String>> nil = new Nil<>() {};
 		Producer<String> op = ops.env().opFromInfoChain(chain, nil);
@@ -44,23 +41,25 @@ public class InfoChainTest extends AbstractTestEnvironment {
 	@Test
 	public void testInfoChainWithDependenciesInstantiation() {
 		// Find dependency
-		Iterator<OpInfo> infos = ops.env().infos("test.infoChain").iterator();
-		Assert.assertTrue(infos.hasNext());
-		OpInfo info = infos.next();
-		Assert.assertFalse(infos.hasNext());
+		OpInfo info = singularInfoOfName("test.infoChain");
 		InfoChain dependencyChain = new InfoChain(info);
 
 		// Find dependent Op
-		infos = ops.env().infos("test.infoChainBase").iterator();
-		Assert.assertTrue(infos.hasNext());
-		info = infos.next();
-		Assert.assertFalse(infos.hasNext());
-		InfoChain chain = new InfoChain(info, Collections.singletonList(
+		OpInfo baseInfo = singularInfoOfName("test.infoChainBase");
+		InfoChain chain = new InfoChain(baseInfo, Collections.singletonList(
 			dependencyChain));
 
 		Nil<Producer<String>> nil = new Nil<>() {};
 		Producer<String> op = ops.env().opFromInfoChain(chain, nil);
 		Assert.assertEquals(S, op.create());
+	}
+
+	private OpInfo singularInfoOfName(String name) {
+		Iterator<OpInfo> infos = ops.env().infos(name).iterator();
+		Assert.assertTrue(infos.hasNext());
+		OpInfo info = infos.next();
+		Assert.assertFalse(infos.hasNext());
+		return info;
 	}
 
 }

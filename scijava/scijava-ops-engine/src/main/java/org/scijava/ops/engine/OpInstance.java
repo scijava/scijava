@@ -1,43 +1,48 @@
+
 package org.scijava.ops.engine;
 
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Map;
 import java.util.Objects;
 
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.types.GenericTyped;
 
 /**
  * An instance of an {@link OpInfo}
  * 
  * @author Gabriel Selzer
  */
-public class OpInstance {
+public class OpInstance implements GenericTyped {
 
 	private final Object op;
-	private final OpInfo info;
-	private final Map<TypeVariable<?>, Type> typeVarAssigns;
+	private final InfoChain info;
+	private final Type reifiedType;
 
-	public OpInstance(final Object op, final OpInfo backingInfo, final Map<TypeVariable<?>, Type> typeVarAssigns) {
+	public OpInstance(final Object op, final InfoChain backingInfo,
+		final Type reifiedType)
+	{
 		this.op = op;
 		this.info = backingInfo;
-		this.typeVarAssigns = typeVarAssigns;
+		this.reifiedType = reifiedType;
 	}
 
-	public static OpInstance of(Object op, OpInfo backingInfo, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		return new OpInstance(op, backingInfo, typeVarAssigns);
+	public static OpInstance of(Object op, InfoChain backingInfo,
+		final Type reifiedType)
+	{
+		return new OpInstance(op, backingInfo, reifiedType);
 	}
 
 	public Object op() {
 		return op;
 	}
 
-	public OpInfo info() {
+	public InfoChain info() {
 		return info;
 	}
 
-	public Map<TypeVariable<?>, Type> typeVarAssigns() {
-		return typeVarAssigns;
+	public Type type() {
+		return reifiedType;
 	}
 
 	@Override
@@ -46,13 +51,19 @@ public class OpInstance {
 		OpInstance thatInstance = (OpInstance) that;
 		boolean infosEqual = info().equals(thatInstance.info());
 		boolean objectsEqual = op().equals(thatInstance.op());
-		boolean typeVarAssignsEqual = typeVarAssigns().equals(thatInstance.typeVarAssigns());
-		return infosEqual && objectsEqual && typeVarAssignsEqual;
+		boolean typesEqual = type().equals(thatInstance.type());
+		return infosEqual && objectsEqual && typesEqual;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(info(), op(), typeVarAssigns());
+		return Objects.hash(info(), op(), type());
+	}
+
+	@Override
+	public Type getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

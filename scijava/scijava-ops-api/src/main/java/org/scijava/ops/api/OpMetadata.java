@@ -6,12 +6,12 @@ import java.util.UUID;
 public class OpMetadata {
 
 	private final Type type;
-	private final OpInfo info;
+	private final InfoChain info;
 	private final UUID executionID;
 	private final Hints hints;
 	private final OpHistory history;
 
-	public OpMetadata(Type type, OpInfo info, UUID executionID,
+	public OpMetadata(Type type, InfoChain info, UUID executionID,
 		Hints hints, OpHistory history)
 	{
 		this.type = type;
@@ -25,7 +25,7 @@ public class OpMetadata {
 		return history;
 	}
 
-	public OpInfo info() {
+	public InfoChain info() {
 		return info;
 	}
 

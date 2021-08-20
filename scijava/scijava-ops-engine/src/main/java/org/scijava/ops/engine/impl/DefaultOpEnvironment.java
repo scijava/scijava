@@ -255,12 +255,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
 		T op = (T) chain.op();
-		OpInfo info = chain.info();
 		Hints hints = getDefaultHints();
 		UUID id = hints.uuid();
-		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-		GenericAssignability.checkGenericAssignability(info.opType(), (ParameterizedType) specialType.getType(), typeVarAssigns, true);
-		RichOp<T> wrappedOp = wrapOp(op, info, hints, id, typeVarAssigns);
+		RichOp<T> wrappedOp = wrapOp(op, chain, hints, id, specialType.getType());
 		if (!hints.contains(History.SKIP_RECORDING))
 			history.logTopLevelOp(wrappedOp, id);
 		return wrappedOp.asOpType();
@@ -365,20 +362,22 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return conditions;
 	}
 	
-	private Object wrapViaCache(MatchingConditions conditions,
+	private RichOp<?> wrapViaCache(MatchingConditions conditions,
 		UUID executionChainID)
 	{
 		OpInstance instance = getInstance(conditions);
-		try {
+		return wrap(conditions, instance, executionChainID);
+	}
+
+	private RichOp<?> wrap(MatchingConditions conditions,
+		OpInstance instance,
+		UUID executionChainID)
+	{
 			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.info(),
-				conditions.hints(), executionChainID, instance.typeVarAssigns());
+				conditions.hints(), executionChainID, instance.type());
 			if (!conditions.hints().contains(History.SKIP_RECORDING))
 				history.logTopLevelOp(wrappedOp, executionChainID);
 			return wrappedOp;
-		}
-		catch (IllegalArgumentException e) {
-			return instance;
-		}
 	}
 
 	/**
@@ -414,11 +413,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpCandidate candidate)
 	{
 		// obtain Op instance (with dependencies)
-		Object op = instantiateOp(candidate, conditions.hints());
+		OpInstance op = instantiateOp(candidate, conditions.hints());
 		
 		// cache instance
-		OpInstance instance = OpInstance.of(op, candidate.opInfo(), candidate.typeVarAssigns());
-		cacheOp(conditions, instance);
+		cacheOp(conditions, op);
 	}
 
 	private void cacheOp(MatchingConditions conditions, OpInstance op) {
@@ -480,12 +478,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param candidate
 	 * @return an Op with all needed dependencies
 	 */
-	private Object instantiateOp(final OpCandidate candidate, Hints hints)
+	private OpInstance instantiateOp(final OpCandidate candidate, Hints hints)
 	{
-		final List<MatchingConditions> instances = resolveOpDependencies(candidate, hints);
-		Object op = candidate.createOp(wrappedDeps(instances, hints.uuid()));
-		history.logDependencies(hints.uuid(), candidate.opInfo(), infos(instances));
-		return op;
+		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
+		final List<InfoChain> depChains = conditions.stream().map(op -> op.metadata().info()).collect(Collectors.toList());
+		final InfoChain chain = new InfoChain(candidate.opInfo(), depChains);
+		history.logDependencies(hints.uuid(), candidate.opInfo(), depChains.stream().map(c -> c.info()).collect(Collectors.toList()));
+		// TODO: this solution does NOT wrap dependencies.
+		return OpInstance.of(chain.op(), chain, candidate.getType());
 	}
 
 	private List<Object> wrappedDeps(List<MatchingConditions> instances, UUID id) {
@@ -493,7 +493,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private List<OpInfo> infos(List<MatchingConditions> instances) {
-		return instances.stream().map(i -> getInstance(i).info()).collect(Collectors.toList());
+		return instances.stream().map(i -> getInstance(i).info().info()).collect(Collectors.toList());
 	}
 
 	/**
@@ -505,25 +505,23 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @return an {@link Op} wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> RichOp<T> wrapOp(T op, OpInfo opInfo, Hints hints, UUID executionID, Map<TypeVariable<?>, Type> typeVarAssigns) throws IllegalArgumentException {
+	private <T> RichOp<T> wrapOp(T op, InfoChain chain, Hints hints, UUID executionID, Type reifiedOpType) throws IllegalArgumentException {
 		if (wrappers == null)
 			initWrappers();
 
-		Type opType = opInfo.opType();
 		try {
 			// find the opWrapper that wraps this type of Op
-			Class<?> wrapper = getWrapperClass(op, opInfo);
+			Class<?> wrapper = getWrapperClass(op, chain.info());
 			// obtain the generic type of the Op w.r.t. the Wrapper class 
-			Type exactSuperType = Types.getExactSuperType(opType, wrapper);
-			Type reifiedSuperType = Types.substituteTypeVariables(exactSuperType, typeVarAssigns);
-			OpMetadata metadata = new OpMetadata(reifiedSuperType, opInfo, executionID, hints, history);
+			Type reifiedSuperType = Types.getExactSuperType(reifiedOpType, wrapper);
+			OpMetadata metadata = new OpMetadata(reifiedSuperType, chain, executionID, hints, history);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
 			return opWrapper.wrap(op, metadata);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			throw new IllegalArgumentException(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
 		} catch (NullPointerException e) {
-			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(opType).toString() + ".");
+			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(reifiedOpType).toString() + ".");
 		}
 	}
 
@@ -560,7 +558,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return list;
 	}
 
-	private List<MatchingConditions> resolveOpDependencies(OpCandidate candidate, Hints hints) {
+	private List<RichOp<?>> resolveOpDependencies(OpCandidate candidate, Hints hints) {
 		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns(), hints);
 	}
 
@@ -592,10 +590,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param typeVarAssigns - the mapping of {@link TypeVariable}s in the
 	 *          {@code OpInfo} to {@link Type}s given in the request.
 	 */
-	private List<MatchingConditions> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints) {
+	private List<RichOp<?>> resolveOpDependencies(OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints) {
 
 		final List<OpDependencyMember<?>> dependencies = info.dependencies();
-		final List<MatchingConditions> resolvedDependencies = new ArrayList<>(dependencies.size());
+		final List<RichOp<?>> dependencyChains = new ArrayList<>();
 
 		for (final OpDependencyMember<?> dependency : dependencies) {
 			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
@@ -608,7 +606,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				}
 
 				MatchingConditions conditions = generateCacheHit(dependencyRef, hintsCopy, false);
-				resolvedDependencies.add(conditions);
+				dependencyChains.add(wrapViaCache(conditions, hints.uuid()));
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info
@@ -619,7 +617,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				throw new DependencyMatchingException(message);
 			}
 		}
-		return resolvedDependencies;
+		return dependencyChains;
 	}
 
 	/**
@@ -660,11 +658,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 			try {
 				// resolve adaptor dependencies
-				final List<MatchingConditions> depConditions = resolveOpDependencies(adaptor,
+				final List<RichOp<?>> dependencies = resolveOpDependencies(adaptor,
 					map, hints);
-				final List<Object> dependencies = depConditions.stream() //
-					.map(c -> wrapViaCache(c, hints.uuid())) //
-					.collect(Collectors.toList());
 
 				@SuppressWarnings("unchecked")
 				Function<Object, Object> adaptorOp = //

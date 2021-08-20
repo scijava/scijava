@@ -50,6 +50,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
+import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 
 @Plugin(type = OpCollection.class)
@@ -114,7 +115,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 		String newString = "This Op invaded the cache!";
 		Producer<String> newProducer = () -> newString;
 		OpInstance invaderInstance = OpInstance.of(newProducer, cachedInstance
-			.info(), cachedInstance.typeVarAssigns());
+			.info(), new Nil<Producer<String>>() {}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		Producer<String> invadedOp = defOpEnv.op("test.basicOp").input().outType(

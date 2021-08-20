@@ -38,6 +38,7 @@ import org.scijava.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.types.Types;
 
 /**
  * Container class for a possible operation match between an {@link OpRef} and
@@ -65,6 +66,7 @@ public class OpCandidate {
 	private final OpInfo info;
 
 	private final Map<TypeVariable<?>, Type> typeVarAssigns;
+	private final Type reifiedType;
 
 	private StatusCode code;
 	private String message;
@@ -83,6 +85,12 @@ public class OpCandidate {
 		this.typeVarAssigns = typeVarAssigns;
 
 		this.paddedArgs = OpUtils.padTypes(this, getRef().getArgs());
+		this.reifiedType = getReifiedType(ref, info, typeVarAssigns);
+	}
+
+	public static Type getReifiedType(OpRef ref, OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) {
+		Type exactSuperType = Types.getExactSuperType(info.opType(), Types.raw(ref.getType()));
+		return Types.mapVarToTypes(exactSuperType, typeVarAssigns);
 	}
 
 	/** Gets the op execution environment of the desired match. */
@@ -98,6 +106,11 @@ public class OpCandidate {
 	/** Gets the {@link OpInfo} metadata describing the op to match against. */
 	public OpInfo opInfo() {
 		return info;
+	}
+
+	/** Gets the reified {@link Type} of the Op described by this candidate. */
+	public Type getType() {
+		return reifiedType;
 	}
 	
 	/** Gets the priority of this result */

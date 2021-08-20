@@ -6,6 +6,12 @@ import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.History;
 
+/**
+ * TODO: rename to AbstractRichOp (i.e. in .vm files)
+ * @author G
+ *
+ * @param <T>
+ */
 public abstract class DefaultRichOp<T> implements RichOp<T> {
 
 	private final T op;

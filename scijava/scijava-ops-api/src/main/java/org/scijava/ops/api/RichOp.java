@@ -5,6 +5,14 @@ import java.lang.reflect.Type;
 
 import org.scijava.types.GenericTyped;
 
+/**
+ * An {@OpInstance} with state ({@link OpMetadata})
+ * 
+ * TODO: Take an OpInstance
+ * @author Gabriel Selzer
+ *
+ * @param <T>
+ */
 public interface RichOp<T> extends GenericTyped {
 
 	T op();

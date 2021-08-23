@@ -26,6 +26,10 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	public AbstractRichOp(final OpInstance<T> instance, final OpMetadata metadata) {
 		this.instance = instance;
 		this.metadata = metadata;
+
+		if (!metadata.hints().contains(History.SKIP_RECORDING)) {
+			metadata.history().logOp(this);
+		}
 	}
 
 	@Override

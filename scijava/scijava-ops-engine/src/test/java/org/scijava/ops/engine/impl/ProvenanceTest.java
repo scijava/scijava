@@ -14,7 +14,9 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.spi.OpCollection;
@@ -33,12 +35,12 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	@Test
 	public void testProvenance() {
 		String s = ops.op("test.provenance").input().outType(String.class).create();
-		List<UUID> executionsUpon = ops.history().executionsUpon(s);
+		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(s);
 		Assert.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
-		Graph<OpInfo> executionHierarchy = ops.history().opExecutionChain(executionsUpon.get(0));
-		Assert.assertEquals(1, executionHierarchy.nodes().size());
-		OpInfo info = executionHierarchy.nodes().iterator().next();
+		InfoChain executionHierarchy = ops.history().opExecutionChain(executionsUpon.get(0));
+		Assert.assertEquals(0, executionHierarchy.dependencies().size());
+		OpInfo info = executionHierarchy.info();
 		Assert.assertTrue(info.implementationName().contains(this.getClass().getPackageName()));
 	}
 
@@ -68,24 +70,20 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		l2.add(8l);
 		Double out2 = ops.op("test.provenance").input(l2).outType(Double.class).apply();
 
-		List<UUID> history1 = ops.history().executionsUpon(out1);
-		List<UUID> history2 = ops.history().executionsUpon(out2);
+		List<RichOp<?>> history1 = ops.history().executionsUpon(out1);
+		List<RichOp<?>> history2 = ops.history().executionsUpon(out2);
 
 		Assert.assertEquals(1, history1.size());
-		Graph<OpInfo> opExecutionChain = ops.history().opExecutionChain(history1.get(0));
-		Assert.assertEquals(1, opExecutionChain.nodes().size());
+		InfoChain opExecutionChain = ops.history().opExecutionChain(history1.get(0));
+		Assert.assertEquals(0, opExecutionChain.dependencies().size());
 		String expected = "public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
-		for (OpInfo i : opExecutionChain.nodes()) {
-			Assert.assertEquals(expected, i.getAnnotationBearer().toString());
-		}
+		Assert.assertEquals(expected, opExecutionChain.info().getAnnotationBearer().toString());
 
 		Assert.assertEquals(1, history2.size());
 		opExecutionChain = ops.history().opExecutionChain(history2.get(0));
-		Assert.assertEquals(1, opExecutionChain.nodes().size());
+		Assert.assertEquals(0, opExecutionChain.dependencies().size());
 		expected = "public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
-		for (OpInfo i : opExecutionChain.nodes()) {
-			Assert.assertEquals(expected, i.getAnnotationBearer().toString());
-		}
+		Assert.assertEquals(expected, opExecutionChain.info().getAnnotationBearer().toString());
 	}
 
 	@OpField(names = "test.provenanceMapped")
@@ -119,7 +117,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Thing out = ops.op("test.provenanceMapper").input(array).outType(Thing.class).apply();
 
 		// Assert only one execution upon this Object
-		List<UUID> executionsUpon = ops.history().executionsUpon(out);
+		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(out);
 		Assert.assertEquals(1, executionsUpon.size());
 	}
 
@@ -132,25 +130,17 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Function<Double[], Thing> mapper = ops.op("test.provenanceMapper").input(array).outType(Thing.class).function();
 
 		// Get the Op execution chain associated with the above call
-		Graph<OpInfo> executionChain = ops.history().opExecutionChain(mapper);
+		InfoChain executionChain = ops.history().opExecutionChain(mapper);
 
-		// Assert only two Ops are called (the Op we asked for, and its dependency)
-		Assert.assertEquals(2, executionChain.nodes().size());
 		// Assert the mapper is in the execution chain
 		Iterator<OpInfo> mapperInfos = ops.env().infos("test.provenanceMapper").iterator();
-		Assert.assertTrue(mapperInfos.hasNext());
 		OpInfo mapperInfo = mapperInfos.next();
-		Assert.assertFalse(mapperInfos.hasNext());
-		Assert.assertTrue(executionChain.nodes().contains(mapperInfo));
+		Assert.assertTrue(executionChain.info().equals(mapperInfo));
 		// Assert mapped is in the execution chain
 		Iterator<OpInfo> mappedInfos = ops.env().infos("test.provenanceMapped").iterator();
-		Assert.assertTrue(mappedInfos.hasNext());
 		OpInfo mappedInfo = mappedInfos.next();
-		Assert.assertFalse(mappedInfos.hasNext());
-		Assert.assertTrue(executionChain.nodes().contains(mappedInfo));
-		// Assert that there is an edge from the mapper OpInfo to the mapped OpInfo
-		Assert.assertEquals(1, executionChain.edges().size());
-		Assert.assertTrue(executionChain.hasEdgeConnecting(mapperInfo, mappedInfo));
+		Assert.assertEquals("Expected only one dependency of the mapper Op!", 1, executionChain.dependencies().size());
+		Assert.assertTrue(executionChain.dependencies().get(0).info().equals(mappedInfo));
 	}
 
 	@Test
@@ -163,7 +153,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Thing out = ops.op("test.provenanceMapper").input(array).outType(Thing.class).apply(hints);
 
 		// Assert only one run of the Base Op
-		List<UUID> history = ops.history().executionsUpon(out);
+		List<RichOp<?>> history = ops.history().executionsUpon(out);
 		Assert.assertEquals(1, history.size());
 
 		// Run the mapped Op, assert still one run on the mapper
@@ -180,9 +170,9 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	public void testDependencylessOpRecoveryFromString() {
 		Hints hints = new DefaultHints();
 		Function<Double, Thing> mapper = ops.op("test.provenanceMapped").input(5.0).outType(Thing.class).function(hints);
-		Graph<OpInfo> g = ops.history().opExecutionChain(mapper);
-		Assert.assertEquals(1, g.nodes().size());
-		OpInfo info = g.nodes().iterator().next();
+		InfoChain chain = ops.history().opExecutionChain(mapper);
+		Assert.assertEquals(0, chain.dependencies().size());
+		OpInfo info = chain.info();
 		Nil<Function<Double, Thing>> special = new Nil<>() {};
 		Nil<Double> inType = Nil.of(Double.class);
 		Nil<Thing> outType = Nil.of(Thing.class);

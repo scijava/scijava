@@ -52,6 +52,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Producer<T> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedProducer();
 		}
@@ -92,6 +97,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public $fg asOpType() {
+					return this;
 				}
 
 			}
@@ -135,6 +145,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public $cg asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer${arity}();
 		}
@@ -176,6 +191,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public $ig asOpType() {
+					return this;
 				}
 
 			}

@@ -51,6 +51,11 @@ public class LossReporterWrapper<I, O> //
 				return output;
 			}
 
+			@Override
+			public LossReporter<I, O> asOpType() {
+				return this;
+			}
+
 		}
 		return new GenericTypedLossReporter();
 	}

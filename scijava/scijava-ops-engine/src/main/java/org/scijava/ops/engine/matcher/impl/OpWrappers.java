@@ -52,6 +52,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Producer<T> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedProducer();
 		}
@@ -92,6 +97,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Function<I, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction1();
 		}
@@ -128,6 +138,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public BiFunction<I1, I2, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -168,6 +183,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity3<I1, I2, I3, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction3();
 		}
@@ -204,6 +224,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity4<I1, I2, I3, I4, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -244,6 +269,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity5<I1, I2, I3, I4, I5, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction5();
 		}
@@ -280,6 +310,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity6<I1, I2, I3, I4, I5, I6, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -320,6 +355,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction7();
 		}
@@ -356,6 +396,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -396,6 +441,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction9();
 		}
@@ -432,6 +482,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -472,6 +527,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction11();
 		}
@@ -508,6 +568,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -548,6 +613,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction13();
 		}
@@ -584,6 +654,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -624,6 +699,11 @@ public class OpWrappers {
 					return out;
 				}
 
+				@Override
+				public Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedFunction15();
 		}
@@ -660,6 +740,11 @@ public class OpWrappers {
 
 					postprocess(out);
 					return out;
+				}
+
+				@Override
+				public Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -700,6 +785,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity0<O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer0();
 		}
@@ -734,6 +824,11 @@ public class OpWrappers {
 					instance.op().compute(in, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity1<I, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -772,6 +867,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity2<I1, I2, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer2();
 		}
@@ -806,6 +906,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity3<I1, I2, I3, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -844,6 +949,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity4<I1, I2, I3, I4, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer4();
 		}
@@ -878,6 +988,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, in4, in5, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity5<I1, I2, I3, I4, I5, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -916,6 +1031,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity6<I1, I2, I3, I4, I5, I6, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer6();
 		}
@@ -950,6 +1070,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -988,6 +1113,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer8();
 		}
@@ -1022,6 +1152,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -1060,6 +1195,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer10();
 		}
@@ -1094,6 +1234,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -1132,6 +1277,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer12();
 		}
@@ -1166,6 +1316,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -1204,6 +1359,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer14();
 		}
@@ -1240,6 +1400,11 @@ public class OpWrappers {
 					postprocess(out);
 				}
 
+				@Override
+				public Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedComputer15();
 		}
@@ -1274,6 +1439,11 @@ public class OpWrappers {
 					instance.op().compute(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out);
 
 					postprocess(out);
+				}
+
+				@Override
+				public Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> asOpType() {
+					return this;
 				}
 
 			}
@@ -1315,6 +1485,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity1<IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace1();
 		}
@@ -1350,6 +1525,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity2_1<IO, I2> asOpType() {
+					return this;
 				}
 
 			}
@@ -1389,6 +1569,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity2_2<I1, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace2_2();
 		}
@@ -1424,6 +1609,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity3_1<IO, I2, I3> asOpType() {
+					return this;
 				}
 
 			}
@@ -1463,6 +1653,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity3_2<I1, IO, I3> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace3_2();
 		}
@@ -1498,6 +1693,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity3_3<I1, I2, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -1537,6 +1737,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity4_1<IO, I2, I3, I4> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace4_1();
 		}
@@ -1572,6 +1777,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity4_2<I1, IO, I3, I4> asOpType() {
+					return this;
 				}
 
 			}
@@ -1611,6 +1821,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity4_3<I1, I2, IO, I4> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace4_3();
 		}
@@ -1646,6 +1861,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity4_4<I1, I2, I3, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -1685,6 +1905,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity5_1<IO, I2, I3, I4, I5> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace5_1();
 		}
@@ -1720,6 +1945,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity5_2<I1, IO, I3, I4, I5> asOpType() {
+					return this;
 				}
 
 			}
@@ -1759,6 +1989,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity5_3<I1, I2, IO, I4, I5> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace5_3();
 		}
@@ -1794,6 +2029,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity5_4<I1, I2, I3, IO, I5> asOpType() {
+					return this;
 				}
 
 			}
@@ -1833,6 +2073,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity5_5<I1, I2, I3, I4, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace5_5();
 		}
@@ -1868,6 +2113,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6> asOpType() {
+					return this;
 				}
 
 			}
@@ -1907,6 +2157,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace6_2();
 		}
@@ -1942,6 +2197,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6> asOpType() {
+					return this;
 				}
 
 			}
@@ -1981,6 +2241,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace6_4();
 		}
@@ -2016,6 +2281,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6> asOpType() {
+					return this;
 				}
 
 			}
@@ -2055,6 +2325,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace6_6();
 		}
@@ -2090,6 +2365,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7> asOpType() {
+					return this;
 				}
 
 			}
@@ -2129,6 +2409,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace7_2();
 		}
@@ -2164,6 +2449,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7> asOpType() {
+					return this;
 				}
 
 			}
@@ -2203,6 +2493,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace7_4();
 		}
@@ -2238,6 +2533,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7> asOpType() {
+					return this;
 				}
 
 			}
@@ -2277,6 +2577,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace7_6();
 		}
@@ -2312,6 +2617,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -2351,6 +2661,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace8_1();
 		}
@@ -2386,6 +2701,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8> asOpType() {
+					return this;
 				}
 
 			}
@@ -2425,6 +2745,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace8_3();
 		}
@@ -2460,6 +2785,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8> asOpType() {
+					return this;
 				}
 
 			}
@@ -2499,6 +2829,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace8_5();
 		}
@@ -2534,6 +2869,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8> asOpType() {
+					return this;
 				}
 
 			}
@@ -2573,6 +2913,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace8_7();
 		}
@@ -2608,6 +2953,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -2647,6 +2997,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace9_1();
 		}
@@ -2682,6 +3037,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9> asOpType() {
+					return this;
 				}
 
 			}
@@ -2721,6 +3081,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace9_3();
 		}
@@ -2756,6 +3121,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9> asOpType() {
+					return this;
 				}
 
 			}
@@ -2795,6 +3165,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace9_5();
 		}
@@ -2830,6 +3205,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9> asOpType() {
+					return this;
 				}
 
 			}
@@ -2869,6 +3249,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace9_7();
 		}
@@ -2904,6 +3289,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9> asOpType() {
+					return this;
 				}
 
 			}
@@ -2943,6 +3333,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace9_9();
 		}
@@ -2978,6 +3373,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> asOpType() {
+					return this;
 				}
 
 			}
@@ -3017,6 +3417,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace10_2();
 		}
@@ -3052,6 +3457,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> asOpType() {
+					return this;
 				}
 
 			}
@@ -3091,6 +3501,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace10_4();
 		}
@@ -3126,6 +3541,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> asOpType() {
+					return this;
 				}
 
 			}
@@ -3165,6 +3585,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace10_6();
 		}
@@ -3200,6 +3625,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> asOpType() {
+					return this;
 				}
 
 			}
@@ -3239,6 +3669,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace10_8();
 		}
@@ -3274,6 +3709,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> asOpType() {
+					return this;
 				}
 
 			}
@@ -3313,6 +3753,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace10_10();
 		}
@@ -3348,6 +3793,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+					return this;
 				}
 
 			}
@@ -3387,6 +3837,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace11_2();
 		}
@@ -3422,6 +3877,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+					return this;
 				}
 
 			}
@@ -3461,6 +3921,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace11_4();
 		}
@@ -3496,6 +3961,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> asOpType() {
+					return this;
 				}
 
 			}
@@ -3535,6 +4005,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace11_6();
 		}
@@ -3570,6 +4045,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> asOpType() {
+					return this;
 				}
 
 			}
@@ -3609,6 +4089,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace11_8();
 		}
@@ -3644,6 +4129,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> asOpType() {
+					return this;
 				}
 
 			}
@@ -3683,6 +4173,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace11_10();
 		}
@@ -3718,6 +4213,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -3757,6 +4257,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace12_1();
 		}
@@ -3792,6 +4297,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+					return this;
 				}
 
 			}
@@ -3831,6 +4341,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace12_3();
 		}
@@ -3866,6 +4381,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+					return this;
 				}
 
 			}
@@ -3905,6 +4425,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace12_5();
 		}
@@ -3940,6 +4465,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> asOpType() {
+					return this;
 				}
 
 			}
@@ -3979,6 +4509,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace12_7();
 		}
@@ -4014,6 +4549,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> asOpType() {
+					return this;
 				}
 
 			}
@@ -4053,6 +4593,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace12_9();
 		}
@@ -4088,6 +4633,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> asOpType() {
+					return this;
 				}
 
 			}
@@ -4127,6 +4677,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace12_11();
 		}
@@ -4162,6 +4717,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -4201,6 +4761,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_1();
 		}
@@ -4236,6 +4801,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
 				}
 
 			}
@@ -4275,6 +4845,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_3();
 		}
@@ -4310,6 +4885,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
 				}
 
 			}
@@ -4349,6 +4929,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_5();
 		}
@@ -4384,6 +4969,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
 				}
 
 			}
@@ -4423,6 +5013,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_7();
 		}
@@ -4458,6 +5053,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> asOpType() {
+					return this;
 				}
 
 			}
@@ -4497,6 +5097,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_9();
 		}
@@ -4532,6 +5137,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> asOpType() {
+					return this;
 				}
 
 			}
@@ -4571,6 +5181,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_11();
 		}
@@ -4606,6 +5221,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> asOpType() {
+					return this;
 				}
 
 			}
@@ -4645,6 +5265,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace13_13();
 		}
@@ -4680,6 +5305,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -4719,6 +5349,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_2();
 		}
@@ -4754,6 +5389,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -4793,6 +5433,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_4();
 		}
@@ -4828,6 +5473,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -4867,6 +5517,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_6();
 		}
@@ -4902,6 +5557,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -4941,6 +5601,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_8();
 		}
@@ -4976,6 +5641,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -5015,6 +5685,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_10();
 		}
@@ -5050,6 +5725,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -5089,6 +5769,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_12();
 		}
@@ -5124,6 +5809,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> asOpType() {
+					return this;
 				}
 
 			}
@@ -5163,6 +5853,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace14_14();
 		}
@@ -5198,6 +5893,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5237,6 +5937,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_2();
 		}
@@ -5272,6 +5977,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5311,6 +6021,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_4();
 		}
@@ -5346,6 +6061,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5385,6 +6105,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_6();
 		}
@@ -5420,6 +6145,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5459,6 +6189,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_8();
 		}
@@ -5494,6 +6229,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5533,6 +6273,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_10();
 		}
@@ -5568,6 +6313,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5607,6 +6357,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_12();
 		}
@@ -5642,6 +6397,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> asOpType() {
+					return this;
 				}
 
 			}
@@ -5681,6 +6441,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace15_14();
 		}
@@ -5716,6 +6481,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> asOpType() {
+					return this;
 				}
 
 			}
@@ -5755,6 +6525,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_1();
 		}
@@ -5790,6 +6565,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -5829,6 +6609,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_3();
 		}
@@ -5864,6 +6649,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -5903,6 +6693,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_5();
 		}
@@ -5938,6 +6733,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -5977,6 +6777,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_7();
 		}
@@ -6012,6 +6817,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -6051,6 +6861,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_9();
 		}
@@ -6086,6 +6901,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -6125,6 +6945,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_11();
 		}
@@ -6160,6 +6985,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -6199,6 +7029,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_13();
 		}
@@ -6234,6 +7069,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> asOpType() {
+					return this;
 				}
 
 			}
@@ -6273,6 +7113,11 @@ public class OpWrappers {
 					postprocess(ioType);
 				}
 
+				@Override
+				public Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> asOpType() {
+					return this;
+				}
+
 			}
 			return new GenericTypedInplace16_15();
 		}
@@ -6308,6 +7153,11 @@ public class OpWrappers {
 
 					// Log a new execution
 					postprocess(ioType);
+				}
+
+				@Override
+				public Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> asOpType() {
+					return this;
 				}
 
 			}

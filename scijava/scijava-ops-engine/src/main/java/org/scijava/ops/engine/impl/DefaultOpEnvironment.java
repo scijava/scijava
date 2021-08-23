@@ -254,8 +254,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpInstance<T> instance = (OpInstance<T>) chain.op(specialType.getType());
 		Hints hints = getDefaultHints();
 		RichOp<T> wrappedOp = wrapOp(instance, hints, hints.uuid());
-		if (!hints.contains(History.SKIP_RECORDING))
-			history.logTopLevelOp(wrappedOp, hints.uuid());
 		return wrappedOp.asOpType();
 		
 	}
@@ -371,8 +369,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		RichOp<?> wrappedOp = wrapOp(instance, conditions.hints(),
 			executionChainID);
-			if (!conditions.hints().contains(History.SKIP_RECORDING))
-				history.logTopLevelOp(wrappedOp, executionChainID);
 			return wrappedOp;
 	}
 
@@ -479,8 +475,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
 		final List<InfoChain> depChains = conditions.stream().map(op -> op.metadata().info()).collect(Collectors.toList());
 		final InfoChain chain = new InfoChain(candidate.opInfo(), depChains);
-		history.logDependencies(hints.uuid(), candidate.opInfo(), depChains.stream().map(c -> c.info()).collect(Collectors.toList()));
-		// TODO: this solution does NOT wrap dependencies.
 		return chain.op();
 	}
 

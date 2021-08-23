@@ -6,6 +6,7 @@ module org.scijava.ops {
 	exports org.scijava.ops.core.builder; // contains OpBuilder classes
 	exports org.scijava.ops.hints;
 	exports org.scijava.ops.matcher;
+	exports org.scijava.ops.provenance;
 	exports org.scijava.ops.simplify;
 	exports org.scijava.ops.conversionLoss;
 	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)
@@ -16,6 +17,8 @@ module org.scijava.ops {
 	// -- Open plugins to scijava-common
 	opens org.scijava.ops to org.scijava;
 	opens org.scijava.ops.impl to org.scijava;
+	opens org.scijava.ops.provenance to org.scijava;
+	opens org.scijava.ops.provenance.impl to org.scijava;
 
   // FIXME: This is a file name and is thus unstable
   requires geantyref;

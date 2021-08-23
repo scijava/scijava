@@ -11,16 +11,20 @@ public class MatchingConditions {
 	private final OpRef ref;
 	private final Hints hints;
 
-	public MatchingConditions(OpRef ref, Hints hints) {
+	private MatchingConditions(OpRef ref, Hints hints) {
 		this.ref = ref;
 		this.hints = hints;
 	}
 
-	public OpRef getRef() {
+	public static MatchingConditions from(OpRef r, Hints h, boolean generateMatchingID) {
+		return new MatchingConditions(r, h.getCopy(generateMatchingID));
+	}
+
+	public OpRef ref() {
 		return ref;
 	}
 
-	public Hints getHints() {
+	public Hints hints() {
 		return hints;
 	}
 
@@ -28,13 +32,13 @@ public class MatchingConditions {
 	public boolean equals(Object that) {
 		if (!(that instanceof MatchingConditions)) return false;
 		MatchingConditions thoseConditions = (MatchingConditions) that;
-		return getRef().equals(thoseConditions.getRef()) && getHints().equals(
-			thoseConditions.getHints());
+		return ref().equals(thoseConditions.ref()) && hints().equals(
+			thoseConditions.hints());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getRef(), getHints());
+		return Objects.hash(ref(), hints());
 	}
 
 }

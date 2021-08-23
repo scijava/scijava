@@ -1,10 +1,23 @@
 
 package org.scijava.ops.hints;
 
+import java.util.Deque;
 import java.util.Map;
+import java.util.UUID;
+
+import org.scijava.ops.hints.BaseOpHints.Simplification;
+import org.scijava.ops.provenance.OpHistory;
 
 /**
- * A basic interface for storing and accessing Hints.
+ * A basic interface for storing and accessing Hints. The general structure for a Hint is
+ * <p>
+ * {@code hint = hintType.option}
+ * <p>
+ * <ul>
+ * <li>{@code hintType} designates the category of hint (for example, {@code Simplification} in {@link Simplification})
+ * <li>{@code option} designates the preference within the category (for example, {@code ALLOWED} in {@link Simplification})
+ * <li>{@code hint} is the combination of {@code hintType} and {@code option} with a delimiting {@code .}
+ * </ul>
  *
  * @author Gabriel Selzer
  */
@@ -20,6 +33,25 @@ public interface Hints {
 
 	public Map<String, String> getHints();
 
-	public Hints getCopy();
+	/**
+	 * Generates a new {@link Hints} with identical hints.
+	 * 
+	 * @param generateID designates whether the returned {@link Hints} should
+	 *          designate a new execution chain ID, or whether it should maintain
+	 *          the ID of this {@link Hints}
+	 * @return a new {@link Hints} Object with the same hints as this
+	 *         {@link Hints}
+	 */
+	public Hints getCopy(boolean generateID);
+
+	/**
+	 * Returns the {@link UUID} uniquely identifying the an associated
+	 * {@link Deque} in the {@link OpHistory}
+	 * 
+	 * @return the {@link UUID} corresponding to the execution chain (logged
+	 *         within the {@link OpHistory}) in which these {@link Hints} are
+	 *         being used.
+	 */
+	public UUID executionChainID();
 
 }

@@ -213,7 +213,7 @@ public interface OpEnvironment {
 	 * Note that this method does not inherently provide <b>any</b> guarantees
 	 * pertaining to thread-safety; this API is provided purely for convenience.
 	 * Any calls to {@link OpEnvironment#op(String, Nil, Nil[], Nil)} that require
-	 * a specific {@Hints} should <not> use this method, instead opting for
+	 * a specific {@Hints} should <b>not</b> use this method, instead opting for
 	 * {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)}.
 	 * 
 	 * @param hints

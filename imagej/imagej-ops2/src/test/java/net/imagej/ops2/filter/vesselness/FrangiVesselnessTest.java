@@ -50,6 +50,8 @@ import org.scijava.Context;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.provenance.OpHistory;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.PluginService;
 import org.scijava.script.ScriptService;
 import org.scijava.thread.ThreadService;
@@ -67,7 +69,7 @@ public class FrangiVesselnessTest{
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
+		context = new Context(OpService.class, OpHistoryService.class, CacheService.class,
 			ThreadService.class, ScriptService.class, PluginService.class,
 			TypeService.class);
 		ops = context.service(OpService.class);

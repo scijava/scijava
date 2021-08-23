@@ -52,6 +52,7 @@ import org.scijava.Context;
 import org.scijava.cache.CacheService;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
 import org.scijava.types.TypeService;
@@ -73,7 +74,7 @@ public abstract class AbstractOpTest{
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
+		context = new Context(OpService.class, OpHistoryService.class, CacheService.class,
 			ThreadService.class, PluginService.class, TypeService.class);
 		ops = context.service(OpService.class);
 	}

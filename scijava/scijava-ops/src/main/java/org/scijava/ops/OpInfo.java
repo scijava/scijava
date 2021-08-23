@@ -4,8 +4,6 @@ package org.scijava.ops;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

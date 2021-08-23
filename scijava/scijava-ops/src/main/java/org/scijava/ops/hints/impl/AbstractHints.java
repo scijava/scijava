@@ -3,6 +3,7 @@ package org.scijava.ops.hints.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import org.scijava.ops.hints.Hints;
 
@@ -14,17 +15,34 @@ import org.scijava.ops.hints.Hints;
  */
 public abstract class AbstractHints implements Hints {
 
+	final UUID historyHash;
+
 	// Hints are stored by their hint type (the middle term)
 	final Map<String, String> hints;
 
-	public AbstractHints(String... startingHints) {
+	public AbstractHints(final String... startingHints) {
 		hints = new HashMap<>();
 		for(String hint : startingHints)
 			setHint(hint);
+
+		this.historyHash = UUID.randomUUID();
 	}
 
-	AbstractHints(Map<String, String> hints) {
+	public AbstractHints(final UUID historyHash, final String... startingHints) {
+		hints = new HashMap<>();
+		for(String hint : startingHints)
+			setHint(hint);
+		this.historyHash = historyHash;
+	}
+
+	AbstractHints(final Map<String, String> hints) {
 		this.hints = hints;
+		this.historyHash = UUID.randomUUID();
+	}
+
+	AbstractHints(final UUID historyHash, final Map<String, String> hints) {
+		this.hints = hints;
+		this.historyHash = historyHash;
 	}
 
 	@Override
@@ -70,6 +88,11 @@ public abstract class AbstractHints implements Hints {
 	@Override
 	public int hashCode() {
 		return hints.hashCode();
+	}
+
+@Override
+	public UUID executionChainID() {
+		return historyHash;
 	}
 
 }

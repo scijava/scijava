@@ -61,6 +61,7 @@ import org.scijava.cache.CacheService;
 import org.scijava.io.location.FileLocation;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.provenance.OpHistoryService;
 import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
 import org.scijava.types.TypeService;
@@ -82,7 +83,7 @@ public abstract class ColocalisationTest {
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
+		context = new Context(OpService.class, OpHistoryService.class, CacheService.class,
 			ThreadService.class, StatusService.class, SCIFIOService.class,
 			FormatService.class, PluginService.class, TypeService.class);
 		ops = context.service(OpService.class);

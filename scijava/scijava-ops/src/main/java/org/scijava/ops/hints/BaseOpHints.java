@@ -24,4 +24,12 @@ public class BaseOpHints {
 		public static final String IN_PROGRESS = prefix + ".IN_PROGRESS";
 	}
 
+	// TODO: better naming
+	public static class DependencyMatching {
+		public static final String prefix = "dependencyMatching";
+		public static final String IN_PROGRESS = prefix + ".IN_PROGRESS";
+		public static final String NOT_IN_PROGRESS = prefix + ".NOT_IN_PROGRESS";
+		
+	}
+
 }

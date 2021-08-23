@@ -1,12 +1,11 @@
 
-package org.scijava.ops.engine;
+package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.OpInfo;
 import org.scijava.types.GenericTyped;
+import org.scijava.util.Types;
 
 /**
  * An instance of an {@link OpInfo}
@@ -41,29 +40,24 @@ public class OpInstance<T> implements GenericTyped {
 		return info;
 	}
 
-	public Type type() {
-		return reifiedType;
-	}
-
 	@Override
 	public boolean equals(Object that) {
 		if (!(that instanceof OpInstance)) return false;
 		OpInstance<?> thatInstance = (OpInstance<?>) that;
 		boolean infosEqual = infoChain().equals(thatInstance.infoChain());
 		boolean objectsEqual = op().equals(thatInstance.op());
-		boolean typesEqual = type().equals(thatInstance.type());
+		boolean typesEqual = getType().equals(thatInstance.getType());
 		return infosEqual && objectsEqual && typesEqual;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(infoChain(), op(), type());
+		return Objects.hash(infoChain(), op(), getType());
 	}
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return reifiedType;
 	}
 
 }

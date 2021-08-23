@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -59,16 +58,15 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.engine.OpInstance;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.DependencyMatchingException;
 import org.scijava.ops.engine.matcher.OpMatcher;
@@ -83,7 +81,6 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
-import org.scijava.struct.Member;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeService;
 import org.scijava.types.Types;
@@ -254,12 +251,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (!(specialType.getType() instanceof ParameterizedType)) 
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
-		T op = (T) chain.op();
+		OpInstance<T> instance = (OpInstance<T>) chain.op(specialType.getType());
 		Hints hints = getDefaultHints();
-		UUID id = hints.uuid();
-		RichOp<T> wrappedOp = wrapOp(op, chain, hints, id, specialType.getType());
+		RichOp<T> wrappedOp = wrapOp(instance, hints, hints.uuid());
 		if (!hints.contains(History.SKIP_RECORDING))
-			history.logTopLevelOp(wrappedOp, id);
+			history.logTopLevelOp(wrappedOp, hints.uuid());
 		return wrappedOp.asOpType();
 		
 	}
@@ -373,8 +369,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpInstance<?> instance,
 		UUID executionChainID)
 	{
-			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.infoChain(),
-				conditions.hints(), executionChainID, instance.type());
+		RichOp<?> wrappedOp = wrapOp(instance, conditions.hints(),
+			executionChainID);
 			if (!conditions.hints().contains(History.SKIP_RECORDING))
 				history.logTopLevelOp(wrappedOp, executionChainID);
 			return wrappedOp;
@@ -485,7 +481,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final InfoChain chain = new InfoChain(candidate.opInfo(), depChains);
 		history.logDependencies(hints.uuid(), candidate.opInfo(), depChains.stream().map(c -> c.info()).collect(Collectors.toList()));
 		// TODO: this solution does NOT wrap dependencies.
-		return OpInstance.of(chain.op(), chain, candidate.getType());
+		return chain.op();
 	}
 
 	private List<Object> wrappedDeps(List<MatchingConditions> instances, UUID id) {
@@ -505,23 +501,23 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @return an {@link Op} wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> RichOp<T> wrapOp(T op, InfoChain chain, Hints hints, UUID executionID, Type reifiedOpType) throws IllegalArgumentException {
+	private <T> RichOp<T> wrapOp(OpInstance<T> instance, Hints hints, UUID executionID) throws IllegalArgumentException {
 		if (wrappers == null)
 			initWrappers();
 
 		try {
 			// find the opWrapper that wraps this type of Op
-			Class<?> wrapper = getWrapperClass(op, chain.info());
+			Class<?> wrapper = getWrapperClass(instance.op(), instance.infoChain().info());
 			// obtain the generic type of the Op w.r.t. the Wrapper class 
-			Type reifiedSuperType = Types.getExactSuperType(reifiedOpType, wrapper);
-			OpMetadata metadata = new OpMetadata(reifiedSuperType, chain, executionID, hints, history);
+			Type reifiedSuperType = Types.getExactSuperType(instance.getType(), wrapper);
+			OpMetadata metadata = new OpMetadata(reifiedSuperType, instance.infoChain(), executionID, hints, history);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
-			return opWrapper.wrap(op, metadata);
+			return opWrapper.wrap(instance.op(), metadata);
 		} catch (IllegalArgumentException | SecurityException exc) {
-			throw new IllegalArgumentException(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + op.getClass());
+			throw new IllegalArgumentException(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + instance.op().getClass());
 		} catch (NullPointerException e) {
-			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(reifiedOpType).toString() + ".");
+			throw new IllegalArgumentException("No wrapper exists for " + Types.raw(instance.getType()).toString() + ".");
 		}
 	}
 

@@ -1,6 +1,7 @@
 
 package org.scijava.ops.api;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -65,11 +66,20 @@ public class InfoChain {
 		return info;
 	}
 
-	public Object op() {
+	public OpInstance<?> op() {
+		return OpInstance.of(generateOp(), this, info.opType());
+	}
+
+	public OpInstance<?> op(Type opType) {
+		return OpInstance.of(generateOp(), this, opType);
+	}
+
+	private Object generateOp() {
 		List<Object> dependencyInstances = dependencies().stream() //
-			.map(d -> d.op()) //
+			.map(d -> d.op().op()) //
 			.collect(Collectors.toList());
-		return info().createOpInstance(dependencyInstances).object();
+		Object op = info().createOpInstance(dependencyInstances).object();
+		return op;
 	}
 
 	private synchronized void generateSignature() {

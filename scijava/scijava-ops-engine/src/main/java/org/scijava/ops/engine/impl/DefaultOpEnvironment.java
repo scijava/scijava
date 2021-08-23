@@ -134,7 +134,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 *
 	 * @see MatchingConditions#equals(Object)
 	 */
-	private Map<MatchingConditions, OpInstance> opCache;
+	private Map<MatchingConditions, OpInstance<?>> opCache;
 
 	/**
 	 * Data structure storing all known {@link OpWrapper}s. Each {@link OpWrapper}
@@ -365,15 +365,15 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private RichOp<?> wrapViaCache(MatchingConditions conditions,
 		UUID executionChainID)
 	{
-		OpInstance instance = getInstance(conditions);
+		OpInstance<?> instance = getInstance(conditions);
 		return wrap(conditions, instance, executionChainID);
 	}
 
 	private RichOp<?> wrap(MatchingConditions conditions,
-		OpInstance instance,
+		OpInstance<?> instance,
 		UUID executionChainID)
 	{
-			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.info(),
+			RichOp<Object> wrappedOp = wrapOp(instance.op(), instance.infoChain(),
 				conditions.hints(), executionChainID, instance.type());
 			if (!conditions.hints().contains(History.SKIP_RECORDING))
 				history.logTopLevelOp(wrappedOp, executionChainID);
@@ -398,7 +398,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
 		// see if the ref has been matched already
-		OpInstance cachedOp = getInstance(conditions);
+		OpInstance<?> cachedOp = getInstance(conditions);
 		if (cachedOp != null) return conditions;
 
 		// obtain suitable OpCandidate
@@ -413,17 +413,17 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpCandidate candidate)
 	{
 		// obtain Op instance (with dependencies)
-		OpInstance op = instantiateOp(candidate, conditions.hints());
+		OpInstance<?> op = instantiateOp(candidate, conditions.hints());
 		
 		// cache instance
 		cacheOp(conditions, op);
 	}
 
-	private void cacheOp(MatchingConditions conditions, OpInstance op) {
+	private void cacheOp(MatchingConditions conditions, OpInstance<?> op) {
 		opCache.putIfAbsent(conditions, op);
 	}
 
-	private OpInstance getInstance(MatchingConditions conditions) {
+	private OpInstance<?> getInstance(MatchingConditions conditions) {
 		if (opCache == null) {
 			opCache = new HashMap<>();
 		}
@@ -478,7 +478,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param candidate
 	 * @return an Op with all needed dependencies
 	 */
-	private OpInstance instantiateOp(final OpCandidate candidate, Hints hints)
+	private OpInstance<?> instantiateOp(final OpCandidate candidate, Hints hints)
 	{
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
 		final List<InfoChain> depChains = conditions.stream().map(op -> op.metadata().info()).collect(Collectors.toList());
@@ -493,7 +493,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private List<OpInfo> infos(List<MatchingConditions> instances) {
-		return instances.stream().map(i -> getInstance(i).info().info()).collect(Collectors.toList());
+		return instances.stream().map(i -> getInstance(i).infoChain().info()).collect(Collectors.toList());
 	}
 
 	/**

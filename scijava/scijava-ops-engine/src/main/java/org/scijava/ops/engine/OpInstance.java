@@ -13,13 +13,13 @@ import org.scijava.types.GenericTyped;
  * 
  * @author Gabriel Selzer
  */
-public class OpInstance implements GenericTyped {
+public class OpInstance<T> implements GenericTyped {
 
-	private final Object op;
+	private final T op;
 	private final InfoChain info;
 	private final Type reifiedType;
 
-	public OpInstance(final Object op, final InfoChain backingInfo,
+	public OpInstance(final T op, final InfoChain backingInfo,
 		final Type reifiedType)
 	{
 		this.op = op;
@@ -27,17 +27,17 @@ public class OpInstance implements GenericTyped {
 		this.reifiedType = reifiedType;
 	}
 
-	public static OpInstance of(Object op, InfoChain backingInfo,
+	public static <T> OpInstance<T> of(T op, InfoChain backingInfo,
 		final Type reifiedType)
 	{
-		return new OpInstance(op, backingInfo, reifiedType);
+		return new OpInstance<>(op, backingInfo, reifiedType);
 	}
 
-	public Object op() {
+	public T op() {
 		return op;
 	}
 
-	public InfoChain info() {
+	public InfoChain infoChain() {
 		return info;
 	}
 
@@ -48,8 +48,8 @@ public class OpInstance implements GenericTyped {
 	@Override
 	public boolean equals(Object that) {
 		if (!(that instanceof OpInstance)) return false;
-		OpInstance thatInstance = (OpInstance) that;
-		boolean infosEqual = info().equals(thatInstance.info());
+		OpInstance<?> thatInstance = (OpInstance<?>) that;
+		boolean infosEqual = infoChain().equals(thatInstance.infoChain());
 		boolean objectsEqual = op().equals(thatInstance.op());
 		boolean typesEqual = type().equals(thatInstance.type());
 		return infosEqual && objectsEqual && typesEqual;
@@ -57,7 +57,7 @@ public class OpInstance implements GenericTyped {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(info(), op(), type());
+		return Objects.hash(infoChain(), op(), type());
 	}
 
 	@Override

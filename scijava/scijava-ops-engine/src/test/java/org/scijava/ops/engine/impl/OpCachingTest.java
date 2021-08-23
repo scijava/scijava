@@ -83,14 +83,14 @@ public class OpCachingTest extends AbstractTestEnvironment {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<MatchingConditions, OpInstance> getOpCache(DefaultOpEnvironment opEnv)
+	private Map<MatchingConditions, OpInstance<?>> getOpCache(DefaultOpEnvironment opEnv)
 		throws NoSuchFieldException, SecurityException, IllegalArgumentException,
 		IllegalAccessException
 	{
 		// use reflection to grab a hold of the opCache
 		Field cacheField = opEnv.getClass().getDeclaredField("opCache");
 		cacheField.setAccessible(true);
-		return (Map<MatchingConditions, OpInstance>) cacheField.get(opEnv);
+		return (Map<MatchingConditions, OpInstance<?>>) cacheField.get(opEnv);
 	}
 
 	@Test
@@ -102,10 +102,10 @@ public class OpCachingTest extends AbstractTestEnvironment {
 		Producer<String> op = defOpEnv.op("test.basicOp").input().outType(
 			String.class).producer();
 
-		Map<MatchingConditions, OpInstance> opCache = getOpCache(defOpEnv);
+		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
 
 		// assert there is exactly one Op in the cache
-		OpInstance cachedInstance = opCache.values().iterator().next();
+		OpInstance<?> cachedInstance = opCache.values().iterator().next();
 		Assert.assertEquals(opCache.size(), 1, 0);
 		Assert.assertEquals(
 			"Object in cache was not the same Object that was returned!", basicOp, cachedInstance.op());
@@ -114,8 +114,8 @@ public class OpCachingTest extends AbstractTestEnvironment {
 		MatchingConditions cachedConditions = opCache.keySet().iterator().next();
 		String newString = "This Op invaded the cache!";
 		Producer<String> newProducer = () -> newString;
-		OpInstance invaderInstance = OpInstance.of(newProducer, cachedInstance
-			.info(), new Nil<Producer<String>>() {}.getType());
+		OpInstance<?> invaderInstance = OpInstance.of(newProducer, cachedInstance
+			.infoChain(), new Nil<Producer<String>>() {}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
 		Producer<String> invadedOp = defOpEnv.op("test.basicOp").input().outType(
@@ -134,7 +134,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 		Producer<String> op = defOpEnv.op("test.complicatedOp").input().outType(
 			String.class).producer();
 
-		Map<MatchingConditions, OpInstance> opCache = getOpCache(defOpEnv);
+		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
 
 		// assert there are exactly two Ops in the cache
 		Assert.assertEquals(opCache.size(), 2, 0);

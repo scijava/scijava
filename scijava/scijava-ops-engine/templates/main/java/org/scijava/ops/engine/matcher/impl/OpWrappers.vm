@@ -13,6 +13,7 @@ import org.scijava.function.Container;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
+import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
@@ -26,17 +27,17 @@ public class OpWrappers {
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
-		public RichOp<Producer<T>> wrap(final Producer<T> op, //
+		public RichOp<Producer<T>> wrap(final OpInstance<Producer<T>> instance, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedProducer //
-				extends DefaultRichOp<Producer<T>> //
+				extends AbstractRichOp<Producer<T>> //
 				implements Producer<T>
 			{
 
 				public GenericTypedProducer()
 				{
-					super(op, metadata);
+					super(instance, metadata);
 				}
 
 				@Override
@@ -44,7 +45,7 @@ public class OpWrappers {
 					preprocess();
 
 					// Call the op
-					T out = op.create();
+					T out = instance.op().create();
 
 					postprocess(out);
 
@@ -68,17 +69,17 @@ public class OpWrappers {
 
 		@Override
 		public RichOp<$fg> wrap( //
-			final $fg op, //
+			final OpInstance<$fg> instance, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedFunction${arity} //
-				extends DefaultRichOp<$fg> //
+				extends AbstractRichOp<$fg> //
 				implements $fg 
 			{
 
 				public GenericTypedFunction${arity}()
 				{
-					super(op, metadata);
+					super(instance, metadata);
 				}
 
 				@Override
@@ -87,7 +88,7 @@ public class OpWrappers {
 					preprocess($applyArgs.call($arity));
 
 					// Call the op
-					O out = op.apply($applyArgs.call($arity));
+					O out = instance.op().apply($applyArgs.call($arity));
 
 					postprocess(out);
 					return out;
@@ -111,16 +112,16 @@ public class OpWrappers {
 
 		@Override
 		public RichOp<$cg> wrap( //
-			final $cg op, //
+			final OpInstance<$cg> instance, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedComputer${arity} //
-				extends DefaultRichOp<$cg> //
+				extends AbstractRichOp<$cg> //
 				implements $cg 
 			{
 				public GenericTypedComputer${arity}()
 				{
-					super(op, metadata);
+					super(instance, metadata);
 				}
 
 				@Override
@@ -129,7 +130,7 @@ public class OpWrappers {
 					preprocess($computeArgs.call($arity));
 
 					// Call the op
-					op.compute($computeArgs.call($arity));
+					instance.op().compute($computeArgs.call($arity));
 
 					postprocess(out);
 				}
@@ -153,16 +154,16 @@ public class OpWrappers {
 
 		@Override
 		public RichOp<$ig> wrap( //
-			final $ig op, //
+			final OpInstance<$ig> instance, //
 			final OpMetadata metadata)
 		{
 			class GenericTypedInplace${inplaceSuffix.call($arity, $a)} //
-				extends DefaultRichOp<$ig> //
+				extends AbstractRichOp<$ig> //
 				implements $ig 
 			{
 				public GenericTypedInplace${inplaceSuffix.call($arity, $a)}()
 				{
-					super(op, metadata);
+					super(instance, metadata);
 				}
 
 				@Override
@@ -171,7 +172,7 @@ public class OpWrappers {
 					preprocess($mutateArgs.call($arity, $a));
 
 					// Call the op
-					op.mutate($mutateArgs.call($arity, $a));
+					instance.op().mutate($mutateArgs.call($arity, $a));
 
 					// Log a new execution
 					postprocess(ioType);

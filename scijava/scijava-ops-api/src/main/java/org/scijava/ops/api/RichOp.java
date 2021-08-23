@@ -6,16 +6,22 @@ import java.lang.reflect.Type;
 import org.scijava.types.GenericTyped;
 
 /**
- * An {@OpInstance} with state ({@link OpMetadata})
+ * An {@link OpInstance} with state (i.e. an {@link OpMetadata})
  * 
- * TODO: Take an OpInstance
  * @author Gabriel Selzer
- *
  * @param <T>
  */
 public interface RichOp<T> extends GenericTyped {
 
-	T op();
+	OpInstance<T> instance();
+
+	default T op() {
+		return instance().op();
+	}
+
+	default InfoChain infoChain() {
+		return instance().infoChain();
+	}
 
 	/**
 	 * Returns this {@link RichOp} as its op interface {@link Type}

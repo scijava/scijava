@@ -1,11 +1,12 @@
 
 package org.scijava.ops.engine.conversionLoss.impl;
 
+import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
-import org.scijava.ops.engine.matcher.impl.DefaultRichOp;
+import org.scijava.ops.engine.matcher.impl.AbstractRichOp;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
@@ -25,16 +26,16 @@ public class LossReporterWrapper<I, O> //
 
 	@Override
 	public RichOp<LossReporter<I, O>> wrap( //
-		final LossReporter<I, O> op, //
+		final OpInstance<LossReporter<I, O>> instance, //
 		final OpMetadata metadata)
 	{
 		class GenericTypedLossReporter //
-			extends DefaultRichOp<LossReporter<I, O>> //
+			extends AbstractRichOp<LossReporter<I, O>> //
 			implements LossReporter<I, O> //
 		{
 
 			public GenericTypedLossReporter() {
-				super(op, metadata);
+				super(instance, metadata);
 			}
 
 			@Override
@@ -43,7 +44,7 @@ public class LossReporterWrapper<I, O> //
 				preprocess(from, to);
 
 				// Call the op
-				Double output = op.apply(from, to);
+				Double output = instance.op().apply(from, to);
 
 				postprocess(output);
 

@@ -513,7 +513,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			OpMetadata metadata = new OpMetadata(reifiedSuperType, instance.infoChain(), executionID, hints, history);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
-			return opWrapper.wrap(instance.op(), metadata);
+			return opWrapper.wrap(instance, metadata);
 		} catch (IllegalArgumentException | SecurityException exc) {
 			throw new IllegalArgumentException(exc.getMessage() != null ? exc.getMessage() : "Cannot wrap " + instance.op().getClass());
 		} catch (NullPointerException e) {

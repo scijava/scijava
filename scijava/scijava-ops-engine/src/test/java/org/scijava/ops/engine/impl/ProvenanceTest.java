@@ -1,12 +1,9 @@
 package org.scijava.ops.engine.impl;
 
-import com.google.common.graph.Graph;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
 
 import org.junit.Assert;

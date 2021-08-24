@@ -2,9 +2,6 @@
 package org.scijava.ops.api;
 
 import java.util.Arrays;
-import java.util.Deque;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * A basic interface for storing and accessing Hints. The general structure for
@@ -46,31 +43,11 @@ public interface Hints {
 	}
 
 	/**
-	 * Generates a new {@link Hints} with identical hints but <b>the same</b>
-	 * {@link UUID}.
+	 * Generates a new {@link Hints} with identical hints.
 	 * 
 	 * @return a new {@link Hints} Object with the same hints as this
 	 *         {@link Hints}
 	 */
 	Hints copy();
-
-	/**
-	 * Generates a new {@link Hints} with identical hints, and a <b>random</b>
-	 * {@link UUID}
-	 * 
-	 * @return a new {@link Hints} Object with the same hints as this
-	 *         {@link Hints}
-	 */
-	Hints copyRandomUUID();
-
-	/**
-	 * Returns the {@link UUID} uniquely identifying the associated
-	 * {@link Deque} in the {@link OpHistory}
-	 * 
-	 * @return the {@link UUID} corresponding to the execution chain (logged
-	 *         within the {@link OpHistory}) in which these {@link Hints} are
-	 *         being used.
-	 */
-	UUID uuid();
 
 }

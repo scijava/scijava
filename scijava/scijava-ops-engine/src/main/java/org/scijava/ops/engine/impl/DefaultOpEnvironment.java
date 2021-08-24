@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -253,7 +252,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		@SuppressWarnings("unchecked")
 		OpInstance<T> instance = (OpInstance<T>) chain.op(specialType.getType());
 		Hints hints = getDefaultHints();
-		RichOp<T> wrappedOp = wrapOp(instance, hints, hints.uuid());
+		RichOp<T> wrappedOp = wrapOp(instance, hints);
 		return wrappedOp.asOpType();
 		
 	}
@@ -312,8 +311,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			final Nil<?> outType, Hints hints) {
 		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
-		MatchingConditions conditions = generateCacheHit(ref, hints, true);
-		return (T) wrapViaCache(conditions, conditions.hints().uuid());
+		MatchingConditions conditions = generateCacheHit(ref, hints);
+		return (T) wrapViaCache(conditions);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -322,8 +321,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		OpRef ref = DefaultOpRef.fromTypes(null, specialType.getType(), outType.getType(),
 			toTypes(inTypes));
-		MatchingConditions conditions = insertCacheHit(ref, hints, true, info);
-		return (T) wrapViaCache(conditions, conditions.hints().uuid());
+		MatchingConditions conditions = insertCacheHit(ref, hints, info);
+		return (T) wrapViaCache(conditions);
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -334,19 +333,18 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * Creates an Op instance from an {@link OpInfo} with the provided
 	 * {@link MatchingConditions} as the guidelines for {@link OpInfo} selection.
 	 * This Op instance is put into the {@code opCache}, and is retrievable via
-	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions, UUID)}
+	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions)}
 	 * 
 	 * @param ref the {@link OpRef} request
 	 * @param hints the {@link Hints} containing matching preferences
-	 * @param generateUUID
 	 * @param info the {@link OpInfo} describing the Op that should match these
 	 *          conditions1
 	 * @return the {@link MatchingConditions} that will return the Op described by
 	 *         {@code info} from the op cache
 	 * @throws OpMatchingException
 	 */
-	private MatchingConditions insertCacheHit (final OpRef ref, final Hints hints, final boolean generateUUID, final OpInfo info) {
-		MatchingConditions conditions = MatchingConditions.from(ref, hints, generateUUID);
+	private MatchingConditions insertCacheHit (final OpRef ref, final Hints hints, final OpInfo info) {
+		MatchingConditions conditions = MatchingConditions.from(ref, hints);
 
 		// create new OpCandidate from ref and info
 		OpCandidate candidate = new ManualOpCandidate(this, ref, info, this.matcher);
@@ -356,19 +354,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return conditions;
 	}
 	
-	private RichOp<?> wrapViaCache(MatchingConditions conditions,
-		UUID executionChainID)
+	private RichOp<?> wrapViaCache(MatchingConditions conditions)
 	{
 		OpInstance<?> instance = getInstance(conditions);
-		return wrap(conditions, instance, executionChainID);
+		return wrap(conditions, instance);
 	}
 
 	private RichOp<?> wrap(MatchingConditions conditions,
-		OpInstance<?> instance,
-		UUID executionChainID)
+		OpInstance<?> instance)
 	{
-		RichOp<?> wrappedOp = wrapOp(instance, conditions.hints(),
-			executionChainID);
+		RichOp<?> wrappedOp = wrapOp(instance, conditions.hints());
 			return wrappedOp;
 	}
 
@@ -382,13 +377,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * 
 	 * @param ref the {@link OpRef} request
 	 * @param hints the {@link Hints} containing matching preferences
-	 * @param generateUUID
 	 * @return the {@link MatchingConditions} that will return the Op found from
 	 *         the op cache
 	 */
-	private MatchingConditions generateCacheHit(OpRef ref, Hints hints, boolean generateUUID) 
+	private MatchingConditions generateCacheHit(OpRef ref, Hints hints) 
 	{
-		MatchingConditions conditions = MatchingConditions.from(ref, hints, true);
+		MatchingConditions conditions = MatchingConditions.from(ref, hints);
 		// see if the ref has been matched already
 		OpInstance<?> cachedOp = getInstance(conditions);
 		if (cachedOp != null) return conditions;
@@ -487,7 +481,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @return an {@link Op} wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> RichOp<T> wrapOp(OpInstance<T> instance, Hints hints, UUID executionID) throws IllegalArgumentException {
+	private <T> RichOp<T> wrapOp(OpInstance<T> instance, Hints hints) throws IllegalArgumentException {
 		if (wrappers == null)
 			initWrappers();
 
@@ -496,7 +490,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			Class<?> wrapper = getWrapperClass(instance.op(), instance.infoChain().info());
 			// obtain the generic type of the Op w.r.t. the Wrapper class 
 			Type reifiedSuperType = Types.getExactSuperType(instance.getType(), wrapper);
-			OpMetadata metadata = new OpMetadata(reifiedSuperType, instance.infoChain(), executionID, hints, history);
+			OpMetadata metadata = new OpMetadata(reifiedSuperType, instance.infoChain(), hints, history);
 			// wrap the Op
 			final OpWrapper<T> opWrapper = (OpWrapper<T>) wrappers.get(Types.raw(reifiedSuperType));
 			return opWrapper.wrap(instance, metadata);
@@ -587,8 +581,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					hintsCopy = hintsCopy.plus(Adaptation.FORBIDDEN);
 				}
 
-				MatchingConditions conditions = generateCacheHit(dependencyRef, hintsCopy, false);
-				dependencyChains.add(wrapViaCache(conditions, hints.uuid()));
+				MatchingConditions conditions = generateCacheHit(dependencyRef, hintsCopy);
+				dependencyChains.add(wrapViaCache(conditions));
 			}
 			catch (final OpMatchingException e) {
 				String message = DependencyMatchingException.message(info

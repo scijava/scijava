@@ -2,6 +2,7 @@ package org.scijava.ops.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -174,6 +175,27 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Nil<Double> inType = Nil.of(Double.class);
 		Nil<Thing> outType = Nil.of(Thing.class);
 		Function<Double, Thing> actual = ops.env().opFromID(signature, special, new Nil[] {inType}, outType);
+	}
+
+	@Test
+	public void testOpWithDependencyRecoveryFromString() {
+		OpInfo info = singularInfoOfName("test.provenanceMapper");
+		OpInfo dependency = singularInfoOfName("test.provenanceMapped");
+		InfoChain depChain = new InfoChain(dependency);
+		InfoChain chain = new InfoChain(info, Collections.singletonList(depChain));
+		String signature = chain.signature();
+		Nil<Function<Double[], Thing>> special = new Nil<>() {};
+		Nil<Double[]> inType = Nil.of(Double[].class);
+		Nil<Thing> outType = Nil.of(Thing.class);
+		Function<Double[], Thing> actual = ops.env().opFromID(signature, special, new Nil[] {inType}, outType);
+	}
+
+	private OpInfo singularInfoOfName(String name) {
+		Iterator<OpInfo> infos = ops.env().infos(name).iterator();
+		Assert.assertTrue(infos.hasNext());
+		OpInfo info = infos.next();
+		Assert.assertFalse(infos.hasNext());
+		return info;
 	}
 
 }

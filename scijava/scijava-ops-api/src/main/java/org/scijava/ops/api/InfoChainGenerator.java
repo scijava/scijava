@@ -9,8 +9,8 @@ import org.scijava.plugin.SciJavaPlugin;
 
 public interface InfoChainGenerator extends SciJavaPlugin {
 
-	public static final String DEP_END_DELIM = "[";
-	public static final String DEP_START_DELIM = "]";
+	public static final Character DEP_START_DELIM = '{';
+	public static final Character DEP_END_DELIM = '}';
 
 	/**
 	 * Generates an {@link InfoChain}. This {@link InfoChainGenerator} is only

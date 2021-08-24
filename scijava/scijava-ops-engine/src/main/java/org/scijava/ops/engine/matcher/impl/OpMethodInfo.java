@@ -209,32 +209,39 @@ public class OpMethodInfo implements OpInfo {
 
 		// Create wrapper class
 		String className = formClassName(m);
-		CtClass cc = pool.makeClass(className);
-
-		// Add implemented interface
-		CtClass jasOpType = pool.get(Types.raw(opType).getName());
-		cc.addInterface(jasOpType);
-
-		// Add OpDependency fields
 		List<OpDependencyMember<?>> depMembers = OpUtils.dependencies(struct());
-		for (int i = 0; i < depMembers.size(); i++) {
-			CtField f = createDependencyField(pool, cc, depMembers.get(i), i);
-			cc.addField(f);
+		Class<?> c;
+		try {
+			CtClass cc = pool.makeClass(className);
+
+			// Add implemented interface
+			CtClass jasOpType = pool.get(Types.raw(opType).getName());
+			cc.addInterface(jasOpType);
+
+			// Add OpDependency fields
+			for (int i = 0; i < depMembers.size(); i++) {
+				CtField f = createDependencyField(pool, cc, depMembers.get(i), i);
+				cc.addField(f);
+			}
+
+			// Add constructor
+			CtConstructor constructor = CtNewConstructor.make(createConstructor(
+				depMembers, cc), cc);
+			cc.addConstructor(constructor);
+
+			// add functional interface method
+			CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(m),
+				cc);
+			cc.addMethod(functionalMethod);
+			c = cc.toClass(MethodHandles.lookup());
 		}
-
-		// Add constructor
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(
-			depMembers, cc), cc);
-		cc.addConstructor(constructor);
-
-		// add functional interface method
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(m), cc);
-		cc.addMethod(functionalMethod);
+		catch (Exception e) {
+			c = this.getClass().getClassLoader().loadClass(className);
+		}
 
 		// Return Op instance
 		Class<?>[] depClasses = depMembers.stream().map(dep -> dep.getRawType())
 			.toArray(Class[]::new);
-		Class<?> c = cc.toClass(MethodHandles.lookup());
 		return c.getDeclaredConstructor(depClasses).newInstance(dependencies
 			.toArray());
 	}

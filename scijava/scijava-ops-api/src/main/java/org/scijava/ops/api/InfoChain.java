@@ -82,11 +82,11 @@ public class InfoChain {
 	private synchronized void generateSignature() {
 		if (id != null) return;
 		String s = info().id();
-		s = s.concat(InfoChainGenerator.DEP_START_DELIM);
+		s = s.concat(String.valueOf(InfoChainGenerator.DEP_START_DELIM));
 		for (InfoChain dependency : dependencies()) {
 			s = s.concat(dependency.signature());
 		}
-		id = s.concat(InfoChainGenerator.DEP_END_DELIM);
+		id = s.concat(String.valueOf(InfoChainGenerator.DEP_END_DELIM));
 	}
 
 }

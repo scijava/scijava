@@ -46,8 +46,8 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 
 		for (int i = 0; i < signature.length(); i++) {
 			char ch = signature.charAt(i);
-			if (ch == '[') parenDepth++;
-			else if (ch == ']') {
+			if (ch == DEP_START_DELIM) parenDepth++;
+			else if (ch == DEP_END_DELIM) {
 				parenDepth--;
 				if (parenDepth == 0) {
 					splits.add(signature.substring(start, i + 1));

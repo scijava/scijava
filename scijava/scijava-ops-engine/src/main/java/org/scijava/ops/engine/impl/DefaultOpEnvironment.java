@@ -478,14 +478,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return chain.op();
 	}
 
-	private List<Object> wrappedDeps(List<MatchingConditions> instances, UUID id) {
-		return instances.stream().map(i -> wrapViaCache(i, id)).collect(Collectors.toList());
-	}
-
-	private List<OpInfo> infos(List<MatchingConditions> instances) {
-		return instances.stream().map(i -> getInstance(i).infoChain().info()).collect(Collectors.toList());
-	}
-
 	/**
 	 * Wraps the matched op into an {@link Op} that knows its generic typing.
 	 * 

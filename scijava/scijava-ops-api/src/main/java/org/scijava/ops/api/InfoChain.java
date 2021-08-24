@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
  */
 public class InfoChain {
 
-	public static final String DEP_END_DELIM = "]";
-	public static final String DEP_START_DELIM = "[";
-
 	private final List<InfoChain> dependencies;
 	private String id;
 
@@ -85,11 +82,11 @@ public class InfoChain {
 	private synchronized void generateSignature() {
 		if (id != null) return;
 		String s = info().id();
-		s = s.concat(DEP_START_DELIM);
+		s = s.concat(InfoChainGenerator.DEP_START_DELIM);
 		for (InfoChain dependency : dependencies()) {
 			s = s.concat(dependency.signature());
 		}
-		id = s.concat(DEP_END_DELIM);
+		id = s.concat(InfoChainGenerator.DEP_END_DELIM);
 	}
 
 }

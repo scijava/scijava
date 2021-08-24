@@ -169,11 +169,11 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Function<Double, Thing> mapper = ops.op("test.provenanceMapped").input(5.0).outType(Thing.class).function(hints);
 		InfoChain chain = ops.history().opExecutionChain(mapper);
 		Assert.assertEquals(0, chain.dependencies().size());
-		OpInfo info = chain.info();
+		String signature = chain.signature();
 		Nil<Function<Double, Thing>> special = new Nil<>() {};
 		Nil<Double> inType = Nil.of(Double.class);
 		Nil<Thing> outType = Nil.of(Thing.class);
-		Function<Double, Thing> actual = ops.env().opFromID(info.id(), special, new Nil[] {inType}, outType);
+		Function<Double, Thing> actual = ops.env().opFromID(signature, special, new Nil[] {inType}, outType);
 	}
 
 }

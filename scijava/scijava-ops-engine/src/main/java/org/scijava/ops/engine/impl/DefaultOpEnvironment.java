@@ -37,8 +37,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -50,6 +52,7 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoChainGenerator;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDependencyMember;
@@ -121,6 +124,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private Map<String, OpInfo> idDirectory;
 
+	/**
+	 * Data structure containing all known InfoChainGenerators
+	 */
+	private Set<InfoChainGenerator> infoChainGenerators;
 	/**
 	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRef}
 	 * and {@Hints} used to find an Op) and the {@link OpInstance} (wrapping an Op
@@ -241,8 +248,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	
 	@Override
 	public <T> T opFromID(final String id, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
-		OpInfo info = infoFromID(id);
-		return opFromInfo(info, specialType, inTypes, outType, getDefaultHints());
+		InfoChain info = chainFromID(id);
+		return opFromInfoChain(info, specialType);
 	}
 
 	@Override
@@ -257,26 +264,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		
 	}
 
-	private OpInfo infoFromID(String id) {
+	@Override
+	public InfoChain chainFromID(String signature) {
 		if (idDirectory == null) initIdDirectory();
+		if (infoChainGenerators == null) initInfoChainGenerators();
 
-		// Adapted OpInfo
-		if (id.contains("Adaptation"))
-			return adaptedInfoFromID(id);
-		// Simplified OpInfo
-		if (id.contains("Simplification"))
-			return simplifiedInfoFromID(id);
-			
-		// Plain OpInfo
-			return idDirectory.get(id);
-	}
-
-	private OpInfo adaptedInfoFromID(String id) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
-
-	private OpInfo simplifiedInfoFromID(String id) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		Optional<InfoChainGenerator> genOpt = InfoChainGenerator
+			.findSuitableGenerator(signature, infoChainGenerators);
+		if (genOpt.isEmpty()) throw new IllegalArgumentException(
+			"Could not find an InfoChainGenerator able to handle id" + signature);
+		return genOpt.get().generate(signature, idDirectory, infoChainGenerators);
 	}
 
 	@Override
@@ -554,6 +551,25 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
 				}
 			}
+	}
+
+	private synchronized void initInfoChainGenerators() {
+		if (infoChainGenerators != null) return;
+		Set<InfoChainGenerator> generators = new HashSet<>();
+		for (Discoverer d : discoverers)
+			for (Class<InfoChainGenerator> cls : d.implementingClasses(InfoChainGenerator.class))
+			{
+				InfoChainGenerator wrapper;
+				try {
+					wrapper = cls.getDeclaredConstructor().newInstance();
+					generators.add(wrapper);
+				}
+				catch (Throwable t)
+				{
+					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
+				}
+			}
+		infoChainGenerators = generators;
 	}
 
 	/**

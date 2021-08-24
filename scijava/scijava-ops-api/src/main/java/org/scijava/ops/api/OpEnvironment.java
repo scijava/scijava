@@ -162,6 +162,8 @@ public interface OpEnvironment {
 	<T> T opFromID(final String opID, final Nil<T> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
+	InfoChain chainFromID(final String signature);
+
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
 	}

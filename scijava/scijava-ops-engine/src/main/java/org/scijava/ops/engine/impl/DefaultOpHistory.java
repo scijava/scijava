@@ -1,12 +1,9 @@
 
 package org.scijava.ops.engine.impl;
 
-import com.google.common.graph.Graph;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.scijava.ops.api.InfoChain;
@@ -42,7 +39,7 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	// -- DATA STRCUTURES -- //
 
 	/**
-	 * {@link Map} responsible for recording the {@link Graph} of {@link OpInfo}s
+	 * {@link Map} responsible for recording the {@link InfoChain} of {@link OpInfo}s
 	 * involved to produce the result of a particular matching call
 	 */
 	private final Map<RichOp<?>, InfoChain> dependencyChain = new WeakHashMap<>();
@@ -54,10 +51,7 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	/**
 	 * Returns the list of executions on {@link Object} {@code o} recorded in the
 	 * history
-	 * <p>
-	 * The list of executions is described by a {@link UUID}, which points to a
-	 * particular Op execution chain.
-	 * 
+	 *
 	 * @param o the {@link Object} of interest
 	 * @return an {@link Iterable} of all executions upon {@code o}
 	 */

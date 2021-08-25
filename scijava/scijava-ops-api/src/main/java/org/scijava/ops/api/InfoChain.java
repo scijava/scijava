@@ -71,7 +71,7 @@ public class InfoChain {
 		return OpInstance.of(generateOp(), this, opType);
 	}
 
-	private Object generateOp() {
+	protected Object generateOp() {
 		List<Object> dependencyInstances = dependencies().stream() //
 			.map(d -> d.op().op()) //
 			.collect(Collectors.toList());

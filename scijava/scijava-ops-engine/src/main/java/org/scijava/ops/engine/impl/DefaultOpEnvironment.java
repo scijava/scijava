@@ -652,11 +652,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				// resolve adaptor dependencies
 				final List<RichOp<?>> dependencies = resolveOpDependencies(adaptor,
 					map, hints);
-
-				@SuppressWarnings("unchecked")
-				Function<Object, Object> adaptorOp = //
-					(Function<Object, Object>) adaptor.createOpInstance(dependencies) //
-						.object(); //
+				InfoChain adaptorChain = new DependencyInstantiatedInfoChain(adaptor, dependencies);
 
 				// grab the first type parameter from the OpInfo and search for
 				// an Op that will then be adapted (this will be the only input of the
@@ -669,7 +665,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
 					.getType(), map);
 				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
-					.opInfo(), adapterOpType, adaptor, adaptorOp);
+					.opInfo(), adapterOpType, adaptorChain);
 				OpCandidate adaptedCandidate = new OpCandidate(this, ref, adaptedInfo, map);
 				adaptedCandidate.setStatus(StatusCode.MATCH);
 				return adaptedCandidate;

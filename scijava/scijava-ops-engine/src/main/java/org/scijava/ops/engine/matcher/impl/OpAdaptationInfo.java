@@ -9,8 +9,10 @@ import java.util.function.Function;
 
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.struct.FunctionalParameters;
@@ -21,6 +23,7 @@ import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
+import org.scijava.types.Nil;
 
 /**
  * {@link OpInfo} for ops that have been adapted to some other Op type.
@@ -33,21 +36,19 @@ public class OpAdaptationInfo implements OpInfo {
 	private static final String IMPL_DELIMITER = "|Adaptation|";
 
 	private final OpInfo srcInfo;
-	private final OpInfo adaptorInfo;
+	private final InfoChain adaptorChain;
 	private final Type type;
-	private final Function<Object, Object> adaptor;
 	private final Hints hints;
 
 	private Struct struct;
 	private ValidityException validityException;
 
 	public OpAdaptationInfo(OpInfo srcInfo, Type type,
-		OpInfo adaptorInfo, Function<Object, Object> adaptor)
+		InfoChain adaptorChain)
 	{
 		this.srcInfo = srcInfo;
-		this.adaptorInfo = adaptorInfo;
+		this.adaptorChain = adaptorChain;
 		this.type = type;
-		this.adaptor = adaptor;
 
 		// NOTE: since the source Op has already been shown to be valid, there is
 		// not
@@ -102,7 +103,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + IMPL_DELIMITER + adaptorInfo.implementationName();
+		return srcInfo.implementationName() + IMPL_DELIMITER + adaptorChain.signature();
 	}
 
 	/**
@@ -110,8 +111,13 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
+		@SuppressWarnings("unchecked")
+		OpInstance<Function<Object, Object>> adaptorInstance =
+			(OpInstance<Function<Object, Object>>) adaptorChain.op(
+				new Nil<Function<Object, Object>>()
+				{}.getType());
 		final Object op = srcInfo.createOpInstance(dependencies).object();
-		final Object adaptedOp = adaptor.apply(op);
+		final Object adaptedOp = adaptorInstance.op().apply(op);
 		return struct().createInstance(adaptedOp);
 	}
 
@@ -139,28 +145,28 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public String version() {
-		return adaptorInfo.version();
+		return adaptorChain.info().version();
 	}
 
 	/**
 	 * For an adapted Op, we define the implementation name as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The implementation name of the <b>original info</b>
+	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}
 	 * <li>The adaptation delimiter
-	 * <li>The implementation name of the <b>adaptor</b>
+	 * <li>The implementation name of the <b>original info</b>
 	 * </ol>
 	 * <p>
 	 * For example, for a source {@code com.example.foo.Bar@1.0.0} with adaptor
 	 * {@code com.example.foo.BazAdaptor@1.0.0} with delimiter
 	 * {@code |Adaptation|}, you might have
 	 * <p>
-	 * {@code com.example.foo.Bar@1.0.0|Adaptation|com.example.foo.BazAdaptor@1.0.0}
+	 * {@code com.example.foo.BazAdaptor@1.0.0{}|Adaptation|com.example.foo.Bar@1.0.0}
 	 * <p>
 	 */
 	@Override
 	public String id() {
-		return srcInfo.id() + IMPL_DELIMITER + adaptorInfo.id();
+		return adaptorChain.signature() + IMPL_DELIMITER + srcInfo.id();
 	}
 
 }

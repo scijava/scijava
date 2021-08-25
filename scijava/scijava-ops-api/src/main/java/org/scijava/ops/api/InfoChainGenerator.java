@@ -2,8 +2,11 @@
 package org.scijava.ops.api;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.scijava.plugin.SciJavaPlugin;
 
@@ -38,9 +41,10 @@ public interface InfoChainGenerator extends SciJavaPlugin {
 	static Optional<InfoChainGenerator> findSuitableGenerator(String signature,
 		Collection<InfoChainGenerator> generators)
 	{
-		return generators.stream() //
+		Optional<InfoChainGenerator> gen = generators.stream() //
 			.filter(g -> g.canGenerate(signature)) //
 			.max((i1, i2) -> (int) (i1.priority() - i2.priority()));
+		return gen;
 	}
 
 	/**

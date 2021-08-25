@@ -33,7 +33,7 @@ import org.scijava.types.Nil;
  */
 public class OpAdaptationInfo implements OpInfo {
 
-	private static final String IMPL_DELIMITER = "|Adaptation|";
+	protected static final String IMPL_DELIMITER = "|Adaptation|";
 
 	private final OpInfo srcInfo;
 	private final InfoChain adaptorChain;

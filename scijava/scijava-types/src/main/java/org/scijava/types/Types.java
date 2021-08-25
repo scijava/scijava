@@ -2596,6 +2596,12 @@ public final class Types {
 				}
 				return replacementType;
 			}
+			if (type instanceof GenericArrayType && typeVarAssigns != null) {
+				final GenericArrayType genArrType = (GenericArrayType) type;
+				final Type replacementType = Types.substituteTypeVariables(genArrType
+					.getGenericComponentType(), typeVarAssigns);
+				return new GenericArrayTypeImpl(replacementType);
+			}
 			return type;
 		}
 

@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
@@ -69,6 +70,50 @@ public class SimplificationMetadata {
 			throw new IllegalArgumentException(
 				"Invalid SimplificationMetadata for Op - incompatible number of input simplifiers and focusers");
 		numInputs = refSimplifiers.size();
+	}
+
+	public SimplificationMetadata(OpInfo info, List<InfoChain> refSimplifiers, List<InfoChain> infoFocusers, InfoChain infoSimplifier, InfoChain refFocuser, Optional<InfoChain> outputCopier) {
+		this.info = info;
+		this.opType = Types.raw(info.opType());
+		
+		this.refSimplifiers = refSimplifiers.stream().map(chain -> chain.info()).collect(Collectors.toList());
+		this.inputSimplifiers = refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
+
+		this.infoFocusers = infoFocusers.stream().map(chain -> chain.info()).collect(Collectors.toList());
+		this.inputFocusers = infoFocusers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
+
+		this.infoSimplifier = infoSimplifier.info();
+		this.outputSimplifier = (Function<?, ?>) infoSimplifier.op().op();
+
+		this.refFocuser = refFocuser.info();
+		this.outputFocuser = (Function<?, ?>) refFocuser.op().op();
+
+		if (outputCopier.isEmpty()) {
+			this.copyOp = Optional.empty();
+		}
+		else {
+			this.copyOp = Optional.of((Computers.Arity1<?, ?>) outputCopier.get().op()
+				.op());
+		}
+
+		if (refSimplifiers.size() != infoFocusers.size())
+			throw new IllegalArgumentException(
+				"Invalid SimplificationMetadata for Op - incompatible number of input simplifiers and focusers");
+		numInputs = refSimplifiers.size();
+
+		List<MutatorChain> inputChains = new ArrayList<>();
+		for (int i = 0; i < numInputs; i++) {
+			OpInfo simplifier = this.refSimplifiers.get(i);
+			OpInfo focuser = this.infoFocusers.get(i);
+			Type inType = simplifier.inputs().get(0).getType();
+			Type outType = focuser.output().getType();
+			inputChains.add(new MutatorChain(simplifier, focuser, new TypePair(inType, outType)));
+		}
+		this.argChains = inputChains.toArray(MutatorChain[]::new);
+
+		Type inType = this.infoSimplifier.inputs().get(0).getType();
+		Type outType = this.refFocuser.output().getType();
+		this.outChain = new MutatorChain(this.infoSimplifier, this.refFocuser, new TypePair(inType, outType));
 	}
 
 	private static List<Function<?, ?>> inputSimplifiers(

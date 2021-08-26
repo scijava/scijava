@@ -38,6 +38,7 @@ public class SimplifiedOpInfo implements OpInfo {
 	private static final String INPUT_FOCUSER_DELIMITER = "|InputFocuser:";
 	private static final String OUTPUT_SIMPLIFIER_DELIMITER = "|OutputSimplifier:";
 	private static final String OUTPUT_FOCUSER_DELIMITER = "|OutputFocuser:";
+	private static final String OUTPUT_COPIER_DELIMITER = "|OutputCopier:";
 
 	private final OpInfo srcInfo;
 	private final SimplificationMetadata metadata;
@@ -267,11 +268,12 @@ public class SimplifiedOpInfo implements OpInfo {
 	 * For a simplified Op, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The implementation name of the source Op
-	 * <li>The implementation name of all input simplifiers
-	 * <li>The implementation name of all input focusers
-	 * <li>The implementation name of the output simplifier
-	 * <li>The implementation name of the output focuser
+	 * <li>The signature of the source Op
+	 * <li>The signature of all input simplifiers
+	 * <li>The signature of all input focusers
+	 * <li>The signature of the output simplifier
+	 * <li>The signature of the output focuser
+	 * <li>The signature of the output copier
 	 * </ol>
 	 * <p>
 	 */

@@ -21,6 +21,7 @@ import java.util.stream.StreamSupport;
 import org.scijava.function.Computers;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
@@ -164,23 +165,15 @@ public class SimplificationUtils {
 	/**
 	 * Finds required mutators (i.e. simplifier or focuser).
 	 * 
-	 * @param env - the {@link OpEnvironment} to query for the needed Op
 	 * @param mutatorInfos - the {@link OpInfo}s for which Ops are needed
-	 * @param originalInputs - the concrete input {@link Type} of the Op.
-	 * @param mutatedInputs - the concrete output {@link Type} of the Op.
 	 * @return a set of {@code Op}s, instantiated from {@code mutatorInfo}s, that
 	 *         satisfy the prescribed input/output types.
 	 */
-	public static List<Function<?, ?>> findArgMutators(OpEnvironment env, List<OpInfo> mutatorInfos,
-		Type[] originalInputs, Type[] mutatedInputs)
+	public static List<Function<?, ?>> findArgMutators(List<InfoChain> mutatorInfos)
 	{
-		if (mutatorInfos.size() != originalInputs.length)
-			throw new IllegalStateException(
-				"Mismatch between number of argument mutators and arguments in ref:\n");
-		
 		List<Function<?, ?>> mutators = new ArrayList<>();
 		for(int i = 0; i < mutatorInfos.size(); i++) {
-			Function<?, ?> mutator = findArgMutator(env, mutatorInfos.get(i), originalInputs[i], mutatedInputs[i]);
+			Function<?, ?> mutator = (Function<?, ?>) mutatorInfos.get(i).op().op();
 			mutators.add(mutator);
 		}
 		return mutators;
@@ -189,8 +182,7 @@ public class SimplificationUtils {
 	public static Function<?, ?> findArgMutator(OpEnvironment env, OpInfo mutatorInfo, Type originalInput, Type mutatedInput){
 			Type opType = Types.parameterize(Function.class, new Type[] {originalInput, mutatedInput});
 			Function<?, ?> mutator = (Function<?, ?>) env.opFromInfo(mutatorInfo,
-				Nil.of(opType), new Nil<?>[] { Nil.of(originalInput) }, Nil.of(
-					mutatedInput));
+				Nil.of(opType));
 			return mutator;
 	}
 

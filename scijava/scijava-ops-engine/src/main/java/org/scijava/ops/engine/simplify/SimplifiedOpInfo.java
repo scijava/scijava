@@ -298,6 +298,10 @@ public class SimplifiedOpInfo implements OpInfo {
 		// output focuser
 		sb.append(OUTPUT_FOCUSER_DELIMITER);
 		sb.append(metadata.outputFocuserInfo().implementationName());
+
+		// output copier
+		sb.append(OUTPUT_COPIER_DELIMITER);
+		sb.append(metadata.copyOpChain().signature());
 		return sb.toString();
 	}
 }

@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 
 public class ChainCluster {
@@ -19,7 +20,7 @@ public class ChainCluster {
 	}
 
 	public static ChainCluster generateCluster(TypePair pairing,
-		List<OpInfo> simplifiers, List<OpInfo> focusers)
+		List<OpInfo> simplifiers, List<OpInfo> focusers, OpEnvironment env)
 	{
 		ChainCluster cluster = new ChainCluster(pairing);
 		List<List<OpInfo>> chains = Lists.cartesianProduct(simplifiers, focusers);
@@ -27,7 +28,7 @@ public class ChainCluster {
 		for (List<OpInfo> chainList : chains) {
 			OpInfo simplifier = chainList.get(0);
 			OpInfo focuser = chainList.get(1);
-			MutatorChain chain = new MutatorChain(simplifier, focuser, pairing);
+			MutatorChain chain = new MutatorChain(simplifier, focuser, pairing, env);
 			if (chain.isValid()) cluster.addChain(chain);
 		}
 		return cluster;

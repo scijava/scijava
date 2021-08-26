@@ -1,27 +1,38 @@
 package org.scijava.ops.engine.simplify;
 
 import java.lang.reflect.Type;
+import java.util.function.Function;
 
+import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.types.Nil;
 import org.scijava.util.Types;
 
 public class MutatorChain implements Comparable<MutatorChain>{
 
 	private final OpInfo simplifier;
+	private InfoChain simpleChain;
 	private final OpInfo focuser;
+	private InfoChain focusChain;
 
 	private final Type input;
 	private final Type simple;
 	private final Type unfocused;
 	private final Type output;
 
+	private final OpEnvironment env;
+
 	public MutatorChain(OpInfo simplifier,
-		OpInfo focuser, TypePair ioTypes)
+		OpInfo focuser, TypePair ioTypes, OpEnvironment env)
 	{
 		this.simplifier = simplifier;
+		this.simpleChain = null;
 		this.focuser = focuser;
+		this.focusChain = null;
 		this.input = ioTypes.getA();
 		this.output = ioTypes.getB();
+		this.env = env;
 		
 		// determine simple and unfocused types.
 		Type simplifierInput = simplifier.inputs().stream().filter(m -> !m
@@ -31,6 +42,30 @@ public class MutatorChain implements Comparable<MutatorChain>{
 			input, simplifierInput, simplifierOutput);
 		Type focuserOutput = focuser.output().getType();
 		Type focuserInput = focuser.inputs().stream().filter(m -> !m
+			.isOutput()).findFirst().get().getType();
+		unfocused = SimplificationUtils.resolveMutatorTypeArgs(
+			output, focuserOutput, focuserInput);
+	}
+
+	public MutatorChain(InfoChain simplifier,
+		InfoChain focuser, TypePair ioTypes, OpEnvironment env)
+	{
+		this.simplifier = simplifier.info();
+		this.simpleChain = simplifier;
+		this.focuser = focuser.info();
+		this.focusChain = focuser;
+		this.input = ioTypes.getA();
+		this.output = ioTypes.getB();
+		this.env = env;
+		
+		// determine simple and unfocused types.
+		Type simplifierInput = this.simplifier.inputs().stream().filter(m -> !m
+			.isOutput()).findFirst().get().getType();
+		Type simplifierOutput = this.simplifier.output().getType();
+		simple = SimplificationUtils.resolveMutatorTypeArgs(
+			input, simplifierInput, simplifierOutput);
+		Type focuserOutput = this.focuser.output().getType();
+		Type focuserInput = this.focuser.inputs().stream().filter(m -> !m
 			.isOutput()).findFirst().get().getType();
 		unfocused = SimplificationUtils.resolveMutatorTypeArgs(
 			output, focuserOutput, focuserInput);
@@ -46,12 +81,26 @@ public class MutatorChain implements Comparable<MutatorChain>{
 		return (sIdentity ? 1 : 0) + (fIdentity ? 1 : 0);
 	}
 
-	public OpInfo simplifier() {
-		return simplifier;
+	public InfoChain simplifier() {
+		if (simpleChain == null) generateSimpleChain();
+		return simpleChain;
 	}
 
-	public OpInfo focuser() {
-		return focuser;
+	private synchronized void generateSimpleChain() {
+		if (simpleChain != null) return;
+		Type specialType = Types.parameterize(Function.class, input, simple);
+		simpleChain = env.chainFromInfo(simplifier, Nil.of(specialType));
+	}
+
+	public InfoChain focuser() {
+		if (focusChain == null) generateFocusChain();
+		return focusChain;
+	}
+
+	private synchronized void generateFocusChain() {
+		if (focusChain != null) return;
+		Type specialType = Types.parameterize(Function.class, unfocused, output);
+		focusChain = env.chainFromInfo(focuser, Nil.of(specialType));
 	}
 
 	public Type inputType() {

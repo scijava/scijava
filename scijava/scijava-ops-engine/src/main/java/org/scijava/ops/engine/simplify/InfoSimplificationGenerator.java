@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
@@ -63,7 +64,7 @@ public class InfoSimplificationGenerator {
 		Map<TypePair, MutatorChain> chains = new HashMap<>();
 		pathways.forEach((pair, cluster) -> chains.put(pair, resolveCluster(cluster)));
 
-		SimplificationMetadata metadata = new SimplificationMetadata(ref, info, argPairings, outPairing, chains, env);
+		SimplificationMetadata metadata = new SimplificationMetadata(ref, info, argPairings, outPairing, chains);
 		return new SimplifiedOpInfo(info, env, metadata);
 	}
 
@@ -96,14 +97,14 @@ public class InfoSimplificationGenerator {
 			if (pathways.keySet().contains(pairing)) continue;
 			List<OpInfo> simplifiers = ref.simplifierSets().get(i);
 			List<OpInfo> focusers = infoFocusers.get(i);
-			ChainCluster cluster = ChainCluster.generateCluster(pairing, simplifiers, focusers);
+			ChainCluster cluster = ChainCluster.generateCluster(pairing, simplifiers, focusers, env);
 			pathways.put(pairing, cluster);
 		}
 
 		if(!pathways.keySet().contains(outPairing)) {
 			List<OpInfo> simplifiers = outputSimplifiers;
 			List<OpInfo> focusers = ref.outputFocusers();
-			ChainCluster cluster = ChainCluster.generateCluster(outPairing, simplifiers, focusers);
+			ChainCluster cluster = ChainCluster.generateCluster(outPairing, simplifiers, focusers, env);
 			pathways.put(outPairing, cluster);
 		}
 

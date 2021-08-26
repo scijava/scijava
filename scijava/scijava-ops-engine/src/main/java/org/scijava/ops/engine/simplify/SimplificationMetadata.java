@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.scijava.function.Computers;
+import org.scijava.function.Computers.Arity1;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
@@ -31,21 +32,20 @@ public class SimplificationMetadata {
 	private final MutatorChain[] argChains;
 	private final MutatorChain outChain;
 
-	private final List<OpInfo> refSimplifiers;
+	private final List<InfoChain> refSimplifiers;
 	private final List<Function<?, ?>> inputSimplifiers;
-	private final List<OpInfo> infoFocusers;
+	private final List<InfoChain> infoFocusers;
 	private final List<Function<?, ?>> inputFocusers;
-	private final OpInfo infoSimplifier;
+	private final InfoChain infoSimplifier;
 	private final Function<?, ?> outputSimplifier;
-	private final OpInfo refFocuser;
+	private final InfoChain refFocuser;
 	private final Function<?, ?> outputFocuser;
 
-	private final Optional<Computers.Arity1<?, ?>> copyOp;
+	private final Optional<InfoChain> copyOpChain;
 
 	private final int numInputs;
 
-	public SimplificationMetadata(SimplifiedOpRef ref, OpInfo info, TypePair[] argPairs, TypePair outPair, Map<TypePair, MutatorChain> mutators,
-		OpEnvironment env)
+	public SimplificationMetadata(SimplifiedOpRef ref, OpInfo info, TypePair[] argPairs, TypePair outPair, Map<TypePair, MutatorChain> mutators)
 	{
 		this.info = info;
 		this.opType = Types.raw(info.opType());
@@ -53,18 +53,18 @@ public class SimplificationMetadata {
 		this.outChain = mutators.get(outPair);
 
 		this.refSimplifiers = Arrays.stream(argChains).map(chain -> chain.simplifier()).collect(Collectors.toList());
-		this.inputSimplifiers = inputSimplifiers(argChains, env, this.refSimplifiers);
+		this.inputSimplifiers = inputSimplifiers(this.refSimplifiers);
 
 		this.infoFocusers = Arrays.stream(argChains).map(chain -> chain.focuser()).collect(Collectors.toList());
-		this.inputFocusers = inputFocusers(argChains, env, this.infoFocusers);
+		this.inputFocusers = inputFocusers(this.infoFocusers);
 
 		this.infoSimplifier = outChain.simplifier();
-		this.outputSimplifier = outputSimplifier(outChain, env, this.infoSimplifier);
+		this.outputSimplifier = outputSimplifier(this.infoSimplifier);
 
 		this.refFocuser = outChain.focuser();
-		this.outputFocuser = outputFocuser(outChain, env, this.refFocuser);
+		this.outputFocuser = outputFocuser(this.refFocuser);
 
-		this.copyOp = ref.copyOp();
+		this.copyOpChain = ref.copyOpChain();
 
 		if (refSimplifiers.size() != infoFocusers.size())
 			throw new IllegalArgumentException(
@@ -72,29 +72,23 @@ public class SimplificationMetadata {
 		numInputs = refSimplifiers.size();
 	}
 
-	public SimplificationMetadata(OpInfo info, List<InfoChain> refSimplifiers, List<InfoChain> infoFocusers, InfoChain infoSimplifier, InfoChain refFocuser, Optional<InfoChain> outputCopier) {
+	public SimplificationMetadata(OpInfo info, List<InfoChain> refSimplifiers, List<InfoChain> infoFocusers, InfoChain infoSimplifier, InfoChain refFocuser, Optional<InfoChain> outputCopier, OpEnvironment env) {
 		this.info = info;
 		this.opType = Types.raw(info.opType());
 		
-		this.refSimplifiers = refSimplifiers.stream().map(chain -> chain.info()).collect(Collectors.toList());
+		this.refSimplifiers = refSimplifiers;
 		this.inputSimplifiers = refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
 
-		this.infoFocusers = infoFocusers.stream().map(chain -> chain.info()).collect(Collectors.toList());
+		this.infoFocusers = infoFocusers;
 		this.inputFocusers = infoFocusers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
 
-		this.infoSimplifier = infoSimplifier.info();
+		this.infoSimplifier = infoSimplifier;
 		this.outputSimplifier = (Function<?, ?>) infoSimplifier.op().op();
 
-		this.refFocuser = refFocuser.info();
+		this.refFocuser = refFocuser;
 		this.outputFocuser = (Function<?, ?>) refFocuser.op().op();
 
-		if (outputCopier.isEmpty()) {
-			this.copyOp = Optional.empty();
-		}
-		else {
-			this.copyOp = Optional.of((Computers.Arity1<?, ?>) outputCopier.get().op()
-				.op());
-		}
+		this.copyOpChain = outputCopier;
 
 		if (refSimplifiers.size() != infoFocusers.size())
 			throw new IllegalArgumentException(
@@ -103,53 +97,37 @@ public class SimplificationMetadata {
 
 		List<MutatorChain> inputChains = new ArrayList<>();
 		for (int i = 0; i < numInputs; i++) {
-			OpInfo simplifier = this.refSimplifiers.get(i);
-			OpInfo focuser = this.infoFocusers.get(i);
-			Type inType = simplifier.inputs().get(0).getType();
-			Type outType = focuser.output().getType();
-			inputChains.add(new MutatorChain(simplifier, focuser, new TypePair(inType, outType)));
+			InfoChain simplifier = this.refSimplifiers.get(i);
+			InfoChain focuser = this.infoFocusers.get(i);
+			Type inType = simplifier.info().inputs().get(0).getType();
+			Type outType = focuser.info().output().getType();
+			inputChains.add(new MutatorChain(simplifier, focuser, new TypePair(inType, outType), env));
 		}
 		this.argChains = inputChains.toArray(MutatorChain[]::new);
 
-		Type inType = this.infoSimplifier.inputs().get(0).getType();
-		Type outType = this.refFocuser.output().getType();
-		this.outChain = new MutatorChain(this.infoSimplifier, this.refFocuser, new TypePair(inType, outType));
+		Type inType = this.infoSimplifier.info().inputs().get(0).getType();
+		Type outType = this.refFocuser.info().output().getType();
+		this.outChain = new MutatorChain(this.infoSimplifier, this.refFocuser, new TypePair(inType, outType), env);
 	}
 
-	private static List<Function<?, ?>> inputSimplifiers(
-		MutatorChain[] chains, OpEnvironment env, List<OpInfo> refSimplifiers)
+	private static List<Function<?, ?>> inputSimplifiers(List<InfoChain> refSimplifiers)
 	{
-		Type[] originalInputs = Arrays.stream(chains).map(chain -> chain.inputType()).toArray(Type[]::new);
-		Type[] simpleInputs = Arrays.stream(chains).map(chain -> chain.simpleType()).toArray(Type[]::new);
-		return SimplificationUtils.findArgMutators(env, refSimplifiers,
-			originalInputs, simpleInputs);
+		return refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
 	}
 
-	private static List<Function<?, ?>> inputFocusers(MutatorChain[] chains, 
-		OpEnvironment env, List<OpInfo> infoFocusers)
+	private static List<Function<?, ?>> inputFocusers(List<InfoChain> infoFocusers)
 	{
-		Type[] unfocusedInputs = Arrays.stream(chains).map(chain -> chain.unfocusedType()).toArray(Type[]::new);
-		Type[] focusedInputs = Arrays.stream(chains).map(chain -> chain.outputType()).toArray(Type[]::new);
-		return SimplificationUtils.findArgMutators(env, infoFocusers,
-			unfocusedInputs, focusedInputs);
+		return infoFocusers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
 	}
 
-	private static Function<?, ?> outputSimplifier(MutatorChain chain,
-		OpEnvironment env, OpInfo infoSimplifier)
+	private static Function<?, ?> outputSimplifier(InfoChain infoSimplifier)
 	{
-		Type originalOutput = chain.inputType();
-		Type simpleOutput = chain.simpleType();
-		return SimplificationUtils.findArgMutator(env, infoSimplifier,
-			originalOutput, simpleOutput);
+		return (Function<?, ?>) infoSimplifier.op().op();
 	}
 
-	private static Function<?, ?> outputFocuser(MutatorChain chain,
-		OpEnvironment env, OpInfo refFocuser)
+	private static Function<?, ?> outputFocuser(InfoChain refFocuser)
 	{
-		Type unfocusedOutput = chain.unfocusedType();
-		Type focusedOutput = chain.outputType();
-		return SimplificationUtils.findArgMutator(env, refFocuser, unfocusedOutput,
-			focusedOutput);
+		return (Function<?, ?>) refFocuser.op().op();
 	}
 
 	public List<Function<?, ?>> inputSimpilfiers() {
@@ -209,11 +187,16 @@ public class SimplificationMetadata {
 	}
 
 	public boolean hasCopyOp() {
-		return copyOp.isPresent();
+		return copyOpChain.isPresent();
+	}
+
+	public InfoChain copyOpChain() {
+		return copyOpChain.get();
 	}
 
 	public Computers.Arity1<?, ?> copyOp() {
-		return copyOp.get();
+		// TODO: Should we prevent multiple instantiations?
+		return (Arity1<?, ?>) copyOpChain.get().op().op();
 	}
 
 	/**
@@ -266,7 +249,7 @@ public class SimplificationMetadata {
 		args.add(outputFocuser);
 		args.add(op);
 		if(hasCopyOp())
-			args.add(copyOp.get());
+			args.add(copyOp());
 
 		return args.toArray();
 	}
@@ -293,19 +276,19 @@ public class SimplificationMetadata {
 	}
 
 	protected List<OpInfo> inputSimplifierInfos() {
-		return refSimplifiers;
+		return refSimplifiers.stream().map(chain -> chain.info()).collect(Collectors.toList());
 	}
 
 	protected List<OpInfo> inputFocuserInfos() {
-		return infoFocusers;
+		return infoFocusers.stream().map(chain -> chain.info()).collect(Collectors.toList());
 	}
 
 	protected OpInfo outputSimplifierInfo() {
-		return infoSimplifier;
+		return infoSimplifier.info();
 	}
 
 	protected OpInfo outputFocuserInfo() {
-		return refFocuser;
+		return refFocuser.info();
 	}
 
 }

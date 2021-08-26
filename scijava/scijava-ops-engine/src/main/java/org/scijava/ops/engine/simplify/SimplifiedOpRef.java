@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
@@ -31,7 +32,7 @@ public class SimplifiedOpRef implements OpRef {
 	private final OpRef srcRef;
 	private final List<List<OpInfo>> simplifierSets;
 	private final List<OpInfo> outputFocusers;
-	private final Optional<Computers.Arity1<?, ?>> copyOp;
+	private final Optional<InfoChain> copyOpChain;
 
 	private SimplifiedOpRef(OpRef ref, OpEnvironment env) {
 		// TODO: this is probably incorrect
@@ -41,11 +42,11 @@ public class SimplifiedOpRef implements OpRef {
 		this.simplifierSets = SimplificationUtils.simplifyArgs(env, ref.getArgs());
 		this.outputFocusers = SimplificationUtils.getFocusers(env, ref
 			.getOutType());
-		this.copyOp = Optional.empty();
+		this.copyOpChain = Optional.empty();
 	}
 
 	private SimplifiedOpRef(OpRef ref, OpEnvironment env,
-		Computers.Arity1<?, ?> copyOp)
+		InfoChain copyOpChain)
 	{
 		this.name = ref.getName();
 		this.rawType = Types.raw(ref.getType());
@@ -53,7 +54,7 @@ public class SimplifiedOpRef implements OpRef {
 		this.simplifierSets = SimplificationUtils.simplifyArgs(env, ref.getArgs());
 		this.outputFocusers = SimplificationUtils.getFocusers(env, ref
 			.getOutType());
-		this.copyOp = Optional.of(copyOp);
+		this.copyOpChain = Optional.of(copyOpChain);
 	}
 
 	public OpRef srcRef() {
@@ -72,8 +73,8 @@ public class SimplifiedOpRef implements OpRef {
 		return outputFocusers;
 	}
 
-	public Optional<Computers.Arity1<?, ?>> copyOp() {
-		return copyOp;
+	public Optional<InfoChain> copyOpChain() {
+		return copyOpChain;
 	}
 
 	public static SimplifiedOpRef simplificationOf(OpEnvironment env, OpRef ref,
@@ -84,7 +85,7 @@ public class SimplifiedOpRef implements OpRef {
 		if (mutableIndex == -1) return new SimplifiedOpRef(ref, env);
 
 		// if the Op's output is mutable, we will also need a copy Op for it.
-		Computers.Arity1<?, ?> copyOp = simplifierCopyOp(env, ref
+		InfoChain copyOp = simplifierCopyOp(env, ref
 			.getArgs()[mutableIndex], hints);
 		return new SimplifiedOpRef(ref, env, copyOp);
 	}
@@ -124,14 +125,14 @@ public class SimplifiedOpRef implements OpRef {
 	 *         {@link Type} {@code copyType}
 	 * @throws OpMatchingException
 	 */
-	private static Computers.Arity1<?, ?> simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
+	private static InfoChain simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
 		Hints hintsCopy = hints.copy() //
 			.plus(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);
 
 		Nil<?> copyNil = Nil.of(copyType);
 		Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {
 			copyType, copyType });
-		return (Arity1<?, ?>) env.op("copy", Nil.of(copierType), new Nil<?>[] {
+		return env.infoChain("copy", Nil.of(copierType), new Nil<?>[] {
 			copyNil, copyNil }, copyNil, hintsCopy);
 	}
 

@@ -75,6 +75,7 @@ import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
+import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRef;
 import org.scijava.ops.engine.matcher.impl.OpAdaptationInfo;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
@@ -215,28 +216,56 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
 		try {
-			return findOp(opName, specialType, inTypes, outType, hints);
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-	
-	@Override
-	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
-		try {
-			return findOp(info, specialType, inTypes, outType, hints);
+			return findOp(opName, specialType, inTypes, outType, hints).asOpType();
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
 
 	@Override
-	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType) {
+	public InfoChain infoChain(String opName, Nil<?> specialType,
+		Nil<?>[] inTypes, Nil<?> outType)
+	{
+		return infoChain(opName, specialType, inTypes, outType, getDefaultHints());
+	}
+
+	@Override
+	public InfoChain infoChain(String opName, Nil<?> specialType,
+		Nil<?>[] inTypes, Nil<?> outType, Hints hints)
+	{
 		try {
-			return findOp(info, specialType, inTypes, outType, getDefaultHints());
+			return findOp(opName, specialType, inTypes, outType, hints).infoChain();
 		} catch (OpMatchingException e) {
 			throw new IllegalArgumentException(e);
 		}
+	}
+	
+	@Override
+	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, Hints hints) {
+		try {
+			return findOp(info, specialType, hints).asOpType();
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	@Override
+	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType) {
+		try {
+			return findOp(info, specialType, getDefaultHints()).asOpType();
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	@Override
+	public InfoChain chainFromInfo(OpInfo info, Nil<?> specialType) {
+		try {
+			return findOp(info, specialType, getDefaultHints()).infoChain();
+		} catch (OpMatchingException e) {
+			throw new IllegalArgumentException(e);
+		}
+		
 	}
 
 	@Override
@@ -304,22 +333,20 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
+	private <T> RichOp<T> findOp(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes,
 			final Nil<?> outType, Hints hints) {
 		final OpRef ref = DefaultOpRef.fromTypes(opName, specialType.getType(), outType != null ? outType.getType() : null,
 				toTypes(inTypes));
 		MatchingConditions conditions = generateCacheHit(ref, hints);
-		return (T) wrapViaCache(conditions);
+		return (RichOp<T>) wrapViaCache(conditions);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T findOp(final OpInfo info, final Nil<T> specialType, final Nil<?>[] inTypes,
-		final Nil<?> outType, Hints hints) throws OpMatchingException
+	private <T> RichOp<T> findOp(final OpInfo info, final Nil<T> specialType, Hints hints) throws OpMatchingException
 	{
-		OpRef ref = DefaultOpRef.fromTypes(null, specialType.getType(), outType.getType(),
-			toTypes(inTypes));
+		OpRef ref = new InfoMatchingOpRef(info, specialType);
 		MatchingConditions conditions = insertCacheHit(ref, hints, info);
-		return (T) wrapViaCache(conditions);
+		return (RichOp<T>) wrapViaCache(conditions);
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {

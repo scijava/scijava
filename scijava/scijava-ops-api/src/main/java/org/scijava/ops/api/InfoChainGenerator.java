@@ -47,6 +47,43 @@ public interface InfoChainGenerator extends SciJavaPlugin {
 		return gen;
 	}
 
+	static InfoChain generateDependencyChain(String subsignature,
+		Map<String, OpInfo> idMap, Collection<InfoChainGenerator> generators)
+	{
+		Optional<InfoChainGenerator> genOpt = InfoChainGenerator
+			.findSuitableGenerator(subsignature, generators);
+		if (genOpt.isEmpty()) throw new IllegalArgumentException(
+			"Could not find an InfoChainGenerator able to handle id" + subsignature);
+		return genOpt.get().generate(subsignature, idMap, generators);
+	}
+
+	/**
+	 * Finds the subsignature in {@link String} {@code signature}. The
+	 * subsignature is assumed to start at index {@code start}.
+	 * 
+	 * @param signature
+	 * @param start
+	 * @return a signature contained withing {@code signature}
+	 */
+	static String subSignatureFrom(String signature, int start) {
+		int depsStart = signature.indexOf(DEP_START_DELIM, start);
+		int depth = 0;
+		for (int i = depsStart; i < signature.length(); i++) {
+			char ch = signature.charAt(i);
+			if (ch == DEP_START_DELIM) depth++;
+			else if (ch == DEP_END_DELIM) {
+				depth--;
+				if (depth == 0) {
+					int depsEnd = i;
+					return signature.substring(start, depsEnd + 1);
+				}
+			}
+		}
+		throw new IllegalArgumentException(
+			"There is no complete signature starting from index " + start +
+				" in signature " + signature);
+	}
+
 	/**
 	 * Describes whether this {@link InfoChainGenerator} is designed to generate
 	 * the <b>outer layer</b> of the {@link InfoChain}

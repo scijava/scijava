@@ -47,30 +47,6 @@ public class MutatorChain implements Comparable<MutatorChain>{
 			output, focuserOutput, focuserInput);
 	}
 
-	public MutatorChain(InfoChain simplifier,
-		InfoChain focuser, TypePair ioTypes, OpEnvironment env)
-	{
-		this.simplifier = simplifier.info();
-		this.simpleChain = simplifier;
-		this.focuser = focuser.info();
-		this.focusChain = focuser;
-		this.input = ioTypes.getA();
-		this.output = ioTypes.getB();
-		this.env = env;
-		
-		// determine simple and unfocused types.
-		Type simplifierInput = this.simplifier.inputs().stream().filter(m -> !m
-			.isOutput()).findFirst().get().getType();
-		Type simplifierOutput = this.simplifier.output().getType();
-		simple = SimplificationUtils.resolveMutatorTypeArgs(
-			input, simplifierInput, simplifierOutput);
-		Type focuserOutput = this.focuser.output().getType();
-		Type focuserInput = this.focuser.inputs().stream().filter(m -> !m
-			.isOutput()).findFirst().get().getType();
-		unfocused = SimplificationUtils.resolveMutatorTypeArgs(
-			output, focuserOutput, focuserInput);
-	}
-
 	public boolean isValid() {
 		return Types.isAssignable(simple, unfocused);
 	}

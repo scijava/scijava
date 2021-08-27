@@ -30,11 +30,8 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 		List<String> dependencies = getDependencies(dependencySignature);
 		List<InfoChain> dependencyChains = new ArrayList<>();
 		for (String dep : dependencies) {
-			Optional<InfoChainGenerator> genOpt = InfoChainGenerator
-				.findSuitableGenerator(dep, generators);
-			if (genOpt.isEmpty()) throw new IllegalArgumentException(
-				"Could not find an InfoChainGenerator able to handle id" + dep);
-			dependencyChains.add(genOpt.get().generate(dep, idMap, generators));
+			dependencyChains.add(InfoChainGenerator.generateDependencyChain(dep,
+				idMap, generators));
 		}
 		return new InfoChain(info, dependencyChains);
 	}

@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
@@ -33,12 +34,13 @@ import org.scijava.util.VersionUtils;
 
 public class SimplifiedOpInfo implements OpInfo {
 
-	private static final String IMPL_DELIMITER = "|Simplification";
-	private static final String INPUT_SIMPLIFIER_DELIMITER = "|InputSimplifier:";
-	private static final String INPUT_FOCUSER_DELIMITER = "|InputFocuser:";
-	private static final String OUTPUT_SIMPLIFIER_DELIMITER = "|OutputSimplifier:";
-	private static final String OUTPUT_FOCUSER_DELIMITER = "|OutputFocuser:";
-	private static final String OUTPUT_COPIER_DELIMITER = "|OutputCopier:";
+	protected static final String IMPL_DECLARATION = "|Simplification:";
+	protected static final String INPUT_SIMPLIFIER_DELIMITER = "|InputSimplifier:";
+	protected static final String INPUT_FOCUSER_DELIMITER = "|InputFocuser:";
+	protected static final String OUTPUT_SIMPLIFIER_DELIMITER = "|OutputSimplifier:";
+	protected static final String OUTPUT_FOCUSER_DELIMITER = "|OutputFocuser:";
+	protected static final String OUTPUT_COPIER_DELIMITER = "|OutputCopier:";
+	protected static final String ORIGINAL_INFO = "|OriginalInfo:";
 
 	private final OpInfo srcInfo;
 	private final SimplificationMetadata metadata;
@@ -50,6 +52,10 @@ public class SimplifiedOpInfo implements OpInfo {
 	private ValidityException validityException;
 
 	public SimplifiedOpInfo(OpInfo info, OpEnvironment env, SimplificationMetadata metadata) {
+		this(info, metadata, calculatePriority(info, metadata, env));
+	}
+
+	public SimplifiedOpInfo(OpInfo info, SimplificationMetadata metadata, double priority) {
 		List<ValidityProblem> problems = new ArrayList<>();
 		this.srcInfo = info;
 		this.metadata = metadata;
@@ -71,7 +77,7 @@ public class SimplifiedOpInfo implements OpInfo {
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
 		this.struct = Structs.from(r, problems, new OpRetypingMemberParser());
 
-		this.priority = calculatePriority(info, metadata, env);
+		this.priority = priority;
 		this.hints = srcInfo.declaredHints().plus(Simplification.FORBIDDEN);
 
 		if(!problems.isEmpty()) {
@@ -268,40 +274,42 @@ public class SimplifiedOpInfo implements OpInfo {
 	 * For a simplified Op, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The signature of the source Op
 	 * <li>The signature of all input simplifiers
 	 * <li>The signature of all input focusers
 	 * <li>The signature of the output simplifier
 	 * <li>The signature of the output focuser
 	 * <li>The signature of the output copier
+	 * <li>The id of the source Op
 	 * </ol>
 	 * <p>
 	 */
 	@Override
 	public String id() {
 		// original Op
-		StringBuilder sb = new StringBuilder(srcInfo.implementationName());
-		sb.append(IMPL_DELIMITER);
+		StringBuilder sb = new StringBuilder(IMPL_DECLARATION);
 		// input simplifiers
-		for (OpInfo i : metadata.inputSimplifierInfos()) {
+		for (InfoChain i : metadata.inputSimplifierChains()) {
 			sb.append(INPUT_SIMPLIFIER_DELIMITER);
-			sb.append(i.implementationName());
+			sb.append(i.signature());
 		}
 		// input focusers
-		for (OpInfo i : metadata.inputFocuserInfos()) {
+		for (InfoChain i : metadata.inputFocuserChains()) {
 			sb.append(INPUT_FOCUSER_DELIMITER);
-			sb.append(i.implementationName());
+			sb.append(i.signature());
 		}
 		// output simplifier
 		sb.append(OUTPUT_SIMPLIFIER_DELIMITER);
-		sb.append(metadata.outputSimplifierInfo().implementationName());
+		sb.append(metadata.outputSimplifierChain().signature());
 		// output focuser
 		sb.append(OUTPUT_FOCUSER_DELIMITER);
-		sb.append(metadata.outputFocuserInfo().implementationName());
+		sb.append(metadata.outputFocuserChain().signature());
 
 		// output copier
 		sb.append(OUTPUT_COPIER_DELIMITER);
 		sb.append(metadata.copyOpChain().signature());
+		// original info
+		sb.append(ORIGINAL_INFO);
+		sb.append(srcInfo().id());
 		return sb.toString();
 	}
 }

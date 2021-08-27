@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
+import org.checkerframework.checker.units.qual.m;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.Priority;
@@ -216,6 +217,39 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Nil<Thing[]> outType = Nil.of(Thing[].class);
 		Function<Double[][], Thing[]> actual = ops.env().opFromID(signature, special, new Nil[] {inType}, outType);
 		Thing[] apply = actual.apply(new Double[][] {new Double[] {1., 2., 3.}});
+	}
+
+	@Test
+	public void testSimplificationRecovery() {
+		Computers.Arity1<Integer[], Integer[]> c = ops.op("test.provenanceComputer").inType(Integer[].class).outType(Integer[].class).computer();
+		@SuppressWarnings("unchecked")
+		InfoChain chain = ((RichOp<Computers.Arity1<Double[], Double[]>>) c).infoChain();
+		String signature = chain.signature();
+		Nil<Computers.Arity1<Integer[], Integer[]>> special = new Nil<>() {};
+		Nil<Integer[]> inType = Nil.of(Integer[].class);
+		Nil<Integer[]> outType = Nil.of(Integer[].class);
+		Computers.Arity1<Integer[], Integer[]> fromString = ops.env().opFromID(signature, special, new Nil[] {inType}, outType);
+		Integer[] in = {1, 2, 3};
+		Integer[] actual = {0, 0, 0};
+		fromString.compute(in, actual);
+		Integer[] expected = {1, 2, 3};
+		Assert.assertArrayEquals(expected, actual);
+	}
+
+	@Test
+	public void testSimplificationAdaptationRecovery() {
+		Function<Integer[], Integer[]> c = ops.op("test.provenanceComputer").inType(Integer[].class).outType(Integer[].class).function();
+		@SuppressWarnings("unchecked")
+		InfoChain chain = ((RichOp<Function<Double[], Double[]>>) c).infoChain();
+		String signature = chain.signature();
+		Nil<Function<Integer[], Integer[]>> special = new Nil<>() {};
+		Nil<Integer[]> inType = Nil.of(Integer[].class);
+		Nil<Integer[]> outType = Nil.of(Integer[].class);
+		Function<Integer[], Integer[]> fromString = ops.env().opFromID(signature, special, new Nil[] {inType}, outType);
+		Integer[] in = {1, 2, 3};
+		Integer[] actual = fromString.apply(in);
+		Integer[] expected = {1, 2, 3};
+		Assert.assertArrayEquals(expected, actual);
 	}
 
 	private OpInfo singularInfoOfName(String name) {

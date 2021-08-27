@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.matcher.impl.OpAdaptationInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
@@ -93,7 +94,7 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 			Throwable cause = e.getCause();
 			Assert.assertTrue(cause instanceof DependencyMatchingException);
 			String message = cause.getMessage();
-			Assert.assertTrue(message.contains("Adaptation"));
+			Assert.assertTrue(message.contains("Adaptor:"));
 			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 
 		}

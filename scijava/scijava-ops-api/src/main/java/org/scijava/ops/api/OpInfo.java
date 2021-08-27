@@ -21,6 +21,8 @@ import org.scijava.struct.ValidityException;
  */
 public interface OpInfo extends Comparable<OpInfo> {
 
+	static final String IMPL_DECLARATION = "|Vanilla:";
+
 	/** name(s) of the op. */
 	List<String> names();
 

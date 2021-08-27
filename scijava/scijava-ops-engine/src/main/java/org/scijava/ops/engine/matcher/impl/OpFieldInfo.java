@@ -206,7 +206,7 @@ public class OpFieldInfo implements OpInfo {
 	 */
 	@Override
 	public String id() {
-		return implementationName() + "@" + version();
+		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
 	}
 
 	// -- Object methods --

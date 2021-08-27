@@ -33,7 +33,9 @@ import org.scijava.types.Nil;
  */
 public class OpAdaptationInfo implements OpInfo {
 
-	protected static final String IMPL_DELIMITER = "|Adaptation|";
+	protected static final String IMPL_DECLARATION = "|Adaptation:";
+	protected static final String ADAPTOR = "|Adaptor:";
+	protected static final String ORIGINAL = "|OriginalOp:";
 
 	private final OpInfo srcInfo;
 	private final InfoChain adaptorChain;
@@ -103,7 +105,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + IMPL_DELIMITER + adaptorChain.signature();
+		return srcInfo.implementationName() + ADAPTOR + adaptorChain.signature();
 	}
 
 	/**
@@ -166,7 +168,7 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public String id() {
-		return adaptorChain.signature() + IMPL_DELIMITER + srcInfo.id();
+		return IMPL_DECLARATION + ADAPTOR + adaptorChain.signature() + ORIGINAL + srcInfo.id();
 	}
 
 }

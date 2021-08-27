@@ -220,7 +220,7 @@ public class OpClassInfo implements OpInfo {
 	 */
 	@Override
 	public String id() {
-		return  implementationName() + "@" + version();
+		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
 	}
 
 	// -- Helper methods

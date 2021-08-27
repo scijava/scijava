@@ -38,23 +38,27 @@ public interface InfoChainGenerator extends SciJavaPlugin {
 	 * @param generators the list of {@link InfoChainGenerator}s
 	 * @return the {@link InfoChainGenerator} best suited to the task
 	 */
-	static Optional<InfoChainGenerator> findSuitableGenerator(String signature,
+	static InfoChainGenerator findSuitableGenerator(String signature,
 		Collection<InfoChainGenerator> generators)
 	{
-		Optional<InfoChainGenerator> gen = generators.stream() //
+		List<InfoChainGenerator> suitableGenerators = generators.stream() //
 			.filter(g -> g.canGenerate(signature)) //
-			.max((i1, i2) -> (int) (i1.priority() - i2.priority()));
-		return gen;
+			.collect(Collectors.toList());
+		if (suitableGenerators.size() == 0) throw new IllegalArgumentException(
+			"No InfoChainGenerator in given collection " + generators +
+				" is able to reify signature " + signature);
+		if (suitableGenerators.size() > 1) throw new IllegalArgumentException(
+			"Signature " + signature +
+				" is able to be reified by multiple generators: " + suitableGenerators);
+		return suitableGenerators.get(0);
 	}
 
 	static InfoChain generateDependencyChain(String subsignature,
 		Map<String, OpInfo> idMap, Collection<InfoChainGenerator> generators)
 	{
-		Optional<InfoChainGenerator> genOpt = InfoChainGenerator
+		InfoChainGenerator genOpt = InfoChainGenerator
 			.findSuitableGenerator(subsignature, generators);
-		if (genOpt.isEmpty()) throw new IllegalArgumentException(
-			"Could not find an InfoChainGenerator able to handle id" + subsignature);
-		return genOpt.get().generate(subsignature, idMap, generators);
+		return genOpt.generate(subsignature, idMap, generators);
 	}
 
 	/**
@@ -94,11 +98,5 @@ public interface InfoChainGenerator extends SciJavaPlugin {
 	 *         layer of the {@link InfoChain}
 	 */
 	boolean canGenerate(String signature);
-
-	/**
-	 * Returns the priority of this {@link InfoChainGenerator}
-	 * @return the priority
-	 */
-	double priority();
 
 }

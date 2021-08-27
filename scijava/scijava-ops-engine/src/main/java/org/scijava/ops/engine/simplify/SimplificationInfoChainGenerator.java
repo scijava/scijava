@@ -126,9 +126,4 @@ public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 		return signature.startsWith(SimplifiedOpInfo.IMPL_DECLARATION);
 	}
 
-	@Override
-	public double priority() {
-		return 0;
-	}
-
 }

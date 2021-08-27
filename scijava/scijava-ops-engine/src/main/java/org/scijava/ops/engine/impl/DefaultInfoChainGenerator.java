@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.InfoChainGenerator;
@@ -58,12 +57,7 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 
 	@Override
 	public boolean canGenerate(String signature) {
-		return true;
-	}
-
-	@Override
-	public double priority() {
-		return -(1e10);
+		return signature.startsWith(OpInfo.IMPL_DECLARATION);
 	}
 
 }

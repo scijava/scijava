@@ -3,10 +3,11 @@ package org.scijava.ops.engine.matcher.impl;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.InfoChainGenerator;
@@ -21,75 +22,58 @@ public class AdaptationInfoChainGenerator implements InfoChainGenerator {
 	public InfoChain generate(String signature, Map<String, OpInfo> idMap,
 		Collection<InfoChainGenerator> generators)
 	{
+
 		// Resolve adaptor
-		int start = 0;
-		int end = matchingCurlyBrace(signature, signature.indexOf('{'));
-		String adaptorSignature = signature.substring(start, end + 1);
-		Optional<InfoChainGenerator> adaptorGenOpt = InfoChainGenerator.findSuitableGenerator(adaptorSignature, generators);
-		if (adaptorGenOpt == null) throw new IllegalArgumentException("Could not find an InfoChainGenerator able to handle id" + adaptorSignature);
-		InfoChain adaptorChain = adaptorGenOpt.get().generate(adaptorSignature, idMap, generators);
-		
-		// Resolve adapted Op
-		int delim_start = signature.indexOf(OpAdaptationInfo.IMPL_DELIMITER);
-		if (delim_start == -1) throw new IllegalStateException("Op signature " +
-			signature + " must have signature delimiter " +
-			OpAdaptationInfo.IMPL_DELIMITER +
-			", but does not! Was InfoChainGenerator.canGenerate() called?");
-		int originalOpStart = delim_start + OpAdaptationInfo.IMPL_DELIMITER.length();
-		String originalSignature = signature.substring(originalOpStart);
-		Optional<InfoChainGenerator> originalGenOpt = InfoChainGenerator.findSuitableGenerator(originalSignature, generators);
-		if (originalGenOpt == null) throw new IllegalArgumentException("Could not find an InfoChainGenerator able to handle id" + originalSignature);
-		InfoChain originalChain = originalGenOpt.get().generate(originalSignature, idMap, generators);
+		String adaptorComponent = signature.substring(signature.indexOf(OpAdaptationInfo.ADAPTOR), signature.indexOf(OpAdaptationInfo.ORIGINAL));
+		if (!adaptorComponent.startsWith(OpAdaptationInfo.ADAPTOR))
+			throw new IllegalArgumentException("Adaptor component " +
+				adaptorComponent + " must begin with prefix " +
+				OpAdaptationInfo.ADAPTOR);
+		String adaptorSignature = adaptorComponent.substring(
+			OpAdaptationInfo.ADAPTOR.length());
+		InfoChain adaptorChain = InfoChainGenerator.generateDependencyChain(
+			adaptorSignature, idMap, generators);
+
+		// Resolve original op
+		String originalComponent = signature.substring(signature.indexOf(OpAdaptationInfo.ORIGINAL));
+		if (!originalComponent.startsWith(OpAdaptationInfo.ORIGINAL))
+			throw new IllegalArgumentException("Original Op component " +
+				originalComponent + " must begin with prefix " +
+				OpAdaptationInfo.ORIGINAL);
+		String originalSignature = originalComponent.substring(
+			OpAdaptationInfo.ORIGINAL.length());
+		InfoChain originalChain = InfoChainGenerator.generateDependencyChain(
+			originalSignature, idMap, generators);
 
 		// Rebuild original chain with an OpAdaptationInfo
 		OpInfo originalInfo = originalChain.info();
 		// TODO: The op type is wrong!
 		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-		if (!Types.isAssignable(originalInfo.opType(), adaptorChain.info().inputs().get(0).getType(), typeVarAssigns)) throw new IllegalArgumentException("The adaptor cannot be used on Op " + originalInfo);
-		Type adaptedOpType = Types.substituteTypeVariables(adaptorChain.info().output().getType(), typeVarAssigns);
-		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType, adaptorChain);
+		if (!Types.isAssignable(originalInfo.opType(), adaptorChain.info().inputs()
+			.get(0).getType(), typeVarAssigns)) throw new IllegalArgumentException(
+				"The adaptor cannot be used on Op " + originalInfo);
+		Type adaptedOpType = Types.substituteTypeVariables(adaptorChain.info()
+			.output().getType(), typeVarAssigns);
+		OpInfo adaptedInfo = new OpAdaptationInfo(originalInfo, adaptedOpType,
+			adaptorChain);
 		return new InfoChain(adaptedInfo, originalChain.dependencies());
 
 	}
 
-	/**
-	 * To prevent intensive signature validation, we do two passes:
-	 * <ol>
-	 * <li>If there is no adaptation delimiter, return false fast
-	 * <li>If there is an adaptation delimiter, return true iff it is the
-	 * outermost piece
-	 * </ol>
-	 */
+	List<String> parseComponents(String signature) {
+		List<String> components = new ArrayList<>();
+		String s = signature;
+		while (s.length() > 0) {
+			String subSignatureFrom = InfoChainGenerator.subSignatureFrom(s, 0);
+			components.add(subSignatureFrom);
+			s = s.substring(subSignatureFrom.length());
+		}
+		return components;
+	}
+
 	@Override
 	public boolean canGenerate(String signature) {
-		// Pass 1 - fail fast iff no adapted Ops
-		if (!signature.contains(OpAdaptationInfo.IMPL_DELIMITER)) return false;
-
-		// Pass 2 - return true iff adaptor delimiter directly follows adaptor
-		// signature.
-		int adaptorDepsStart = signature.indexOf('{');
-		int adaptorDepsEnd = matchingCurlyBrace(signature, adaptorDepsStart);
-		return signature.indexOf(
-			OpAdaptationInfo.IMPL_DELIMITER) == adaptorDepsEnd + 1;
-	}
-
-	private int matchingCurlyBrace(String s, int startBraceIndex) {
-		int braceCount = 0;
-		for (int i = startBraceIndex; i < s.length(); i++) {
-			if (s.charAt(i) == DEP_START_DELIM) braceCount++;
-			else if (s.charAt(i) == DEP_END_DELIM) {
-				braceCount--;
-				if (braceCount == 0) return i;
-			}
-		}
-		throw new IllegalArgumentException("Signature" + s +
-			" does not have a curly brace matching the one at index " +
-			startBraceIndex);
-	}
-
-	@Override
-	public double priority() {
-		return 0;
+		return signature.startsWith(OpAdaptationInfo.IMPL_DECLARATION);
 	}
 
 }

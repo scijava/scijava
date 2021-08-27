@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -298,11 +297,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (idDirectory == null) initIdDirectory();
 		if (infoChainGenerators == null) initInfoChainGenerators();
 
-		Optional<InfoChainGenerator> genOpt = InfoChainGenerator
-			.findSuitableGenerator(signature, infoChainGenerators);
-		if (genOpt.isEmpty()) throw new IllegalArgumentException(
-			"Could not find an InfoChainGenerator able to handle id" + signature);
-		return genOpt.get().generate(signature, idDirectory, infoChainGenerators);
+		InfoChainGenerator genOpt = InfoChainGenerator.findSuitableGenerator(
+			signature, infoChainGenerators);
+		return genOpt.generate(signature, idDirectory, infoChainGenerators);
 	}
 
 	@Override

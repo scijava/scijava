@@ -307,11 +307,18 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> RichOp<T> findOp(final OpInfo info, final Nil<T> specialType, Hints hints) throws OpMatchingException
+	private <T> OpInstance<T> findOp(final OpInfo info, final Nil<T> specialType, Hints hints) throws OpMatchingException
 	{
 		OpRef ref = new InfoMatchingOpRef(info, specialType);
 		MatchingConditions conditions = insertCacheHit(ref, hints, info);
-		return (RichOp<T>) wrapViaCache(conditions);
+		return (OpInstance<T>) getInstance(conditions);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> RichOp<T> findRichOp(final OpInfo info, final Nil<T> specialType, Hints hints) throws OpMatchingException
+	{
+		OpInstance<T> instance = findOp(info, specialType, hints);
+		return (RichOp<T>) wrap(instance, hints);
 	}
 
 	private Type[] toTypes(Nil<?>... nils) {
@@ -346,13 +353,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private RichOp<?> wrapViaCache(MatchingConditions conditions)
 	{
 		OpInstance<?> instance = getInstance(conditions);
-		return wrap(conditions, instance);
+		return wrap(instance, conditions.hints());
 	}
 
-	private RichOp<?> wrap(MatchingConditions conditions,
-		OpInstance<?> instance)
+	private RichOp<?> wrap(
+		OpInstance<?> instance, Hints hints)
 	{
-		RichOp<?> wrappedOp = wrapOp(instance, conditions.hints());
+		RichOp<?> wrappedOp = wrapOp(instance, hints);
 			return wrappedOp;
 	}
 

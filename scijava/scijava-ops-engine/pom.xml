@@ -170,7 +170,7 @@
 		<dependency>
 			<groupId>com.github.therapi</groupId>
 			<artifactId>therapi-runtime-javadoc</artifactId>
-			<version>0.12.0</version>
+			<version>${therapi-runtime-javadoc.version}</version>
 		</dependency>
 
 		<!-- Test scope dependencies -->

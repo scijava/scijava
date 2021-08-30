@@ -94,6 +94,9 @@
 
 		<script-maven.version>1.0.0</script-maven.version>
 		<jruby.version>9.2.11.1</jruby.version>
+		<therapi.version>0.12.0</therapi.version>
+		<therapi-runtime-javadoc.version>${therapi.version}</therapi-runtime-javadoc.version>
+		<therapi-runtime-javadoc-scribe.version>${therapi.version}</therapi-runtime-javadoc-scribe.version>
 	</properties>
 
 	<build>
@@ -105,7 +108,7 @@
 						<path>
 							<groupId>com.github.therapi</groupId>
 							<artifactId>therapi-runtime-javadoc-scribe</artifactId>
-							<version>0.12.0</version>
+							<version>${therapi-runtime-javadoc-scribe.version}</version>
 						</path>
 						<path>
 							<groupId>org.scijava</groupId>

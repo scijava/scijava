@@ -45,6 +45,10 @@ public interface OpHistory {
 	 */
 	InfoChain opExecutionChain(Object op);
 
+	default String signatureOf(Object op) {
+		return opExecutionChain(op).signature();
+	}
+
 	// -- HISTORY MAINTENANCE API -- //
 
 	/**

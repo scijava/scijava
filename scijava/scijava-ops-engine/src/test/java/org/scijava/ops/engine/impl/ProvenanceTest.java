@@ -195,10 +195,8 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	@Test
 	public void testAdaptationRecoveryFromString() {
 		Function<Double[], Thing[]> f = ops.op("test.provenanceMapped").inType(Double[].class).outType(Thing[].class).function();
+		String signature = ops.history().signatureOf(f);
 		Thing[] apply = f.apply(new Double[] {1., 2., 3.});
-		@SuppressWarnings("unchecked")
-		InfoChain chain = ((RichOp<Function<Double[], Thing[]>>) f).infoChain();
-		String signature = chain.signature();
 		Nil<Function<Double[], Thing[]>> special = new Nil<>() {};
 		Nil<Double[]> inType = Nil.of(Double[].class);
 		Nil<Thing[]> outType = Nil.of(Thing[].class);
@@ -209,9 +207,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	@Test
 	public void testAdaptedOpWithDependencies() {
 		Function<Double[][], Thing[]> f = ops.op("test.provenanceMapper").inType(Double[][].class).outType(Thing[].class).function();
-		@SuppressWarnings("unchecked")
-		InfoChain chain = ((RichOp<Function<Double[], Thing[]>>) f).infoChain();
-		String signature = chain.signature();
+		String signature = ops.history().signatureOf(f);
 		Nil<Function<Double[][], Thing[]>> special = new Nil<>() {};
 		Nil<Double[][]> inType = Nil.of(Double[][].class);
 		Nil<Thing[]> outType = Nil.of(Thing[].class);
@@ -222,9 +218,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	@Test
 	public void testSimplificationRecovery() {
 		Computers.Arity1<Integer[], Integer[]> c = ops.op("test.provenanceComputer").inType(Integer[].class).outType(Integer[].class).computer();
-		@SuppressWarnings("unchecked")
-		InfoChain chain = ((RichOp<Computers.Arity1<Double[], Double[]>>) c).infoChain();
-		String signature = chain.signature();
+		String signature = ops.history().signatureOf(c);
 		Nil<Computers.Arity1<Integer[], Integer[]>> special = new Nil<>() {};
 		Nil<Integer[]> inType = Nil.of(Integer[].class);
 		Nil<Integer[]> outType = Nil.of(Integer[].class);
@@ -239,9 +233,7 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 	@Test
 	public void testSimplificationAdaptationRecovery() {
 		Function<Integer[], Integer[]> c = ops.op("test.provenanceComputer").inType(Integer[].class).outType(Integer[].class).function();
-		@SuppressWarnings("unchecked")
-		InfoChain chain = ((RichOp<Function<Double[], Double[]>>) c).infoChain();
-		String signature = chain.signature();
+		String signature = ops.history().signatureOf(c);
 		Nil<Function<Integer[], Integer[]>> special = new Nil<>() {};
 		Nil<Integer[]> inType = Nil.of(Integer[].class);
 		Nil<Integer[]> outType = Nil.of(Integer[].class);

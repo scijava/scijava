@@ -13,9 +13,9 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
-import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.ops.spi.Op;
@@ -183,10 +183,9 @@ public class SimplifiedOpInfo implements OpInfo {
 			LossReporter<T, R> op = env.op("lossReporter", specialTypeNil, new Nil[] {
 				Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(Double.class));
 			return op.apply(from, to);
-		} catch(IllegalArgumentException e) {
-			if (e.getCause() instanceof OpMatchingException)
-				return Double.POSITIVE_INFINITY;
-			throw e;
+		}
+		catch (OpMatchingException e) {
+			return Double.POSITIVE_INFINITY;
 		}
 	}
 

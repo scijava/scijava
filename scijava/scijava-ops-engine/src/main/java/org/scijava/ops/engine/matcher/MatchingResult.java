@@ -7,6 +7,7 @@ import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.OpCandidate.StatusCode;
+import org.scijava.ops.api.features.OpMatchingException;
 
 /**
  * Class representing the result from type matching done by the

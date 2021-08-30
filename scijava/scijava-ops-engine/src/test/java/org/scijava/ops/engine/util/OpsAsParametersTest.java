@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -28,9 +29,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment {
 		return output;
 	};
 
-	// TODO: find a better way to check that this call fails BECAUSE func cannot be
-	// reified
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=OpMatchingException.class)
 	public void TestOpWithNonReifiableFunction() {
 
 		List<Number> list = new ArrayList<>();

@@ -1,7 +1,6 @@
 
 package org.scijava.ops.engine.hints;
 
-import static org.junit.Assert.assertTrue;
 
 import java.util.function.Function;
 
@@ -9,9 +8,9 @@ import org.junit.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpHints;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
@@ -40,8 +39,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 			throw new IllegalStateException(
 				"Simplification is forbidden - this op call should not match!");
 		}
-		catch (IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		catch (OpMatchingException e) {
 		}
 
 	}
@@ -62,8 +60,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 			throw new IllegalStateException(
 				"Simplification is forbidden - this op call should not match!");
 		}
-		catch (IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		catch (OpMatchingException e) {
 		}
 
 	}
@@ -91,8 +88,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 			throw new IllegalStateException(
 				"The only relevant Op is not simplifiable - this op call should not match!");
 		}
-		catch (IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		catch (OpMatchingException e) {
 		}
 
 	}
@@ -114,8 +110,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 			throw new IllegalStateException(
 				"The only relevant Op is not simplifiable - this op call should not match!");
 		}
-		catch (IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		catch (OpMatchingException e) {
 		}
 
 	}

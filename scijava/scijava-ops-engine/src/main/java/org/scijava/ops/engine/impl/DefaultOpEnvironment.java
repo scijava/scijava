@@ -64,14 +64,14 @@ import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.matcher.DependencyMatchingException;
 import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
 import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRef;
@@ -213,12 +213,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 	
 	@Override
-	public <T> T op(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
-		try {
-			return findOp(opName, specialType, inTypes, outType, hints).asOpType();
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
+	public <T> T op(final String opName, final Nil<T> specialType,
+		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints)
+	{
+		return findOp(opName, specialType, inTypes, outType, hints).asOpType();
 	}
 
 	@Override
@@ -241,12 +239,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@Override
 	public InfoChain chainFromInfo(OpInfo info, Nil<?> specialType) {
-		try {
-			return findOp(info, specialType, getDefaultHints()).infoChain();
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
-		
+		return findOp(info, specialType, getDefaultHints()).infoChain();
 	}
 
 	@Override

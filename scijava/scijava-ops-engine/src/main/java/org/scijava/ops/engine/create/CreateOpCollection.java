@@ -11,7 +11,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Creation ops
- * @author G
+ * @author Gabriel Selzer
  *
  */
 @Plugin(type = OpCollection.class)

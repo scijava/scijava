@@ -26,7 +26,7 @@ import org.scijava.plugin.Plugin;
  * Tests the ability of a Javadoc parser to scrape an Op's parameters out of its
  * Javadoc
  * 
- * @author G
+ * @author Gabriel Selzer
  */
 @Plugin(type = OpCollection.class)
 public class JavadocParameterTest extends AbstractTestEnvironment {

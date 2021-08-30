@@ -128,31 +128,6 @@ public interface OpEnvironment {
 	InfoChain infoChain(final String opName, final Nil<?> specialType,
 		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
 
-	/**
-	 * Returns an Op fitting the provided arguments. NB implementations of this
-	 * method likely depend on the {@link Hints} set by
-	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee of
-	 * thread-safety. Users interested in parallel Op matching should consider
-	 * using {@link OpEnvironment#opFromInfo(String, Nil, Hints)} instead.
-	 *
-	 * @param <T> the {@link Type} of the Op
-	 * @param info the {@link OpInfo}
-	 * @param specialType the generic {@link Type} of the Op
-	 * @return an instance of an Op aligning with the search parameters
-	 */
-	<T> T opFromInfo(OpInfo info, Nil<T> specialType);
-
-	/**
-	 * Returns an Op fitting the provided arguments.
-	 *
-	 * @param <T> the {@link Type} of the Op
-	 * @param info the {@link OpInfo}
-	 * @param specialType the generic {@link Type} of the Op
-	 * @param hints the {@link Hints} that should guide this matching call
-	 * @return an instance of an Op aligning with the search parameters
-	 */
-	<T> T opFromInfo(OpInfo info, Nil<T> specialType, Hints hints);
-
 	<T> T opFromInfoChain(InfoChain chain, Nil<T> specialType);
 
 	/**

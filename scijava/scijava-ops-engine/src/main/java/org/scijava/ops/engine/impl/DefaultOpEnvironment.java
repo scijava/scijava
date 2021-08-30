@@ -238,24 +238,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
-	@Override
-	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType, Hints hints) {
-		try {
-			return findOp(info, specialType, hints).asOpType();
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	@Override
-	public <T> T opFromInfo(final OpInfo info, final Nil<T> specialType) {
-		try {
-			return findOp(info, specialType, getDefaultHints()).asOpType();
-		} catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
 
 	@Override
 	public InfoChain chainFromInfo(OpInfo info, Nil<?> specialType) {
@@ -496,8 +478,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	/**
 	 * Wraps the matched op into an {@link Op} that knows its generic typing.
 	 * 
-	 * @param op - the op to wrap.
-	 * @param opInfo - from which we determine the {@link Type} of the {@code Op}
+	 * @param instance - the {@link OpInstance} to wrap.
+	 * @param hints - the {@link Hints} used to create the {@link OpInstance}
 	 *            
 	 * @return an {@link Op} wrapping of op.
 	 */
@@ -559,6 +541,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return resolveOpDependencies(candidate.opInfo(), candidate.typeVarAssigns(), hints);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private synchronized void initWrappers() {
 		if (wrappers != null) return;
 		wrappers = new HashMap<>();
@@ -769,7 +752,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * 
 	 * Input and output types will be inferred by looking at the signature of the
 	 * functional method of the specified type. Also see
-	 * {@link ParameterStructs#findFunctionalMethodTypes(Type)}.
+	 * {@link FunctionalParameters#findFunctionalMethodTypes(Type)}.
 	 *
 	 * @param type
 	 * @param name

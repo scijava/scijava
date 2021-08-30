@@ -131,35 +131,14 @@ public interface OpEnvironment {
 	<T> T opFromInfoChain(InfoChain chain, Nil<T> specialType);
 
 	/**
-	 * Returns an Op fitting the provided arguments. NB implementations of this
-	 * method likely depend on the {@link Hints} set by
-	 * {@link OpEnvironment#setDefaultHints(Hints)}, which provides no guarantee of
-	 * thread-safety. Users interested in parallel Op matching should consider
-	 * using {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)} instead.
-	 *
-	 * @param <T> the {@link Type} of the Op
-	 * @param opID the name of the Op
-	 * @param specialType the generic {@link Type} of the Op
-	 * @param inTypes the arguments (inputs) to the Op
-	 * @param outType the return of the Op (note that it may also be an argument)
-	 * @return an instance of an Op aligning with the search parameters
-	 */
-	<T> T opFromID(final String opID, final Nil<T> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType);
-
-	/**
 	 * Returns an Op fitting the provided arguments.
 	 *
 	 * @param <T> the {@link Type} of the Op
-	 * @param opName the name of the Op
+	 * @param signature the signature of the Op
 	 * @param specialType the generic {@link Type} of the Op
-	 * @param inTypes the arguments (inputs) to the Op
-	 * @param outType the return of the Op (note that it may also be an argument)
-	 * @param hints the {@link Hints} that should guide this matching call
 	 * @return an instance of an Op aligning with the search parameters
 	 */
-	<T> T opFromID(final String opID, final Nil<T> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType, Hints hints);
+	<T> T opFromSignature(final String signature, final Nil<T> specialType);
 
 	InfoChain chainFromID(final String signature);
 

@@ -250,15 +250,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T opFromID(final String id, final Nil<T> specialType,
-		final Nil<?>[] inTypes, final Nil<?> outType)
-	{
-		return opFromID(id, specialType, inTypes, outType, getDefaultHints());
-	}
-	
-	@Override
-	public <T> T opFromID(final String id, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType, Hints hints) {
-		InfoChain info = chainFromID(id);
+	public <T> T opFromSignature(final String signature, final Nil<T> specialType) {
+		InfoChain info = chainFromID(signature);
 		return opFromInfoChain(info, specialType);
 	}
 

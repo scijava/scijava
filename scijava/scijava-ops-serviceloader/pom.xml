@@ -104,7 +104,9 @@
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 		<!--  <enforcer.skip>true</enforcer.skip>-->
-		<scijava-ops-serviceloader.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-serviceloader.allowedDuplicateClasses>
+		<scijava-ops-serviceloader.allowedDuplicateClasses>
+			${scijava.allowedDuplicateClasses}
+		</scijava-ops-serviceloader.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-ops-serviceloader.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>

@@ -103,7 +103,9 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-discovery.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-discovery.allowedDuplicateClasses>
+		<scijava-discovery.allowedDuplicateClasses>
+			${scijava.allowedDuplicateClasses}
+		</scijava-discovery.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-discovery.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>

@@ -30,6 +30,9 @@
 
 package org.scijava.ops.engine.struct;
 
+import com.github.therapi.runtimejavadoc.FieldJavadoc;
+import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
+
 import java.lang.reflect.Field;
 
 import org.scijava.ops.spi.OpDependency;
@@ -48,9 +51,14 @@ public class FieldOpDependencyMember<T> extends AnnotatedOpDependencyMember<T>
 	private final Field field;
 
 	public FieldOpDependencyMember(final Field field, final Class<?> structType) {
-		super(field.getName(), Types.fieldType(field, structType), field
+		super(field.getName(), getDescription(field), Types.fieldType(field, structType), field
 			.getAnnotation(OpDependency.class));
 		this.field = field;
+	}
+
+	private static String getDescription(Field f) {
+		FieldJavadoc javadoc = RuntimeJavadoc.getJavadoc(f);
+		return javadoc.getComment().toString();
 	}
 
 	// -- ValueAccessible methods --

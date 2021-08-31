@@ -1,10 +1,13 @@
 
 package org.scijava.ops.engine.struct;
 
+import com.github.therapi.runtimejavadoc.MethodJavadoc;
+import com.github.therapi.runtimejavadoc.ParamJavadoc;
+import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.scijava.ValidityProblem;
@@ -39,26 +42,23 @@ public class MethodOpDependencyMemberParser implements
 	private static void parseMethodOpDependencies(final List<MethodParameterOpDependencyMember<?>> items,
 		final Method annotatedMethod)
 	{
+		MethodJavadoc javadoc = RuntimeJavadoc.getJavadoc(annotatedMethod);
+		List<ParamJavadoc> params = javadoc.getParams();
 		final java.lang.reflect.Parameter[] methodParams = annotatedMethod
 			.getParameters();
-		final java.lang.reflect.Parameter[] opDependencyParams = getOpDependencies(methodParams);
 
-		for (java.lang.reflect.Parameter param : opDependencyParams) {
-			final OpDependency dependency = param.getAnnotation(OpDependency.class);
-			final Type methodParamType = param.getParameterizedType();
-			final MethodParameterOpDependencyMember<?> item = new MethodParameterOpDependencyMember<>(
-				param, methodParamType, dependency);
+		for (int i = 0; i < methodParams.length; i++) {
+			final OpDependency dependency = methodParams[i].getAnnotation(OpDependency.class);
+			if (dependency == null) continue;
+
+			final String name = params.size() > i ? params.get(i).getName() : methodParams[i].getName();
+			final String description = params.size() > i ? params.get(i).getComment().toString() : "";
+			final Type methodParamType = methodParams[i].getParameterizedType();
+			final MethodParameterOpDependencyMember<?> item =
+				new MethodParameterOpDependencyMember<>(name, description,
+					methodParamType, dependency);
 			items.add(item);
 		}
-	}
-
-	private static java.lang.reflect.Parameter[] getOpDependencies(
-		java.lang.reflect.Parameter[] methodParams)
-	{
-		return Arrays //
-			.stream(methodParams) //
-			.filter(param -> param.getAnnotation(OpDependency.class) != null) //
-			.toArray(java.lang.reflect.Parameter[]::new);
 	}
 
 }

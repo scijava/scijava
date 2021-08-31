@@ -3,6 +3,7 @@ package org.scijava.ops.engine;
 
 import com.google.common.collect.Streams;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -149,7 +150,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	/**
 	 * Tests javadoc scraping of mutable taglet
 	 * 
-	 * @dependency inplace the Op being wrapped
+	 * @param inplace the Op being wrapped
 	 * @param foo the i/o argument
 	 */
 	@OpMethod(names = "test.javadoc.methodDependency", type = Inplaces.Arity1.class)
@@ -208,6 +209,12 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 			.getDescription()).toArray(String[]::new);
 		Assert.assertArrayEquals(inputDescriptions, new String[] {
 			"the i/o argument"});
+
+		// assert dependency descriptions
+		String[] dependencyDescriptions = info.dependencies().stream().map(m -> m
+			.getDescription()).toArray(String[]::new);
+		Assert.assertArrayEquals(dependencyDescriptions, new String[] {
+			"the Op being wrapped"});
 
 		// assert output name
 		String outputName = info.output().getKey();
@@ -363,14 +370,14 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocClass() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.class").iterator();
+		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.dependentClass").iterator();
 
 		if (!infos.hasNext()) {
-			Assert.fail("No OpInfos with name \"test.javadoc.class\"");
+			Assert.fail("No OpInfos with name \"test.javadoc.dependentClass\"");
 		}
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.class\"");
+			Assert.fail("Multiple OpInfos with name \"test.javadoc.dependentClass\"");
 		}
 
 		// assert input names
@@ -382,6 +389,13 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
 		Assert.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
+
+		// assert dependency description
+		String[] dependencyDescriptions = info.dependencies().stream().map(m -> m
+			.getDescription()).toArray(String[]::new);
+		Assert.assertArrayEquals(new String[] {
+			"Used to compute output for each element in the array" },
+			dependencyDescriptions);
 
 		// assert output name
 		String outputName = info.output().getKey();
@@ -443,6 +457,31 @@ class JavadocOp implements Function<Double, Double> {
 	@Override
 	public Double apply(Double t) {
 		return t + 1;
+	}
+
+}
+
+/**
+ * Test Op used to see if we can't scrape the javadoc.
+ * 
+ * @author Gabriel Selzer
+ */
+@Plugin(type = Op.class, name = "test.javadoc.dependentClass")
+class JavadocComplexOp implements Function<Double[], Double[]> {
+
+	/**
+	 * Used to compute output for each element in the array
+	 */
+	@OpDependency(name = "test.javadoc.class")
+	private Function<Double, Double> fooOp;
+
+	/**
+	 * @param t the input
+	 * @return the output
+	 */
+	@Override
+	public Double[] apply(Double[] t) {
+		return Arrays.stream(t).map(fooOp).toArray(Double[]::new);
 	}
 
 }

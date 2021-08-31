@@ -30,7 +30,6 @@
 
 package org.scijava.ops.engine.struct;
 
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
 import org.scijava.ops.spi.OpDependency;
@@ -42,12 +41,27 @@ public class MethodParameterOpDependencyMember<T> extends
 	AnnotatedOpDependencyMember<T>
 {
 
-	public MethodParameterOpDependencyMember(Parameter methodParameter,
+	public MethodParameterOpDependencyMember(String name,
 		final Type parameterType, OpDependency annotation)
 	{
 		// NB: "Real" parameter name may or may not be available during runtime,
 		// that is, the keys of instances of this class will likely be of the form:
 		// arg0, arg1, etc.
-		super(methodParameter.getName(), parameterType, annotation);
+		this(name, //
+			"", //
+			parameterType, //
+			annotation);
+	}
+
+	public MethodParameterOpDependencyMember(String name,
+		final String description,
+		final Type parameterType,
+		OpDependency annotation)
+	{
+		super(name, //
+			description, //
+			parameterType, //
+			annotation);
+
 	}
 }

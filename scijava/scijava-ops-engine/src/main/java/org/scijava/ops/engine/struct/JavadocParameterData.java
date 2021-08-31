@@ -10,12 +10,13 @@ import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
@@ -141,20 +142,14 @@ public class JavadocParameterData implements ParameterData {
 	private void parseMethod(Method m) {
 		// determine the Op inputs/outputs
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
-		long numOpParams = getOpParams(m);
+		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 		// ensure the method declares a complete set of tags
 		if (!hasVanillaJavadoc(doc, numOpParams, numReturns))
 			throw new IllegalArgumentException("Method " + m +
 				" has no suitable tag(lets) to scrape documentation from");
 		// scrape the conventional javadoc tags
-		populateViaParamAndReturn(doc.getParams(), doc.getReturns());
-	}
-
-	private long getOpParams(Method m) {
-		return Arrays //
-			.stream(m.getParameters()) //
-			.filter(param -> param.getAnnotation(OpDependency.class) == null).count();
+		populateViaParamAndReturn(m, doc.getParams(), doc.getReturns());
 	}
 
 	/**
@@ -226,16 +221,22 @@ public class JavadocParameterData implements ParameterData {
 	 * {@link JavadocParameterData#paramDescriptions} using {@code params}, and
 	 * {@link JavadocParameterData#returnDescription} using {@code returnDoc}.
 	 * 
+	 * @param m the {@link Method} being parsed
 	 * @param params the {@code @param} tags on the method of interest
 	 * @param returnDoc the string following {@code @return}
 	 */
-	private void populateViaParamAndReturn(List<ParamJavadoc> params,
+	private void populateViaParamAndReturn(Method m, List<ParamJavadoc> params,
 		Comment returnDoc)
 	{
-		paramNames = params.stream().map(param -> param.getName()).collect(
-			Collectors.toList());
-		paramDescriptions = params.stream().map(param -> param.getComment()
-			.toString()).collect(Collectors.toList());
+		Parameter[] methodParams = m.getParameters();
+		paramNames = new ArrayList<>(methodParams.length);
+		paramDescriptions = new ArrayList<>(methodParams.length);
+		IntStream.range(0, m.getParameterCount()).forEach(i -> {
+			if (!methodParams[i].isAnnotationPresent(OpDependency.class)) {
+				paramNames.add(params.get(i).getName());
+				paramDescriptions.add(params.get(i).getComment().toString());
+			}
+		});
 		returnDescription = returnDoc.toString();
 	}
 

@@ -42,14 +42,25 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	OpDependencyMember<T>
 {
 
-	private String key;
-	private Type type;
+	private final String key;
+	private final String description;
+	private final Type type;
 	private final OpDependency annotation;
 
 	public AnnotatedOpDependencyMember(String key, Type type,
 		final OpDependency annotation)
 	{
 		this.key = key;
+		this.description = "";
+		this.type = type;
+		this.annotation = annotation;
+	}
+
+	public AnnotatedOpDependencyMember(String key, String description, Type type,
+		final OpDependency annotation)
+	{
+		this.key = key;
+		this.description = description;
 		this.type = type;
 		this.annotation = annotation;
 	}
@@ -79,8 +90,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 
 	@Override
 	public String getDescription() {
-		// TODO: consider more implementation here
-		return "";
+		return description;
 	}
 
 	@Override

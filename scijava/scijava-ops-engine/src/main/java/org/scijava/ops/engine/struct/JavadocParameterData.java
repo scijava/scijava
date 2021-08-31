@@ -242,7 +242,7 @@ public class JavadocParameterData implements ParameterData {
 
 	/**
 	 * Populates {@link JavadocParameterData#paramNames},
-	 * {@link JavadocParameterData#paramDescriptions}, and, and
+	 * {@link JavadocParameterData#paramDescriptions}, and
 	 * {@link JavadocParameterData#returnDescription} using
 	 * {@code @input/@output/@container/@mutable} taglets.
 	 * 

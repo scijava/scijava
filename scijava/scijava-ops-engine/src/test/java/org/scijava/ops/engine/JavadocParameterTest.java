@@ -271,12 +271,12 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputNames, new String[] { "input1", "input2" });
+		Assert.assertArrayEquals(new String[] { "input1", "input2" }, inputNames);
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputDescriptions, new String[] { "", "" });
+		Assert.assertArrayEquals(new String[] { "", ""}, inputDescriptions);
 
 		// assert output name
 		String outputName = info.output().getKey();

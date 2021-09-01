@@ -3,9 +3,7 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.scijava.ValidityProblem;
 import org.scijava.struct.MemberParser;
@@ -23,7 +21,6 @@ public class ClassParameterMemberParser implements
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
-		final Set<String> names = new HashSet<>();
 
 		// NB: Reject abstract classes.
 		org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
@@ -36,7 +33,7 @@ public class ClassParameterMemberParser implements
 			paramData = new SynthesizedParameterData();
 		}
 
-		FunctionalParameters.parseFunctionalParameters(items, names, problems, source, paramData);
+		FunctionalParameters.parseFunctionalParameters(items, problems, source, paramData);
 
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) throw new ValidityException(problems);

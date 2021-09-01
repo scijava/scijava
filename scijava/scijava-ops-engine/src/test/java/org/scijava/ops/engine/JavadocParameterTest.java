@@ -264,7 +264,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	 * </ul>
 	 * and as output:
 	 * <ul>
-	 * <li> output1
+	 * <li> output
 	 * </ul>
 	 */
 	private void isSuitableGenericOpMethodInfo(OpInfo info) {
@@ -280,7 +280,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output1", outputName);
+		Assert.assertEquals("output", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();

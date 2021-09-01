@@ -4,9 +4,7 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.scijava.ValidityProblem;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
@@ -30,7 +28,7 @@ public class MethodParameterMemberParser implements
 		// obtain a parameterData (preferably one that scrapes the javadoc)
 		ParameterData paramData;
 		try {
-			paramData = new JavadocParameterData(source);
+			paramData = new LazyJavadocParameterData(source);
 		}
 		catch (IllegalArgumentException e) {
 			paramData = new SynthesizedParameterData();
@@ -38,7 +36,6 @@ public class MethodParameterMemberParser implements
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
-		final Set<String> names = new HashSet<>();
 		final OpMethod methodAnnotation = source.getAnnotation(OpMethod.class);
 
 		// Determine functional type
@@ -52,7 +49,7 @@ public class MethodParameterMemberParser implements
 		}
 
 		// Parse method level @Parameter annotations.
-		FunctionalParameters.parseFunctionalParameters(items, names, problems, functionalType,
+		FunctionalParameters.parseFunctionalParameters(items, problems, functionalType,
 			paramData);
 
 		// Fail if there were any problems.

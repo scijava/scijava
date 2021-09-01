@@ -5,9 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.scijava.ValidityProblem;
 import org.scijava.struct.MemberParser;
@@ -36,12 +34,11 @@ public class FieldParameterMemberParser implements
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
-		final Set<String> names = new HashSet<>();
 		final Type fieldType = Types.fieldType(source, c);
 
 		org.scijava.struct.Structs.checkModifiers(source.toString() + ": ", problems, source
 			.getModifiers(), false, Modifier.FINAL);
-		FunctionalParameters.parseFunctionalParameters(items, names, problems, fieldType,
+		FunctionalParameters.parseFunctionalParameters(items, problems, fieldType,
 			paramData);
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {

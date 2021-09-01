@@ -4,6 +4,7 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Type;
 
 import org.scijava.function.Producer;
+import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 
@@ -15,8 +16,8 @@ import org.scijava.struct.Member;
  */
 public class SynthesizedParameterMember<T> implements Member<T> {
 
-	/** Type, or a subtype thereof, which houses the field. */
-	private final Type itemType;
+	/** {@link FunctionalMethodType} describing this Member */
+	private final FunctionalMethodType fmt;
 
 	/** Producer able to generate the parameter name */
 	private final Producer<String> nameGenerator;
@@ -29,27 +30,17 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 
 	private String description = null;
 
-	/** IO status of the parameter */
-	private final ItemIO itemIO;
-
-	public SynthesizedParameterMember(final Type itemType, final Producer<MethodParamInfo> nameInfo, final ItemIO ioType,
-		final int paramNo)
+	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> nameInfo)
 	{
-		this.itemType = itemType;
-		this.nameGenerator = () -> nameInfo.create().name(paramNo);
-		this.descriptionGenerator = () -> nameInfo.create().description(paramNo);
-		this.itemIO = ioType;
+		this.fmt = fmt;
+		this.nameGenerator = () -> nameInfo.create().name(fmt);
+		this.descriptionGenerator = () -> nameInfo.create().description(fmt);
 	}
 
 	public SynthesizedParameterMember(final Type itemType, final String name,
 		final String description, final ItemIO ioType)
 	{
-		this.itemType = itemType;
-		this.name = name;
-		this.nameGenerator = () -> name;
-		this.description = description;
-		this.descriptionGenerator = () -> description;
-		this.itemIO = ioType;
+		throw new UnsupportedOperationException();
 	}
 
 	// -- Member methods --
@@ -62,7 +53,8 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 
 	private synchronized void generateName() {
 		if (name != null) return;
-		name = nameGenerator.create();
+		String temp = nameGenerator.create();
+		name = temp;
 	}
 
 	@Override
@@ -73,17 +65,18 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 
 	private synchronized void generateDescription() {
 		if (description != null) return;
-		description = descriptionGenerator.create();
+		String temp = descriptionGenerator.create();
+		description = temp;
 	}
 
 	@Override
 	public Type getType() {
-		return itemType;
+		return fmt.type();
 	}
 
 	@Override
 	public ItemIO getIOType() {
-		return itemIO;
+		return fmt.itemIO();
 	}
 
 	@Override

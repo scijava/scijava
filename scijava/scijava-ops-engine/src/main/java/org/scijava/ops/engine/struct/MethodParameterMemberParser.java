@@ -25,14 +25,8 @@ public class MethodParameterMemberParser implements
 
 		source.setAccessible(true);
 
-		// obtain a parameterData (preferably one that scrapes the javadoc)
-		ParameterData paramData;
-		try {
-			paramData = new LazyJavadocParameterData(source);
-		}
-		catch (IllegalArgumentException e) {
-			paramData = new SynthesizedParameterData();
-		}
+		// obtain a parameterData
+		ParameterData paramData = new LazilyGeneratedMethodParameterData(source);
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();

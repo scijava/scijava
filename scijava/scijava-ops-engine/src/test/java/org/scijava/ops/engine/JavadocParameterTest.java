@@ -280,7 +280,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output", outputName);
+		Assert.assertEquals("output1", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
@@ -330,7 +330,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output", outputName);
+		Assert.assertEquals("output1", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();

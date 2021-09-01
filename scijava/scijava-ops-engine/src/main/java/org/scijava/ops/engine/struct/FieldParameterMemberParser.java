@@ -23,13 +23,7 @@ public class FieldParameterMemberParser implements
 		if (source == null) return null;
 		Class<?> c = source.getDeclaringClass();
 		// obtain a parameterData (preferably one that scrapes the javadoc)
-		ParameterData paramData;
-		try {
-			paramData = new JavadocParameterData(source);
-		}
-		catch (IllegalArgumentException e) {
-			paramData = new SynthesizedParameterData();
-		}
+		ParameterData paramData = new LazilyGeneratedFieldParameterData(source);
 		source.setAccessible(true);
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();

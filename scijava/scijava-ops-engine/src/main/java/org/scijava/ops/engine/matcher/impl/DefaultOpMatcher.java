@@ -34,27 +34,20 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
 
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.features.MatchingResult;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.ops.engine.simplify.InfoSimplificationGenerator;
+import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.api.features.MatchingRoutine;
+import org.scijava.ops.api.features.OpMatcher;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.service.AbstractService;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
@@ -68,129 +61,22 @@ import org.scijava.types.Types.TypeVarInfo;
  */
 public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 
-	@Override
-	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref) {
-		return findMatch(env, ref).singleMatch();
+	private final List<MatchingRoutine> matchers;
+
+	public DefaultOpMatcher(Collection<? extends MatchingRoutine> matchers) {
+		this.matchers = new ArrayList<>(matchers);
+		Collections.sort(this.matchers, Collections.reverseOrder());
 	}
 
-	@Override
-	public OpCandidate findSingleMatch(final OpEnvironment env, final OpRef ref, final Hints hints) {
-		return findMatch(env, ref, hints).singleMatch();
-	}
-
-	@Override
-	public MatchingResult findMatch(final OpEnvironment env, final OpRef ref) {
-		return findMatch(env, Collections.singletonList(ref));
-	}
-
-	@Override
-	public MatchingResult findMatch(final OpEnvironment env, final OpRef ref, final Hints hints) {
-		return findMatch(env, Collections.singletonList(ref), hints);
-	}
-
-	@Override
-	public MatchingResult findMatch(final OpEnvironment env, final List<OpRef> refs) {
-		return findMatch(env, refs, new DefaultHints());
-	}
-
-	@Override
-	public MatchingResult findMatch(final OpEnvironment env, final List<OpRef> refs, final Hints hints) {
-		// find candidates with matching name & type
-		final List<OpCandidate> candidates = findCandidates(env, refs, hints);
-		if (candidates.isEmpty()) {
-			return MatchingResult.empty(refs);
+	private OpMatchingException agglomeratedException(
+		List<OpMatchingException> list)
+	{
+		OpMatchingException agglomerated = new OpMatchingException(
+			"No MatchingRoutine was able to produce a match!");
+		for (int i = 0; i < list.size(); i++) {
+			agglomerated.addSuppressed(list.get(i));
 		}
-		// narrow down candidates to the exact matches
-		final List<OpCandidate> matches = filterMatches(candidates);
-		return new MatchingResult(candidates, matches, refs);
-	}
-
-	@Override
-	public List<OpCandidate> findCandidates(final OpEnvironment env, final OpRef ref) {
-		return findCandidates(env, Collections.singletonList(ref));
-	}
-
-	@Override
-	public List<OpCandidate> findCandidates(final OpEnvironment env, final OpRef ref, final Hints hints) {
-		return findCandidates(env, Collections.singletonList(ref), hints);
-	}
-
-	@Override
-	public List<OpCandidate> findCandidates(final OpEnvironment env, final List<OpRef> refs) {
-		return findCandidates(env, refs, new DefaultHints());
-	}
-
-	@Override
-	public List<OpCandidate> findCandidates(final OpEnvironment env, final List<OpRef> refs, final Hints hints) {
-		final ArrayList<OpCandidate> candidates = new ArrayList<>();
-		for (final OpRef ref : refs) {
-			for (final OpInfo info : getInfos(env, ref, hints)) {
-				Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
-				if (ref.typesMatch(info.opType(), typeVarAssigns)) {
-					OpCandidate candidate = info.createCandidate(env, ref, typeVarAssigns);
-					candidates.add(candidate);
-				}
-			}
-		}
-		return candidates;
-	}
-
-	private Iterable<OpInfo> getInfos(OpEnvironment env, OpRef ref, Hints hints) {
-		Iterable<OpInfo> suitableInfos = env.infos(ref.getName(), hints);
-		if(hints.contains(Simplification.IN_PROGRESS) && !hints.contains(Simplification.FORBIDDEN)) {
-			Set<OpInfo> simpleInfos = new HashSet<>();
-			for(OpInfo info: suitableInfos) {
-				boolean functionallyAssignable = Types.isAssignable(Types.raw(info.opType()), Types.raw(ref.getType()));
-				if(!functionallyAssignable) continue;
-				try {
-					InfoSimplificationGenerator gen = new InfoSimplificationGenerator(info, env);
-					simpleInfos.add(gen.generateSuitableInfo(env, ref, hints));
-				} catch(Throwable e) {continue; }
-			}
-			// TODO: should this also return suitableInfos (i.e. combine the two)?
-			return simpleInfos;
-		}
-		return suitableInfos;
-	}
-
-	@Override
-	public List<OpCandidate> filterMatches(final List<OpCandidate> candidates) {
-		final List<OpCandidate> validCandidates = checkCandidates(candidates);
-
-		// List of valid candidates needs to be sorted according to priority.
-		// This is used as an optimization in order to not look at ops with
-		// lower priority than the already found one.
-		validCandidates.sort((c1, c2) -> Double.compare(c2.priority(), c1.priority()));
-
-		List<OpCandidate> matches;
-		matches = filterMatches(validCandidates, (cand) -> typesPerfectMatch(cand));
-		if (!matches.isEmpty())
-			return matches;
-
-		matches = filterMatches(validCandidates, (cand) -> typesMatch(cand));
-		return matches;
-	}
-
-	/**
-	 * Checks whether the arg types of the candidate satisfy the padded arg
-	 * types of the candidate. Sets candidate status code if there are too many,
-	 * to few,not matching arg types or if a match was found.
-	 *
-	 * @param candidate
-	 *            the candidate to check args for
-	 * @return whether the arg types are satisfied
-	 */
-	@Override
-	public boolean typesMatch(final OpCandidate candidate) {
-		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
-		if (!inputsMatch(candidate, typeBounds)) {
-			return false;
-		}
-		if (!outputsMatch(candidate, typeBounds)) {
-			return false;
-		}
-		candidate.setStatus(StatusCode.MATCH);
-		return true;
+		return agglomerated;
 	}
 
 	// -- Helper methods --
@@ -222,92 +108,6 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 			validCandidates.add(candidate);
 		}
 		return validCandidates;
-	}
-
-	/**
-	 * Filters specified list of candidates using specified predicate. This
-	 * method stops filtering when the priority decreases. Expects list of candidates
-	 * to be sorted in non-ascending order.
-	 *
-	 * @param candidates
-	 *            the candidates to filter
-	 * @param filter
-	 *            the condition
-	 * @return candidates passing test of condition and having highest priority
-	 */
-	private List<OpCandidate> filterMatches(final List<OpCandidate> candidates, final Predicate<OpCandidate> filter) {
-		final ArrayList<OpCandidate> matches = new ArrayList<>();
-		double priority = Double.NaN;
-		for (final OpCandidate candidate : candidates) {
-			final double p = OpUtils.getPriority(candidate);
-			if (p != priority && !matches.isEmpty()) {
-				// NB: Lower priority was reached; stop looking for any more
-				// matches.
-				break;
-			}
-			priority = p;
-
-			if (filter.test(candidate)) {
-				matches.add(candidate);
-			}
-		}
-		return matches;
-	}
-
-	/**
-	 * Determines if the candidate has some arguments missing.
-	 * <p>
-	 * Helper method of {@link #filterMatches(List)}.
-	 * </p>
-	 */
-	private boolean missArgs(final OpCandidate candidate, final Type[] paddedArgs) {
-		int i = 0;
-		for (final Member<?> member : OpUtils.inputs(candidate)) {
-			if (paddedArgs[i++] == null && member.isRequired()) {
-				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Determine if the arguments and the output types of the candidate
-	 * perfectly match with the reference.
-	 */
-	private boolean typesPerfectMatch(final OpCandidate candidate) {
-		int i = 0;
-		Type[] paddedArgs = candidate.paddedArgs();
-		for (final Type t : OpUtils.inputTypes(candidate)) {
-			if (paddedArgs[i] != null) {
-				if (!t.equals(paddedArgs[i]))
-					return false;
-			}
-			i++;
-		}
-
-		final Type outputType = candidate.getRef().getOutType();
-		if (!Objects.equals(outputType, OpUtils.outputType(candidate)))
-			return false;
-
-		candidate.setStatus(StatusCode.MATCH);
-		return true;
-	}
-
-	/**
-	 * Determines if the specified candidate is valid and sets status code if
-	 * not.
-	 *
-	 * @param candidate
-	 *            the candidate to check
-	 * @return whether the candidate is valid
-	 */
-	private boolean isValid(final OpCandidate candidate) {
-		if (candidate.opInfo().isValid()) {
-			return true;
-		}
-		candidate.setStatus(StatusCode.INVALID_STRUCT);
-		return false;
 	}
 
 	/**
@@ -368,6 +168,56 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 	}
 
 	/**
+	 * Determines if the specified candidate is valid and sets status code if
+	 * not.
+	 *
+	 * @param candidate
+	 *            the candidate to check
+	 * @return whether the candidate is valid
+	 */
+	private boolean isValid(final OpCandidate candidate) {
+		if (candidate.opInfo().isValid()) {
+			return true;
+		}
+		candidate.setStatus(StatusCode.INVALID_STRUCT);
+		return false;
+	}
+
+	@Override
+	public OpCandidate match(MatchingConditions conditions, OpEnvironment env) {
+		List<OpMatchingException> exceptions = new ArrayList<>(matchers.size());
+		// in priority order, search for a match
+		for (MatchingRoutine r : matchers) {
+			try {
+				return r.match(conditions, this, env);
+			}
+			catch (OpMatchingException e) {
+				exceptions.add(e);
+			}
+		}
+
+		// in the case of no matches, throw an agglomerated exception
+		throw agglomeratedException(exceptions);
+	}
+
+	/**
+	 * Determines if the candidate has some arguments missing.
+	 * <p>
+	 * Helper method of {@link #filterMatches(List)}.
+	 * </p>
+	 */
+	private boolean missArgs(final OpCandidate candidate, final Type[] paddedArgs) {
+		int i = 0;
+		for (final Member<?> member : OpUtils.inputs(candidate)) {
+			if (paddedArgs[i++] == null && member.isRequired()) {
+				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Checks whether the output type of the candidate matches the output type
 	 * of the {@link OpRef}. Sets candidate status code if they are not matching.
 	 *
@@ -391,6 +241,28 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 					"request=" + refOutType.getTypeName() + ", actual=" + candidateOutType.getTypeName());
 			return false;
 		}
+		return true;
+	}
+
+	/**
+	 * Checks whether the arg types of the candidate satisfy the padded arg
+	 * types of the candidate. Sets candidate status code if there are too many,
+	 * to few,not matching arg types or if a match was found.
+	 *
+	 * @param candidate
+	 *            the candidate to check args for
+	 * @return whether the arg types are satisfied
+	 */
+	@Override
+	public boolean typesMatch(final OpCandidate candidate) {
+		HashMap<TypeVariable<?>, TypeVarInfo> typeBounds = new HashMap<>();
+		if (!inputsMatch(candidate, typeBounds)) {
+			return false;
+		}
+		if (!outputsMatch(candidate, typeBounds)) {
+			return false;
+		}
+		candidate.setStatus(StatusCode.MATCH);
 		return true;
 	}
 }

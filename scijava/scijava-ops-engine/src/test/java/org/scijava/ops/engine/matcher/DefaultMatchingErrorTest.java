@@ -1,6 +1,7 @@
 
 package org.scijava.ops.engine.matcher;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import org.junit.Assert;
@@ -37,9 +38,11 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 		}
 		catch (OpMatchingException e) {
 			Assert.assertTrue(e.getMessage().startsWith(
-				"Multiple 'test.duplicateOp/" +
+				"No MatchingRoutine was able to produce a match!"));
+			Assert.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s
+				.getMessage().startsWith("Multiple 'test.duplicateOp/" +
 					"java.util.function.Function<java.lang.Double, java.lang.Double>' " +
-					"ops of priority 0.0:"));
+					"ops of priority 0.0:")));
 		}
 	}
 

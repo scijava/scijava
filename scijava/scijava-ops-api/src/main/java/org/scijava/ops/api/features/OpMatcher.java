@@ -27,15 +27,11 @@
  * #L%
  */
 
-package org.scijava.ops.engine.matcher;
+package org.scijava.ops.api.features;
 
-import java.util.List;
-
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.MatchingResult;
 
 /**
  * Finds Ops which match an {@link OpRef}.
@@ -45,27 +41,7 @@ import org.scijava.ops.api.features.MatchingResult;
 //TODO javadoc
 public interface OpMatcher {
 
-	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref);
-
-	OpCandidate findSingleMatch(OpEnvironment env, OpRef ref, Hints hints);
-
-	MatchingResult findMatch(OpEnvironment env, OpRef ref);
-
-	MatchingResult findMatch(OpEnvironment env, OpRef ref, Hints hints);
-
-	MatchingResult findMatch(OpEnvironment env, List<OpRef> refs);
-
-	MatchingResult findMatch(OpEnvironment env, List<OpRef> refs, Hints hints);
-
-	List<OpCandidate> findCandidates(OpEnvironment env, OpRef ref);
-
-	List<OpCandidate> findCandidates(OpEnvironment env, OpRef ref, Hints hints);
-
-	List<OpCandidate> findCandidates(OpEnvironment env, List<OpRef> refs);
-
-	List<OpCandidate> findCandidates(OpEnvironment env, List<OpRef> refs, Hints hints);
-
-	List<OpCandidate> filterMatches(List<OpCandidate> candidates);
+	OpCandidate match(MatchingConditions conditions, OpEnvironment env);
 
 	boolean typesMatch(OpCandidate candidate);
 }

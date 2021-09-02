@@ -10,7 +10,7 @@ import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.engine.matcher.OpMatcher;
+import org.scijava.ops.api.features.OpMatcher;
 
 public class ManualOpCandidate extends OpCandidate {
 

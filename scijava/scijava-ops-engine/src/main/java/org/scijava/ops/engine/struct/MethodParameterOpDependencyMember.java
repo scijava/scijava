@@ -58,8 +58,8 @@ public class MethodParameterOpDependencyMember<T> extends
 		final Type parameterType,
 		OpDependency annotation)
 	{
-		super(name, //
-			description, //
+		super(() -> name, //
+			() -> description, //
 			parameterType, //
 			annotation);
 

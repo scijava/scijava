@@ -8,6 +8,7 @@ import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.scijava.ValidityProblem;
@@ -42,6 +43,10 @@ public class MethodOpDependencyMemberParser implements
 	private static void parseMethodOpDependencies(final List<MethodParameterOpDependencyMember<?>> items,
 		final Method annotatedMethod)
 	{
+		boolean hasOpDependencies = Arrays.stream(annotatedMethod.getParameters()) //
+				.anyMatch(param -> param.isAnnotationPresent(OpDependency.class));
+		if (!hasOpDependencies) return;
+
 		MethodJavadoc javadoc = RuntimeJavadoc.getJavadoc(annotatedMethod);
 		List<ParamJavadoc> params = javadoc.getParams();
 		final java.lang.reflect.Parameter[] methodParams = annotatedMethod

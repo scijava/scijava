@@ -95,21 +95,11 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		// Assigns fmt inputs to javadoc params
 		List<FunctionalMethodType> params = fmts.stream().filter(fmt -> fmt.itemIO() != ItemIO.OUTPUT).collect(Collectors.toList());
 		Parameter[] methodParams = m.getParameters();
-//		int j = 0;
-//		Parameter methodParam = methodParams[j++];
-//		for (int i = 0; i < params.size(); i++) {
-//			FunctionalMethodType fmt = params.get(i);
-//			while (methodParam.isAnnotationPresent(OpDependency.class))
-//				methodParam = methodParams[j++];
-//			fmtNames.put(fmt, doc.getParams().get(j).getName());
-//			fmtDescriptions.put(fmt, doc.getParams().get(j).getComment().toString());
-//
-//		}
 		int fmtIndex = 0;
 		for(int i = 0; i < methodParams.length; i++) {
 			Parameter methodParam = methodParams[i];
 			if (methodParam.isAnnotationPresent(OpDependency.class)) continue;
-			FunctionalMethodType fmt = fmts.get(fmtIndex++);
+			FunctionalMethodType fmt = params.get(fmtIndex++);
 			fmtNames.put(fmt, doc.getParams().get(i).getName());
 			fmtDescriptions.put(fmt, doc.getParams().get(i).getComment().toString());
 		}

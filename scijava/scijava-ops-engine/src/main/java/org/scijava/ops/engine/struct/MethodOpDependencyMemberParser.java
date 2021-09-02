@@ -10,8 +10,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.scijava.ValidityProblem;
+import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.ValidityException;
@@ -19,6 +22,8 @@ import org.scijava.struct.ValidityException;
 public class MethodOpDependencyMemberParser implements
 	MemberParser<Method, MethodParameterOpDependencyMember<?>>
 {
+
+	private static final Map<Method, MethodJavadoc> methodDocMap = new ConcurrentHashMap<>();
 
 	@Override
 	public List<MethodParameterOpDependencyMember<?>> parse(Method source)
@@ -40,15 +45,20 @@ public class MethodOpDependencyMemberParser implements
 		return items;
 	}
 
+	private static MethodJavadoc getDocData(Method annotatedMethod) {
+		return methodDocMap.computeIfAbsent(annotatedMethod, m -> RuntimeJavadoc
+			.getJavadoc(m));
+	}
+
 	private static void parseMethodOpDependencies(final List<MethodParameterOpDependencyMember<?>> items,
 		final Method annotatedMethod)
 	{
+		// If the Op method has no dependencies, return false without looping
+		// through parameters
 		boolean hasOpDependencies = Arrays.stream(annotatedMethod.getParameters()) //
 				.anyMatch(param -> param.isAnnotationPresent(OpDependency.class));
 		if (!hasOpDependencies) return;
 
-		MethodJavadoc javadoc = RuntimeJavadoc.getJavadoc(annotatedMethod);
-		List<ParamJavadoc> params = javadoc.getParams();
 		final java.lang.reflect.Parameter[] methodParams = annotatedMethod
 			.getParameters();
 
@@ -56,11 +66,21 @@ public class MethodOpDependencyMemberParser implements
 			final OpDependency dependency = methodParams[i].getAnnotation(OpDependency.class);
 			if (dependency == null) continue;
 
-			final String name = params.size() > i ? params.get(i).getName() : methodParams[i].getName();
-			final String description = params.size() > i ? params.get(i).getComment().toString() : "";
+			final int j = i;
+			Producer<String> nameGenerator = () -> {
+				List<ParamJavadoc> params = getDocData(annotatedMethod).getParams();
+				if (params.size() <= j) return methodParams[j].getName();
+				return getDocData(annotatedMethod).getParams().get(j).getName();
+			};
+
+			Producer<String> descriptionGenerator = () -> {
+				List<ParamJavadoc> params = getDocData(annotatedMethod).getParams();
+				if (params.size() <= j) return "";
+				return getDocData(annotatedMethod).getParams().get(j).getComment().toString();
+			};
 			final Type methodParamType = methodParams[i].getParameterizedType();
 			final MethodParameterOpDependencyMember<?> item =
-				new MethodParameterOpDependencyMember<>(name, description,
+				new MethodParameterOpDependencyMember<>(nameGenerator, descriptionGenerator,
 					methodParamType, dependency);
 			items.add(item);
 		}

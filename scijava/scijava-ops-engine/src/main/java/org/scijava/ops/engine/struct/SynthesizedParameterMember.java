@@ -30,11 +30,11 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 
 	private String description = null;
 
-	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> nameInfo)
+	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> synthesizerGenerator)
 	{
 		this.fmt = fmt;
-		this.nameGenerator = () -> nameInfo.create().name(fmt);
-		this.descriptionGenerator = () -> nameInfo.create().description(fmt);
+		this.nameGenerator = () -> synthesizerGenerator.create().name(fmt);
+		this.descriptionGenerator = () -> synthesizerGenerator.create().description(fmt);
 	}
 
 	public SynthesizedParameterMember(final Type itemType, final String name,

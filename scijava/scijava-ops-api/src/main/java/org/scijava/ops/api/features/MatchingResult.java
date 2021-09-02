@@ -1,4 +1,4 @@
-package org.scijava.ops.engine.matcher;
+package org.scijava.ops.api.features;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +7,12 @@ import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.features.OpMatchingException;
 
 /**
- * Class representing the result from type matching done by the
- * {@link OpMatcher}. Contains the original candidates which match
- * the types specified by {@link OpRef} and the final matches that match all
- * inputs, outputs, and arguments.
+ * Class representing the result from type matching done by a
+ * {@link MatchingRoutine}. Contains the original candidates which match the
+ * types specified by {@link OpRef} and the final matches that match all inputs,
+ * outputs, and arguments.
  * 
  * @author David Kolb
  */

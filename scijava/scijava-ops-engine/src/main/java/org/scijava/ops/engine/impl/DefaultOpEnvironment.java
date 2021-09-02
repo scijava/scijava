@@ -65,6 +65,7 @@ import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;

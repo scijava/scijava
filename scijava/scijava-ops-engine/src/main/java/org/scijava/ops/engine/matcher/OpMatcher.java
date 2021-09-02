@@ -35,7 +35,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.engine.matcher.MatchingResult;
+import org.scijava.ops.api.features.MatchingResult;
 
 /**
  * Finds Ops which match an {@link OpRef}.

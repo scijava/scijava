@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.impl;
+package org.scijava.ops.api.features;
 
 import java.util.Objects;
 

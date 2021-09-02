@@ -42,6 +42,7 @@ import org.scijava.Context;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInstance;
+import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpService;
 import org.scijava.ops.spi.Op;

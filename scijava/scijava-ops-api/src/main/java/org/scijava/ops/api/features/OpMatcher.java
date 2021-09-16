@@ -42,6 +42,4 @@ import org.scijava.ops.api.OpRef;
 public interface OpMatcher {
 
 	OpCandidate match(MatchingConditions conditions, OpEnvironment env);
-
-	boolean typesMatch(OpCandidate candidate);
 }

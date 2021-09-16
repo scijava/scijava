@@ -18,9 +18,6 @@ public class ManualOpCandidate extends OpCandidate {
 		OpMatcher matcher)
 	{
 		super(env, ref, info, generateTypeVarAssigns(ref, info));
-		if (!matcher.typesMatch(this)) throw new IllegalArgumentException(
-			"OpInfo " + info +
-				" cannot satisfy the requirements contained within OpRef " + ref);
 	}
 
 	private static Map<TypeVariable<?>, Type> generateTypeVarAssigns(OpRef ref,

@@ -9,6 +9,7 @@ import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.engine.progress.BinaryProgressReporter;
+import org.scijava.ops.engine.progress.Progress;
 import org.scijava.ops.engine.progress.ProgressReporters;
 
 /**
@@ -51,6 +52,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 		e.setReporter(new BinaryProgressReporter());
 		ProgressReporters.add(e);
 		metadata.history().addExecution(e);
+		Progress.pushExecution(this);
 	}
 
 	@Override
@@ -59,6 +61,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 		OpExecution e = ProgressReporters.remove();
 		e.recordCompletion(output);
 		metadata.history().logOutput(e, output);
+		Progress.popExecution();
 	}
 
 }

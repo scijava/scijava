@@ -13,4 +13,6 @@ public interface ProgressReporter {
 
 	double getProgress();
 
+	boolean isCompleted();
+
 }

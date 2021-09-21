@@ -33,4 +33,9 @@ public class BinaryProgressReporter implements ProgressReporter {
 		hasCompleted = true;
 	}
 
+	@Override
+	public boolean isCompleted() {
+		return hasCompleted;
+	}
+
 }

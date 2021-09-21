@@ -33,4 +33,9 @@ public class DefaultProgressReporter implements ProgressReporter {
 		return Math.max(0, Math.min(1, completedElements.doubleValue() / numElements));
 	}
 
+	@Override
+	public boolean isCompleted() {
+		return numElements == completedElements.get();
+	}
+
 }

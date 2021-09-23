@@ -80,17 +80,20 @@ public final class Progress {
 		pingListeners();
 	}
 
-	public static void defineStages(long numStages) {
-		currentTask().defineStages(numStages);
+	public static void defineTotalProgress(int opStages) {
+		currentTask().defineTotalProgress(opStages);
+	}
+
+	public static void defineTotalProgress(int opStages, int totalSubTasks) {
+		currentTask().defineTotalProgress(opStages, totalSubTasks);
 	}
 
 	public static void registerSubtasks() {
 		
 	}
 
-	public static void maxForStage(long stage, long max) {
-		ProgressibleObject o = progressibleStack.get().peek();
-		o.task().setMax(max);
+	public static void setStageMax(long max) {
+		currentTask().setStageMax(max);
 	}
 
 	private Progress() {}

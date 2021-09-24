@@ -6,7 +6,6 @@ import java.util.concurrent.Future;
 public class OpExecution {
 
 	private final RichOp<?> op;
-	private ProgressReporter reporter;
 	private final CompletableFuture<Object> outContainer;
 
 	public OpExecution(RichOp<?> op) {
@@ -14,21 +13,12 @@ public class OpExecution {
 		this.outContainer = new CompletableFuture<>();
 	}
 
-	public void setReporter(ProgressReporter p) {
-		this.reporter = p;
-	}
-
 	public RichOp<?> op() {
 		return op;
 	}
 
-	public ProgressReporter reporter() {
-		return reporter;
-	}
-
 	public void recordCompletion(Object output) {
 		outContainer.complete(output);
-		reporter.reportCompletion();
 	}
 
 	public Future<Object> output() {

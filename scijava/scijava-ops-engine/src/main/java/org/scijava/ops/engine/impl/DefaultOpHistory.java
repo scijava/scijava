@@ -14,7 +14,6 @@ import org.scijava.ops.api.OpExecution;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.engine.progress.ProgressReporters;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
@@ -52,8 +51,6 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 
 	private final Map<Object, List<RichOp<?>>> mutationMap = new WeakHashMap<>();
 
-	private final Set<OpExecution> currentExecutions = new HashSet<>();
-
 	// -- USER API -- //
 
 	/**
@@ -71,34 +68,11 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	}
 
 	@Override
-	public Set<OpExecution> currentExecutions() {
-		return new HashSet<>(currentExecutions);
-	}
-
-
-	@Override
 	public InfoChain opExecutionChain(Object op) {
 		return dependencyChain.get(op);
 	}
 
 	// -- HISTORY MAINTENANCE API -- //
-
-	/**
-	 * Logs an Op execution in the history
-	 * <p>
-	 * TODO: It would be nice if different Objects returned different Objects with
-	 * the same hash code would hash differently. For example, if two Ops return a
-	 * {@link Double} of the same value, they will appear as the same Object, and
-	 * asking for the execution history on either of the {@link Object}s will
-	 * suggest that both executions mutated both {@link Object}s. This would
-	 * really hamper the simplicity of the implementation, however.
-	 * 
-	 * @param e the {@link OpExecution} that we'd like to record
-	 */
-	@Override
-	public void addExecution(OpExecution e) {
-		currentExecutions.add(e);
-	}
 
 	@Override
 	public void logOp(RichOp<?> op) {
@@ -106,10 +80,9 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	}
 
 	@Override
-	public void logOutput(OpExecution e, Object output) {
-		currentExecutions.remove(e);
+	public void logOutput(RichOp<?> op, Object output) {
 		if (!mutationMap.containsKey(output)) updateList(output);
-		resolveExecution(e.op(), output);
+		resolveExecution(op, output);
 	}
 
 	// -- HELPER METHODS -- //

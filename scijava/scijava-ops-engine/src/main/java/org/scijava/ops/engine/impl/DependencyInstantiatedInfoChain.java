@@ -25,10 +25,7 @@ public class DependencyInstantiatedInfoChain extends InfoChain {
 
 	@Override
 	protected Object generateOp() {
-		List<Object> dependencyInstances = dependencies.stream() //
-			.map(d -> d.op()) //
-			.collect(Collectors.toList());
-		return info().createOpInstance(dependencyInstances).object();
+		return info().createOpInstance(dependencies).object();
 	}
 
 	public static List<InfoChain> chainsFrom(List<RichOp<?>> dependencies) {

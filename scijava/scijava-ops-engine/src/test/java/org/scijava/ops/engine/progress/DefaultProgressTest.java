@@ -7,7 +7,9 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
@@ -64,7 +66,7 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 	@Test
 	public void testMultiStageReporter() throws InterruptedException {
 		// obtain the Op
-		BiFunction<Integer,Integer, Integer> op = //
+		BiFunction<Integer, Integer, Integer> op = //
 			ops.op("test.progressReporter") //
 				.inType(Integer.class, Integer.class) //
 				.outType(Integer.class) //
@@ -82,10 +84,47 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 
 	}
 
+	@Test
+	public void testDependentReporter() throws InterruptedException {
+		// obtain the Op
+		Function<Integer, Integer> op = //
+			ops.op("test.dependentProgressReporter") //
+				.inType(Integer.class) //
+				.outType(Integer.class) //
+				.function();
+
+		int numIterations = 100;
+		Progress.addListener(op, (t) -> {
+			testProgress(t.progress(), 3);
+		});
+		Thread t = new Thread(() -> op.apply(numIterations));
+		t.start();
+		t.join();
+		Assert.assertEquals(3, this.numUpdates);
+
+	}
+
 	private int numUpdates = 0;
 
 	private void testProgress(double progress, int numIterations) {
 		Assert.assertEquals((double) ++numUpdates / numIterations, progress, 1e-6);
+	}
+
+}
+
+@Plugin(type = Op.class, name = "test.dependentProgressReporter")
+class DependentProgressReportingOp implements Function<Integer, Integer> {
+
+	@OpDependency(name = "test.progressReporter")
+	private Function<Integer, Integer> dependency;
+
+	@Override
+	public Integer apply(Integer t) {
+		Progress.defineTotalProgress(0, 3);
+		for (int i = 0; i < 3; i++) {
+			dependency.apply(t);
+		}
+		return 3 * t;
 	}
 
 }

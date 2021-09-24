@@ -2,6 +2,7 @@ package org.scijava.ops.engine.progress;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ public final class Progress {
 	public static void popExecution() {
 		ProgressibleObject completed = progressibleStack.get().pop();
 		completed.task().complete();
+		pingListeners();
 	}
 
 	public static void pushExecution(Object progressible) {
@@ -60,7 +62,8 @@ public final class Progress {
 
 	private static void pingListeners() {
 		ProgressibleObject o = progressibleStack.get().peek();
-		List<ProgressListener> list = progressibleListeners.get(o.object());
+		if (o == null) return;
+		List<ProgressListener> list = progressibleListeners.getOrDefault(o.object(), Collections.emptyList());
 		synchronized (list) {
 			list.forEach(l -> l.updateProgress(o.task()));
 		}

@@ -25,7 +25,7 @@ public class Task {
 
 	boolean tasksDefined = false;
 
-	AtomicLong max = new AtomicLong(0);
+	AtomicLong max = new AtomicLong(1);
 
 	AtomicLong current = new AtomicLong(0);
 
@@ -47,6 +47,7 @@ public class Task {
 		if (!subTasks.contains(task)) throw new IllegalArgumentException("Task " +
 			task + " is not a subtask of Task " + this);
 		subTasksCompleted.getAndIncrement();
+
 	}
 
 	public boolean isComplete() {

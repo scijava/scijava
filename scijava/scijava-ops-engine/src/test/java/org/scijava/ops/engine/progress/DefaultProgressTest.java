@@ -44,7 +44,7 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 	};
 
 	@Test
-	public void testSimpleReporter() throws InterruptedException {
+	public void testSimpleReporter() {
 		// obtain the Op
 		Function<Integer, Integer> op = //
 			ops.op("test.progressReporter") //
@@ -56,15 +56,12 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 		Progress.addListener(op, (t) -> {
 			testProgress(t.progress(), numIterations);
 		});
-		Thread t = new Thread(() -> op.apply(numIterations));
-		t.start();
-		t.join();
-		Assert.assertEquals(numIterations, this.numUpdates);
+		op.apply(numIterations);
 
 	}
 
 	@Test
-	public void testMultiStageReporter() throws InterruptedException {
+	public void testMultiStageReporter() {
 		// obtain the Op
 		BiFunction<Integer, Integer, Integer> op = //
 			ops.op("test.progressReporter") //
@@ -77,15 +74,11 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 		Progress.addListener(op, (t) -> {
 			testProgress(t.progress(), numStages * numIterations);
 		});
-		Thread t = new Thread(() -> op.apply(numStages, numIterations));
-		t.start();
-		t.join();
-		Assert.assertEquals(numStages * numIterations, this.numUpdates);
-
+		op.apply(numStages, numIterations);
 	}
 
 	@Test
-	public void testDependentReporter() throws InterruptedException {
+	public void testDependentReporter() {
 		// obtain the Op
 		Function<Integer, Integer> op = //
 			ops.op("test.dependentProgressReporter") //
@@ -97,11 +90,41 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 		Progress.addListener(op, (t) -> {
 			testProgress(t.progress(), 3);
 		});
-		Thread t = new Thread(() -> op.apply(numIterations));
-		t.start();
-		t.join();
-		Assert.assertEquals(3, this.numUpdates);
+		op.apply(numIterations);
 
+	}
+
+	@Test
+	public void testComplexDependentReporter() {
+		// obtain the Op
+		Function<Integer, Integer> op = //
+			ops.op("test.dependentComplexProgressReporter") //
+				.inType(Integer.class) //
+				.outType(Integer.class) //
+				.function();
+
+		int numIterations = 100;
+		Progress.addListener(op, (t) -> {
+			testComplexProgress(t.progress(), numIterations);
+		});
+		op.apply(numIterations);
+	}
+
+	boolean firstStageComplete = false;
+
+	private void testComplexProgress(double progress, int numIterations) {
+		if(!firstStageComplete) {
+			Assert.assertEquals(1. / 3, progress, 1e-6);
+			firstStageComplete = true;
+			return;
+		}
+		else if(numUpdates < numIterations) {
+			double expected = (1. + (double) ++numUpdates / numIterations) / 3;
+			Assert.assertEquals(expected, progress, 1e-6);
+		}
+		else {
+			Assert.assertEquals(1., progress, 1e-6);
+		}
 	}
 
 	private int numUpdates = 0;
@@ -124,6 +147,28 @@ class DependentProgressReportingOp implements Function<Integer, Integer> {
 		for (int i = 0; i < 3; i++) {
 			dependency.apply(t);
 		}
+		return 3 * t;
+	}
+
+}
+
+@Plugin(type = Op.class, name = "test.dependentComplexProgressReporter")
+class DependentComplexProgressReportingOp implements Function<Integer, Integer> {
+
+	@OpDependency(name = "test.progressReporter")
+	private Function<Integer, Integer> dependency;
+
+	@Override
+	public Integer apply(Integer t) {
+		Progress.defineTotalProgress(1, 2);
+		dependency.apply(t);
+
+		Progress.setStageMax(t);
+		for (int i = 0; i < t; i++) {
+			Progress.update();
+		}
+
+		dependency.apply(t);
 		return 3 * t;
 	}
 

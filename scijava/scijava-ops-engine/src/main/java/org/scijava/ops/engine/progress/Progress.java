@@ -43,9 +43,17 @@ public final class Progress {
 	}
 
 	public static void popExecution() {
-		ProgressibleObject completed = progressibleStack.get().pop();
+		progressibleStack.get().pop();
+	}
+
+	public static void popAndCompleteExecution() {
+		ProgressibleObject completed = progressibleStack.get().peek();
 		completed.task().complete();
-		pingListeners();
+		pingListeners(completed);
+		popExecution();
+		if (progressibleStack.get().peek() != null) {
+			pingListeners(progressibleStack.get().peek());
+		}
 	}
 
 	public static void pushExecution(Object progressible) {
@@ -60,9 +68,7 @@ public final class Progress {
 		progressibleStack.get().push(new ProgressibleObject(progressible, t));
 	}
 
-	private static void pingListeners() {
-		ProgressibleObject o = progressibleStack.get().peek();
-		if (o == null) return;
+	private static void pingListeners(ProgressibleObject o) {
 		List<ProgressListener> list = progressibleListeners.getOrDefault(o.object(), Collections.emptyList());
 		synchronized (list) {
 			list.forEach(l -> l.updateProgress(o.task()));
@@ -80,7 +86,7 @@ public final class Progress {
 
 	public static void update(long numElements) {
 		currentTask().update(numElements);
-		pingListeners();
+		pingListeners(progressibleStack.get().peek());
 	}
 
 	public static void defineTotalProgress(int opStages) {

@@ -52,7 +52,7 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	public void postprocess(Object output) {
 		// Log a new execution
 		metadata.history().logOutput(this, output);
-		Progress.popExecution();
+		Progress.popAndCompleteExecution();
 	}
 
 }

@@ -16,20 +16,22 @@ public class Task {
 		this.parent = parent;
 	}
 
-	long numStages = -1;
+	long numStages = 0;
 	AtomicLong stagesCompleted = new AtomicLong(0);
 
-	long numSubTasks = -1;
+	long numSubTasks = 0;
 	public List<Task> subTasks = new ArrayList<>();
 	AtomicLong subTasksCompleted = new AtomicLong(0);
 
 	boolean tasksDefined = false;
+	boolean updateDefined = false;
 
 	AtomicLong max = new AtomicLong(1);
 
 	AtomicLong current = new AtomicLong(0);
 
 	public String status;
+	private boolean completed = false;
 
 	public synchronized Task createSubtask() {
 		Task sub = new Task(this);
@@ -39,19 +41,26 @@ public class Task {
 
 	
 	public void complete() {
-		current.set(max.get());
+		if (current.longValue() != 0) throw new IllegalStateException(
+			"Task finished in the middle of a stage!");
+		if (stagesCompleted.longValue() != numStages)
+			throw new IllegalStateException("Task declared " + numStages +
+				" total stages, however only " + stagesCompleted + " were completed!");
+		if (subTasksCompleted.longValue() != numSubTasks)
+			throw new IllegalStateException("Task declared " + numSubTasks +
+				" op subtasks, however only " + subTasksCompleted + " were completed!");
+		this.completed = true;
 		if (parent != null) parent.recordSubtaskCompletion(this);
 	}
 
 	private void recordSubtaskCompletion(Task task) {
 		if (!subTasks.contains(task)) throw new IllegalArgumentException("Task " +
 			task + " is not a subtask of Task " + this);
-		subTasksCompleted.getAndIncrement();
-
+		if (tasksDefined) subTasksCompleted.getAndIncrement();
 	}
 
 	public boolean isComplete() {
-		return max.get() == current.get() && subTasks.stream().allMatch(t -> t.isComplete());
+		return completed;
 	}
 
 	public void defineTotalProgress(int opStages) {
@@ -70,22 +79,16 @@ public class Task {
 
 	public void setStageMax(long max) {
 		this.max.set(max);
+		this.updateDefined = true;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public long max( ) {
-		return subTasks.parallelStream().mapToLong(t -> t.max()).sum() + max.get();
-	}
-
-	public long current( ) {
-		return subTasks.parallelStream().mapToLong(t -> t.current()).sum() + current.get();
-	}
-
 	public double progress() {
-		if(!this.tasksDefined) throw new IllegalStateException("Progress undefined - Op does not define total progress");
+		if(isComplete()) return 1.;
+		if(!this.tasksDefined) return 0.;
 		double totalCompletion = stagesCompleted.get();
 		totalCompletion += current.doubleValue() / max.doubleValue();
 		totalCompletion += subTasksCompleted.get();
@@ -94,8 +97,21 @@ public class Task {
 
 
 	public void update(long numElements) {
-		if(numStages == 0) throw new IllegalStateException("");
-		current.addAndGet(numElements);
+		if (updateDefined) {
+			current.addAndGet(numElements);
+			if (current.longValue() == max.longValue()) {
+				current.set(0);
+				stagesCompleted.incrementAndGet();
+				this.updateDefined = false;
+				if (stagesCompleted.longValue() == numStages && subTasksCompleted
+					.longValue() == numSubTasks) completed = true;
+			}
+		}
+		else {
+			// update is undefined if total progress has not been set!
+			throw new IllegalStateException(
+				"Cannot update; progress has not yet been defined!");
+		}
 	}
 
 }

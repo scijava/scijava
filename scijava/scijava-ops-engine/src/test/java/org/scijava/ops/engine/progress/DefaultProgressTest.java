@@ -89,7 +89,7 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 			int timesUpdated = 0;
 
 			@Override
-			public void updateProgress(Task task) {
+			public void acknowledgeUpdate(Task task) {
 				if (timesUpdated > 0) Assert.fail(
 					"If the Op doesn't call update, the listener should only be called upon the Op's completion!");
 				timesUpdated++;
@@ -120,7 +120,7 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 			double maxIterations = numIterations;
 
 			@Override
-			public void updateProgress(Task task) {
+			public void acknowledgeUpdate(Task task) {
 				Assert.assertEquals(Math.min(1., currentIterations++ / maxIterations),
 					task.progress(), 1e-6);
 			}
@@ -150,7 +150,7 @@ public class DefaultProgressTest extends AbstractTestEnvironment {
 			double maxIterations = numStages * numIterations;
 
 			@Override
-			public void updateProgress(Task task) {
+			public void acknowledgeUpdate(Task task) {
 				Assert.assertEquals(Math.min(1., currentIterations++ / maxIterations),
 					task.progress(), 1e-6);
 			}

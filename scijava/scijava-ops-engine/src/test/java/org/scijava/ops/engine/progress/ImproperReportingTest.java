@@ -64,20 +64,27 @@ public class ImproperReportingTest extends AbstractTestEnvironment {
 		return totalStages;
 	};
 
+	/**
+	 * An Op that defines fewer subtasks than it runs
+	 * 
+	 * @param op the subtask being run
+	 * @return the summation of each subtask
+	 */
 	@OpMethod(names = "test.defineTooFewSubTasks", type = Producer.class)
 	public static Integer tooFewSubTaskOp(@OpDependency(
 		name = "test.progressReporter") Function<Integer, Integer> op)
 	{
 		Progress.defineTotalProgress(0, 2);
 		return IntStream.range(0, 3) //
-				.map(i -> op.apply(4)) //
-				.sum();
+			.map(i -> op.apply(4)) //
+			.sum();
 	}
 
 	/**
-	 * An Op that defines more subtasks than 
-	 * @param op
-	 * @return
+	 * An Op that defines more subtasks than it runs
+	 * 
+	 * @param op the subtask being run
+	 * @return the summation of each subtask
 	 */
 	@OpMethod(names = "test.defineTooManySubTasks", type = Producer.class)
 	public static Integer tooManySubTaskOp(@OpDependency(
@@ -85,8 +92,8 @@ public class ImproperReportingTest extends AbstractTestEnvironment {
 	{
 		Progress.defineTotalProgress(0, 3);
 		return IntStream.range(0, 2) //
-				.map(i -> op.apply(4)) //
-				.sum();
+			.map(i -> op.apply(4)) //
+			.sum();
 	}
 
 	/**
@@ -121,7 +128,7 @@ public class ImproperReportingTest extends AbstractTestEnvironment {
 			Integer.class).producer();
 		Assert.assertThrows(IllegalStateException.class, () -> op.create());
 	}
-	
+
 	/**
 	 * Tests that Ops who updated progress past the defined maximum result in a
 	 * thrown error.
@@ -134,8 +141,8 @@ public class ImproperReportingTest extends AbstractTestEnvironment {
 	}
 
 	/**
-	 * Tests that Ops who did not complete as many stages as they said they would
-	 * results in a thrown error.
+	 * Tests that Ops who did not complete as many subtasks as they said they
+	 * would results in a thrown error.
 	 */
 	@Test
 	public void testDefineTooManySubTasks() {

@@ -71,7 +71,7 @@ public final class Progress {
 	private static void pingListeners(ProgressibleObject o) {
 		List<ProgressListener> list = progressibleListeners.getOrDefault(o.object(), Collections.emptyList());
 		synchronized (list) {
-			list.forEach(l -> l.updateProgress(o.task()));
+			list.forEach(l -> l.acknowledgeUpdate(o.task()));
 		}
 	}
 
@@ -86,6 +86,11 @@ public final class Progress {
 
 	public static void update(long numElements) {
 		currentTask().update(numElements);
+		pingListeners(progressibleStack.get().peek());
+	}
+
+	public static void setStatus(String status) {
+		currentTask().setStatus(status);
 		pingListeners(progressibleStack.get().peek());
 	}
 

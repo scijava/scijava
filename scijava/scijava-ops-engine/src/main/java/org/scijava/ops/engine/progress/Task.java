@@ -30,7 +30,7 @@ public class Task {
 
 	AtomicLong current = new AtomicLong(0);
 
-	public String status;
+	public String status = "Executing...";
 	private boolean completed = false;
 
 	public synchronized Task createSubtask() {
@@ -95,6 +95,9 @@ public class Task {
 		return totalCompletion / (numStages + numSubTasks);
 	}
 
+	public String status() {
+		return status;
+	}
 
 	public void update(long numElements) {
 		if (updateDefined) {

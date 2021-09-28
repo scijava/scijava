@@ -38,7 +38,7 @@ public class DependencyProgressTest extends AbstractTestEnvironment {
 			double middleStageMax = numIterations;
 
 			@Override
-			public void updateProgress(Task task) {
+			public void acknowledgeUpdate(Task task) {
 				if (subtasksCompleted == 0) {
 					Assert.assertEquals(1. / 3, task.progress(), 1e-6);
 					subtasksCompleted++;
@@ -77,7 +77,7 @@ public class DependencyProgressTest extends AbstractTestEnvironment {
 			double maxIterations = 3;
 
 			@Override
-			public void updateProgress(Task task) {
+			public void acknowledgeUpdate(Task task) {
 				Assert.assertEquals(Math.min(1., currentIterations++ / maxIterations),
 					task.progress(), 1e-6);
 			}

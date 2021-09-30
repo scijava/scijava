@@ -98,6 +98,7 @@
 		<therapi.version>0.12.0</therapi.version>
 		<therapi-runtime-javadoc.version>${therapi.version}</therapi-runtime-javadoc.version>
 		<therapi-runtime-javadoc-scribe.version>${therapi.version}</therapi-runtime-javadoc-scribe.version>
+		<therapi.packages>-</therapi.packages>
 	</properties>
 
 	<build>
@@ -117,6 +118,10 @@
 							<version>${scijava-common.version}</version>
 						</path>
 					</annotationProcessorPaths>
+					<fork>true</fork>
+					<compilerArgs>
+						<arg>-Ajavadoc.packages="${therapi.packages}"</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>

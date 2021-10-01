@@ -1,45 +1,70 @@
+
 package org.scijava.ops.engine.progress;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Keeps track of progress associated with an execution of progressable code.
+ * {@Link Task}s should <b>not</b> be updated by the code itself; it should be
+ * update via {@link Progress#update()}.
+ *
+ * @author Gabriel Selzer
+ */
 public class Task {
 
+	// -- FIELDS -- //
+
+	/** Parent of this task */
 	private final Task parent;
+
+	/** Subtasks created by this task */
+	private Set<Task> subTasks = new HashSet<>();
+
+	/** Designates task completion */
+	private boolean completed = false;
+
+	/** Number of processing stages within the task */
+	private long numStages = 0;
+
+	/** Number of subtasks utilized by the task */
+	private long numSubTasks = 0;
+
+	/** Progress in current stage */
+	private AtomicLong current = new AtomicLong(0);
+
+	/** Maximum of current stage */
+	private AtomicLong max = new AtomicLong(1);
+
+	/** Number of within-task stages completed */
+	private AtomicLong stagesCompleted = new AtomicLong(0);
+
+	/** Number of subtasks completed */
+	private AtomicLong subTasksCompleted = new AtomicLong(0);
+
+	/**
+	 * True iff a call to {@link Task#defineTotalProgress(int, int)} has been made
+	 */
+	private boolean tasksDefined = false;
+
+	/** True iff {@link Task#max} has been defined for the current stage */
+	private boolean updateDefined = false;
+
+	/** Computation status as defined by the task */
+	private String status = "Executing...";
 
 	public Task() {
 		this.parent = null;
 	}
 
-	public Task(Task parent) {
+	public Task(final Task parent) {
 		this.parent = parent;
 	}
 
-	long numStages = 0;
-	AtomicLong stagesCompleted = new AtomicLong(0);
-
-	long numSubTasks = 0;
-	public List<Task> subTasks = new ArrayList<>();
-	AtomicLong subTasksCompleted = new AtomicLong(0);
-
-	boolean tasksDefined = false;
-	boolean updateDefined = false;
-
-	AtomicLong max = new AtomicLong(1);
-
-	AtomicLong current = new AtomicLong(0);
-
-	public String status = "Executing...";
-	private boolean completed = false;
-
-	public synchronized Task createSubtask() {
-		Task sub = new Task(this);
-		subTasks.add(sub);
-		return sub;
-	}
-
-	
+	/**
+	 * Records the completion of this {@link Task}
+	 */
 	public void complete() {
 		if (current.longValue() != 0) throw new IllegalStateException(
 			"Task finished in the middle of a stage!");
@@ -53,67 +78,155 @@ public class Task {
 		if (parent != null) parent.recordSubtaskCompletion(this);
 	}
 
-	private void recordSubtaskCompletion(Task task) {
-		if (!subTasks.contains(task)) throw new IllegalArgumentException("Task " +
-			task + " is not a subtask of Task " + this);
-		if (tasksDefined) subTasksCompleted.getAndIncrement();
+	/**
+	 * Creates a subtask, recording it to keep track of progress.
+	 *
+	 * @return the subtask.
+	 */
+	public synchronized Task createSubtask() {
+		final Task sub = new Task(this);
+		subTasks.add(sub);
+		return sub;
 	}
 
-	public boolean isComplete() {
-		return completed;
+	/**
+	 * Defines the total progress of this {@link Task}.
+	 * <p>
+	 * This method <b>must be called</b> before {@link #update(long)} or
+	 * {@link Task#progress()} are called, as otherwise total progress cannot be
+	 * defined.
+	 * <p>
+	 * Under the hood, this method calls {@link #defineTotalProgress(int, int)}
+	 *
+	 * @param totalStages the number of computation stages within the task
+	 */
+	public void defineTotalProgress(final int totalStages) {
+		defineTotalProgress(totalStages, 0);
 	}
 
-	public void defineTotalProgress(int opStages) {
-		defineTotalProgress(opStages, 0);
-	}
-
-	public void defineTotalProgress(int opStages, int totalSubTasks) {
-		this.numStages = opStages;
+	/**
+	 * Defines the total progress of this {@link Task}.
+	 * <p>
+	 * This method <b>must be called</b> before {@link #update(long)} or
+	 * {@link Task#progress()} are called, as otherwise total progress cannot be
+	 * defined.
+	 *
+	 * @param totalStages the number of computation stages within the task
+	 * @param totalSubTasks the number <b>of times</b> subtasks are called upon
+	 *          within the task. This <b>is not</b> the same as the number of
+	 *          subtasks used (as one subtask may run multiple times).
+	 */
+	public void defineTotalProgress(final int totalStages,
+		final int totalSubTasks)
+	{
+		this.numStages = totalStages;
 		this.numSubTasks = totalSubTasks;
 		this.tasksDefined = true;
 	}
 
-	public boolean progressDefined () {
-		return tasksDefined;
+	/**
+	 * Returns {@code true} iff this {@link Task} is complete.
+	 *
+	 * @return {@code true} iff this {@link Task} is complete.
+	 */
+	public boolean isComplete() {
+		return completed;
 	}
 
-	public void setStageMax(long max) {
-		this.max.set(max);
-		this.updateDefined = true;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
+	/**
+	 * Calculates and returns the progress of the associated progressible
+	 * {@link Object}. If the total progress is defined using
+	 * {@link Task#defineTotalProgress(int, int)}, then this method will return a
+	 * {@code double} within the range [0, 1]. If the progress is <b>not</b>
+	 * defined, then this Op will return {@code 0} until {@link #complete()} is
+	 * called; after that call this method will return {@code 1.}.
+	 *
+	 * @return the progress
+	 */
 	public double progress() {
-		if(isComplete()) return 1.;
-		if(!this.tasksDefined) return 0.;
+		if (isComplete()) return 1.;
+		if (!this.tasksDefined) return 0.;
 		double totalCompletion = stagesCompleted.get();
 		totalCompletion += current.doubleValue() / max.doubleValue();
 		totalCompletion += subTasksCompleted.get();
 		return totalCompletion / (numStages + numSubTasks);
 	}
 
+	/**
+	 * Returns {@code true} iff progress has been defined
+	 *
+	 * @return {@code true} iff progress has been defined
+	 */
+	public boolean progressDefined() {
+		return tasksDefined;
+	}
+
+	/**
+	 * Iff {@code task} was a task generated by this {@link Task}, then we update
+	 * progress based on its completion.
+	 *
+	 * @param task a {@link Task} generated by this one
+	 */
+	private void recordSubtaskCompletion(final Task task) {
+		if (!subTasks.contains(task)) throw new IllegalArgumentException("Task " +
+			task + " is not a subtask of Task " + this);
+		subTasks.remove(task);
+		if (tasksDefined) subTasksCompleted.getAndIncrement();
+	}
+
+	private void resetStage() {
+		current.set(0);
+		stagesCompleted.incrementAndGet();
+		this.updateDefined = false;
+		if (stagesCompleted.longValue() == numStages && subTasksCompleted
+			.longValue() == numSubTasks) completed = true;
+	}
+
+	/**
+	 * Sets the maximum for the <b>current</b> (and only the current) stage of
+	 * computation.
+	 *
+	 * @param max the maximum amount of progress
+	 */
+	public void setStageMax(final long max) {
+		this.max.set(max);
+		this.updateDefined = true;
+	}
+
+	/**
+	 * Used by the progressible {@link Object} to set the status of its
+	 * computation. This method should <b>not</b> used by any code not part of the
+	 * progressible {@link Object}
+	 *
+	 * @param status the status of the progressible {@link Object}
+	 */
+	public void setStatus(final String status) {
+		this.status = status;
+	}
+
+	/**
+	 * The status of the progressible {@link Object}
+	 *
+	 * @return the status
+	 */
 	public String status() {
 		return status;
 	}
 
-	public void update(long numElements) {
-		if (updateDefined) {
-			current.addAndGet(numElements);
-			if (current.longValue() == max.longValue()) {
-				current.set(0);
-				stagesCompleted.incrementAndGet();
-				this.updateDefined = false;
-				if (stagesCompleted.longValue() == numStages && subTasksCompleted
-					.longValue() == numSubTasks) completed = true;
-			}
-		}
-		else {
-			// update is undefined if total progress has not been set!
-			throw new IllegalStateException(
-				"Cannot update; progress has not yet been defined!");
+	/**
+	 * Used by a progressible {@link Object}, through {@link Progress} to
+	 * increment progress
+	 *
+	 * @param numElements the number of elements completed
+	 */
+	public void update(final long numElements) {
+		// update is undefined if total progress has not been set!
+		if (!updateDefined) throw new IllegalStateException(
+			"Cannot update; progress has not yet been defined!");
+
+		current.addAndGet(numElements);
+		if (current.longValue() == max.longValue()) {
+			resetStage();
 		}
 	}
 

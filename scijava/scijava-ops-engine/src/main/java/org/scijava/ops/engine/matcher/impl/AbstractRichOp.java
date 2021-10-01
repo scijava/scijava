@@ -45,14 +45,14 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 
 	@Override
 	public void preprocess(Object... inputs) {
-		Progress.pushExecution(this);
+		Progress.register(this);
 	}
 
 	@Override
 	public void postprocess(Object output) {
 		// Log a new execution
 		metadata.history().logOutput(this, output);
-		Progress.popAndCompleteExecution();
+		Progress.complete();
 	}
 
 }

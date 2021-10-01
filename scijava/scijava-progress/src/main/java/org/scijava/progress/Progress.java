@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.progress;
+package org.scijava.progress;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -176,8 +176,8 @@ public final class Progress {
 	 * 
 	 * @see Task#defineTotalProgress(int)
 	 */
-	public static void defineTotalProgress(int opStages) {
-		currentTask().defineTotalProgress(opStages);
+	public static void defineTotalProgress(int numStages) {
+		currentTask().defineTotalProgress(numStages);
 	}
 
 	/**
@@ -185,8 +185,8 @@ public final class Progress {
 	 * 
 	 * @see Task#defineTotalProgress(int, int)
 	 */
-	public static void defineTotalProgress(int opStages, int totalSubTasks) {
-		currentTask().defineTotalProgress(opStages, totalSubTasks);
+	public static void defineTotalProgress(int numStages, int numSubTasks) {
+		currentTask().defineTotalProgress(numStages, numSubTasks);
 	}
 
 	/**

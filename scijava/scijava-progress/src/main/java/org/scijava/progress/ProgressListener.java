@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.progress;
+package org.scijava.progress;
 
 @FunctionalInterface
 public interface ProgressListener {

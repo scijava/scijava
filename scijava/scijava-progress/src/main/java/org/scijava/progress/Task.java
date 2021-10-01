@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.progress;
+package org.scijava.progress;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -73,7 +73,7 @@ public class Task {
 				" total stages, however only " + stagesCompleted + " were completed!");
 		if (subTasksCompleted.longValue() != numSubTasks)
 			throw new IllegalStateException("Task declared " + numSubTasks +
-				" op subtasks, however only " + subTasksCompleted + " were completed!");
+				" subtasks, however only " + subTasksCompleted + " were completed!");
 		this.completed = true;
 		if (parent != null) parent.recordSubtaskCompletion(this);
 	}
@@ -138,7 +138,7 @@ public class Task {
 	 * {@link Object}. If the total progress is defined using
 	 * {@link Task#defineTotalProgress(int, int)}, then this method will return a
 	 * {@code double} within the range [0, 1]. If the progress is <b>not</b>
-	 * defined, then this Op will return {@code 0} until {@link #complete()} is
+	 * defined, then this task will return {@code 0} until {@link #complete()} is
 	 * called; after that call this method will return {@code 1.}.
 	 *
 	 * @return the progress

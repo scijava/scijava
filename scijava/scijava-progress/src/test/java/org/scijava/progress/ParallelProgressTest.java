@@ -1,32 +1,41 @@
 
-package org.scijava.ops.engine.progress;
+package org.scijava.progress;
 
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpMethod;
-import org.scijava.plugin.Plugin;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests progress reporting in parallel situations
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class ParallelProgressTest extends AbstractTestEnvironment {
+public class ParallelProgressTest {
 
 	/**
-	 * An Op that utilizes parallel progress reporting in one of its stages
+	 * Function that updates its progress {@code iterations} times during its
+	 * operation.
+	 * 
+	 * @input iterations the number of times the task should update its progress.
+	 * @output the number of iterations performed
 	 */
-	@OpField(names = "test.parallelProgressReporting")
-	public final BiFunction<Integer, Integer, Integer> parallelProgressOp = (
+	public final Function<Integer, Integer> iterator = (iterations) -> {
+		// set up progress reporter
+		Progress.defineTotalProgress(1);
+		Progress.setStageMax(iterations);
+
+		for (int i = 0; i < iterations; i++) {
+			Progress.update();
+		}
+		return iterations;
+	};
+
+	/**
+	 * A task that utilizes parallel progress reporting in one of its stages
+	 */
+	public final BiFunction<Integer, Integer, Integer> parallelProgressTask = (
 		numThreads, iterationsPerThread) -> {
 
 		Progress.defineTotalProgress(1);
@@ -52,16 +61,14 @@ public class ParallelProgressTest extends AbstractTestEnvironment {
 	};
 
 	/**
-	 * An Op that parallelizes its subtasks
+	 * A task that parallelizes its subtasks
 	 * 
-	 * @param dep the {@link OpDependency}
+	 * @param dep the subtask
 	 * @param numThreads the number of threads upon which to run {@code dep}
 	 * @param iterationsPerThread the arugment passed to {@code dep}
 	 * @return {@code numThreads * iterationsPerThread}
 	 */
-	@OpMethod(names = "test.parallelDependencyReporting", type = BiFunction.class)
-	public static Integer parallelDepOp(@OpDependency(
-		name = "test.progressReporter") Function<Integer, Integer> dep,
+	public static Integer parallelDepTask(Function<Integer, Integer> dep,
 		Integer numThreads, Integer iterationsPerThread)
 	{
 
@@ -70,7 +77,9 @@ public class ParallelProgressTest extends AbstractTestEnvironment {
 
 		for (int i = 0; i < numThreads; i++) {
 			threadArr[i] = new Thread(() -> {
+				Progress.register(dep);
 				dep.apply(iterationsPerThread);
+				Progress.complete();
 			});
 			threadArr[i].start();
 		}
@@ -85,58 +94,59 @@ public class ParallelProgressTest extends AbstractTestEnvironment {
 	}
 
 	/**
-	 * Tests the ability for an Op to update its progress (specifically its stage
+	 * Tests the ability for a task to update its progress (specifically its stage
 	 * progress) in parallel
 	 */
 	@Test
 	public void testParallelProgressUpdating() {
-		BiFunction<Integer, Integer, Integer> op = ops.op(
-			"test.parallelProgressReporting").inType(Integer.class, Integer.class)
-			.outType(Integer.class).function();
+		BiFunction<Integer, Integer, Integer> task = parallelProgressTask;
 		int numThreads = 4;
 		int iterationsPerThread = 1000;
-		Progress.addListener(op, new ProgressListener() {
+		Progress.addListener(task, new ProgressListener() {
 
 			double lastProgress = 0;
 
 			@Override
-			public void acknowledgeUpdate(Task task) {
-				double progress = task.progress();
-				Assert.assertTrue(lastProgress <= progress);
+			public void acknowledgeUpdate(Task t) {
+				double progress = t.progress();
+				Assertions.assertTrue(lastProgress <= progress);
 				lastProgress = progress;
 			}
 
 		});
-		op.apply(numThreads, iterationsPerThread);
+		Progress.register(task);
+		task.apply(numThreads, iterationsPerThread);
+		Progress.complete();
 	}
 
 	/**
-	 * Tests the ability for an Op to update its progress (specifically its
+	 * Tests the ability for a task to update its progress (specifically its
 	 * subtask progress) in parallel
 	 */
 	@Test
 	public void testParallelDependencyUpdating() {
-		BiFunction<Integer, Integer, Integer> op = ops.op(
-			"test.parallelDependencyReporting").inType(Integer.class, Integer.class)
-			.outType(Integer.class).function();
+		BiFunction<Integer, Integer, Integer> task = (in1, in2) -> parallelDepTask(
+			iterator, in1, in2);
 		int numThreads = 4;
 		int iterationsPerThread = 1000;
-		Progress.addListener(op, new ProgressListener() {
+		Progress.addListener(task, new ProgressListener() {
 
 			double lastProgress = 0;
 
 			@Override
-			public void acknowledgeUpdate(Task task) {
+			public void acknowledgeUpdate(Task t) {
 				// TODO: Can we do better? Is there a way to guarantee that the
 				// progress will not be updated again in between when we enter the
 				// method and when we ask for the progress?
-				double progress = task.progress();
-				Assert.assertTrue(lastProgress <= progress);
+				double progress = t.progress();
+				Assertions.assertTrue(lastProgress <= progress);
 				lastProgress = progress;
 			}
 
 		});
-		op.apply(numThreads, iterationsPerThread);
+		Progress.register(task);
+		task.apply(numThreads, iterationsPerThread);
+		Progress.complete();
 	}
 
 }

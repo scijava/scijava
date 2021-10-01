@@ -7,7 +7,7 @@ import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.History;
-import org.scijava.ops.engine.progress.Progress;
+import org.scijava.progress.Progress;
 
 /**
  * An abstract implementation of {@link RichOp}. While this class has <b>no

@@ -25,7 +25,7 @@ public class PluginBasedClassOpInfoGenerator implements OpInfoGenerator {
 	@Override
 	public List<OpInfo> generateInfos() {
 		List<OpInfo> infos = discoverers.stream() //
-			.flatMap(d -> d.implementingClasses(Op.class).stream()) //
+			.flatMap(d -> d.implsOfType(Op.class).stream()) //
 			.filter(cls -> cls.getAnnotation(Plugin.class) != null) //
 			.map(cls -> {
 				Plugin p = cls.getAnnotation(Plugin.class);

@@ -25,7 +25,7 @@ public class OpClassBasedClassOpInfoGenerator implements OpInfoGenerator {
 	@Override
 	public List<OpInfo> generateInfos() {
 		List<OpInfo> infos = discoverers.stream() //
-			.flatMap(d -> d.implementingClasses(Op.class).stream()) //
+			.flatMap(d -> d.implsOfType(Op.class).stream()) //
 			.filter(cls -> cls.getAnnotation(OpClass.class) != null) //
 			.map(cls -> {
 				OpClass p = cls.getAnnotation(OpClass.class);

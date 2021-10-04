@@ -125,7 +125,7 @@ class PluginBasedDiscoverer implements Discoverer {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> List<Class<T>> implementingClasses(Class<T> c) {
+	public <T> List<Class<T>> implsOfType(Class<T> c) {
 		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
 			throw new UnsupportedOperationException(
 				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");

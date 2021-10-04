@@ -32,7 +32,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	@Override
 	public List<OpInfo> generateInfos() {
 		List<OpInfo> infos = discoverers.stream() //
-			.flatMap(d -> d.implementingClasses(OpCollection.class).stream()) //
+			.flatMap(d -> d.implsOfType(OpCollection.class).stream()) //
 			.map(cls -> {
 			try {
 				String version = VersionUtils.getVersion(cls);

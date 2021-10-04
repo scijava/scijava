@@ -12,7 +12,7 @@ public class ServiceLoaderDiscoverer implements Discoverer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<Class<T>> implementingClasses(Class<T> c) {
+	public <T> List<Class<T>> implsOfType(Class<T> c) {
 		// If we cannot use c, we cannot find any implementations
 		Module thisModule = this.getClass().getModule();
 		if (!thisModule.canUse(c)) return Collections.emptyList();

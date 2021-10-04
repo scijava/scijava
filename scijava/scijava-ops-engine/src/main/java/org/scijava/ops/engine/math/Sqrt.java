@@ -8,6 +8,11 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
+/**
+ * @implNote op
+ * @author gselz
+ *
+ */
 @Plugin(type = OpCollection.class)
 public class Sqrt {
 
@@ -32,5 +37,11 @@ public class Sqrt {
 	public static final Inplaces.Arity1<double[]> MathPointwiseSqrtDoubleArrayInplace = (arr) -> {
 		for(int i = 0; i < arr.length; i++) arr[i] = Math.sqrt(arr[i]);
 	};
+
+	/**
+	 * TEMP op used for testing
+	 * @implNote op
+	 */
+	public static final Function<Long, Long> MathSqrtLongFunction = (in) -> (long) Math.sqrt(in);
 
 }

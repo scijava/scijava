@@ -1,6 +1,7 @@
 package org.scijava.ops.serviceloader;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;

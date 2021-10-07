@@ -3,7 +3,6 @@ package org.scijava.ops.engine.impl;
 
 import com.github.therapi.runtimejavadoc.BaseJavadoc;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
-import com.github.therapi.runtimejavadoc.FieldJavadoc;
 import com.github.therapi.runtimejavadoc.MethodJavadoc;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
@@ -19,30 +18,47 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.WeakHashMap;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.Discovery;
 
 public class TherapiDiscoverer implements Discoverer {
 
-	BiPredicate<BaseJavadoc, String[]> hasTags = (mjavadoc, tags) -> {
-		for (String tag : tags) {
-			boolean hasTag = mjavadoc.getOther().parallelStream() //
-					.anyMatch(m -> m
-				.getName().equals("implNote") && m.getComment().toString().contains(
-					tag));
-			if (!hasTag)
-				return false;
-		}
-		return true;
+	private static Class<?> getClass(String name) throws ClassNotFoundException {
+		return getClassLoader().loadClass(name);
+	}
+
+	/**
+	 * Gets the class loader to use. This will be the current thread's context
+	 * class loader if non-null; otherwise it will be the system class loader.
+	 * <p>
+	 * Forked from SciJava Common's Context class.
+	 * 
+	 * @see Thread#getContextClassLoader()
+	 * @see ClassLoader#getSystemClassLoader()
+	 */
+	private static ClassLoader getClassLoader() {
+		final ClassLoader contextCL = Thread.currentThread()
+			.getContextClassLoader();
+		return contextCL != null ? contextCL : ClassLoader.getSystemClassLoader();
+	}
+
+	BiFunction<BaseJavadoc, String, Optional<String>> getTag = (javadoc, tagType) -> {
+			return javadoc.getOther().stream() //
+			.filter(m -> m.getName().equals("implNote") && m.getComment().toString()
+				.startsWith(tagType)).map(m -> m.getComment().toString()).findFirst();
+			
 	};
 
 	@Override
-	public List<AnnotatedElement> elementsTaggedWith(String... tags) {
+	public List<Discovery<AnnotatedElement>> elementsTaggedWith(String tagType) {
 		List<String> paths = new ArrayList<>(Arrays.asList(System.getProperty(
 			"java.class.path").split(File.pathSeparator)));
 		paths.addAll(Arrays.asList(System.getProperty("jdk.module.path").split(
@@ -57,7 +73,7 @@ public class TherapiDiscoverer implements Discoverer {
 		javadocedFiles.entrySet().parallelStream().forEach(e -> {
 			Class<?> c;
 			try {
-				c = Class.forName(e.getValue().get(0));
+				c = getClass(e.getValue().get(0));
 				e.getValue().parallelStream().forEach(s -> javadocData.put(
 					RuntimeJavadoc.getJavadoc(s, c), s));
 			}
@@ -66,25 +82,27 @@ public class TherapiDiscoverer implements Discoverer {
 			}
 		});
 
-		List<AnnotatedElement> taggedClasses = javadocData.entrySet()
+		List<Discovery<AnnotatedElement>> taggedClasses = javadocData.entrySet()
 			.parallelStream() //
-			.filter(e -> hasTags.test(e.getKey(), tags)) //
 			.map(e -> {
 				try {
-					return Class.forName(e.getValue());
+					Class<?> taggedClass = getClass(e.getValue());
+					Optional<String> tag = getTag.apply(e.getKey(), tagType);
+					if (tag.isEmpty()) return null;
+					return new Discovery<AnnotatedElement>(taggedClass, tag.get());
 				}
 				catch (ClassNotFoundException exc) {
 					return null;
 				}
 			}).filter(c -> c != null).collect(Collectors.toList());
-		List<AnnotatedElement> taggedMethods = javadocData.entrySet()
+		List<Discovery<AnnotatedElement>> taggedMethods = javadocData.entrySet()
 			.parallelStream() //
-			.map(e -> taggedMethodFinder.apply(e, tags)) //
+			.map(e -> taggedMethodFinder.apply(e, tagType)) //
 			.flatMap(list -> list.parallelStream()) //
 			.collect(Collectors.toList());
-		List<AnnotatedElement> taggedFields = javadocData.entrySet()
+		List<Discovery<AnnotatedElement>> taggedFields = javadocData.entrySet()
 			.parallelStream() //
-			.map(e -> taggedFieldFinder.apply(e, tags)) //
+			.map(e -> taggedFieldFinder.apply(e, tagType)) //
 			.flatMap(list -> list.parallelStream()) //
 			.collect(Collectors.toList());
 		taggedClasses.addAll(taggedMethods);
@@ -92,51 +110,90 @@ public class TherapiDiscoverer implements Discoverer {
 		return taggedClasses;
 	}
 
+		private ThreadLocal<WeakHashMap<MethodJavadoc, String>> methodJavadocMap = new ThreadLocal<>() {
+			@Override
+			protected WeakHashMap<MethodJavadoc, String> initialValue() {
+				return new WeakHashMap<>();
+			}
+			
+		};
+
 	/**
 	 * Using a string {@code className}, finds a list of tagged methods
 	 */
-	private final BiFunction<Map.Entry<ClassJavadoc, String>, String[], List<Method>> taggedMethodFinder =
-		(entry, tags) -> {
-			List<MethodJavadoc> taggedJavadoc = entry.getKey().getMethods()
-				.parallelStream().filter(m -> hasTags.test(m, tags)).collect(Collectors.toList());
+	private final BiFunction<Map.Entry<ClassJavadoc, String>, String, List<Discovery<AnnotatedElement>>> taggedMethodFinder =
+		(entry, tagType) -> {
+			methodJavadocMap.get().clear();
+			entry.getKey().getMethods().parallelStream() //
+			.forEach(j -> {
+				Optional<String> tag = getTag.apply(j, tagType);
+				if (tag.isPresent()) {
+					methodJavadocMap.get().put(j, tag.get());
+				}
 
-			if (taggedJavadoc.isEmpty()) return Collections.emptyList();
+			});
+
+			if(methodJavadocMap.get().isEmpty()) return Collections.emptyList();
 
 			Method[] methods;
 			try {
-				methods = Class.forName(entry.getValue()).getDeclaredMethods();
+				methods = getClass(entry.getValue()).getDeclaredMethods();
 			}
-			catch (SecurityException | ClassNotFoundException exc) {
+			catch (ClassNotFoundException exc) {
 				return Collections.emptyList();
 			}
-			List<Method> taggedClassMethods = taggedJavadoc.parallelStream() //
-				.map(mJavadoc -> Arrays.stream(methods).filter(m -> mJavadoc.matches(m))
-					.findAny()) //
-				.filter(optional -> optional.isPresent()) //
-				.map(o -> o.get()).collect(Collectors.toList());
+			List<Discovery<AnnotatedElement>> taggedClassMethods = methodJavadocMap.get().entrySet().parallelStream() //
+				.map(e -> {
+					Optional<Method> taggedMethod = Arrays.stream(methods).filter(m -> e.getKey().matches(m))
+					.findAny(); //
+					if (taggedMethod.isEmpty()) return null;
+					return new Discovery<AnnotatedElement>(taggedMethod.get(), e.getValue());
+				})
+				.filter(Objects::nonNull) //
+				.collect(Collectors.toList());
 			return taggedClassMethods;
 
 		};
 
-	private final BiFunction<Map.Entry<ClassJavadoc, String>, String[], List<Field>> taggedFieldFinder =
-		(entry, tags) -> {
-			List<FieldJavadoc> taggedJavadoc = entry.getKey().getFields()
-				.parallelStream().filter(j -> hasTags.test(j, tags)).collect(Collectors.toList());
+		private ThreadLocal<WeakHashMap<BaseJavadoc, String>> funcJavadocMap = new ThreadLocal<>() {
+			@Override
+			protected WeakHashMap<BaseJavadoc, String> initialValue() {
+				return new WeakHashMap<>();
+			}
+			
+		};
 
-			if (taggedJavadoc.isEmpty()) return Collections.emptyList();
+
+	private final BiFunction<Map.Entry<ClassJavadoc, String>, String, List<Discovery<AnnotatedElement>>> taggedFieldFinder =
+		(entry, tagType) -> {
+			funcJavadocMap.get().clear();
+			entry.getKey().getFields().parallelStream() //
+			.forEach(j -> {
+				Optional<String> tag = getTag.apply(j, tagType);
+				if (tag.isPresent()) {
+					funcJavadocMap.get().put(j, tag.get());
+				}
+
+			});
+
+			if (funcJavadocMap.get().isEmpty()) return Collections.emptyList();
 
 			Field[] fields;
 			try {
-				fields = Class.forName(entry.getValue()).getDeclaredFields();
+				fields = getClass(entry.getValue()).getDeclaredFields();
 			}
-			catch (SecurityException | ClassNotFoundException exc) {
+			catch (ClassNotFoundException exc) {
 				return Collections.emptyList();
 			}
-			List<Field> taggedClassFields = taggedJavadoc.parallelStream() //
-				.map(fJavadoc -> Arrays.stream(fields).filter(f -> fJavadoc.getName()
-					.equals(f.getName())).findAny()) //
-				.filter(optional -> optional.isPresent()) //
-				.map(o -> o.get()).collect(Collectors.toList());
+			List<Discovery<AnnotatedElement>> taggedClassFields = funcJavadocMap.get().entrySet().parallelStream() //
+				.map(e -> {
+					Optional<Field> taggedField = Arrays.stream(fields).filter(f -> e.getKey().getName()
+					.equals(f.getName())).findAny(); //
+					if (taggedField.isEmpty()) return null;
+					return new Discovery<AnnotatedElement>(taggedField.get(), e.getValue());
+				})
+				.filter(Objects::nonNull) //
+				.collect(Collectors.toList());
 			return taggedClassFields;
 
 		};

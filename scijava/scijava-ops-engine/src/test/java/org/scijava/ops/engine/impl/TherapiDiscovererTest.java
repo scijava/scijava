@@ -4,28 +4,33 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.scijava.discovery.Discovery;
 
 public class TherapiDiscovererTest extends TherapiDiscoverer {
 
 	@Test
 	public void discoverClass() {
-		List<AnnotatedElement> list = new TherapiDiscoverer().elementsTaggedWith("test");
-		Assert.assertTrue(list.contains(ClassTest.class));
+		List<Discovery<AnnotatedElement>> list = new TherapiDiscoverer().elementsTaggedWith("test");
+		List<AnnotatedElement> elements = list.stream().map(d -> d.discovery()).collect(Collectors.toList());
+		Assert.assertTrue(elements.contains(ClassTest.class));
 	}
 
 	@Test
 	public void discoverField() throws NoSuchFieldException, SecurityException {
-		List<AnnotatedElement> list = new TherapiDiscoverer().elementsTaggedWith("test");
-		Assert.assertTrue(list.contains(this.getClass().getDeclaredField("fieldTest")));
+		List<Discovery<AnnotatedElement>> list = new TherapiDiscoverer().elementsTaggedWith("test");
+		List<AnnotatedElement> elements = list.stream().map(d -> d.discovery()).collect(Collectors.toList());
+		Assert.assertTrue(elements.contains(this.getClass().getDeclaredField("fieldTest")));
 	}
 
 	@Test
 	public void discoverMethod() throws NoSuchMethodException, SecurityException {
-		List<AnnotatedElement> list = new TherapiDiscoverer().elementsTaggedWith("test");
-		Assert.assertTrue(list.contains(this.getClass().getDeclaredMethod("methodTest")));
+		List<Discovery<AnnotatedElement>> list = new TherapiDiscoverer().elementsTaggedWith("test");
+		List<AnnotatedElement> elements = list.stream().map(d -> d.discovery()).collect(Collectors.toList());
+		Assert.assertTrue(elements.contains(this.getClass().getDeclaredMethod("methodTest")));
 	}
 
 	/**

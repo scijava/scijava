@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.scijava.discovery.Discoverer;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
@@ -44,16 +47,22 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 					if (!isStatic && instance == null) {
 						instance = field.getDeclaringClass().newInstance();
 					}
-					String unparsedOpNames = field.getAnnotation(OpField.class).names();
+					OpField annotation = field.getAnnotation(OpField.class);
+					String unparsedOpNames = annotation.names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
-					collectionInfos.add(new OpFieldInfo(isStatic ? null : instance, field, version,
+					double priority = annotation.priority();
+					Hints hints = formHints(field.getAnnotation(OpHints.class));
+					collectionInfos.add(new OpFieldInfo(isStatic ? null : instance, field, version, hints, priority,
 						parsedOpNames));
 				}
 				final List<Method> methods = ClassUtils.getAnnotatedMethods(cls, OpMethod.class);
 				for (final Method method: methods) {
-					String unparsedOpNames = method.getAnnotation(OpMethod.class).names();
+					OpMethod annotation = method.getAnnotation(OpMethod.class);
+					String unparsedOpNames = annotation.names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
-					collectionInfos.add(new OpMethodInfo(method, version, parsedOpNames));
+					Hints hints = formHints(method.getAnnotation(OpHints.class));
+					double priority = annotation.priority();
+					collectionInfos.add(new OpMethodInfo(method, version, hints, priority, parsedOpNames));
 				}
 				return collectionInfos;
 			} catch (InstantiationException | IllegalAccessException exc) {
@@ -67,5 +76,11 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 			.collect(Collectors.toList());
 		return infos;
 	}
+
+	private Hints formHints(OpHints h) {
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
+	}
+
 
 }

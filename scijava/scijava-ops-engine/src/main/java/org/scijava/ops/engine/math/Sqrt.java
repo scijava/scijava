@@ -8,11 +8,6 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
-/**
- * @implNote op
- * @author gselz
- *
- */
 @Plugin(type = OpCollection.class)
 public class Sqrt {
 
@@ -40,7 +35,7 @@ public class Sqrt {
 
 	/**
 	 * TEMP op used for testing
-	 * @implNote op
+	 * @implNote op math.sqrt
 	 */
 	public static final Function<Long, Long> MathSqrtLongFunction = (in) -> (long) Math.sqrt(in);
 

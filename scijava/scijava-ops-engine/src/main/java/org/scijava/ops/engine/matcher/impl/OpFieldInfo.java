@@ -40,10 +40,8 @@ import java.util.List;
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.spi.OpField;
 import org.scijava.struct.Struct;
@@ -62,17 +60,23 @@ public class OpFieldInfo implements OpInfo {
 	private final Field field;
 	private final String version;
 	private final List<String> names;
+	private final double priority;
 
 	private Struct struct;
 	private ValidityException validityException;
 
 	private final Hints hints;
 
-	public OpFieldInfo(final Object instance, final Field field, final String version, final String... names) {
+	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final String... names) {
+		this(instance, field, version, hints, Priority.NORMAL, names);
+	}
+
+	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final double priority, final String... names) {
 		this.instance = instance;
 		this.version = version;
 		this.field = field;
 		this.names = Arrays.asList(names);
+		this.priority = priority;
 
 		if (Modifier.isStatic(field.getModifiers())) {
 			// Field is static; instance must be null.
@@ -107,7 +111,7 @@ public class OpFieldInfo implements OpInfo {
 			validityException = new ValidityException(problems);
 		}
 
-		hints = formHints(field.getAnnotation(OpHints.class));
+		this.hints = hints;
 	}
 
 	// -- OpInfo methods --
@@ -135,8 +139,7 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public double priority() {
-		final OpField opField = field.getAnnotation(OpField.class);
-		return opField == null ? Priority.NORMAL : opField.priority();
+		return priority;
 	}
 
 	@Override
@@ -227,13 +230,6 @@ public class OpFieldInfo implements OpInfo {
 	@Override
 	public String toString() {
 		return OpUtils.opString(this);
-	}
-
-	// -- Helper methods -- //
-
-	private Hints formHints(OpHints h) {
-		if (h == null) return new DefaultHints();
-		return new DefaultHints(h.hints());
 	}
 
 }

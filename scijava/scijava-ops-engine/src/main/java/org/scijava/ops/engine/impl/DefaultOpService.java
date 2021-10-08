@@ -103,10 +103,12 @@ public class DefaultOpService extends AbstractService implements OpService {
 		OpHistory history = history();
 		Discoverer d1 = new PluginBasedDiscoverer(context());
 		Discoverer d2 = new ServiceLoaderDiscoverer();
+		Discoverer d3 = new TherapiDiscoverer();
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
 			new PluginBasedClassOpInfoGenerator(d1, d2),
 			new OpClassBasedClassOpInfoGenerator(d1, d2),
-			new OpCollectionInfoGenerator(d1, d2));
+			new OpCollectionInfoGenerator(d1, d2),
+			new TagBasedOpInfoGenerator(d3));
 		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2);
 	}
 

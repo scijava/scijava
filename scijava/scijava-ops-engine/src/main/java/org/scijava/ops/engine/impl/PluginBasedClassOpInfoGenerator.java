@@ -5,10 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
@@ -31,10 +35,21 @@ public class PluginBasedClassOpInfoGenerator implements OpInfoGenerator {
 				Plugin p = cls.getAnnotation(Plugin.class);
 				String[] parsedOpNames = OpUtils.parseOpNames(p.name());
 				String version = VersionUtils.getVersion(cls);
-				return new OpClassInfo(cls, version, parsedOpNames);
+				Hints hints = formHints(cls.getAnnotation(OpHints.class));
+				double priority = priorityFromAnnotation(cls);
+				return new OpClassInfo(cls, version, hints, priority, parsedOpNames);
 			}) //
 			.collect(Collectors.toList());
 		return infos;
 	}
 
+	private static double priorityFromAnnotation(Class<?> annotationBearer) {
+		final Plugin opAnnotation = annotationBearer.getAnnotation(Plugin.class);
+		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
+	}
+
+	private Hints formHints(OpHints h) {
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
+	}
 }

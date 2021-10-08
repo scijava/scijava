@@ -333,7 +333,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public OpInfo opify(final Class<?> opClass, final double priority,
 		final String... names)
 	{
-		return new OpClassInfo(opClass, VersionUtils.getVersion(opClass), priority,
+		return new OpClassInfo(opClass, VersionUtils.getVersion(opClass), new DefaultHints(), priority,
 			names);
 	}
 

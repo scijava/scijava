@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.impl;
+package org.scijava.discovery.therapi;
 
 import com.github.therapi.runtimejavadoc.BaseJavadoc;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,6 +45,8 @@ public class TherapiDiscoverer implements Discoverer {
 	 * class loader if non-null; otherwise it will be the system class loader.
 	 * <p>
 	 * Forked from SciJava Common's Context class.
+	 *
+	 * @implNote test
 	 * 
 	 * @see Thread#getContextClassLoader()
 	 * @see ClassLoader#getSystemClassLoader()
@@ -213,7 +220,9 @@ public class TherapiDiscoverer implements Discoverer {
 		else if (file.getPath().endsWith(".jar")) {
 			try {
 				for (String s : getJarContent(path))
-					if (s.endsWith("__Javadoc.json")) filesList.add(file);
+					if (s.endsWith("__Javadoc.json")) {
+						filesList.add(new File(s));
+					}
 			}
 			catch (IOException exc) {
 				// TODO Auto-generated catch block
@@ -239,7 +248,11 @@ public class TherapiDiscoverer implements Discoverer {
 	}
 
 	private static String getFullyQualifiedName(File f, String path) {
+		if (f.getPath().contains(path)) {
 		return f.getPath().substring(path.length() + 1, f.getPath().indexOf(
+			"__Javadoc.json")).replace(System.getProperty("file.separator"), ".");
+		}
+		return f.getPath().substring(0, f.getPath().indexOf(
 			"__Javadoc.json")).replace(System.getProperty("file.separator"), ".");
 	}
 

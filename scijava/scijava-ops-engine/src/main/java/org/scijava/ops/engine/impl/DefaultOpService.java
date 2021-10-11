@@ -38,6 +38,7 @@ import org.scijava.Context;
 import org.scijava.InstantiableException;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
+import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
@@ -109,7 +110,7 @@ public class DefaultOpService extends AbstractService implements OpService {
 			new OpClassBasedClassOpInfoGenerator(d1, d2),
 			new OpCollectionInfoGenerator(d1, d2),
 			new TagBasedOpInfoGenerator(d3));
-		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2);
+		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2, d3);
 	}
 
 	private synchronized void initHistory() {
@@ -117,48 +118,4 @@ public class DefaultOpService extends AbstractService implements OpService {
 		history = new DefaultOpHistory();
 	}
 	
-}
-
-class PluginBasedDiscoverer implements Discoverer {
-
-	private final PluginService p;
-
-	public PluginBasedDiscoverer(Context ctx) {
-		p = ctx.getService(PluginService.class);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<Discovery<Class<T>>> discoveriesOfType(Class<T> c) {
-		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			throw new UnsupportedOperationException(
-				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
-		}
-		List<PluginInfo<SciJavaPlugin>> infos = p.getPluginsOfType(
-			(Class<SciJavaPlugin>) c);
-		return infos.stream() //
-			.map(info -> makeDiscoveryOrNull(c, info)) //
-			.filter(Objects::nonNull).collect(Collectors.toList());
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> Discovery<Class<T>> makeDiscoveryOrNull(@SuppressWarnings("unused") Class<T> type,
-		PluginInfo<SciJavaPlugin> instance)
-	{
-		try {
-			Class<T> c = (Class<T>) instance.loadClass();
-			String tag = getTag(instance.getAnnotation());
-			return new Discovery<>(c, tag);
-		}
-		catch (InstantiableException exc) {
-			return null;
-		}
-	}
-
-	private String getTag(Plugin annotation) {
-		String tagType = annotation.type().getTypeName().toLowerCase();
-		String priority = "priority " + annotation.priority();
-		return String.join(" ", tagType, priority);
-	}
-
 }

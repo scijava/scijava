@@ -1,4 +1,4 @@
-package org.scijava.ops.engine.impl;
+package org.scijava.discovery.therapi;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.discovery.Discovery;
 
 public class TherapiDiscovererTest extends TherapiDiscoverer {

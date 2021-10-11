@@ -48,6 +48,7 @@
 		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej-testutil</module>
 		<module>scijava/scijava-discovery</module>
+		<module>scijava/scijava-discovery-therapi</module>
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-engine</module>

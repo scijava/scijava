@@ -29,15 +29,11 @@
 
 package org.scijava.ops.engine.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import org.scijava.Context;
-import org.scijava.InstantiableException;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.Discovery;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpBuilder;
@@ -46,10 +42,8 @@ import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.engine.OpService;
 import org.scijava.ops.serviceloader.ServiceLoaderDiscoverer;
+import org.scijava.parse2.ParseService;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.PluginInfo;
-import org.scijava.plugin.PluginService;
-import org.scijava.plugin.SciJavaPlugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.types.TypeService;
@@ -101,16 +95,24 @@ public class DefaultOpService extends AbstractService implements OpService {
 		if (env != null) return;
 		LogService log = context().getService(LogService.class);
 		TypeService types = context().getService(TypeService.class);
+		ParseService parser = context().getService(ParseService.class);
 		OpHistory history = history();
+		List<Discoverer> discoverers = new ArrayList<>();
 		Discoverer d1 = new PluginBasedDiscoverer(context());
+		discoverers.add(d1);
 		Discoverer d2 = new ServiceLoaderDiscoverer();
-		Discoverer d3 = new TherapiDiscoverer();
-		List<OpInfoGenerator> infoGenerators = Arrays.asList(
+		discoverers.add(d2);
+		List<OpInfoGenerator> infoGenerators = new ArrayList<>(Arrays.asList(
 			new PluginBasedClassOpInfoGenerator(d1, d2),
 			new OpClassBasedClassOpInfoGenerator(d1, d2),
-			new OpCollectionInfoGenerator(d1, d2),
-			new TagBasedOpInfoGenerator(d3));
-		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2, d3);
+			new OpCollectionInfoGenerator(d1, d2)));
+		if (parser != null) {
+			Discoverer d3 = new TherapiDiscoverer(parser);
+			discoverers.add(d3);
+			OpInfoGenerator g3 = new TagBasedOpInfoGenerator(log, d3);
+			infoGenerators.add(g3);
+		}
+		env = new DefaultOpEnvironment(types, log, history, infoGenerators, discoverers.toArray(Discoverer[]::new));
 	}
 
 	private synchronized void initHistory() {

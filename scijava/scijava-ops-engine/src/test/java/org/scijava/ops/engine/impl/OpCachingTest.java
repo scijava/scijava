@@ -49,6 +49,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
+import org.scijava.parse2.ParseService;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
 import org.scijava.types.Nil;
@@ -63,7 +64,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 	 */
 	@Before
 	public void setUpEach() {
-		context = new Context(OpService.class, PluginService.class,
+		context = new Context(OpService.class, PluginService.class, ParseService.class,
 			TypeService.class);
 		ops = context.getService(OpService.class);
 	}

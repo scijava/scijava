@@ -33,10 +33,4 @@ public class Sqrt {
 		for(int i = 0; i < arr.length; i++) arr[i] = Math.sqrt(arr[i]);
 	};
 
-	/**
-	 * TEMP op used for testing
-	 * @implNote op math.sqrt
-	 */
-	public static final Function<Long, Long> MathSqrtLongFunction = (in) -> (long) Math.sqrt(in);
-
 }

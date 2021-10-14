@@ -14,6 +14,7 @@ import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
 import org.scijava.function.Functions;
+import org.scijava.log.LogService;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpUtils;
@@ -41,9 +42,11 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 
 	private static final String TAGTYPE = "op";
 
+	private final LogService log;
 	private final List<Discoverer> discoverers;
 
-	public TagBasedOpInfoGenerator(Discoverer... d) {
+	public TagBasedOpInfoGenerator(LogService log, Discoverer... d) {
+		this.log = log;
 		this.discoverers = Arrays.asList(d);
 	}
 
@@ -78,11 +81,25 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 	@Override
 	public List<OpInfo> generateInfos() {
 		List<OpInfo> infos = discoverers.stream() //
-			.flatMap(d -> d.elementsTaggedWith("op").stream()) //
+			.flatMap(d -> d.elementsTaggedWith(TAGTYPE).stream()) //
 			.map(discovery -> {
+				// Obtain op metadata
+				String[] names;
+				double priority;
+
+				try {
+					names = getOpNames(discovery);
+					System.out.println(names);
+					priority = getOpPriority(discovery);
+				}
+				catch (IllegalArgumentException e) {
+					log.warn("Skipping Op Discovery " + discovery + ": " + e
+						.getMessage());
+					return null;
+				}
+
+				// Delegate to proper constructor
 				AnnotatedElement e = discovery.discovery();
-				String[] names = getOpNames(discovery.tag());
-				double priority = getOpPriority(discovery.tag());
 				if (e instanceof Class) {
 					return opClassGenerator.apply((Class<?>) e, priority, names);
 				}
@@ -99,18 +116,23 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 		return infos;
 	}
 
-	private static String[] getOpNames(String tag) {
-		int tagTypeIndex = tag.indexOf(TAGTYPE + "=");
-		String joinedNames = tag.substring(tagTypeIndex + TAGTYPE.length() + 1)
-			.split(" ")[0];
-		return OpUtils.parseOpNames(joinedNames);
+	private String[] getOpNames(Discovery<AnnotatedElement> d) {
+		String names = d.option("names");
+		String name = d.option("name");
+		if (names.isEmpty() && name.isEmpty()) {
+			throw new IllegalArgumentException("Op discovery " + d + " does not record any names!");
+		}
+		if (!names.isEmpty()) {
+			System.out.println(names);
+			return OpUtils.parseOpNames(names);
+		}
+			System.out.println(name);
+		return OpUtils.parseOpNames(name);
 	}
 
-	private static double getOpPriority(String tag) {
-		int tagTypeIndex = tag.indexOf("priority=");
-		if (tagTypeIndex == -1) return Priority.NORMAL;
-		return Double.parseDouble(tag.substring(tagTypeIndex + "priority=".length())
-			.split(" ")[0]);
+	private static double getOpPriority(Discovery<AnnotatedElement> d) {
+		String priority = d.option("priority");
+		return priority.isEmpty() ? Priority.NORMAL : Double.parseDouble(priority);
 	}
 
 }

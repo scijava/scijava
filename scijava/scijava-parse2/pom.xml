@@ -11,10 +11,10 @@
 		<relativePath>../..</relativePath>
 	</parent>
 
-	<artifactId>scijava-discovery-therapi</artifactId>
+	<artifactId>scijava-parse2</artifactId>
 
-	<name>SciJava Discovery Therapi</name>
-	<description>SciJava Discovery Therapi: A therapi-aided Discovery implementation</description>
+	<name>SciJava Parse 2 </name>
+	<description>SciJava Parse 2: SciJava plugins for String parsing.</description>
 	<url>https://github.com/scijava/scijava</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>
@@ -35,6 +35,7 @@
 			<url>https://imagej.net/User:Rueden</url>
 			<roles>
 				<role>founder</role>
+				<role>lead</role>
 				<role>reviewer</role>
 				<role>support</role>
 				<role>maintainer</role>
@@ -45,7 +46,6 @@
 			<name>Gabriel Selzer</name>
 			<roles>
 				<role>founder</role>
-				<role>lead</role>
 				<role>developer</role>
 				<role>debugger</role>
 				<role>reviewer</role>
@@ -62,7 +62,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-discovery-therapi</archive>
+			<archive>https://forum.image.sc/tags/scijava-parse2</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -82,36 +82,25 @@
 	</ciManagement>
 
 	<properties>
-		<package-name>org.scijava.discovery.therapi</package-name>
+		<package-name>org.scijava.parse2</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-discovery-therapi.allowedDuplicateClasses>
+		<scijava-parse2.allowedDuplicateClasses>
 			${scijava.allowedDuplicateClasses}
-		</scijava-discovery-therapi.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-discovery-therapi.allowedDuplicateClasses}</allowedDuplicateClasses>
-		<therapi.packages></therapi.packages>
+		</scijava-parse2.allowedDuplicateClasses>
+		<allowedDuplicateClasses>${scijava-parse2.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.github.therapi</groupId>
-			<artifactId>therapi-runtime-javadoc</artifactId>
-			<version>${therapi-runtime-javadoc.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-parse2</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>parsington</artifactId>
+		</dependency>
+
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>junit</groupId>

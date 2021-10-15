@@ -58,11 +58,12 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 				final List<Method> methods = ClassUtils.getAnnotatedMethods(cls, OpMethod.class);
 				for (final Method method: methods) {
 					OpMethod annotation = method.getAnnotation(OpMethod.class);
+					Class<?> opType = annotation.type();
 					String unparsedOpNames = annotation.names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
 					Hints hints = formHints(method.getAnnotation(OpHints.class));
 					double priority = annotation.priority();
-					collectionInfos.add(new OpMethodInfo(method, version, hints, priority, parsedOpNames));
+					collectionInfos.add(new OpMethodInfo(method, opType, version, hints, priority, parsedOpNames));
 				}
 				return collectionInfos;
 			} catch (InstantiationException | IllegalAccessException exc) {

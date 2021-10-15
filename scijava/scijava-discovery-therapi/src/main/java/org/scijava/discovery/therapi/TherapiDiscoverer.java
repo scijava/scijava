@@ -56,7 +56,6 @@ public class TherapiDiscoverer implements Discoverer {
 			tagType, javadocData);
 		List<Discovery<AnnotatedElement>> taggedFields = discoverTaggedFields(
 			tagType, javadocData);
-
 		// return concatenation of classes, methods, and fields.
 		return Stream.of(taggedClasses, taggedMethods, taggedFields) //
 			.flatMap(Collection::stream) //
@@ -199,8 +198,6 @@ public class TherapiDiscoverer implements Discoverer {
 
 	private Map<String, ?> itemsFromTag(String tagType, String tag) {
 		String tagBody = tag.substring(tag.indexOf(tagType) + tagType.length()).trim();
-		System.out.println("Parser: " + parser);
-		System.out.println("Tag Body: " + tagBody);
 		return parser.parse(tagBody.replaceAll("\\s+",""), true).asMap();
 	}
 
@@ -289,7 +286,7 @@ public class TherapiDiscoverer implements Discoverer {
 				Class<?> taggedClass = getClass(e.getValue());
 				Optional<String> tag = getTag.apply(e.getKey(), tagType);
 				if (tag.isEmpty()) return null;
-			Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, e.getValue());
+			Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
 				return new Discovery<>(taggedClass, tagType, tagOptions);
 			}
 			catch (ClassNotFoundException exc) {

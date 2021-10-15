@@ -89,11 +89,11 @@ public class OpMethodInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method, final String version, final Hints hints, final String... names) {
-		this(method, version, hints, Priority.NORMAL, names);
+	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final String... names) {
+		this(method, opType, version, hints, Priority.NORMAL, names);
 	}
 
-	public OpMethodInfo(final Method method, final String version, final Hints hints, final double priority, final String... names) {
+	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final double priority, final String... names) {
 		this.method = method;
 		this.version = version;
 		this.names = Arrays.asList(names);
@@ -103,10 +103,8 @@ public class OpMethodInfo implements OpInfo {
 		final List<ValidityProblem> problems = new ArrayList<>();
 		checkModifiers(method, problems);
 
-		// determine the functional interface this Op should implement
-		final OpMethod methodAnnotation = method.getAnnotation(OpMethod.class);
-		this.opType = findOpType(method, methodAnnotation, problems);
-		this.struct = generateStruct(method, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
+		this.opType = findOpType(method, opType, problems);
+		this.struct = generateStruct(method, problems, new MethodParameterMemberParser(opType), new MethodOpDependencyMemberParser());
 
 		validityException = problems.isEmpty() ? null : new ValidityException(
 			problems);
@@ -124,11 +122,11 @@ public class OpMethodInfo implements OpInfo {
 		}
 	}
 
-	private Type findOpType(Method m, OpMethod methodAnnotation,
+	private Type findOpType(Method m, Class<?> opType,
 		List<ValidityProblem> problems)
 	{
 		try {
-			return OpMethodUtils.getOpMethodType(methodAnnotation.type(),
+			return OpMethodUtils.getOpMethodType(opType,
 				method);
 		}
 		catch (IllegalArgumentException e) {

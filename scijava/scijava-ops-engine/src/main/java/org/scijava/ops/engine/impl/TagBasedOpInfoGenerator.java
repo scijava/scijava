@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.scijava.Context;
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
-import org.scijava.function.Functions;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
@@ -45,51 +45,64 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 	private final LogService log;
 	private final List<Discoverer> discoverers;
 
-	public TagBasedOpInfoGenerator(LogService log, Discoverer... d) {
+	public TagBasedOpInfoGenerator(final LogService log, Discoverer... d) {
 		this.log = log;
 		this.discoverers = Arrays.asList(d);
 	}
 
-	Functions.Arity3<Class<?>, Double, String[], OpClassInfo> opClassGenerator = //
-		(cls, priority, names) -> {
-			String version = VersionUtils.getVersion(cls);
-			return new OpClassInfo(cls, version, new DefaultHints(), priority, names);
-		};
+	private OpInfo opClassGenerator(Class<?> cls, double priority,
+		String[] names)
+	{
+		String version = VersionUtils.getVersion(cls);
+		return new OpClassInfo(cls, version, new DefaultHints(), priority, names);
+	}
 
-	Functions.Arity3<Method, Double, String[], OpMethodInfo> opMethodGenerator = //
-		(m, priority, names) -> {
-			String version = VersionUtils.getVersion(m.getDeclaringClass());
-			return new OpMethodInfo(m, version, new DefaultHints(), names);
-		};
+	private OpInfo opMethodGenerator(Method m, String opType, double priority,
+		String[] names)
+	{
+		Class<?> cls;
+		try {
+			cls = Context.getClassLoader().loadClass(opType);
+		}
+		catch (ClassNotFoundException exc) {
+			log.warn("Skipping method " + m + ": Cannot load Class" + opType);
+			return null;
+		}
+		String version = VersionUtils.getVersion(m.getDeclaringClass());
+		return new OpMethodInfo(m, cls, version, new DefaultHints(), priority,
+			names);
+	}
 
-	Functions.Arity3<Field, Double, String[], OpFieldInfo> opFieldGenerator = //
-		(f, priority, names) -> {
-			String version = VersionUtils.getVersion(f.getDeclaringClass());
-			Object instance;
-			try {
-				instance = f.getDeclaringClass().getDeclaredConstructor().newInstance();
-			}
-			catch (InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException exc)
+	private OpInfo opFieldGenerator(Field f, double priority, String[] names) {
+		String version = VersionUtils.getVersion(f.getDeclaringClass());
+		Object instance;
+		try {
+			instance = f.getDeclaringClass().getDeclaredConstructor().newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException exc)
 		{
-				return null;
-			}
-			return new OpFieldInfo(instance, f, version, new DefaultHints(), names);
-		};
+			return null;
+		}
+		return new OpFieldInfo(instance, f, version, new DefaultHints(), priority,
+			names);
+	}
 
 	@Override
 	public List<OpInfo> generateInfos() {
+		try {
 		List<OpInfo> infos = discoverers.stream() //
 			.flatMap(d -> d.elementsTaggedWith(TAGTYPE).stream()) //
 			.map(discovery -> {
 				// Obtain op metadata
 				String[] names;
+				String opType;
 				double priority;
 
 				try {
 					names = getOpNames(discovery);
-					System.out.println(names);
+					opType = getOpType(discovery);
 					priority = getOpPriority(discovery);
 				}
 				catch (IllegalArgumentException e) {
@@ -101,19 +114,23 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 				// Delegate to proper constructor
 				AnnotatedElement e = discovery.discovery();
 				if (e instanceof Class) {
-					return opClassGenerator.apply((Class<?>) e, priority, names);
+					return opClassGenerator((Class<?>) e, priority, names);
 				}
 				else if (e instanceof Method) {
-					return opMethodGenerator.apply((Method) e, priority, names);
+					return opMethodGenerator((Method) e, opType, priority, names);
 				}
 				else if (e instanceof Field) {
-					return opFieldGenerator.apply((Field) e, priority, names);
+					return opFieldGenerator((Field) e, priority, names);
 				}
 				else return null;
 			}) //
 			.filter(Objects::nonNull) //
 			.collect(Collectors.toList());
 		return infos;
+		} catch(NullPointerException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private String[] getOpNames(Discovery<AnnotatedElement> d) {
@@ -123,16 +140,18 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 			throw new IllegalArgumentException("Op discovery " + d + " does not record any names!");
 		}
 		if (!names.isEmpty()) {
-			System.out.println(names);
 			return OpUtils.parseOpNames(names);
 		}
-			System.out.println(name);
 		return OpUtils.parseOpNames(name);
 	}
 
 	private static double getOpPriority(Discovery<AnnotatedElement> d) {
 		String priority = d.option("priority");
 		return priority.isEmpty() ? Priority.NORMAL : Double.parseDouble(priority);
+	}
+
+	private static String getOpType(Discovery<AnnotatedElement> d) {
+		return d.option("type");
 	}
 
 }

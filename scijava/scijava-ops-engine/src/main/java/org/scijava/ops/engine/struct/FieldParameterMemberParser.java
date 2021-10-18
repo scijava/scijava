@@ -17,7 +17,7 @@ public class FieldParameterMemberParser implements
 {
 
 	@Override
-	public List<SynthesizedParameterMember<?>> parse(Field source)
+	public List<SynthesizedParameterMember<?>> parse(Field source, Type structType)
 		throws ValidityException
 	{
 		if (source == null) return null;
@@ -32,7 +32,7 @@ public class FieldParameterMemberParser implements
 
 		org.scijava.struct.Structs.checkModifiers(source.toString() + ": ", problems, source
 			.getModifiers(), false, Modifier.FINAL);
-		FunctionalParameters.parseFunctionalParameters(items, problems, fieldType,
+		FunctionalParameters.parseFunctionalParameters(items, problems, structType,
 			paramData);
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {

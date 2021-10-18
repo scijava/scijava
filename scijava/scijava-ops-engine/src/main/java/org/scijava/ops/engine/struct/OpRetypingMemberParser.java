@@ -1,6 +1,7 @@
 
 package org.scijava.ops.engine.struct;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class OpRetypingMemberParser implements
 	 *         output of this {@link SimplifiedOpInfo}
 	 */
 	@Override
-	public List<Member<?>> parse(RetypingRequest source)
+	public List<Member<?>> parse(RetypingRequest source, Type structType)
 		throws ValidityException
 	{
 		List<FunctionalMethodType> newFmts = source.newFmts();
@@ -58,10 +59,10 @@ public class OpRetypingMemberParser implements
 		return newMembers;
 	}
 
-	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts)
+	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts, Type structType)
 		throws ValidityException
 	{
-		return parse(new RetypingRequest(s, newFmts));
+		return parse(new RetypingRequest(s, newFmts), structType);
 	}
 
 }

@@ -2,6 +2,7 @@
 package org.scijava.struct;
 
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -30,13 +31,13 @@ public final class Structs {
 	}
 
 	@SafeVarargs
-	public static <S> Struct from(S source, List<ValidityProblem> problems,
+	public static <S> Struct from(S source, Type structType, List<ValidityProblem> problems,
 		MemberParser<S, ? extends Member<?>>... parsers)
 	{
 		List<Member<?>> members = new ArrayList<>();
 		for (MemberParser<S, ? extends Member<?>> p : parsers) {
 			try {
-				members.addAll(p.parse(source));
+				members.addAll(p.parse(source, structType));
 			}
 			catch (ValidityException e) {
 				problems.addAll(e.problems());

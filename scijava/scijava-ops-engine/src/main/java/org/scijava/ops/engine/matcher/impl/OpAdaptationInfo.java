@@ -59,7 +59,7 @@ public class OpAdaptationInfo implements OpInfo {
 		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
 		
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
-		struct = Structs.from(r, problems, new OpRetypingMemberParser());
+		struct = Structs.from(r, type, problems, new OpRetypingMemberParser());
 		try {
 			OpUtils.checkHasSingleOutput(struct);
 		}

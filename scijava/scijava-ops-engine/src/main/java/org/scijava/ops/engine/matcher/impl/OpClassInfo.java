@@ -77,7 +77,7 @@ public class OpClassInfo implements OpInfo {
 		this.names = Arrays.asList(names);
 		List<ValidityProblem> problems = new ArrayList<>();
 		try {
-			struct = Structs.from(opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
+			struct = Structs.from(opClass, opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
 			OpUtils.checkHasSingleOutput(struct);
 		} catch (ValidityException e) {
 			validityException = e;

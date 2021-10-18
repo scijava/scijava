@@ -48,6 +48,7 @@ import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
+import org.scijava.types.Types;
 
 /**
  * Metadata about an op implementation defined as a field.
@@ -100,7 +101,8 @@ public class OpFieldInfo implements OpInfo {
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
 		try {
-			struct = Structs.from(field, problems, new FieldParameterMemberParser());
+			Type structType = Types.fieldType(field, field.getDeclaringClass());
+			struct = Structs.from(field, structType, problems, new FieldParameterMemberParser());
 //			struct = ParameterStructs.structOf(field);
 			OpUtils.checkHasSingleOutput(struct);
 			// NB: Contextual parameters not supported for now.

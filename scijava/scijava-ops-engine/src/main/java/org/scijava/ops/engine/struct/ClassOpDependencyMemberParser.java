@@ -3,6 +3,7 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ClassOpDependencyMemberParser implements
 {
 
 	@Override
-	public List<FieldOpDependencyMember<?>> parse(Class<?> source)
+	public List<FieldOpDependencyMember<?>> parse(Class<?> source, Type structType)
 		throws ValidityException
 	{
 				if (source == null) return null;

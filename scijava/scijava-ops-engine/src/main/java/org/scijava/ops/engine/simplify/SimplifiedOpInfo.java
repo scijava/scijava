@@ -75,7 +75,7 @@ public class SimplifiedOpInfo implements OpInfo {
 		this.opType = SimplificationUtils.retypeOpType(info.opType(), inputTypes,
 			outputType);
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
-		this.struct = Structs.from(r, problems, new OpRetypingMemberParser());
+		this.struct = Structs.from(r, opType, problems, new OpRetypingMemberParser());
 
 		this.priority = priority;
 		this.hints = srcInfo.declaredHints().plus(Simplification.FORBIDDEN);

@@ -104,18 +104,19 @@ public class OpMethodInfo implements OpInfo {
 		checkModifiers(method, problems);
 
 		this.opType = findOpType(method, opType, problems);
-		this.struct = generateStruct(method, problems, new MethodParameterMemberParser(opType), new MethodOpDependencyMemberParser());
+		this.struct = generateStruct(method, opType, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
 
 		validityException = problems.isEmpty() ? null : new ValidityException(
 			problems);
 	}
 
 	@SafeVarargs
-	private Struct generateStruct(Method m, List<ValidityProblem> problems,
-		MemberParser<Method, ? extends Member<?>> ... memberParsers)
+	private Struct generateStruct(Method m, Type structType,
+		List<ValidityProblem> problems,
+		MemberParser<Method, ? extends Member<?>>... memberParsers)
 	{
 		try {
-			return Structs.from(m, problems, memberParsers);
+			return Structs.from(m, structType, problems, memberParsers);
 		} catch (IllegalArgumentException e) {
 			problems.add(new ValidityProblem(e));
 			return null;

@@ -38,10 +38,9 @@ import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.view.Views;
 
 import org.scijava.Priority;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -56,16 +55,13 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final ImgLabeling<?, ?> o, final int n) {
+	public Type reify(final TypeReifier t, final ImgLabeling<?, ?> o, final int n) {
 		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
 		
 		if(n == 0) {
 			// o.firstElement will return a LabelingType
-			Type labelingType = typeService.reify(o.firstElement());
+			Type labelingType = t.reify(o.firstElement());
 			// sanity check
 			if(!(labelingType instanceof ParameterizedType)) throw new IllegalArgumentException("ImgLabeling is not of a LabelingType");
 			// get type arg of labelingType
@@ -73,7 +69,7 @@ public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>
 			return pType.getActualTypeArguments()[0];
 		}
 		// otherwise n == 1
-		return typeService.reify(Views.iterable(o.getSource()).firstElement());
+		return t.reify(Views.iterable(o.getSource()).firstElement());
 	}
 
 	@Override

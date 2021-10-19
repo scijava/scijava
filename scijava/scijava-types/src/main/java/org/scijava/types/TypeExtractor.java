@@ -55,10 +55,12 @@ public interface TypeExtractor<T> extends SingletonPlugin {
 	/**
 	 * Extracts the generic type of the given object.
 	 * 
+	 * @param r a {@link TypeReifier}
+	 * @param o Object for which the type should be reified.
 	 * @return The object's generic {@link Type}, or {@code null} if the object is
 	 *         not supported by this extractor.
 	 */
-	default ParameterizedType reify(final T o) {
+	default ParameterizedType reify(final TypeReifier r, final T o) {
 		final TypeVariable<Class<T>>[] typeVars = getRawType().getTypeParameters();
 		if (typeVars.length == 0) {
 			throw new IllegalStateException("Class " + getRawType().getName() +
@@ -66,7 +68,7 @@ public interface TypeExtractor<T> extends SingletonPlugin {
 		}
 		final Type[] types = new Type[typeVars.length];
 		for (int i = 0; i < types.length; i++) {
-			types[i] = reify(o, i);
+			types[i] = reify(r, o, i);
 			if (types[i] == null) types[i] = new Any();
 		}
 		return Types.parameterize(getRawType(), types);
@@ -76,6 +78,7 @@ public interface TypeExtractor<T> extends SingletonPlugin {
 	 * Extracts the generic type of the given object's Nth type parameter, with
 	 * respect to the class handled by this type extractor.
 	 * 
+	 * @param r a {@link TypeReifier}
 	 * @param o Object for which the type should be reified.
 	 * @param n Index of the type parameter whose type should be extracted.
 	 * @return The reified Nth type parameter, or {@code null} if the extractor
@@ -85,8 +88,8 @@ public interface TypeExtractor<T> extends SingletonPlugin {
 	 * @throws UnsupportedOperationException if the supported class does not have
 	 *           any type parameters.
 	 */
-	default Type reify(final T o, final int n) {
-		final Type type = reify(o);
+	default Type reify(final TypeReifier r, final T o, final int n) {
+		final Type type = reify(r, o);
 		if (!(type instanceof ParameterizedType)) {
 			throw new UnsupportedOperationException("Not a parameterized type");
 		}

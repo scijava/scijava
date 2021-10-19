@@ -29,7 +29,7 @@ import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.impl.DependencyInstantiatedInfoChain;
+import org.scijava.ops.engine.impl.DependencyRichOpInfoChain;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.plugin.Plugin;

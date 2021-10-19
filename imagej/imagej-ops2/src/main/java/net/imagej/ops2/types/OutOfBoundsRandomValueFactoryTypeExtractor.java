@@ -38,11 +38,10 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 
+import org.scijava.plugin.Plugin;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
 
 /**
@@ -54,11 +53,8 @@ import org.scijava.types.Types;
 @Plugin(type = TypeExtractor.class)
 public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor<OutOfBoundsRandomValueFactory<?, ?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final OutOfBoundsRandomValueFactory<?, ?> o, final int n) {
+	public Type reify(final TypeReifier t, final OutOfBoundsRandomValueFactory<?, ?> o, final int n) {
 		if (n < 0 || n > 1)
 			throw new IndexOutOfBoundsException();
 
@@ -70,7 +66,7 @@ public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor
 		} catch (Exception e) {
 
 		}
-		Type elementType = typeService.reify(elementObject);
+		Type elementType = t.reify(elementObject);
 		if (n == 0)
 			return elementType;
 		// if we need the second type parameter, it can just be a

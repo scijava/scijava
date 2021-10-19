@@ -29,11 +29,13 @@
 
 package org.scijava.types;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.plugin.PluginBasedDiscoverer;
+import org.scijava.log2.LogService;
 import org.scijava.plugin.AbstractSingletonService;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginService;
 import org.scijava.service.Service;
 
 /**
@@ -46,34 +48,32 @@ public class DefaultTypeService extends
 	AbstractSingletonService<TypeExtractor<?>> implements TypeService
 {
 
-	private Map<Class<?>, TypeExtractor<?>> extractors;
+	@Parameter
+	private PluginService plugins;
+
+	@Parameter
+	private LogService logger;
+
+	private TypeReifier reifier;
+
+	private synchronized void generateReifier() {
+		pluginService().getPluginsOfType(TypeExtractor.class);
+		Discoverer d = new PluginBasedDiscoverer(plugins);
+		if (reifier != null) return;
+			reifier = new DefaultTypeReifier(logger, d);
+	}
+
+	@Override
+	public TypeReifier reifier() {
+		if (reifier == null) generateReifier();
+		return reifier;
+	}
 
 	// -- TypeService methods --
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> TypeExtractor<T> getExtractor(final Class<T> c) {
-		return (TypeExtractor<T>) extractors().get(c);
-	}
-
-	// -- Helper methods --
-
-	private Map<Class<?>, TypeExtractor<?>> extractors() {
-		if (extractors == null) initExtractors();
-		return extractors;
-	}
-
-	private synchronized void initExtractors() {
-		if (extractors != null) return;
-
-		final HashMap<Class<?>, TypeExtractor<?>> map = new HashMap<>();
-
-		for (final TypeExtractor<?> typeExtractor : getInstances()) {
-			final Class<?> key = typeExtractor.getRawType();
-			if (!map.containsKey(key)) map.put(key, typeExtractor);
-		}
-
-		extractors = map;
+		return reifier().getExtractor(c);
 	}
 
 }

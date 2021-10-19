@@ -8,4 +8,7 @@ module org.scijava.types {
 
 	requires transitive com.google.common;
 	requires org.scijava;
+	requires transitive org.scijava.discovery;
+	requires org.scijava.discovery.plugin;
+	requires transitive org.scijava.log2;
 }

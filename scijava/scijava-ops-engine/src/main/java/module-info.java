@@ -37,6 +37,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.discovery.plugin;
 	requires org.scijava.discovery.therapi;
 	requires org.scijava.function;
+	requires org.scijava.log2;
 	requires org.scijava.progress;
 	requires org.scijava.struct;
 	requires transitive org.scijava.ops.api;

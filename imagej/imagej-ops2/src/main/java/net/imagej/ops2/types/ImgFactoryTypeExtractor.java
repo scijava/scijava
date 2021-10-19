@@ -37,10 +37,9 @@ import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImg;
 
 import org.scijava.Priority;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link ArrayImg} objects.
@@ -55,15 +54,12 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class ImgFactoryTypeExtractor implements TypeExtractor<ImgFactory<?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final ImgFactory<?> o, final int n) {
+	public Type reify(final TypeReifier t, final ImgFactory<?> o, final int n) {
 		if (n != 0)
 			throw new IndexOutOfBoundsException();
 
-		return typeService.reify(o.type());
+		return t.reify(o.type());
 	}
 
 	@Override

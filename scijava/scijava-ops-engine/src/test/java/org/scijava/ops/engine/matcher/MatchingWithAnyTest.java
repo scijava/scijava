@@ -15,6 +15,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
 
 /**
  * Tests op matcher functionality with {@link Any} types.
@@ -54,7 +55,7 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 	public static class ThingTypeExtractor implements TypeExtractor<Thing<?>> {
 
 		@Override
-		public Type reify(final Thing<?> o, final int n) {
+		public Type reify(final TypeReifier t, final Thing<?> o, final int n) {
 			if (n != 0)
 				throw new IndexOutOfBoundsException();
 

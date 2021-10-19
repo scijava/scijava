@@ -1,60 +1,22 @@
-/*
- * #%L
- * SciJava Operations: a framework for reusable algorithms.
- * %%
- * Copyright (C) 2016 - 2019 SciJava Ops developers.
- * %%
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- * 
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- * #L%
- */
-
 package org.scijava.types;
 
+import com.google.common.reflect.TypeToken;
+
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.scijava.plugin.SingletonService;
-import org.scijava.service.SciJavaService;
+import org.scijava.log2.Logger;
 import org.scijava.types.extractors.IterableTypeExtractor;
 
-/**
- * Service for working with generic {@link Type}s. This service can extract
- * generic types from objects in an extensible way, via {@link TypeExtractor}
- * plugins. It also provides some methods for reasoning about generic types in
- * general.
- * 
- * @author Curtis Rueden
- */
-public interface TypeService extends
-	SingletonService<TypeExtractor<?>>, SciJavaService
-{
-
-	TypeReifier reifier();
+public interface TypeReifier {
 
 	/** Gets the type extractor which handles the given class, or null if none. */
-	default <T> TypeExtractor<T> getExtractor(Class<T> c) {
-		return reifier().getExtractor(c);
-	}
+	<T> TypeExtractor<T> getExtractor(Class<T> c);
+
+	Logger log();
 
 	/**
 	 * Extracts the generic {@link Type} of the given {@link Object}.
@@ -105,7 +67,66 @@ public interface TypeService extends
 	 * </p>
 	 */
 	default Type reify(final Object o) {
-		return reifier().reify(o);
+		if (o == null) return new Any();
+		
+		if (o instanceof GenericTyped) {
+			// Object implements the GenericTyped interface; it explicitly declares
+			// the generic type by which it wants to be known. This makes life easy!
+			return ((GenericTyped) o).getType();
+		}
+
+		final Class<?> c = o.getClass();
+		final TypeVariable<?>[] typeVars = c.getTypeParameters();
+		final int numVars = typeVars.length;
+
+		if (numVars == 0) {
+			// if the class is synthetic, we are probably missing something due to
+			// type erasure.
+			if (c.isSynthetic()) {
+				log().warn("Object " + o + " is synthetic. " +
+					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
+			}
+			// Object has no generic parameters; we are done!
+			return c;
+		}
+
+		// Object has parameters which need to be resolved. Let's do it.
+
+		// Here we will store all of our object's resolved type variables.
+		final Map<TypeVariable<?>, Type> resolved = new HashMap<>();
+
+		for (final TypeToken<?> token : TypeToken.of(c).getTypes()) {
+			if (resolved.size() == numVars) break; // Got 'em all!
+
+			final Type type = token.getType();
+			if (!Types.containsTypeVars(type)) {
+				// No type variables are buried in this type; it is useless to us!
+				continue;
+			}
+
+			// Populate relevant type variables from the reified supertype!
+			final Map<TypeVariable<?>, Type> vars = //
+				args(o, token.getRawType());
+
+			if (vars != null) {
+				// Remember any resolved type variables.
+				// Note that vars may contain other type variables from other layers
+				// of the generic type hierarchy, which we don't care about here.
+				for (final TypeVariable<?> typeVar : typeVars) {
+					if (vars.containsKey(typeVar)) {
+						resolved.putIfAbsent(typeVar, vars.get(typeVar));
+					}
+				}
+			}
+		}
+
+		// fill in any remaining unresolved type parameters with wildcards
+		for (final TypeVariable<?> typeVar : typeVars) {
+			resolved.putIfAbsent(typeVar, new Any());
+		}
+
+		// now apply all the type variables we resolved
+		return Types.parameterize(c, resolved);
 	}
 
 	/**
@@ -133,15 +154,22 @@ public interface TypeService extends
 	default <T> Map<TypeVariable<?>, Type> args(final Object o,
 		final Class<T> superType)
 	{
-		return reifier().args(o, superType);
-	}
+		final Class<?> c = o.getClass();
 
-	// -- PTService methods --
+		final TypeExtractor<T> extractor = getExtractor(superType);
+		if (extractor == null) return null; // No plugin for this specific class.
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	default Class<TypeExtractor<?>> getPluginType() {
-		return (Class) TypeExtractor.class;
+		if (!superType.isInstance(o)) {
+			throw new IllegalStateException("'" + o.getClass() +
+				"' is not an instance of '" + superType.getName() + "'");
+		}
+		@SuppressWarnings("unchecked")
+		final T t = (T) o;
+
+		final ParameterizedType extractedType = extractor.reify(this, t);
+
+		// Populate type variables to fully populate the supertype.
+		return Types.args(c, extractedType);
 	}
 
 }

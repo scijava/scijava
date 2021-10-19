@@ -27,6 +27,43 @@ public final class LambdaTypeBaker {
 	 */
 	private LambdaTypeBaker() {}
 
+	/**
+	 * Used to enrich a lambda expression with its generic type. Its usage is
+	 * necessary in order to find Ops that could take this lamdba expression as an
+	 * argument.
+	 * <p>
+	 * Suppose, for example, that a user has written a lambda
+	 * {@code Computers.Arity1<Double, Double> computer}, but a user wishes to
+	 * have a {@code Computers.Arity1<Iterable<Double>, Iterable<Double>>}. They
+	 * know of an Op in the {@code OpEnvironment} that is able to adapt
+	 * {@code computer} so that it is run in a parallel fashion. They cannot
+	 * simply call
+	 * <p>
+	 *
+	 * <pre>
+	 * <code>
+	 * op("adapt")
+	 *   .input(computer)
+	 *   .outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {})
+	 *   .apply()
+	 * </code>
+	 * </pre>
+	 *
+	 * since the type parameters of {@code computer} are not retained at runtime.
+	 * <p>
+	 * {@code bakeLambdaType} should be used as a method of retaining that fully
+	 * reified lambda type so that the lambda can be used
+	 * <p>
+	 * Note: {@code bakeLambdaType} <b>does not</b> need to be used with anonymous
+	 * subclasses; these retain their type parameters at runtime. It is only
+	 * lambda expressions that need to be passed to this method.
+	 * 
+	 * @param <T> The type of the op instance to enrich.
+	 * @param originalOp The op instance to enrich.
+	 * @param reifiedType The intended generic type of the object to be known at runtime.
+	 * @return An enriched version of the object with full knowledge of its
+	 *         generic type.
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T bakeLambdaType(T originalOp, Type reifiedType) {
 		ensureImplementation(originalOp, reifiedType);

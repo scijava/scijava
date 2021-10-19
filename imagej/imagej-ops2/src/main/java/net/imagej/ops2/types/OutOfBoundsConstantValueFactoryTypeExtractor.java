@@ -36,10 +36,9 @@ import java.lang.reflect.Type;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
 
 /**
@@ -52,15 +51,12 @@ import org.scijava.types.Types;
 public class OutOfBoundsConstantValueFactoryTypeExtractor
 		implements TypeExtractor<OutOfBoundsConstantValueFactory<?, ?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final OutOfBoundsConstantValueFactory<?, ?> o, final int n) {
+	public Type reify(final TypeReifier t, final OutOfBoundsConstantValueFactory<?, ?> o, final int n) {
 		if (n < 0 || n > 1)
 			throw new IndexOutOfBoundsException();
 
-		Type elementType = typeService.reify(o.getValue());
+		Type elementType = t.reify(o.getValue());
 		if (n == 0)
 			return elementType;
 		// if we need the second type parameter, it can just be a

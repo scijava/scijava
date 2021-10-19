@@ -114,7 +114,7 @@ public class DefaultOpService extends AbstractService implements OpService {
 			OpInfoGenerator g3 = new TagBasedOpInfoGenerator(log, d3);
 			infoGenerators.add(g3);
 		}
-		env = new DefaultOpEnvironment(types, log, history, infoGenerators, discoverers.toArray(Discoverer[]::new));
+		env = new RichOpEnvironment(types, log, history, infoGenerators, discoverers.toArray(Discoverer[]::new));
 	}
 
 	private synchronized void initHistory() {

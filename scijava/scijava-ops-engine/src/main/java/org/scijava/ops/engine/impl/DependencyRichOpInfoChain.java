@@ -14,11 +14,11 @@ import org.scijava.ops.api.RichOp;
  *
  * @author Gabe Selzer
  */
-public class DependencyInstantiatedInfoChain extends InfoChain {
+public class DependencyRichOpInfoChain extends InfoChain {
 
 	private final List<RichOp<?>> dependencies;
 
-	public DependencyInstantiatedInfoChain(OpInfo info, List<RichOp<?>> dependencies) {
+	public DependencyRichOpInfoChain(OpInfo info, List<RichOp<?>> dependencies) {
 		super(info, chainsFrom(dependencies));
 		this.dependencies = dependencies;
 	}

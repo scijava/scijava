@@ -24,22 +24,6 @@ import org.scijava.types.Nil;
  * @author Gabriel Selzer
  */
 public class OpEnvironmentTest extends AbstractTestEnvironment{
-	
-	@Test
-	public void testBakeType() {
-		Function<Double, Double> func = (in) -> in * 2;
-		Type funcType = new Nil<Function<Double, Double>>() {}.getType();
-
-		Function<Double, Double> wrappedFunction = ops.env().bakeLambdaType(func,
-			funcType);
-
-		Assert.assertTrue("wrappedFunction should be a GenericTyped but is not!",
-			wrappedFunction instanceof GenericTyped);
-		Type type = ((GenericTyped) wrappedFunction).getType();
-		Assert.assertEquals("wrappedFunction type " + type +
-			"is not equivalent to the provided type " + funcType + "!", funcType,
-			type);
-	}
 
 	@Test
 	public void testClassOpification() {

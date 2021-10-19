@@ -34,10 +34,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Map} objects.
@@ -52,18 +51,15 @@ import org.scijava.types.TypeService;
 @Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class MapTypeExtractor implements TypeExtractor<Map<?, ?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final Map<?, ?> o, final int n) {
+	public Type reify(final TypeReifier t, final Map<?, ?> o, final int n) {
 		if (n < 0 || n > 1) throw new IndexOutOfBoundsException("" + n);
 
 		if (o.isEmpty()) return null;
 
 		final Entry<?, ?> entry = o.entrySet().iterator().next();
-		if (n == 0) return typeService.reify(entry.getKey());
-		return typeService.reify(entry.getValue());
+		if (n == 0) return t.reify(entry.getKey());
+		return t.reify(entry.getValue());
 
 		// TODO: Avoid infinite recursion when the map references itself.
 	}

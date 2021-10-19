@@ -30,16 +30,13 @@
 package org.scijava.types.extractors;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
+import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
 
 /**
@@ -55,11 +52,8 @@ import org.scijava.types.Types;
 @Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final Iterable<?> o, final int n) {
+	public Type reify(final TypeReifier t, final Iterable<?> o, final int n) {
 		if (n != 0) throw new IndexOutOfBoundsException();
 
 		final Iterator<?> iterator = o.iterator();
@@ -70,7 +64,7 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 		// can we make this more efficient (possibly a parallel stream)?
 		Type[] types = StreamSupport.stream(o.spliterator(), false) //
 			.limit(typesToCheck) //
-			.map(s -> typeService.reify(s)) //
+			.map(s -> t.reify(s)) //
 			.toArray(Type[]::new);
 
 		return Types.greatestCommonSuperType(types, true);

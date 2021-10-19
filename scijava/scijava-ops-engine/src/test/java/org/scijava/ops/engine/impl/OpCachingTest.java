@@ -77,15 +77,15 @@ public class OpCachingTest extends AbstractTestEnvironment {
 	@OpField(names = "test.basicOp")
 	public final Producer<String> basicOp = () -> "This Op should be cached";
 
-	private DefaultOpEnvironment getDefaultOpEnv() {
+	private RichOpEnvironment getDefaultOpEnv() {
 		OpEnvironment opEnv = ops.env();
-		if (!(opEnv instanceof DefaultOpEnvironment)) fail(
+		if (!(opEnv instanceof RichOpEnvironment)) fail(
 			"OpCachingTest expects a DefaultOpEnvironment (since it is testing the caching behavior of that class).");
-		return (DefaultOpEnvironment) opEnv;
+		return (RichOpEnvironment) opEnv;
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<MatchingConditions, OpInstance<?>> getOpCache(DefaultOpEnvironment opEnv)
+	private Map<MatchingConditions, OpInstance<?>> getOpCache(RichOpEnvironment opEnv)
 		throws NoSuchFieldException, SecurityException, IllegalArgumentException,
 		IllegalAccessException
 	{
@@ -100,7 +100,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 		NoSuchFieldException, IllegalAccessException
 	{
 		// put the Op in the cache
-		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
+		RichOpEnvironment defOpEnv = getDefaultOpEnv();
 		Producer<String> op = defOpEnv.op("test.basicOp").input().outType(
 			String.class).producer();
 
@@ -132,7 +132,7 @@ public class OpCachingTest extends AbstractTestEnvironment {
 		SecurityException, IllegalArgumentException, IllegalAccessException
 	{
 		// put the Op in the cache
-		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
+		RichOpEnvironment defOpEnv = getDefaultOpEnv();
 		Producer<String> op = defOpEnv.op("test.complicatedOp").input().outType(
 			String.class).producer();
 

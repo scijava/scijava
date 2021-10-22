@@ -50,8 +50,8 @@ public class PluginBasedDiscoverer implements Discoverer {
 	}
 
 	private String getTag(Plugin annotation) {
-		String tagType = annotation.type().getTypeName().toLowerCase();
-		String priority = "priority " + annotation.priority();
+		String tagType = annotation.type().getSimpleName().toLowerCase();
+		String priority = "priority='" + annotation.priority() + "'";
 		return String.join(" ", tagType, priority);
 	}
 

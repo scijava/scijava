@@ -51,8 +51,9 @@ public class EulerCharacteristic26NTest extends AbstractOpTest {
 	public void testConforms() throws AssertionError {
 		final Img<BitType> img = ArrayImgs.bits(3, 3);
 
+		final DoubleType result = new DoubleType();
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("topology.eulerCharacteristic26N").input(img).apply();
+			ops.op("topology.eulerCharacteristic26N").input(img).output(result).compute();
 		});
 	}
 

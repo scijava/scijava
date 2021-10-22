@@ -51,8 +51,9 @@ public class EulerCorrectionTest extends AbstractOpTest {
     public void testConforms() throws Exception {
         final Img<BitType> img = ArrayImgs.bits(3, 3);
 
+        final DoubleType result = new DoubleType();
 				Assertions.assertThrows(IllegalArgumentException.class, () -> {
-					ops.op("topology.eulerCorrection").input(img).apply();
+					ops.op("topology.eulerCorrection").input(img).output(result).compute();
 				});
 	    }
 

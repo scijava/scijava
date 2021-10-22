@@ -350,7 +350,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			hints);
 		InfoChain adaptorChain = new DependencyOpInstanceInfoChain(candidate
 			.opInfo(), conditions);
-		return adaptorChain.op();
+		return adaptorChain.op(candidate.getType());
 	}
 
 	private List<OpInstance<?>> resolveOpDependencies(OpCandidate candidate,

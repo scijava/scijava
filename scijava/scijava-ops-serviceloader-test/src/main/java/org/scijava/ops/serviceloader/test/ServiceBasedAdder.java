@@ -1,5 +1,5 @@
 
-package org.scijava.ops.serviceloader;
+package org.scijava.ops.serviceloader.test;
 
 import java.util.function.BiFunction;
 

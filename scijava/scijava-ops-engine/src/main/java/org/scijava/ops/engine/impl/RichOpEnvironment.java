@@ -478,7 +478,7 @@ public class RichOpEnvironment implements OpEnvironment {
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
 		InfoChain adaptorChain = new DependencyRichOpInfoChain(candidate
 			.opInfo(), conditions);
-		return adaptorChain.op();
+		return adaptorChain.op(candidate.getType());
 	}
 
 	/**

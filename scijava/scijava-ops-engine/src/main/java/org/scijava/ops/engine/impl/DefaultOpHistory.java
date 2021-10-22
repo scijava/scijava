@@ -93,10 +93,13 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 		}
 	}
 
-	private synchronized void resolveExecution(RichOp<?> op, Object output) {
+	private void resolveExecution(RichOp<?> op, Object output) {
 		List<RichOp<?>> l = mutationMap.get(output);
-		synchronized (l) {
-			l.add(op);
+		// HACK: sometimes, l can be null. Don't yet know why
+		if (l != null) {
+			synchronized (l) {
+				l.add(op);
+			}
 		}
 	}
 

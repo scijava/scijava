@@ -139,6 +139,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery-therapi</artifactId>
 			<version>${project.version}</version>
 		</dependency>

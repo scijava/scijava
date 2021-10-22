@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.plugin.PluginBasedDiscoverer;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpBuilder;
@@ -44,6 +45,7 @@ import org.scijava.ops.engine.OpService;
 import org.scijava.ops.serviceloader.ServiceLoaderDiscoverer;
 import org.scijava.parse2.ParseService;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 import org.scijava.types.TypeService;
@@ -98,7 +100,7 @@ public class DefaultOpService extends AbstractService implements OpService {
 		ParseService parser = context().getService(ParseService.class);
 		OpHistory history = history();
 		List<Discoverer> discoverers = new ArrayList<>();
-		Discoverer d1 = new PluginBasedDiscoverer(context());
+		Discoverer d1 = new PluginBasedDiscoverer(context().getService(PluginService.class));
 		discoverers.add(d1);
 		Discoverer d2 = new ServiceLoaderDiscoverer();
 		discoverers.add(d2);

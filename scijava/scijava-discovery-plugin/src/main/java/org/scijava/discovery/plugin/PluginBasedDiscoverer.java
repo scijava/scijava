@@ -1,4 +1,4 @@
-package org.scijava.ops.engine.impl;
+package org.scijava.discovery.plugin;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,8 +17,8 @@ public class PluginBasedDiscoverer implements Discoverer {
 
 	private final PluginService p;
 
-	public PluginBasedDiscoverer(Context ctx) {
-		p = ctx.getService(PluginService.class);
+	public PluginBasedDiscoverer(PluginService p) {
+		this.p = p;
 	}
 
 	@Override

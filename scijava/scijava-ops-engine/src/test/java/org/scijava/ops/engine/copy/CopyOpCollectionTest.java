@@ -30,10 +30,16 @@
 package org.scijava.ops.engine.copy;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
 
-public class CopyOpCollectionTest extends AbstractTestEnvironment {
+public class CopyOpCollectionTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(CopyOpCollection.class, "opcollection");
+	}
 
 	@Test
 	public void testCopyOp() {

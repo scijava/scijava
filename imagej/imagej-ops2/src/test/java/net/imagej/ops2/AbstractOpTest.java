@@ -54,7 +54,6 @@ import org.scijava.ops.engine.OpService;
 import org.scijava.ops.spi.Op;
 import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
-import org.scijava.types.TypeService;
 
 /**
  * Base class for {@link Op} unit testing.
@@ -74,7 +73,7 @@ public abstract class AbstractOpTest{
 	@BeforeAll
 	public static void setUp() {
 		context = new Context(OpService.class, CacheService.class,
-			ThreadService.class, PluginService.class, TypeService.class);
+			ThreadService.class, PluginService.class);
 		ops = context.service(OpService.class);
 	}
 

@@ -139,4 +139,13 @@ module net.imagej.ops2 {
 	requires imglib2.algorithm.fft;
 	requires mines.jtk;
 
+	provides org.scijava.types.TypeExtractor with
+			net.imagej.ops2.types.ImgFactoryTypeExtractor,
+			net.imagej.ops2.types.ImgLabelingTypeExtractor,
+			net.imagej.ops2.types.LabelingMappingTypeExtractor,
+			net.imagej.ops2.types.OutOfBoundsConstantValueFactoryTypeExtractor,
+			net.imagej.ops2.types.OutOfBoundsFactoryTypeExtractor,
+			net.imagej.ops2.types.OutOfBoundsRandomValueFactoryTypeExtractor,
+			net.imagej.ops2.types.RAITypeExtractor;
+
 }

@@ -3,28 +3,21 @@ package org.scijava.discovery.therapi;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
+import java.util.ServiceLoader;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.scijava.Context;
 import org.scijava.discovery.Discovery;
-import org.scijava.parse2.ParseService;
+import org.scijava.parse2.Parser;
 
 public class TagOptionsTest {
 
-	private ParseService parser;
+	private Parser parser;
 
 	@Before
 	public void setUp() {
-		Context ctx = new Context(ParseService.class);
-		parser = ctx.getService(ParseService.class);
-	}
-
-	@After
-	public void tearDown() {
-		parser.getContext().dispose();
+		parser = ServiceLoader.load(Parser.class).findFirst().get();
 	}
 
 	private List<Discovery<AnnotatedElement>> getTaggedDiscoveries(

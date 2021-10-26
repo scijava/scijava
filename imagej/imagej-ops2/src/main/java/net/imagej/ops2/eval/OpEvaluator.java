@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.engine.OpService;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.util.FunctionUtils;
 import org.scijava.ops.spi.Op;
 import org.scijava.parsington.Operator;
@@ -46,7 +46,6 @@ import org.scijava.parsington.Variable;
 import org.scijava.parsington.eval.AbstractStandardStackEvaluator;
 import org.scijava.parsington.eval.Evaluator;
 import org.scijava.types.Nil;
-import org.scijava.types.TypeService;
 
 /**
  * A Parsington {@link Evaluator} using available {@link Op}s.
@@ -55,12 +54,12 @@ import org.scijava.types.TypeService;
  */
 public class OpEvaluator extends AbstractStandardStackEvaluator {
 
-	private final OpService ops;
+	private final OpEnvironment ops;
 
 	/** Map of Parsington {@link Operator}s to Ops operation names. */
 	private final HashMap<Operator, String> opMap;
 
-	public OpEvaluator(final OpService ops) {
+	public OpEvaluator(final OpEnvironment ops) {
 		this.ops = ops;
 		opMap = new HashMap<>();
 
@@ -150,13 +149,13 @@ public class OpEvaluator extends AbstractStandardStackEvaluator {
 		Nil<Object> outType = new Nil<>() {};
 
 		// Try executing the op.
-		Functions.ArityN<Object> func = FunctionUtils.matchN(ops.env(), opName, outType, inTypes);
+		Functions.ArityN<Object> func = FunctionUtils.matchN(ops, opName, outType, inTypes);
 		return func.apply(argValues);
 	}
 
 	@SuppressWarnings({ "unchecked" })
 	private <T> Nil<T> type(Object obj) {
-		return (Nil<T>) Nil.of(ops.context().service(TypeService.class).reify(obj));
+		return (Nil<T>) Nil.of(ops.genericType(obj));
 	}
 
 	/** Gets the op name associated with the given {@link Operator}. */
@@ -411,8 +410,8 @@ public class OpEvaluator extends AbstractStandardStackEvaluator {
 
 		// Try the base execute, which handles assignment-oriented operations.
 		// (NB: super.execute pops the arguments again, so put them back first.)
-		for (int i = 0; i < args.length; i++) {
-			stack.push(args[i]);
+		for (Object arg : args) {
+			stack.push(arg);
 		}
 		final Object result = super.execute(op, stack);
 		if (result != null) return result;

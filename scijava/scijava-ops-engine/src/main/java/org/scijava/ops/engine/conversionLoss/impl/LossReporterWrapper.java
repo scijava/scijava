@@ -7,7 +7,6 @@ import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.matcher.impl.AbstractRichOp;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 /**
@@ -18,7 +17,6 @@ import org.scijava.types.Nil;
  * @param <I>
  * @param <O>
  */
-@Plugin(type = OpWrapper.class)
 public class LossReporterWrapper<I, O> //
 	implements //
 	OpWrapper<LossReporter<I, O>>

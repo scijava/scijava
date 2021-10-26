@@ -9,9 +9,7 @@ import java.util.Optional;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.InfoChainGenerator;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = InfoChainGenerator.class)
 public class SimplificationInfoChainGenerator implements InfoChainGenerator {
 
 	@Override

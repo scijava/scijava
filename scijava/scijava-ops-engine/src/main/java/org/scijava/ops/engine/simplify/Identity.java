@@ -6,11 +6,11 @@ import java.util.function.Function;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 @OpHints(hints = { Simplification.FORBIDDEN })
-@Plugin(type = Op.class, name = "simplify, focus")
-public class Identity<T> implements Function<T, T> {
+@OpClass(names = "simplify, focus")
+public class Identity<T> implements Function<T, T>, Op {
 
 	public Identity() {}
 

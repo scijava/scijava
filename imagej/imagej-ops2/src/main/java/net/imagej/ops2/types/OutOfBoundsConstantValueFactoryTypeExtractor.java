@@ -36,7 +36,6 @@ import java.lang.reflect.Type;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
@@ -47,7 +46,6 @@ import org.scijava.types.Types;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class)
 public class OutOfBoundsConstantValueFactoryTypeExtractor
 		implements TypeExtractor<OutOfBoundsConstantValueFactory<?, ?>> {
 
@@ -70,5 +68,14 @@ public class OutOfBoundsConstantValueFactoryTypeExtractor
 	public Class<OutOfBoundsConstantValueFactory<?, ?>> getRawType() {
 		return (Class) OutOfBoundsConstantValueFactory.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.NORMAL
+	 */
+	@Override
+	public double priority() {
+		return 0;
+	}
+
 
 }

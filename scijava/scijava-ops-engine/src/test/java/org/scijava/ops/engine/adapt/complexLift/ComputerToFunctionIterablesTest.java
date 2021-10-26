@@ -39,10 +39,14 @@ import static org.junit.Assert.assertArrayEquals;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.OpBuilderTestOps;
+import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
+import org.scijava.ops.engine.adapt.lift.FunctionToIterables;
+import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.types.Nil;
 
 /**
@@ -52,7 +56,16 @@ import org.scijava.types.Nil;
  * @author Gabriel Selzer
  *
  */
-public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
+public class ComputerToFunctionIterablesTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.registerAll(ComputersToFunctionsAndLift.class.getDeclaredClasses(), "op");
+		discoverer.register(FunctionToIterables.class, "opcollection");
+		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
+		discoverer.register(CreateOpCollection.class, "opcollection");
+		discoverer.register(OpBuilderTestOps.class, "opcollection");
+	}
 
 	@Test
 	public void testComputer1ToIterables() {

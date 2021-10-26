@@ -52,7 +52,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>> {
 
 	@Override
@@ -76,6 +75,14 @@ public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<ImgLabeling<?, ?>> getRawType() {
 		return (Class) ImgLabeling.class;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
 	}
 
 }

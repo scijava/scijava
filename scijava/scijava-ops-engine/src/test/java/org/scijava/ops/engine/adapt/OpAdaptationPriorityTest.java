@@ -34,16 +34,15 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaSource;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Ensures that higher-priority adapt Ops are used over lower-priority adapt
@@ -52,8 +51,14 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class OpAdaptationPriorityTest extends AbstractTestEnvironment {
+public class OpAdaptationPriorityTest extends BarebonesTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(OpAdaptationPriorityTest.class, "opcollection");
+		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
+		discoverer.registerAll(ComputersToFunctionsViaSource.class.getDeclaredClasses(), "op");
+	}
 
 	public static class PriorityThing {
 

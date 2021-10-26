@@ -5,6 +5,9 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -13,6 +16,34 @@ import java.util.stream.Collectors;
  * @author Gabriel Selzer
  */
 public interface Discoverer {
+
+	public static Discoverer using(
+		Function<Class<?>, ? extends ServiceLoader<?>> func)
+	{
+		return new Discoverer() {
+
+			@Override
+			public <T> List<Discovery<Class<T>>> discoveriesOfType(Class<T> c) {
+				// If we can use c, look up the implementations
+				try {
+					@SuppressWarnings("unchecked")
+					ServiceLoader<T> loader = (ServiceLoader<T>) func.apply(c);
+					return loader.stream() //
+						.map(impl -> {
+							String tagType = c.getTypeName().toLowerCase();
+							@SuppressWarnings("unchecked")
+							Class<T> implClass = (Class<T>) impl.get().getClass();
+							return new Discovery<>(implClass, tagType);
+						}) //
+						.collect(Collectors.toList());
+				}
+				catch (ServiceConfigurationError e) {
+					return Collections.emptyList();
+				}
+			}
+
+		};
+	}
 
 	/**
 	 * Discovers implementations of some {@link Class} {@code c}.

@@ -6,10 +6,8 @@ import java.util.function.BinaryOperator;
 import org.scijava.Priority;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class MathOpCollection {
+public class MathOpCollection implements OpCollection {
 
 	@OpField(names = MathOps.ADD, priority = Priority.LOW)
 	public static final BiFunction<Number, Number, Double> addDoublesFunction = (x, y) -> x.doubleValue() + y.doubleValue();

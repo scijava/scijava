@@ -3,20 +3,14 @@ package org.scijava.ops.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.OpExecution;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
-import org.scijava.service.Service;
 
 /**
  * Log describing each execution of an Op. This class is designed to answer two
@@ -37,8 +31,7 @@ import org.scijava.service.Service;
  *
  * @author Gabe Selzer
  */
-@Plugin(type = Service.class)
-public class DefaultOpHistory extends AbstractService implements OpHistory {
+public class DefaultOpHistory implements OpHistory {
 
 	// -- DATA STRCUTURES -- //
 

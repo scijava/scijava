@@ -41,7 +41,6 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Collection of ops designed to lift {@link Inplaces} to operate
@@ -49,8 +48,7 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class InplaceToArrays$classGenerics.call($maxArity) {
+public class InplaceToArrays$classGenerics.call($maxArity) implements OpCollection {
 
 	private int minLength(Object[]... arrays) {
 		int minLength = Integer.MAX_VALUE;

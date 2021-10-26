@@ -6,10 +6,8 @@ import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class Sqrt {
+public class Sqrt implements OpCollection {
 
 	public static final String NAMES = MathOps.SQRT;
 

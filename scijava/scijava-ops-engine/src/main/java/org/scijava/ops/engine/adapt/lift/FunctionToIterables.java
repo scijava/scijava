@@ -43,7 +43,6 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Converts {@link Functions} operating on single types to {@link Functions}
@@ -53,8 +52,7 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements OpCollection {
 
 	// NOTE: we cannot convert Producers since there is no way to determine the
 	// length of the output Iterable

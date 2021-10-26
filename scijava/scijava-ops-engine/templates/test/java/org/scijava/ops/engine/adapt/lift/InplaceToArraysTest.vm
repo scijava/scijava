@@ -34,13 +34,13 @@
 
 package org.scijava.ops.engine.adapt.lift;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.spi.OpField;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpField;
 
 /**
  * Tests the adaptation of {@link Inplaces} running on a type into
@@ -48,13 +48,18 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class InplaceToArraysTest extends AbstractTestEnvironment {
+public class InplaceToArraysTest extends BarebonesTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(InplaceToArraysTest.class, "opcollection");
+		discoverer.register(InplaceToArrays.class, "opcollection");
+	}
 
 	/**
 	 * @author Gabriel Selzer
 	 */
-	private class NumericalThing extends AbstractTestEnvironment {
+	private class NumericalThing {
 
 		private int number;
 
@@ -91,8 +96,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI$a") //
+			ops.op("test.liftArrayI$a") //
 			.input($inputList.call($arity, $a)) //
 			.${mutateMethod.call($arity, $a)}();
 

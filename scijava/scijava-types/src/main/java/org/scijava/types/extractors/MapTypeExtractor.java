@@ -33,8 +33,6 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -48,7 +46,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class MapTypeExtractor implements TypeExtractor<Map<?, ?>> {
 
 	@Override
@@ -68,6 +65,14 @@ public class MapTypeExtractor implements TypeExtractor<Map<?, ?>> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<Map<?, ?>> getRawType() {
 		return (Class) Map.class;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
 	}
 
 }

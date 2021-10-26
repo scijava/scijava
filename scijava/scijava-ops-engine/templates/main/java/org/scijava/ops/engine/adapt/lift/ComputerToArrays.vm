@@ -38,10 +38,7 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Collection of ops designed to lift {@link Computers} to operate
@@ -49,8 +46,7 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class ComputerToArrays$classGenerics.call($maxArity) {
+public class ComputerToArrays$classGenerics.call($maxArity) implements OpCollection {
 
 	private int minLength(Object[]... arrays) {
 		int minLength = Integer.MAX_VALUE;

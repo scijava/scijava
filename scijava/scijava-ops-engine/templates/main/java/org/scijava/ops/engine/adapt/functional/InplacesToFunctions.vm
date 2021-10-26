@@ -40,12 +40,10 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpDependency;
 
 #set($classArity = $maxArity + 1)
 /**
@@ -54,13 +52,12 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class InplacesToFunctions$generics.call($classArity, $classArity) {
+public class InplacesToFunctions$generics.call($classArity, $classArity) implements OpCollection {
 
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
-	@Plugin(type = Op.class, name = "adapt")
-	static class Inplace$inplaceSuffix.call($arity, $a)ToFunction${arity}$generics.call($arity, $a) implements Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $functionArity.call($arity)$functionGenerics.call($arity, $a)> {
+	@OpClass(names = "adapt")
+	public static class Inplace$inplaceSuffix.call($arity, $a)ToFunction${arity}$generics.call($arity, $a) implements Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $functionArity.call($arity)$functionGenerics.call($arity, $a)>, Op {
 		
 		@OpDependency(name = "create", adaptable = false)
 		private Function<IO, IO> createOp;

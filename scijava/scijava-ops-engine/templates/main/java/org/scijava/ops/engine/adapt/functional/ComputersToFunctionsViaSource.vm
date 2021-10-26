@@ -42,9 +42,8 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Collection of adaptation Ops to convert {@link Computers} into
@@ -56,9 +55,11 @@ import org.scijava.plugin.Plugin;
 public class ComputersToFunctionsViaSource {
 
 #foreach($arity in [0..$maxArity])
-	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
+	@OpClass(names = "adapt", priority = Priority.LOW)
 	public static class Computer${arity}ToFunction${arity}ViaSource$generics.call($arity)
-			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)> {
+			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)>, 
+			Op
+		{
 
 		@OpDependency(name = "create", adaptable = false)
 		Producer<O> creator;

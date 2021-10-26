@@ -11,17 +11,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.plugin.Plugin;
 
 /**
  * Tests the ability of a Javadoc parser to scrape an Op's parameters out of its
@@ -29,8 +30,14 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class JavadocParameterTest extends AbstractTestEnvironment {
+public class JavadocParameterTest extends BarebonesTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(JavadocParameterTest.class, "opcollection");
+		discoverer.register(JavadocOp.class, "op");
+		discoverer.register(JavadocComplexOp.class, "op");
+	}
 
 	/**
 	 * Tests javadoc scraping with param (P) and return (R)
@@ -93,7 +100,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocMethodPR() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodPR").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodPR").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -104,7 +111,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocMethodIO() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodIO").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodIO").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -115,7 +122,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocMethodIR() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodIR").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodIR").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -126,7 +133,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testJavadocMethodI() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodI").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodI").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -163,7 +170,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocMethodInplaceI() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodInplaceI").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodInplaceI").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -192,7 +199,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testJavadocMethodInplaceWithDepedency() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodDependency").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodDependency").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -308,7 +315,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocFieldF() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.fieldF").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.fieldF").iterator();
 
 		if (!infos.hasNext()) {
 			Assert.fail("No OpInfos with name \"test.javadoc.fieldF\"");
@@ -339,7 +346,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testJavadocFieldC() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.fieldC").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.fieldC").iterator();
 
 		if (!infos.hasNext()) {
 			Assert.fail("No OpInfos with name \"test.javadoc.fieldC\"");
@@ -370,7 +377,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testJavadocClass() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.dependentClass").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.dependentClass").iterator();
 
 		if (!infos.hasNext()) {
 			Assert.fail("No OpInfos with name \"test.javadoc.dependentClass\"");
@@ -408,7 +415,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
 
 	@Test
 	public void opStringRegressionTest() {
-		Iterator<OpInfo> infos = ops.env().infos("test.javadoc.methodPR").iterator();
+		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodPR").iterator();
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
@@ -447,8 +454,8 @@ public class JavadocParameterTest extends AbstractTestEnvironment {
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = Op.class, name = "test.javadoc.class")
-class JavadocOp implements Function<Double, Double> {
+@OpClass(names = "test.javadoc.class")
+class JavadocOp implements Function<Double, Double>, Op {
 
 	/**
 	 * @param t the input
@@ -466,8 +473,8 @@ class JavadocOp implements Function<Double, Double> {
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = Op.class, name = "test.javadoc.dependentClass")
-class JavadocComplexOp implements Function<Double[], Double[]> {
+@OpClass(names = "test.javadoc.dependentClass")
+class JavadocComplexOp implements Function<Double[], Double[]>, Op {
 
 	/**
 	 * Used to compute output for each element in the array

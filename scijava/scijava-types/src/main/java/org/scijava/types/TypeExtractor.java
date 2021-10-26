@@ -50,7 +50,7 @@ import org.scijava.plugin.SingletonPlugin;
  * 
  * @author Curtis Rueden
  */
-public interface TypeExtractor<T> extends SingletonPlugin {
+public interface TypeExtractor<T> extends Comparable<TypeExtractor<?>> {
 
 	/**
 	 * Extracts the generic type of the given object.
@@ -99,4 +99,13 @@ public interface TypeExtractor<T> extends SingletonPlugin {
 
 	/** Gets the {@link Class} handled by this type extractor. */
 	Class<T> getRawType();
+
+	/** Gets the priority of this type extractor */
+	double priority();
+
+	@Override
+	default int compareTo(TypeExtractor<?> o) {
+		return Double.compare(priority(), o.priority());
+	}
+
 }

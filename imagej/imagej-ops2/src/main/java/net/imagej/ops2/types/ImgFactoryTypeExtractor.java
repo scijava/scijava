@@ -51,7 +51,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class ImgFactoryTypeExtractor implements TypeExtractor<ImgFactory<?>> {
 
 	@Override
@@ -66,6 +65,14 @@ public class ImgFactoryTypeExtractor implements TypeExtractor<ImgFactory<?>> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<ImgFactory<?>> getRawType() {
 		return (Class) ImgFactory.class;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
 	}
 
 }

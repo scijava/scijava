@@ -1,11 +1,69 @@
 package org.scijava.ops.engine.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.scijava.function.Producer;
-import org.scijava.ops.engine.AbstractTestEnvironment;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ServiceLoader;
 
-public class TherapiBasedOpTest extends AbstractTestEnvironment {
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.StaticDiscoverer;
+import org.scijava.discovery.therapi.TherapiDiscoverer;
+import org.scijava.function.Producer;
+import org.scijava.log2.Logger;
+import org.scijava.log2.StderrLogFactory;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.engine.matcher.impl.OpWrappers;
+import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
+import org.scijava.parse2.Parser;
+import org.scijava.types.DefaultTypeReifier;
+import org.scijava.types.TypeReifier;
+
+public class TherapiBasedOpTest {
+
+	protected static OpEnvironment ops;
+	protected static OpHistory history;
+	protected static Logger logger;
+	protected static TypeReifier types;
+	protected static Parser parser;
+	protected static TherapiDiscoverer discoverer;
+
+	@BeforeClass
+	public static void setUp() {
+		logger = new StderrLogFactory().create();
+		types = new DefaultTypeReifier(logger, Discoverer.using(
+			ServiceLoader::load));
+		parser = ServiceLoader.load(Parser.class).findFirst().get();
+		ops = barebonesEnvironment();
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		ops = null;
+		logger = null;
+	}
+
+	protected static OpEnvironment barebonesEnvironment()
+
+	{
+		// register needed classes in StaticDiscoverer
+		discoverer = new TherapiDiscoverer(parser);
+		// register possibly useful OpInfoGenerators
+		StaticDiscoverer d = new StaticDiscoverer();
+		d.register(RuntimeSafeMatchingRoutine.class, "matchingroutine");
+		d.registerAll(OpWrappers.class.getDeclaredClasses(), "opwrapper");
+		List<OpInfoGenerator> generators = new ArrayList<>();
+		generators.add(new TagBasedOpInfoGenerator(logger, discoverer));
+
+		history = new DefaultOpHistory();
+		// return Op Environment
+		return new DefaultOpEnvironment(types, logger, history, generators,
+			discoverer, d);
+	}
 
 	private static final String FIELD_STRING = "This OpField is discoverable using Therapi!";
 	static final String CLASS_STRING = "This OpClass is discoverable using Therapi!";

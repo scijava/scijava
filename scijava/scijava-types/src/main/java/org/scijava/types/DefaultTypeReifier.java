@@ -1,3 +1,4 @@
+
 package org.scijava.types;
 
 import java.util.Arrays;
@@ -11,6 +12,12 @@ import java.util.stream.Collectors;
 import org.scijava.discovery.Discoverer;
 import org.scijava.log2.Logger;
 
+/**
+ * TODO: Hide implementation
+ * 
+ * @author Gabriel Selzer
+ * @author Curtis Rueden
+ */
 public class DefaultTypeReifier implements TypeReifier {
 
 	private Map<Class<?>, TypeExtractor<?>> extractors;
@@ -78,4 +85,5 @@ public class DefaultTypeReifier implements TypeReifier {
 			return null;
 		}
 	}
+
 }

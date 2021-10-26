@@ -4,7 +4,6 @@ package org.scijava.ops.api.features;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.SciJavaPlugin;
 
 /**
  * A plugin type employing a particular strategy to generate an
@@ -12,7 +11,7 @@ import org.scijava.plugin.SciJavaPlugin;
  * 
  * @author Gabriel Selzer
  */
-public interface MatchingRoutine extends SciJavaPlugin,
+public interface MatchingRoutine extends
 	Comparable<MatchingRoutine>
 {
 
@@ -51,10 +50,6 @@ public interface MatchingRoutine extends SciJavaPlugin,
 	 * 
 	 * @return the priority
 	 */
-	default double priority() {
-		Plugin annotation = this.getClass().getAnnotation(Plugin.class);
-		if (annotation == null) return 0.;
-		return annotation.priority();
-	}
+	double priority();
 
 }

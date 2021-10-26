@@ -51,7 +51,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBoundsFactory<?, ?>> {
 
 	@Override
@@ -67,5 +66,14 @@ public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBound
 	public Class<OutOfBoundsFactory<?, ?>> getRawType() {
 		return (Class) OutOfBoundsFactory.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
+	}
+
 
 }

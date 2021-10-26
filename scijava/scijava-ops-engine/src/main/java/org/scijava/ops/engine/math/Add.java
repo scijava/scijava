@@ -13,10 +13,8 @@ import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public final class Add<M extends Number, I extends Iterable<M>> {
+public final class Add<M extends Number, I extends Iterable<M>> implements OpCollection {
 
 	public static final String NAMES = MathOps.ADD;
 

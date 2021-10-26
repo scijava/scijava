@@ -53,7 +53,6 @@ import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.PluginService;
 import org.scijava.script.ScriptService;
 import org.scijava.thread.ThreadService;
-import org.scijava.types.TypeService;
 
 /**
  * Tests the Frangi Vesselness operation.
@@ -65,11 +64,10 @@ public class FrangiVesselnessTest{
 	protected static Context context;
 	protected static OpService ops;
 
-	@BeforeAll
-	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
-			ThreadService.class, ScriptService.class, PluginService.class,
-			TypeService.class);
+	@BeforeAll public static void setUp() {
+		context =
+				new Context(OpService.class, CacheService.class, ThreadService.class,
+						ScriptService.class, PluginService.class);
 		ops = context.service(OpService.class);
 	}
 

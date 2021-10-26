@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
-import org.scijava.types.TypeService;
 
 /**
  * Ensures correct behavior in {@link OpBuilder} calls <b>where no output type
@@ -22,10 +20,14 @@ import org.scijava.types.TypeService;
  * @author Gabriel Selzer
  * @see OpBuilderTest
  */
-@Plugin(type = OpCollection.class)
 public class OpBuilderNoOutputTest<T extends Number> extends
-	AbstractTestEnvironment
+	BarebonesTestEnvironment implements OpCollection
 {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(OpBuilderNoOutputTest.class, "opcollection");
+	}
 
 	public final String opName = "test.noOutput";
 
@@ -47,8 +49,7 @@ public class OpBuilderNoOutputTest<T extends Number> extends
 	@Test
 	public void testNoParameterizedTypeOutputGiven() {
 		Object output = ops.op(opName).input(5.).apply();
-		TypeService types = context.getService(TypeService.class);
 		Type expectedOutputType = new Nil<WrappedList<Double>>() {}.getType();
-		Assert.assertEquals(types.reify(output), expectedOutputType);
+		Assert.assertEquals(ops.genericType(output), expectedOutputType);
 	}
 }

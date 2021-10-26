@@ -8,35 +8,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Predicate;
 
-import org.scijava.Priority;
-import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingResult;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.simplify.InfoSimplificationGenerator;
-import org.scijava.plugin.Plugin;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
 import org.scijava.types.Types.TypeVarInfo;
 import org.scijava.types.inference.GenericAssignability;
 
-@Plugin(type = MatchingRoutine.class, priority = Priority.HIGH)
 public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 	@Override
@@ -333,6 +325,14 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 		candidate.setStatus(StatusCode.MATCH);
 		return true;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.HIGH
+	 */
+	@Override
+	public double priority() {
+		return 100.;
 	}
 
 }

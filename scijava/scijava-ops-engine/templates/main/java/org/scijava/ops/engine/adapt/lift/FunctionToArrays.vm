@@ -43,7 +43,6 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Converts {@link Functions} operating on single types to {@link Functions}
@@ -53,8 +52,7 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class FunctionToArrays$classGenerics.call($maxArity) {
+public class FunctionToArrays$classGenerics.call($maxArity) implements OpCollection{
 
 	// TODO: extract logic to a utility class
 	private int minLength(Object[]... arrays) {

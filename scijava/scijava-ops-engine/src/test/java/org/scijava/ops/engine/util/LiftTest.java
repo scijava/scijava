@@ -37,14 +37,20 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.util.Maps;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.TestOps;
 import org.scijava.types.Nil;
 
-public class LiftTest extends AbstractTestEnvironment {
+public class LiftTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.registerAll(TestOps.class.getDeclaredClasses(), "op");
+	}
 
 	Nil<Double> nilDouble = new Nil<>() {
 	};
@@ -54,7 +60,7 @@ public class LiftTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testliftFunction(){
-		Function<Double, Double> powFunction = OpBuilder.matchFunction(ops.env(), "test.liftFunction", nilDouble, nilDouble);
+		Function<Double, Double> powFunction = OpBuilder.matchFunction(ops, "test.liftFunction", nilDouble, nilDouble);
 
 		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.FunctionMaps.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
@@ -72,7 +78,7 @@ public class LiftTest extends AbstractTestEnvironment {
 	@Test
 	public void testliftComputer() {
 
-		Computers.Arity1<double[], double[]> powComputer = OpBuilder.matchComputer(ops.env(), "test.liftComputer", nilDoubleArray, nilDoubleArray);
+		Computers.Arity1<double[], double[]> powComputer = OpBuilder.matchComputer(ops, "test.liftComputer", nilDoubleArray, nilDoubleArray);
 
 		Computers.Arity1<Iterable<double[]>, Iterable<double[]>> liftedToIterable = Maps.ComputerMaps.Iterables
 				.liftBoth(powComputer);

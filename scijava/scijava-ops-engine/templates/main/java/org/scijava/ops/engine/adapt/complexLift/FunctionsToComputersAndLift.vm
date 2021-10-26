@@ -41,9 +41,8 @@ import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Collection of adaptation Ops to convert {@link Functions} into
@@ -55,9 +54,10 @@ import org.scijava.plugin.Plugin;
 public class FunctionsToComputersAndLift {
 #foreach($arity in [1..$maxArity])
 
-	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
+	@OpClass(names = "adapt", priority = Priority.LOW)
 	public static class Function${arity}ToComputer${arity}AndLiftAfter$generics.call($arity) implements
-		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>
+		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>,
+		Op
 	{
 
 		@OpDependency(name = "adapt", adaptable = false)
@@ -78,9 +78,10 @@ public class FunctionsToComputersAndLift {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
+	@OpClass(names = "adapt", priority = Priority.LOW + 1)
 	public static class Function${arity}ToComputer${arity}AndLiftBefore$generics.call($arity) implements
-		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>
+		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>,
+		Op
 	{
 
 		@OpDependency(name = "adapt", adaptable = false)

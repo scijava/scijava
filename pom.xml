@@ -50,12 +50,11 @@
 		<module>scijava/scijava-discovery</module>
 		<module>scijava/scijava-discovery-plugin</module>
 		<module>scijava/scijava-discovery-therapi</module>
+		<module>scijava/scijava-discovery-test</module>
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-log2</module>
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-engine</module>
-		<module>scijava/scijava-ops-serviceloader</module>
-		<module>scijava/scijava-ops-serviceloader-test</module>
 		<module>scijava/scijava-ops-spi</module>
 		<module>scijava/scijava-parse2</module>
 		<module>scijava/scijava-persist</module>
@@ -144,6 +143,7 @@
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
 				<executions>
+				<!-- HACK: 
 					<execution>
 						<id>enforce-no-package-cycles</id>
 						<goals>
@@ -169,7 +169,8 @@
 									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
 							</rules>
 						</configuration>
-					</execution>
+					</execution> 
+					 -->
 				</executions>
 			</plugin>
 		</plugins>

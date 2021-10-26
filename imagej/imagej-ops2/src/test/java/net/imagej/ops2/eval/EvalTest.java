@@ -38,6 +38,7 @@ import net.imagej.ops2.AbstractOpTest;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.OpService;
 import org.scijava.types.Nil;
 
@@ -54,20 +55,19 @@ public class EvalTest extends AbstractOpTest {
 		vars.put("a", 2);
 		vars.put("b", 3);
 		vars.put("c", 5);
-		final OpService opService = context.getService(OpService.class);
 
 		// TODO: can we use ops.run here?
-		Functions.Arity3<String, Map<String, Object>, OpService, Object> evaluator = ops.env().op("eval",
-				new Nil<Functions.Arity3<String, Map<String, Object>, OpService, Object>>() {},
-				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpService>() {} },
+		Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object> evaluator = ops.env().op("eval",
+				new Nil<Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>>() {},
+				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpEnvironment>() {} },
 				new Nil<Object>() {});
 
-		assertEquals(7., evaluator.apply("a+c", vars, opService));
-		assertEquals(3., evaluator.apply("c-a", vars, opService));
-		assertEquals(6., evaluator.apply("a*b", vars, opService));
-		assertEquals(2.5, evaluator.apply("c/a", vars, opService));
-		assertEquals(1., evaluator.apply("c%a", vars, opService));
-		assertEquals(17., evaluator.apply("a+b*c", vars, opService));
+		assertEquals(7., evaluator.apply("a+c", vars, ops.env()));
+		assertEquals(3., evaluator.apply("c-a", vars, ops.env()));
+		assertEquals(6., evaluator.apply("a*b", vars, ops.env()));
+		assertEquals(2.5, evaluator.apply("c/a", vars, ops.env()));
+		assertEquals(1., evaluator.apply("c%a", vars, ops.env()));
+		assertEquals(17., evaluator.apply("a+b*c", vars, ops.env()));
 	}
 
 }

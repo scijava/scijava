@@ -52,7 +52,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.HIGH)
 public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
 
 	@Override
@@ -74,5 +73,14 @@ public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
 	public Class<NativeImg<?, ?>> getRawType() {
 		return (Class) NativeImg.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.HIGH_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return 100;
+	}
+
 
 }

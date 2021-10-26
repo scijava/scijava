@@ -51,7 +51,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMapping<?>> {
 
 	@Override
@@ -76,5 +75,14 @@ public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMappi
 	public Class<LabelingMapping<?>> getRawType() {
 		return (Class) LabelingMapping.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
+	}
+
 
 }

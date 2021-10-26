@@ -39,10 +39,7 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Converts {@link Computers} operating on single types to {@link Computers}
@@ -52,8 +49,7 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class ComputerToIterables$classGenerics.call($maxArity) {
+public class ComputerToIterables$classGenerics.call($maxArity) implements OpCollection {
 
 #foreach($arity in [0..$maxArity])
 	@OpField(names = "adapt")

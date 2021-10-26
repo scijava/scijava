@@ -4,11 +4,18 @@ package org.scijava.ops.engine;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
-public class OpMethodInParentTest extends AbstractTestEnvironment {
+public class OpMethodInParentTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(SuperOpMethodHousingClass.class, "op");
+		discoverer.register(SuperOpMethodHousingInterface.class, "op");
+	}
 
 	@Test
 	public void testFMethodInSuperclass() {
@@ -41,8 +48,11 @@ abstract class OpMethodHousingClass<T> implements Function<T, T> {
 
 }
 
-@Plugin(type = Op.class, name = "test.superMethod")
-class SuperOpMethodHousingClass extends OpMethodHousingClass<String> {
+@OpClass(names = "test.superMethod")
+class SuperOpMethodHousingClass //
+	extends OpMethodHousingClass<String> //
+	implements Op
+{
 
 	@Override
 	String getT() {
@@ -62,9 +72,9 @@ interface OpMethodHousingInterface<T> extends Function<T, T> {
 
 }
 
-@Plugin(type = Op.class, name = "test.superMethodIface")
+@OpClass(names = "test.superMethodIface")
 class SuperOpMethodHousingInterface implements
-	OpMethodHousingInterface<String>
+	OpMethodHousingInterface<String>, Op
 {
 
 	@Override

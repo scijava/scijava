@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ import org.scijava.Context;
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
-import org.scijava.log.LogService;
+import org.scijava.log2.Logger;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpUtils;
@@ -42,12 +43,16 @@ public class TagBasedOpInfoGenerator implements OpInfoGenerator {
 
 	private static final String TAGTYPE = "op";
 
-	private final LogService log;
-	private final List<Discoverer> discoverers;
+	private final Logger log;
+	private final Collection<Discoverer> discoverers;
 
-	public TagBasedOpInfoGenerator(final LogService log, Discoverer... d) {
+	public TagBasedOpInfoGenerator(final Logger log, Discoverer... d) {
+		this(log, Arrays.asList(d));
+	}
+
+	public TagBasedOpInfoGenerator(final Logger log, Collection<Discoverer> d) {
 		this.log = log;
-		this.discoverers = Arrays.asList(d);
+		this.discoverers = d;
 	}
 
 	private OpInfo opClassGenerator(Class<?> cls, double priority,

@@ -40,9 +40,8 @@ import java.util.function.Function;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Collection of adaptation Ops to convert {@link Computers} into
@@ -54,9 +53,11 @@ import org.scijava.plugin.Plugin;
 public class ComputersToFunctionsViaFunction {
 
 #foreach($arity in [1..$maxArity])
-	@Plugin(type = Op.class, name = "adapt")
+	@OpClass(names = "adapt")
 	public static class Computer${arity}ToFunction${arity}ViaFunction$generics.call($arity)
-			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)> {
+			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)>,
+			Op
+		 {
 
 		@OpDependency(name = "create", adaptable = false)
 		Function<I#if($arity == 1)#{else}1#end, O> creator;

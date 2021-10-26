@@ -7,7 +7,6 @@ import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 import org.scijava.util.ObjectArray;
 
 /**
@@ -15,8 +14,7 @@ import org.scijava.util.ObjectArray;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class PrimitiveArraySimplifiers {
+public class PrimitiveArraySimplifiers implements OpCollection {
 
 	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "simplify")

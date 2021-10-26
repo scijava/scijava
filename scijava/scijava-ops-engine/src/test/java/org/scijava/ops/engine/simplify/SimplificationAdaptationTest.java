@@ -1,15 +1,27 @@
 package org.scijava.ops.engine.simplify;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
+import org.scijava.ops.engine.copy.CopyOpCollection;
+import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class SimplificationAdaptationTest<T> extends AbstractTestEnvironment {
+public class SimplificationAdaptationTest<T> extends BarebonesTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(SimplificationAdaptationTest.class, "opcollection");
+		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
+		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
+		discoverer.register(CopyOpCollection.class, "opcollection");
+		discoverer.register(CreateOpCollection.class, "opcollection");
+		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
+	}
 
 	@OpField(names = "test.math.modulus")
 	public final Computers.Arity2<Integer[], Integer, Integer[]> modOp = (inArr, mod, outArr) -> {

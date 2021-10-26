@@ -6,17 +6,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.math.Add;
+import org.scijava.ops.engine.math.MathOpCollection;
 import org.scijava.types.Nil;
 
-public class MeanTest <N extends Number> extends AbstractTestEnvironment{
+public class MeanTest <N extends Number> extends BarebonesTestEnvironment{
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.registerAll(Size.class.getDeclaredClasses(), "op");
+		discoverer.registerAll(Mean.class.getDeclaredClasses(), "op");
+		discoverer.register(Add.class, "opcollection");
+		discoverer.register(MathOpCollection.class, "opcollection");
+	}
 
 	@Test
 	public void regressionTest() {
 
-		Function<Iterable<Integer>, Double> goodFunc = OpBuilder.matchFunction(ops.env(), "stats.mean", new Nil<Iterable<Integer>>() {}, new Nil<Double>() {});
+		Function<Iterable<Integer>, Double> goodFunc = OpBuilder.matchFunction(ops, "stats.mean", new Nil<Iterable<Integer>>() {}, new Nil<Double>() {});
 
 		List<Integer> goodNums = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		double expected = 5.5;

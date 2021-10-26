@@ -38,11 +38,24 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.adapt.functional.FunctionToComputerAdaptTestOps;
+import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
+import org.scijava.ops.engine.adapt.lift.ComputerToIterables;
+import org.scijava.ops.engine.copy.CopyOpCollection;
 
-public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
+public class FunctionToComputerIterablesTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.registerAll(FunctionsToComputersAndLift.class.getDeclaredClasses(), "op");
+		discoverer.register(ComputerToIterables.class, "opcollection");
+		discoverer.registerAll(FunctionsToComputers.class.getDeclaredClasses(), "op");
+		discoverer.register(CopyOpCollection.class, "opcollection");
+		discoverer.register(FunctionToComputerAdaptTestOps.class, "opcollection");
+	}
 #foreach($arity in [1..$maxArity])
 
 	@Test

@@ -51,7 +51,6 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class RAITypeExtractor implements
 	TypeExtractor<RandomAccessibleInterval<?>>
 {
@@ -69,6 +68,14 @@ public class RAITypeExtractor implements
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<RandomAccessibleInterval<?>> getRawType() {
 		return (Class) RandomAccessibleInterval.class;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
 	}
 
 }

@@ -39,10 +39,11 @@ import static org.junit.Assert.assertArrayEquals;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.OpBuilderTestOps;
 
 /**
  * Tests the adaptation of {@link Computers} running on a type into
@@ -50,7 +51,13 @@ import org.scijava.ops.api.OpBuilder;
  * 
  * @author Gabriel Selzer
  */
-public class ComputerToIterablesTest extends AbstractTestEnvironment {
+public class ComputerToIterablesTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(ComputerToIterables.class, "opcollection");
+		discoverer.register(OpBuilderTestOps.class, "opcollection");
+	}
 
 #foreach($arity in [1..$maxArity])
 	@Test

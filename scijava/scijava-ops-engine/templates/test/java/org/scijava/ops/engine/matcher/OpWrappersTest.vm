@@ -10,13 +10,15 @@ import static org.junit.Assert.assertTrue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.OpBuilderTestOps;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
 
@@ -26,12 +28,17 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-public class OpWrappersTest extends AbstractTestEnvironment {
+public class OpWrappersTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(OpBuilderTestOps.class, "opcollection");
+	}
 
 	@Test
 	public void testWrapProducer() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
-		Producer<Double> op = OpBuilder.matchFunction(ops.env(), "test.addDoubles", nilDouble);
+		Producer<Double> op = OpBuilder.matchFunction(ops, "test.addDoubles", nilDouble);
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -40,7 +47,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapFunction$arity() {
 		Nil<Double> nilDouble = Nil.of(Double.class);
 		$functionArity.call($arity)$doubleTypeParams.call($arity) op = //
-			OpBuilder.matchFunction(ops.env(), "test.addDoubles", //
+			OpBuilder.matchFunction(ops, "test.addDoubles", //
 				$nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
@@ -51,7 +58,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapComputer$arity() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$computerArity.call($arity)$doubleArrayTypeParams.call($arity) op = //
-			OpBuilder.matchComputer(ops.env(), "test.addArrays", $nilDoubleList.call($arity));
+			OpBuilder.matchComputer(ops, "test.addArrays", $nilDoubleList.call($arity));
 		assertTrue(op instanceof GenericTyped);
 	}
 
@@ -63,7 +70,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 	public void testWrapInplace$inplaceSuffix.call($arity, $a)() {
 		Nil<double[]> nilDouble = Nil.of(double[].class);
 		$inplaceType.call($arity, $a)$doubleArrayTypeParams.call($t) op = //
-			OpBuilder.$matchName.call($arity, $a)(ops.env(), "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
+			OpBuilder.$matchName.call($arity, $a)(ops, "test.mulArrays${arity}_${a}", $nilDoubleList.call($t));
 		assertTrue(op instanceof GenericTyped);
 	}
 

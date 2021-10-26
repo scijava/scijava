@@ -1,10 +1,10 @@
 package org.scijava.discovery.plugin;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.Context;
 import org.scijava.InstantiableException;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
@@ -25,8 +25,7 @@ public class PluginBasedDiscoverer implements Discoverer {
 	@SuppressWarnings("unchecked")
 	public <T> List<Discovery<Class<T>>> discoveriesOfType(Class<T> c) {
 		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			throw new UnsupportedOperationException(
-				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
+			return Collections.emptyList();
 		}
 		List<PluginInfo<SciJavaPlugin>> infos = p.getPluginsOfType(
 			(Class<SciJavaPlugin>) c);

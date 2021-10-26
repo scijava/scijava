@@ -50,7 +50,6 @@ import org.scijava.types.Types;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class)
 public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor<OutOfBoundsRandomValueFactory<?, ?>> {
 
 	@Override
@@ -80,5 +79,14 @@ public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor
 	public Class<OutOfBoundsRandomValueFactory<?, ?>> getRawType() {
 		return (Class) OutOfBoundsRandomValueFactory.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.NORMAL
+	 */
+	@Override
+	public double priority() {
+		return 0;
+	}
+
 
 }

@@ -34,13 +34,13 @@
 
 package org.scijava.ops.engine.adapt.lift;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.spi.OpField;
+import org.scijava.ops.engine.BarebonesTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpField;
 
 /**
  * Tests the adaptation of {@link Inplaces} running on a type into
@@ -48,13 +48,18 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class InplaceToArraysTest extends AbstractTestEnvironment {
+public class InplaceToArraysTest extends BarebonesTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(InplaceToArraysTest.class, "opcollection");
+		discoverer.register(InplaceToArrays.class, "opcollection");
+	}
 
 	/**
 	 * @author Gabriel Selzer
 	 */
-	private class NumericalThing extends AbstractTestEnvironment {
+	private class NumericalThing {
 
 		private int number;
 
@@ -83,8 +88,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io) //
 			.mutate();
 
@@ -105,8 +109,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input) //
 			.mutate1();
 
@@ -127,8 +130,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io) //
 			.mutate2();
 
@@ -150,8 +152,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input) //
 			.mutate1();
 
@@ -173,8 +174,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input) //
 			.mutate2();
 
@@ -196,8 +196,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io) //
 			.mutate3();
 
@@ -220,8 +219,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input) //
 			.mutate1();
 
@@ -244,8 +242,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input) //
 			.mutate2();
 
@@ -268,8 +265,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input) //
 			.mutate3();
 
@@ -292,8 +288,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io) //
 			.mutate4();
 
@@ -317,8 +312,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input) //
 			.mutate1();
 
@@ -342,8 +336,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input) //
 			.mutate2();
 
@@ -367,8 +360,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input) //
 			.mutate3();
 
@@ -392,8 +384,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input) //
 			.mutate4();
 
@@ -417,8 +408,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io) //
 			.mutate5();
 
@@ -443,8 +433,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input) //
 			.mutate1();
 
@@ -469,8 +458,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input) //
 			.mutate2();
 
@@ -495,8 +483,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input) //
 			.mutate3();
 
@@ -521,8 +508,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input) //
 			.mutate4();
 
@@ -547,8 +533,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input) //
 			.mutate5();
 
@@ -573,8 +558,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io) //
 			.mutate6();
 
@@ -600,8 +584,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -627,8 +610,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input) //
 			.mutate2();
 
@@ -654,8 +636,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input) //
 			.mutate3();
 
@@ -681,8 +662,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input) //
 			.mutate4();
 
@@ -708,8 +688,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input) //
 			.mutate5();
 
@@ -735,8 +714,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input) //
 			.mutate6();
 
@@ -762,8 +740,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io) //
 			.mutate7();
 
@@ -790,8 +767,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -818,8 +794,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -846,8 +821,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input) //
 			.mutate3();
 
@@ -874,8 +848,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input) //
 			.mutate4();
 
@@ -902,8 +875,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input) //
 			.mutate5();
 
@@ -930,8 +902,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input) //
 			.mutate6();
 
@@ -958,8 +929,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input) //
 			.mutate7();
 
@@ -986,8 +956,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io) //
 			.mutate8();
 
@@ -1015,8 +984,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -1044,8 +1012,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -1073,8 +1040,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -1102,8 +1068,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input) //
 			.mutate4();
 
@@ -1131,8 +1096,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input) //
 			.mutate5();
 
@@ -1160,8 +1124,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input) //
 			.mutate6();
 
@@ -1189,8 +1152,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input) //
 			.mutate7();
 
@@ -1218,8 +1180,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input) //
 			.mutate8();
 
@@ -1247,8 +1208,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io) //
 			.mutate9();
 
@@ -1277,8 +1237,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -1307,8 +1266,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -1337,8 +1295,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -1367,8 +1324,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -1397,8 +1353,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input) //
 			.mutate5();
 
@@ -1427,8 +1382,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input) //
 			.mutate6();
 
@@ -1457,8 +1411,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input) //
 			.mutate7();
 
@@ -1487,8 +1440,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input) //
 			.mutate8();
 
@@ -1517,8 +1469,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input) //
 			.mutate9();
 
@@ -1547,8 +1498,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io) //
 			.mutate10();
 
@@ -1578,8 +1528,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -1609,8 +1558,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -1640,8 +1588,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -1671,8 +1618,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -1702,8 +1648,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input, input) //
 			.mutate5();
 
@@ -1733,8 +1678,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input, input) //
 			.mutate6();
 
@@ -1764,8 +1708,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input, input) //
 			.mutate7();
 
@@ -1795,8 +1738,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input, input) //
 			.mutate8();
 
@@ -1826,8 +1768,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input, input) //
 			.mutate9();
 
@@ -1857,8 +1798,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io, input) //
 			.mutate10();
 
@@ -1888,8 +1828,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI11") //
+			ops.op("test.liftArrayI11") //
 			.input(input, input, input, input, input, input, input, input, input, input, io) //
 			.mutate11();
 
@@ -1920,8 +1859,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -1952,8 +1890,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -1984,8 +1921,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -2016,8 +1952,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -2048,8 +1983,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input, input, input) //
 			.mutate5();
 
@@ -2080,8 +2014,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input, input, input) //
 			.mutate6();
 
@@ -2112,8 +2045,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input, input, input) //
 			.mutate7();
 
@@ -2144,8 +2076,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input, input, input) //
 			.mutate8();
 
@@ -2176,8 +2107,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input, input, input) //
 			.mutate9();
 
@@ -2208,8 +2138,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io, input, input) //
 			.mutate10();
 
@@ -2240,8 +2169,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI11") //
+			ops.op("test.liftArrayI11") //
 			.input(input, input, input, input, input, input, input, input, input, input, io, input) //
 			.mutate11();
 
@@ -2272,8 +2200,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI12") //
+			ops.op("test.liftArrayI12") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, io) //
 			.mutate12();
 
@@ -2305,8 +2232,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -2338,8 +2264,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -2371,8 +2296,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -2404,8 +2328,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -2437,8 +2360,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input, input, input, input) //
 			.mutate5();
 
@@ -2470,8 +2392,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input, input, input, input) //
 			.mutate6();
 
@@ -2503,8 +2424,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input, input, input, input) //
 			.mutate7();
 
@@ -2536,8 +2456,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input, input, input, input) //
 			.mutate8();
 
@@ -2569,8 +2488,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input, input, input, input) //
 			.mutate9();
 
@@ -2602,8 +2520,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io, input, input, input) //
 			.mutate10();
 
@@ -2635,8 +2552,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI11") //
+			ops.op("test.liftArrayI11") //
 			.input(input, input, input, input, input, input, input, input, input, input, io, input, input) //
 			.mutate11();
 
@@ -2668,8 +2584,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI12") //
+			ops.op("test.liftArrayI12") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, io, input) //
 			.mutate12();
 
@@ -2701,8 +2616,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI13") //
+			ops.op("test.liftArrayI13") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, io) //
 			.mutate13();
 
@@ -2735,8 +2649,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -2769,8 +2682,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -2803,8 +2715,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -2837,8 +2748,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -2871,8 +2781,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input, input, input, input, input) //
 			.mutate5();
 
@@ -2905,8 +2814,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input, input, input, input, input) //
 			.mutate6();
 
@@ -2939,8 +2847,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input, input, input, input, input) //
 			.mutate7();
 
@@ -2973,8 +2880,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input, input, input, input, input) //
 			.mutate8();
 
@@ -3007,8 +2913,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input, input, input, input, input) //
 			.mutate9();
 
@@ -3041,8 +2946,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io, input, input, input, input) //
 			.mutate10();
 
@@ -3075,8 +2979,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI11") //
+			ops.op("test.liftArrayI11") //
 			.input(input, input, input, input, input, input, input, input, input, input, io, input, input, input) //
 			.mutate11();
 
@@ -3109,8 +3012,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI12") //
+			ops.op("test.liftArrayI12") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, io, input, input) //
 			.mutate12();
 
@@ -3143,8 +3045,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI13") //
+			ops.op("test.liftArrayI13") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, io, input) //
 			.mutate13();
 
@@ -3177,8 +3078,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI14") //
+			ops.op("test.liftArrayI14") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, io) //
 			.mutate14();
 
@@ -3212,8 +3112,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -3247,8 +3146,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -3282,8 +3180,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -3317,8 +3214,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -3352,8 +3248,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input, input, input, input, input, input) //
 			.mutate5();
 
@@ -3387,8 +3282,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input, input, input, input, input, input) //
 			.mutate6();
 
@@ -3422,8 +3316,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input, input, input, input, input, input) //
 			.mutate7();
 
@@ -3457,8 +3350,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input, input, input, input, input, input) //
 			.mutate8();
 
@@ -3492,8 +3384,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input, input, input, input, input, input) //
 			.mutate9();
 
@@ -3527,8 +3418,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io, input, input, input, input, input) //
 			.mutate10();
 
@@ -3562,8 +3452,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI11") //
+			ops.op("test.liftArrayI11") //
 			.input(input, input, input, input, input, input, input, input, input, input, io, input, input, input, input) //
 			.mutate11();
 
@@ -3597,8 +3486,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI12") //
+			ops.op("test.liftArrayI12") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, io, input, input, input) //
 			.mutate12();
 
@@ -3632,8 +3520,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI13") //
+			ops.op("test.liftArrayI13") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, io, input, input) //
 			.mutate13();
 
@@ -3667,8 +3554,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI14") //
+			ops.op("test.liftArrayI14") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, io, input) //
 			.mutate14();
 
@@ -3702,8 +3588,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI15") //
+			ops.op("test.liftArrayI15") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, io) //
 			.mutate15();
 
@@ -3738,8 +3623,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI1") //
+			ops.op("test.liftArrayI1") //
 			.input(io, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate1();
 
@@ -3774,8 +3658,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI2") //
+			ops.op("test.liftArrayI2") //
 			.input(input, io, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate2();
 
@@ -3810,8 +3693,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI3") //
+			ops.op("test.liftArrayI3") //
 			.input(input, input, io, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate3();
 
@@ -3846,8 +3728,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI4") //
+			ops.op("test.liftArrayI4") //
 			.input(input, input, input, io, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate4();
 
@@ -3882,8 +3763,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI5") //
+			ops.op("test.liftArrayI5") //
 			.input(input, input, input, input, io, input, input, input, input, input, input, input, input, input, input, input) //
 			.mutate5();
 
@@ -3918,8 +3798,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI6") //
+			ops.op("test.liftArrayI6") //
 			.input(input, input, input, input, input, io, input, input, input, input, input, input, input, input, input, input) //
 			.mutate6();
 
@@ -3954,8 +3833,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI7") //
+			ops.op("test.liftArrayI7") //
 			.input(input, input, input, input, input, input, io, input, input, input, input, input, input, input, input, input) //
 			.mutate7();
 
@@ -3990,8 +3868,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI8") //
+			ops.op("test.liftArrayI8") //
 			.input(input, input, input, input, input, input, input, io, input, input, input, input, input, input, input, input) //
 			.mutate8();
 
@@ -4026,8 +3903,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI9") //
+			ops.op("test.liftArrayI9") //
 			.input(input, input, input, input, input, input, input, input, io, input, input, input, input, input, input, input) //
 			.mutate9();
 
@@ -4062,8 +3938,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI10") //
+			ops.op("test.liftArrayI10") //
 			.input(input, input, input, input, input, input, input, input, input, io, input, input, input, input, input, input) //
 			.mutate10();
 
@@ -4098,8 +3973,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI11") //
+			ops.op("test.liftArrayI11") //
 			.input(input, input, input, input, input, input, input, input, input, input, io, input, input, input, input, input) //
 			.mutate11();
 
@@ -4134,8 +4008,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI12") //
+			ops.op("test.liftArrayI12") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, io, input, input, input, input) //
 			.mutate12();
 
@@ -4170,8 +4043,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI13") //
+			ops.op("test.liftArrayI13") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, io, input, input, input) //
 			.mutate13();
 
@@ -4206,8 +4078,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI14") //
+			ops.op("test.liftArrayI14") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, io, input, input) //
 			.mutate14();
 
@@ -4242,8 +4113,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI15") //
+			ops.op("test.liftArrayI15") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, io, input) //
 			.mutate15();
 
@@ -4278,8 +4148,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment {
 			new NumericalThing(2) };
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-			ops.env() //
-			.op("test.liftArrayI16") //
+			ops.op("test.liftArrayI16") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, io) //
 			.mutate16();
 

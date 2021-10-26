@@ -33,8 +33,6 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
@@ -49,7 +47,6 @@ import org.scijava.types.Types;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 
 	@Override
@@ -75,6 +72,14 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<Iterable<?>> getRawType() {
 		return (Class) Iterable.class;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
 	}
 
 }

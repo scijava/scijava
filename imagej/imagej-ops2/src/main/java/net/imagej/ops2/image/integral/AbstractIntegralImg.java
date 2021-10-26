@@ -47,7 +47,6 @@ import org.scijava.plugin.Plugin;
  *            The type of the input image.
  * @author Stefan Helfrich (University of Konstanz)
  */
-@Plugin(type = OpCollection.class)
 public abstract class AbstractIntegralImg<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
 

@@ -6,16 +6,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class OpMethodDependencyPositionTest extends AbstractTestEnvironment {
+public class OpMethodDependencyPositionTest extends BarebonesTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(OpMethodDependencyPositionTest.class, "opcollection");
+	}
 
 	@OpField(names = "test.stringToLong")
 	public final Function<String, Long> parser = in -> Long.parseLong(in);

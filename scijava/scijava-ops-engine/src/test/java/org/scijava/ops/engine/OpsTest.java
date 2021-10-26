@@ -32,12 +32,25 @@ package org.scijava.ops.engine;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.engine.math.Add;
+import org.scijava.ops.engine.math.MathOpCollection;
+import org.scijava.ops.engine.math.Sqrt;
+import org.scijava.ops.engine.math.Zero;
 import org.scijava.types.Nil;
 
-public class OpsTest extends AbstractTestEnvironment {
+public class OpsTest extends BarebonesTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(MathOpCollection.class, "opcollection");
+		discoverer.register(Zero.class, "opcollection");
+		discoverer.register(Sqrt.class, "opcollection");
+		discoverer.register(Add.class, "opcollection");
+	}
 
 	private static Nil<Double> nilDouble = new Nil<>() {
 	};
@@ -48,7 +61,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void unaryFunction() {
 		// Look up a function type safe
-		Function<Double, Double> sqrtFunction = ops.env().op( //
+		Function<Double, Double> sqrtFunction = ops.op( //
 				"math.sqrt", new Nil<Function<Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble }, //
@@ -61,7 +74,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	@Test
 	public void binaryFunction() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
-		BiFunction<Double, Double, Double> addFunction = ops.env().op( //
+		BiFunction<Double, Double, Double> addFunction = ops.op( //
 				"math.add", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -72,7 +85,7 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void nullaryComputer() {
-		Computers.Arity0<double[]> sqrtComputer = ops.env().op( //
+		Computers.Arity0<double[]> sqrtComputer = ops.op( //
 				"math.zero", new Nil<Computers.Arity0<double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray }, //
@@ -85,7 +98,7 @@ public class OpsTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void unaryComputer() {
-		Computers.Arity1<double[], double[]> sqrtComputer = ops.env().op( //
+		Computers.Arity1<double[], double[]> sqrtComputer = ops.op( //
 				"math.sqrt", new Nil<Computers.Arity1<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //
@@ -98,7 +111,7 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void binaryComputer() {
-		Computers.Arity2<double[], double[], double[]> computer = ops.env().op( //
+		Computers.Arity2<double[], double[], double[]> computer = ops.op( //
 				"math.add", new Nil<Computers.Arity2<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
@@ -113,7 +126,7 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void unaryInplace() {
-		Inplaces.Arity1<double[]> inplaceSqrt = ops.env().op( //
+		Inplaces.Arity1<double[]> inplaceSqrt = ops.op( //
 				"math.sqrt", new Nil<Inplaces.Arity1<double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray }, //
@@ -126,7 +139,7 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@Test
 	public void binaryInplace() {
-		Inplaces.Arity2_1<double[], double[]> inplaceAdd = ops.env().op( //
+		Inplaces.Arity2_1<double[], double[]> inplaceAdd = ops.op( //
 				"math.add", new Nil<Inplaces.Arity2_1<double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //

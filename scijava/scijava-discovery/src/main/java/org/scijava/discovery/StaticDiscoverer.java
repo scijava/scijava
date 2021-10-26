@@ -1,6 +1,7 @@
 
 package org.scijava.discovery;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,16 @@ public class StaticDiscoverer implements Discoverer {
 
 	public StaticDiscoverer() {
 		tags = new HashMap<>();
+	}
+
+	public void registerAll(Class<?>[] classes, String tag) {
+		for(Class<?> c : classes)
+			register(c, tag);
+	}
+
+	public void registerAll(Collection<? extends Class<?>> classes, String tag) {
+		for(Class<?> c : classes)
+			register(c, tag);
 	}
 
 	public void register(Class<?> c, String tag) {
@@ -26,7 +37,7 @@ public class StaticDiscoverer implements Discoverer {
 	@Override
 	public <T> List<Discovery<Class<T>>> discoveriesOfType(Class<T> c) {
 		return tags.keySet().stream() //
-			.filter(cls -> cls.isAssignableFrom(c)) //
+			.filter(cls -> c.isAssignableFrom(cls)) //
 			.map(cls -> new Discovery<>((Class<T>) cls, tags.get(cls))) //
 			.collect(Collectors.toList());
 	}

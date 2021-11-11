@@ -32,9 +32,9 @@ package org.scijava.ops.engine.copy;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 
-public class CopyOpCollectionTest extends BarebonesTestEnvironment {
+public class CopyOpCollectionTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

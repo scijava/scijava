@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
 
 public class PrimitiveListSimplifierTest {
 

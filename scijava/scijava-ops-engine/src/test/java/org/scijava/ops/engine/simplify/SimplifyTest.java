@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
 import org.scijava.ops.engine.conversionLoss.impl.LossReporterWrapper;
 import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
@@ -22,7 +22,7 @@ import org.scijava.ops.spi.OpField;
  * @author Gabriel Selzer
  * @author Curtis Rueden
  */
-public class SimplifyTest extends BarebonesTestEnvironment implements OpCollection {
+public class SimplifyTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void AddNeededOps() {

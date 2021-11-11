@@ -9,14 +9,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
-public class OpsAsParametersTest extends BarebonesTestEnvironment implements OpCollection {
+public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

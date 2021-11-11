@@ -42,7 +42,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToIterables;
@@ -56,7 +56,7 @@ import org.scijava.types.Nil;
  * @author Gabriel Selzer
  *
  */
-public class ComputerToFunctionIterablesTest extends BarebonesTestEnvironment {
+public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

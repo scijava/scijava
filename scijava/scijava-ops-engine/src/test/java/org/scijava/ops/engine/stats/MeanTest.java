@@ -9,12 +9,12 @@ import java.util.function.Function;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.math.Add;
 import org.scijava.ops.engine.math.MathOpCollection;
 import org.scijava.types.Nil;
 
-public class MeanTest <N extends Number> extends BarebonesTestEnvironment{
+public class MeanTest <N extends Number> extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

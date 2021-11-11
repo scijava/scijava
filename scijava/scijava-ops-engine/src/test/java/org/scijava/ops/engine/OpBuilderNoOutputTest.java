@@ -21,7 +21,7 @@ import org.scijava.types.Nil;
  * @see OpBuilderTest
  */
 public class OpBuilderNoOutputTest<T extends Number> extends
-	BarebonesTestEnvironment implements OpCollection
+		AbstractTestEnvironment implements OpCollection
 {
 
 	@BeforeClass

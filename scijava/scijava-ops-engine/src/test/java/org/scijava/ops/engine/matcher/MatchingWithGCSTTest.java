@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
@@ -19,7 +19,7 @@ import org.scijava.types.Types;
  * 
  * @author Gabriel Selzer
  */
-public class MatchingWithGCSTTest extends BarebonesTestEnvironment implements OpCollection {
+public class MatchingWithGCSTTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

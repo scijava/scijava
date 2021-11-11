@@ -9,12 +9,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
-public class SimplifyIOTest extends BarebonesTestEnvironment implements OpCollection{
+public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollection{
 
 	@BeforeClass
 	public static void AddNeededOps() {

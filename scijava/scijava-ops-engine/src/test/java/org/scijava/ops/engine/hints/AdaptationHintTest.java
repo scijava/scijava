@@ -9,14 +9,14 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
-public class AdaptationHintTest extends BarebonesTestEnvironment implements OpCollection {
+public class AdaptationHintTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void AddNeededOps() {

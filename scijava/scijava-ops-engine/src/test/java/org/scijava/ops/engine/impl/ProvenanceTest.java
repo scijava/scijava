@@ -19,7 +19,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
 import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
@@ -36,7 +36,7 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.types.Nil;
 
-public class ProvenanceTest extends BarebonesTestEnvironment implements OpCollection {
+public class ProvenanceTest extends AbstractTestEnvironment implements OpCollection {
 
 	private static final Collection<? extends Class<?>> INFO_CHAIN_GENERATORS =
 		Arrays.asList( //

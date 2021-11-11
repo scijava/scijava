@@ -42,13 +42,13 @@ import java.util.Arrays;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.types.Nil;
 
-public class InplaceToFunctionAdaptTest extends BarebonesTestEnvironment {
+public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

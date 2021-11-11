@@ -10,7 +10,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers;
@@ -18,7 +18,7 @@ import org.scijava.ops.engine.simplify.PrimitiveSimplifiers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
-public class SimplificationHintTest extends BarebonesTestEnvironment implements OpCollection {
+public class SimplificationHintTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

@@ -37,7 +37,7 @@ import org.scijava.ops.engine.math.MathOpCollection;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 
-public class OpCollectionTest extends BarebonesTestEnvironment {
+public class OpCollectionTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

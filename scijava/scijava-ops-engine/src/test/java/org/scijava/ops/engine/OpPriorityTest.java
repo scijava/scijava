@@ -38,7 +38,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.types.Nil;
 
-public class OpPriorityTest extends BarebonesTestEnvironment {
+public class OpPriorityTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {

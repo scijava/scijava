@@ -17,7 +17,7 @@ import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
@@ -28,7 +28,7 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-public class OpWrappersTest extends BarebonesTestEnvironment {
+public class OpWrappersTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

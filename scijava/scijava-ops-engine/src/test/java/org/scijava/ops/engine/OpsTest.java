@@ -42,7 +42,7 @@ import org.scijava.ops.engine.math.Sqrt;
 import org.scijava.ops.engine.math.Zero;
 import org.scijava.types.Nil;
 
-public class OpsTest extends BarebonesTestEnvironment {
+public class OpsTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

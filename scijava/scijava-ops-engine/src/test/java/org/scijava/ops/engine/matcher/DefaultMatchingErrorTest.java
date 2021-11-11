@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.features.DependencyMatchingException;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.spi.Op;
@@ -19,7 +19,7 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 
-public class DefaultMatchingErrorTest extends BarebonesTestEnvironment implements OpCollection {
+public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

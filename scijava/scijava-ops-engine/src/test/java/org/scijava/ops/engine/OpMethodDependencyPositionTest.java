@@ -14,7 +14,8 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 
-public class OpMethodDependencyPositionTest extends BarebonesTestEnvironment implements OpCollection {
+public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
+		implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

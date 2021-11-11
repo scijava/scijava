@@ -22,7 +22,7 @@ import org.scijava.types.Nil;
  *
  * @author Gabriel Selzer
  */
-public class InfoChainTest extends BarebonesTestEnvironment implements OpCollection {
+public class InfoChainTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

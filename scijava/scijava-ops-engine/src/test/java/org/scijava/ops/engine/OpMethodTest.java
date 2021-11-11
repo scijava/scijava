@@ -46,7 +46,7 @@ import org.scijava.ops.spi.OpMethod;
  * @author Gabriel Selzer
  * @author Marcel Wiedenmann
  */
-public class OpMethodTest extends BarebonesTestEnvironment implements OpCollection {
+public class OpMethodTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

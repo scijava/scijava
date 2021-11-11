@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 
-public class OpMethodInParentTest extends BarebonesTestEnvironment {
+public class OpMethodInParentTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {

@@ -41,11 +41,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.TestOps;
 import org.scijava.types.Nil;
 
-public class LiftTest extends BarebonesTestEnvironment {
+public class LiftTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

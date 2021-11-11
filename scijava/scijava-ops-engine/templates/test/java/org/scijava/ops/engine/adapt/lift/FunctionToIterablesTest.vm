@@ -40,7 +40,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
 import org.scijava.types.Nil;
 
@@ -50,7 +50,7 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-public class FunctionToIterablesTest extends BarebonesTestEnvironment {
+public class FunctionToIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

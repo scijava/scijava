@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.types.Nil;
@@ -24,7 +24,7 @@ import org.scijava.types.Nil;
  * @author Gabriel Selzer
  *
  */
-public class OpMonitorTest extends BarebonesTestEnvironment {
+public class OpMonitorTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {

@@ -40,13 +40,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionToComputerAdaptTestOps;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.adapt.lift.ComputerToIterables;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 
-public class FunctionToComputerIterablesTest extends BarebonesTestEnvironment {
+public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

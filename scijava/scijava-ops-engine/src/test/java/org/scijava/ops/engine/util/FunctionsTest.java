@@ -35,13 +35,13 @@ import java.util.function.Function;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.math.Add;
 import org.scijava.ops.engine.math.Power;
 import org.scijava.ops.engine.math.Sqrt;
 import org.scijava.types.Nil;
 
-public class FunctionsTest extends BarebonesTestEnvironment {
+public class FunctionsTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {

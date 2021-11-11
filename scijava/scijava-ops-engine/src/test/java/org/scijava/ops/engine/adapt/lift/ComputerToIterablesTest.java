@@ -42,7 +42,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
 
 /**
@@ -51,7 +51,7 @@ import org.scijava.ops.engine.OpBuilderTestOps;
  * 
  * @author Gabriel Selzer
  */
-public class ComputerToIterablesTest extends BarebonesTestEnvironment {
+public class ComputerToIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

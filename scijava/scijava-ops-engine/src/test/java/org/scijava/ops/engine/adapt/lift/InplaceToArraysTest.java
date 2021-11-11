@@ -38,7 +38,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
@@ -48,7 +48,7 @@ import org.scijava.ops.spi.OpField;
  * 
  * @author Gabriel Selzer
  */
-public class InplaceToArraysTest extends BarebonesTestEnvironment implements OpCollection {
+public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

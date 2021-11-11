@@ -34,11 +34,11 @@ import java.util.function.BiFunction;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.TestOps;
 import org.scijava.types.Nil;
 
-public class AdaptersTest extends BarebonesTestEnvironment {
+public class AdaptersTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

@@ -41,7 +41,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
@@ -52,7 +52,7 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-public class FunctionToArraysTest extends BarebonesTestEnvironment implements OpCollection {
+public class FunctionToArraysTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

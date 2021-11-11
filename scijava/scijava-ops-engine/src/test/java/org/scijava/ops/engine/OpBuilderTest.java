@@ -85,7 +85,7 @@ import org.scijava.ops.api.OpBuilder;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public class OpBuilderTest extends BarebonesTestEnvironment {
+public class OpBuilderTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

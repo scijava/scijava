@@ -16,7 +16,7 @@ import org.scijava.ops.api.OpInfo;
  * 
  * @author Gabriel Selzer
  */
-public class OpEnvironmentTest extends BarebonesTestEnvironment {
+public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testClassOpification() {

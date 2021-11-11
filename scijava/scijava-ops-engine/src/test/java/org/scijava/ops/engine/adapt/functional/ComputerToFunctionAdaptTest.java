@@ -37,10 +37,10 @@ package org.scijava.ops.engine.adapt.functional;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.create.CreateOpCollection;
 
-public class ComputerToFunctionAdaptTest extends BarebonesTestEnvironment {
+public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {

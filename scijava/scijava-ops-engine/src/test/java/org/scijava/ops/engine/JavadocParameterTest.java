@@ -30,7 +30,7 @@ import org.scijava.ops.spi.OpMethod;
  * 
  * @author Gabriel Selzer
  */
-public class JavadocParameterTest extends BarebonesTestEnvironment implements OpCollection {
+public class JavadocParameterTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

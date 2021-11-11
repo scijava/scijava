@@ -9,9 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
-import org.scijava.ops.engine.BarebonesTestEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaSource;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Any;
@@ -21,7 +20,7 @@ import org.scijava.types.Any;
  * 
  * @author Gabriel Selzer
  */
-public class MatchingWithAnyTest extends BarebonesTestEnvironment implements OpCollection {
+public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCollection {
 
 	@BeforeClass
 	public static void addNeededOps() {

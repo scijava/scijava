@@ -55,8 +55,8 @@ import org.scijava.plugin.Plugin;
  * @see OpEnvironment#map(IterableInterval, RandomAccessibleInterval, Shape,
  *      CenterAwareComputerOp)
  * @see CenterAwareComputerOp
+ * @implNote op names='map.neighborhood'
  */
-@Plugin(type = Op.class, name = "map.neighborhood")
 public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, IterableInterval<O>>
 {
 
@@ -98,8 +98,8 @@ public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomA
  * We also assume that the input and output have identical dimensions.
  * 
  * @author Gabriel Selzer
+ *@implNote op names='map.neighborhood', priority='100.'
  */
-@Plugin(type = Op.class, name = "map.neighborhood", priority = Priority.HIGH)
 class MapNeighborhoodWithCenterAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, RandomAccessibleInterval<O>>
 {

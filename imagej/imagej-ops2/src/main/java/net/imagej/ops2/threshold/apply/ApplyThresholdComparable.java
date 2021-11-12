@@ -41,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * threshold.
  *
  * @author Martin Horn (University of Konstanz)
+ *@implNote op names='threshold.apply'
  */
-@Plugin(type = Op.class, name = "threshold.apply")
 public class ApplyThresholdComparable<T> implements
 	Computers.Arity2<Comparable<? super T>, T, BitType>
 {

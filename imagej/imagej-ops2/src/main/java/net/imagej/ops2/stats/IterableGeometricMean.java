@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='stats.geometricMean', priority='10000.'
  */
-@Plugin(type = Op.class, name = "stats.geometricMean", priority = Priority.VERY_HIGH)
 public class IterableGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	/**

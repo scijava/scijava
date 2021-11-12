@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Convolves an image naively.
+ *@implNote op names='filter.convolve'
  */
-@Plugin(type = Op.class, name = "filter.convolve")
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
 		implements Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
 	// TODO: should this be binary so we can use different kernels?? Not sure.. what

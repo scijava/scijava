@@ -58,9 +58,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author bnorthan
  * @param <T>
+ * @implNote op names='deconvolve.accelerate', priority='0.'
  */
-@Plugin(type = Op.class, name = "deconvolve.accelerate",
-	priority = Priority.NORMAL)
 public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	Inplaces.Arity1<RandomAccessibleInterval<T>> 
 {

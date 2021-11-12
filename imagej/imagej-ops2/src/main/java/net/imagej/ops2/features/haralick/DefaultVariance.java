@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='features.haralick.variance'
  */
-@Plugin(type = Op.class, name = "features.haralick.variance")
 public class DefaultVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	/**

@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  *
+ *@implNote op names='features.haralick.contrast'
  */
-@Plugin(type = Op.class, name = "features.haralick.contrast")
 public class DefaultContrast<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXMinusY")

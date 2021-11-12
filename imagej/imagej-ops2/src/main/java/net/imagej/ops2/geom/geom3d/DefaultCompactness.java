@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * (36*PI)/(area^3/volume^2).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.compactness', label='Geometric (3D): Compactness', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.compactness", label = "Geometric (3D): Compactness", priority = Priority.VERY_HIGH)
 public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.boundarySize")

@@ -47,9 +47,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ * @implNote op names='threshold.intermodes', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.intermodes",
-	priority = Priority.HIGH)
 public class ComputeIntermodesThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

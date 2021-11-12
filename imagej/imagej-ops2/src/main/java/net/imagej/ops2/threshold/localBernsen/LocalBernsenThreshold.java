@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T> input type
+ *@implNote op names='threshold.localBernsen'
  */
-@Plugin(type = Op.class, name = "threshold.localBernsen")
 public class LocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {

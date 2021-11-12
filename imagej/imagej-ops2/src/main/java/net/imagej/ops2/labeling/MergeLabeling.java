@@ -56,8 +56,8 @@ import org.scijava.plugin.Plugin;
  * provided). Outside of the mask, labels will be empty.
  *
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='labeling.merge'
  */
-@Plugin(type = Op.class, name = "labeling.merge")
 public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
 
@@ -113,7 +113,9 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	}
 }
 
-@Plugin(type = Op.class, name = "labeling.merge")
+/**
+ *@implNote op names='labeling.merge'
+ */
 class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements BiFunction<ImgLabeling<L, I>, ImgLabeling<L, I>, ImgLabeling<L, I>> {
 

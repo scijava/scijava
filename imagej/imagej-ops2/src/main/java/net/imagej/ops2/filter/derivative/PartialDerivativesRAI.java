@@ -51,9 +51,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <T>
  *            type of input
+ *@implNote op names='filter.partialDerivative'
  */
-
-@Plugin(type = Op.class, name = "filter.partialDerivative")
 public class PartialDerivativesRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 

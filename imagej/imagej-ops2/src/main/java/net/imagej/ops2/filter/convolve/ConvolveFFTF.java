@@ -59,8 +59,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  * @param <K>
  * @param <C>
+ * @implNote op names='filter.convolve', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH)
 public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		/* extends AbstractFFTFilterF<I, O, K, C> */ implements
 		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, C, ExecutorService, RandomAccessibleInterval<O>> {
@@ -165,7 +165,9 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 
 }
 
-@Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH)
+/**
+ *@implNote op names='filter.convolve', priority='100.'
+ */
 class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
 		Functions.Arity3<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<FloatType>> {

@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='copy, copy.type'
  */
-@Plugin(type = Op.class, name = "copy, copy.type")
 public class CopyType<T extends Type<T>> implements Computers.Arity1<T, T> {
 
 	/**

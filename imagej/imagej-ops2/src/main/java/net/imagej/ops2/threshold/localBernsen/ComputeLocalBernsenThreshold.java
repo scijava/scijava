@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T> input type
+ *@implNote op names='threshold.localBernsen'
  */
-@Plugin(type = Op.class, name = "threshold.localBernsen")
 public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {

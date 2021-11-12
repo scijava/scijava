@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @param <T>
  *            type
+ *@implNote op names='filter.median'
  */
-@Plugin(type = Op.class, name = "filter.median")
 public class DefaultMedianFilter<T, V> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>> {
 

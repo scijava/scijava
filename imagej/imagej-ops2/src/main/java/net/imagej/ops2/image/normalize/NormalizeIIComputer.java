@@ -54,8 +54,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  *            - the type of the output in which we will return the normalized
  *            input.
+ *@implNote op names='image.normalize'
  */
-@Plugin(type = Op.class, name = "image.normalize")
 public class NormalizeIIComputer<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>> {
 

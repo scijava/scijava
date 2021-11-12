@@ -55,8 +55,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  *
  * @author Richard Domander (Royal Veterinary College, London)
+ *@implNote op names='stats.leastSquares'
  */
-@Plugin(type = Op.class, name = "stats.leastSquares")
 public class Quadric implements
 	Function<Collection<Vector3d>, Matrix4d> 
 {

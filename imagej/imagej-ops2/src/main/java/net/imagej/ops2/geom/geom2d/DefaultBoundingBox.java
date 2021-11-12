@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.boundingBox}.
  *
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='geom.boundingBox'
  */
-@Plugin(type = Op.class, name = "geom.boundingBox")
 public class DefaultBoundingBox implements Function<Polygon2D, Polygon2D> {
 
 	/**

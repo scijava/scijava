@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *
  * @see IntegralImg
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='image.integral', priority='-100.'
  */
-@Plugin(type = Op.class, name = "image.integral", priority = Priority.LOW)
 public class WrappedIntegralImg<I extends RealType<I>>
 	implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<DoubleType>>
 {

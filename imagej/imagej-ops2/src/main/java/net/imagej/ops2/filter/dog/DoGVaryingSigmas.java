@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='filter.DoG'
  */
-@Plugin(type = Op.class, name = "filter.DoG")
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -88,7 +88,9 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 
 }
 
-@Plugin(type = Op.class, name = "filter.DoG")
+/**
+ *@implNote op names='filter.DoG'
+ */
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 

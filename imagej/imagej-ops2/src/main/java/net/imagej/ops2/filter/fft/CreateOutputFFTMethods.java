@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Brian Northan
  * @param <T>
+ *@implNote op names='filter.createFFTOutput'
  */
-@Plugin(type = Op.class, name = "filter.createFFTOutput")
 public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T, Boolean, Img<T>> {
 
 	@OpDependency(name = "create.img")
@@ -70,7 +70,9 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 
 }
 
-@Plugin(type = Op.class, name = "filter.createFFTOutput")
+/**
+ *@implNote op names='filter.createFFTOutput'
+ */
 class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, T, Boolean, Img<T>> create;

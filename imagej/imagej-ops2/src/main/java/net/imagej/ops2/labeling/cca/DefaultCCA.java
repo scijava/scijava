@@ -51,8 +51,8 @@ import org.scijava.plugin.Plugin;
  * ImgLib2-algorithms.
  * 
  * @author Christian Dietz (University of Konstanz)
+ * @implNote op names='labeling.cca', priority='1.0'
  */
-@Plugin(type = Op.class, name = "labeling.cca", priority = 1.0)
 public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
 
@@ -80,7 +80,9 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 
 }
 
-@Plugin(type = Op.class, name = "labeling.cca", priority = 1.0)
+/**
+ *@implNote op names='labeling.cca', priority='1.0'
+ */
 class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
 		Functions.Arity3<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, ImgLabeling<Integer, IntType>> {
 	@OpDependency(name = "labeling.cca")

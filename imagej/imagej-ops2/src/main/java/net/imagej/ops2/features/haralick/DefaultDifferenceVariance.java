@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  *
  *         Formula based on: http://haralick.org/journals/TexturalFeatures.pdf
+ *@implNote op names='features.haralick.differenceVariance'
  */
-@Plugin(type = Op.class, name = "features.haralick.differenceVariance")
 public class DefaultDifferenceVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXMinusY")

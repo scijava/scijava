@@ -51,8 +51,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ *@implNote op names='filter.padShiftKernel'
  */
-@Plugin(type = Op.class, name = "filter.padShiftKernel")
 public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	implements BiFunction<I, Dimensions, O> 
 {

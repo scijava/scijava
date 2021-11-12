@@ -52,8 +52,8 @@ import static java.util.Collections.swap;
  * @author Jan Eglinger
  * @param <I> input type
  * @param <O> output type
+ *@implNote op names='stats.quantile'
  */
-@Plugin(type = Op.class, name = "stats.quantile")
 public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
 implements Computers.Arity2<Iterable<I>, Double, O>
 {

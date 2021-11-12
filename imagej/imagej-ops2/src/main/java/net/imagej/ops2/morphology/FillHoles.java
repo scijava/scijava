@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Martin Horn (University of Konstanz)
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='morphology.fillHoles'
  */
-@Plugin(type = Op.class, name = "morphology.fillHoles")
 public class FillHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {

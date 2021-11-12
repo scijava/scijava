@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ *@implNote op names='stats.sumOfInverses'
  */
-@Plugin(type = Op.class, name = "stats.sumOfInverses")
 public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<Iterable<I>, O, O> {
 
 	/**

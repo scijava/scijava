@@ -38,6 +38,6 @@ import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.solidity', label='Geometric (2D): Solidity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.solidity", label = "Geometric (2D): Solidity", priority = Priority.VERY_HIGH)
 public class DefaultSolidityPolygon extends AbstractSolidity<Polygon2D> {}

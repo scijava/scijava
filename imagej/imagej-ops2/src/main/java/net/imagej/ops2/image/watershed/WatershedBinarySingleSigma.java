@@ -80,8 +80,8 @@ import org.scijava.plugin.Plugin;
  *            element type of mask
  *
  * @author Simon Schmid (University of Konstanz)
+ *@implNote op names='image.watershed'
  */
-@Plugin(type = Op.class, name = "image.watershed")
 public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -137,7 +137,9 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -162,7 +164,9 @@ class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends Boolea
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -191,7 +195,9 @@ class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends Boolea
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinarySigngleSigmaFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 

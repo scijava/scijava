@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.coocMeanY'
  */
-@Plugin(type = Op.class, name = "features.haralick.coocMeanY")
 public class CoocMeanY implements Function<double[][], DoubleType> {
 
 	@OpDependency(name = "features.haralick.coocPY")

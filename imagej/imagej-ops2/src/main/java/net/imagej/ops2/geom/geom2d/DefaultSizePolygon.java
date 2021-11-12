@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * Computes the size (i.e. area) of a {@link Polygon2D}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.size', label='Geometric (2D): Size', priority = '9999.'
  */
-@Plugin(type = Op.class, name = "geom.size", label = "Geometric (2D): Size", priority = Priority.VERY_HIGH - 1)
 public class DefaultSizePolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	/**

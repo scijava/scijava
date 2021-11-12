@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <T>
  *            Input Type
+ *@implNote op names='features.zernike.magnitude'
  */
-@Plugin(type = Op.class, name = "features.zernike.magnitude")
 public class DefaultMagnitudeFeature<T extends RealType<T>>
 		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, DoubleType> {
 

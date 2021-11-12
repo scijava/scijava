@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * are outside of the output types range.
  *
  * @author Martin Horn (University of Konstanz)
+ *@implNote op names='convert.clip'
  */
-@Plugin(type = Op.class, name = "convert.clip")
 public class ClipRealTypes<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<I, O>
 {

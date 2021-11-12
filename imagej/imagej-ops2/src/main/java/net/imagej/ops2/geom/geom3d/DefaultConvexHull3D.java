@@ -55,8 +55,8 @@ import org.scijava.plugin.Plugin;
  * implementation (http://www.cs.ubc.ca/~lloyd/java/quickhull3d.html).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='geom.convexHull'
  */
-@Plugin(type = Op.class, name = "geom.convexHull")
 public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 {
 
@@ -610,7 +610,9 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 }
 
-@Plugin(type = Op.class, name = "geom.convexHullEpsilon")
+/**
+ *@implNote op names='geom.convexHullEpsilon'
+ */
 class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 {
 

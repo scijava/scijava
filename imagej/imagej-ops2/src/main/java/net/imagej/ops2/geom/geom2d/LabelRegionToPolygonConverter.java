@@ -51,6 +51,7 @@ import org.scijava.types.Nil;
  * Converts a {@link LabelRegion} to a polygon
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote converter priority='10000.'
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = Converter.class, priority = Priority.VERY_HIGH)

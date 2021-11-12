@@ -64,10 +64,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  * @param <K>
  * @param <C>
+ * @implNote op names='deconvolve.normalizationFactor', priority='-100.'
  */
-
-@Plugin(type = Op.class, name = "deconvolve.normalizationFactor",
-	priority = Priority.LOW)
 public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService>
 {

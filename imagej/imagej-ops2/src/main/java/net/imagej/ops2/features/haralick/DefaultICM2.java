@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.icm2'
  */
-@Plugin(type = Op.class, name = "features.haralick.icm2")
 public class DefaultICM2<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocHXY")

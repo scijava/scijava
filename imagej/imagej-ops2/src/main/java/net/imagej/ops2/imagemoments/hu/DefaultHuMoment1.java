@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @param <I> input type
  * @param <O> output type
  * @see <a href="https://en.wikipedia.org/wiki/Image_moment#Rotation_invariants"> This page </a>
+ * @implNote op names='imageMoments.huMoment1', label='Image Moment: HuMoment1'
  */
-@Plugin(type = Op.class, name = "imageMoments.huMoment1", label = "Image Moment: HuMoment1")
 public class DefaultHuMoment1<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

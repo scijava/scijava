@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='threshold.localContrast'
  */
-@Plugin(type = Op.class, name = "threshold.localContrast")
 public class ComputeLocalContrastThreshold<T extends RealType<T>> implements
 	Computers.Arity2<Iterable<T>, T, BitType>
 {

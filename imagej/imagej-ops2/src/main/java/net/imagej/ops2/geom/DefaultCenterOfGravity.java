@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * (Label).
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='geom.centerOfGravity'
  */
-@Plugin(type = Op.class, name = "geom.centerOfGravity")
 public class DefaultCenterOfGravity<T extends RealType<T>> implements Function<IterableInterval<T>, RealLocalizable> {
 
 	/**

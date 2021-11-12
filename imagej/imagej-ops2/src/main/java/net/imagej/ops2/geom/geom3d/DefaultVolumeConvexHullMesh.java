@@ -38,6 +38,6 @@ import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.sizeConvexHull', label='Geometric (3D): Convex Hull Volume', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.sizeConvexHull", label = "Geometric (3D): Convex Hull Volume", priority = Priority.VERY_HIGH)
 public class DefaultVolumeConvexHullMesh extends AbstractSizeConvexHull<Mesh> {}

@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Martin Horn (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='threshold.apply'
  */
-@Plugin(type = Op.class, name = "threshold.apply")
 public class ApplyConstantThreshold<T extends RealType<T>>
 		implements Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> {
 
@@ -79,7 +79,9 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 // If people don't want to / don't know how to make a comparator, they can just
 // use this Op. The default comparator just returns true if the input is greater
 // than the threshold.
-@Plugin(type = Op.class, name = "threshold.apply")
+/**
+ *@implNote op names='threshold.apply'
+ */
 class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.Arity2<Iterable<T>, T, Iterable<BitType>> {
 
 	@OpDependency(name = "threshold.apply")

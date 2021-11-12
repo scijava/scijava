@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Andreas Burger, University of Konstanz
  * @author Kyle Harrington, Beth Israel Deaconess Medical Center
+ *@implNote op names='morphology.thinGuoHall'
  */
-@Plugin(type = Op.class, name = "morphology.thinGuoHall")
 public class ThinGuoHall extends AbstractThin {
 
 	/**

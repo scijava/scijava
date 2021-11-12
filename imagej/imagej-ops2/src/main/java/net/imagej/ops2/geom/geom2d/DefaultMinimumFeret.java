@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * Minimum Feret of a polygon.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ *@implNote op names='geom.minimumFeret'
  */
-@Plugin(type = Op.class, name = "geom.minimumFeret")
 public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")

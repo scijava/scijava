@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  * 
  * @author Curtis Rueden
+ *@implNote op names='image.ascii'
  */
-@Plugin(type = Op.class, name = "image.ascii")
 public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<IterableInterval<T>, T, T, String>
 {
 

@@ -67,8 +67,8 @@ import org.scijava.plugin.Plugin;
  * @author Richard Domander (Royal Veterinary College, London)
  * 
  * NB: Methods are public and static to help testing
+ *@implNote op names='topology.eulerCorrection'
  */
-@Plugin(type = Op.class, name = "topology.eulerCorrection")
 public class EulerCorrection<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
 

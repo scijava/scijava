@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * Maximum Feret of a polygon.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ *@implNote op names='geom.maximumFeret'
  */
-@Plugin(type = Op.class, name = "geom.maximumFeret")
 public class DefaultMaximumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")

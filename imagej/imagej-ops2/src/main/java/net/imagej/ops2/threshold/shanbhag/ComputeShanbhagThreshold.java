@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ * @implNote op names='threshold.shanbhag', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.shanbhag", priority = Priority.HIGH)
 public class ComputeShanbhagThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

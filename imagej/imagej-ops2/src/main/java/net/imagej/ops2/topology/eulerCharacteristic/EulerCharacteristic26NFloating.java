@@ -67,8 +67,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Richard Domander (Royal Veterinary College, London)
  * @author Michael Doube (Royal Veterinary College, London)
+ *@implNote op names='topology.eulerCharacteristic26NFloating'
  */
-@Plugin(type = Op.class, name = "topology.eulerCharacteristic26NFloating")
 public class EulerCharacteristic26NFloating
         <B extends BooleanType<B>> implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */

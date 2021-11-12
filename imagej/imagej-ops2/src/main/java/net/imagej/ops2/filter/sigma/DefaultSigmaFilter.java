@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @param <T>
  *            type
+ * @implNote op names='filter.sigma', priority='-100.'
  */
-@Plugin(type = Op.class, name = "filter.sigma", priority = Priority.LOW)
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, RandomAccessibleInterval<V>> {
 

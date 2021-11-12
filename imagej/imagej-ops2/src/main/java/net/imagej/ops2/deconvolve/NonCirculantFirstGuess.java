@@ -56,9 +56,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  * @param <K>
  * @param <C>
+ * @implNote op names='deconvolve.firstGuess', priority='-100.'
  */
-
-@Plugin(type = Op.class, name = "deconvolve.firstGuess", priority = Priority.LOW)
 public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
 	Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>

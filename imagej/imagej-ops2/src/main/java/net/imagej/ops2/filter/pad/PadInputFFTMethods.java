@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padInputFFTMethods', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padInputFFTMethods", priority = Priority.HIGH)
 public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadInputFFT<T, I, O> {
 	

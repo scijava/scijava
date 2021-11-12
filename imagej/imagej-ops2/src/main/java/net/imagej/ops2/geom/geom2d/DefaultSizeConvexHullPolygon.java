@@ -38,6 +38,6 @@ import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.sizeConvexHull', label='Geometric (2D): Size ConvexHull', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.sizeConvexHull", label = "Geometric (2D): Size ConvexHull", priority = Priority.VERY_HIGH)
 public class DefaultSizeConvexHullPolygon extends AbstractSizeConvexHull<Polygon2D> {}

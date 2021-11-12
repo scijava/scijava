@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='features.haralick.sumVariance'
  */
-@Plugin(type = Op.class, name = "features.haralick.sumVariance")
 public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXPlusY")

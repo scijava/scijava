@@ -324,7 +324,9 @@ public class BoxCount {
 	}
 }
 
-@Plugin(type = Op.class, name = "topology.boxCount")
+/**
+ *@implNote op names='topology.boxCount'
+ */
 class DefaultBoxCount<B extends BooleanType<B>> implements
 	Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>>
 {

@@ -49,9 +49,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='imageMoments.moment00', label='Image Moment: Moment00', priority='10000.'
  */
-@Plugin(type = Op.class, name = "imageMoments.moment00", label = "Image Moment: Moment00",
-	priority = Priority.VERY_HIGH)
 public class DefaultMoment00<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O>
 {

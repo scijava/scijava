@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Andreas Burger, University of Konstanz
  * @author Kyle Harrington, Beth Israel Deaconess Medical Center
+ *@implNote op names='morphology.thinHilditch'
  */
-@Plugin(type = Op.class, name = "morphology.thinHilditch")
 public class ThinHilditch extends AbstractThin {
 
 	/**

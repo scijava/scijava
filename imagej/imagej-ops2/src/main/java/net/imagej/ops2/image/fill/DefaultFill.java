@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * Fill an {@link IterableInterval} with some constant value.
  * 
  * @author Leon Yang
+ *@implNote op names='image.fill'
  */
-@Plugin(type = Op.class, name = "image.fill")
 public class DefaultFill<T extends Type<T>> implements
 	Computers.Arity1<T, Iterable<T>> 
 {

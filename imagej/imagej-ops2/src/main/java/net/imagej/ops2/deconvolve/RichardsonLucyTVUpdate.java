@@ -58,9 +58,8 @@ import org.scijava.plugin.Plugin;
  * @author Brian Northan
  * @param <I> TODO Documentation
  * @param <T> TODO Documentation
+ * @implNote op names='deconvolve.richardsonLucyUpdate', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucyUpdate",
-	priority = Priority.HIGH)
 public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I extends RandomAccessibleInterval<T>>
 	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I> 
 {

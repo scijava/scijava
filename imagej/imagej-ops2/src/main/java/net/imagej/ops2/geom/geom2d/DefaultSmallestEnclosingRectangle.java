@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.smallestBoundingBox}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.smallestEnclosingBoundingBox', label='Geometric (2D): Smallest Enclosing Rectangle'
  */
-@Plugin(type = Op.class, name = "geom.smallestEnclosingBoundingBox", label = "Geometric (2D): Smallest Enclosing Rectangle")
 public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Polygon2D> {
 
 	@OpDependency(name = "geom.convexHull")

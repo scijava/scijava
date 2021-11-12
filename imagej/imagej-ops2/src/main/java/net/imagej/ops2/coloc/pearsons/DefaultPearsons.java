@@ -43,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * data container. It implements the FAST calculation for Pearson's Correlation.
  *
  * @author Ellen T Arena
+ *@implNote op names='coloc.pearsons'
  */
-@Plugin(type = Op.class, name = "coloc.pearsons")
 public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> implements
 	BiFunction<Iterable<T>, Iterable<U>, Double> 
 {

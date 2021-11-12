@@ -59,8 +59,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  * 
  * @author Kyle Harrington (University of Idaho)
+ *@implNote op names='geom.voxelization'
  */
-@Plugin(type = Op.class, name = "geom.voxelization")
 public class DefaultVoxelization3D
 		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 

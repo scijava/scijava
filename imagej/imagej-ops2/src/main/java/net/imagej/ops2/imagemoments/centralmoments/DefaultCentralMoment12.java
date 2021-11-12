@@ -52,8 +52,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='imageMoments.centralMoment12', label='Image Moment: CentralMoment12'
  */
-@Plugin(type = Op.class, name = "imageMoments.centralMoment12", label = "Image Moment: CentralMoment12")
 public class DefaultCentralMoment12<I extends RealType<I>, O extends RealType<O>>
 		implements AbstractImageMomentOp<I, O> {
 

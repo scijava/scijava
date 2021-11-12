@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
 /**
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='threshold.localMedian'
  */
-@Plugin(type = Op.class, name = "threshold.localMedian")
 public class LocalMedianThreshold<T extends RealType<T>> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {

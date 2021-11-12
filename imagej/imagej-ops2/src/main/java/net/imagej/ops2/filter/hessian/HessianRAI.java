@@ -50,9 +50,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <T>
  *            type of input
+ *@implNote op names='filter.hessian'
  */
-
-@Plugin(type = Op.class, name = "filter.hessian")
 public class HessianRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 

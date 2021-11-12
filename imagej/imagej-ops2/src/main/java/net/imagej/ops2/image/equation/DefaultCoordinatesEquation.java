@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * coordinates
  * 
  * @author Brian Northan
+ *@implNote op names='image.equation'
  */
-@Plugin(type = Op.class, name = "image.equation")
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
 		implements Computers.Arity1<Function<long[], N>, IterableInterval<T>> {
 

@@ -18,8 +18,8 @@ import org.scijava.plugin.Plugin;
  * @author Gabriel Selzer
  *
  * @param <T> - the input {@link RealType}.
+ *@implNote op names='image.cooccurrenceMatrix'
  */
-@Plugin(type = Op.class, name = "image.cooccurrenceMatrix")
 public class CooccurrenceMatrix<T extends RealType<T>>
 		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 

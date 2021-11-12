@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * Suen.
  *
  * @author Andreas Burger, University of Konstanz
+ * @implNote thinningstrategy names='ZhangSuen'
  */
-@Plugin(type = ThinningStrategy.class, name = "ZhangSuen")
 public class ZhangSuenThinningStrategy extends
 	Abstract3x3NeighbourhoodThinning
 {

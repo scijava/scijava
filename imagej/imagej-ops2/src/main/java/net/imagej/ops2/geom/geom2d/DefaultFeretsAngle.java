@@ -41,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.feretsAngle}.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ * @implNote op names='geom.feretsAngle', label='Geometric (2D): Ferets Angle'
  */
-@Plugin(type = Op.class, name = "geom.feretsAngle", label = "Geometric (2D): Ferets Angle")
 public class DefaultFeretsAngle implements Computers.Arity1<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
 
 	/**

@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * Ferets Diameter for a certain angle.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ *@implNote op names='geom.feretsDiameter'
  */
-@Plugin(type = Op.class, name = "geom.feretsDiameter")
 public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D, Double, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")

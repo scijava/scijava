@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  *            Input Type
  * @param <O>
  *            Output Type
+ *@implNote op names='features.zernike.phase'
  */
-@Plugin(type = Op.class, name = "features.zernike.phase")
 public class DefaultPhaseFeature<T extends RealType<T>>
 		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, DoubleType> {
 

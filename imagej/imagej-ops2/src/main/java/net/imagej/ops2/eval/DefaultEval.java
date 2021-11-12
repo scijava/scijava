@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Curtis Rueden
  * @see OpEvaluator
+ *@implNote op names='eval'
  */
-@Plugin(type = Op.class, name = "eval")
 public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>
 {
 

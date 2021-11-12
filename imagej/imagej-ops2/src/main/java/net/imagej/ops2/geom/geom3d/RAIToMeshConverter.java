@@ -51,9 +51,9 @@ import org.scijava.types.Nil;
  * Converts a RandomAccessibleInterval to a Mesh
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote converter priority='10000.'
  */
 @SuppressWarnings("rawtypes")
-@Plugin(type = Converter.class, priority = Priority.VERY_HIGH)
 public class RAIToMeshConverter <B extends BooleanType<B>> extends
 	AbstractConverter<RandomAccessibleInterval<B>, Mesh>
 {

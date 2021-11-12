@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I>
  *            input type
+ *@implNote op names='stats.minMax'
  */
-@Plugin(type = Op.class, name = "stats.minMax")
 public class IterableMinMax<I extends RealType<I>> implements Function<Iterable<I>, Pair<I, I>> {
 
 	/**

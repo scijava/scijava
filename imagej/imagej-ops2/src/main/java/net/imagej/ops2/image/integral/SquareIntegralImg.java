@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            The type of the input image.
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op name='image.squareIntegral', priority='99.'
  */
-@Plugin(type = Op.class, name = "image.squareIntegral", priority = Priority.LOW + 1)
 public class SquareIntegralImg<I extends RealType<I>, O extends RealType<O>> extends AbstractIntegralImg<I, O>
 {
 

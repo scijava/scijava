@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T>
  *            input type
+ *@implNote op names='stats.min'
  */
-@Plugin(type = Op.class, name = "stats.min")
 public class IterableMin<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
 
 	/**

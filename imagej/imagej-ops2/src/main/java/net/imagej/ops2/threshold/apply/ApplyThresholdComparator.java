@@ -43,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * compares above the threshold.
  *
  * @author Curtis Rueden
+ *@implNote op names='threshold.apply'
  */
-@Plugin(type = Op.class, name = "threshold.apply")
 public class ApplyThresholdComparator<T> implements Computers.Arity3<T, T, Comparator<? super T>, BitType>
 {
 

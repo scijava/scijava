@@ -60,8 +60,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <I>
  * @param <O>
+ *@implNote op names='features.tamura.coarseness'
  */
-@Plugin(type = Op.class, name = "features.tamura.coarseness")
 public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 

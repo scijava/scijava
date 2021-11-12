@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @author Curtis Rueden
  * @param <T>
+ *@implNote op names='filter.DoG'
  */
-@Plugin(type = Op.class, name = "filter.DoG")
 public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
 

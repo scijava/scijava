@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * each chunk consists of consecutive elements.
  * 
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='thread.chunker'
  */
-@Plugin(type = Op.class, name = "thread.chunker")
 public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorService> {
 
 	private final int STEP_SIZE = 1;

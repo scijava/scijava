@@ -52,8 +52,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @param <I>
+ *@implNote op names='features.lbp2d'
  */
-@Plugin(type = Op.class, name = "features.lbp2d")
 public class DefaultLBP2D<I extends RealType<I>>
 		implements Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
 

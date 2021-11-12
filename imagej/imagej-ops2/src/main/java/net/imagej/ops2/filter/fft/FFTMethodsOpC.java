@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @author Brian Northan
  * @param <T>
  * @param <C>
+ * @implNote op names='filter.fft', priority='0.'
  */
-@Plugin(type = Op.class, name = "filter.fft", priority = Priority.NORMAL)
 public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	implements Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>>
 {

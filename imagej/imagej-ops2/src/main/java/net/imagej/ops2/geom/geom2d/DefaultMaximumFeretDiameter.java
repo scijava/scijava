@@ -40,7 +40,9 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "geom.maximumFeretsDiameter")
+/**
+ *@implNote op names='geom.maximumFeretsDiameter'
+ */
 public class DefaultMaximumFeretDiameter implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.maximumFeret")

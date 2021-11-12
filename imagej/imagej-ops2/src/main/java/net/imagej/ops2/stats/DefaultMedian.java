@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ *@implNote op names='stats.median'
  */
-@Plugin(type = Op.class, name = "stats.median")
 public class DefaultMedian<I extends RealType<I>, O extends RealType<O>> 
 		implements Computers.Arity1<Iterable<I>, O> {
 

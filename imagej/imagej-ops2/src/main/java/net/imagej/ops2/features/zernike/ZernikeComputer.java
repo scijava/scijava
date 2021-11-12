@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * Computes a specific zernike moment
  * 
  * @author Andreas Graumann (University of Konstanz)
+ *@implNote op names='features.zernike.computer'
  */
-@Plugin(type = Op.class, name = "features.zernike.computer")
 public class ZernikeComputer<T extends RealType<T>>
 		implements Functions.Arity3<IterableInterval<T>, Integer, Integer, ZernikeMoment> {
 

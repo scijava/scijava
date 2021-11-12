@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <B> - the {@link BooleanType} of the input image
  * @param <T> - the {@link RealType} of the output image
+ *@implNote op names='image.distanceTransform'
  */
-@Plugin(type = Op.class, name = "image.distanceTransform")
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
 

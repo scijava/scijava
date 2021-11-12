@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * Default implementation of tamura feature contrast.
  * 
  * @author Andreas Graumann (University of Konstanz)
+ *@implNote op names='features.tamura.contrast'
  */
-@Plugin(type = Op.class, name = "features.tamura.contrast")
 public class DefaultContrastFeature<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 

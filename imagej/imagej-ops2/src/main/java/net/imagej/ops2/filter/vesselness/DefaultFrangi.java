@@ -55,8 +55,8 @@ import Jama.Matrix;
  * RandomAccessibleInterval, and can vary for each dimension of the image.
  *
  * @author Gabe Selzer
+ *@implNote op names='filter.frangiVesselness'
  */
-@Plugin(type = Op.class, name = "filter.frangiVesselness")
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
 

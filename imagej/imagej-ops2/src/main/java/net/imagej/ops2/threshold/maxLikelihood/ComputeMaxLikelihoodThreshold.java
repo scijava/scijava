@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * {@literal &} Rubin and Glasbey.
  *
  * @author Barry DeZonia
+ *@implNote op names='threshold.maxLikelihood'
  */
-@Plugin(type = Op.class, name = "threshold.maxLikelihood")
 public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

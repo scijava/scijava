@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * precision.
  *
  * @author Martin Horn (University of Konstanz)
+ *@implNote op names='convert.copy'
  */
-@Plugin(type = Op.class, name = "convert.copy")
 public class CopyRealTypes<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<I, O> 
 {

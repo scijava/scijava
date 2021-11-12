@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ *@implNote op names='stats.geometricMean'
  */
-@Plugin(type = Op.class, name = "stats.geometricMean")
 public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.size")

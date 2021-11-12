@@ -50,9 +50,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padShiftKernelFFTMethods', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padShiftKernelFFTMethods",
-	priority = Priority.HIGH)
 public class PadShiftKernelFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	extends PadShiftKernel<T, I, O>
 {

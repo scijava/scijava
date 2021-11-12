@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ * @implNote op names='threshold.isoData', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.isoData", priority = Priority.HIGH)
 public class ComputeIsoDataThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

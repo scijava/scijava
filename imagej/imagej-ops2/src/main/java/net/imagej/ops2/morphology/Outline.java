@@ -53,8 +53,8 @@ import org.scijava.plugin.Plugin;
  * the input. Rectangles become outlines, solid cubes become surfaces etc.
  *
  * @author Richard Domander (Royal Veterinary College, London)
+ *@implNote op names='morphology.outline'
  */
-@Plugin(type = Op.class, name = "morphology.outline")
 public class Outline<B extends BooleanType<B>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
 

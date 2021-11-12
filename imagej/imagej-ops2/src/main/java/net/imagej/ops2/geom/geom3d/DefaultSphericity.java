@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * Based on https://en.wikipedia.org/wiki/Sphericity.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.sphericity', label='Geometric (3D): Sphericity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.sphericity", label = "Geometric (3D): Sphericity", priority = Priority.VERY_HIGH)
 public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.size")

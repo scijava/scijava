@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.convexHull}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='geom.convexHull'
  */
-@Plugin(type = Op.class, name = "geom.convexHull")
 public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
 	/**

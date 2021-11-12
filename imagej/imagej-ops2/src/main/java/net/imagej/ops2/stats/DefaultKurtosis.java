@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ *@implNote op names='stats.kurtosis'
  */
-@Plugin(type = Op.class, name = "stats.kurtosis")
 public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {

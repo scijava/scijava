@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ *@implNote op names='stats.percentile'
  */
-@Plugin(type = Op.class, name = "stats.percentile")
 public class DefaultPercentile<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity2<Iterable<I>, Double, O> {
 

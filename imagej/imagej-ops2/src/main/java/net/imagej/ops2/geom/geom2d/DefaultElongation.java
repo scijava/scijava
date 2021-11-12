@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * shape_descriptors_survey.pdf.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ * @implNote op names='geom.mainElongation', label='Geometric (2D): Elongation'
  */
-@Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (2D): Elongation")
 public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")

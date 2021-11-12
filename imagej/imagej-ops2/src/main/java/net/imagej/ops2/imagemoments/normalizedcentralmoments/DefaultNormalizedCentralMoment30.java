@@ -45,9 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='imageMoments.normalizedCentralMoment30', label='Image Moment: NormalizedCentralMoment30'
  */
-@Plugin(type = Op.class, name = "imageMoments.normalizedCentralMoment30",
-	label = "Image Moment: NormalizedCentralMoment30")
 public class DefaultNormalizedCentralMoment30<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O>
 {

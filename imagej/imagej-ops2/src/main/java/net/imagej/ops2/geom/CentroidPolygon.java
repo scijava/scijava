@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.centroid}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.centroid', label='Geometric: Center of Gravity'
  */
-@Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Center of Gravity")
 public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")

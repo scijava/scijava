@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.verticesCountConvexHull', label='Geometric (3D): Convex Hull Vertices Count', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.verticesCountConvexHull", label = "Geometric (3D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
 public class DefaultVerticesCountConvexHullMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")

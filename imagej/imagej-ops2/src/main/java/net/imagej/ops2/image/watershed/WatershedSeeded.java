@@ -98,8 +98,8 @@ import org.scijava.plugin.Plugin;
  *            element type of mask
  * 
  * @author Simon Schmid (University of Konstanz)
+ *@implNote op names='image.watershed'
  */
-@Plugin(type = Op.class, name = "image.watershed")
 public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -390,7 +390,9 @@ public class WatershedSeeded<T extends RealType<T>, B extends BooleanType<B>> im
 
 // Convenience Ops
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -415,7 +417,9 @@ class WatershedSeededMaskless<T extends RealType<T>, B extends BooleanType<B>> i
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 
@@ -442,7 +446,9 @@ class WatershedSeededMasklessFunction<T extends RealType<T>, B extends BooleanTy
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedSeededFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, ImgLabeling<Integer, IntType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 

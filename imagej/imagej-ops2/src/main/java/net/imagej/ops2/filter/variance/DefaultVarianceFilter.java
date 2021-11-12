@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @param <T>
  *            type
+ *@implNote op names='filter.variance'
  */
-@Plugin(type = Op.class, name = "filter.variance")
 public class DefaultVarianceFilter<T, V> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<V>> {
 

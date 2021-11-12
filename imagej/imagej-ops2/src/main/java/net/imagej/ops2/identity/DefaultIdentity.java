@@ -37,8 +37,8 @@ import org.scijava.plugin.Plugin;
  * Default implementation of the {@link IdentityOp} op.
  * 
  * @author Curtis Rueden
+ *@implNote op names='identity'
  */
-@Plugin(type = Op.class, name = "identity")
 public class DefaultIdentity<A> implements Inplaces.Arity1<A>
 {
 

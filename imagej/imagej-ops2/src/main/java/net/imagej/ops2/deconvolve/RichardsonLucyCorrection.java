@@ -57,9 +57,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  * @param <O>
  * @param <C>
+ * @implNote op names='deconvolve.richardsonLucyCorrection', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucyCorrection",
-	priority = Priority.HIGH)
 public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<O>, C extends ComplexType<C>>
 	implements
 	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>

@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  *
  * @author Hadrien Mary
+ * @implNote op names='threshold.rosin', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.rosin", priority = Priority.HIGH)
 public class ComputeRosinThreshold<T extends RealType<T>> extends AbstractComputeThresholdHistogram<T> {
 
 	/**

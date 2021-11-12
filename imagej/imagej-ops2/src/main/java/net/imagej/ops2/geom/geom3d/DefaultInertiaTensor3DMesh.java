@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * This {@link Op} computes the 2nd multi variate of a {@link Mesh} (Label).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='geom.secondMoment'
  */
-@Plugin(type = Op.class, name = "geom.secondMoment")
 public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")

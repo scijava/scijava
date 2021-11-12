@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='stats.sumOfInverses', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.sumOfInverses", priority = Priority.HIGH)
 public class DefaultSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<RandomAccessibleInterval<I>, O, O> {
 	
 	@OpDependency(name = "create.img")

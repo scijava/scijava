@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * shape_descriptors_survey.pdf
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.medianElongation', label='Geometric (3D): Median Elongation', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.medianElongation", label = "Geometric (3D): Median Elongation", priority = Priority.VERY_HIGH)
 public class DefaultMedianElongation implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

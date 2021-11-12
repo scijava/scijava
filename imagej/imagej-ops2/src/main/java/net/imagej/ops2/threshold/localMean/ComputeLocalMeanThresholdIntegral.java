@@ -59,9 +59,8 @@ import org.scijava.plugin.Plugin;
  *
  * @see ComputeLocalMeanThreshold
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op name='threshold.localMean', priority='-101.'
  */
-@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW -
-	1)
 public class ComputeLocalMeanThresholdIntegral<T extends RealType<T>, U extends RealType<U>> implements
 	Computers.Arity3<RectangleNeighborhood<? extends Composite<U>>, T, Double, BitType>
 {

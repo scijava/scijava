@@ -40,7 +40,9 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "geom.minimumFeretsDiameter")
+/**
+ *@implNote op names='geom.minimumFeretsDiameter'
+ */
 public class DefaultMinimumFeretDiameter implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minimumFeret")

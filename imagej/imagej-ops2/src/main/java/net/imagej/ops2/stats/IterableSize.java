@@ -43,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='stats.size', priority='-100.'
  */
-@Plugin(type = Op.class, name = "stats.size", priority = Priority.LOW)
 public class IterableSize<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<Iterable<I>, O>
 {

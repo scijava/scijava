@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padIntervalCentered', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padIntervalCentered", priority = Priority.HIGH)
 public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
 		implements BiFunction<I, Dimensions, O> {
 

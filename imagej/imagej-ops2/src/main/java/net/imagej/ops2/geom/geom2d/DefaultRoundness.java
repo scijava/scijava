@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * Based on https://imagej.nih.gov/ij/plugins/descriptors.html.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.roundness', label='Geometric (2D): Roundness'
  */
-@Plugin(type = Op.class, name = "geom.roundness", label = "Geometric (2D): Roundness")
 public class DefaultRoundness implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")

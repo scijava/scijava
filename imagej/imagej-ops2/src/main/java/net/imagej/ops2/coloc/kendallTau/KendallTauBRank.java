@@ -72,8 +72,8 @@ import org.scijava.plugin.Plugin;
  * @author Johannes Schindelin
  * @author Ellen T Arena
  * @param <T>
+ *@implNote op names='coloc.kendallTau'
  */
-@Plugin(type = Op.class, name = "coloc.kendallTau")
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 

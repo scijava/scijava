@@ -41,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.boundaryPixelCount}.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.verticesCount', label='Geometric3D: Surface Vertices Count', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric3D: Surface Vertices Count", priority = Priority.VERY_HIGH)
 public class DefaultVerticesCountMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	/**

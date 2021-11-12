@@ -41,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='features.haralick.coocHXY'
  */
-@Plugin(type = Op.class, name = "features.haralick.coocHXY")
 public class CoocHXY implements Function<double[][], double[]> {
 
 	private static final double EPSILON = Double.MIN_NORMAL;

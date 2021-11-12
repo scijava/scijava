@@ -46,9 +46,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Brian Northan
  * @param <T> Type of {@link RandomAccessibleInterval} upon which to operate.
+ * @implNote op names='deconvolve.richardsonLucyUpdate', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucyUpdate",
-	priority = Priority.HIGH)
 public class RichardsonLucyUpdate<T extends RealType<T>> implements
 	Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {

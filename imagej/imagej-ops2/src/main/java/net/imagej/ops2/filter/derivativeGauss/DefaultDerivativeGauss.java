@@ -51,8 +51,8 @@ import org.scijava.plugin.Plugin;
  * at a particular point.
  *
  * @author Gabe Selzer
+ *@implNote op names='filter.derivativeGauss'
  */
-@Plugin(type = Op.class, name = "filter.derivativeGauss")
 public class DefaultDerivativeGauss<T extends RealType<T>>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], int[], RandomAccessibleInterval<DoubleType>> {
 	

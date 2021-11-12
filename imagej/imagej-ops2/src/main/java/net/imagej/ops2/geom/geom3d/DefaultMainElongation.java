@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * shape_descriptors_survey.pdf
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.mainElongation', label='Geometric (3D): Main Elongation', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (3D): Main Elongation", priority = Priority.VERY_HIGH)
 public class DefaultMainElongation implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

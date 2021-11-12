@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.boundarySize}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.boundarySize', label='Geometric (2D): Perimeter'
  */
-@Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (2D): Perimeter")
 public class DefaultPerimeterLength implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	/**

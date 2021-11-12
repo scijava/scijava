@@ -56,8 +56,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @author Daniel Seebacher (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='geom.contour'
  */
-@Plugin(type = Op.class, name = "geom.contour")
 public class DefaultContour<B extends BooleanType<B>>
 		implements BiFunction<RandomAccessibleInterval<B>, Boolean, Polygon2D> {
 

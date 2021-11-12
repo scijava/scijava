@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * supported FFT size.
  * 
  * @author Brian Northan
+ *@implNote op names='filter.ifft'
  */
-@Plugin(type = Op.class, name = "filter.ifft")
 public class IFFTMethodsOpI<C extends ComplexType<C>>
 		implements Inplaces.Arity2_1<RandomAccessibleInterval<C>, ExecutorService> {
 

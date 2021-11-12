@@ -60,8 +60,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @author Martin Horn (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localMean', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW)
 public class LocalMeanThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

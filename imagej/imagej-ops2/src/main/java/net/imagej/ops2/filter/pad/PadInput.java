@@ -53,8 +53,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padInput', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padInput", priority = Priority.HIGH)
 public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		implements Functions.Arity3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 

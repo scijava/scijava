@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ * @implNote op names='copy, copy.rai', priority='1.0'
  */
-@Plugin(type = Op.class, name = "copy, copy.rai", priority = 1.0)
 public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "copy")

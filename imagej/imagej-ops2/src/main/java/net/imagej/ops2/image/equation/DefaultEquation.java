@@ -60,8 +60,8 @@ import org.scijava.script.ScriptService;
  * </p>
  * 
  * @author Curtis Rueden
+ *@implNote op names='image.equation'
  */
-@Plugin(type = Op.class, name = "image.equation")
 public class DefaultEquation<T extends RealType<T>> implements
 	Computers.Arity2<String, ScriptService, IterableInterval<T>> 
 {

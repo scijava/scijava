@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Online_algorithm">
  *      Wikipedia</a>
+ *@implNote op names='stats.variance'
  */
-@Plugin(type = Op.class, name = "stats.variance")
 public class IterableVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	/**

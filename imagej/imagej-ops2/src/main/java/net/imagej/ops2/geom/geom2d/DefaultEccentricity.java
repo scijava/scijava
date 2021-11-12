@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * Ayoub B. Ayoub.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ * @implNote op names='geom.eccentricity', label='Geometric (2D): Eccentricity'
  */
-@Plugin(type = Op.class, name = "geom.eccentricity", label = "Geometric (2D): Eccentricity")
 public class DefaultEccentricity implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minorAxis")

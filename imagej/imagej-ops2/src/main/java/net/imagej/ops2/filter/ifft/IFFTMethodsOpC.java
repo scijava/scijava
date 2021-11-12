@@ -51,8 +51,8 @@ import org.scijava.plugin.Plugin;
  * @author Brian Northan
  * @param <C>
  * @param <T>
+ *@implNote op names='filter.ifft'
  */
-@Plugin(type = Op.class, name = "filter.ifft")
 public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
 

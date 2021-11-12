@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            input type
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='stats.integralVariance'
  */
-@Plugin(type = Op.class, name = "stats.integralVariance")
 public class IntegralVariance<I extends RealType<I>>
 		implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 

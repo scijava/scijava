@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  *
+ *@implNote op names='features.haralick.maxProbability'
  */
-@Plugin(type = Op.class, name = "features.haralick.maxProbability")
 public class DefaultMaxProbability<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	/**

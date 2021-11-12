@@ -41,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * evaluated as false.
  * 
  * @author Leon Yang
+ *@implNote op names='logic.default'
  */
-@Plugin(type = Op.class, name = "logic.default")
 public class Default<I extends BooleanType<I>, O extends Type<O>> implements
 	Computers.Arity2<I, O, O> 
 {

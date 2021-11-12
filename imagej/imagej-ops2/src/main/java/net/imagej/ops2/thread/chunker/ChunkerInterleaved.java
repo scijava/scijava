@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * executable 2, k+2, 2k+2 and so on.
  * 
  * @author Michael Zinsmaier (University of Konstanz)
+ * @implNote op names='thread.chunker', priority='-10000.'
  */
-@Plugin(type = Op.class, name = "thread.chunker", priority = Priority.VERY_LOW)
 public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, ExecutorService>{
 
 	private String cancellationMsg;

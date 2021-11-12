@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  * @param <T> input type
+ * @implNote op names='stats.max', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.max", priority = Priority.HIGH)
 public class DefaultMax<T extends RealType<T>> implements Computers.Arity1<RandomAccessibleInterval<T>, T> {
 	
 	@OpDependency(name = "stats.minMax")

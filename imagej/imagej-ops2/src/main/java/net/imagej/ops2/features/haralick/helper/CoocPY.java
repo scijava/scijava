@@ -38,8 +38,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.coocPY'
  */
-@Plugin(type = Op.class, name = "features.haralick.coocPY")
 public class CoocPY implements Function<double[][], double[]> {
 
 	/**

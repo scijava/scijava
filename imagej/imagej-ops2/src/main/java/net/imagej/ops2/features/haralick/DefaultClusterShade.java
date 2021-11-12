@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  *
+ *@implNote op names='features.haralick.clusterShade'
  */
-@Plugin(type = Op.class, name = "features.haralick.clusterShade")
 public class DefaultClusterShade<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocMeanX")

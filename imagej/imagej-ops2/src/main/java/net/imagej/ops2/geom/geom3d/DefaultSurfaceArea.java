@@ -43,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.BoundarySize}.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.boundarySize', label='Geometric (3D): Surface Area', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (3D): Surface Area", priority = Priority.VERY_HIGH)
 public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 
 	/**

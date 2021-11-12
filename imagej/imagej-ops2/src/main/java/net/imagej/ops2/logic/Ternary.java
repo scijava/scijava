@@ -42,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * <code>ifFalseVal</code> otherwise.
  * 
  * @author Leon Yang
+ *@implNote op names='logic.match'
  */
-@Plugin(type = Op.class, name = "logic.match")
 public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computers.Arity3<I, O, O, O>
 
 {

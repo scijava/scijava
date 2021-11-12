@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='features.haralick.ifdm'
  */
-@Plugin(type = Op.class, name = "features.haralick.ifdm")
 public class DefaultIFDM<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	/**

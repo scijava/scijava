@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='imageMoments.centralMoment11', label='Image Moment: CentralMoment11', priority='10000.'
  */
-@Plugin(type = Op.class, name = "imageMoments.centralMoment11", label = "Image Moment: CentralMoment11", priority = Priority.VERY_HIGH)
 public class IterableCentralMoment11<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 

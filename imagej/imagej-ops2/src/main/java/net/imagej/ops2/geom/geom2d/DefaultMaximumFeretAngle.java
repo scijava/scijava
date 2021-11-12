@@ -40,7 +40,9 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "geom.maximumFeretsAngle")
+/**
+ *@implNote op names='geom.maximumFeretsAngle'
+ */
 public class DefaultMaximumFeretAngle implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.maximumFeret")

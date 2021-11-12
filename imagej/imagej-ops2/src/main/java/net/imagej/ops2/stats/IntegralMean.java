@@ -49,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            input type
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='stats.integralMean'
  */
-@Plugin(type = Op.class, name = "stats.integralMean")
 public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 
 	/**

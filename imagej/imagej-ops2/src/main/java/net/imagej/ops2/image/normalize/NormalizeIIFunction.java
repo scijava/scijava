@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @author Leon Yang
  * @param <T>
+ *@implNote op names='image.normalize'
  */
-@Plugin(type = Op.class, name = "image.normalize")
 public class NormalizeIIFunction<I extends RealType<I>, O extends RealType<O>>
 	implements
 	Functions.Arity5<RandomAccessibleInterval<I>, I, I, O, O, RandomAccessibleInterval<O>>

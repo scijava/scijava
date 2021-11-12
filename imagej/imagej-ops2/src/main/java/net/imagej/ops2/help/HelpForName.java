@@ -41,9 +41,8 @@ import org.scijava.plugin.Plugin;
  * Gets documentation for the given name.
  *
  * @author Mark Hiner
+ * @implNote op names='help', priority='100.', description='Gets documentation for all Ops with the given name'
  */
-@Plugin(type = Op.class, name = "help", priority = Priority.HIGH,
-	description = "Gets documentation for all Ops with the given name")
 public class HelpForName extends AbstractHelp implements BiFunction<String, OpService, String> {
 
 	/**

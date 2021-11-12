@@ -53,8 +53,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <T>
  *            type of input
+ *@implNote op names='filter.partialDerivative'
  */
-@Plugin(type = Op.class, name = "filter.partialDerivative")
 public class PartialDerivativeRAI<T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> {
 

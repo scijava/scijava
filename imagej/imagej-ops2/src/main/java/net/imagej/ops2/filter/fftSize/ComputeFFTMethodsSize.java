@@ -40,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * Op that calculates FFT sizes.
  * 
  * @author Brian Northan
+ *@implNote op names='filter.fftSize'
  */
-@Plugin(type = Op.class, name = "filter.fftSize")
 public class ComputeFFTMethodsSize implements Functions.Arity3<Dimensions, Boolean, Boolean, long[][]> {
 
 	/**

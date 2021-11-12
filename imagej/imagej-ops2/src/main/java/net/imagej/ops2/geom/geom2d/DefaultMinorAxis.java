@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * Generic implementation of {@code geom.minorAxis}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.minorAxis', label='Geometric (2D): Minor Axis'
  */
-@Plugin(type = Op.class, name = "geom.minorAxis", label = "Geometric (2D): Minor Axis")
 public class DefaultMinorAxis implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

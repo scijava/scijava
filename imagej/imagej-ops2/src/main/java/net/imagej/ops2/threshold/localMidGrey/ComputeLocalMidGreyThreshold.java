@@ -47,9 +47,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localMidGrey', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localMidGrey",
-	priority = Priority.LOW)
 public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
 	Computers.Arity3<Iterable<T>, T, Double, BitType>
 {

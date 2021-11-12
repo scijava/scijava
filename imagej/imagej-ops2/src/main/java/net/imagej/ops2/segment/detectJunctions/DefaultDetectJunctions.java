@@ -58,8 +58,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  * 
  * @author Gabe Selzer
+ *@implNote op names='segment.detectJunctions'
  */
-@Plugin(type = Op.class, name = "segment.detectJunctions")
 public class DefaultDetectJunctions implements BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> {
 
 	// @Parameter(required = false)
@@ -318,7 +318,9 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 
 }
 
-@Plugin(type = Op.class, name = "segment.detectJunctions")
+/**
+ *@implNote op names='segment.detectJunctions'
+ */
 class SimpleDetectJunctions implements Function<List<? extends WritablePolyline>, List<RealPoint>> {
 
 	@OpDependency(name = "segment.detectJunctions")

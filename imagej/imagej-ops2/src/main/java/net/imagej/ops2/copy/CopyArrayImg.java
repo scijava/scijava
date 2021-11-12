@@ -48,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ * @implNote op names='copy, copy.img', priority='10000.'
  */
-@Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> {
 	/**
@@ -70,7 +70,9 @@ public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 	}
 }
 
-@Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
+/**
+ *@implNote op names='copy, copy.img', priority='10000.'
+ */
 class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Function<ArrayImg<T, A>, ArrayImg<T, A>> {
 

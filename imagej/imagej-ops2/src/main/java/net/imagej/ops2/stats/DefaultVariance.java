@@ -57,8 +57,8 @@ import org.scijava.plugin.Plugin;
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm">
  *      Wikipedia </a>
+ * @implNote op names='stats.variance', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.variance", priority = Priority.HIGH)
 public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.mean")

@@ -59,9 +59,8 @@ import org.scijava.plugin.Plugin;
  *
  * @see ComputeLocalNiblackThreshold
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op name='threshold.localNiblack', priority='-101.'
  */
-@Plugin(type = Op.class, name = "threshold.localNiblack",
-	priority = Priority.LOW - 1)
 public class ComputeLocalNiblackThresholdIntegral<T extends RealType<T>, U extends RealType<U>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<U>>, T, Double, Double, BitType>

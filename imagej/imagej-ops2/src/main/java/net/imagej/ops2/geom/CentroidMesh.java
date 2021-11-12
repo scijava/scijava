@@ -46,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * Computation based on http://wwwf.imperial.ac.uk/~rn/centroid.pdf.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.centroid', label='Geometric: Centroid'
  */
-@Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Centroid")
 public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")

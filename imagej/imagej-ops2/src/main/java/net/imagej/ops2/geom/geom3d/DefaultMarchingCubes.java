@@ -55,8 +55,8 @@ import org.scijava.plugin.Plugin;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @param <T>
  *            BooleanType
+ *@implNote op names='geom.marchingCubes'
  */
-@Plugin(type = Op.class, name = "geom.marchingCubes")
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
@@ -556,7 +556,9 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 
 }
 
-@Plugin(type = Op.class, name = "geom.marchingCubes")
+/**
+ *@implNote op names='geom.marchingCubes'
+ */
 class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	

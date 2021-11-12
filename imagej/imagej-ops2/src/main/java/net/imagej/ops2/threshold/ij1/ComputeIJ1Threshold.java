@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ * @implNote op names='threshold.ij1', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.ij1", priority = Priority.HIGH)
 public class ComputeIJ1Threshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

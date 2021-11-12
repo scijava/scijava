@@ -56,8 +56,8 @@ import org.scijava.plugin.Plugin;
  * Performs the Ridge Detection algorithm on a 2-Dimensional, gray-scale image.
  * 
  * @author Gabe Selzer
+ *@implNote op names='segment.detectRidges'
  */
-@Plugin(type = Op.class, name = "segment.detectRidges")
 public class DefaultDetectRidges<T extends RealType<T>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, Double, Double, Double, Integer, List<DefaultWritablePolyline>> {
 

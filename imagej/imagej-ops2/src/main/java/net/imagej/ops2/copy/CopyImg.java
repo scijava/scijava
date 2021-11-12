@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='copy, copy.img'
  */
-@Plugin(type = Op.class, name = "copy, copy.img")
 public class CopyImg<T extends NativeType<T>> implements Computers.Arity1<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.iterableInterval")
@@ -66,7 +66,9 @@ public class CopyImg<T extends NativeType<T>> implements Computers.Arity1<Img<T>
 	}
 }
 
-@Plugin(type = Op.class, name = "copy, copy.img")
+/**
+ *@implNote op names='copy, copy.img'
+ */
 class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.img")

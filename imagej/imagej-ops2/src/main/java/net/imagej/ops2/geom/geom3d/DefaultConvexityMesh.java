@@ -38,6 +38,6 @@ import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.convexity', label='Geometric (3D): Convexity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.convexity", label = "Geometric (3D): Convexity", priority = Priority.VERY_HIGH)
 public class DefaultConvexityMesh extends AbstractConvexity<Mesh> {}

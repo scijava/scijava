@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='copy, copy.imgLabeling'
  */
-@Plugin(type = Op.class, name = "copy, copy.imgLabeling")
 public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
 		implements Computers.Arity1<ImgLabeling<L, T>, ImgLabeling<L, T>> {
 

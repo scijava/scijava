@@ -63,9 +63,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  * @param <K>
  * @param <C>
+ * @implNote op names='deconvolve.richardsonLucyTV', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucyTV",
-	priority = Priority.HIGH)
 public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 	implements Functions.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, Float, ExecutorService, RandomAccessibleInterval<O>> {
 

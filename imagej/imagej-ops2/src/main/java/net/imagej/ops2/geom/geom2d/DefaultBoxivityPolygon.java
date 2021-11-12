@@ -38,6 +38,6 @@ import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.boxivity', label='Geometric (2D): Rectangularity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.boxivity", label = "Geometric (2D): Rectangularity", priority = Priority.VERY_HIGH)
 public class DefaultBoxivityPolygon extends AbstractBoxivity<Polygon2D> {}

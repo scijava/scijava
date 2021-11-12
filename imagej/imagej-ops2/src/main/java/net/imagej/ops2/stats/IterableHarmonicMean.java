@@ -45,8 +45,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='stats.harmonicMean', priority='10000.'
  */
-@Plugin(type = Op.class, name = "stats.harmonicMean", priority = Priority.VERY_HIGH)
 public class IterableHarmonicMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	/**

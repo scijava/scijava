@@ -47,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            input type
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='stats.integralSum'
  */
-@Plugin(type = Op.class, name = "stats.integralSum")
 public class IntegralSum<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<I>, DoubleType> {
 
 	/**

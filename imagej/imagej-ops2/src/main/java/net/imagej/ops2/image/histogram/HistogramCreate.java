@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
 /**
  * @author Martin Horn (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='image.histogram'
  */
-@Plugin(type = Op.class, name = "image.histogram")
 public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterable<T>, Integer, Histogram1d<T>> {
 
 	public static final int DEFAULT_NUM_BINS = 256;
@@ -77,7 +77,9 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 
 }
 
-@Plugin(type = Op.class, name = "image.histogram")
+/**
+ *@implNote op names='image.histogram'
+ */
 class HistogramCreateSimple<T extends RealType<T>> implements Function<Iterable<T>, Histogram1d<T>> {
 
 	@OpDependency(name = "image.histogram")

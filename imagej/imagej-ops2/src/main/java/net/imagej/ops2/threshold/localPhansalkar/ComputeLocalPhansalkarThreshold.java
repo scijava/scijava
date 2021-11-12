@@ -64,9 +64,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  *
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localPhansalkar', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localPhansalkar",
-	priority = Priority.LOW)
 public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {

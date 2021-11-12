@@ -44,8 +44,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ *@implNote op names='threshold.mean'
  */
-@Plugin(type = Op.class, name = "threshold.mean")
 public class ComputeMeanThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

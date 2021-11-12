@@ -39,8 +39,8 @@ import org.scijava.plugin.Plugin;
  * An implementation of the Algorithm proposed by C. J. Hilditch.
  *
  * @author Andreas Burger, University of Konstanz
+ * @implNote thinningstrategy names='Hilditch'
  */
-@Plugin(type = ThinningStrategy.class, name = "Hilditch")
 public class HilditchThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 
 	public HilditchThinningStrategy() {

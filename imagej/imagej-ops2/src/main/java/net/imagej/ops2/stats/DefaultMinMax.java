@@ -50,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I>
  *            input type
+ * @implNote op names='stats.minMax', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.minMax", priority = Priority.HIGH)
 public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAccessibleInterval<I>, Pair<I, I>> {
 
 	/**

@@ -59,9 +59,8 @@ import org.scijava.plugin.Plugin;
  *
  * @see ComputeLocalSauvolaThreshold
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op name='threshold.localSauvola', priority='-101.'
  */
-@Plugin(type = Op.class, name = "threshold.localSauvola",
-	priority = Priority.LOW - 1)
 public class ComputeLocalSauvolaThresholdIntegral<T extends RealType<T>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>

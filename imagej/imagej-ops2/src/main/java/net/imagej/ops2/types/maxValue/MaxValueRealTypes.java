@@ -40,21 +40,27 @@ public class MaxValueRealTypes {
 
 	final BitType maxBit = new BitType(true);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<BitType, BitType> maxBitType = in -> {
 		return maxBit;
 	};
 
 	final BoolType maxBool = new BoolType(true);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<BoolType, BoolType> maxBoolType = in -> {
 		return maxBool;
 	};
 
 	final NativeBoolType maxNativeBool = new NativeBoolType(true);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<NativeBoolType, NativeBoolType> maxNativeBoolType =
 		in -> {
 			return maxNativeBool;
@@ -62,7 +68,9 @@ public class MaxValueRealTypes {
 
 	final ByteType maxByte = new ByteType(Byte.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<ByteType, ByteType> maxByteType = in -> {
 		return maxByte;
 	};
@@ -70,7 +78,9 @@ public class MaxValueRealTypes {
 	final UnsignedByteType maxUnsignedByte = new UnsignedByteType(
 		-Byte.MIN_VALUE + Byte.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<UnsignedByteType, UnsignedByteType> maxUnsignedByteType =
 		in -> {
 			return maxUnsignedByte;
@@ -78,14 +88,18 @@ public class MaxValueRealTypes {
 
 	final IntType maxInt = new IntType(Integer.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<IntType, IntType> maxIntType = in -> {
 		return maxInt;
 	};
 
 	final UnsignedIntType maxUnsignedInt = new UnsignedIntType(0xffffffffL);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<UnsignedIntType, UnsignedIntType> maxUnsignedIntType =
 		in -> {
 			return maxUnsignedInt;
@@ -93,7 +107,9 @@ public class MaxValueRealTypes {
 
 	final LongType maxLong = new LongType(Long.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<LongType, LongType> maxLongType = in -> {
 		return maxLong;
 	};
@@ -101,7 +117,9 @@ public class MaxValueRealTypes {
 	final UnsignedLongType maxUnsignedLong = new UnsignedLongType(
 		new UnsignedLongType().getMaxBigIntegerValue());
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<UnsignedLongType, UnsignedLongType> maxUnsignedLongType =
 		in -> {
 			return maxUnsignedLong;
@@ -109,7 +127,9 @@ public class MaxValueRealTypes {
 
 	final ShortType maxShort = new ShortType(Short.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<ShortType, ShortType> maxShortType = in -> {
 		return maxShort;
 	};
@@ -117,7 +137,9 @@ public class MaxValueRealTypes {
 	final UnsignedShortType maxUnsignedShort = new UnsignedShortType(
 		-Short.MIN_VALUE + Short.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<UnsignedShortType, UnsignedShortType> maxUnsignedShortType =
 		in -> {
 			return maxUnsignedShort;
@@ -125,21 +147,27 @@ public class MaxValueRealTypes {
 
 	final FloatType maxFloat = new FloatType(Float.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<FloatType, FloatType> maxFloatType = in -> {
 		return maxFloat;
 	};
 
 	final DoubleType maxDouble = new DoubleType(Double.MAX_VALUE);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<DoubleType, DoubleType> maxDoubleType = in -> {
 		return maxDouble;
 	};
 
 	final Unsigned2BitType max2Bit = new Unsigned2BitType(3);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<Unsigned2BitType, Unsigned2BitType> max2BitType =
 		in -> {
 			return max2Bit;
@@ -147,7 +175,9 @@ public class MaxValueRealTypes {
 
 	final Unsigned4BitType max4Bit = new Unsigned4BitType(15);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<Unsigned4BitType, Unsigned4BitType> max4BitType =
 		in -> {
 			return max4Bit;
@@ -155,7 +185,9 @@ public class MaxValueRealTypes {
 
 	final Unsigned12BitType max12Bit = new Unsigned12BitType(4095);
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<Unsigned12BitType, Unsigned12BitType> max12BitType =
 		in -> {
 			return max12Bit;
@@ -164,7 +196,9 @@ public class MaxValueRealTypes {
 	final Unsigned128BitType max128Bit = new Unsigned128BitType(
 		new Unsigned128BitType().getMaxBigIntegerValue());
 
-	@OpField(names = "types.maxValue")
+	/**
+	 * @implNote op names='types.maxValue'
+	 */
 	public final Function<Unsigned128BitType, Unsigned128BitType> max128BitType =
 		in -> {
 			return max128Bit;
@@ -181,8 +215,8 @@ public class MaxValueRealTypes {
 	 * more efficient as a 64 bit type and bit lengths greater than 64 are
 	 * unsupported). TODO: Is there some way we could cache the values? Is that
 	 * worth it??
+	 * @implNote op names='types.maxValue'
 	 */
-	@OpField(names = "types.maxValue")
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> maxVarLengthType =
 		in -> {
 			int nBits = in.getBitsPerPixel();

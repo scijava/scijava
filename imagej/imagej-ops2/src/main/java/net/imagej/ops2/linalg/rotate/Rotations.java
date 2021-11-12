@@ -50,23 +50,43 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = OpCollection.class)
 public class Rotations {
 
-	@OpField(names = "linalg.rotate", params = "inVector, quaternion, vDot")
+	/**
+	 * @input inVector
+	 * @input quaternion
+	 * @container vDot
+	 * @implNote op names='linalg.rotate'
+	 */
 	public final Computers.Arity2<Vector3d, Quaterniondc, Vector3d> rotate3d = (v, q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
 
-	@OpField(names = "linalg.rotate", params = "inVector, axisAngle, vDot")
+	/**
+	 * @input inVector
+	 * @input axisAngle
+	 * @container vDot
+	 * @implNote op names='linalg.rotate'
+	 */
 	public final Computers.Arity2<Vector3d, AxisAngle4d, Vector3d> rotate3dAxisAngle = (v, aa, vDot) -> rotate3d.compute(v,
 			new Quaterniond(aa), vDot);
 
-	@OpField(names = "linalg.rotate", params = "inVector, quaternion, vDot")
+	/**
+	 * @input inVector
+	 * @input quaternion
+	 * @container vDot
+	 * @implNote op names='linalg.rotate'
+	 */
 	public final Computers.Arity2<Vector3f, Quaternionfc, Vector3f> rotate3f = (v, q, vDot) -> {
 		vDot.set(v);
 		vDot.rotate(q);
 	};
-	
-	@OpField(names = "linalg.rotate", params = "inVector, axisAngle, vDot")
+
+	/**
+	 * @input inVector
+	 * @input axisAngle
+	 * @container vDot
+	 * @implNote op names='linalg.rotate'
+	 */
 	public final Computers.Arity2<Vector3f, AxisAngle4f, Vector3f> rotate3fAxisAngle = (v, aa, vDot) -> rotate3f.compute(v,
 			new Quaternionf(aa), vDot);
 

@@ -40,21 +40,27 @@ public class MinValueRealTypes {
 
 	final BitType minBit = new BitType(false);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<BitType, BitType> minBitType = in -> {
 		return minBit;
 	};
 
 	final BoolType minBool = new BoolType(false);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<BoolType, BoolType> minBoolType = in -> {
 		return minBool;
 	};
 
 	final NativeBoolType minNativeBool = new NativeBoolType(false);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<NativeBoolType, NativeBoolType> minNativeBoolType =
 		in -> {
 			return minNativeBool;
@@ -62,14 +68,18 @@ public class MinValueRealTypes {
 
 	final ByteType minByte = new ByteType(Byte.MIN_VALUE);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<ByteType, ByteType> minByteType = in -> {
 		return minByte;
 	};
 
 	final UnsignedByteType minUnsignedByte = new UnsignedByteType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<UnsignedByteType, UnsignedByteType> minUnsignedByteType =
 		in -> {
 			return minUnsignedByte;
@@ -77,14 +87,18 @@ public class MinValueRealTypes {
 
 	final IntType minInt = new IntType(Integer.MIN_VALUE);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<IntType, IntType> minIntType = in -> {
 		return minInt;
 	};
 
 	final UnsignedIntType minUnsignedInt = new UnsignedIntType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<UnsignedIntType, UnsignedIntType> minUnsignedIntType =
 		in -> {
 			return minUnsignedInt;
@@ -92,14 +106,18 @@ public class MinValueRealTypes {
 
 	final LongType minLong = new LongType(Long.MIN_VALUE);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<LongType, LongType> minLongType = in -> {
 		return minLong;
 	};
 
 	final UnsignedLongType minUnsignedLong = new UnsignedLongType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<UnsignedLongType, UnsignedLongType> minUnsignedLongType =
 		in -> {
 			return minUnsignedLong;
@@ -107,14 +125,18 @@ public class MinValueRealTypes {
 
 	final ShortType minShort = new ShortType(Short.MIN_VALUE);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<ShortType, ShortType> minShortType = in -> {
 		return minShort;
 	};
 
 	final UnsignedShortType minUnsignedShort = new UnsignedShortType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<UnsignedShortType, UnsignedShortType> minUnsignedShortType =
 		in -> {
 			return minUnsignedShort;
@@ -122,21 +144,27 @@ public class MinValueRealTypes {
 
 	final FloatType minFloat = new FloatType(Float.MIN_VALUE);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<FloatType, FloatType> minFloatType = in -> {
 		return minFloat;
 	};
 
 	final DoubleType minDouble = new DoubleType(Double.MIN_VALUE);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<DoubleType, DoubleType> minDoubleType = in -> {
 		return minDouble;
 	};
 
 	final Unsigned2BitType min2Bit = new Unsigned2BitType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<Unsigned2BitType, Unsigned2BitType> min2BitType =
 		in -> {
 			return min2Bit;
@@ -144,7 +172,9 @@ public class MinValueRealTypes {
 
 	final Unsigned4BitType min4Bit = new Unsigned4BitType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<Unsigned4BitType, Unsigned4BitType> min4BitType =
 		in -> {
 			return min4Bit;
@@ -152,7 +182,9 @@ public class MinValueRealTypes {
 
 	final Unsigned12BitType min12Bit = new Unsigned12BitType(0);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<Unsigned12BitType, Unsigned12BitType> min12BitType =
 		in -> {
 			return min12Bit;
@@ -160,7 +192,9 @@ public class MinValueRealTypes {
 
 	final Unsigned128BitType min128Bit = new Unsigned128BitType(BigInteger.ZERO);
 
-	@OpField(names = "types.minValue")
+	/**
+	 * @implNote op names='types.minValue'
+	 */
 	public final Function<Unsigned128BitType, Unsigned128BitType> min128BitType =
 		in -> {
 			return min128Bit;
@@ -172,8 +206,8 @@ public class MinValueRealTypes {
 	 * Due to the variable length of this type, we cannot simply return some final
 	 * value. The best we can do is quickly compute the answer. TODO: Is there
 	 * some way we could cache the values? Is that worth it??
+	 * @implNote op names='types.minValue'
 	 */
-	@OpField(names = "types.minValue")
 	public final Function<UnsignedVariableBitLengthType, UnsignedVariableBitLengthType> minVarLengthType =
 		in -> {
 			int nBits = in.getBitsPerPixel();

@@ -72,8 +72,12 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @author Christian Dietz (University of Konstanz)
 	 * @param <T>
 	 *            type of input and output
+	 * @input input
+	 * @input executorService
+	 * @input sigmas
+	 * @container output
+	 * @implNote op names='filter.gauss', priority='-100.'
 	 */
-	@OpField(names = "filter.gauss", priority = Priority.LOW, params = "input, executorService, sigmas, output")
 	public final Computers.Arity3<RandomAccessible<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRA = (input,
 			es, sigmas, output) -> {
 		try {
@@ -91,9 +95,14 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @author Stephan Saalfeld
 	 * @param <T>
 	 *            type of input and output
+	 * @input input
+	 * @input executorService
+	 * @input sigmas
+	 * @input outOfBoundsFactory
+	 * @container output
+	 * @implNote op names='filter.gauss'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@OpField(names = "filter.gauss", params = "input, executorService, sigmas, outOfBoundsFactory, output")
 	public final Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> defaultGaussRAI = (input,
 					es, sigmas, outOfBounds, output) -> {
@@ -119,9 +128,13 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 *
 	 * @param <T>
 	 *            type of input
+	 * @input input
+	 * @input executorService
+	 * @input sigmas
+	 * @container output
+	 * @implNote op names='filter.gauss'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@OpField(names = "filter.gauss", params = "input, executorService, sigmas, output")
 	public final Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, double[], RandomAccessibleInterval<T>> defaultGaussRAISimple = (
 			input, es, sigmas, output) -> defaultGaussRAI.compute(input, es, sigmas,
 					new OutOfBoundsMirrorFactory<>(Boundary.SINGLE), output);
@@ -134,8 +147,13 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @author Stephan Saalfeld
 	 * @param <T>
 	 *            type of input
+	 * @input input
+	 * @input executorService
+	 * @input sigma
+	 * @input outOfBoundsFactory
+	 * @container output
+	 * @implNote op names='filter.gauss'
 	 */
-	@OpField(names = "filter.gauss", params = "input, executorService, sigma, outOfBoundsFactory, output")
 	public final Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> //
 	gaussRAISingleSigma = (input, es, sigma, outOfBounds, output) -> { //
@@ -152,8 +170,12 @@ public class Gaussians<T extends NumericType<T> & NativeType<T>> {
 	 * @author Gabriel Selzer
 	 * @param <T>
 	 *            type of input
+	 * @input input
+	 * @input executorService
+	 * @input sigma
+	 * @container output
+	 * @implNote op names='filter.gauss'
 	 */
-	@OpField(names = "filter.gauss", params = "input, executorService, sigma, output")
 	public final Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, RandomAccessibleInterval<T>> gaussRAISingleSigmaSimple = (
 			input, es, sigma, output) -> gaussRAISingleSigma.compute(input, es, sigma,
 					new OutOfBoundsMirrorFactory<>(Boundary.SINGLE), output);

@@ -20,7 +20,13 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = OpCollection.class)
 public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 
-	@OpField(names = "image.invert", params = "input, min, max, invertedOutput")
+	/**
+	 * @input input
+	 * @input min
+	 * @input max
+	 * @container invertedOutput
+	 * @implNote op names='image.invert'
+	 */
 	public final Computers.Arity3<RandomAccessibleInterval<T>, T, T, RandomAccessibleInterval<T>> delegatorInvert = (input, min, max,
 			output) -> {
 
@@ -50,7 +56,11 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 		}
 	};
 
-	@OpField(names = "image.invert", params = "input, invertedOutput")
+	/**
+	 * @input input
+	 * @container invertedOutput
+	 * @implNote op names='image.invert'
+	 */
 	public final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> simpleInvert =
 		(input, output) -> {
 			T type = Util.getTypeFromInterval(input);

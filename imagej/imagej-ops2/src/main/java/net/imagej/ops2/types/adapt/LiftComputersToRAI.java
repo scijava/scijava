@@ -28,7 +28,9 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = OpCollection.class)
 public class LiftComputersToRAI<I1, I2, I3, I4, I5, I6, O> {
 
-	@OpField(names = "adapt", priority = Priority.HIGH)
+	/**
+	 * @implNote op names='adapt', priority='100.'
+	 */
 	public final Function<Computers.Arity1<I1, O>, Computers.Arity1<RandomAccessibleInterval<I1>, RandomAccessibleInterval<O>>> lift1 =
 		(computer) -> {
 			return (raiInput, raiOutput) -> {
@@ -37,7 +39,9 @@ public class LiftComputersToRAI<I1, I2, I3, I4, I5, I6, O> {
 			};
 		};
 
-	@OpField(names = "adapt", priority = Priority.HIGH)
+	/**
+	 * @implNote op names='adapt', priority='100.'
+	 */
 	public final Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<O>>> lift2 =
 		(computer) -> {
 			return (raiInput1, raiInput2, raiOutput) -> {
@@ -46,7 +50,9 @@ public class LiftComputersToRAI<I1, I2, I3, I4, I5, I6, O> {
 			};
 		};
 
-	@OpField(names = "adapt", priority = Priority.HIGH)
+	/**
+	 * @implNote op names='adapt', priority='100.'
+	 */
 	public final Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<O>>> lift3 =
 		(computer) -> {
 			return (raiInput1, raiInput2, raiInput3, raiOutput) -> {
@@ -56,7 +62,9 @@ public class LiftComputersToRAI<I1, I2, I3, I4, I5, I6, O> {
 			};
 		};
 
-	@OpField(names = "adapt", priority = Priority.HIGH)
+	/**
+	 * @implNote op names='adapt', priority='100.'
+	 */
 	public final Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<O>>> lift4 =
 		(computer) -> {
 			return (raiInput1, raiInput2, raiInput3, raiInput4, raiOutput) -> {
@@ -66,7 +74,9 @@ public class LiftComputersToRAI<I1, I2, I3, I4, I5, I6, O> {
 			};
 		};
 
-	@OpField(names = "adapt", priority = Priority.HIGH)
+	/**
+	 * @implNote op names='adapt', priority='100.'
+	 */
 	public final Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<I5>, RandomAccessibleInterval<O>>> lift5 =
 		(computer) -> {
 			return (raiInput1, raiInput2, raiInput3, raiInput4, raiInput5,

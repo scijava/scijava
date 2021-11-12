@@ -30,45 +30,69 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = OpCollection.class)
 public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	@SuppressWarnings("unchecked")
-	@OpField(names = "morphology.BlackTopHat", params = "source, strels, numThreads, result")
 	public final Functions.Arity3<Img<R>, List<? extends Shape>, Integer, Img<R>> BlackTopHatImgList = (in1, in2, in3) -> BlackTopHat.blackTopHat(in1, (List<Shape>) in2, in3);
 
-	@OpField(names = "morphology.BlackTopHat", params = "source, strel, numThreads, result")
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	public final Functions.Arity3<Img<R>, Shape, Integer, Img<R>> BlackTopHatImgSingle = BlackTopHat::blackTopHat;
 
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	@SuppressWarnings("unchecked")
-	@OpField(names = "morphology.BlackTopHat", params = "source, strels, minValue, maxValue, numThreads, result")
 	public final Functions.Arity5<Img<T>, List<? extends Shape>, T, T, Integer, Img<T>> BlackTopHatImgListMinMax = (in1, in2, in3, in4, in5) -> BlackTopHat.blackTopHat(in1, (List<Shape>) in2, in3, in4, in5);
 
-	@OpField(names = "morphology.BlackTopHat", params = "source, strel, minValue, maxValue, numThreads, result")
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	public final Functions.Arity5<Img<T>, Shape, T, T, Integer, Img<T>> BlackTopHatImgSingleMinMax = BlackTopHat::blackTopHat;
 
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	@SuppressWarnings("unchecked")
-	@OpField(names = "morphology.BlackTopHat", params = "source, strels, numThreads, target")
 	public final Computers.Arity3<RandomAccessible<R>, List<? extends Shape>, Integer, IterableInterval<R>> BlackTopHatImgListComputer = (in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, (List<Shape>) in2, in3);
 
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	@SuppressWarnings("unchecked")
-	@OpField(names = "morphology.BlackTopHat", params = "source, strels, minVal, maxVal, numThreads, target")
 	public final Computers.Arity5<RandomAccessible<T>, List<? extends Shape>, T, T, Integer, IterableInterval<T>> BlackTopHatImgListMinMaxComputer = (in1, in2, in3, in4, in5, out) -> BlackTopHat.blackTopHat(in1, out, (List<Shape>) in2, in3, in4, in5);
 
-	@OpField(names = "morphology.BlackTopHat", params = "source, strel, numThreads, target")
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	public final Computers.Arity3<RandomAccessible<R>, Shape, Integer, IterableInterval<R>> BlackTopHatImgComputer = (in1, in2, in3, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3);
 
-	@OpField(names = "morphology.BlackTopHat", params = "source, strel, minVal, maxVal, numThreads, target")
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	public final Computers.Arity5<RandomAccessible<T>, Shape, T, T, Integer, IterableInterval<T>> BlackTopHatImgMinMaxComputer = (in1, in2, in3, in4, in5, out) -> BlackTopHat.blackTopHat(in1, out, in2, in3, in4, in5);
 
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	@SuppressWarnings("unchecked")
-	@OpField(names = "morphology.BlackTopHat", params = "source, interval, strels, numThreads")
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, List<? extends Shape>, Integer> BlackTopHatImgListInPlace = (io, in2, in3, in4) -> BlackTopHat.blackTopHatInPlace(io, in2, (List<Shape>) in3, in4);
 
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	@SuppressWarnings("unchecked")
-	@OpField(names = "morphology.BlackTopHat", params = "source, interval, strels, minVal, maxVal, numThreads")
 	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, List<? extends Shape>, T, T, Integer> BlackTopHatImgListMinMaxInplace = (io, in2, in3, in4, in5, in6) -> BlackTopHat.blackTopHatInPlace(io, in2, (List<Shape>) in3, in4, in5, in6);
 
-	@OpField(names = "morphology.BlackTopHat", params = "source, interval, strel, numThreads")
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	public final Inplaces.Arity4_1<RandomAccessibleInterval<R>, Interval, Shape, Integer> BlackTopHatImgSingleInPlace = BlackTopHat::blackTopHatInPlace;
 
-	@OpField(names = "morphology.BlackTopHat", params = "source, interval, strel, minVal, maxVal, numThreads")
+	/**
+	 * @implNote op names='morphology.BlackTopHat'
+	 */
 	public final Inplaces.Arity6_1<RandomAccessibleInterval<T>, Interval, Shape, T, T, Integer> BlackTopHatImgSingleMinMaxInplace = BlackTopHat::blackTopHatInPlace;
 }

@@ -51,8 +51,11 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	/**
 	 * Sets the real component of an output real number to the addition of the
 	 * real components of two input real numbers.
+	 * @input input1
+	 * @input input2
+	 * @container sum
+	 * @implNote op names='math.add', priority='100.'
 	 */
-	@OpField(names = "math.add", priority = Priority.HIGH, params = "input1, input2, sum")
 	public final Computers.Arity2<T, T, T> adder = (input1, input2, output) -> {
 		output.set(input1);
 		output.add(input2);
@@ -61,8 +64,12 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	/**
 	 * Sets the real component of an output real number to the division of the
 	 * real component of two input real numbers.
+	 * @input input1
+	 * @input input2
+	 * @input divideByZeroValue
+	 * @container result
+	 * @implNote op names='math.divide', priority='100.'
 	 */
-	@OpField(names = "math.divide", priority = Priority.HIGH, params = "input1, input2, divideByZeroValue, result")
 	public final Computers.Arity3<T, T, T, T> divider = (input1, input2, dbzVal, output) -> { 
 		try {
 			output.set(input1);
@@ -75,8 +82,11 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	/**
 	 * Sets the real component of an output real number to the multiplication of
 	 * the real component of two input real numbers.
+	 * @input input1
+	 * @input input2
+	 * @container result
+	 * @implNote op names='math.multiply', priority='100.'
 	 */
-	@OpField(names = "math.multiply", priority = Priority.HIGH, params = "input1, input2, result")
 	public final Computers.Arity2<T, T, T> multiplier = (input1, input2, output) -> {
 		output.set(input1);
 		output.mul(input2);
@@ -85,8 +95,11 @@ public class BinaryNumericTypeMath <T extends NumericType<T>> {
 	/*
 	 * Sets the real component of an output real number to the subtraction between
 	 * the real component of two input real numbers.
+	 * @input input1
+	 * @input input2
+	 * @container result
+	 * @implNote op names='math.subtract', priority='100.'
 	 */
-	@OpField(names = "math.subtract", priority = Priority.HIGH, params = "input1, input2, result")
 	public final Computers.Arity2<T, T, T> subtracter = (input1, input2, output) -> {
 		output.set(input1);
 		output.sub(input2);

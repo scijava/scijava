@@ -142,6 +142,7 @@ module net.imagej.ops2 {
 	provides org.scijava.types.TypeExtractor with
 			net.imagej.ops2.types.ImgFactoryTypeExtractor,
 			net.imagej.ops2.types.ImgLabelingTypeExtractor,
+			net.imagej.ops2.types.NativeImgTypeExtractor,
 			net.imagej.ops2.types.LabelingMappingTypeExtractor,
 			net.imagej.ops2.types.OutOfBoundsConstantValueFactoryTypeExtractor,
 			net.imagej.ops2.types.OutOfBoundsFactoryTypeExtractor,

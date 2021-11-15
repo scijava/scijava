@@ -282,11 +282,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-testutil</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>

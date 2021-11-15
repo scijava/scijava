@@ -33,10 +33,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import org.scijava.Priority;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of a {@link ChunkerOp} that interleaves the chunks. In a

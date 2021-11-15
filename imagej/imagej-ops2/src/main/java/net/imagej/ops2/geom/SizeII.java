@@ -34,10 +34,6 @@ import java.util.function.Function;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Size}.
  * 

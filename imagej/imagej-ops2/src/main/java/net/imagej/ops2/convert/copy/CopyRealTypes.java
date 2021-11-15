@@ -32,8 +32,6 @@ package net.imagej.ops2.convert.copy;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copies the value of one {@link RealType} into another using {@code double}

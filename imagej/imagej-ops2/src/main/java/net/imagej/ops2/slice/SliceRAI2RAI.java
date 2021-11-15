@@ -32,10 +32,7 @@ package net.imagej.ops2.slice;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link SliceOp} implementation for {@link RandomAccessibleInterval} input and

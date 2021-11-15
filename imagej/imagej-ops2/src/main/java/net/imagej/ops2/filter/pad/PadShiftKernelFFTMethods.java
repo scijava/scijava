@@ -35,12 +35,9 @@ import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.Priority;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op used to pad a kernel to a size that is compatible with FFTMethods and

@@ -34,8 +34,6 @@ import java.util.Comparator;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Applies a threshold value (the second input) to the given object using the

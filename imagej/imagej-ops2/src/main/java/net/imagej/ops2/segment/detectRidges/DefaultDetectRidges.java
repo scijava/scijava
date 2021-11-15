@@ -48,9 +48,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Performs the Ridge Detection algorithm on a 2-Dimensional, gray-scale image.

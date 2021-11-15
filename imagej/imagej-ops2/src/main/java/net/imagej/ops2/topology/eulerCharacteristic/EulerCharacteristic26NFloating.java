@@ -33,8 +33,6 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An Op which calculates the euler characteristic (χ) of the given binary image. The object in the image

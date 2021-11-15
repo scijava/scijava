@@ -34,9 +34,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Implementation of Variance Haralick Feature based on
  * http://murphylab.web.cmu.edu/publications/boland/boland_node26.html

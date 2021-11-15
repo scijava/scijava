@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpCandidate.StatusCode;
 
 /**
  * Class representing the result from type matching done by a

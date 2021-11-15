@@ -25,19 +25,15 @@ import net.imglib2.view.SubsampleIntervalView;
 import net.imglib2.view.SubsampleView;
 import net.imglib2.view.TransformView;
 import net.imglib2.view.Views;
-import net.imglib2.view.composite.Composite;
 import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.GenericComposite;
 import net.imglib2.view.composite.NumericComposite;
 import net.imglib2.view.composite.RealComposite;
 
-import org.scijava.Priority;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link OpCollection} containing all of the transform {@link Op}s.
@@ -61,7 +57,6 @@ import org.scijava.plugin.Plugin;
  * @param <E>
  *            - a {@link TypeVariable} extending {@link EuclideanSpace}
  */
-@Plugin(type = OpCollection.class)
 public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y extends Type<Y>, F extends RandomAccessibleInterval<T>, E extends EuclideanSpace> {
 
 	/**

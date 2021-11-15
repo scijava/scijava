@@ -38,10 +38,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 
 public class FunctionToComputerAdaptTestOps implements OpCollection {
 

@@ -29,6 +29,9 @@
 
 package net.imagej.ops2.stats;
 
+import static java.util.Collections.shuffle;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +42,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-
-import static java.util.Collections.shuffle;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for {@link DefaultMedian}

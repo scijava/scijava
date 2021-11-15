@@ -37,9 +37,6 @@ import org.joml.Quaternionfc;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Rotates the vector by the quaternion.
@@ -47,7 +44,6 @@ import org.scijava.plugin.Plugin;
  * @author Richard Domander (Royal Veterinary College, London)
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
 public class Rotations {
 
 	/**

@@ -32,10 +32,6 @@ package net.imagej.ops2.geom.geom3d;
 import net.imagej.mesh.Mesh;
 import net.imagej.ops2.geom.AbstractConvexity;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.convexity', label='Geometric (3D): Convexity', priority='10000.'

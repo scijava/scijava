@@ -33,10 +33,6 @@ import net.imagej.ops2.threshold.AbstractComputeThresholdHistogram;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Implements Rosin's threshold method. From : Rosin, Paul L. "Unimodal
  * thresholding." Pattern recognition 34.11 (2001): 2083-2096.

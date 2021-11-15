@@ -41,9 +41,9 @@ import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * Collection of adaptation Ops to convert {@link Computers} into

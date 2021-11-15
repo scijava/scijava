@@ -33,8 +33,6 @@ import net.imglib2.Dimensions;
 import net.imglib2.algorithm.fft2.FFTMethods;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op that calculates FFT sizes.

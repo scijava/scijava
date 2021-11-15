@@ -39,8 +39,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Set;
 
-import org.scijava.types.Types;
-
 /**
  * A "typed null" which knows its generic type, and can generate proxy objects
  * implementing that type's interfaces, with customizable behavior per interface

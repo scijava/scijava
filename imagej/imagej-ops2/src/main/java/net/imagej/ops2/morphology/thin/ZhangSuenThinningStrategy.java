@@ -33,7 +33,6 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.type.logic.BitType;
 
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of the thinning algorithm proposed by T. Y. Zhang and C. Y.

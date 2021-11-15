@@ -29,11 +29,9 @@
 
 package org.scijava.log2;
 
-import org.junit.Test;
-
-import java.util.function.Supplier;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Tests {@link CallingClassUtils}.

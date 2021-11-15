@@ -38,9 +38,6 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * This algorithm calculates Kendall's Tau-b rank correlation coefficient
  * <p>

@@ -24,10 +24,6 @@ import net.imglib2.type.numeric.integer.UnsignedVariableBitLengthType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
-
 /**
  * This collection of Ops can be used to obtain the maximum value of any
  * {@link RealType}. This method of determining the maximum value of a
@@ -35,7 +31,6 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
 public class MaxValueRealTypes {
 
 	final BitType maxBit = new BitType(true);

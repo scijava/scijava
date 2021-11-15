@@ -70,9 +70,7 @@ import java.util.zip.ZipEntry;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
 import org.scijava.util.FileUtils;
-import org.scijava.types.Types;
 
 /**
  * Tests {@link Types}.

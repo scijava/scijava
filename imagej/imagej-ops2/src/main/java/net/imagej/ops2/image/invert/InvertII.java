@@ -42,7 +42,6 @@
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;
-//import org.scijava.plugin.Plugin;
 //
 ///**
 // * @author Martin Horn (University of Konstanz)

@@ -38,9 +38,7 @@ import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Maximum Feret of a polygon.

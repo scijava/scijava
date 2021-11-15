@@ -52,16 +52,12 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Converters for converting between Complex types
  *
  * @author Alison Walter
  */
-@Plugin(type = OpCollection.class)
 public final class ConvertTypes<C extends ComplexType<C>, T extends IntegerType<T>> {
 
 	/**

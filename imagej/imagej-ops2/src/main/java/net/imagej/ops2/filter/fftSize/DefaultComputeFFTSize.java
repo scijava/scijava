@@ -33,9 +33,6 @@ import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Op that calculates FFT fast sizes according to the following logic.
  * 

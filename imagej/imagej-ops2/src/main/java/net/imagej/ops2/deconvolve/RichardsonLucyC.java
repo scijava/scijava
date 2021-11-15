@@ -42,12 +42,9 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Richardson Lucy algorithm for (@link RandomAccessibleInterval) (Lucy, L. B.

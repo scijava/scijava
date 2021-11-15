@@ -59,9 +59,7 @@ import net.imglib2.view.composite.GenericComposite;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Calculates a histogram of oriented gradients which is a feature descriptor.

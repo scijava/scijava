@@ -33,10 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
 import net.imglib2.RandomAccess;
@@ -44,6 +40,10 @@ import net.imglib2.img.Img;
 import net.imglib2.roi.geom.real.DefaultWritablePolyline;
 import net.imglib2.roi.util.RealLocalizableRealPositionable;
 import net.imglib2.type.numeric.real.FloatType;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 /**
  * Tests for {@link DefaultDetectRidges}

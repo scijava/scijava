@@ -36,8 +36,6 @@ import java.lang.reflect.Type;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.util.Util;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 

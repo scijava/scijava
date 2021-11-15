@@ -33,9 +33,6 @@ import net.imglib2.type.Type;
 import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Nullary Ops of the {@code math} namespace which operate on
@@ -43,7 +40,6 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Leon Yang
  */
-@Plugin(type = OpCollection.class)
 public class NullaryNumericTypeMath <T extends Type<T>, N extends NumericType<N>>{
 
 	/**

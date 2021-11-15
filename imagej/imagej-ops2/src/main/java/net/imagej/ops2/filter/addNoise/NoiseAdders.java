@@ -31,15 +31,11 @@ package net.imagej.ops2.filter.addNoise;
 
 import java.util.Random;
 
-import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Contains Ops designed to add noise to populated images.
@@ -51,7 +47,6 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  *            type of output
  */
-@Plugin(type = OpCollection.class)
 public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 
 	/**

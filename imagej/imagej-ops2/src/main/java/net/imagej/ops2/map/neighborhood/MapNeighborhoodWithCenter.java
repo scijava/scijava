@@ -38,11 +38,8 @@ import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on

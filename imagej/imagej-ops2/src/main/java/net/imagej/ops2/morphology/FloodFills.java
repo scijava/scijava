@@ -12,13 +12,8 @@ import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.type.Type;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
 public class FloodFills<T extends Type<T>, U extends Type<U>> {
 
 	/**

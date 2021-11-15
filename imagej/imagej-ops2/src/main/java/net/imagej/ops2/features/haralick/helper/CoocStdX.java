@@ -32,9 +32,7 @@ import java.util.function.Function;
 
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * NB: Helper class. Internal usage only.

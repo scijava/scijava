@@ -32,11 +32,7 @@ package net.imagej.ops2.math;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Binary Ops of the {@code math} namespace which operate on {@link RealType}s.
@@ -45,7 +41,6 @@ import org.scijava.plugin.Plugin;
  *
  * @author Leon Yang
  */
-@Plugin(type = OpCollection.class)
 public class BinaryNumericTypeMath <T extends NumericType<T>> {
 
 	/**

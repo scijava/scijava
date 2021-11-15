@@ -37,7 +37,6 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.IterableRegion;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * This {@link Op} computes the centroid of a {@link IterableRegion} (Label).

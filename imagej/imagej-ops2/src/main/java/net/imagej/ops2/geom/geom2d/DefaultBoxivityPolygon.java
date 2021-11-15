@@ -32,10 +32,6 @@ package net.imagej.ops2.geom.geom2d;
 import net.imagej.ops2.geom.AbstractBoxivity;
 import net.imglib2.roi.geom.real.Polygon2D;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.boxivity', label='Geometric (2D): Rectangularity', priority='10000.'

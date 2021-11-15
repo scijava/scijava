@@ -50,9 +50,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.Cancelable;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * The Tubeness filter: enhance filamentous structures of a specified thickness.

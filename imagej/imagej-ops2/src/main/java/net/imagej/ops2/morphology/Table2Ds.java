@@ -21,9 +21,6 @@ import net.imglib2.img.Img;
 import net.imglib2.type.BooleanType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Wraps all of <a href=
@@ -35,7 +32,6 @@ import org.scijava.plugin.Plugin;
  * @param <B>
  *            - any Type extending {@link BooleanType}
  */
-@Plugin(type = OpCollection.class)
 public class Table2Ds<B extends BooleanType<B>> {
 
 	/**

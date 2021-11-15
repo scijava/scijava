@@ -51,8 +51,6 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 /**
@@ -61,7 +59,6 @@ import org.scijava.types.Nil;
  * @author Christian Dietz (University of Konstanz)
  * @author Brian Northan
  */
-@Plugin(type = OpCollection.class)
 public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends AbstractOpTest {
 
 	private Img<ByteType> in;

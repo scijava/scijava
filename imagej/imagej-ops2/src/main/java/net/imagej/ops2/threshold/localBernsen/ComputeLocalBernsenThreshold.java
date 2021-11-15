@@ -37,9 +37,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Local threshold method which is similar to

@@ -9,7 +9,6 @@ import java.util.function.Function;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.util.Adapt;
 
 /**
  * Confirms the capabilities of the lambdaizer to convert methods into their

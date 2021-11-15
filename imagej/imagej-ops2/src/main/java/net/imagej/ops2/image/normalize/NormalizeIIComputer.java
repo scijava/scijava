@@ -31,7 +31,6 @@ package net.imagej.ops2.image.normalize;
 
 import java.util.function.Function;
 
-import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
@@ -39,9 +38,7 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to

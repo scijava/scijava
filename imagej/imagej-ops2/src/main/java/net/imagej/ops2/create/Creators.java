@@ -39,14 +39,9 @@ import net.imglib2.view.Views;
 
 import org.joml.Vector3d;
 import org.joml.Vector3f;
-import org.scijava.Priority;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
 public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T extends Type<T>, C extends ComplexType<C>, W extends ComplexType<W> & NativeType<W>, B extends BooleanType<B>> {
 
 	/* ImgFactories */

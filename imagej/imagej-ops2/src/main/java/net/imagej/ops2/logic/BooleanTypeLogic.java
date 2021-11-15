@@ -32,16 +32,12 @@ package net.imagej.ops2.logic;
 import net.imglib2.type.BooleanType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Logic operations with {@link BooleanType} as output.
  * 
  * @author Leon Yang
  */
-@Plugin(type = OpCollection.class)
 public class BooleanTypeLogic<B extends BooleanType<B>, C extends Comparable<C>> {
 
 	/**

@@ -1,5 +1,8 @@
 package org.scijava.ops.engine;
 
+import java.util.List;
+import java.util.ServiceLoader;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.discovery.Discoverer;
@@ -12,9 +15,6 @@ import org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator;
 import org.scijava.ops.engine.impl.OpCollectionInfoGenerator;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
-
-import java.util.List;
-import java.util.ServiceLoader;
 
 public class ServiceLoaderDiscoveryIntegrationTest {
 

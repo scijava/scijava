@@ -40,7 +40,6 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.mean} from an integral image using a

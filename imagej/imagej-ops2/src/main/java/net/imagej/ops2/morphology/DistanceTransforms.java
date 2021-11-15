@@ -11,11 +11,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.util.ExceptionUtils;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
 public class DistanceTransforms<T extends RealType<T>, U extends RealType<U>> {
 
 	/**

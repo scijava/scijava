@@ -36,8 +36,6 @@ import java.lang.reflect.Type;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImg;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 

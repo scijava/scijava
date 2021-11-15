@@ -37,14 +37,11 @@ import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.BooleanType;
 
-import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
-import org.scijava.convert.Converter;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 /**

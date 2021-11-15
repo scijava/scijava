@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;

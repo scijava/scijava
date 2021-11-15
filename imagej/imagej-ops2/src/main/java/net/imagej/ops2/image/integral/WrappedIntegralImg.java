@@ -37,10 +37,6 @@ import net.imglib2.converter.RealDoubleConverter;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Wrapper op for the creation of integral images with
  * {@code net.imglib2.algorithm.integral.IntegralImg}.

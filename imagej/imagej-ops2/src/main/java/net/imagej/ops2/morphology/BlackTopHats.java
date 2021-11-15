@@ -14,9 +14,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Wrapper Ops for imglib2-algorithm's Black Top Hats algorithms TODO: Revert to
@@ -27,7 +24,6 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <R>
  */
-@Plugin(type = OpCollection.class)
 public class BlackTopHats<T extends RealType<T> & Comparable<T>, R extends RealType<R>> {
 
 	/**

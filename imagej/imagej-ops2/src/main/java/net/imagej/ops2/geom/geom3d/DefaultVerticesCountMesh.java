@@ -32,10 +32,7 @@ package net.imagej.ops2.geom.geom3d;
 import net.imagej.mesh.Mesh;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@code geom.boundaryPixelCount}.

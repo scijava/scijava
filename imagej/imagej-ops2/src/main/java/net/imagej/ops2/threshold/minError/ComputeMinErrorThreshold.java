@@ -35,10 +35,7 @@ import net.imagej.ops2.threshold.mean.ComputeMeanThreshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.ops.engine.OpExecutionException;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 // NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
 // plugin found in Fiji (version 1.14).

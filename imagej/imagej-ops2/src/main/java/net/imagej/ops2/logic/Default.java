@@ -33,8 +33,6 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.Type;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An Op that sets the output to the <code>defaultVal</code> iff the input is

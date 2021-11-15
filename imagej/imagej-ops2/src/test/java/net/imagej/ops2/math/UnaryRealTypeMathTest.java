@@ -42,7 +42,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**

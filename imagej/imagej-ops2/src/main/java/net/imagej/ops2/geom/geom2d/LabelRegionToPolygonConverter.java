@@ -37,14 +37,11 @@ import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.type.logic.BoolType;
 
-import org.scijava.Priority;
 import org.scijava.convert.AbstractConverter;
 import org.scijava.convert.ConversionRequest;
-import org.scijava.convert.Converter;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 /**
@@ -54,7 +51,6 @@ import org.scijava.types.Nil;
  * @implNote converter priority='10000.'
  */
 @SuppressWarnings("rawtypes")
-@Plugin(type = Converter.class, priority = Priority.VERY_HIGH)
 public class LabelRegionToPolygonConverter extends
 	AbstractConverter<LabelRegion, Polygon2D>
 {

@@ -37,9 +37,7 @@ import net.imglib2.IterableInterval;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.util.Maps;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copies an {@link IterableInterval} into another {@link IterableInterval}

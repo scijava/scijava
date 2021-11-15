@@ -1,6 +1,8 @@
 
 package org.scijava.persist;
 
+import java.util.List;
+
 import org.scijava.Context;
 import org.scijava.Priority;
 import org.scijava.plugin.AbstractPTService;
@@ -8,8 +10,6 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
 import org.scijava.service.Service;
-
-import java.util.List;
 
 /**
  * Scijava service which provides the different Scijava Adapters available in

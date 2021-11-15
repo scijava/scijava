@@ -37,8 +37,6 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op that calculates FFT sizes.

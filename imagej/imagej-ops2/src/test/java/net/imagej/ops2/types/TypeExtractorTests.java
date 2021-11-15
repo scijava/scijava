@@ -13,9 +13,6 @@ import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 
 /**
@@ -24,7 +21,6 @@ import org.scijava.types.TypeExtractor;
  * @author Gabriel Selzer
  *
  */
-@Plugin(type = OpCollection.class)
 public class TypeExtractorTests extends AbstractOpTest {
 
 	/**

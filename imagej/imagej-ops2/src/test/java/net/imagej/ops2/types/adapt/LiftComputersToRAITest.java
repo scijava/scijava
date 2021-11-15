@@ -11,12 +11,8 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
 public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>> extends AbstractOpTest {
 
 	/**

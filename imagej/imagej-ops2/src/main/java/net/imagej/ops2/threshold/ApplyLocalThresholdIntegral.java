@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import net.imagej.ops2.stats.IntegralMean;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
@@ -50,7 +51,6 @@ import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 import net.imglib2.view.composite.Composite;
-import net.imglib2.view.composite.GenericComposite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.OpExecutionException;

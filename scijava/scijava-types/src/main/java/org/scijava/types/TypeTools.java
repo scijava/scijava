@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.types.Types;
-
 /**
  * Additional functions beyond {@link Types} for working with generic types,
  * fields and methods.

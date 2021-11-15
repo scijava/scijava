@@ -4,19 +4,13 @@ package net.imagej.ops2.types.adapt;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.Type;
 import net.imglib2.util.Util;
-import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Lifts {@link Functions} operating on some types {@code I1, I2, ..., In},
@@ -37,7 +31,6 @@ import org.scijava.plugin.Plugin;
  *          {@link Function}
  * @param <O> - the {@code Type} of the output of the {@link Function}
  */
-@Plugin(type = OpCollection.class)
 public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 
 	/**

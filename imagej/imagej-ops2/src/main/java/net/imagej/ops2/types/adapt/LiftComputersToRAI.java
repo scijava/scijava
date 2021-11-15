@@ -6,11 +6,7 @@ import java.util.function.Function;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Lifts {@link Computers} operating on some types {@code I1, I2, ..., In},
@@ -25,7 +21,6 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
 public class LiftComputersToRAI<I1, I2, I3, I4, I5, I6, O> {
 
 	/**

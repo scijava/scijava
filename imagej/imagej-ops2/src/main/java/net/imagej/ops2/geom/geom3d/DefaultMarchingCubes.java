@@ -43,9 +43,7 @@ import net.imglib2.view.Views;
 
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * This is a marching cubes implementation. It is inspired by Paul Bourke's

@@ -30,9 +30,6 @@ package net.imagej.ops2.features.haralick.helper;
 
 import java.util.function.Function;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * NB: Helper class. Internal usage only.
  * 

@@ -39,7 +39,6 @@ import net.imglib2.roi.IterableRegion;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * This {@link Op} computes the center of gravity of a {@link IterableRegion}

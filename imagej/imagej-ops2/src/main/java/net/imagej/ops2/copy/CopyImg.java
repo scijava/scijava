@@ -35,9 +35,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copying {@link Img} into another {@link Img}. Exists mainly for convenience

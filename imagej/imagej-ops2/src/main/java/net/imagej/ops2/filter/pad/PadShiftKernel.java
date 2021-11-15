@@ -40,9 +40,7 @@ import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op used to pad a kernel and shift the center of the kernel to the origin

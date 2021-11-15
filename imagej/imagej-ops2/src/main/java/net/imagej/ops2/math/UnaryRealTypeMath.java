@@ -34,11 +34,7 @@ import java.util.Random;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Ops of the {@code math} namespace which operate on {@link RealType}s.
@@ -47,7 +43,6 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @author Curtis Rueden
  */
-@Plugin(type = OpCollection.class)
 public final class UnaryRealTypeMath<I extends RealType<I>, O extends RealType<O>> {
 
 	/**

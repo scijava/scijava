@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
@@ -25,8 +25,8 @@ public class ServiceLoaderDiscovererTest {
 		List<Class<T>> implementingClasses = d.discover(discovery).stream().map(o -> (Class<T>) o.getClass()).collect(
 				Collectors.toList());
 		for(Class<? extends T> cls : impls)
-			Assert.assertTrue(implementingClasses.contains(cls));
+			Assertions.assertTrue(implementingClasses.contains(cls));
 
-			Assert.assertEquals(impls.length, implementingClasses.size());
+			Assertions.assertEquals(impls.length, implementingClasses.size());
 	}
 }

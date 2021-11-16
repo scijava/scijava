@@ -92,11 +92,6 @@
 		<allowedDuplicateClasses>${scijava-log2.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
-		</dependency>
-
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>junit</groupId>

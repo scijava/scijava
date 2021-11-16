@@ -44,7 +44,6 @@ import static org.scijava.log2.LogLevel.WARN;
  * 
  * @author Curtis Rueden
  * @see LogLevel
- * @see LogService
  */
 @IgnoreAsCallingClass
 public interface Logger {

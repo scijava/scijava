@@ -33,7 +33,7 @@ import java.io.PrintStream;
 import java.util.function.Function;
 
 /**
- * Implementation of {@link LogService} using the standard error stream.
+ * Implementation of {@link LoggerFactory} using the standard error stream.
  * <p>
  * Actually, this service is somewhat misnamed now, since it prints {@code WARN}
  * and {@code ERROR} messages to stderr, but messages at lesser severities to

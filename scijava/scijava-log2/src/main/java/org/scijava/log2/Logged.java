@@ -36,7 +36,6 @@ package org.scijava.log2;
  */
 public interface Logged {
 
-	/** Gets the {@link LogService} to use when logging activities. */
-	// TODO: SJC3: Generalize to Logger instead of LogService.
-	LogService log();
+	/** Gets the {@link Logger} to use when logging activities. */
+	Logger log();
 }

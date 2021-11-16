@@ -29,8 +29,6 @@
 
 package org.scijava.log2;
 
-import org.scijava.Context;
-
 /**
  * Utility class for getting the calling class of a method.
  *
@@ -62,12 +60,27 @@ public final class CallingClassUtils {
 
 	private static boolean hasIgnoreAsCallingClassAnnotation(String className) {
 		try {
-			Class< ? > clazz = Context.getClassLoader().loadClass(className);
+			Class< ? > clazz = getClassLoader().loadClass(className);
 			return clazz.isAnnotationPresent(IgnoreAsCallingClass.class);
 		}
 		catch (ClassNotFoundException ignore) {
 			return false;
 		}
+	}
+
+	/**
+	 * Gets the class loader to use. This will be the current thread's context
+	 * class loader if non-null; otherwise it will be the system class loader.
+	 * <p>
+	 * Forked from SciJava Common's Context class.
+	 *
+	 * @see Thread#getContextClassLoader()
+	 * @see ClassLoader#getSystemClassLoader()
+	 */
+	private static ClassLoader getClassLoader() {
+		final ClassLoader contextCL = Thread.currentThread()
+				.getContextClassLoader();
+		return contextCL != null ? contextCL : ClassLoader.getSystemClassLoader();
 	}
 
 	/**

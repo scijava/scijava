@@ -94,10 +94,6 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
 			<version>${project.version}</version>
 		</dependency>

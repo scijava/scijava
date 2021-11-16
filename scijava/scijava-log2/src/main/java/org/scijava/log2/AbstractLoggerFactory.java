@@ -30,7 +30,7 @@
 package org.scijava.log2;
 
 /**
- * Base class for {@link LogService} implementations.
+ * Base class for {@link LoggerFactory} implementations.
  *
  * @author Johannes Schindelin
  * @author Curtis Rueden

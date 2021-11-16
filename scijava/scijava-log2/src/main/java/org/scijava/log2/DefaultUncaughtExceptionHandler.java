@@ -45,9 +45,9 @@ public class DefaultUncaughtExceptionHandler implements
 	UncaughtExceptionHandler
 {
 
-	private final LogService log;
+	private final Logger log;
 
-	public DefaultUncaughtExceptionHandler(final LogService log) {
+	public DefaultUncaughtExceptionHandler(final Logger log) {
 		this.log = log;
 	}
 
@@ -62,7 +62,7 @@ public class DefaultUncaughtExceptionHandler implements
 		log.error("Uncaught exception on the Event Dispatch Thread", exception);
 	}
 
-	public static void install(final LogService log) {
+	public static void install(final Logger log) {
 		final UncaughtExceptionHandler handler =
 			new DefaultUncaughtExceptionHandler(log);
 		Thread.setDefaultUncaughtExceptionHandler(handler);

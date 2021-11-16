@@ -29,14 +29,13 @@
 
 package org.scijava.types;
 
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
@@ -91,27 +90,27 @@ public class NilConverterTest {
 		// support generic types. Right now, CastingConverter steals this.
 //		assertConvert(nil, new Nil<Nil<Map<?, ?>>>() {}.getType());
 		final Converter<?, ?> converter = convert.getHandler(nil, Observer.class);
-		assertTrue(converter instanceof NilConverter);
+		Assertions.assertTrue(converter instanceof NilConverter);
 		// TODO: Enable after Nil proxying is improved to support non-interfaces.
-//		assertTrue(converter.convert(nil, String.class) instanceof String);
-		assertTrue(converter.convert(nil, List.class) instanceof List);
-		assertTrue(converter.convert(nil, new Nil<Map<?, ?>>() {}.getType()) instanceof Map);
+//		Assertions.assertTrue(converter.convert(nil, String.class) instanceof String);
+		Assertions.assertTrue(converter.convert(nil, List.class) instanceof List);
+		Assertions.assertTrue(converter.convert(nil, new Nil<Map<?, ?>>() {}.getType()) instanceof Map);
 		// TODO: Enable after ConvertService is rewritten to fully
 		// support generic types. Right now, CastingConverter steals this.
-//		assertTrue(converter.convert(nil, new Nil<Nil<Map<?, ?>>>() {}.getType()) instanceof Nil);
+//		Assertions.assertTrue(converter.convert(nil, new Nil<Nil<Map<?, ?>>>() {}.getType()) instanceof Nil);
 	}
 
 	private void assertCanConvert(final Nil<?> nil, final Type destType) {
 		final Converter<?, ?> converter = convert.getHandler(nil, destType);
-		assertTrue(converter instanceof NilConverter);
-		assertTrue(converter.canConvert(nil, destType));
+		Assertions.assertTrue(converter instanceof NilConverter);
+		Assertions.assertTrue(converter.canConvert(nil, destType));
 	}
 
 	private void assertConvert(final Nil<?> nil, final Type destType) {
 		final Converter<?, ?> converter = convert.getHandler(nil, destType);
-		assertTrue(converter instanceof NilConverter);
+		Assertions.assertTrue(converter instanceof NilConverter);
 		final Object o = converter.convert(nil, destType);
-		assertTrue(Types.raw(destType).isAssignableFrom(o.getClass()));
+		Assertions.assertTrue(Types.raw(destType).isAssignableFrom(o.getClass()));
 	}
 
 }

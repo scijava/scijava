@@ -43,15 +43,15 @@ import java.util.function.Function;
  * @author Johannes Schindelin
  * @author Curtis Rueden
  */
-public class StderrLogFactory extends AbstractLoggerFactory {
+public class StderrLoggerFactory extends AbstractLoggerFactory {
 
 	private final Function<Integer, PrintStream> levelToStream;
 
-	public StderrLogFactory() {
+	public StderrLoggerFactory() {
 		this.levelToStream = level -> (level <= LogLevel.WARN) ? System.err : System.out;
 	}
 
-	public StderrLogFactory(Function<Integer, PrintStream> levelToStream) {
+	public StderrLoggerFactory(Function<Integer, PrintStream> levelToStream) {
 		this.levelToStream = levelToStream;
 	}
 

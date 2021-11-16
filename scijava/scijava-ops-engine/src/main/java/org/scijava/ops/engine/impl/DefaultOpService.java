@@ -38,7 +38,7 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.plugin.PluginBasedDiscoverer;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLogFactory;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
@@ -97,7 +97,7 @@ public class DefaultOpService extends AbstractService implements OpService {
 
 	private synchronized void initEnv() {
 		if (env != null) return;
-		Logger log = new StderrLogFactory().create();
+		Logger log = new StderrLoggerFactory().create();
 		Parser parser = ServiceLoader.load(Parser.class).findFirst().get();
 		OpHistory history = history();
 		List<Discoverer> discoverers = new ArrayList<>();

@@ -45,13 +45,12 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.StaticDiscoverer;
 import org.scijava.function.Producer;
 import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLogFactory;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.engine.matcher.impl.OpWrappers;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.ops.spi.Op;
@@ -69,7 +68,7 @@ public class OpCachingTest implements OpCollection {
 
 	@Before
 	public void setUp() {
-		Logger logger = new StderrLogFactory().create();
+		Logger logger = new StderrLoggerFactory().create();
 		TypeReifier types = new DefaultTypeReifier(logger, Discoverer.using(
 			ServiceLoader::load));
 		OpHistory history = new DefaultOpHistory();

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
 import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLogFactory;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator;
@@ -24,7 +24,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 		final List<Discovery<Class<Op>>> discoveries = d.discoveriesOfType(Op.class);
 		Assert.assertEquals(235, discoveries.size());
 
-		final Logger l = new StderrLogFactory().create();
+		final Logger l = new StderrLoggerFactory().create();
 		final OpInfoGenerator g = new OpClassBasedClassOpInfoGenerator(l, d);
 		final List<OpInfo> infos = g.generateInfos();
 		Assert.assertEquals(235, infos.size());
@@ -36,7 +36,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 		final List<Discovery<Class<OpCollection>>> discoveries = d.discoveriesOfType(
 				OpCollection.class);
 		Assert.assertEquals(16, discoveries.size());
-		final Logger l = new StderrLogFactory().create();
+		final Logger l = new StderrLoggerFactory().create();
 		final OpInfoGenerator g = new OpCollectionInfoGenerator(l, d);
 		final List<OpInfo> infos = g.generateInfos();
 		Assert.assertEquals(264, infos.size());

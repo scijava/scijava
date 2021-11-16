@@ -13,7 +13,7 @@ import org.scijava.discovery.StaticDiscoverer;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.function.Producer;
 import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLogFactory;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
@@ -34,7 +34,7 @@ public class TherapiBasedOpTest {
 
 	@BeforeClass
 	public static void setUp() {
-		logger = new StderrLogFactory().create();
+		logger = new StderrLoggerFactory().create();
 		types = new DefaultTypeReifier(logger, Discoverer.using(
 			ServiceLoader::load));
 		parser = ServiceLoader.load(Parser.class).findFirst().get();

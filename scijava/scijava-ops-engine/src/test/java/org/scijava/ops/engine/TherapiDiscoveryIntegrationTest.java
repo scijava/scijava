@@ -6,13 +6,11 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLogFactory;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator;
-import org.scijava.ops.engine.impl.OpCollectionInfoGenerator;
 import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpCollection;
 import org.scijava.parse2.Parser;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class TherapiDiscoveryIntegrationTest {
 		final List<Discovery<Class<Op>>> discoveries = d.discoveriesOfType(Op.class);
 		Assert.assertEquals(0, discoveries.size());
 
-		final Logger l = new StderrLogFactory().create();
+		final Logger l = new StderrLoggerFactory().create();
 		final OpInfoGenerator g = new OpClassBasedClassOpInfoGenerator(l, d);
 		final List<OpInfo> infos = g.generateInfos();
 		Assert.assertEquals(0, infos.size());

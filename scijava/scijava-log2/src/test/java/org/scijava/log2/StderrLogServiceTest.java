@@ -38,7 +38,7 @@ import java.io.PrintStream;
 import org.junit.Test;
 
 /**
- * Tests {@link StderrLogFactory}.
+ * Tests {@link StderrLoggerFactory}.
  * 
  * @author Johannes Schindelin
  * @author Matthias Arzt
@@ -47,7 +47,7 @@ public class StderrLogServiceTest {
 
 	@Test
 	public void testDefaultLevel() {
-		final Logger log = new StderrLogFactory().create();
+		final Logger log = new StderrLoggerFactory().create();
 		int level = log.getLevel();
 		assertTrue("default level (" + level + //
 			") is at least INFO(" + WARN + ")", level >= WARN);
@@ -58,7 +58,7 @@ public class StderrLogServiceTest {
 		// setup
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		final PrintStream p = new PrintStream(outputStream);
-		final Logger log = new StderrLogFactory(ignore -> p).create();
+		final Logger log = new StderrLoggerFactory(ignore -> p).create();
 
 		final String text1 = "Hello World!";
 		final String text2 = "foo bar";

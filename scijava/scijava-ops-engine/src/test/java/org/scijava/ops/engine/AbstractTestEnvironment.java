@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.StaticDiscoverer;
 import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLogFactory;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
@@ -57,7 +57,7 @@ public abstract class AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void setUp() {
-		logger = new StderrLogFactory().create();
+		logger = new StderrLoggerFactory().create();
 		types = new DefaultTypeReifier(logger, Discoverer.using(
 			ServiceLoader::load));
 		ops = barebonesEnvironment(routines(), opContainingClasses());

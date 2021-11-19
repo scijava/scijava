@@ -16,7 +16,6 @@ module org.scijava.ops {
 	exports org.scijava.ops.provenance;
 	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)
 	exports org.scijava.ops.util; // contains OpWrapper interface
-	exports org.scijava.struct;
 	exports org.scijava.param;
 
 	opens org.scijava.ops.conversionLoss to therapi.runtime.javadoc;
@@ -35,7 +34,6 @@ module org.scijava.ops {
 	opens org.scijava.ops.adapt.functional to therapi.runtime.javadoc;
 	opens org.scijava.ops to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.util to therapi.runtime.javadoc;
-	opens org.scijava.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.matcher to therapi.runtime.javadoc;
 	opens org.scijava.ops.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.stats to therapi.runtime.javadoc;
@@ -50,6 +48,7 @@ module org.scijava.ops {
 
 	requires org.scijava;
 	requires org.scijava.function;
+	requires org.scijava.struct;
 	requires org.scijava.types;
 	requires javassist;
 	requires java.compiler;

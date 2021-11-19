@@ -36,7 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.max}.
@@ -48,10 +47,14 @@ import org.scijava.struct.ItemIO;
  *            input type
  */
 @Plugin(type = Op.class, name = "stats.max")
-@Parameter(key = "iterableInput")
-@Parameter(key = "max")
 public class IterableMax<T extends RealType<T>> implements Computers.Arity1<Iterable<T>, T> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param max
+	 */
 	@Override
 	public void compute(final Iterable<T> input, final T output) {
 		// Re-use output to compare against

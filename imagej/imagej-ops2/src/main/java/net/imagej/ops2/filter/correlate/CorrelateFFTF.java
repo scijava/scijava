@@ -48,7 +48,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Correlate op for (@link Img)
@@ -60,15 +59,6 @@ import org.scijava.struct.ItemIO;
  * @param <C>
  */
 @Plugin(type = Op.class, name = "filter.correlate", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "borderSize")
-@Parameter(key = "obfInput")
-@Parameter(key = "obfKernel")
-@Parameter(key = "outType")
-@Parameter(key = "fftType")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class CorrelateFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 //	extends AbstractFFTFilterF<I, O, K, C>
 implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, ExecutorService, RandomAccessibleInterval<O>> {
@@ -89,6 +79,19 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	@OpDependency(name = "filter.correlate")
 	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlateOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param borderSize
+	 * @param obfInput
+	 * @param obfKernel
+	 * @param outType
+	 * @param fftType
+	 * @param executorService
+	 * @return the output
+	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final long[] borderSize,

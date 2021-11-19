@@ -39,9 +39,7 @@ import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.random.Deterministic;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An op that fits a quadratic surface (quadric) into a set of points.
@@ -59,8 +57,6 @@ import org.scijava.struct.ItemIO;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 @Plugin(type = Op.class, name = "stats.leastSquares")
-@Parameter(key = "vectorCollection")
-@Parameter(key = "outputMatrix")
 public class Quadric implements
 	Function<Collection<Vector3d>, Matrix4d> 
 {
@@ -71,6 +67,12 @@ public class Quadric implements
 	 */
 	public static final int MIN_DATA = 9;
 
+	/**
+	 * TODO
+	 *
+	 * @param vectorCollection
+	 * @return the outputMatrix
+	 */
 	@Override
 	public Matrix4d apply(final Collection<Vector3d> points) {
 		if (points.size() < MIN_DATA)

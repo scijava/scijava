@@ -39,7 +39,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.circularity}.
@@ -49,8 +48,6 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.circularity", label = "Geometric (2D): Circularity")
-@Parameter(key = "input")
-@Parameter(key = "circularity")
 public class DefaultCircularity implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")
@@ -58,6 +55,12 @@ public class DefaultCircularity implements Computers.Arity1<Polygon2D, DoubleTyp
 	@OpDependency(name = "geom.boundarySize")
 	private Function<Polygon2D, DoubleType> perimeterFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param circularity
+	 */
 	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(4 * Math.PI

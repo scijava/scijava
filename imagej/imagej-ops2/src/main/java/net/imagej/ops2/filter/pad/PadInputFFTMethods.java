@@ -40,9 +40,7 @@ import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Adapt;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to pad the image to a size that is compatible with FFTMethods
@@ -53,11 +51,6 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "filter.padInputFFTMethods", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "fast")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "output")
 public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadInputFFT<T, I, O> {
 	

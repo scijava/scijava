@@ -34,9 +34,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * NB: Helper class. Internal usage only.
@@ -46,8 +44,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocStdX")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CoocStdX implements Function<double[][], DoubleType> {
 
 	@OpDependency(name = "features.haralick.coocMeanX")
@@ -55,6 +51,12 @@ public class CoocStdX implements Function<double[][], DoubleType> {
 	@OpDependency(name = "features.haralick.coocPX")
 	private Function<double[][], double[]> coocPXFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	@Override
 	public DoubleType apply(double[][] input) {
 

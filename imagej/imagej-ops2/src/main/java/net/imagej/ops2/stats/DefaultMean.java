@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.max} using {@code stats.sum} and
@@ -51,8 +50,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "stats.mean",
 	priority = Priority.HIGH)
-@Parameter(key = "rai")
-@Parameter(key = "mean")
 public class DefaultMean<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
@@ -63,6 +60,12 @@ public class DefaultMean<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "stats.size")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> areaComputer;
 
+	/**
+	 * TODO
+	 *
+	 * @param rai
+	 * @param mean
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 

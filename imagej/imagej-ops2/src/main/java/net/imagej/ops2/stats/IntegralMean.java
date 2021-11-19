@@ -42,7 +42,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.mean} from an integral image using a
@@ -53,10 +52,14 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "stats.integralMean")
-@Parameter(key = "iterableInput")
-@Parameter(key = "integralMean")
 public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param integralMean
+	 */
 	@Override
 	public void compute(final RectangleNeighborhood<? extends Composite<I>> input, final DoubleType output) {
 		// computation according to

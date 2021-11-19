@@ -34,14 +34,10 @@ import net.imagej.ops2.geom.AbstractSizeConvexHull;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.sizeConvexHull", label = "Geometric (3D): Convex Hull Volume", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "volumeConvexHullMesh")
 public class DefaultVolumeConvexHullMesh extends AbstractSizeConvexHull<Mesh> {}

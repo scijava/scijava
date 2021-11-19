@@ -41,7 +41,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Local threshold method which is similar to
@@ -54,11 +53,6 @@ import org.scijava.struct.ItemIO;
  * @param <T> input type
  */
 @Plugin(type = Op.class, name = "threshold.localBernsen")
-@Parameter(key = "inputNeighborhood")
-@Parameter(key = "inputCenterPixel")
-@Parameter(key = "contrastThreshold")
-@Parameter(key = "halfMaxValue")
-@Parameter(key = "output")
 public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {
@@ -66,6 +60,15 @@ public class ComputeLocalBernsenThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "stats.minMax")
 	private Function<Iterable<T>, Pair<T, T>> minMaxOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputNeighborhood
+	 * @param inputCenterPixel
+	 * @param contrastThreshold
+	 * @param halfMaxValue
+	 * @param output
+	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
 		final T inputCenterPixel, final Double contrastThreshold,

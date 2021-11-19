@@ -43,7 +43,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Low-level difference of Gaussians (DoG) implementation which leans on other
@@ -54,10 +53,6 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "filter.DoG")
-@Parameter(key = "input")
-@Parameter(key = "gauss1")
-@Parameter(key = "gauss2")
-@Parameter(key = "output")
 public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> {
 
@@ -67,6 +62,14 @@ public class DefaultDoG<T extends NumericType<T> & NativeType<T>> implements
 	@OpDependency(name = "math.subtract")
 	private Computers.Arity2<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> subtractor;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param gauss1
+	 * @param gauss2
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 			final Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> gauss1,

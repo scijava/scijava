@@ -40,9 +40,7 @@ import org.apache.commons.math3.linear.BlockRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This {@link Op} computes the 2nd multi variate of a {@link IterableRegion}
@@ -53,13 +51,17 @@ import org.scijava.struct.ItemIO;
  *            BooleanType
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
-@Parameter(key = "iterableRegion")
-@Parameter(key = "inertiaTensor")
 public class DefaultInertiaTensor3D<B extends BooleanType<B>> implements Function<IterableRegion<B>, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")
 	private Function<IterableRegion<B>, RealLocalizable> centroid;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableRegion
+	 * @param inertiaTensor
+	 */
 	@Override
 	public RealMatrix apply(final IterableRegion<B> input) {
 		// ensure validity of inputs

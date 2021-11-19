@@ -41,16 +41,19 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "project", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "op")
-@Parameter(key = "dim")
-@Parameter(key = "output")
 public class ProjectRAIToIterableInterval<T, V>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param op
+	 * @param dim
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Computers.Arity1<Iterable<T>, V> method,
 			final Integer dim, final IterableInterval<V> output) {

@@ -36,9 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Size}.
@@ -46,10 +44,14 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric: Size", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "size")
 public class SizeII implements Function<IterableInterval<?>, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param size
+	 */
 	@Override
 	public DoubleType apply(IterableInterval<?> input) {
 		return new DoubleType(input.size());

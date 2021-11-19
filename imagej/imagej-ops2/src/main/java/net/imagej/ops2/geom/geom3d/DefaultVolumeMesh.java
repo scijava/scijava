@@ -37,9 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Size}.
@@ -47,10 +45,14 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric3D: Volume", priority = Priority.VERY_HIGH - 1)
-@Parameter(key = "input")
-@Parameter(key = "volume")
 public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param volume
+	 */
 	@Override
 	public DoubleType apply(final Mesh input) {
 		double volume = 0;

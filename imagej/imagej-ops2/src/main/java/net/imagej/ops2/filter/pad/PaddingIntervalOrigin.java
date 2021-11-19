@@ -38,9 +38,7 @@ import net.imglib2.type.numeric.ComplexType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to translate the center of an interval the origin. This is needed for
@@ -52,14 +50,18 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "filter.padIntervalOrigin", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "interval")
-@Parameter(key = "output")
 public class PaddingIntervalOrigin<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
 		implements BiFunction<I, Interval, O> {
 
 	@Override
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param interval
+	 * @return the output
+	 */
 	public O apply(final I input, final Interval centeredInterval) {
 
 		int numDimensions = input.numDimensions();

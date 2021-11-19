@@ -36,7 +36,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.moment4AboutMean} using
@@ -50,8 +49,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.moment4AboutMean")
-@Parameter(key = "iterableInput")
-@Parameter(key = "moment4AboutMean")
 public class IterableMoment4AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.mean")
@@ -59,6 +56,12 @@ public class IterableMoment4AboutMean<I extends RealType<I>, O extends RealType<
 	@OpDependency(name = "stats.size")
 	private Computers.Arity1<Iterable<I>, O> sizeComputer;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param moment4AboutMean
+	 */
 	@Override
 	public void compute(final Iterable<I> input, final O output) {
 

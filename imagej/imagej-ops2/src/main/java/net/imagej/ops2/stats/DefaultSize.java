@@ -36,7 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.size} of an {@link Interval}.
@@ -46,11 +45,15 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.size")
-@Parameter(key = "interval")
-@Parameter(key = "size")
 public class DefaultSize<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<Interval, O>
 {
+	/**
+	 * TODO
+	 *
+	 * @param interval
+	 * @param size
+	 */
 	@Override
 	public void compute(final Interval input, final O output) {
 		output.setOne();

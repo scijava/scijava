@@ -42,7 +42,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Ferets Diameter for a certain angle.
@@ -50,14 +49,18 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.feretsDiameter")
-@Parameter(key = "input")
-@Parameter(key = "angle")
-@Parameter(key = "feretsDiameter")
 public class DefaultFeretsDiameterForAngle implements Computers.Arity2<Polygon2D, Double, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param angle
+	 * @param feretsDiameter
+	 */
 	@Override
 	public void compute(Polygon2D input, final Double angle, DoubleType output) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));

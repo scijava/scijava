@@ -35,14 +35,11 @@ import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.core.Op;
 import org.scijava.types.Nil;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 public class OpPriorityTest extends AbstractTestEnvironment {
 	
 	@Plugin(type = Op.class, name = "test.priority", priority = Priority.HIGH)
-	@Parameter(key = "result")
 	private static final class testDouble implements Producer<Number>{
 		@Override
 		public Number create() {
@@ -51,7 +48,6 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 	}
 
 	@Plugin(type = Op.class, name = "test.priority", priority = Priority.LOW)
-	@Parameter(key = "result")
 	private static final class testFloat implements Producer<Number>{
 		@Override
 		public Number create() {

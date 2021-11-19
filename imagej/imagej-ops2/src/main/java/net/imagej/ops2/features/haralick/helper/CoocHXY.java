@@ -33,9 +33,7 @@ import java.util.function.Function;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * NB: Helper class. Internal usage only.
@@ -45,8 +43,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocHXY")
-@Parameter(key = "matix")
-@Parameter(key = "output")
 public class CoocHXY implements Function<double[][], double[]> {
 
 	private static final double EPSILON = Double.MIN_NORMAL;
@@ -56,6 +52,12 @@ public class CoocHXY implements Function<double[][], double[]> {
 	@OpDependency(name = "features.haralick.coocPY")
 	private Function<double[][], double[]> coocPYFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param matix
+	 * @return the output
+	 */
 	@Override
 	public double[] apply(double[][] matrix) {
 		double hx = 0.0d;

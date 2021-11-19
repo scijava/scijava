@@ -41,7 +41,6 @@ import java.util.function.Function;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -60,8 +59,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Function<I, O>, Function<Iterable<I>, Iterable<O>>> liftFunction1 =
 		(function) -> {
 			return (in1) -> lazyIterable(itrs -> function.apply((I) itrs[0].next()), in1);
@@ -69,8 +66,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<BiFunction<I1, I2, O>, BiFunction<Iterable<I1>, Iterable<I2>, Iterable<O>>> liftFunction2 =
 		(function) -> {
 			return (in1, in2) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next()), in1, in2);
@@ -78,8 +73,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>> liftFunction3 =
 		(function) -> {
 			return (in1, in2, in3) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next()), in1, in2, in3);
@@ -87,8 +80,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>> liftFunction4 =
 		(function) -> {
 			return (in1, in2, in3, in4) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next()), in1, in2, in3, in4);
@@ -96,8 +87,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>> liftFunction5 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next()), in1, in2, in3, in4, in5);
@@ -105,8 +94,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>> liftFunction6 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next()), in1, in2, in3, in4, in5, in6);
@@ -114,8 +101,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>> liftFunction7 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next()), in1, in2, in3, in4, in5, in6, in7);
@@ -123,8 +108,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>> liftFunction8 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next()), in1, in2, in3, in4, in5, in6, in7, in8);
@@ -132,8 +115,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>> liftFunction9 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9);
@@ -141,8 +122,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>> liftFunction10 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
@@ -150,8 +129,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>> liftFunction11 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
@@ -159,8 +136,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>> liftFunction12 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(), (I12) itrs[11].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
@@ -168,8 +143,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>> liftFunction13 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(), (I12) itrs[11].next(), (I13) itrs[12].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
@@ -177,8 +150,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>> liftFunction14 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(), (I12) itrs[11].next(), (I13) itrs[12].next(), (I14) itrs[13].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
@@ -186,8 +157,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>> liftFunction15 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(), (I12) itrs[11].next(), (I13) itrs[12].next(), (I14) itrs[13].next(), (I15) itrs[14].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
@@ -195,8 +164,6 @@ public class FunctionToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 
 	@SuppressWarnings("unchecked")
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>> liftFunction16 =
 		(function) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16) -> lazyIterable(itrs -> function.apply((I1) itrs[0].next(), (I2) itrs[1].next(), (I3) itrs[2].next(), (I4) itrs[3].next(), (I5) itrs[4].next(), (I6) itrs[5].next(), (I7) itrs[6].next(), (I8) itrs[7].next(), (I9) itrs[8].next(), (I10) itrs[9].next(), (I11) itrs[10].next(), (I12) itrs[11].next(), (I13) itrs[12].next(), (I14) itrs[13].next(), (I15) itrs[14].next(), (I16) itrs[15].next()), in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);

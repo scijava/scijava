@@ -35,9 +35,7 @@ import org.scijava.Priority;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Gets documentation for the given name.
@@ -46,11 +44,14 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "help", priority = Priority.HIGH,
 	description = "Gets documentation for all Ops with the given name")
-@Parameter(key = "name")
-@Parameter(key = "opService")
-@Parameter(key = "opInfo")
 public class HelpForName extends AbstractHelp implements BiFunction<String, OpService, String> {
 
+	/**
+	 * TODO
+	 *
+	 * @param name
+	 * @param opService
+	 */
 	@Override
 	public String apply(String name, OpService ops) {
 		final Iterable<OpInfo> allOps = ops.env().infos(name);

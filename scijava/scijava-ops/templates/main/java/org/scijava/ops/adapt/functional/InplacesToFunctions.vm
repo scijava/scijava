@@ -41,10 +41,8 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.OpField;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 #set($classArity = $maxArity + 1)
@@ -60,8 +58,6 @@ public class InplacesToFunctions$generics.call($classArity, $classArity) {
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
 	@Plugin(type = Op.class, name = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	static class Inplace$inplaceSuffix.call($arity, $a)ToFunction${arity}$generics.call($arity, $a) implements Function<$inplaceType.call($arity, $a)$generics.call($arity, $a), $functionArity.call($arity)$functionGenerics.call($arity, $a)> {
 		
 		@OpDependency(name = "create", adaptable = false)
@@ -69,6 +65,10 @@ public class InplacesToFunctions$generics.call($classArity, $classArity) {
 		@OpDependency(name = "copy", adaptable = false)
 		private Computers.Arity1<IO, IO> copyOp;
 
+		/**
+		 * @param t the Inplace to adapt
+		 * @return an adaptation of inplace
+		 */
 		@Override
 		public $functionArity.call($arity)$functionGenerics.call($arity, $a) apply($inplaceType.call($arity, $a)$generics.call($arity, $a) t) {
 			return ($mutateArgs.call($arity, $a)) -> {

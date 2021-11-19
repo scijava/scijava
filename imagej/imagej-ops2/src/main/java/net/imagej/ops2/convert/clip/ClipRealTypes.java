@@ -35,7 +35,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Copies the value of one {@link RealType} to another, and clips values which
@@ -44,12 +43,16 @@ import org.scijava.struct.ItemIO;
  * @author Martin Horn (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "convert.clip")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class ClipRealTypes<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<I, O>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final I input, final O output) {
 		final double v = input.getRealDouble();

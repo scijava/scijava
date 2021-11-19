@@ -35,9 +35,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Implements Rosin's threshold method. From : Rosin, Paul L. "Unimodal
@@ -51,10 +49,14 @@ import org.scijava.struct.ItemIO;
  * @author Hadrien Mary
  */
 @Plugin(type = Op.class, name = "threshold.rosin", priority = Priority.HIGH)
-@Parameter(key = "inputHistogram")
-@Parameter(key = "output")
 public class ComputeRosinThreshold<T extends RealType<T>> extends AbstractComputeThresholdHistogram<T> {
 
+	/**
+	 * TODO
+	 *
+	 * @param inputHistogram
+	 * @param output
+	 */
 	@Override
 	public long computeBin(final Histogram1d<T> histo) {
 		final long[] hist = histo.toLongArray();

@@ -36,7 +36,6 @@ import org.scijava.ops.OpService;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Evaluates an expression.
@@ -50,13 +49,17 @@ import org.scijava.struct.ItemIO;
  * @see OpEvaluator
  */
 @Plugin(type = Op.class, name = "eval")
-@Parameter(key = "input")
-@Parameter(key = "vars")
-@Parameter(key = "opService")
-@Parameter(key = "output")
 public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpService, Object>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param vars
+	 * @param opService
+	 * @return the output
+	 */
 	@Override
 	public Object apply(final String input, final Map<String, Object> vars, final OpService ops) {
 		OpEvaluator e = new OpEvaluator(ops);

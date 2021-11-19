@@ -37,7 +37,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link SliceOp} implementation for {@link RandomAccessibleInterval} input and
@@ -52,14 +51,18 @@ import org.scijava.struct.ItemIO;
  * @author Martin Horn (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "slice", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "Op")
-@Parameter(key = "axisIndices")
-@Parameter(key = "dropSingleDimensions")
-@Parameter(key = "output")
 public class SliceRAI2RAI<I, O> implements
 		Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>>, int[], Boolean, RandomAccessibleInterval<O>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param Op
+	 * @param axisIndices
+	 * @param dropSingleDimensions
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input,
 			final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> op, final int[] axisIndices,

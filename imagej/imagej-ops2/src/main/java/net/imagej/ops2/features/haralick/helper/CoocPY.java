@@ -31,9 +31,7 @@ package net.imagej.ops2.features.haralick.helper;
 import java.util.function.Function;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * NB: Helper class. Internal usage only.
@@ -42,10 +40,14 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.coocPY")
-@Parameter(key = "matrix")
-@Parameter(key = "output")
 public class CoocPY implements Function<double[][], double[]> {
 
+	/**
+	 * TODO
+	 *
+	 * @param matrix
+	 * @return the output
+	 */
 	@Override
 	public double[] apply(final double[][] matrix) {
 		final int nrGrayLevels = matrix.length;

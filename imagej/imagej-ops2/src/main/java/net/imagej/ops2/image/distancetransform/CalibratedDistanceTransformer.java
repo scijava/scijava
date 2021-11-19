@@ -39,7 +39,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Passes an input image of any dimension off to the correct Distance Transform
@@ -55,13 +54,17 @@ import org.scijava.struct.ItemIO;
  *            - the {@link RealType} of the output image
  */
 @Plugin(type = Op.class, name = "image.distanceTransform")
-@Parameter(key = "binaryInput")
-@Parameter(key = "calibration")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param binaryInput
+	 * @param calibration
+	 * @param executorService
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<B> in, final double[] calibration, final ExecutorService es,
 			final RandomAccessibleInterval<T> out) {

@@ -36,7 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An Op which calculates the euler characteristic (χ) of the given binary image. The object in the image
@@ -71,8 +70,6 @@ import org.scijava.struct.ItemIO;
  * @author Michael Doube (Royal Veterinary College, London)
  */
 @Plugin(type = Op.class, name = "topology.eulerCharacteristic26NFloating")
-@Parameter(key = "interval")
-@Parameter(key = "output")
 public class EulerCharacteristic26NFloating
         <B extends BooleanType<B>> implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */
@@ -215,7 +212,13 @@ public class EulerCharacteristic26NFloating
     }
     //endregion
 
-    @Override
+   	/**
+	 * TODO
+	 *
+	 * @param interval
+	 * @param output
+	 */
+ @Override
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final Octant<B> octant = new Octant<>(interval);

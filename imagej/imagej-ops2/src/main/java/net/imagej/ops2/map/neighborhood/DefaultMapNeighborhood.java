@@ -42,7 +42,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Evaluates a {@link UnaryComputerOp} for each {@link Neighborhood} on the
@@ -54,13 +53,17 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "map.neighborhood")
-@Parameter(key = "input")
-@Parameter(key = "shape")
-@Parameter(key = "op")
-@Parameter(key = "output")
 public class DefaultMapNeighborhood<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, IterableInterval<O>>
 {
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param shape
+	 * @param op
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
 		final Computers.Arity1<Iterable<I>, O> computer, final IterableInterval<O> out)
@@ -91,14 +94,18 @@ public class DefaultMapNeighborhood<I, O> implements
  * @author Gabriel Selzer
  */
 @Plugin(type = Op.class, name = "map.neighborhood", priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "shape")
-@Parameter(key = "op")
-@Parameter(key = "output")
 class MapNeighborhoodAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, RandomAccessibleInterval<O>>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param shape
+	 * @param op
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
 		final Computers.Arity1<Iterable<I>, O> centerAwareOp,

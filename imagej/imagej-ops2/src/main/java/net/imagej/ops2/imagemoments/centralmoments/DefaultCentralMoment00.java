@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.centralMoment00}.
@@ -49,8 +48,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "imageMoments.centralMoment00", label = "Image Moment: CentralMoment00")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultCentralMoment00<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {
@@ -58,6 +55,12 @@ public class DefaultCentralMoment00<I extends RealType<I>, O extends RealType<O>
 	@OpDependency(name = "imageMoments.moment00")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment00Cmp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void computeMoment(final RandomAccessibleInterval<I> input, final O output) {
 		moment00Cmp.compute(input, output);

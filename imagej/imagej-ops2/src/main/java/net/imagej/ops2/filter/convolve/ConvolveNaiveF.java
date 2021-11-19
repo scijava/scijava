@@ -49,17 +49,11 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Convolves an image naively (no FFTs).
  */
 @Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH + 1)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "outType")
-@Parameter(key = "output")
 public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
 		implements
 		Functions.Arity4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, RandomAccessibleInterval<O>> {
@@ -97,6 +91,15 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 		return createOp.apply(input, outType.createVariable());
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param outOfBoundsFactory
+	 * @param outType
+	 * @return the output
+	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
@@ -131,9 +134,6 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 }
 
 @Plugin(type = Op.class, name = "filter.convolve", priority = Priority.HIGH + 1)
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "output")
 class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K>>
 		implements
 		BiFunction<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
@@ -141,6 +141,13 @@ class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Native
 	@OpDependency(name = "filter.convolve")
 	Functions.Arity4<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, O, RandomAccessibleInterval<O>> convolveOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @return the output
+	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> t, RandomAccessibleInterval<K> u) {
 		return convolveOp.apply(t, u, null, null);

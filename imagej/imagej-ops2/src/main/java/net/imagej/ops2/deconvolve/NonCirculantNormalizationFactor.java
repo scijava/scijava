@@ -54,7 +54,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Calculate non-circulant normalization factor. This is used as part of the
@@ -70,12 +69,6 @@ import org.scijava.struct.ItemIO;
 
 @Plugin(type = Op.class, name = "deconvolve.normalizationFactor",
 	priority = Priority.LOW)
-@Parameter(key = "io")
-@Parameter(key = "k")
-@Parameter(key = "l")
-@Parameter(key = "fftInput")
-@Parameter(key = "fftKernel")
-@Parameter(key = "executorService")
 public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService>
 {
@@ -123,6 +116,13 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	/**
 	 * apply the normalization image needed for semi noncirculant model see
 	 * http://bigwww.epfl.ch/deconvolution/challenge2013/index.html?p=doc_math_rl
+	 *
+	 * @param io
+	 * @param k
+	 * @param l
+	 * @param fftInput
+	 * @param fftKernel
+	 * @param executorService
 	 */
 	@Override
 	public void mutate(RandomAccessibleInterval<O> arg, final Dimensions k, final Dimensions l, final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel, final ExecutorService es) {

@@ -4,9 +4,7 @@ package org.scijava.ops.conversionLoss;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.hints.BaseOpHints.Simplification;
 import org.scijava.ops.hints.OpHints;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 
 /**
@@ -17,11 +15,13 @@ import org.scijava.types.Nil;
  */
 @OpHints(hints = {Simplification.FORBIDDEN})
 @Plugin(type = Op.class, name = "lossReporter")
-@Parameter(key = "fromType")
-@Parameter(key = "toType")
-@Parameter(key = "maximumLoss")
 public class IdentityLossReporter<T> implements LossReporter<T, T> {
 
+	/**
+	 * @param t the Nil describing the type that is being converted from
+	 * @param u the Nil describing the type that is being converted to
+	 * @return the worst-case loss converting from type T to type T (i.e. 0)
+	 */
 	@Override
 	public Double apply(Nil<T> t, Nil<T> u) {
 		return 0.;

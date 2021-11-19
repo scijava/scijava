@@ -63,7 +63,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Calculates a histogram of oriented gradients which is a feature descriptor.
@@ -80,11 +79,6 @@ import org.scijava.struct.ItemIO;
  * @author Simon Schmid (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.hog")
-@Parameter(key = "input")
-@Parameter(key = "numOrientations")
-@Parameter(key = "spanOfNeighborhood")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -99,6 +93,15 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 	private Converter<GenericComposite<FloatType>, FloatType> converterGetMax;
 
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numOrientations
+	 * @param spanOfNeighborhood
+	 * @param executorService
+	 * @param output
+	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, Integer numOrientations, Integer spanOfNeighborhood,
 			ExecutorService es, RandomAccessibleInterval<T> out) {
@@ -274,11 +277,6 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 }
 
 @Plugin(type = Op.class, name = "features.hog")
-@Parameter(key = "input")
-@Parameter(key = "numOrientations")
-@Parameter(key = "spanOfNeighborhood")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -288,6 +286,15 @@ class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 	@OpDependency(name = "features.hog")
 	private Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> hogOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numOrientations
+	 * @param spanOfNeighborhood
+	 * @param executorService
+	 * @return the output
+	 */
 	@Override
 	public RandomAccessibleInterval<T> apply(final RandomAccessibleInterval<T> input, final Integer numOrientations,
 			final Integer spanOfNeighborhood, final ExecutorService es) {

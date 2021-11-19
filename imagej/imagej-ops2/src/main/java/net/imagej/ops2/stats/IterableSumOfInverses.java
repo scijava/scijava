@@ -35,7 +35,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.sumOfInverses}.
@@ -49,10 +48,14 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.sumOfInverses")
-@Parameter(key = "iterableInput")
-@Parameter(key = "sumOfInverses")
 public class IterableSumOfInverses<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity2<Iterable<I>, O, O> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param sumOfInverses
+	 */
 	@Override
 	public void compute(final Iterable<I> input, final O dbzValue,
 		final O output)

@@ -40,7 +40,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Sphericity}.
@@ -50,8 +49,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.sphericity", label = "Geometric (3D): Sphericity", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "sphericity")
 public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.size")
@@ -59,6 +56,12 @@ public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 	@OpDependency(name = "geom.boundarySize")
 	private Function<Mesh, DoubleType> areaFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sphericity
+	 */
 	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		final double sphereArea = Math.pow(Math.PI, 1 / 3d) * Math.pow(6 * volumeFunc.apply(input).get(), 2 / 3d);

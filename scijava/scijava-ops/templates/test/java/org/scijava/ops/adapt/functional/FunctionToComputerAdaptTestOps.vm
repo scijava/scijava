@@ -40,7 +40,6 @@ import java.util.function.Function;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)
@@ -48,9 +47,6 @@ public class FunctionToComputerAdaptTestOps {
 #foreach($arity in [1..$maxArity])
 
 	@OpField(names = "test.FtC")
-#foreach($p in $genericsNamesList.call($arity))
-	@Parameter(key = "$p")
-#end
 	public static final $functionArity.call($arity)$doubleGenerics.call($arity) toComp${arity} = ($applyArgs.call($arity)) -> {
 		double[] out = new double[in#if($arity == 1)#{else}1#end.length];
 		for(int i = 0; i < in#if($arity == 1)#{else}1#end.length; i++) {

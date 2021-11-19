@@ -131,11 +131,15 @@ public final class ParameterStructs {
 		// NB: Reject abstract classes.
 		checkModifiers(type.getName() + ": ", problems, type.getModifiers(), true, Modifier.ABSTRACT);
 
-		// Parse class level (i.e., generic) @Parameter annotations.
-		final Class<?> paramsClass = findParametersDeclaration(type);
-		if (paramsClass != null) {
-			parseFunctionalParameters(items, names, problems, paramsClass, type, false);
+		// obtain a parameterData (preferably one that scrapes the javadoc)
+		ParameterData paramData;
+		try {
+			paramData = new JavadocParameterData(type);
+		} catch(NullPointerException | IllegalArgumentException e) {
+			paramData = new SynthesizedParameterData();
 		}
+
+		parseFunctionalParameters(items, names, problems, type, paramData);
 
 		// Parse field level @OpDependency annotations.
 		parseFieldOpDependencies(items, problems, type);
@@ -158,6 +162,13 @@ public final class ParameterStructs {
 		Class<?> c = field.getDeclaringClass();
 		if (c == null || field == null) return null;
 
+		// obtain a parameterData (preferably one that scrapes the javadoc)
+		ParameterData paramData;
+		try {
+			paramData = new JavadocParameterData(field);
+		} catch(IllegalArgumentException e) {
+			paramData = new SynthesizedParameterData();
+		}
 		field.setAccessible(true);
 		
 		final ArrayList<Member<?>> items = new ArrayList<>();
@@ -166,8 +177,7 @@ public final class ParameterStructs {
 		final Type fieldType = Types.fieldType(field, c);
 
 		checkModifiers(field.toString() + ": ", problems, field.getModifiers(), false, Modifier.FINAL);
-		parseFunctionalParameters(items, names, problems, field, fieldType, false);
-
+		parseFunctionalParameters(items, names, problems, fieldType, paramData); 
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {
 			throw new ValidityException(problems);
@@ -182,7 +192,15 @@ public final class ParameterStructs {
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
 		final Set<String> names = new HashSet<>();
 
-		parseFunctionalParameters(items, names, problems, opInfo.getAnnotationBearer(), newType, true);
+		// obtain a parameterData (preferably one that scrapes the javadoc)
+		ParameterData paramData;
+		try {
+			paramData = new JavadocParameterData(opInfo, newType);
+		} catch(IllegalArgumentException e) {
+			paramData = new SynthesizedParameterData();
+		}
+
+		parseFunctionalParameters(items, names, problems, newType, paramData);
 
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {
@@ -198,6 +216,14 @@ public final class ParameterStructs {
 			if (c == null || method == null) return null;
 
 			method.setAccessible(true);
+
+			// obtain a parameterData (preferably one that scrapes the javadoc)
+			ParameterData paramData;
+			try {
+				paramData = new JavadocParameterData(method);
+			} catch(IllegalArgumentException e) {
+				paramData = new SynthesizedParameterData();
+			}
 
 			final ArrayList<Member<?>> items = new ArrayList<>();
 			final ArrayList<ValidityProblem> problems = new ArrayList<>();
@@ -216,7 +242,7 @@ public final class ParameterStructs {
 			}
 			
 			// Parse method level @Parameter annotations.
-			parseFunctionalParameters(items, names, problems, method, functionalType, true);
+			parseFunctionalParameters(items, names, problems, functionalType, paramData);
 
 			// Parse method level @OpDependency annotations.
 			parseMethodOpDependencies(items, problems, c, method);
@@ -226,7 +252,7 @@ public final class ParameterStructs {
 
 			return items;
 		}
-	
+
 	private static java.lang.reflect.Parameter[] getOpDependencies(
 		java.lang.reflect.Parameter[] methodParams)
 	{
@@ -414,7 +440,7 @@ public final class ParameterStructs {
 	 * @param fmts
 	 * @return
 	 */
-	private static Parameter[] synthesizeParameterAnnotations(final List<FunctionalMethodType> fmts) {
+	private static Parameter[] synthesizeParameterAnnotations(final List<FunctionalMethodType> fmts, JavadocParameterData data) {
 		List<Parameter> params = new ArrayList<>();
 		
 		int ins, outs, containers, mutables;
@@ -453,47 +479,9 @@ public final class ParameterStructs {
 		
 		return params.toArray(new Parameter[params.size()]);
 	}
-	
-	//TODO: delete
-//	/**
-//	 * Mutates {@link ItemIO#AUTO} in the specified annotations array by replacing it with the inferred {@link ItemIO}
-//	 * from the specified {@link FunctionalMethodType}s. Also checks if the user defined {@link ItemIO} matches the 
-//	 * inferred one if its different from AUTO and logs the errors in the specified problems list. It is expected that
-//	 * the order of annotations matches the order of specified {@link FunctionalMethodType}s.
-//	 * 
-//	 * @param annotations the {@link Parameter} annotations to mutate
-//	 * @param fmts inferred method types from the functional method
-//	 * @param problems list to record problems
-//	 * @return true if new problems got added to the problems list
-//	 */
-//	private static boolean resolveItemIOAuto(Parameter[] annotations, List<FunctionalMethodType> fmts, final ArrayList<ValidityProblem> problems) {
-//		boolean dirty = false;
-//		int i = 0;
-//		for (Parameter anno : annotations) {
-//			FunctionalMethodType fmt = fmts.get(i);
-//			if (anno.itemIO().equals(ItemIO.AUTO)) {
-//				// NB: Mutating the annotation should be fine here, as the functional signature can't change dynamically.
-//				// Hence, the inferred ITemIO should stay valid. (And for now we do not need information about AUTO after
-//				// this point)
-//				ItemIO io = (ItemIO) AnnotationUtils.mutateAnnotationInstance(anno, Parameter.ITEMIO_FIELD_NAME, fmt.itemIO());
-//				assert io.equals(ItemIO.AUTO);
-//			// if the ItemIO is explicitly specified, we can check if it matches the inferred ItemIO from the functional method
-//			} else if (!anno.itemIO().equals(fmt.itemIO())) {
-//				String message = "";
-//				message += "Inferred ItemIO of parameter annotation number " + i + " does not match "
-//						+ "the specified ItemIO of the annotation: "
-//						+ "inferred: " + fmt.itemIO() + " vs. "
-//						+ "specified: " + anno.itemIO();
-//				problems.add(new ValidityProblem(message));
-//				dirty = true;
-//			}
-//			i++;
-//		}
-//		return dirty;
-//	}
-	
+
 	private static void parseFunctionalParameters(final ArrayList<Member<?>> items, final Set<String> names, final ArrayList<ValidityProblem> problems,
-			AnnotatedElement annotationBearer, Type type, final boolean synthesizeAnnotations) {
+			Type type, ParameterData data) {
 		//Search for the functional method of 'type' and map its signature to ItemIO
 		List<FunctionalMethodType> fmts;
 		try {
@@ -504,32 +492,12 @@ public final class ParameterStructs {
 				type.getTypeName()));
 			return;
 		}
-		
+
 		// Get parameter annotations (may not be present)
 		// TODO: remove Parameter annotations from all ops and remove logic below.
 		// TODO: grab names from OpClass/OpField annotations.
-		Parameter[] annotations = synthesizeParameterAnnotations(fmts);
-//		// 'type' is annotated, resolve ItemIO.AUTO by matching it to the signature of the functional method
-//		if (annotations.length > 0 && !synthesizeAnnotations) {
-//			if (annotations.length != fmts.size()) {
-//				String fmtIOs = Arrays.deepToString(fmts.stream().map(fmt -> fmt.itemIO()).toArray(ItemIO[]::new));
-//				problems.add(new ValidityProblem("The number of inferred functional method types does not match "
-//						+ "the number of specified parameters annotations.\n"
-//						+ "#inferred functional method types: " + fmts.size() + " " +  fmtIOs + "\n"
-//						+ "#specified paraeter annotations: " + annotations.length));
-//				return;
-//			}
-//			// START HERE: Instead of hacking the annotation here, we need to 
-//			if (resolveItemIOAuto(annotations, fmts, problems)) {
-//				// specified parameter annotations do not match functional method signature
-//				return;
-//			}
-//		// 'type' is not annotated, synthesize parameter annotations using defaults and ItemIO inferred from 
-//		// the functional method
-//		} else {
-//			annotations = synthesizeParameterAnnotations(fmts);
-//		}
-		
+		Parameter[] annotations = data.synthesizeAnnotations(fmts).toArray(Parameter[]::new);
+
 		for (int i=0; i<annotations.length; i++) {
 			String key = annotations[i].key();
 			final Type itemType = fmts.get(i).type();
@@ -694,4 +662,6 @@ public final class ParameterStructs {
 		
 		return nonDefaults.get(0);
 	}
+	
+	
 }

@@ -40,6 +40,7 @@ import java.util.Map;
 
 import org.scijava.struct.ItemIO;
 
+
 /**
  * Default {@link MutableParameterMember} implementation.
  * 
@@ -75,10 +76,17 @@ public class DefaultMutableParameterMember<T> implements
 	private final Map<String, String> values = new HashMap<>();
 
 	public DefaultMutableParameterMember(final String key, final Class<T> type, final ItemIO ioType) {
-		this(key, (Type) type, ioType);
+		this(key, "", (Type) type, ioType);
 	}
 	public DefaultMutableParameterMember(final String key, final Type type, final ItemIO ioType) {
+		this(key, "", type, ioType);
+	}
+	public DefaultMutableParameterMember(final String key, final String description, final Class<T> type, final ItemIO ioType) {
+		this(key, description, (Type) type, ioType);
+	}
+	public DefaultMutableParameterMember(final String key, final String description, final Type type, final ItemIO ioType) {
 		this.key = key;
+		this.description = description;
 		this.type = type;
 		this.ioType = ioType;
 		visibility = MutableParameterMember.super.getVisibility();
@@ -94,7 +102,6 @@ public class DefaultMutableParameterMember<T> implements
 		final List<Object> superChoices = MutableParameterMember.super.getChoices();
 		if (superChoices != null) choices.addAll(superChoices);
 		label = MutableParameterMember.super.getLabel();
-		description = MutableParameterMember.super.getDescription();
 	}
 
 	/** Creates a new parameter with the same values as the given one. */

@@ -37,7 +37,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.feretsAngle}.
@@ -45,10 +44,14 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.feretsAngle", label = "Geometric (2D): Ferets Angle")
-@Parameter(key = "points")
-@Parameter(key = "feretsAngle")
 public class DefaultFeretsAngle implements Computers.Arity1<Pair<RealLocalizable, RealLocalizable>, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param points
+	 * @param feretsAngle
+	 */
 	@Override
 	public void compute(final Pair<RealLocalizable, RealLocalizable> input, final DoubleType output) {
 

@@ -28,6 +28,11 @@ public class ConvertedParameterMember<T> implements Member<T>{
 	}
 
 	@Override
+	public String getDescription() {
+		return original.getDescription();
+	}
+
+	@Override
 	public Type getType() {
 		return newType;
 	}

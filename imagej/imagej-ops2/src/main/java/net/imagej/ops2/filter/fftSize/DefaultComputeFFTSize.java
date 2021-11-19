@@ -34,9 +34,7 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op that calculates FFT fast sizes according to the following logic.
@@ -48,11 +46,15 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "filter.fftSize")
-@Parameter(key = "dimensions")
-@Parameter(key = "powerOfTwo")
-@Parameter(key = "outputSizes")
 public class DefaultComputeFFTSize implements BiFunction<Dimensions, Boolean, long[][]> {
 
+	/**
+	 * TODO
+	 *
+	 * @param dimensions
+	 * @param powerOfTwo
+	 * @return the outputSizes
+	 */
 	@Override
 	public long[][] apply(Dimensions inputDimensions, Boolean powerOfTwo) {
 

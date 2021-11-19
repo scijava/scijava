@@ -43,9 +43,7 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.secondMultiVariate}.
@@ -53,8 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
-@Parameter(key = "input")
-@Parameter(key = "minorMajorAxisPair")
 public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleType, DoubleType>> {
 
 	/**
@@ -192,6 +188,12 @@ public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleTyp
 		return input.vertex(i).getDoublePosition(0);
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param minorMajorAxisPair
+	 */
 	@Override
 	public Pair<DoubleType, DoubleType> apply(final Polygon2D input) {
 		

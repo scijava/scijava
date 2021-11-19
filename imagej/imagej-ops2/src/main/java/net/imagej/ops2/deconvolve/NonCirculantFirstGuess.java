@@ -46,7 +46,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Calculate non-circulant first guess. This is used as part of the Boundary
@@ -61,10 +60,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "deconvolve.firstGuess", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "outType")
-@Parameter(key = "k")
-@Parameter(key = "output")
 public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements
 	Functions.Arity3<RandomAccessibleInterval<I>, O, Dimensions, RandomAccessibleInterval<O>>
@@ -81,6 +76,14 @@ public class NonCirculantFirstGuess<I extends RealType<I>, O extends RealType<O>
 	 * k is the size of the measurement window. That is the size of the acquired
 	 * image before extension, k is required to calculate the non-circulant
 	 * normalization factor
+	 */
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param outType
+	 * @param k
+	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> in, final O outType, final Dimensions k) {

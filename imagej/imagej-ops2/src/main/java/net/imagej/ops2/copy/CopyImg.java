@@ -39,7 +39,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Copying {@link Img} into another {@link Img}. Exists mainly for convenience
@@ -49,13 +48,17 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "copy, copy.img")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CopyImg<T extends NativeType<T>> implements Computers.Arity1<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.iterableInterval")
 	private Computers.Arity1<Iterable<T>, Iterable<T>> copyComputer;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final Img<T> input, final Img<T> output) {
 		if (!input.iterationOrder().equals(output.iterationOrder()))
@@ -65,8 +68,6 @@ public class CopyImg<T extends NativeType<T>> implements Computers.Arity1<Img<T>
 }
 
 @Plugin(type = Op.class, name = "copy, copy.img")
-@Parameter(key = "input")
-@Parameter(key = "output")
 class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T>> {
 
 	@OpDependency(name = "copy.img")
@@ -75,6 +76,12 @@ class CopyImgFunction<T extends NativeType<T>> implements Function<Img<T>, Img<T
 	@OpDependency(name = "create.img")
 	private Function<Img<T>, Img<T>> createFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	@Override
 	public Img<T> apply(Img<T> input) {
 		Img<T> output = createFunc.apply(input);

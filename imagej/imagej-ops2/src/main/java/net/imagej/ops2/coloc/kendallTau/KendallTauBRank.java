@@ -39,9 +39,7 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This algorithm calculates Kendall's Tau-b rank correlation coefficient
@@ -76,12 +74,16 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "coloc.kendallTau")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "output")
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @return the output
+	 */
 	@Override
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {
 		if (!ColocUtil.sameIterationOrder(image1, image2))

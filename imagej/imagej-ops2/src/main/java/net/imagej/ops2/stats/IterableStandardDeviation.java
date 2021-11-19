@@ -36,7 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.stdDev} directly.
@@ -49,11 +48,15 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.stdDev")
-@Parameter(key = "iterableInput")
-@Parameter(key = "stdDev")
 public class IterableStandardDeviation<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<Iterable<I>, O> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param stdDev
+	 */
 	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double sum = 0;

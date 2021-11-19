@@ -40,19 +40,22 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.verticesCountConvexHull", label = "Geometric (2D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "verticesCountConvexHull")
 public class DefaultVerticesCountConvexHullPolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> convexHullFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param verticesCountConvexHull
+	 */
 	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		output.set(convexHullFunc.apply(input).numVertices());

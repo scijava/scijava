@@ -42,7 +42,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.mainElongation} based on
@@ -52,13 +51,17 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (2D): Elongation")
-@Parameter(key = "input")
-@Parameter(key = "elongation")
 public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")
 	private Function<Polygon2D, Polygon2D> minimumBoundingBoxFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param elongation
+	 */
 	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 		final List<? extends RealLocalizable> minBB = GeomUtils.vertices(minimumBoundingBoxFunc.apply(input));

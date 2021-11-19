@@ -41,7 +41,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Difference of Gaussians (DoG) implementation where sigmas can vary by
@@ -51,12 +50,6 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "filter.DoG")
-@Parameter(key = "input")
-@Parameter(key = "sigmas1")
-@Parameter(key = "sigmas2")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -69,6 +62,16 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 			Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> dogOp;
 
 	//TODO: make the outOfBoundsFactory optional (see DoGTest for the default).
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sigmas1
+	 * @param sigmas2
+	 * @param outOfBoundsFactory
+	 * @param executorService
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> t, final double[] sigmas1, //
 			final double[] sigmas2, final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> fac,
@@ -87,12 +90,6 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 }
 
 @Plugin(type = Op.class, name = "filter.DoG")
-@Parameter(key = "input")
-@Parameter(key = "sigma1")
-@Parameter(key = "sigma2")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -100,6 +97,16 @@ class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 	private Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], //
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> dogOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param sigma1
+	 * @param sigma2
+	 * @param outOfBoundsFactory
+	 * @param executorService
+	 * @param output
+	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, Double in2, Double in3,
 			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> in4, ExecutorService in5,

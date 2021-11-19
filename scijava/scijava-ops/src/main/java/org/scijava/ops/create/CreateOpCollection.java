@@ -9,8 +9,12 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
+/**
+ * Creation ops
+ * @author G
+ *
+ */
 @Plugin(type = OpCollection.class)
 public class CreateOpCollection {
 
@@ -29,6 +33,5 @@ public class CreateOpCollection {
 	};
 	
 	@OpField(names = "create", priority = Priority.HIGH)
-	@Parameter(key = "output")
 	public static final Producer<Double> doubleSource = () -> 0.0;
 }

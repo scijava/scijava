@@ -39,9 +39,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Maps;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Copies an {@link IterableInterval} into another {@link IterableInterval}
@@ -50,8 +48,6 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, IterableInterval<T>> {
 
 	// used internally
@@ -59,6 +55,12 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 	@OpDependency(name = "copy.type")
 	private Computers.Arity1<T, T> copyOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final IterableInterval<T> input, final IterableInterval<T> output) {
 		if (!input.iterationOrder().equals(output.iterationOrder()))
@@ -69,8 +71,6 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 }
 
 @Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "output")
 class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterval<T>> {
 
 	@OpDependency(name = "create.img")
@@ -78,6 +78,12 @@ class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterva
 	@OpDependency(name = "copy.iterableInterval")
 	private Computers.Arity1<IterableInterval<T>, IterableInterval<T>> copyOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	@Override
 	public IterableInterval<T> apply(IterableInterval<T> input) {
 		IterableInterval<T> output = imgCreator.apply(input, input.firstElement());

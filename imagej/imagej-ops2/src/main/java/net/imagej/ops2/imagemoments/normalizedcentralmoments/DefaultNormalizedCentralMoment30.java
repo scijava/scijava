@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.normalizedCentralMoment30}.
@@ -50,8 +49,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "imageMoments.normalizedCentralMoment30",
 	label = "Image Moment: NormalizedCentralMoment30")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultNormalizedCentralMoment30<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O>
 {

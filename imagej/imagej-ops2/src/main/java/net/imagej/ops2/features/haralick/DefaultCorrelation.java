@@ -37,9 +37,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * 
@@ -51,11 +49,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.correlation")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultCorrelation<T extends RealType<T>> extends
 		AbstractHaralickFeature<T> {
 
@@ -69,6 +62,15 @@ public class DefaultCorrelation<T extends RealType<T>> extends
 	@OpDependency(name = "features.haralick.coocStdX")
 	private Function<double[][], DoubleType> coocStdXFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {

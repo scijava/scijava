@@ -42,7 +42,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.MainElongation}
@@ -53,13 +52,17 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (3D): Main Elongation", priority = Priority.VERY_HIGH)
-@Parameter(key = "inputMesh")
-@Parameter(key = "output")
 public class DefaultMainElongation implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Mesh, RealMatrix> inertiaTensor;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputMesh
+	 * @param output
+	 */
 	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		final RealMatrix it = inertiaTensor.apply(input);

@@ -36,9 +36,7 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 // This plugin code ported from the original MatLab code of the max likelihood
 // threshold method (th_maxlik) as written in Antti Niemisto's 1.03 version of
@@ -51,14 +49,18 @@ import org.scijava.struct.ItemIO;
  * @author Barry DeZonia
  */
 @Plugin(type = Op.class, name = "threshold.maxLikelihood")
-@Parameter(key = "inputHistogram")
-@Parameter(key = "output")
 public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {
 
 	private static final int MAX_ATTEMPTS = 10000;
 
+	/**
+	 * TODO
+	 *
+	 * @param inputHistogram
+	 * @param output
+	 */
 	@Override
 	public long computeBin(final Histogram1d<T> hist) {
 		final long[] histogram = hist.toLongArray();

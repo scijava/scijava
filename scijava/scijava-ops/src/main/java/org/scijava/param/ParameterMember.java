@@ -144,11 +144,6 @@ public interface ParameterMember<T> extends Member<T> {
 		return getKey();
 	}
 
-	/** Gets a string describing the object. */
-	default String getDescription() {
-		return null;
-	}
-
 	/** Returns true iff the given key is defined. */
 	default boolean has(@SuppressWarnings("unused") String key) {
 		return false;

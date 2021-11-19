@@ -37,7 +37,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An Op which calculates the euler characteristic (χ) of the given 3D binary image.<br>
@@ -69,8 +68,6 @@ import org.scijava.struct.ItemIO;
  * @author David Legland  - original MatLab implementation
  */
 @Plugin(type = Op.class, name = "topology.eulerCharacteristic26N")
-@Parameter(key = "interval")
-@Parameter(key = "output")
 public class EulerCharacteristic26N<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */
@@ -93,7 +90,13 @@ public class EulerCharacteristic26N<B extends BooleanType<B>>
              0, -1, -1,  0, -1,  0,  2,  1, -1,  2,  0,  1,  0,  1,  1,  0
     };
 
-    @Override
+   	/**
+	 * TODO
+	 *
+	 * @param interval
+	 * @param output
+	 */
+ @Override
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final RandomAccess<B> access = interval.randomAccess();

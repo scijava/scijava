@@ -36,7 +36,6 @@ import org.scijava.ops.OpField;
 import org.scijava.ops.core.OpCollection;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Logic operations with {@link BooleanType} as output.

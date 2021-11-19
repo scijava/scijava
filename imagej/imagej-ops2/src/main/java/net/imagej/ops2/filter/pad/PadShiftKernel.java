@@ -42,9 +42,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to pad a kernel and shift the center of the kernel to the origin
@@ -55,9 +53,6 @@ import org.scijava.struct.ItemIO;
  * @param <O>
  */
 @Plugin(type = Op.class, name = "filter.padShiftKernel")
-@Parameter(key = "kernel")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "output")
 public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	implements BiFunction<I, Dimensions, O> 
 {
@@ -70,6 +65,13 @@ public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessible
 
 	@Override
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param kernel
+	 * @param paddedDimensions
+	 * @return the output
+	 */
 	public O apply(final I kernel, final Dimensions paddedDimensions) {
 
 		Dimensions paddedFFTInputDimensions;

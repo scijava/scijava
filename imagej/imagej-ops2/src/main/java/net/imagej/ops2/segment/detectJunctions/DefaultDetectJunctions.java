@@ -46,9 +46,7 @@ import net.imglib2.util.Intervals;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Finds the junctions between a {@link ArrayList} of {@link WritablePolyline},
@@ -62,9 +60,6 @@ import org.scijava.struct.ItemIO;
  * @author Gabe Selzer
  */
 @Plugin(type = Op.class, name = "segment.detectJunctions")
-@Parameter(key = "lines")
-@Parameter(key = "threshold", description = "Maximum distance between polylines to be considered a junction")
-@Parameter(key = "junctions")
 public class DefaultDetectJunctions implements BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> {
 
 	// @Parameter(required = false)
@@ -100,6 +95,13 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 		return new RealPoint(input);
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param lines
+	 * @param threshold Maximum distance between polylines to be considered a junction
+	 * @param junctions
+	 */
 	@Override
 	public List<RealPoint> apply(final List<? extends WritablePolyline> input, final Double threshold) {
 
@@ -317,13 +319,17 @@ public class DefaultDetectJunctions implements BiFunction<List<? extends Writabl
 }
 
 @Plugin(type = Op.class, name = "segment.detectJunctions")
-@Parameter(key = "lines")
-@Parameter(key = "junctions")
 class SimpleDetectJunctions implements Function<List<? extends WritablePolyline>, List<RealPoint>> {
 
 	@OpDependency(name = "segment.detectJunctions")
 	private BiFunction<List<? extends WritablePolyline>, Double, List<RealPoint>> junctionDetector;
 
+	/**
+	 * TODO
+	 *
+	 * @param lines
+	 * @param junctions
+	 */
 	@Override
 	public List<RealPoint> apply(List<? extends WritablePolyline> t) {
 		return junctionDetector.apply(t, null);

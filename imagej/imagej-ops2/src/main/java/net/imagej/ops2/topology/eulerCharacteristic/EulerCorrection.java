@@ -40,7 +40,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An Op which calculates the correction needed to approximate the contribution of the image to the
@@ -71,12 +70,16 @@ import org.scijava.struct.ItemIO;
  * NB: Methods are public and static to help testing
  */
 @Plugin(type = Op.class, name = "topology.eulerCorrection")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class EulerCorrection<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
 
-    @Override
+   	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
+ @Override
     public void compute(RandomAccessibleInterval<B> interval, DoubleType output) {
     	if(interval.numDimensions() != 3) throw new IllegalArgumentException("Input must have 3 dimensions!");
         final Traverser<B> traverser = new Traverser<>(interval);

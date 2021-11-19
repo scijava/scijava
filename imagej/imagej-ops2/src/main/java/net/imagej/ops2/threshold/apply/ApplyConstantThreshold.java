@@ -39,9 +39,7 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Adapt;
 import org.scijava.ops.util.Maps;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Applies the given threshold value to every element along the given
@@ -51,10 +49,6 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.apply")
-@Parameter(key = "input")
-@Parameter(key = "threshold")
-@Parameter(key = "comparator")
-@Parameter(key = "output")
 public class ApplyConstantThreshold<T extends RealType<T>>
 		implements Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> {
 
@@ -62,6 +56,14 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 	Computers.Arity3<T, T, Comparator<? super T>, BitType> applyThreshold;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param threshold
+	 * @param comparator
+	 * @param output
+	 */
 	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Comparator<T> comparator,
 			final Iterable<BitType> output) {
@@ -78,15 +80,19 @@ public class ApplyConstantThreshold<T extends RealType<T>>
 // use this Op. The default comparator just returns true if the input is greater
 // than the threshold.
 @Plugin(type = Op.class, name = "threshold.apply")
-@Parameter(key = "input")
-@Parameter(key = "threshold")
-@Parameter(key = "output")
 class ApplyConstantThresholdSimple<T extends RealType<T>> implements Computers.Arity2<Iterable<T>, T, Iterable<BitType>> {
 
 	@OpDependency(name = "threshold.apply")
 	Computers.Arity3<Iterable<T>, T, Comparator<T>, Iterable<BitType>> applyThreshold;
 
 	// TODO can/should the Comparator be of <? super T> instead of just <T>?
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param threshold
+	 * @param output
+	 */
 	@Override
 	public void compute(final Iterable<T> input1, final T input2, final Iterable<BitType> output) {
 

@@ -49,9 +49,7 @@ import org.scijava.function.Inplaces;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Adapt;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Vector Accelerator implements acceleration scheme described in Acceleration
@@ -63,7 +61,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "deconvolve.accelerate",
 	priority = Priority.NORMAL)
-@Parameter(key = "io")
 public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 	Inplaces.Arity1<RandomAccessibleInterval<T>> 
 {
@@ -84,6 +81,11 @@ public class VectorAccelerator<T extends RealType<T> & NativeType<T>> implements
 
 	ArrayImgFactory<T> factory;
 
+	/**
+	 * TODO
+	 *
+	 * @param io
+	 */
 	@Override
 	public void mutate(RandomAccessibleInterval<T> yk_iterated) {
 		T type = Util.getTypeFromInterval(yk_iterated);

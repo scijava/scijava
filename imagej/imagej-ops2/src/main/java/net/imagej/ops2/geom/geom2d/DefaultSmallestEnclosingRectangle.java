@@ -42,9 +42,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.smallestBoundingBox}.
@@ -52,8 +50,6 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.smallestEnclosingBoundingBox", label = "Geometric (2D): Smallest Enclosing Rectangle")
-@Parameter(key = "input")
-@Parameter(key = "smallestEnclosingBoundingBox")
 public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Polygon2D> {
 
 	@OpDependency(name = "geom.convexHull")
@@ -101,6 +97,12 @@ public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Po
 		return new DefaultWritablePolygon2D(out);
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param smallestEnclosingBoundingBox
+	 */
 	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		// ensure validity of inputs

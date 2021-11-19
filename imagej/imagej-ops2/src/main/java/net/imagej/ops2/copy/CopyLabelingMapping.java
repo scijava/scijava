@@ -40,7 +40,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Copies a {@link LabelingMapping} into another {@link LabelingMapping}
@@ -49,10 +48,14 @@ import org.scijava.struct.ItemIO;
  * @param <L>
  */
 @Plugin(type = Op.class, name = "copy, copy.labelingMapping", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final LabelingMapping<L> input, final LabelingMapping<L> output) {
 
@@ -63,8 +66,6 @@ public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<
 }
 
 //@Plugin(type = Op.class, name = "copy.labelingMapping", priority = Priority.VERY_HIGH)
-//@Parameter(key = "input")
-//@Parameter(key = "output")
 //class CopyLabelingMappingFunction<L> implements Function<LabelingMapping<L>, LabelingMapping<L>> {
 //
 //	@OpDependency(name = "copy.labelingMapping")

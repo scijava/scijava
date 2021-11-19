@@ -40,9 +40,7 @@ import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.boundingBox}.
@@ -50,10 +48,14 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.boundingBox")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultBoundingBox implements Function<Polygon2D, Polygon2D> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		double min_x = Double.POSITIVE_INFINITY;

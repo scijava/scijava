@@ -42,7 +42,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Inverse FFT computer that operates on an RAI and wraps FFTMethods. The input
@@ -55,9 +54,6 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "filter.ifft")
-@Parameter(key = "input")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 		implements Computers.Arity2<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -66,6 +62,13 @@ public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 
 	/**
 	 * Compute an ND inverse FFT
+	 */
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<C> input, final ExecutorService es,

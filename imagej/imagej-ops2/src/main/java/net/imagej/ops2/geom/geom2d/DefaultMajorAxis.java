@@ -40,7 +40,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.majorAxis}.
@@ -48,13 +47,17 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.majorAxis", label = "Geometric (2D): Major Axis")
-@Parameter(key = "input")
-@Parameter(key = "majorAxis")
 public class DefaultMajorAxis implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")
 	private Function<Polygon2D, Pair<DoubleType, DoubleType>> minorMajorAxisFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param majorAxis
+	 */
 	@Override
 	public void compute(final Polygon2D input, final DoubleType output) {
 		output.set(minorMajorAxisFunc.apply(input).getB());

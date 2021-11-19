@@ -33,9 +33,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Thinning Operation
@@ -44,10 +42,14 @@ import org.scijava.struct.ItemIO;
  * @author Kyle Harrington, Beth Israel Deaconess Medical Center
  */
 @Plugin(type = Op.class, name = "morphology.thinMorphological")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class ThinMorphological extends AbstractThin {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<BitType> input, //
 			final RandomAccessibleInterval<BitType> output) {

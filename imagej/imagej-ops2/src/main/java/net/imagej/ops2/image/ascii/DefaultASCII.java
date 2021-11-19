@@ -41,7 +41,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generates an ASCII version of an image.
@@ -52,10 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Curtis Rueden
  */
 @Plugin(type = Op.class, name = "image.ascii")
-@Parameter(key = "iterableInput")
-@Parameter(key = "min")
-@Parameter(key = "max")
-@Parameter(key = "ASCIIArt")
 public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<IterableInterval<T>, T, T, String>
 {
 
@@ -64,6 +59,14 @@ public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<Ite
 	@OpDependency(name = "stats.minMax")
 	private Function<IterableInterval<T>, Pair<T, T>> minMaxFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param min
+	 * @param max
+	 * @param ASCIIArt
+	 */
 	@Override
 	public String apply(final IterableInterval<T> input, T min, T max) {
 		if (min == null || max == null) {

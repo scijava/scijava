@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.moment1AboutMean}
@@ -53,11 +52,15 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.moment1AboutMean")
-@Parameter(key = "iterableInput")
-@Parameter(key = "moment1AboutMean")
 public class DefaultMoment1AboutMean<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param moment1AboutMean
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setZero();

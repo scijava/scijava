@@ -43,9 +43,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Line;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Minimum Feret of a polygon.
@@ -53,13 +51,17 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.minimumFeret")
-@Parameter(key = "input")
-@Parameter(key = "minFeret")
 public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param minFeret
+	 */
 	@Override
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));

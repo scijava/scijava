@@ -42,7 +42,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Fills the holes of a BooleanType image.
@@ -51,19 +50,22 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "morphology.fillHoles")
-@Parameter(key = "input")
-@Parameter(key = "structElement")
-@Parameter(key = "output")
 public class FillHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
 
-//	@Parameter(required = false)
 //	private Shape structElement = new RectangleShape(1, false);
 
 	@OpDependency(name = "morphology.floodFill")
 	private Computers.Arity3<RandomAccessibleInterval<T>, Localizable, Shape, RandomAccessibleInterval<T>> floodFillComp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param structElement
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> op,
 		final Shape structElement, final RandomAccessibleInterval<T> r)

@@ -42,8 +42,6 @@ import org.scijava.plugin.Plugin;
 public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 
 	@OpField(names = "adapt", priority = Priority.HIGH)
-	@Parameter(key = "from")
-	@Parameter(key = "to")
 	public final Function<Function<I1, O>, Function<RandomAccessibleInterval<I1>, RandomAccessibleInterval<O>>> lift1 =
 		(function) -> {
 			return (raiInput) -> {
@@ -57,8 +55,6 @@ public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "from")
-	@Parameter(key = "to")
 	public final Function<BiFunction<I1, I2, O>, BiFunction<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<O>>> lift2 =
 		(function) -> {
 			return (raiInput1, raiInput2) -> {
@@ -73,8 +69,6 @@ public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "from")
-	@Parameter(key = "to")
 	public final Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<O>>> lift3 =
 		(function) -> {
 			return (raiInput1, raiInput2, raiInput3) -> {
@@ -90,8 +84,6 @@ public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 		};
 
 		@OpField(names = "adapt")
-		@Parameter(key = "from")
-		@Parameter(key = "to")
 		public final Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<O>>> lift4 =
 			(function) -> {
 				return (raiInput1, raiInput2, raiInput3, raiInput4) -> {
@@ -108,9 +100,7 @@ public class LiftFunctionsToRAI<I1, I2, I3, I4, I5, O extends Type<O>> {
 			};
 
 		@OpField(names = "adapt")
-	@Parameter(key = "from")
-	@Parameter(key = "to")
-	public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<I5>, RandomAccessibleInterval<O>>> lift5 =
+		public final Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<RandomAccessibleInterval<I1>, RandomAccessibleInterval<I2>, RandomAccessibleInterval<I3>, RandomAccessibleInterval<I4>, RandomAccessibleInterval<I5>, RandomAccessibleInterval<O>>> lift5 =
 		(function) -> {
 			return (raiInput1, raiInput2, raiInput3, raiInput4, raiInput5) -> {
 				O outType = function.apply(Util.getTypeFromInterval(raiInput1), Util

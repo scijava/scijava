@@ -38,9 +38,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.centroid}.
@@ -50,13 +48,17 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Centroid")
-@Parameter(key = "input")
-@Parameter(key = "centroid")
 public class CentroidMesh implements Function<Mesh, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> sizeFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centroid
+	 */
 	@Override
 	public RealLocalizable apply(final Mesh input) {
 

@@ -34,14 +34,10 @@ import net.imglib2.roi.geom.real.Polygon2D;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.boundarySizeConvexHull", label = "Geometric (2D): Perimeter Convex Hull", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "boundarySizeConvexHull")
 public class DefaultBoundarySizeConvexHullPolygon extends AbstractBoundarySizeConvexHull<Polygon2D> {}

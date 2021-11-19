@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.matcher.OpClassInfo;
-import org.scijava.param.Parameter;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Nil;
 
@@ -77,7 +75,6 @@ public class OpEnvironmentTest extends AbstractTestEnvironment{
  *
  * @author Gabriel Selzer
  */
-@Parameter(key = "output")
 class OpifyOp implements Producer<String> {
 
 	@Override

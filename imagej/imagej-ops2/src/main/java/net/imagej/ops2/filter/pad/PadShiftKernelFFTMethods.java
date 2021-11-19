@@ -40,9 +40,7 @@ import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Adapt;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to pad a kernel to a size that is compatible with FFTMethods and
@@ -55,9 +53,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "filter.padShiftKernelFFTMethods",
 	priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "output")
 public class PadShiftKernelFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	extends PadShiftKernel<T, I, O>
 {

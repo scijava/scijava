@@ -47,7 +47,6 @@ import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.script.ScriptService;
-import org.scijava.struct.ItemIO;
 
 /**
  * Computes an image using an equation.
@@ -64,13 +63,17 @@ import org.scijava.struct.ItemIO;
  * @author Curtis Rueden
  */
 @Plugin(type = Op.class, name = "image.equation")
-@Parameter(key = "input")
-@Parameter(key = "scriptService")
-@Parameter(key = "output")
 public class DefaultEquation<T extends RealType<T>> implements
 	Computers.Arity2<String, ScriptService, IterableInterval<T>> 
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param scriptService
+	 * @param output
+	 */
 	@Override
 	public void compute(final String input, final ScriptService scriptService, final IterableInterval<T> output) {
 		final String equation = input + ";";

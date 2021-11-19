@@ -50,7 +50,6 @@ import org.scijava.function.Functions;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An N-dimensional box counting that can be used to estimate the fractal
@@ -327,16 +326,20 @@ public class BoxCount {
 }
 
 @Plugin(type = Op.class, name = "topology.boxCount")
-@Parameter(key = "input")
-@Parameter(key = "maxSize")
-@Parameter(key = "minSize")
-@Parameter(key = "scaling")
-@Parameter(key = "gridMoves")
-@Parameter(key = "output")
 class DefaultBoxCount<B extends BooleanType<B>> implements
 	Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param maxSize
+	 * @param minSize
+	 * @param scaling
+	 * @param gridMoves
+	 * @return the output
+	 */
 	@Override
 	public List<ValuePair<DoubleType, DoubleType>> apply(
 		RandomAccessibleInterval<B> input, Long maxSize, Long minSize,

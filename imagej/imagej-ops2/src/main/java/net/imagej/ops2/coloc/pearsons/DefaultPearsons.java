@@ -36,9 +36,7 @@ import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * A class that represents the mean calculation of the two source images in the
@@ -47,13 +45,17 @@ import org.scijava.struct.ItemIO;
  * @author Ellen T Arena
  */
 @Plugin(type = Op.class, name = "coloc.pearsons")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "output")
 public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> implements
 	BiFunction<Iterable<T>, Iterable<U>, Double> 
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @return the output
+	 */
 	@Override
 	public Double apply(final Iterable<T> image1,
 		final Iterable<U> image2)

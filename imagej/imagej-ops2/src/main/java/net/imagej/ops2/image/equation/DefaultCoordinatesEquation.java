@@ -39,7 +39,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An equation operation which computes image values from coordinates using
@@ -49,11 +48,15 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "image.equation")
-@Parameter(key = "op")
-@Parameter(key = "output")
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
 		implements Computers.Arity1<Function<long[], N>, IterableInterval<T>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param op
+	 * @param output
+	 */
 	@Override
 	public void compute(final Function<long[], N> op, final IterableInterval<T> output) {
 

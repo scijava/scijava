@@ -43,7 +43,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Copying {@link ArrayImg} into another {@link ArrayImg}
@@ -52,10 +51,14 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "copy")
 public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> {
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param copy
+	 */
 	@Override
 	public void compute(final ArrayImg<T, A> input, final ArrayImg<T, A> output) {
 
@@ -69,14 +72,18 @@ public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 }
 
 @Plugin(type = Op.class, name = "copy, copy.img", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "copy")
 class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 		implements Function<ArrayImg<T, A>, ArrayImg<T, A>> {
 
 	@OpDependency(name = "copy.img")
 	private Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> copyOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param copy
+	 */
 	@Override
 	public ArrayImg<T, A> apply(ArrayImg<T, A> input) {
 		// NB: Workaround for ArrayImgFactory not overriding create(Dimensions, T).

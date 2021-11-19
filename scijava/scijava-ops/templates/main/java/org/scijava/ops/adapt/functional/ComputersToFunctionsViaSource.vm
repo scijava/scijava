@@ -43,7 +43,6 @@ import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -57,14 +56,16 @@ public class ComputersToFunctionsViaSource {
 
 #foreach($arity in [0..$maxArity])
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Computer${arity}ToFunction${arity}ViaSource$generics.call($arity)
 			implements Function<$computerArity.call($arity)$generics.call($arity), $functionArity.call($arity)$generics.call($arity)> {
 
 		@OpDependency(name = "create", adaptable = false)
 		Producer<O> creator;
 
+		/**
+		 * @param computer the computer to adapt
+		 * @return a Function adaptation of computer
+		 */
 		@Override
 		public $functionArity.call($arity)$generics.call($arity) apply($computerArity.call($arity)$generics.call($arity) computer) {
 			return (#if($arity == 0)#{else}$applyArgs.call($arity)#end) -> {

@@ -39,7 +39,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
@@ -53,8 +52,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> - the type of the output image
  */
 @Plugin(type = Op.class, name = "image.normalize")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class NormalizeIILazyFunction<I extends RealType<I>>
 		implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> {
 
@@ -64,6 +61,12 @@ public class NormalizeIILazyFunction<I extends RealType<I>>
 	@OpDependency(name = "image.normalize")
 	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<I>> normalizer;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	@Override
 	public RandomAccessibleInterval<I> apply(RandomAccessibleInterval<I> img) {
 		RandomAccessibleInterval<I> output = createFunc.apply(img);

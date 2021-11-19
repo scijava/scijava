@@ -42,7 +42,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.variance} from an integral image
@@ -53,11 +52,15 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "stats.integralVariance")
-@Parameter(key = "iterableInput")
-@Parameter(key = "integralVariance")
 public class IntegralVariance<I extends RealType<I>>
 		implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param integralVariance
+	 */
 	@Override
 	public void compute(final RectangleNeighborhood<? extends Composite<I>> input, final DoubleType output) {
 		// computation according to

@@ -43,7 +43,6 @@ import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.core.OpCollection;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
@@ -88,17 +87,12 @@ public class OpMethodTest extends AbstractTestEnvironment {
 //	@OpMethod(names = "test.parseInteger", type = Function.class)
 //	// Refers to the input parameter of the function that's returned by this
 //	// factory method.
-//	@Parameter(key = "numericString")
 //	// Refers to the output parameter of the function.
-//	@Parameter(key = "parsedInteger")
 //	public static Integer createParseIntegerOp(String in) {
 //		return Integer.parseInt(in);
 //	}
 //
 //	@OpMethod(names = "test.multiplyNumericStrings", type = BiFunction.class)
-//	@Parameter(key = "numericString1")
-//	@Parameter(key = "numericString2")
-//	@Parameter(key = "multipliedNumericStrings")
 //	public static Integer createMultiplyNumericStringsOp(final String in1,
 //		final String in2, @OpDependency(
 //			name = "test.parseInteger") Function<String, Integer> parseIntegerOp)

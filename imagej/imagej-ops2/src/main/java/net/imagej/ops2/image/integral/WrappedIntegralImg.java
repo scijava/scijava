@@ -39,9 +39,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Wrapper op for the creation of integral images with
@@ -51,14 +49,18 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "image.integral", priority = Priority.LOW)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class WrappedIntegralImg<I extends RealType<I>>
 	implements Function<RandomAccessibleInterval<I>, RandomAccessibleInterval<DoubleType>>
 {
 
 	private IntegralImg<I, DoubleType> integralImg;
 
+		/**
+		 * TODO
+		 *
+		 * @param input
+		 * @return the output
+		 */
 	@Override
 	public RandomAccessibleInterval<DoubleType> apply(
 		final RandomAccessibleInterval<I> input)

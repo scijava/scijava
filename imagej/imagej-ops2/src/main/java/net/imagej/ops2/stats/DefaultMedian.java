@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.median}.
@@ -53,14 +52,18 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.median")
-@Parameter(key = "iterableInput")
-@Parameter(key = "median")
 public class DefaultMedian<I extends RealType<I>, O extends RealType<O>> 
 		implements Computers.Arity1<Iterable<I>, O> {
 
 	@OpDependency(name = "stats.quantile")
 	private Computers.Arity2<Iterable<I>, Double, O> quantileOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param median
+	 */
 	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		final ArrayList<Double> statistics = new ArrayList<>();

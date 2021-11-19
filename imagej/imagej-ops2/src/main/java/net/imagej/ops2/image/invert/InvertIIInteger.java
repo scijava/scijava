@@ -46,16 +46,11 @@
 //import org.scijava.functions.Computers;
 //import org.scijava.param.Parameter;
 //import org.scijava.plugin.Plugin;
-//import org.scijava.struct.ItemIO;
 //
 ///**
 // * @author Gabe Selzer
 // */
 //@Plugin(type = Op.class, name = "image.invert", priority = Priority.HIGH)
-//@Parameter(key = "input")
-//@Parameter(key = "min")
-//@Parameter(key = "max")
-//@Parameter(key = "invertedOutput")
 //public class InvertIIInteger<T extends IntegerType<T>> implements
 //	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> 
 //{

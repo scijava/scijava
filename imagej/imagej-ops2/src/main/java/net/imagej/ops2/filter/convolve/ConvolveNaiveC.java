@@ -42,21 +42,24 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Convolves an image naively.
  */
 @Plugin(type = Op.class, name = "filter.convolve")
-@Parameter(key = "input")
-@Parameter(key = "kernel")
-@Parameter(key = "output")
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
 		implements Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {
 	// TODO: should this be binary so we can use different kernels?? Not sure.. what
 	// if someone tried to re-use
 	// with a big kernel that should be matched with ConvolveFFT
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param kernel
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessible<I> input, final RandomAccessibleInterval<K> kernel,
 			final RandomAccessibleInterval<O> output) {

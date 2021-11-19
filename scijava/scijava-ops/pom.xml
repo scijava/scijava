@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -55,13 +57,21 @@
 		<contributor>
 			<name>Christian Dietz</name>
 			<url>https://imagej.net/User:Dietzc</url>
-			<roles><role>founder</role></roles>
-			<properties><id>dietzc</id></properties>
+			<roles>
+				<role>founder</role>
+			</roles>
+			<properties>
+				<id>dietzc</id>
+			</properties>
 		</contributor>
 		<contributor>
 			<name>David Kolb</name>
-			<roles><role>founder</role></roles>
-			<properties><id>Treiblesschorle</id></properties>
+			<roles>
+				<role>founder</role>
+			</roles>
+			<properties>
+				<id>Treiblesschorle</id>
+			</properties>
 		</contributor>
 	</contributors>
 
@@ -93,8 +103,10 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
+		<enforcer.skip>true</enforcer.skip>
+		<scijava-ops.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops.allowedDuplicateClasses>
+		<allowedDuplicateClasses>${scijava-ops.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -111,12 +123,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-function</artifactId>
+			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-types</artifactId>
+			<groupId> org.scijava</groupId>
+			<artifactId>scijava-function</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Third-party dependencies -->
@@ -133,6 +145,17 @@
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.therapi</groupId>
+			<artifactId>therapi-runtime-javadoc</artifactId>
+			<version>0.12.0</version>
+		</dependency>
+
 		<!-- Test scope dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

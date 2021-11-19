@@ -38,7 +38,6 @@ import org.scijava.function.Inplaces;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Simple default implementation of a {@link ChunkerOp}. The list of
@@ -49,13 +48,17 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "thread.chunker")
-@Parameter(key = "chunk")
-@Parameter(key = "numberOfElements")
-@Parameter(key = "executorService")
 public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorService> {
 
 	private final int STEP_SIZE = 1;
 
+	/**
+	 * TODO
+	 *
+	 * @param chunk
+	 * @param numberOfElements
+	 * @param executorService
+	 */
 	@Override
 	public void mutate(final Chunk chunk, final Long numberOfElements, final ExecutorService es) {
 

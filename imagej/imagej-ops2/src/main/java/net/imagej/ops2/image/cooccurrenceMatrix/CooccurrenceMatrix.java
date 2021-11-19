@@ -11,7 +11,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Handler Op delegating between {@link CooccurrenceMatrix2D} and
@@ -22,17 +21,21 @@ import org.scijava.struct.ItemIO;
  * @param <T> - the input {@link RealType}.
  */
 @Plugin(type = Op.class, name = "image.cooccurrenceMatrix")
-@Parameter(key = "iterableInput")
-@Parameter(key = "nrGreyLevels", min = "0", max = "128", stepSize = "1", initializer = "32")
-@Parameter(key = "distance", min = "0", max = "128", stepSize = "1", initializer = "1")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "cooccurrenceMatrix")
 public class CooccurrenceMatrix<T extends RealType<T>>
 		implements Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, double[][]> {
 
 	@OpDependency(name = "stats.minMax")
 	private Function<RandomAccessibleInterval<T>, Pair<T, T>> minmax;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param nrGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @param cooccurrenceMatrix
+	 */
 	@Override
 	public double[][] apply(RandomAccessibleInterval<T> input, Integer nrGreyLevels, Integer distance,
 			MatrixOrientation orientation) {

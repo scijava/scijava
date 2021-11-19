@@ -38,7 +38,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.centralMoment00} directly.
@@ -51,11 +50,15 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "imageMoments.centralMoment00", label = "Image Moment: CentralMoment00", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class IterableCentralMoment00<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(final IterableInterval<I> input, final O output) {
 		if (input.numDimensions() != 2)

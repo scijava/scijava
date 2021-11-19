@@ -47,7 +47,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * <p>
@@ -84,13 +83,6 @@ import org.scijava.struct.ItemIO;
  * @author Simon Schmid (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "sigma")
-@Parameter(key = "mask")
-@Parameter(key = "executorService")
-@Parameter(key = "outputLabeling")
 public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -108,6 +100,17 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity4<RandomAccessibleInterval<FloatType>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> watershedOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param sigma
+	 * @param mask
+	 * @param executorService
+	 * @param outputLabeling
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> in, final Boolean useEightConnectivity,
 			final Boolean drawWatersheds, final double[] sigma, final RandomAccessibleInterval<B> mask,
@@ -141,18 +144,22 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 }
 
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "sigma")
-@Parameter(key = "executorService")
-@Parameter(key = "outputLabeling")
 class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "image.watershed")
 	private Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> watershedOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param sigma
+	 * @param executorService
+	 * @param outputLabeling
+	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> in, Boolean useEightConnectivity, Boolean drawWatersheds,
 			double[] sigma, ExecutorService es, ImgLabeling<Integer, IntType> outputLabeling) {
@@ -162,13 +169,6 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 }
 
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "sigma")
-@Parameter(key = "mask")
-@Parameter(key = "executorService")
-@Parameter(key = "outputLabeling")
 class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -177,6 +177,17 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param sigma
+	 * @param mask
+	 * @param executorService
+	 * @return the outputLabeling
+	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds, double[] sigma, RandomAccessibleInterval<B> mask, ExecutorService es) {
@@ -187,12 +198,6 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 }
 
 @Plugin(type = Op.class, name = "image.watershed")
-@Parameter(key = "input")
-@Parameter(key = "useEightConnectivity")
-@Parameter(key = "drawWatersheds")
-@Parameter(key = "sigma")
-@Parameter(key = "executorService")
-@Parameter(key = "outputLabeling")
 class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends BooleanType<B>>
 		implements Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -201,6 +206,16 @@ class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends Boolea
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<Integer, IntType>> labelingCreator;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param useEightConnectivity
+	 * @param drawWatersheds
+	 * @param sigma
+	 * @param executorService
+	 * @return the outputLabeling
+	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> in, Boolean useEightConnectivity,
 			Boolean drawWatersheds, double[] sigma, ExecutorService es) {

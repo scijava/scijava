@@ -41,9 +41,7 @@ import net.imglib2.util.ValuePair;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.minMax}.
@@ -54,10 +52,14 @@ import org.scijava.struct.ItemIO;
  *            input type
  */
 @Plugin(type = Op.class, name = "stats.minMax", priority = Priority.HIGH)
-@Parameter(key = "iterableInput")
-@Parameter(key = "minMax")
 public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAccessibleInterval<I>, Pair<I, I>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param minMax
+	 */
 	@Override
 	public Pair<I, I> apply(final RandomAccessibleInterval<I> input) {
 		// set minVal to the largest possible value and maxVal to the smallest possible.

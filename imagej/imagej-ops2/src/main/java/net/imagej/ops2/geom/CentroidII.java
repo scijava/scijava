@@ -37,9 +37,7 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.IterableRegion;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This {@link Op} computes the centroid of a {@link IterableRegion} (Label).
@@ -47,10 +45,14 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.centroid", priority = 1)
-@Parameter(key = "input")
-@Parameter(key = "centroid")
 public class CentroidII implements Function<IterableInterval<?>, RealLocalizable> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param centroid
+	 */
 	@Override
 	public RealLocalizable apply(final IterableInterval<?> input) {
 		int numDimensions = input.numDimensions();

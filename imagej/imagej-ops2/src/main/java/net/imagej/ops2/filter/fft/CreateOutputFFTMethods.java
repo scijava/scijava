@@ -39,7 +39,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Function that creates an output for FFTMethods FFT
@@ -48,15 +47,19 @@ import org.scijava.struct.ItemIO;
  * @param <T>
  */
 @Plugin(type = Op.class, name = "filter.createFFTOutput")
-@Parameter(key = "Dimensions")
-@Parameter(key = "outType")
-@Parameter(key = "fast")
-@Parameter(key = "output")
 public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T, Boolean, Img<T>> {
 
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, T, Img<T>> create;
 
+	/**
+	 * TODO
+	 *
+	 * @param Dimensions
+	 * @param outType
+	 * @param fast
+	 * @return the output
+	 */
 	@Override
 	public Img<T> apply(Dimensions paddedDimensions, T outType, Boolean fast) {
 
@@ -69,13 +72,17 @@ public class CreateOutputFFTMethods<T> implements Functions.Arity3<Dimensions, T
 }
 
 @Plugin(type = Op.class, name = "filter.createFFTOutput")
-@Parameter(key = "Dimensions")
-@Parameter(key = "outType")
-@Parameter(key = "output")
 class CreateOutputFFTMethodsSimple<T> implements BiFunction<Dimensions, T, Img<T>> {
 	@OpDependency(name = "filter.createFFTOutput")
 	private Functions.Arity3<Dimensions, T, Boolean, Img<T>> create;
 
+	/**
+	 * TODO
+	 *
+	 * @param Dimensions
+	 * @param outType
+	 * @return the output
+	 */
 	@Override
 	public Img<T> apply(Dimensions paddedDimensions, T outType) {
 		return create.apply(paddedDimensions, outType, true);

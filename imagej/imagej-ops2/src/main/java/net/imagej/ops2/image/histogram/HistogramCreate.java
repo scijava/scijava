@@ -39,18 +39,13 @@ import net.imglib2.util.Pair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * @author Martin Horn (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "image.histogram")
-@Parameter(key = "iterable")
-@Parameter(key = "numBins", required = false)
-@Parameter(key = "histogram")
 public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterable<T>, Integer, Histogram1d<T>> {
 
 	public static final int DEFAULT_NUM_BINS = 256;
@@ -58,6 +53,13 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 	@OpDependency(name = "stats.minMax")
 	private Function<Iterable<T>, Pair<T, T>> minMaxFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterable
+	 * @param numBins
+	 * @param histogram
+	 */
 	@Override
 	public Histogram1d<T> apply(final Iterable<T> input, Integer numBins) {
 		if (numBins == null)
@@ -76,13 +78,17 @@ public class HistogramCreate<T extends RealType<T>> implements BiFunction<Iterab
 }
 
 @Plugin(type = Op.class, name = "image.histogram")
-@Parameter(key = "iterable")
-@Parameter(key = "histogram")
 class HistogramCreateSimple<T extends RealType<T>> implements Function<Iterable<T>, Histogram1d<T>> {
 
 	@OpDependency(name = "image.histogram")
 	private BiFunction<Iterable<T>, Integer, Histogram1d<T>> histogramOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterable
+	 * @param histogram
+	 */
 	@Override
 	public Histogram1d<T> apply(final Iterable<T> input) {
 		return histogramOp.apply(input, null);

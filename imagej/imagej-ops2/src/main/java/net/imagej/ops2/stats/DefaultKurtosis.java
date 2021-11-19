@@ -37,7 +37,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.kurtosis} using {@code stats.stdDev}
@@ -49,8 +48,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.kurtosis")
-@Parameter(key = "iterableInput")
-@Parameter(key = "kurtosis")
 public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
@@ -61,6 +58,12 @@ public class DefaultKurtosis<I extends RealType<I>, O extends RealType<O>>
 	@OpDependency(name = "stats.moment4AboutMean")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> moment4AboutMeanComputer;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param kurtosis
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setReal(Double.NaN);

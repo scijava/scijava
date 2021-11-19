@@ -48,7 +48,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Computes Richardson Lucy correction factor for (@link
@@ -62,12 +61,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "deconvolve.richardsonLucyCorrection",
 	priority = Priority.HIGH)
-@Parameter(key = "input")
-@Parameter(key = "reblurred")
-@Parameter(key = "fftBuffer")
-@Parameter(key = "fftKernel")
-@Parameter(key = "executorService")
-@Parameter(key = "output")
 public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<O>, C extends ComplexType<C>>
 	implements
 	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>
@@ -105,6 +98,13 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 
 	/**
 	 * computes the correction factor of the Richardson Lucy Algorithm
+	 *
+	 * @param input
+	 * @param reblurred
+	 * @param fftBuffer
+	 * @param fftKernel
+	 * @param executorService
+	 * @param output
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> observed,

@@ -38,7 +38,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Fill an {@link IterableInterval} with some constant value.
@@ -46,13 +45,17 @@ import org.scijava.struct.ItemIO;
  * @author Leon Yang
  */
 @Plugin(type = Op.class, name = "image.fill")
-@Parameter(key = "constant")
-@Parameter(key = "iterableOutput")
 public class DefaultFill<T extends Type<T>> implements
 	Computers.Arity1<T, Iterable<T>> 
 {
 
 	//TODO can we find a way to parallelize this (or use lift?)
+	/**
+	 * TODO
+	 *
+	 * @param constant
+	 * @param iterableOutput
+	 */
 	@Override
 	public void compute(final T constant, final Iterable<T> output) {
 		Iterator<T> iterator = output.iterator();

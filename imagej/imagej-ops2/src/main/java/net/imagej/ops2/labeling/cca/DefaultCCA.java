@@ -46,7 +46,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Default Implementation wrapping {@link ConnectedComponents} of
@@ -55,11 +54,6 @@ import org.scijava.struct.ItemIO;
  * @author Christian Dietz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "labeling.cca", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "executorService")
-@Parameter(key = "structuringElement")
-@Parameter(key = "labelGenerator")
-@Parameter(key = "labeling")
 public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
 
@@ -67,6 +61,15 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 	private BiFunction<Dimensions, IntType, ImgLabeling<L, IntType>> imgLabelingCreator;
 
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 * @param structuringElement
+	 * @param labelGenerator
+	 * @param labeling
+	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply(final RandomAccessibleInterval<T> input, ExecutorService es,
 			StructuringElement se, Iterator<Integer> labelGenerator) {
@@ -79,16 +82,20 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 }
 
 @Plugin(type = Op.class, name = "labeling.cca", priority = 1.0)
-@Parameter(key = "input")
-@Parameter(key = "executorService")
-@Parameter(key = "structuringElement")
-@Parameter(key = "labeling")
 class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
 		Functions.Arity3<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, ImgLabeling<Integer, IntType>> {
 	@OpDependency(name = "labeling.cca")
 	private Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
 
 	@SuppressWarnings("unchecked")
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param executorService
+	 * @param structuringElement
+	 * @param labeling
+	 */
 	@Override
 	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> input, ExecutorService es,
 			StructuringElement structuringElement) {

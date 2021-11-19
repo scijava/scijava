@@ -47,7 +47,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Default implementation of 2d local binary patterns
@@ -56,16 +55,20 @@ import org.scijava.struct.ItemIO;
  * @param <I>
  */
 @Plugin(type = Op.class, name = "features.lbp2d")
-@Parameter(key = "input")
-@Parameter(key = "distance")
-@Parameter(key = "histogramSize")
-@Parameter(key = "output")
 public class DefaultLBP2D<I extends RealType<I>>
 		implements Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
 
 	@OpDependency(name = "image.histogram")
 	private BiFunction<ArrayList<LongType>, Integer, Histogram1d<LongType>> histOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param distance
+	 * @param histogramSize
+	 * @return the output
+	 */
 	@Override
 	public ArrayList<LongType> apply(RandomAccessibleInterval<I> input, Integer distance, Integer histogramSize) {
 		ArrayList<LongType> output = new ArrayList<>();

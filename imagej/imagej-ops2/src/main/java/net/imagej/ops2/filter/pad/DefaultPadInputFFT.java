@@ -40,9 +40,7 @@ import org.scijava.Priority;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.ops.util.Adapt;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op used to pad the image using the default FFT padding scheme.
@@ -53,11 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "filter.padInputFFT", priority = Priority.NORMAL)
-@Parameter(key = "input")
-@Parameter(key = "paddedDimensions")
-@Parameter(key = "fast")
-@Parameter(key = "outOfBoundsFactory")
-@Parameter(key = "output")
 public class DefaultPadInputFFT<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadInputFFT<T, I, O> {
 

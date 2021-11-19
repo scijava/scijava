@@ -51,7 +51,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Merges the labels of two {@link ImgLabeling} within a defined mask (if
@@ -60,10 +59,6 @@ import org.scijava.struct.ItemIO;
  * @author Stefan Helfrich (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "labeling.merge")
-@Parameter(key = "labeling1")
-@Parameter(key = "labeling2")
-@Parameter(key = "mask")
-@Parameter(key = "combinedLabeling")
 public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> {
 
@@ -74,6 +69,14 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 	private Function<Computers.Arity2<LabelingType<L>, LabelingType<L>, LabelingType<L>>, Computers.Arity2<Iterable<LabelingType<L>>, Iterable<LabelingType<L>>, Iterable<LabelingType<L>>>> adaptor;
 
 	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
+	/**
+	 * TODO
+	 *
+	 * @param labeling1
+	 * @param labeling2
+	 * @param mask
+	 * @param combinedLabeling
+	 */
 	@Override
 	public ImgLabeling<L, I> apply(final ImgLabeling<L, I> input1, final ImgLabeling<L, I> input2,
 			final RandomAccessibleInterval<B> mask) {
@@ -112,15 +115,19 @@ public class MergeLabeling<L, I extends IntegerType<I>, B extends BooleanType<B>
 }
 
 @Plugin(type = Op.class, name = "labeling.merge")
-@Parameter(key = "labeling1")
-@Parameter(key = "labeling2")
-@Parameter(key = "combinedLabeling")
 class MergeLabelingMaskless<L, I extends IntegerType<I>, B extends BooleanType<B>>
 		implements BiFunction<ImgLabeling<L, I>, ImgLabeling<L, I>, ImgLabeling<L, I>> {
 
 	@OpDependency(name = "labeling.merge")
 	private Functions.Arity3<ImgLabeling<L, I>, ImgLabeling<L, I>, RandomAccessibleInterval<B>, ImgLabeling<L, I>> mergeOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param labeling1
+	 * @param labeling2
+	 * @param combinedLabeling
+	 */
 	@Override
 	public ImgLabeling<L, I> apply(ImgLabeling<L, I> t, ImgLabeling<L, I> u) {
 		return mergeOp.apply(t, u, null);

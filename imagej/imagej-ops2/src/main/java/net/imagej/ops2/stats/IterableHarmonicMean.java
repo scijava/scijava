@@ -36,7 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.harmonicMean} directly.
@@ -49,10 +48,14 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.harmonicMean", priority = Priority.VERY_HIGH)
-@Parameter(key = "iterableInput")
-@Parameter(key = "harmonicMean")
 public class IterableHarmonicMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<Iterable<I>, O> {
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param harmonicMean
+	 */
 	@Override
 	public void compute(final Iterable<I> input, final O output) {
 		double size = 0;

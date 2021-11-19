@@ -34,14 +34,10 @@ import net.imglib2.roi.geom.real.Polygon2D;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.boxivity", label = "Geometric (2D): Rectangularity", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "boxivity")
 public class DefaultBoxivityPolygon extends AbstractBoxivity<Polygon2D> {}

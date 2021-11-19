@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.stdDev} using
@@ -49,8 +48,6 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.stdDev", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "stdDev")
 public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
@@ -61,6 +58,12 @@ public class DefaultStandardDeviation<I extends RealType<I>, O extends RealType<
 	@OpDependency(name = "math.sqrt")
 	private Computers.Arity1<O, O> sqrtComputer;
 
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param stdDev
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		O variance = output.createVariable();

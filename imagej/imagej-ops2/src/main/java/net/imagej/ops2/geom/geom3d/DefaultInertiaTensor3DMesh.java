@@ -40,9 +40,7 @@ import org.apache.commons.math3.linear.BlockRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This {@link Op} computes the 2nd multi variate of a {@link Mesh} (Label).
@@ -50,13 +48,17 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.secondMoment")
-@Parameter(key = "input")
-@Parameter(key = "inertiaTensor")
 public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")
 	private Function<Mesh, RealLocalizable> centroid;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param inertiaTensor
+	 */
 	@Override
 	public RealMatrix apply(final Mesh input) {
 		// ensure validity of inputs

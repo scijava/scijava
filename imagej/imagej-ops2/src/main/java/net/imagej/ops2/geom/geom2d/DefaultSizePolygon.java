@@ -40,7 +40,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Specific implementation of {@link Area} for a Polygon2D.
@@ -48,10 +47,14 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.size", label = "Geometric (2D): Size", priority = Priority.VERY_HIGH - 1)
-@Parameter(key = "input")
-@Parameter(key = "size")
 public class DefaultSizePolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param size
+	 */
 	@Override
 	public void compute(Polygon2D input, DoubleType output) {
 		double sum = 0;

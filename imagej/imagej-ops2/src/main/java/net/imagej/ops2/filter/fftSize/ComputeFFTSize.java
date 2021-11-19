@@ -40,7 +40,6 @@ import org.scijava.function.Functions;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Op that calculates FFT sizes.
@@ -48,14 +47,18 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan
  */
 @Plugin(type = Op.class, name = "filter.fftSize")
-@Parameter(key = "inputDimensions")
-@Parameter(key = "paddedSize")
-@Parameter(key = "fftSize")
-@Parameter(key = "forward")
-@Parameter(key = "fast")
-@Parameter(key = "outputs")
 public class ComputeFFTSize implements Functions.Arity5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>> {
 
+	/**
+	 * TODO
+	 *
+	 * @param inputDimensions
+	 * @param paddedSize
+	 * @param fftSize
+	 * @param forward
+	 * @param fast
+	 * @return the outputs
+	 */
 	@Override
 	public Pair<long[], long[]> apply(Dimensions inputDimensions, long[] paddedSize, long[] fftSize, Boolean forward,
 			Boolean fast) {

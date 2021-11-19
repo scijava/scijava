@@ -40,9 +40,7 @@ import net.imglib2.util.Intervals;
 
 import org.scijava.Priority;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.moment10}.
@@ -54,8 +52,6 @@ import org.scijava.struct.ItemIO;
  */
 @Plugin(type = Op.class, name = "imageMoments.moment10", label = "Image Moment: Moment10",
 	priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class DefaultMoment10<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

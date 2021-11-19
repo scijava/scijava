@@ -35,7 +35,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Applies a threshold value (the second input) to the given comparable object,
@@ -45,13 +44,17 @@ import org.scijava.struct.ItemIO;
  * @author Martin Horn (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "threshold.apply")
-@Parameter(key = "input")
-@Parameter(key = "threshold")
-@Parameter(key = "output")
 public class ApplyThresholdComparable<T> implements
 	Computers.Arity2<Comparable<? super T>, T, BitType>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param threshold
+	 * @param output
+	 */
 	@Override
 	public void compute(final Comparable<? super T> input, final T threshold,
 		final BitType output)

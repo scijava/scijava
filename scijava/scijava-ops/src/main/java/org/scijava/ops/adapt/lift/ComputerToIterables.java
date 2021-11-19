@@ -55,8 +55,6 @@ import org.scijava.plugin.Plugin;
 public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity0<O>, Computers.Arity0<Iterable<O>>> liftComputer0 = 
 		(computer) -> {
 			return (out) -> {
@@ -68,8 +66,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity1<I, O>, Computers.Arity1<Iterable<I>, Iterable<O>>> liftComputer1 = 
 		(computer) -> {
 			return (in, out) -> {
@@ -82,8 +78,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>>> liftComputer2 = 
 		(computer) -> {
 			return (in1, in2, out) -> {
@@ -97,8 +91,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>> liftComputer3 = 
 		(computer) -> {
 			return (in1, in2, in3, out) -> {
@@ -113,8 +105,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>> liftComputer4 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, out) -> {
@@ -130,8 +120,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>> liftComputer5 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, out) -> {
@@ -148,8 +136,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>> liftComputer6 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, out) -> {
@@ -167,8 +153,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>> liftComputer7 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, out) -> {
@@ -187,8 +171,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>> liftComputer8 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, out) -> {
@@ -208,8 +190,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>> liftComputer9 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, out) -> {
@@ -230,8 +210,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>> liftComputer10 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, out) -> {
@@ -253,8 +231,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>> liftComputer11 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, out) -> {
@@ -277,8 +253,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>> liftComputer12 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, out) -> {
@@ -302,8 +276,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>> liftComputer13 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, out) -> {
@@ -328,8 +300,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>> liftComputer14 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, out) -> {
@@ -355,8 +325,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>> liftComputer15 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, out) -> {
@@ -383,8 +351,6 @@ public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11
 		};
 
 	@OpField(names = "adapt")
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public final Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>> liftComputer16 = 
 		(computer) -> {
 			return (in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16, out) -> {

@@ -42,7 +42,6 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -55,8 +54,6 @@ import org.scijava.plugin.Plugin;
 public class FunctionsToComputersAndLift {
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function1ToComputer1AndLiftAfter<I, O> implements
 		Function<Function<I, O>, Computers.Arity1<Iterable<I>, Iterable<O>>>
 	{
@@ -66,6 +63,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity1<I, O>, Computers.Arity1<Iterable<I>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity1<Iterable<I>, Iterable<O>> apply(
 			Function<I, O> function)
@@ -76,8 +77,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function1ToComputer1AndLiftBefore<I, O> implements
 		Function<Function<I, O>, Computers.Arity1<Iterable<I>, Iterable<O>>>
 	{
@@ -87,6 +86,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Function<I, O>, Function<Iterable<I>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity1<Iterable<I>, Iterable<O>> apply(
 			Function<I, O> function)
@@ -97,8 +100,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function2ToComputer2AndLiftAfter<I1, I2, O> implements
 		Function<BiFunction<I1, I2, O>, Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>>>
 	{
@@ -108,6 +109,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity2<I1, I2, O>, Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>> apply(
 			BiFunction<I1, I2, O> function)
@@ -118,8 +123,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function2ToComputer2AndLiftBefore<I1, I2, O> implements
 		Function<BiFunction<I1, I2, O>, Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>>>
 	{
@@ -129,6 +132,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<BiFunction<I1, I2, O>, BiFunction<Iterable<I1>, Iterable<I2>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity2<Iterable<I1>, Iterable<I2>, Iterable<O>> apply(
 			BiFunction<I1, I2, O> function)
@@ -139,8 +146,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function3ToComputer3AndLiftAfter<I1, I2, I3, O> implements
 		Function<Functions.Arity3<I1, I2, I3, O>, Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>>
 	{
@@ -150,6 +155,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity3<I1, I2, I3, O>, Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>> apply(
 			Functions.Arity3<I1, I2, I3, O> function)
@@ -160,8 +169,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function3ToComputer3AndLiftBefore<I1, I2, I3, O> implements
 		Function<Functions.Arity3<I1, I2, I3, O>, Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>>
 	{
@@ -171,6 +178,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity3<I1, I2, I3, O>, Functions.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity3<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<O>> apply(
 			Functions.Arity3<I1, I2, I3, O> function)
@@ -181,8 +192,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function4ToComputer4AndLiftAfter<I1, I2, I3, I4, O> implements
 		Function<Functions.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>>
 	{
@@ -192,6 +201,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>> apply(
 			Functions.Arity4<I1, I2, I3, I4, O> function)
@@ -202,8 +215,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function4ToComputer4AndLiftBefore<I1, I2, I3, I4, O> implements
 		Function<Functions.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>>
 	{
@@ -213,6 +224,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity4<I1, I2, I3, I4, O>, Functions.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity4<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<O>> apply(
 			Functions.Arity4<I1, I2, I3, I4, O> function)
@@ -223,8 +238,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function5ToComputer5AndLiftAfter<I1, I2, I3, I4, I5, O> implements
 		Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>>
 	{
@@ -234,6 +247,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>> apply(
 			Functions.Arity5<I1, I2, I3, I4, I5, O> function)
@@ -244,8 +261,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function5ToComputer5AndLiftBefore<I1, I2, I3, I4, I5, O> implements
 		Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>>
 	{
@@ -255,6 +270,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Functions.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity5<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<O>> apply(
 			Functions.Arity5<I1, I2, I3, I4, I5, O> function)
@@ -265,8 +284,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function6ToComputer6AndLiftAfter<I1, I2, I3, I4, I5, I6, O> implements
 		Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>>
 	{
@@ -276,6 +293,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>> apply(
 			Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function)
@@ -286,8 +307,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function6ToComputer6AndLiftBefore<I1, I2, I3, I4, I5, I6, O> implements
 		Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>>
 	{
@@ -297,6 +316,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Functions.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity6<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<O>> apply(
 			Functions.Arity6<I1, I2, I3, I4, I5, I6, O> function)
@@ -307,8 +330,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function7ToComputer7AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, O> implements
 		Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>>
 	{
@@ -318,6 +339,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>> apply(
 			Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function)
@@ -328,8 +353,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function7ToComputer7AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, O> implements
 		Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>>
 	{
@@ -339,6 +362,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Functions.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity7<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<O>> apply(
 			Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O> function)
@@ -349,8 +376,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function8ToComputer8AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, O> implements
 		Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>>
 	{
@@ -360,6 +385,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>> apply(
 			Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function)
@@ -370,8 +399,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function8ToComputer8AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, O> implements
 		Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>>
 	{
@@ -381,6 +408,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Functions.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity8<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<O>> apply(
 			Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O> function)
@@ -391,8 +422,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function9ToComputer9AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> implements
 		Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>>
 	{
@@ -402,6 +431,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>> apply(
 			Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function)
@@ -412,8 +445,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function9ToComputer9AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> implements
 		Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>>
 	{
@@ -423,6 +454,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Functions.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity9<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<O>> apply(
 			Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> function)
@@ -433,8 +468,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function10ToComputer10AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> implements
 		Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>>
 	{
@@ -444,6 +477,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>> apply(
 			Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function)
@@ -454,8 +491,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function10ToComputer10AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> implements
 		Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>>
 	{
@@ -465,6 +500,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Functions.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity10<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<O>> apply(
 			Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> function)
@@ -475,8 +514,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function11ToComputer11AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> implements
 		Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>>
 	{
@@ -486,6 +523,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>> apply(
 			Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function)
@@ -496,8 +537,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function11ToComputer11AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> implements
 		Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>>
 	{
@@ -507,6 +546,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Functions.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity11<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<O>> apply(
 			Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> function)
@@ -517,8 +560,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function12ToComputer12AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> implements
 		Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>>
 	{
@@ -528,6 +569,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>> apply(
 			Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function)
@@ -538,8 +583,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function12ToComputer12AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> implements
 		Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>>
 	{
@@ -549,6 +592,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Functions.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity12<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<O>> apply(
 			Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> function)
@@ -559,8 +606,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function13ToComputer13AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> implements
 		Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>>
 	{
@@ -570,6 +615,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>> apply(
 			Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function)
@@ -580,8 +629,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function13ToComputer13AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> implements
 		Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>>
 	{
@@ -591,6 +638,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Functions.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity13<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<O>> apply(
 			Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> function)
@@ -601,8 +652,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function14ToComputer14AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> implements
 		Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>>
 	{
@@ -612,6 +661,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>> apply(
 			Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function)
@@ -622,8 +675,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function14ToComputer14AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> implements
 		Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>>
 	{
@@ -633,6 +684,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Functions.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity14<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<O>> apply(
 			Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> function)
@@ -643,8 +698,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function15ToComputer15AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> implements
 		Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>>
 	{
@@ -654,6 +707,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>> apply(
 			Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function)
@@ -664,8 +721,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function15ToComputer15AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> implements
 		Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>>
 	{
@@ -675,6 +730,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Functions.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity15<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<O>> apply(
 			Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> function)
@@ -685,8 +744,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function16ToComputer16AndLiftAfter<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements
 		Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>>
 	{
@@ -696,6 +753,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>> apply(
 			Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function)
@@ -706,8 +767,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function16ToComputer16AndLiftBefore<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements
 		Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>>
 	{
@@ -717,6 +776,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Functions.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>>> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public Computers.Arity16<Iterable<I1>, Iterable<I2>, Iterable<I3>, Iterable<I4>, Iterable<I5>, Iterable<I6>, Iterable<I7>, Iterable<I8>, Iterable<I9>, Iterable<I10>, Iterable<I11>, Iterable<I12>, Iterable<I13>, Iterable<I14>, Iterable<I15>, Iterable<I16>, Iterable<O>> apply(
 			Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> function)

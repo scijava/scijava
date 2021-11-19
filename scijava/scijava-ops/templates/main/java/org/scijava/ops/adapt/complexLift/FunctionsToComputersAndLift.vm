@@ -42,7 +42,6 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -56,8 +55,6 @@ public class FunctionsToComputersAndLift {
 #foreach($arity in [1..$maxArity])
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function${arity}ToComputer${arity}AndLiftAfter$generics.call($arity) implements
 		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>
 	{
@@ -67,6 +64,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<$computerArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public $computerArity.call($arity)$iterableGenerics.call($arity) apply(
 			$functionArity.call($arity)$generics.call($arity) function)
@@ -77,8 +78,6 @@ public class FunctionsToComputersAndLift {
 	}
 
 	@Plugin(type = Op.class, name = "adapt", priority = Priority.LOW + 1)
-	@Parameter(key = "fromOp")
-	@Parameter(key = "toOp")
 	public static class Function${arity}ToComputer${arity}AndLiftBefore$generics.call($arity) implements
 		Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$iterableGenerics.call($arity)>
 	{
@@ -88,6 +87,10 @@ public class FunctionsToComputersAndLift {
 		@OpDependency(name = "adapt", adaptable = false)
 		Function<$functionArity.call($arity)$generics.call($arity), $functionArity.call($arity)$iterableGenerics.call($arity)> lifter;
 
+		/**
+		 * @param function - the Function to convert
+		 * @return the function as a Computer
+		 */
 		@Override
 		public $computerArity.call($arity)$iterableGenerics.call($arity) apply(
 			$functionArity.call($arity)$generics.call($arity) function)

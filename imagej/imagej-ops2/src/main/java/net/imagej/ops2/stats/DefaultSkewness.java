@@ -37,7 +37,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.skewness} using
@@ -51,8 +50,6 @@ import org.scijava.struct.ItemIO;
  *            output type
  */
 @Plugin(type = Op.class, name = "stats.skewness")
-@Parameter(key = "iterableInput")
-@Parameter(key = "skewness")
 public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.moment3AboutMean")
@@ -60,6 +57,12 @@ public class DefaultSkewness<I extends RealType<I>, O extends RealType<O>> imple
 	@OpDependency(name = "stats.stdDev")
 	private Computers.Arity1<RandomAccessibleInterval<I>, O> stdDevComputer;
 
+	/**
+	 * TODO
+	 *
+	 * @param iterableInput
+	 * @param skewness
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		final O moment3 = output.createVariable();

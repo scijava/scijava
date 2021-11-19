@@ -49,7 +49,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This is a marching cubes implementation. It is inspired by Paul Bourke's
@@ -61,10 +60,6 @@ import org.scijava.struct.ItemIO;
  *            BooleanType
  */
 @Plugin(type = Op.class, name = "geom.marchingCubes")
-@Parameter(key = "input")
-@Parameter(key = "isolevel")
-@Parameter(key = "interpolatorClass")
-@Parameter(key = "output")
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
@@ -75,6 +70,14 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	private VertexInterpolator interpolatorClass;
 
 	@SuppressWarnings({ "unchecked" })
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param isolevel
+	 * @param interpolatorClass
+	 * @return the output
+	 */
 	@Override
 	public Mesh apply(final RandomAccessibleInterval<T> input, Double isolevel, VertexInterpolator interpolatorClass) {
 
@@ -557,14 +560,18 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 }
 
 @Plugin(type = Op.class, name = "geom.marchingCubes")
-@Parameter(key = "input")
-@Parameter(key = "output")
 class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	
 	@OpDependency(name = "geom.marchingCubes")
 	private Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @return the output
+	 */
 	@Override
 	public Mesh apply(RandomAccessibleInterval<T> t) {
 		return marchingOp.apply(t, null, null);

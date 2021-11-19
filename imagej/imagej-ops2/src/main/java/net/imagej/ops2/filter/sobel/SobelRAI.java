@@ -38,7 +38,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Sobel filter implementation using separated sobel kernel.
@@ -50,8 +49,6 @@ import org.scijava.struct.ItemIO;
  */
 
 @Plugin(type = Op.class, name = "filter.sobel")
-@Parameter(key = "input")
-@Parameter(key = "output")
 public class SobelRAI<T extends RealType<T>>
 		implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 	
@@ -70,6 +67,12 @@ public class SobelRAI<T extends RealType<T>>
 	@OpDependency(name = "filter.partialDerivative")
 	private Computers.Arity2<RandomAccessibleInterval<T>, Integer, RandomAccessibleInterval<T>> derivativeComputer;
 	
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param output
+	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output) {
 

@@ -40,9 +40,7 @@ import net.imglib2.util.ValuePair;
 
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Maximum Feret of a polygon.
@@ -50,13 +48,17 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz, University of Konstanz
  */
 @Plugin(type = Op.class, name = "geom.maximumFeret")
-@Parameter(key = "input")
-@Parameter(key = "maximumFeret")
 public class DefaultMaximumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")
 	private Function<Polygon2D, Polygon2D> function;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param maximumFeret
+	 */
 	@Override
 	public Pair<RealLocalizable, RealLocalizable> apply(Polygon2D input) {
 		final List<? extends RealLocalizable> points = GeomUtils.vertices(function.apply(input));

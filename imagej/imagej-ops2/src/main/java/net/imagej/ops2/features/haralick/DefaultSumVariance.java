@@ -41,7 +41,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Implementation of Sum Variance Haralick Feature according to
@@ -52,11 +51,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "features.haralick.sumVariance")
-@Parameter(key = "input")
-@Parameter(key = "numGreyLevels")
-@Parameter(key = "distance")
-@Parameter(key = "matrixOrientation")
-@Parameter(key = "output")
 public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXPlusY")
@@ -65,6 +59,15 @@ public class DefaultSumVariance<T extends RealType<T>> extends AbstractHaralickF
 	@OpDependency(name = "features.haralick.sumEntropy")
 	private Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, MatrixOrientation, RealType> sumEntropyFunc;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param numGreyLevels
+	 * @param distance
+	 * @param matrixOrientation
+	 * @return the output
+	 */
 	@Override
 	public DoubleType apply(final RandomAccessibleInterval<T> input, final Integer numGreyLevels, final Integer distance,
 			final MatrixOrientation orientation) {

@@ -36,7 +36,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * An Op that works the same way as the <code>?:</code> operator. It sets the
@@ -46,14 +45,18 @@ import org.scijava.struct.ItemIO;
  * @author Leon Yang
  */
 @Plugin(type = Op.class, name = "logic.match")
-@Parameter(key = "input")
-@Parameter(key = "ifTrueVal")
-@Parameter(key = "ifFalseVal")
-@Parameter(key = "output")
 public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computers.Arity3<I, O, O, O>
 
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param ifTrueVal
+	 * @param ifFalseVal
+	 * @param output
+	 */
 	@Override
 	public void compute(final I input, final O ifTrueVal, final O ifFalseVal, final O output) {
 		output.set(input.get() ? ifTrueVal : ifFalseVal);

@@ -40,9 +40,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * This algorithm calculates Li et al.'s ICQ (intensity correlation quotient).
@@ -53,11 +51,6 @@ import org.scijava.struct.ItemIO;
  *            Type of the second image
  */
 @Plugin(type = Op.class, name = "coloc.icq")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "mean1")
-@Parameter(key = "mean2")
-@Parameter(key = "output")
 public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 		implements Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
 
@@ -66,6 +59,15 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	@OpDependency(name = "stats.mean")
 	private Computers.Arity1<Iterable<U>, DoubleType> meanUOp;
 
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @param mean1
+	 * @param mean2
+	 * @return the output
+	 */
 	@Override
 	public Double apply(final Iterable<T> image1, final Iterable<U> image2, final DoubleType mean1, final DoubleType mean2) {
 
@@ -120,15 +122,19 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 }
 
 @Plugin(type = Op.class, name = "coloc.icq")
-@Parameter(key = "image1")
-@Parameter(key = "image2")
-@Parameter(key = "output")
 class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 		implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 	
 	@OpDependency(name = "coloc.icq")
 	private Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> colocOp;
 	
+	/**
+	 * TODO
+	 *
+	 * @param image1
+	 * @param image2
+	 * @return the output
+	 */
 	@Override
 	public Double apply(Iterable<T> image1, Iterable<U> image2) {
 		return colocOp.apply(image1, image2, null, null);

@@ -85,9 +85,6 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 }
 
 @Plugin(type = Op.class, name = "test.functionAndLongToLong")
-@Parameter(key = "input")
-@Parameter(key = "op")
-@Parameter(key = "output")
 class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Long> {
 
 	@Override
@@ -98,9 +95,6 @@ class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Lo
 }
 
 @Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")
-@Parameter(key = "input1")
-@Parameter(key = "input2")
-@Parameter(key = "output")
 class IntegerAndLongAndNotAnyComputer implements Computers.Arity2<Integer, Long, StringContainer> {
 
 	@Override
@@ -123,7 +117,6 @@ class StringContainer {
 }
 
 @Plugin(type = Op.class, name = "create, create.stringContainer")
-@Parameter(key = "stringContainer")
 class StringContainerCreator implements Producer<StringContainer> {
 
 	@Override
@@ -164,8 +157,6 @@ class NestedThing<U, V extends Thing<?>> {
 }
 
 @Plugin(type = Op.class, name = "test.any")
-@Parameter(key = "thing")
-@Parameter(key = "output")
 class ThingFunction implements Function<Thing<String>, Double> {
 
 	@Override
@@ -176,8 +167,6 @@ class ThingFunction implements Function<Thing<String>, Double> {
 }
 
 @Plugin(type = Op.class, name = "test.exceptionalAny")
-@Parameter(key = "thing")
-@Parameter(key = "output")
 class ExceptionalThingFunction implements Function<ExceptionalThing<String>, Double> {
 
 	@Override
@@ -189,8 +178,6 @@ class ExceptionalThingFunction implements Function<ExceptionalThing<String>, Dou
 }
 
 @Plugin(type = Op.class, name = "test.nestedAny")
-@Parameter(key = "nestedThing")
-@Parameter(key = "output")
 class NestedThingFunction implements Function<NestedThing<String, Thing<String>>, Double> {
 
 	@Override

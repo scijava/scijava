@@ -41,9 +41,7 @@ import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 
 import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.convexHull}.
@@ -51,10 +49,14 @@ import org.scijava.struct.ItemIO;
  * @author Daniel Seebacher (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.convexHull")
-@Parameter(key = "input")
-@Parameter(key = "convexHull")
 public class DefaultConvexHull2D implements Function<Polygon2D, Polygon2D> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param convexHull
+	 */
 	@Override
 	public Polygon2D apply(final Polygon2D input) {
 		// create a copy of points because se will get resorted, etc.

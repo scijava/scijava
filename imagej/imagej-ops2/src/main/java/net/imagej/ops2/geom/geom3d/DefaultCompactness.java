@@ -40,7 +40,6 @@ import org.scijava.ops.OpDependency;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Compactness}.
@@ -54,8 +53,6 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.compactness", label = "Geometric (3D): Compactness", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "compactness")
 public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.boundarySize")
@@ -64,6 +61,12 @@ public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 	@OpDependency(name = "geom.size")
 	private Function<Mesh, DoubleType> volume;
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param compactness
+	 */
 	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		final double s3 = Math.pow(surfaceArea.apply(input).get(), 3);

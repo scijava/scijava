@@ -38,7 +38,6 @@ import org.scijava.function.Inplaces;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Implementation of a {@link ChunkerOp} that interleaves the chunks. In a
@@ -49,13 +48,17 @@ import org.scijava.struct.ItemIO;
  * @author Michael Zinsmaier (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "thread.chunker", priority = Priority.VERY_LOW)
-@Parameter(key = "chunk")
-@Parameter(key = "numberOfElements")
-@Parameter(key = "executorService")
 public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, ExecutorService>{
 
 	private String cancellationMsg;
 
+	/**
+	 * TODO
+	 *
+	 * @param chunk
+	 * @param numberOfElements
+	 * @param executorService
+	 */
 	@Override
 	public void mutate(final Chunk chunk, final Long numberOfElements, final ExecutorService es) {
 

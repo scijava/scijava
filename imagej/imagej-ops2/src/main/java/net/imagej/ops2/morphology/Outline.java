@@ -48,7 +48,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * The Op creates an output interval where the objects are hollow versions from
@@ -57,9 +56,6 @@ import org.scijava.struct.ItemIO;
  * @author Richard Domander (Royal Veterinary College, London)
  */
 @Plugin(type = Op.class, name = "morphology.outline")
-@Parameter(key = "input")
-@Parameter(key = "excludeEdges")
-@Parameter(key = "output")
 public class Outline<B extends BooleanType<B>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
 
@@ -81,6 +77,13 @@ public class Outline<B extends BooleanType<B>>
 	 *            </p>
 	 * @param output
 	 *            outlines of the objects in interval
+	 */
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param excludeEdges
+	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<B> input, final Boolean excludeEdges,

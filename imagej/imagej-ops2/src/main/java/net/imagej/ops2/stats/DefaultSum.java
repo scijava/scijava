@@ -40,7 +40,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * {@link Op} to calculate the {@code stats.sum}.
@@ -50,12 +49,16 @@ import org.scijava.struct.ItemIO;
  * @param <O> output type
  */
 @Plugin(type = Op.class, name = "stats.sum", priority = Priority.HIGH)
-@Parameter(key = "raiInput")
-@Parameter(key = "sum")
 public class DefaultSum<I extends RealType<I>, O extends RealType<O>> implements
 	Computers.Arity1<RandomAccessibleInterval<I>, O>
 {
 
+	/**
+	 * TODO
+	 *
+	 * @param raiInput
+	 * @param sum
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input, final O output) {
 		output.setZero();

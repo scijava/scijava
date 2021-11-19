@@ -37,7 +37,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Generic implementation of {@code geom.boundaryPixelCount}.
@@ -45,10 +44,14 @@ import org.scijava.struct.ItemIO;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
 @Plugin(type = Op.class, name = "geom.verticesCount", label = "Geometric3D: Surface Vertices Count", priority = Priority.VERY_HIGH)
-@Parameter(key = "input")
-@Parameter(key = "verticesCountMesh")
 public class DefaultVerticesCountMesh implements Computers.Arity1<Mesh, DoubleType> {
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param verticesCountMesh
+	 */
 	@Override
 	public void compute(final Mesh input, final DoubleType output) {
 		output.set(input.vertices().size());

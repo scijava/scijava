@@ -16,7 +16,6 @@ import org.scijava.ops.core.Op;
 import org.scijava.ops.util.FunctionUtils;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 
 /**
@@ -86,8 +85,6 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 }
 
 @Plugin(type = Op.class, name = "test.opMonitor")
-@Parameter(key = "monitor")
-@Parameter(key = "bigInteger")
 class InfiniteOp implements Function<OpMonitor, BigInteger> {
 
 	@Override
@@ -106,9 +103,6 @@ class InfiniteOp implements Function<OpMonitor, BigInteger> {
 }
 
 @Plugin(type = Op.class, name = "test.progress")
-@Parameter(key = "monitor")
-@Parameter(key = "target")
-@Parameter(key = "output")
 class CountingOp implements BiFunction<OpMonitor, BigInteger, BigInteger> {
 
 	@Override

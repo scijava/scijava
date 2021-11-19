@@ -45,7 +45,6 @@ import org.scijava.function.Computers;
 import org.scijava.ops.core.Op;
 import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
@@ -59,10 +58,6 @@ import Jama.Matrix;
  * @author Gabe Selzer
  */
 @Plugin(type = Op.class, name = "filter.frangiVesselness")
-@Parameter(key = "input")
-@Parameter(key = "spacing", description = "physicl distance between data points")
-@Parameter(key = "scale", description = "size of vessels to search for")
-@Parameter(key = "output")
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
 
@@ -101,6 +96,14 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 		return ((val2 - val1) / distance);
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param spacing physicl distance between data points
+	 * @param scale size of vessels to search for
+	 * @param output
+	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final double[] spacing, final Integer scale,
 			final RandomAccessibleInterval<U> output) {

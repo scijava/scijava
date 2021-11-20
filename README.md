@@ -1,6 +1,6 @@
 [![](https://github.com/scijava/incubator/actions/workflows/build-main.yml/badge.svg)](https://github.com/scijava/incubator/actions/workflows/build-main.yml)
 
-# SciJava Incubator
+# SciJava Incubator: A staging ground for fledgling SciJava projects
 
 This repository is a place for complex but immature codebases to rapidly
 develop, without concern for versioning. Each module here stays at version
@@ -11,6 +11,16 @@ The primary motivation of doing this development work in a single place is to
 work better together as a community, raise awareness of the work, and make it
 easier to keep modules coupled together such that breaking changes are
 quickly caught by CI and subsequently fixed across all incubating projects.
+
+# What benefits come with using the SciJava Incubator?
+
+* Build on other incubating projects without waiting for them to be released.
+* Take advantage of Java 11 and the
+  [Java Platform Module System](https://en.wikipedia.org/wiki/Java_Platform_Module_System).
+* Easily partition and repartition a project into multiple modules. No need to
+  create a new repository per module until your project is ready to graduate.
+
+# SciJava Incubator
 
 ## Projects incubating here
 

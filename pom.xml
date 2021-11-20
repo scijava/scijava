@@ -49,7 +49,10 @@
 		<module>imagej/imagej-testutil</module>
 		<module>scijava/scijava-persist</module>
 		<module>scijava/scijava-function</module>
-		<module>scijava/scijava-ops</module>
+		<module>scijava/scijava-ops-api</module>
+		<module>scijava/scijava-ops-discovery</module>
+		<module>scijava/scijava-ops-engine</module>
+		<module>scijava/scijava-ops-spi</module>
 		<module>scijava/scijava-struct</module>
 		<module>scijava/scijava-taglets</module>
 		<module>scijava/scijava-testutil</module>

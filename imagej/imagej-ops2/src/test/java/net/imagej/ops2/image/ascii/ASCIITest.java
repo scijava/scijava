@@ -38,7 +38,8 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Pair;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**

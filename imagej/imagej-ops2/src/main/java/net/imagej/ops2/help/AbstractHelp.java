@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.scijava.ops.OpCandidate;
-import org.scijava.ops.OpInfo;
-import org.scijava.ops.OpUtils;
+import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpUtils;
 
 /**
  * Base class for help operations.

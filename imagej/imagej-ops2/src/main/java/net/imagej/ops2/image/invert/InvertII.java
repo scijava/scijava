@@ -36,7 +36,8 @@
 //import net.imglib2.type.numeric.RealType;
 //import net.imglib2.type.numeric.integer.UnsignedVariableBitLengthType;
 //
-//import org.scijava.ops.OpDependency;
+//import org.scijava.ops.spi.OpDependency;
+//import org.scijava.ops.spi.OpDependency;
 //import org.scijava.ops.core.Op;
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;

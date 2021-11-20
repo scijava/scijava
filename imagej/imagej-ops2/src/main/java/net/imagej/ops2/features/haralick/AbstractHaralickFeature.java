@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * Abstract class for HaralickFeatures.

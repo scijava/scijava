@@ -14,8 +14,8 @@ import net.imglib2.view.Views;
 
 import org.scijava.Priority;
 import org.scijava.function.Functions;
-import org.scijava.ops.OpCollection;
-import org.scijava.ops.OpField;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.plugin.Plugin;
 
 /**

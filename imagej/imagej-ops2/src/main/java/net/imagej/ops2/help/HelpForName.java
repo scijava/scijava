@@ -32,9 +32,9 @@ package net.imagej.ops2.help;
 import java.util.function.BiFunction;
 
 import org.scijava.Priority;
-import org.scijava.ops.Op;
-import org.scijava.ops.OpInfo;
-import org.scijava.ops.OpService;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.engine.OpService;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

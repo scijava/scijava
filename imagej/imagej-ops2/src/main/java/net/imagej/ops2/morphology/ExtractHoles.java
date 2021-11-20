@@ -38,8 +38,8 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.BooleanType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

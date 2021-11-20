@@ -43,8 +43,8 @@ import net.imglib2.type.numeric.integer.LongType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

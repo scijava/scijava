@@ -38,7 +38,7 @@ import org.joml.Vector3d;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.random.Deterministic;
-import org.scijava.ops.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

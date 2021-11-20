@@ -38,7 +38,7 @@ import net.imagej.ops2.AbstractOpTest;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.OpService;
+import org.scijava.ops.engine.OpService;
 import org.scijava.types.Nil;
 
 /**

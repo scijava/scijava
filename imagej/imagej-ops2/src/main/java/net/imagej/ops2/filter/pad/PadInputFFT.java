@@ -43,7 +43,7 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * Abstract Op used to pad the image by extending the borders optionally using

@@ -34,7 +34,7 @@ import java.util.function.Function;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * Generic implementation of

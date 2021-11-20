@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.OpBuilder;
+import org.scijava.ops.api.OpBuilder;
 
 /**
  * Tests that the {@code convert} ops work on {@link Img} objects via

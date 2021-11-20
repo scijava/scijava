@@ -38,8 +38,8 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

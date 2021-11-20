@@ -42,8 +42,8 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests {@link DefaultPValue}.

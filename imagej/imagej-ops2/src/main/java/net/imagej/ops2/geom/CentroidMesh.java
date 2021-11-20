@@ -36,8 +36,8 @@ import net.imglib2.RealLocalizable;
 import net.imglib2.RealPoint;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.Op;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.plugin.Plugin;
 
 /**

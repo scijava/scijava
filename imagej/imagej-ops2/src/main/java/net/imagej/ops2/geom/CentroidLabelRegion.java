@@ -36,7 +36,7 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.roi.labeling.LabelRegion;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

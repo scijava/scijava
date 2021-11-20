@@ -32,7 +32,7 @@ package net.imagej.ops2.threshold;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.OpDependency;
+import org.scijava.ops.spi.OpDependency;
 
 /**
  * @author Curtis Rueden

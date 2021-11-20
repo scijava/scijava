@@ -30,7 +30,7 @@
 package net.imagej.ops2.identity;
 
 import org.scijava.function.Inplaces;
-import org.scijava.ops.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

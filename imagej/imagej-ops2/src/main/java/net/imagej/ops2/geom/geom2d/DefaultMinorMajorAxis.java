@@ -42,7 +42,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
-import org.scijava.ops.Op;
+import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**

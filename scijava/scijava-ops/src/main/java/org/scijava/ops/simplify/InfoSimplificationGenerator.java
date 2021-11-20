@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
+import org.scijava.ops.OpRef;
 import org.scijava.ops.OpUtils;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.matcher.OpMatchingException;
-import org.scijava.ops.matcher.OpRef;
 import org.scijava.types.Types;
 
 
@@ -48,13 +47,13 @@ public class InfoSimplificationGenerator {
 		return info;
 	}
 
-	public OpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) throws OpMatchingException {
+	public OpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) {
 		SimplifiedOpRef simpleRef = SimplifiedOpRef.simplificationOf(env, originalRef, hints);
 		return generateSuitableInfo(simpleRef);
 	}
 
 	public OpInfo generateSuitableInfo(SimplifiedOpRef ref) {
-		if(!Types.isAssignable(Types.raw(info.opType()), Types.raw(ref.getType())))
+		if(!Types.isAssignable(Types.raw(info.opType()), ref.rawType()))
 				throw new IllegalArgumentException("OpInfo and OpRef do not share an Op type");
 		TypePair[] argPairings = generatePairings(ref);
 		TypePair outPairing = generateOutPairing(ref);

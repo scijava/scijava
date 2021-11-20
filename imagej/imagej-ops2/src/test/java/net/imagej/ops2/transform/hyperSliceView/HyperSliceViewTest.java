@@ -30,6 +30,7 @@ package net.imagej.ops2.transform.hyperSliceView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -40,10 +41,8 @@ import net.imglib2.view.MixedTransformView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -74,8 +73,8 @@ public class HyperSliceViewTest extends AbstractOpTest {
 
 	@Test
 	public void defaultHyperSliceTest() {
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc = FunctionUtils
-				.match(ops.env(), "transform.hyperSliceView", raNil, integerNil, longNil,
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Long, MixedTransformView<DoubleType>> hyperSliceFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.hyperSliceView", raNil, integerNil, longNil,
 						new Nil<MixedTransformView<DoubleType>>() {
 				});
 
@@ -95,8 +94,8 @@ public class HyperSliceViewTest extends AbstractOpTest {
 	@Test
 	public void IntervalHyperSliceTest() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc = FunctionUtils
-				.match(ops.env(), "transform.hyperSliceView", raiNil, integerNil, longNil,
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Integer, Long, IntervalView<DoubleType>> hyperSliceFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.hyperSliceView", raiNil, integerNil, longNil,
 						new Nil<IntervalView<DoubleType>>() {
 						});
 

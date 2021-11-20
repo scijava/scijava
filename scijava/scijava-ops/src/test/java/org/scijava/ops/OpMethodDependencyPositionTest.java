@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.core.OpCollection;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

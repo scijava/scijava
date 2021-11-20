@@ -42,9 +42,8 @@ import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.core.OpCollection;
+import org.scijava.ops.OpCollection;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 
 /**

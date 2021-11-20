@@ -29,6 +29,7 @@
 
 package org.scijava.ops;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,19 +37,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.matcher.MatchingResult;
-import org.scijava.ops.matcher.OpCandidate;
-import org.scijava.ops.matcher.OpCandidate.StatusCode;
-import org.scijava.ops.matcher.OpMatcher;
-import org.scijava.ops.matcher.OpRef;
-import org.scijava.param.ParameterMember;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
-import org.scijava.param.ValidityProblem;
+import org.scijava.ValidityProblem;
+import org.scijava.ops.OpCandidate.StatusCode;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.ValidityException;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.types.Types;
 
@@ -200,7 +195,7 @@ public final class OpUtils {
 		int inputCount = 0, requiredCount = 0;
 		for (final Member<?> item : members) {
 			inputCount++;
-			if (isRequired(item))
+			if (!item.isRequired())
 				requiredCount++;
 		}
 		if (args.length == inputCount) {
@@ -229,7 +224,7 @@ public final class OpUtils {
 		final Object[] paddedArgs = new Object[inputCount];
 		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
 		for (final Member<?> item : members) {
-			if (!isRequired(item) && optionalIndex++ >= optionalsToFill) {
+			if (!item.isRequired() && optionalIndex++ >= optionalsToFill) {
 				// skip this optional parameter (pad with null)
 				paddedIndex++;
 				continue;
@@ -238,12 +233,7 @@ public final class OpUtils {
 		}
 		return paddedArgs;
 	}
-	
-	public static boolean isRequired(final Member<?> item) {
-		return item instanceof ParameterMember && //
-				((ParameterMember<?>) item).isRequired();
-	}
-	
+
 	public static List<Member<?>> injectableMembers(Struct struct) {
 		return struct.members()
 				.stream()
@@ -256,11 +246,10 @@ public final class OpUtils {
 	 * several matches that do not have equal output types, the output type may not
 	 * completely match the request as only raw type assignability will be checked
 	 * at the moment.
-	 * @see OpMatcher#typesMatch(OpCandidate)
 	 * @param matches
 	 * @return
 	 */
-	private static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
+	public static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
 		Type outputType = null;
 		for (OpCandidate match : matches) {
 			Type ts = output(match).getType();
@@ -276,72 +265,6 @@ public final class OpUtils {
 
 	public static Type[] getTypes(List<Member<?>> members) {
 		return members.stream().map(m -> m.getType()).toArray(Type[]::new);
-	}
-
-	/**
-	 * Gets a string with an analysis of a particular match request failure.
-	 * <p>
-	 * This method is used to generate informative exception messages when no
-	 * matches, or too many matches, are found.
-	 * </p>
-	 * 
-	 * @param res
-	 *            The result of type matching
-	 * @return A multi-line string describing the situation: 1) the type of
-	 *         match failure; 2) the list of matching ops (if any); 3) the
-	 *         request itself; and 4) the list of candidates including status
-	 *         (i.e., whether it matched, and if not, why not).
-	 */
-	public static String matchInfo(final MatchingResult res) {
-		final StringBuilder sb = new StringBuilder();
-
-		List<OpCandidate> candidates = res.getCandidates();
-		List<OpCandidate> matches = res.getMatches();
-
-		final OpRef ref = res.getOriginalQueries().get(0);
-		if (matches.isEmpty()) {
-			// no matches
-			sb.append("No matching '" + ref.getLabel() + "' op\n");
-		} else {
-			// multiple matches
-			final double priority = getPriority(matches.get(0));
-			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " + priority + ":\n");
-			if (typeCheckingIncomplete(matches)) {
-				sb.append("Incomplete output type checking may have occured!\n");
-			}
-			int count = 0;
-			for (final OpCandidate match : matches) {
-				sb.append(++count + ". ");
-				sb.append(match.toString() + "\n");
-			}
-		}
-
-		// fail, with information about the request and candidates
-		sb.append("\n");
-		sb.append("Request:\n");
-		sb.append("-\t" + ref.toString() + "\n");
-		sb.append("\n");
-		sb.append("Candidates:\n");
-		if (candidates.isEmpty()) {
-			sb.append("-\t No candidates found!");
-		}
-		int count = 0;
-		for (final OpCandidate candidate : candidates) {
-			sb.append(++count + ". ");
-			sb.append("\t" + opString(candidate.opInfo(), candidate.getStatusItem()) + "\n");
-			final String status = candidate.getStatus();
-			if (status != null)
-				sb.append("\t" + status + "\n");
-			if (candidate.getStatusCode() == StatusCode.DOES_NOT_CONFORM) {
-				// TODO: Conformity not yet implemented
-				// // show argument values when a contingent op rejects them
-				// for (final ModuleItem<?> item : inputs(info)) {
-				// final Object value = item.getValue(candidate.getModule());
-				// sb.append("\t\t" + item.getName() + " = " + value + "\n");
-				// }
-			}
-		}
-		return sb.toString();
 	}
 
 	public static String opString(final OpInfo info) {
@@ -377,11 +300,57 @@ public final class OpUtils {
 	}
 
 	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {
-		final Class<?> functionalInterface = ParameterStructs
+		final Class<?> functionalInterface = OpUtils
 			.findFunctionalInterface(Types.raw(opRef.getType()));
 		if (functionalInterface != null) {
 			return functionalInterface;
 		}
 		return null;
+	}
+
+	/**
+	 * Searches for a {@code @FunctionalInterface} annotated interface in the 
+	 * class hierarchy of the specified type. The first one that is found will
+	 * be returned. If no such interface can be found, null will be returned.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static Class<?> findFunctionalInterface(Class<?> type) {
+		if (type == null) return null;
+		if (type.getAnnotation(FunctionalInterface.class) != null) return type;
+		for (Class<?> iface : type.getInterfaces()) {
+			final Class<?> result = findFunctionalInterface(iface);
+			if (result != null) return result;
+		}
+		return findFunctionalInterface(type.getSuperclass());
+	}
+
+	/**
+	 * Attempts to find the single functional method of the specified
+	 * class, by scanning the for functional interfaces. If there
+	 * is no functional interface, null will be returned.
+	 * 
+	 * @param cls
+	 * @return
+	 */
+	public static Method findFunctionalMethod(Class<?> cls) {
+		Class<?> iFace = findFunctionalInterface(cls);
+		if (iFace == null) {
+			return null;
+		}
+		
+		List<Method> nonDefaults = Arrays.stream(iFace.getMethods())
+				.filter(m -> !m.isDefault()).collect(Collectors.toList());
+		
+		// The single non default method must be the functional one
+		if (nonDefaults.size() != 1) {
+			for (Class<?> i : iFace.getInterfaces()) {
+				final Method result = findFunctionalMethod(i);
+				if (result != null) return result;
+			}
+		}
+		
+		return nonDefaults.get(0);
 	}
 }

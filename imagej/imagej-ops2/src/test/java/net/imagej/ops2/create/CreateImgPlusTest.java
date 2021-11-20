@@ -35,16 +35,15 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import net.imagej.ImgPlus;
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests several ways to create an image
@@ -57,8 +56,8 @@ public class CreateImgPlusTest extends AbstractOpTest {
 
 	@Test
 	public void createImgPlusTest() {
-		BiFunction<Dimensions, DoubleType, Img<DoubleType>> createImgFunc = FunctionUtils.match(ops.env(), "create.img", new Nil<Dimensions>() {}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
-		Function<Img<DoubleType>, ImgPlus<DoubleType>> imgPlusFunction = FunctionUtils.match(ops.env(), "create.imgPlus", new Nil<Img<DoubleType>>() {}, new Nil<ImgPlus<DoubleType>>() {});
+		BiFunction<Dimensions, DoubleType, Img<DoubleType>> createImgFunc = OpBuilder.matchFunction(ops.env(), "create.img", new Nil<Dimensions>() {}, new Nil<DoubleType>() {}, new Nil<Img<DoubleType>>() {});
+		Function<Img<DoubleType>, ImgPlus<DoubleType>> imgPlusFunction = OpBuilder.matchFunction(ops.env(), "create.imgPlus", new Nil<Img<DoubleType>>() {}, new Nil<ImgPlus<DoubleType>>() {});
 		assertEquals(imgPlusFunction.apply(createImgFunc.apply(new FinalDimensions(new long[] { 10, 9, 8 }), new DoubleType())).getClass(), ImgPlus.class);
 	}
 }

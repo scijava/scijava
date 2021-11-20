@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -44,10 +45,8 @@ import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.RealComposite;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.CollapseRealView} ops.
@@ -66,8 +65,8 @@ public class CollapseRealViewTest extends AbstractOpTest {
 
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 
-		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, RealComposite<DoubleType>>> collapseFunc = FunctionUtils
-				.match(ops.env(), "transform.collapseRealView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+		Function<RandomAccessibleInterval<DoubleType>, CompositeIntervalView<DoubleType, RealComposite<DoubleType>>> collapseFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.collapseRealView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<CompositeIntervalView<DoubleType, RealComposite<DoubleType>>>() {
 				});
 
@@ -77,8 +76,8 @@ public class CollapseRealViewTest extends AbstractOpTest {
 
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
-		BiFunction<RandomAccessible<DoubleType>, Integer, CompositeView<DoubleType, RealComposite<DoubleType>>> collapseFuncRA = FunctionUtils
-				.match(ops.env(), "transform.collapseRealView", new Nil<RandomAccessible<DoubleType>>() {
+		BiFunction<RandomAccessible<DoubleType>, Integer, CompositeView<DoubleType, RealComposite<DoubleType>>> collapseFuncRA = OpBuilder
+				.matchFunction(ops.env(), "transform.collapseRealView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<CompositeView<DoubleType, RealComposite<DoubleType>>>() {
 				});

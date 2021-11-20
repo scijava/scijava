@@ -32,8 +32,8 @@ package org.scijava.ops;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
+import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
-import org.scijava.param.ValidityException;
 
 public class OpCollectionTest extends AbstractTestEnvironment {
 

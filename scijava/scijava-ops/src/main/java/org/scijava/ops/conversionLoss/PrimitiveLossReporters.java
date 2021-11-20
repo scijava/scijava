@@ -1,10 +1,10 @@
 
 package org.scijava.ops.conversionLoss;
 
+import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
-import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.hints.BaseOpHints.Simplification;
-import org.scijava.ops.hints.OpHints;
+import org.scijava.ops.OpHints;
+import org.scijava.ops.BaseOpHints.Simplification;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 

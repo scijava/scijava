@@ -75,7 +75,7 @@ import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.Op;
+import org.scijava.ops.Op;
 import org.scijava.plugin.Plugin;
 
 /**

@@ -49,7 +49,7 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.util.ComputerUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -150,8 +150,8 @@ public class CopyRAITest extends AbstractOpTest {
 	public void copyRAIDifferentSizeTest() {
 
 		// create a copy op
-		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = ComputerUtils
-				.match(ops.env(), "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {},
+		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = OpBuilder
+				.matchComputer(ops.env(), "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {},
 						new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
 
 		assertNotNull(copy);

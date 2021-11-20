@@ -7,11 +7,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.Op;
+import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpDependency;
 import org.scijava.ops.OpField;
-import org.scijava.ops.core.Op;
-import org.scijava.ops.core.OpCollection;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct.ItemIO;
 
@@ -104,13 +103,15 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 }
 
 @Plugin(type = Op.class, name = "test.furtherOutsideOp")
-@Parameter(key = "in")
-@Parameter(key = "out", itemIO = ItemIO.OUTPUT)
 class FurtherDependentOp implements Function<Double, Double> {
 
 	@OpDependency(name = "test.outsideOp")
 	private Function<Double, Double> op;
 
+	/**
+	 * @param t the input
+	 * @return the output
+	 */
 	@Override
 	public Double apply(Double t) {
 		return op.apply(t);
@@ -119,13 +120,15 @@ class FurtherDependentOp implements Function<Double, Double> {
 }
 
 @Plugin(type = Op.class, name = "test.outsideOp")
-@Parameter(key = "in")
-@Parameter(key = "out", itemIO = ItemIO.OUTPUT)
 class DependentOp implements Function<Double, Double> {
 
 	@OpDependency(name = "test.missingDependencyOp")
 	private Function<Double, Double> op;
 
+	/**
+	 * @param t the input
+	 * @return the output
+	 */
 	@Override
 	public Double apply(Double t) {
 		return op.apply(t);
@@ -134,13 +137,15 @@ class DependentOp implements Function<Double, Double> {
 }
 
 @Plugin(type = Op.class, name = "test.missingDependencyOp")
-@Parameter(key = "in")
-@Parameter(key = "out", itemIO = ItemIO.OUTPUT)
 class MissingDependencyOp implements Function<Double, Double> {
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;
 
+	/**
+	 * @param t the input
+	 * @return the output
+	 */
 	@Override
 	public Double apply(Double t) {
 		return op.apply(t);
@@ -149,26 +154,30 @@ class MissingDependencyOp implements Function<Double, Double> {
 }
 
 @Plugin(type = Op.class, name = "test.adaptMissingDep")
-@Parameter(key = "in")
-@Parameter(key = "out", itemIO = ItemIO.OUTPUT)
 class MissingDependencyOpArr1 implements Computers.Arity1<Double[], Double[]> {
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;
 
+	/**
+	 * @param t the input
+	 * @param out the output
+	 */
 	@Override
 	public void compute(Double[] t, Double[] out) {}
 
 }
 
 @Plugin(type = Op.class, name = "test.adaptMissingDep")
-@Parameter(key = "in")
-@Parameter(key = "out", itemIO = ItemIO.OUTPUT)
 class MissingDependencyOpArr2 implements Function<Double, Double> {
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;
 
+	/**
+	 * @param t the input
+	 * @return the output
+	 */
 	@Override
 	public Double apply(Double t) {
 		return op.apply(t);

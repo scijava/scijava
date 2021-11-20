@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -43,10 +44,8 @@ import net.imglib2.view.StackView.StackAccessMode;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.StackView} ops.
@@ -63,7 +62,7 @@ public class StackViewTest extends AbstractOpTest {
 	@Test
 	public void defaultStackTest() {
 		Function<List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc =
-			FunctionUtils.match(ops.env(), "transform.stackView",
+			OpBuilder.matchFunction(ops.env(), "transform.stackView",
 				new Nil<List<Img<DoubleType>>>()
 				{}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 
@@ -82,8 +81,8 @@ public class StackViewTest extends AbstractOpTest {
 	@Test
 	public void stackWithAccessModeTest() {
 
-		BiFunction<StackAccessMode, List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc = FunctionUtils
-				.match(ops.env(), "transform.stackView", new Nil<StackAccessMode>() {
+		BiFunction<StackAccessMode, List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.stackView", new Nil<StackAccessMode>() {
 				}, new Nil<List<Img<DoubleType>>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

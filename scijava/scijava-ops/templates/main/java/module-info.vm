@@ -8,21 +8,17 @@ module org.scijava.ops {
 ## Determines all packages in the module
 #set($packages = $modulePackages.call("src/main/java/org/scijava"))
 ## Defines the packages that should be exported to org.scijava
-#set($scijavaPackages = ["org.scijava.ops", "org.scijava.ops.impl", "org.scijava.ops.provenance.impl"])
+#set($scijavaPackages = ["org.scijava.ops", "org.scijava.ops.impl", "org.scijava.ops.matcher.impl"])
 ## Defines the packages that should be exported to therapi.runtime.javadoc
 #set($therapiPackages = $modulePackages.call("src/main/java/org/scijava"))
 	//TODO: rearrange packages to export only needed classes
 	exports org.scijava.ops; //contains OpDependency interface
-	exports org.scijava.ops.core; // contains OpCollection, Op interfaces
-	exports org.scijava.ops.core.builder; // contains OpBuilder classes
 	exports org.scijava.ops.matcher;
 	exports org.scijava.ops.math;
 	exports org.scijava.ops.simplify;
 	exports org.scijava.ops.conversionLoss;
-	exports org.scijava.ops.provenance;
 	// TODO: move OpWrapper to its own package (org.scijava.ops.wrap??)
 	exports org.scijava.ops.util; // contains OpWrapper interface
-	exports org.scijava.param;
 
 #foreach($package in $packages)
 	opens $package to $opensToString.call($package, $scijavaPackages, $therapiPackages);

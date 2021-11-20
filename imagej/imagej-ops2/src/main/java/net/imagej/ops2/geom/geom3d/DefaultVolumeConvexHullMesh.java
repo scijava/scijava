@@ -33,7 +33,7 @@ import net.imagej.mesh.Mesh;
 import net.imagej.ops2.geom.AbstractSizeConvexHull;
 
 import org.scijava.Priority;
-import org.scijava.ops.core.Op;
+import org.scijava.ops.Op;
 import org.scijava.plugin.Plugin;
 
 /**

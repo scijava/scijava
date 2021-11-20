@@ -30,6 +30,7 @@ package net.imagej.ops2.transform.unshearView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
@@ -43,10 +44,8 @@ import net.imglib2.view.TransformView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -63,8 +62,8 @@ public class UnshearViewTest extends AbstractOpTest {
 	@Test
 	public void defaultUnshearTest() {
 
-		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> unshearFunc = FunctionUtils
-				.match(ops.env(), "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
+		Functions.Arity3<RandomAccessible<DoubleType>, Integer, Integer, TransformView<DoubleType>> unshearFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {
 				}, new Nil<TransformView<DoubleType>>() {
@@ -93,8 +92,8 @@ public class UnshearViewTest extends AbstractOpTest {
 	@Test
 	public void UnshearIntervalTest() {
 
-		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> unshearFunc = FunctionUtils
-				.match(ops.env(), "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
+		Functions.Arity4<RandomAccessible<DoubleType>, Interval, Integer, Integer, IntervalView<DoubleType>> unshearFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.unshearView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<Integer>() {
 				}, new Nil<Integer>() {

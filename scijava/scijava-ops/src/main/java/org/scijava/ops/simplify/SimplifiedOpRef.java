@@ -2,59 +2,67 @@
 package org.scijava.ops.simplify;
 
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.OpInfo;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.impl.DefaultHints;
-import org.scijava.ops.hints.BaseOpHints.Adaptation;
-import org.scijava.ops.hints.BaseOpHints.Simplification;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
+import org.scijava.ops.BaseOpHints.Adaptation;
+import org.scijava.ops.BaseOpHints.Simplification;
+import org.scijava.ops.Hints;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.OpRef;
+import org.scijava.ops.hint.DefaultHints;
+import org.scijava.ops.matcher.OpMatchingException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
-public class SimplifiedOpRef extends OpRef {
+public class SimplifiedOpRef implements OpRef {
+
+	/** Name of the op, or null for any name. */
+	private final String name;
+
+	/** Raw type of the request */
+	private final Class<?> rawType;
 
 	private final OpRef srcRef;
 	private final List<List<OpInfo>> simplifierSets;
 	private final List<OpInfo> outputFocusers;
 	private final Optional<Computers.Arity1<?, ?>> copyOp;
 
-	private SimplifiedOpRef(String name, Type type, Type outType,
-		Type[] args)
-	{
-		super(name, type, outType, args);
-		throw new UnsupportedOperationException("Simplified OpRef requires original OpRef!");
-	}
-
 	private SimplifiedOpRef(OpRef ref, OpEnvironment env) {
 		// TODO: this is probably incorrect
-		super(ref.getName(), ref.getType(), ref.getOutType(), ref.getArgs());
+		this.name = ref.getName();
+		this.rawType = Types.raw(ref.getType());
 		this.srcRef = ref;
 		this.simplifierSets = SimplificationUtils.simplifyArgs(env, ref.getArgs());
-		this.outputFocusers = SimplificationUtils.getFocusers(env, ref.getOutType());
+		this.outputFocusers = SimplificationUtils.getFocusers(env, ref
+			.getOutType());
 		this.copyOp = Optional.empty();
 	}
 
-	private SimplifiedOpRef(OpRef ref, OpEnvironment env, Computers.Arity1<?, ?> copyOp) {
-		// TODO: this is probably incorrect
-		super(ref.getName(), ref.getType(), ref.getOutType(), ref.getArgs());
+	private SimplifiedOpRef(OpRef ref, OpEnvironment env,
+		Computers.Arity1<?, ?> copyOp)
+	{
+		this.name = ref.getName();
+		this.rawType = Types.raw(ref.getType());
 		this.srcRef = ref;
 		this.simplifierSets = SimplificationUtils.simplifyArgs(env, ref.getArgs());
-		this.outputFocusers = SimplificationUtils.getFocusers(env, ref.getOutType());
+		this.outputFocusers = SimplificationUtils.getFocusers(env, ref
+			.getOutType());
 		this.copyOp = Optional.of(copyOp);
 	}
 
 	public OpRef srcRef() {
 		return srcRef;
+	}
+
+	public Class<?> rawType() {
+		return rawType;
 	}
 
 	public List<List<OpInfo>> simplifierSets() {
@@ -69,7 +77,9 @@ public class SimplifiedOpRef extends OpRef {
 		return copyOp;
 	}
 
-	public static SimplifiedOpRef simplificationOf(OpEnvironment env, OpRef ref, Hints hints) throws OpMatchingException {
+	public static SimplifiedOpRef simplificationOf(OpEnvironment env, OpRef ref,
+		Hints hints)
+	{
 		Class<?> opType = Types.raw(ref.getType());
 		int mutableIndex = SimplificationUtils.findMutableArgIndex(opType);
 		if (mutableIndex == -1) return new SimplifiedOpRef(ref, env);
@@ -113,6 +123,47 @@ public class SimplifiedOpRef extends OpRef {
 			Nil<?> copyNil = Nil.of(copyType);
 			Type copierType = Types.parameterize(Computers.Arity1.class, new Type[] {copyType, copyType});
 			return (Arity1<?, ?>) env.op("copy", Nil.of(copierType), new Nil<?>[] {copyNil, copyNil}, copyNil, hintsCopy);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public Type getType() {
+		throw new UnsupportedOperationException(
+			"The type of a SimplifiedOpRef is indeterminate; it must be matched with a OpInfo to form a concrete Type");
+	}
+
+	@Override
+	public Type getOutType() {
+		throw new UnsupportedOperationException(
+			"The output type of a SimplifiedOpRef is indeterminate; it must be matched with a OpInfo to form a concrete Type");
+	}
+
+	@Override
+	public Type[] getArgs() {
+		throw new UnsupportedOperationException(
+			"The output type of a SimplifiedOpRef is indeterminate; it must be matched with a OpInfo to form a concrete Type");
+	}
+
+	@Override
+	public String getLabel() {
+		return "Simplification of " + srcRef.getLabel();
+	}
+
+	@Override
+	public boolean typesMatch(Type opType) {
+		return typesMatch(opType, new HashMap<>());
+	}
+
+	@Override
+	public boolean typesMatch(Type opType,
+		Map<TypeVariable<?>, Type> typeVarAssigns)
+	{
+		throw new UnsupportedOperationException(
+			"The type of a SimplifiedOpRef is indeterminate; it must be matched with an OpInfo to form a concrete Type!");
 	}
 
 }

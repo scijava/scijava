@@ -38,12 +38,11 @@ import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.OpBuilder;
+import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpField;
 import org.scijava.ops.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.adapt.functional.ComputersToFunctionsViaSource;
-import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.param.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**

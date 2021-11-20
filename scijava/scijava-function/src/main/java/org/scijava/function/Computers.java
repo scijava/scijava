@@ -5,6 +5,7 @@
 
 package org.scijava.function;
 
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -30,6 +31,46 @@ public final class Computers {
 
 	private Computers() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	// -- Static Utility Methods -- //
+
+	/**
+	 * All known computer types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 */
+	public static final HashMap<Class<?>, Integer> ALL_COMPUTERS;
+
+	static {
+		ALL_COMPUTERS = new HashMap<>();
+		ALL_COMPUTERS.put(Computers.Arity0.class, 0);
+		ALL_COMPUTERS.put(Computers.Arity1.class, 1);
+		ALL_COMPUTERS.put(Computers.Arity2.class, 2);
+		ALL_COMPUTERS.put(Computers.Arity3.class, 3);
+		ALL_COMPUTERS.put(Computers.Arity4.class, 4);
+		ALL_COMPUTERS.put(Computers.Arity5.class, 5);
+		ALL_COMPUTERS.put(Computers.Arity6.class, 6);
+		ALL_COMPUTERS.put(Computers.Arity7.class, 7);
+		ALL_COMPUTERS.put(Computers.Arity8.class, 8);
+		ALL_COMPUTERS.put(Computers.Arity9.class, 9);
+		ALL_COMPUTERS.put(Computers.Arity10.class, 10);
+		ALL_COMPUTERS.put(Computers.Arity11.class, 11);
+		ALL_COMPUTERS.put(Computers.Arity12.class, 12);
+		ALL_COMPUTERS.put(Computers.Arity13.class, 13);
+		ALL_COMPUTERS.put(Computers.Arity14.class, 14);
+		ALL_COMPUTERS.put(Computers.Arity15.class, 15);
+		ALL_COMPUTERS.put(Computers.Arity16.class, 16);
+	}
+
+	/**
+	 * @return {@code true} if the given type is a known
+	 *         computer type, {@code false} otherwise. <br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code c} is {@code null}.
+	 */
+	public static boolean isComputer(Class<?> c) {
+		return ALL_COMPUTERS.containsKey(c);
 	}
 
 

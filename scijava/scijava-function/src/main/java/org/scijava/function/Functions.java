@@ -5,6 +5,7 @@
 
 package org.scijava.function;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -29,6 +30,44 @@ public final class Functions {
 
 	private Functions() {
 		// NB: Prevent instantiation of utility class.
+	}
+
+	/**
+	 * All known function types and their arities. The entries are sorted by
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 */
+	public static final HashMap<Integer, Class<?>> ALL_FUNCTIONS;
+
+	static {
+		ALL_FUNCTIONS = new HashMap<>(10);
+		ALL_FUNCTIONS.put(0, Producer.class);
+		ALL_FUNCTIONS.put(1, Function.class);
+		ALL_FUNCTIONS.put(2, BiFunction.class);
+		ALL_FUNCTIONS.put(3, Functions.Arity3.class);
+		ALL_FUNCTIONS.put(4, Functions.Arity4.class);
+		ALL_FUNCTIONS.put(5, Functions.Arity5.class);
+		ALL_FUNCTIONS.put(6, Functions.Arity6.class);
+		ALL_FUNCTIONS.put(7, Functions.Arity7.class);
+		ALL_FUNCTIONS.put(8, Functions.Arity8.class);
+		ALL_FUNCTIONS.put(9, Functions.Arity9.class);
+		ALL_FUNCTIONS.put(10, Functions.Arity10.class);
+		ALL_FUNCTIONS.put(11, Functions.Arity11.class);
+		ALL_FUNCTIONS.put(12, Functions.Arity12.class);
+		ALL_FUNCTIONS.put(13, Functions.Arity13.class);
+		ALL_FUNCTIONS.put(14, Functions.Arity14.class);
+		ALL_FUNCTIONS.put(15, Functions.Arity15.class);
+		ALL_FUNCTIONS.put(16, Functions.Arity16.class);
+	}
+
+	/**
+	 * @return {@code true} if the given type is a known
+	 *         function type, {@code false} otherwise.<br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code c} is {@code null}.
+	 */
+	public static boolean isFunction(Class<?> c) {
+		return ALL_FUNCTIONS.containsValue(c);
 	}
 
 	/**

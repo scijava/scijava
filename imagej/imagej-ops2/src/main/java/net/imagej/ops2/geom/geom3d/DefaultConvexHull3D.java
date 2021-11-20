@@ -40,14 +40,11 @@ import java.util.function.Function;
 
 import net.imagej.mesh.Mesh;
 import net.imagej.mesh.naive.NaiveDoubleMesh;
-import net.imagej.ops2.geom.geom3d.mesh.Horizon;
-import net.imagej.ops2.geom.geom3d.mesh.TriangularFacet;
-import net.imagej.ops2.geom.geom3d.mesh.Vertex;
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.scijava.ops.core.Op;
+import org.scijava.ops.Op;
 import org.scijava.plugin.Plugin;
 
 /**

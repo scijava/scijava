@@ -40,9 +40,6 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 
-import org.scijava.param.Parameter;
-import org.scijava.param.Parameters;
-
 /**
  * Useful methods for working with annotation instances.
  * 
@@ -52,22 +49,6 @@ public final class AnnotationUtils {
 
 	private AnnotationUtils() {
 		// prevent instantiation of utility class
-	}
-
-	/**
-	 * Gets a list of {@link Parameter} from the specified annotated element.
-	 * If the element is not annotated, an empty array is returned.
-	 * 
-	 * @param element the annotated element
-	 * @return array of {@link Parameter} annotations
-	 */
-	public static Parameter[] parameters(final AnnotatedElement element) {
-		final Parameters params = element.getAnnotation(Parameters.class);
-		if (params != null) {
-			return params.value();
-		}
-		final Parameter p = element.getAnnotation(Parameter.class);
-		return p == null ? new Parameter[0] : new Parameter[] { p };
 	}
 
 	/**

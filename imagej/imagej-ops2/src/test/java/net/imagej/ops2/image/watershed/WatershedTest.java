@@ -51,7 +51,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 

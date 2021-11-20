@@ -9,7 +9,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**

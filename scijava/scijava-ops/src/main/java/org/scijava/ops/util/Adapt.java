@@ -14,8 +14,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.core.OneToOneCommand;
-import org.scijava.ops.core.Op;
+import org.scijava.ops.Op;
 
 /**
  * Utility providing adaptation between {@link Op} types.
@@ -135,18 +134,6 @@ public class Adapt {
 				computer.compute(in1, in2, in3, out);
 				return out;
 			};
-		}
-
-		public static <I, O> OneToOneCommand<I, O> asCommand(final Computers.Arity1<I, O> computer, I input, O output) {
-			OneToOneCommand<I, O> command = new OneToOneCommand<I, O>() {
-				@Override
-				public void run() {
-					computer.compute(input, output);
-				}
-			};
-			// Populate the input and output member of the computer command
-			Inject.Commands.all(command, input, output);
-			return command;
 		}
 
 		public static <I1, I2, O> Computers.Arity1<I1, O> asComputer(final Computers.Arity2<I1, I2, O> computer, I2 in2) {

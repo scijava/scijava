@@ -13,13 +13,15 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.AbstractTestEnvironment;
+import org.scijava.ops.Hints;
+import org.scijava.ops.OpCollection;
 import org.scijava.ops.OpDependency;
+import org.scijava.ops.OpExecutionSummary;
 import org.scijava.ops.OpField;
+import org.scijava.ops.OpHistoryService;
 import org.scijava.ops.OpInfo;
 import org.scijava.ops.OpMethod;
-import org.scijava.ops.core.OpCollection;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.impl.DefaultHints;
+import org.scijava.ops.hint.DefaultHints;
 import org.scijava.plugin.Plugin;
 
 @Plugin(type = OpCollection.class)

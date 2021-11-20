@@ -26,25 +26,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package org.scijava.ops;
 
-import org.scijava.ops.core.builder.OpBuilder;
-import org.scijava.ops.impl.DefaultOpEnvironment;
-import org.scijava.plugin.Plugin;
-import org.scijava.service.AbstractService;
 import org.scijava.service.SciJavaService;
-import org.scijava.service.Service;
 
 /**
  * Service to provide a list of available ops structured in a prefix tree and to
  * search for ops matching specified types.
  *
+ * @author Gabriel Selzer
  * @author David Kolb
  */
-@Plugin(type = Service.class)
-public class OpService extends AbstractService implements SciJavaService {
-
-	private OpEnvironment env;
+public interface OpService extends SciJavaService {
 
 	/**
 	 * Begins declaration of an op matching request for locating an op with a
@@ -56,20 +50,9 @@ public class OpService extends AbstractService implements SciJavaService {
 	 * @return An {@link OpBuilder} for refining the search criteria for an op.
 	 * @see OpBuilder
 	 */
-	public OpBuilder op(final String opName) {
-		return env().op(opName);
-	}
+	public OpBuilder op(final String opName);
 
 	/** Retrieves the motherlode of available ops. */
-	public OpEnvironment env() {
-		if (env == null) initEnv();
-		return env;
-	}
+	public OpEnvironment env();
 
-	// -- Helper methods - lazy initialization --
-
-	private synchronized void initEnv() {
-		if (env != null) return;
-		env = new DefaultOpEnvironment(context());
-	}
 }

@@ -23,12 +23,13 @@ import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.OpEnvironment;
 import org.scijava.ops.OpInfo;
-import org.scijava.ops.matcher.MatchingUtils;
-import org.scijava.ops.matcher.OpRef;
+import org.scijava.ops.OpRef;
+import org.scijava.ops.OpUtils;
 import org.scijava.ops.util.AnnotationUtils;
-import org.scijava.param.ParameterStructs;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
+import org.scijava.types.inference.InterfaceInference;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -66,18 +67,18 @@ public class SimplificationUtils {
 			if (!(originalOpType instanceof ParameterizedType))
 				throw new IllegalStateException("We hadn't thought about this yet.");
 			Class<?> opType = Types.raw(originalOpType);
-			Method fMethod = findFMethod(opType);
+			Method fMethod = OpUtils.findFunctionalMethod(opType);
 
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 
 			// solve input types
 			Type[] genericParameterTypes = paramTypesFromOpType(opType, fMethod);
-			MatchingUtils.inferTypeVariables(genericParameterTypes, newArgs, typeVarAssigns);
+			GenericAssignability.inferTypeVariables(genericParameterTypes, newArgs, typeVarAssigns);
 
 			// solve output type
 			Type genericReturnType = returnTypeFromOpType(opType, fMethod);
 			if (genericReturnType != void.class) {
-				MatchingUtils.inferTypeVariables(new Type[] {genericReturnType}, new Type[] {newOutType}, typeVarAssigns);
+				GenericAssignability.inferTypeVariables(new Type[] {genericReturnType}, new Type[] {newOutType}, typeVarAssigns);
 			}
 
 			// build new (read: simplified) Op type
@@ -109,16 +110,9 @@ public class SimplificationUtils {
 		Type genericDeclaringClass = Types.parameterizeRaw(declaringClass);
 		Type genericClass = Types.parameterizeRaw(opType);
 		Type superGenericClass = Types.getExactSuperType(genericClass, declaringClass);
-		MatchingUtils.inferTypeVariables(new Type[] {genericDeclaringClass}, new Type[] {superGenericClass}, map);
+		GenericAssignability.inferTypeVariables(new Type[] {genericDeclaringClass}, new Type[] {superGenericClass}, map);
 
 		return Types.mapVarToTypes(types, map);
-	}
-
-	// TODO: extract this method to a more general utility class
-	public static Method findFMethod(Class<?> c) {
-			Class<?> fIface = ParameterStructs.findFunctionalInterface(c);
-			if(fIface == null) throw new IllegalArgumentException("Class " + c +" does not implement a functional interface!");
-			return ParameterStructs.singularAbstractMethod(fIface);
 	}
 
 	/**
@@ -133,7 +127,7 @@ public class SimplificationUtils {
 	 * @return the index of the mutable argument (or -1 iff the output is returned).
 	 */
 	public static int findMutableArgIndex(Class<?> c) {
-		Method fMethod = findFMethod(c);
+		Method fMethod = OpUtils.findFunctionalMethod(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
 				Mutable.class) != null) return i;
@@ -163,7 +157,7 @@ public class SimplificationUtils {
 	public static Type resolveMutatorTypeArgs(Type inferFrom, Type mutatorInferFrom, Type unresolvedType) {
 		if(!Types.containsTypeVars(unresolvedType)) return unresolvedType;
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
-		MatchingUtils.inferTypeVariables(new Type[] {mutatorInferFrom}, new Type[] {inferFrom}, map);
+		GenericAssignability.inferTypeVariables(new Type[] {mutatorInferFrom}, new Type[] {inferFrom}, map);
 		return Types.mapVarToTypes(unresolvedType, map);
 	}
 
@@ -477,7 +471,7 @@ public class SimplificationUtils {
 		StringBuilder sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Method m = ParameterStructs.singularAbstractMethod(metadata.opType());
+		Method m = InterfaceInference.singularAbstractMethod(metadata.opType());
 		// determine the name of the output:
 		String opOutput = "";
 		int ioIndex = metadata.ioArgIndex();

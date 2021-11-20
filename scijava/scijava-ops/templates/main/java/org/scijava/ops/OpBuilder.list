@@ -1,0 +1,131 @@
+.include templates/main/java/org/scijava/ops/util/Globals.list
+arities = (1..maxArity).collect()
+
+[OpBuilder.java]
+inplaceMatchNumber = ```
+{ arity, num ->
+  arity == 1 ? '' :
+  "$num"
+}
+```
+generics = ```
+{ arity ->
+  arity == 0 ? '<O>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', O>'
+}
+```
+genericsWithoutOutput = ```
+{ arity ->
+  arity == 1 ? '<I1>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + '>'
+}
+```
+genericsWildcardFunction = ```
+{ arity ->
+  arity == 0 ? '<?>' :
+  '<' + String.join(', ', (1..arity).stream().map{a -> "I$a"}.collect()) + ', ?>'
+}
+```
+inputObjectsArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "final I$a in$a"}.collect())
+}
+```
+inputObjects = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "in$a"}.collect())
+}
+```
+inputClassesArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "final Class<I$a> in${a}Class"}.collect())
+}
+```
+inputClassesToTypes = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "Nil.of(in${a}Class)"}.collect())
+}
+```
+inputTypesArgs = ```
+{ arity ->
+  arity == 0 ? '' : 
+  String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect())
+}
+```
+inputTypesFromArgs = ```
+{ arity ->
+  String.join(', ', (1..arity).stream().map{a -> "type(in$a)"}.collect())
+}
+```
+inputTypesArgsWithOutput = ```
+{ arity ->
+  arity == 0 ? 'final Nil<O> outType' : 
+  String.join(', ', (1..arity).stream().map{a -> "final Nil<I$a> in${a}Type"}.collect()) + ', final Nil<O> outType'
+}
+```
+inputTypes = ```
+{ arity ->
+  arity == 0 ? '' : 
+  String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect())
+}
+```
+inputTypesWithOutput = ```
+{ arity ->
+  arity == 0 ? 'outType' : 
+  String.join(', ', (1..arity).stream().map{a -> "in${a}Type"}.collect()) + ', outType'
+}
+```
+simplifiedClass = ```
+{ arity, num ->
+  simplifiedInplace(arity, num) + '.class'
+}
+```
+inplaceClass = ```
+{ arity, num ->
+  inplaceType(arity, num) + '.class'
+}
+```
+matchName = ```
+{ arity, num ->
+  arity == 1 ? "matchInplace" :
+  "matchInplace${num}"
+}
+```
+inplaceTypeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+inplaceGenericsList = ```
+{ arity, io ->
+  inplaceTypeVarNums(arity, io).stream().map{a -> "I$a"}.collect()
+}
+```
+inplaceGenerics = ```
+{ arity, io ->
+  '<' + String.join(', ', inplaceGenericsList(arity, io)) + '>'
+}
+```
+matchParams = ```
+{ arity, io ->
+  String.join(', ', inplaceGenericsList(arity, io).stream().map{a -> 
+    a.charAt(1) == 'O'? 
+	"final Nil<$a> ${a.toLowerCase()}Type"  :
+	"final Nil<$a> in${a.substring(1)}Type"}.collect())
+}
+```
+typeVarNums = ```
+{ arity, io ->
+  (1..arity).subList(0, io - 1) + 'O' + (1..arity).subList(io, arity)
+}
+```
+basicParamsList = ```
+{ arity, io -> 
+	typeVarNums(arity, io).stream().map{a -> a == 'O' ? "ioType" : "in${a}Type"}.collect()
+}
+```
+basicParams = ```
+{ arity, io ->
+  String.join(', ', basicParamsList(arity, io))
+}
+```

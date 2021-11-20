@@ -38,8 +38,8 @@ import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
+import org.scijava.ops.Op;
 import org.scijava.ops.OpDependency;
-import org.scijava.ops.core.Op;
 import org.scijava.plugin.Plugin;
 
 /**

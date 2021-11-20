@@ -40,7 +40,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.ops.AbstractTestEnvironment;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 
 public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 

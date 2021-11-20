@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.function.BiFunction;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -45,10 +46,8 @@ import net.imglib2.view.MixedTransformView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 
 /**
  * Tests {@link net.imagej.ops2.Ops.Transform.TranslateView} ops.
@@ -71,7 +70,7 @@ public class TranslateViewTest extends AbstractOpTest {
 	@Test
 	public void defaultTranslateTest() {
 
-		BiFunction<Img<DoubleType>, long[], MixedTransformView<DoubleType>> translateFunc = FunctionUtils.match(ops.env(),
+		BiFunction<Img<DoubleType>, long[], MixedTransformView<DoubleType>> translateFunc = OpBuilder.matchFunction(ops.env(),
 				"transform.translateView", new Nil<Img<DoubleType>>() {
 		}, new Nil<long[]>() {
 		}, new Nil<MixedTransformView<DoubleType>>() {
@@ -93,7 +92,7 @@ public class TranslateViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalTranslate() {
 
-		BiFunction<Img<DoubleType>, long[], IntervalView<DoubleType>> translateFunc = FunctionUtils.match(ops.env(),
+		BiFunction<Img<DoubleType>, long[], IntervalView<DoubleType>> translateFunc = OpBuilder.matchFunction(ops.env(),
 				"transform.translateView", new Nil<Img<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

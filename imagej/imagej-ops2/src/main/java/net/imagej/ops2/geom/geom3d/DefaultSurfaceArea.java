@@ -36,8 +36,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.core.Op;
-import org.scijava.param.Parameter;
+import org.scijava.ops.Op;
 import org.scijava.plugin.Plugin;
 
 /**

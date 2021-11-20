@@ -39,7 +39,7 @@ import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.core.builder.OpBuilder;
+import org.scijava.ops.OpBuilder;
 
 /**
  * Tests for {@link Rotate3d}.

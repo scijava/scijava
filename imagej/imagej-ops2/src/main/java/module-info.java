@@ -13,8 +13,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.convert.copy to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.copy to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.create to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.create.img to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.create.kernel to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.deconvolve to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.deconvolve.accelerate to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.eval to org.scijava, org.scijava.ops;
@@ -24,7 +22,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.features.lbp2d to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.features.tamura2d to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.features.zernike to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.features.zernike.helper to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.filter to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.filter.addNoise to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.filter.bilateral to org.scijava, org.scijava.ops;
@@ -51,7 +48,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.geom to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.geom.geom2d to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.geom.geom3d to org.scijava, org.scijava.ops;
-	opens net.imagej.ops2.geom.geom3d.mesh to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.identity to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.image.ascii to org.scijava, org.scijava.ops;
 	opens net.imagej.ops2.image.cooccurrenceMatrix to org.scijava, org.scijava.ops;

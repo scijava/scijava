@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.BiFunction;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessible;
@@ -44,10 +45,8 @@ import net.imglib2.view.MixedTransformView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
@@ -65,8 +64,8 @@ public class OffsetViewTest extends AbstractOpTest {
 	@Test
 	public void defaultOffsetTest() {
 
-		BiFunction<RandomAccessible<DoubleType>, long[], MixedTransformView<DoubleType>> offsetFunc = FunctionUtils
-				.match(ops.env(), "transform.offsetView", new Nil<RandomAccessible<DoubleType>>() {
+		BiFunction<RandomAccessible<DoubleType>, long[], MixedTransformView<DoubleType>> offsetFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.offsetView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
 				});
@@ -87,8 +86,8 @@ public class OffsetViewTest extends AbstractOpTest {
 	@Test
 	public void defaultOffsetIntervalTest() {
 
-		BiFunction<RandomAccessibleInterval<DoubleType>, Interval, IntervalView<DoubleType>> offsetFunc = FunctionUtils
-				.match(ops.env(), "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+		BiFunction<RandomAccessibleInterval<DoubleType>, Interval, IntervalView<DoubleType>> offsetFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Interval>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});
@@ -109,8 +108,8 @@ public class OffsetViewTest extends AbstractOpTest {
 	@Test
 	public void defaultOffsetStartEndTest() {
 
-		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc = FunctionUtils
-				.match(ops.env(), "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+		Functions.Arity3<RandomAccessibleInterval<DoubleType>, long[], long[], IntervalView<DoubleType>> offsetFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.offsetView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

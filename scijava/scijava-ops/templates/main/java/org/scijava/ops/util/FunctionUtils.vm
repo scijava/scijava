@@ -5,11 +5,7 @@
 
 package org.scijava.ops.util;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -17,7 +13,7 @@ import java.util.function.Function;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.OpEnvironment;
-import org.scijava.ops.hints.Hints;
+import org.scijava.ops.Hints;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -33,53 +29,15 @@ public final class FunctionUtils {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	/**
-	 * All known function types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
-	 */
-	public static final BiMap<Integer, Class<?>> ALL_FUNCTIONS;
-
-	static {
-		final Map<Integer, Class<?>> functions = new HashMap<>(10);
-#foreach($arity in [0..$maxArity])
-		functions.put($arity, ${functionArity.call($arity)}.class);
-#end
-		ALL_FUNCTIONS = ImmutableBiMap.copyOf(functions);
-	}
-
-	/**
-	 * @return {@code true} if the given type is a {@link #ALL_FUNCTIONS known}
-	 *         function type, {@code false} otherwise.<br>
-	 *         Note that only the type itself and not its type hierarchy is
-	 *         considered.
-	 * @throws NullPointerException If {@code type} is {@code null}.
-	 */
-	public static boolean isFunction(Type type) {
-		return ALL_FUNCTIONS.containsValue(Types.raw(type));
-	}
-
-#foreach($arity in [0..$maxArity])
-	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpEnvironment env, final String opName, $matchParams.call($arity))
-	{
-		return matchHelper(env, opName, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
-	}
-
-#end
-#foreach($arity in [0..$maxArity])
-	@SuppressWarnings({ "unchecked" })
-	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) match(final OpEnvironment env, final String opName, $matchParams.call($arity), final Hints hints)
-	{
-		return matchHelper(env, opName, hints, ${functionArity.call($arity)}.class, $nilArgs.call($arity));
-	}
-
-#end
 	@SuppressWarnings({ "unchecked" })
 	public static <O, T> Functions.ArityN<O> matchN(final OpEnvironment env,
 		final String opName, final Nil<O> outType, final Nil<?>... inTypes)
 	{
-		Object op = matchHelper(env, opName, ALL_FUNCTIONS.get(inTypes.length),
-			outType, inTypes);
+		Map.Entry<Integer, Class<?>> c = Functions.ALL_FUNCTIONS //
+			.entrySet().stream() //
+			.filter(e -> e.getKey() == inTypes.length) //
+			.findAny().get();
+		Object op = matchHelper(env, opName, c.getValue(), outType, inTypes);
 		if (op instanceof Producer) {
 			return Functions.nary((Producer<O>) op);
 		}
@@ -103,17 +61,4 @@ public final class FunctionUtils {
 		final Type specialType = Types.parameterize(opClass, types);
 		return (T) env.op(opName, Nil.of(specialType), inTypes, outType);
 	}
-
-	@SuppressWarnings({ "unchecked" })
-	private static <T> T matchHelper(final OpEnvironment env, final String opName, final Hints hints,
-		final Class<T> opClass, final Nil<?> outType, final Nil<?>... inTypes)
-	{
-		final Type[] types = new Type[inTypes.length + 1];
-		for (int i = 0; i < inTypes.length; i++)
-			types[i] = inTypes[i].getType();
-		types[types.length - 1] = outType.getType();
-		final Type specialType = Types.parameterize(opClass, types);
-		return (T) env.op(opName, Nil.of(specialType), inTypes, outType, hints);
-	}
-
 }

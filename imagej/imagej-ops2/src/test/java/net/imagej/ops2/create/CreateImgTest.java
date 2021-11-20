@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.FinalInterval;
@@ -57,10 +58,8 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
-
 import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
@@ -94,7 +93,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 			}
 
 			// create img
-			final Function<Interval, Img<?>> createFunc = FunctionUtils.match(ops.env(), "create.img", new Nil<Interval>() {
+			final Function<Interval, Img<?>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img", new Nil<Interval>() {
 			}, new Nil<Img<?>>() {
 			});
 			final Img<?> img = createFunc.apply(new FinalInterval(min, max));
@@ -120,7 +119,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 			}
 
 			// create img
-			BiFunction<Dimensions, DoubleType, Img<DoubleType>> createFunc = FunctionUtils.match(ops.env(), "create.img",
+			BiFunction<Dimensions, DoubleType, Img<DoubleType>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img",
 					new Nil<Dimensions>() {
 					}, new Nil<DoubleType>() {
 					}, new Nil<Img<DoubleType>>() {
@@ -135,13 +134,13 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	@Test
 	public void testImgFromImg() {
 		// create img
-		BiFunction<Dimensions, ByteType, Img<ByteType>> createFuncDimsType = FunctionUtils.match(ops.env(), "create.img",
+		BiFunction<Dimensions, ByteType, Img<ByteType>> createFuncDimsType = OpBuilder.matchFunction(ops.env(), "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ByteType>() {
 				}, new Nil<Img<ByteType>>() {
 				});
 		final Img<ByteType> img = createFuncDimsType.apply(new FinalDimensions(1), new ByteType());
-		Function<Img<ByteType>, Img<ByteType>> createFuncImg = FunctionUtils.match(ops.env(), "create.img",
+		Function<Img<ByteType>, Img<ByteType>> createFuncImg = OpBuilder.matchFunction(ops.env(), "create.img",
 				new Nil<Img<ByteType>>() {
 				}, new Nil<Img<ByteType>>() {
 				});
@@ -157,7 +156,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
 		Functions.Arity3<Dimensions, DoubleType, ImgFactory<DoubleType>, Img<DoubleType>> createFunc =
-			FunctionUtils.match(ops.env(), "create.img", new Nil<Dimensions>()
+			OpBuilder.matchFunction(ops.env(), "create.img", new Nil<Dimensions>()
 			{}, new Nil<DoubleType>() {}, new Nil<ImgFactory<DoubleType>>() {},
 				new Nil<Img<DoubleType>>()
 				{});
@@ -178,7 +177,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	public void testImageType() {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 		
-		BiFunction<Dimensions, T, Img<T>> createFunc = FunctionUtils.match(ops.env(), "create.img", new Nil<Dimensions>() {}, new Nil<T>() {}, new Nil<Img<T>>() {});
+		BiFunction<Dimensions, T, Img<T>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img", new Nil<Dimensions>() {}, new Nil<T>() {}, new Nil<Img<T>>() {});
 
 		assertEquals(BitType.class, ((Img<?>) createFunc.apply(dim,
 			(T) new BitType())).firstElement().getClass(), "Image Type: ");
@@ -202,7 +201,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	@Test
 	public void testCreateFromImgSameType() {
 		final Img<ByteType> input = PlanarImgs.bytes(10, 10, 10);
-		BiFunction<Dimensions, ByteType, Img<ByteType>> createFunc = FunctionUtils.match(ops.env(), "create.img",
+		BiFunction<Dimensions, ByteType, Img<ByteType>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ByteType>() {
 				}, new Nil<Img<ByteType>>() {
@@ -218,7 +217,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	@Test
 	public void testCreateFromImgDifferentType() {
 		final Img<ByteType> input = PlanarImgs.bytes(10, 10, 10);
-		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = FunctionUtils.match(ops.env(), "create.img",
+		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ShortType>() {
 				}, new Nil<Img<ShortType>>() {
@@ -236,7 +235,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 		final IntervalView<ByteType> input = Views.interval(PlanarImgs.bytes(10, 10, 10),
 				new FinalInterval(new long[] { 10, 10, 1 }));
 
-		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = FunctionUtils.match(ops.env(), "create.img",
+		BiFunction<Dimensions, ShortType, Img<ShortType>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img",
 				new Nil<Dimensions>() {
 				}, new Nil<ShortType>() {
 				}, new Nil<Img<ShortType>>() {
@@ -260,7 +259,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	public void testCreateFromIntegerArray() {
 		final Integer[] dims = new Integer[] { 25, 25, 10 };
 
-		Function<Integer[], Img<?>> createFunc = FunctionUtils.match(ops.env(), "create.img", new Nil<Integer[]>() {
+		Function<Integer[], Img<?>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img", new Nil<Integer[]>() {
 		}, new Nil<Img<?>>() {
 		});
 		final Img<?> res = createFunc.apply(dims);
@@ -278,7 +277,7 @@ public class CreateImgTest<T extends RealType<T>> extends AbstractOpTest {
 	public void testCreateFromLongArray() {
 		final Long[] dims = new Long[] { 25l, 25l, 10l };
 
-		Function<Long[], Img<?>> createFunc = FunctionUtils.match(ops.env(), "create.img", new Nil<Long[]>() {
+		Function<Long[], Img<?>> createFunc = OpBuilder.matchFunction(ops.env(), "create.img", new Nil<Long[]>() {
 		}, new Nil<Img<?>>() {
 		});
 		final Img<?> res = createFunc.apply(dims);

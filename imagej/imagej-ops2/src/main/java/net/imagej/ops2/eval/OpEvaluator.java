@@ -37,15 +37,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.function.Functions;
+import org.scijava.ops.Op;
 import org.scijava.ops.OpService;
 import org.scijava.ops.util.FunctionUtils;
-import org.scijava.types.Nil;
-import org.scijava.types.TypeService;
 import org.scijava.parsington.Operator;
 import org.scijava.parsington.Operators;
 import org.scijava.parsington.Variable;
 import org.scijava.parsington.eval.AbstractStandardStackEvaluator;
 import org.scijava.parsington.eval.Evaluator;
+import org.scijava.types.Nil;
+import org.scijava.types.TypeService;
 
 /**
  * A Parsington {@link Evaluator} using available {@link Op}s.

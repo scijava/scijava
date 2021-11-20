@@ -7,9 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.Context;
-import org.scijava.persist.testobjects.Circle;
-import org.scijava.persist.testobjects.Shape;
-import org.scijava.persist.testobjects.Shapes;
 
 public class SerializationTests {
 
@@ -43,7 +40,7 @@ public class SerializationTests {
 	}
 
 	/**
-	 * Test {@link org.scijava.persist.testobjects.CircleAdapter}
+	 * Test {@link org.scijava.persist.CircleAdapter}
 	 */
 	@Test
 	public void testCircleObject() {
@@ -52,7 +49,7 @@ public class SerializationTests {
 	}
 
 	/**
-	 * Test adapters located in {@link org.scijava.persist.testobjects.Shapes}
+	 * Test adapters located in {@link org.scijava.persist.Shapes}
 	 */
 	@Test
 	public void testDrawingObject() {

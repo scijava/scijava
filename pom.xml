@@ -78,6 +78,8 @@
 		<scijava.javadoc.url.java>https://javadoc.scijava.org/Java11/</scijava.javadoc.url.java>
 		<scijava.javadoc.url.javafx>https://javadoc.scijava.org/JavaFX11/</scijava.javadoc.url.javafx>
 
+		<scijava-maven-plugin.version>2.2.0</scijava-maven-plugin.version>
+
 		<doclint>none</doclint>
 
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->
@@ -120,6 +122,37 @@
 						</tagletArtifact>
 					</tagletArtifacts>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-no-package-cycles</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoPackageCyclesRule
+									implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-no-subpackage-dependence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<rules>
+								<NoSubpackageDependenceRule
+									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>

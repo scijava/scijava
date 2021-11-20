@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RealRandomAccessible;
@@ -43,10 +44,8 @@ import net.imglib2.view.RandomAccessibleOnRealRandomAccessible;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import net.imagej.ops2.AbstractOpTest;
+import org.scijava.ops.OpBuilder;
 import org.scijava.types.Nil;
-import org.scijava.function.Functions;
-import org.scijava.ops.util.FunctionUtils;
 import org.scijava.util.MersenneTwisterFast;
 
 /**
@@ -66,8 +65,8 @@ public class RasterViewTest extends AbstractOpTest {
 	@Test
 	public void defaultRasterTest() {
 
-		Function<RealRandomAccessible<DoubleType>, RandomAccessibleOnRealRandomAccessible<DoubleType>> rasterFunc = FunctionUtils
-				.match(ops.env(), "transform.rasterView", new Nil<RealRandomAccessible<DoubleType>>() {
+		Function<RealRandomAccessible<DoubleType>, RandomAccessibleOnRealRandomAccessible<DoubleType>> rasterFunc = OpBuilder
+				.matchFunction(ops.env(), "transform.rasterView", new Nil<RealRandomAccessible<DoubleType>>() {
 				}, new Nil<RandomAccessibleOnRealRandomAccessible<DoubleType>>() {
 				});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

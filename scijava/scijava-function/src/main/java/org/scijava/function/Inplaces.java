@@ -5,8 +5,14 @@
 
 package org.scijava.function;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Container class for inplace-style functional interfaces at various
@@ -41,6 +47,171 @@ public final class Inplaces {
 
 	private Inplaces() {
 		// NB: Prevent instantiation of container class.
+	}
+
+	/**
+	 * All known inplace types and their arities and mutable positions. The
+	 * entries are sorted by arity and mutable position.
+	 */
+	public static final Map<Class<?>, InplaceInfo> ALL_INPLACES;
+
+	static {
+		final Map<Class<?>, InplaceInfo> inplaces = new LinkedHashMap<>(22);
+		inplaces.put(Inplaces.Arity1.class, new InplaceInfo(1, 0));
+		inplaces.put(Inplaces.Arity2_1.class, new InplaceInfo(2, 0));
+		inplaces.put(Inplaces.Arity2_2.class, new InplaceInfo(2, 1));
+		inplaces.put(Inplaces.Arity3_1.class, new InplaceInfo(3, 0));
+		inplaces.put(Inplaces.Arity3_2.class, new InplaceInfo(3, 1));
+		inplaces.put(Inplaces.Arity3_3.class, new InplaceInfo(3, 2));
+		inplaces.put(Inplaces.Arity4_1.class, new InplaceInfo(4, 0));
+		inplaces.put(Inplaces.Arity4_2.class, new InplaceInfo(4, 1));
+		inplaces.put(Inplaces.Arity4_3.class, new InplaceInfo(4, 2));
+		inplaces.put(Inplaces.Arity4_4.class, new InplaceInfo(4, 3));
+		inplaces.put(Inplaces.Arity5_1.class, new InplaceInfo(5, 0));
+		inplaces.put(Inplaces.Arity5_2.class, new InplaceInfo(5, 1));
+		inplaces.put(Inplaces.Arity5_3.class, new InplaceInfo(5, 2));
+		inplaces.put(Inplaces.Arity5_4.class, new InplaceInfo(5, 3));
+		inplaces.put(Inplaces.Arity5_5.class, new InplaceInfo(5, 4));
+		inplaces.put(Inplaces.Arity6_1.class, new InplaceInfo(6, 0));
+		inplaces.put(Inplaces.Arity6_2.class, new InplaceInfo(6, 1));
+		inplaces.put(Inplaces.Arity6_3.class, new InplaceInfo(6, 2));
+		inplaces.put(Inplaces.Arity6_4.class, new InplaceInfo(6, 3));
+		inplaces.put(Inplaces.Arity6_5.class, new InplaceInfo(6, 4));
+		inplaces.put(Inplaces.Arity6_6.class, new InplaceInfo(6, 5));
+		inplaces.put(Inplaces.Arity7_1.class, new InplaceInfo(7, 0));
+		inplaces.put(Inplaces.Arity7_2.class, new InplaceInfo(7, 1));
+		inplaces.put(Inplaces.Arity7_3.class, new InplaceInfo(7, 2));
+		inplaces.put(Inplaces.Arity7_4.class, new InplaceInfo(7, 3));
+		inplaces.put(Inplaces.Arity7_5.class, new InplaceInfo(7, 4));
+		inplaces.put(Inplaces.Arity7_6.class, new InplaceInfo(7, 5));
+		inplaces.put(Inplaces.Arity7_7.class, new InplaceInfo(7, 6));
+		inplaces.put(Inplaces.Arity8_1.class, new InplaceInfo(8, 0));
+		inplaces.put(Inplaces.Arity8_2.class, new InplaceInfo(8, 1));
+		inplaces.put(Inplaces.Arity8_3.class, new InplaceInfo(8, 2));
+		inplaces.put(Inplaces.Arity8_4.class, new InplaceInfo(8, 3));
+		inplaces.put(Inplaces.Arity8_5.class, new InplaceInfo(8, 4));
+		inplaces.put(Inplaces.Arity8_6.class, new InplaceInfo(8, 5));
+		inplaces.put(Inplaces.Arity8_7.class, new InplaceInfo(8, 6));
+		inplaces.put(Inplaces.Arity8_8.class, new InplaceInfo(8, 7));
+		inplaces.put(Inplaces.Arity9_1.class, new InplaceInfo(9, 0));
+		inplaces.put(Inplaces.Arity9_2.class, new InplaceInfo(9, 1));
+		inplaces.put(Inplaces.Arity9_3.class, new InplaceInfo(9, 2));
+		inplaces.put(Inplaces.Arity9_4.class, new InplaceInfo(9, 3));
+		inplaces.put(Inplaces.Arity9_5.class, new InplaceInfo(9, 4));
+		inplaces.put(Inplaces.Arity9_6.class, new InplaceInfo(9, 5));
+		inplaces.put(Inplaces.Arity9_7.class, new InplaceInfo(9, 6));
+		inplaces.put(Inplaces.Arity9_8.class, new InplaceInfo(9, 7));
+		inplaces.put(Inplaces.Arity9_9.class, new InplaceInfo(9, 8));
+		inplaces.put(Inplaces.Arity10_1.class, new InplaceInfo(10, 0));
+		inplaces.put(Inplaces.Arity10_2.class, new InplaceInfo(10, 1));
+		inplaces.put(Inplaces.Arity10_3.class, new InplaceInfo(10, 2));
+		inplaces.put(Inplaces.Arity10_4.class, new InplaceInfo(10, 3));
+		inplaces.put(Inplaces.Arity10_5.class, new InplaceInfo(10, 4));
+		inplaces.put(Inplaces.Arity10_6.class, new InplaceInfo(10, 5));
+		inplaces.put(Inplaces.Arity10_7.class, new InplaceInfo(10, 6));
+		inplaces.put(Inplaces.Arity10_8.class, new InplaceInfo(10, 7));
+		inplaces.put(Inplaces.Arity10_9.class, new InplaceInfo(10, 8));
+		inplaces.put(Inplaces.Arity10_10.class, new InplaceInfo(10, 9));
+		inplaces.put(Inplaces.Arity11_1.class, new InplaceInfo(11, 0));
+		inplaces.put(Inplaces.Arity11_2.class, new InplaceInfo(11, 1));
+		inplaces.put(Inplaces.Arity11_3.class, new InplaceInfo(11, 2));
+		inplaces.put(Inplaces.Arity11_4.class, new InplaceInfo(11, 3));
+		inplaces.put(Inplaces.Arity11_5.class, new InplaceInfo(11, 4));
+		inplaces.put(Inplaces.Arity11_6.class, new InplaceInfo(11, 5));
+		inplaces.put(Inplaces.Arity11_7.class, new InplaceInfo(11, 6));
+		inplaces.put(Inplaces.Arity11_8.class, new InplaceInfo(11, 7));
+		inplaces.put(Inplaces.Arity11_9.class, new InplaceInfo(11, 8));
+		inplaces.put(Inplaces.Arity11_10.class, new InplaceInfo(11, 9));
+		inplaces.put(Inplaces.Arity11_11.class, new InplaceInfo(11, 10));
+		inplaces.put(Inplaces.Arity12_1.class, new InplaceInfo(12, 0));
+		inplaces.put(Inplaces.Arity12_2.class, new InplaceInfo(12, 1));
+		inplaces.put(Inplaces.Arity12_3.class, new InplaceInfo(12, 2));
+		inplaces.put(Inplaces.Arity12_4.class, new InplaceInfo(12, 3));
+		inplaces.put(Inplaces.Arity12_5.class, new InplaceInfo(12, 4));
+		inplaces.put(Inplaces.Arity12_6.class, new InplaceInfo(12, 5));
+		inplaces.put(Inplaces.Arity12_7.class, new InplaceInfo(12, 6));
+		inplaces.put(Inplaces.Arity12_8.class, new InplaceInfo(12, 7));
+		inplaces.put(Inplaces.Arity12_9.class, new InplaceInfo(12, 8));
+		inplaces.put(Inplaces.Arity12_10.class, new InplaceInfo(12, 9));
+		inplaces.put(Inplaces.Arity12_11.class, new InplaceInfo(12, 10));
+		inplaces.put(Inplaces.Arity12_12.class, new InplaceInfo(12, 11));
+		inplaces.put(Inplaces.Arity13_1.class, new InplaceInfo(13, 0));
+		inplaces.put(Inplaces.Arity13_2.class, new InplaceInfo(13, 1));
+		inplaces.put(Inplaces.Arity13_3.class, new InplaceInfo(13, 2));
+		inplaces.put(Inplaces.Arity13_4.class, new InplaceInfo(13, 3));
+		inplaces.put(Inplaces.Arity13_5.class, new InplaceInfo(13, 4));
+		inplaces.put(Inplaces.Arity13_6.class, new InplaceInfo(13, 5));
+		inplaces.put(Inplaces.Arity13_7.class, new InplaceInfo(13, 6));
+		inplaces.put(Inplaces.Arity13_8.class, new InplaceInfo(13, 7));
+		inplaces.put(Inplaces.Arity13_9.class, new InplaceInfo(13, 8));
+		inplaces.put(Inplaces.Arity13_10.class, new InplaceInfo(13, 9));
+		inplaces.put(Inplaces.Arity13_11.class, new InplaceInfo(13, 10));
+		inplaces.put(Inplaces.Arity13_12.class, new InplaceInfo(13, 11));
+		inplaces.put(Inplaces.Arity13_13.class, new InplaceInfo(13, 12));
+		inplaces.put(Inplaces.Arity14_1.class, new InplaceInfo(14, 0));
+		inplaces.put(Inplaces.Arity14_2.class, new InplaceInfo(14, 1));
+		inplaces.put(Inplaces.Arity14_3.class, new InplaceInfo(14, 2));
+		inplaces.put(Inplaces.Arity14_4.class, new InplaceInfo(14, 3));
+		inplaces.put(Inplaces.Arity14_5.class, new InplaceInfo(14, 4));
+		inplaces.put(Inplaces.Arity14_6.class, new InplaceInfo(14, 5));
+		inplaces.put(Inplaces.Arity14_7.class, new InplaceInfo(14, 6));
+		inplaces.put(Inplaces.Arity14_8.class, new InplaceInfo(14, 7));
+		inplaces.put(Inplaces.Arity14_9.class, new InplaceInfo(14, 8));
+		inplaces.put(Inplaces.Arity14_10.class, new InplaceInfo(14, 9));
+		inplaces.put(Inplaces.Arity14_11.class, new InplaceInfo(14, 10));
+		inplaces.put(Inplaces.Arity14_12.class, new InplaceInfo(14, 11));
+		inplaces.put(Inplaces.Arity14_13.class, new InplaceInfo(14, 12));
+		inplaces.put(Inplaces.Arity14_14.class, new InplaceInfo(14, 13));
+		inplaces.put(Inplaces.Arity15_1.class, new InplaceInfo(15, 0));
+		inplaces.put(Inplaces.Arity15_2.class, new InplaceInfo(15, 1));
+		inplaces.put(Inplaces.Arity15_3.class, new InplaceInfo(15, 2));
+		inplaces.put(Inplaces.Arity15_4.class, new InplaceInfo(15, 3));
+		inplaces.put(Inplaces.Arity15_5.class, new InplaceInfo(15, 4));
+		inplaces.put(Inplaces.Arity15_6.class, new InplaceInfo(15, 5));
+		inplaces.put(Inplaces.Arity15_7.class, new InplaceInfo(15, 6));
+		inplaces.put(Inplaces.Arity15_8.class, new InplaceInfo(15, 7));
+		inplaces.put(Inplaces.Arity15_9.class, new InplaceInfo(15, 8));
+		inplaces.put(Inplaces.Arity15_10.class, new InplaceInfo(15, 9));
+		inplaces.put(Inplaces.Arity15_11.class, new InplaceInfo(15, 10));
+		inplaces.put(Inplaces.Arity15_12.class, new InplaceInfo(15, 11));
+		inplaces.put(Inplaces.Arity15_13.class, new InplaceInfo(15, 12));
+		inplaces.put(Inplaces.Arity15_14.class, new InplaceInfo(15, 13));
+		inplaces.put(Inplaces.Arity15_15.class, new InplaceInfo(15, 14));
+		inplaces.put(Inplaces.Arity16_1.class, new InplaceInfo(16, 0));
+		inplaces.put(Inplaces.Arity16_2.class, new InplaceInfo(16, 1));
+		inplaces.put(Inplaces.Arity16_3.class, new InplaceInfo(16, 2));
+		inplaces.put(Inplaces.Arity16_4.class, new InplaceInfo(16, 3));
+		inplaces.put(Inplaces.Arity16_5.class, new InplaceInfo(16, 4));
+		inplaces.put(Inplaces.Arity16_6.class, new InplaceInfo(16, 5));
+		inplaces.put(Inplaces.Arity16_7.class, new InplaceInfo(16, 6));
+		inplaces.put(Inplaces.Arity16_8.class, new InplaceInfo(16, 7));
+		inplaces.put(Inplaces.Arity16_9.class, new InplaceInfo(16, 8));
+		inplaces.put(Inplaces.Arity16_10.class, new InplaceInfo(16, 9));
+		inplaces.put(Inplaces.Arity16_11.class, new InplaceInfo(16, 10));
+		inplaces.put(Inplaces.Arity16_12.class, new InplaceInfo(16, 11));
+		inplaces.put(Inplaces.Arity16_13.class, new InplaceInfo(16, 12));
+		inplaces.put(Inplaces.Arity16_14.class, new InplaceInfo(16, 13));
+		inplaces.put(Inplaces.Arity16_15.class, new InplaceInfo(16, 14));
+		inplaces.put(Inplaces.Arity16_16.class, new InplaceInfo(16, 15));
+		ALL_INPLACES = Collections.unmodifiableMap(inplaces);
+	}
+
+	/**
+	 * @return {@code true} if the given type is a known
+	 *         inplace type, {@code false} otherwise. <br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code c} is {@code null}.
+	 */
+	public static boolean isInplace(Class<?> c) {
+		return ALL_INPLACES.containsKey(c);
+	}
+
+	public static List<Class<?>> getInplacesOfArity(final int arity) {
+		return ALL_INPLACES.entrySet().stream() //
+			.filter(e -> e.getValue().arity() == arity) //
+			.map(Entry<Class<?>, InplaceInfo>::getKey) //
+			.collect(Collectors.toList());
 	}
 
 	@FunctionalInterface
@@ -1329,4 +1500,22 @@ public final class Inplaces {
 		void mutate(I1 in1, I2 in2, I3 in3, I4 in4, I5 in5, I6 in6, I7 in7, I8 in8, I9 in9, I10 in10, I11 in11, I12 in12, I13 in13, I14 in14, I15 in15, @Mutable IO io);
 	}
 
+	public static class InplaceInfo {
+
+		private final int arity;
+		private final int mutablePosition;
+
+		public InplaceInfo(final int arity, final int mutablePosition) {
+			this.arity = arity;
+			this.mutablePosition = mutablePosition;
+		}
+
+		public int arity() {
+			return arity;
+		}
+
+		public int mutablePosition() {
+			return mutablePosition;
+		}
+	}
 }

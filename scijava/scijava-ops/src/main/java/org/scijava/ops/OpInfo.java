@@ -8,15 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.log.Logger;
-import org.scijava.ops.hints.Hints;
-import org.scijava.ops.hints.OpHints;
-import org.scijava.ops.hints.impl.ImmutableHints;
-import org.scijava.ops.matcher.OpCandidate;
-import org.scijava.ops.matcher.OpRef;
-import org.scijava.param.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
+import org.scijava.struct.ValidityException;
 import org.scijava.util.MiscUtils;
 
 /**
@@ -35,11 +30,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** Gets the hints declared in the {@link OpHints} annotation */
 	Hints declaredHints();
-
-	default Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
-	}
 
 	/** Gets the op's input parameters. */
 	default List<Member<?>> inputs() {

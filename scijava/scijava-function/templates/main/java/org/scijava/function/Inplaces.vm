@@ -5,8 +5,14 @@
 
 package org.scijava.function;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Container class for inplace-style functional interfaces at various
@@ -41,6 +47,41 @@ public final class Inplaces {
 
 	private Inplaces() {
 		// NB: Prevent instantiation of container class.
+	}
+
+	/**
+	 * All known inplace types and their arities and mutable positions. The
+	 * entries are sorted by arity and mutable position.
+	 */
+	public static final Map<Class<?>, InplaceInfo> ALL_INPLACES;
+
+	static {
+		final Map<Class<?>, InplaceInfo> inplaces = new LinkedHashMap<>(22);
+#foreach($arity in $arities)
+#foreach($a in [1..$arity])
+#set($inplaceIndex = $a - 1)
+		inplaces.put($inplaceClass.call($arity, $a), new InplaceInfo(${arity}, $inplaceIndex));
+#end
+#end
+		ALL_INPLACES = Collections.unmodifiableMap(inplaces);
+	}
+
+	/**
+	 * @return {@code true} if the given type is a known
+	 *         inplace type, {@code false} otherwise. <br>
+	 *         Note that only the type itself and not its type hierarchy is
+	 *         considered.
+	 * @throws NullPointerException If {@code c} is {@code null}.
+	 */
+	public static boolean isInplace(Class<?> c) {
+		return ALL_INPLACES.containsKey(c);
+	}
+
+	public static List<Class<?>> getInplacesOfArity(final int arity) {
+		return ALL_INPLACES.entrySet().stream() //
+			.filter(e -> e.getValue().arity() == arity) //
+			.map(Entry<Class<?>, InplaceInfo>::getKey) //
+			.collect(Collectors.toList());
 	}
 
 	@FunctionalInterface
@@ -80,4 +121,22 @@ public final class Inplaces {
 
 #end
 #end
+	public static class InplaceInfo {
+
+		private final int arity;
+		private final int mutablePosition;
+
+		public InplaceInfo(final int arity, final int mutablePosition) {
+			this.arity = arity;
+			this.mutablePosition = mutablePosition;
+		}
+
+		public int arity() {
+			return arity;
+		}
+
+		public int mutablePosition() {
+			return mutablePosition;
+		}
+	}
 }

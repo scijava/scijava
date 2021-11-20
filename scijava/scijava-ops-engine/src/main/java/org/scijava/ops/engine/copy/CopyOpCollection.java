@@ -4,10 +4,8 @@ import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class CopyOpCollection <T>{
+public class CopyOpCollection <T> implements OpCollection{
 
 	@OpField(names = "cp, copy", priority = Priority.LOW, params = "array, arrayCopy")
 	public static final Computers.Arity1<double[], double[]> copyPrimitiveDoubleArray = (from, to) -> {

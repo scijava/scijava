@@ -4,9 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.scijava.InstantiableException;
+import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpUtils;
@@ -15,26 +17,25 @@ import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.plugin.PluginInfo;
-import org.scijava.plugin.PluginService;
 import org.scijava.util.ClassUtils;
 
 
-public class PluginBasedOpCollectionInfoGenerator implements OpInfoGenerator {
+public class OpCollectionInfoGenerator implements OpInfoGenerator {
 
-	private final PluginService service;
+	private final List<Discoverer> discoverers;
 
-	public PluginBasedOpCollectionInfoGenerator(PluginService service) {
-		this.service = service;
+	public OpCollectionInfoGenerator(Discoverer... d) {
+		this.discoverers = Arrays.asList(d);
 	}
 
 	@Override
 	public List<OpInfo> generateInfos() {
-		List<OpInfo> infos = new ArrayList<>();
-		for (PluginInfo<OpCollection> info : service.getPluginsOfType(OpCollection.class) ) {
+		List<OpInfo> infos = discoverers.stream() //
+			.flatMap(d -> d.implementingClasses(OpCollection.class).stream()) //
+			.map(cls -> {
 			try {
-				Class<?> c = info.loadClass();
-				final List<Field> fields = ClassUtils.getAnnotatedFields(c, OpField.class);
+				List<OpInfo> collectionInfos = new ArrayList<>();
+				final List<Field> fields = ClassUtils.getAnnotatedFields(cls, OpField.class);
 				Object instance = null;
 				for (Field field : fields) {
 					final boolean isStatic = Modifier.isStatic(field.getModifiers());
@@ -43,20 +44,25 @@ public class PluginBasedOpCollectionInfoGenerator implements OpInfoGenerator {
 					}
 					String unparsedOpNames = field.getAnnotation(OpField.class).names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
-					infos.add(new OpFieldInfo(isStatic ? null : instance, field,
+					collectionInfos.add(new OpFieldInfo(isStatic ? null : instance, field,
 						parsedOpNames));
 				}
-				final List<Method> methods = ClassUtils.getAnnotatedMethods(c, OpMethod.class);
+				final List<Method> methods = ClassUtils.getAnnotatedMethods(cls, OpMethod.class);
 				for (final Method method: methods) {
 					String unparsedOpNames = method.getAnnotation(OpMethod.class).names();
 					String[] parsedOpNames = OpUtils.parseOpNames(unparsedOpNames);
-					infos.add(new OpMethodInfo(method, parsedOpNames));
+					collectionInfos.add(new OpMethodInfo(method, parsedOpNames));
 				}
-			} catch (InstantiationException | IllegalAccessException | InstantiableException exc) {
+				return collectionInfos;
+			} catch (InstantiationException | IllegalAccessException exc) {
 				// TODO: Consider how best to handle this.
-				exc.printStackTrace();
+				return null;
 			}
-		}
+			
+			}) //
+			.filter(list -> list!= null) //
+			.flatMap(list -> list.stream()) //
+			.collect(Collectors.toList());
 		return infos;
 	}
 

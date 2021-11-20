@@ -4,13 +4,13 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 public class Mean {
 
-	@Plugin(type = Op.class, name = "stats.mean")
-	public static class MeanFunction <N, O> implements Function<Iterable<N>, O>{
+	@OpClass(names = "stats.mean")
+	public static class MeanFunction <N, O> implements Function<Iterable<N>, O>, Op{
 
 		@OpDependency(name = "math.add")
 		Function<Iterable<N>, O> sumFunc;

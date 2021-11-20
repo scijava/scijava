@@ -11,11 +11,11 @@
 		<relativePath>../..</relativePath>
 	</parent>
 
-	<artifactId>scijava-ops-discovery</artifactId>
+	<artifactId>scijava-ops-serviceloader</artifactId>
 
-	<name>SciJava Ops Discovery</name>
-	<description>SciJava Operations Discovery: Discovery mechanisms used by the SciJava Operations framework.</description>
-	<url>https://github.com/scijava/scijava-ops-discovery</url>
+	<name>SciJava Ops Service Loader</name>
+	<description>SciJava Operations Service Loader: A ServiceLoader based implementation of SciJava Ops Discovery.</description>
+	<url>https://github.com/scijava/scijava-ops-serviceloader</url>
 	<inceptionYear>2021</inceptionYear>
 	<organization>
 		<name>SciJava</name>
@@ -78,7 +78,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-ops-discovery</archive>
+			<archive>https://forum.image.sc/tags/scijava-ops-serviceloader</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -90,7 +90,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/scijava/scijava-ops-discovery/issues</url>
+		<url>https://github.com/scijava/scijava-ops-serviceloader/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Travis CI</system>
@@ -98,15 +98,31 @@
 	</ciManagement>
 
 	<properties>
-		<main-class>org.scijava.ops.discovery.Main</main-class>
-		<package-name>org.scijava.ops.discovery</package-name>
+		<main-class>org.scijava.ops.serviceloader.Main</main-class>
+		<package-name>org.scijava.ops.serviceloader</package-name>
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
 		<!--  <enforcer.skip>true</enforcer.skip>-->
-		<scijava-ops-discovery.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-discovery.allowedDuplicateClasses>
-		<allowedDuplicateClasses>${scijava-ops-discovery.allowedDuplicateClasses}</allowedDuplicateClasses>
+		<scijava-ops-serviceloader.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-serviceloader.allowedDuplicateClasses>
+		<allowedDuplicateClasses>${scijava-ops-serviceloader.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ops-spi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Test Scope Dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

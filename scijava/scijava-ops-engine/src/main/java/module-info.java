@@ -34,10 +34,11 @@ module org.scijava.ops.engine {
 	requires java.desktop;
 
 	requires org.scijava;
+	requires org.scijava.discovery;
 	requires org.scijava.function;
 	requires org.scijava.struct;
 	requires org.scijava.ops.api;
-	requires org.scijava.ops.discovery;
+	requires org.scijava.ops.serviceloader;
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;
 	requires javassist;
@@ -45,4 +46,6 @@ module org.scijava.ops.engine {
 	requires therapi.runtime.javadoc;
 
 	uses javax.annotation.processing.Processor;
+	provides org.scijava.ops.spi.OpCollection with org.scijava.ops.engine.copy.CopyOpCollection;
+	provides org.scijava.ops.spi.Op with org.scijava.ops.engine.stats.Mean.MeanFunction;
 }

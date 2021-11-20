@@ -35,14 +35,14 @@ import java.util.stream.Collectors;
 
 import org.scijava.Context;
 import org.scijava.InstantiableException;
+import org.scijava.discovery.Discoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.discovery.Discoverer;
-import org.scijava.ops.discovery.Implementation;
 import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
+import org.scijava.ops.serviceloader.ServiceLoaderDiscoverer;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
@@ -88,15 +88,16 @@ public class DefaultOpService extends AbstractService implements OpService {
 
 	private synchronized void initEnv() {
 		if (env != null) return;
-		PluginService plugins = context().getService(PluginService.class);
 		LogService log = context().getService(LogService.class);
 		TypeService types = context().getService(TypeService.class);
 		OpHistoryService history = context().getService(OpHistoryService.class);
+		Discoverer d1 = new PluginBasedDiscoverer(context());
+		Discoverer d2 = new ServiceLoaderDiscoverer();
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
-			new PluginBasedClassOpInfoGenerator(plugins),
-			new PluginBasedOpCollectionInfoGenerator(plugins));
-		env = new DefaultOpEnvironment(new PluginBasedDiscoverer(context()), types,
-			log, history, infoGenerators);
+			new PluginBasedClassOpInfoGenerator(d1, d2),
+			new OpClassBasedClassOpInfoGenerator(d1, d2),
+			new OpCollectionInfoGenerator(d1, d2));
+		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2);
 	}
 }
 
@@ -110,7 +111,7 @@ class PluginBasedDiscoverer implements Discoverer {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> List<? extends Class<T>> implementingClasses(Class<T> c) {
+	public <T> List<Class<T>> implementingClasses(Class<T> c) {
 		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
 			throw new UnsupportedOperationException(
 				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
@@ -120,36 +121,6 @@ class PluginBasedDiscoverer implements Discoverer {
 		return infos.stream() //
 			.map(info -> makeClassOrNull(c, info)) //
 			.filter(cls -> cls != null).collect(Collectors.toList());
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<? extends T> implementingInstances(Class<T> c,
-		Class<?>[] constructorClasses, Object[] constructorArgs)
-	{
-		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			throw new UnsupportedOperationException(
-				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
-		}
-		List<SciJavaPlugin> instances = p.createInstancesOfType(
-			(Class<SciJavaPlugin>) c);
-		return instances.stream().map(instance -> (T) instance).collect(Collectors
-			.toList());
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<Implementation<T>> implementationsOf(Class<T> c) {
-		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			throw new UnsupportedOperationException(
-				"Current discovery mechanism tied to SciJava Context; only able to search for SciJavaPlugins");
-		}
-		List<PluginInfo<SciJavaPlugin>> instances = p.getPluginsOfType(
-			(Class<SciJavaPlugin>) c);
-		return instances.stream() //
-			.map(instance -> makeDiscoveryOrNull(c, instance)) //
-			.filter(d -> d.implementation() != null) //
-			.collect(Collectors.toList());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -162,13 +133,6 @@ class PluginBasedDiscoverer implements Discoverer {
 		catch (InstantiableException exc) {
 			return null;
 		}
-	}
-
-	private <T> Implementation<T> makeDiscoveryOrNull(Class<T> type,
-		PluginInfo<SciJavaPlugin> instance)
-	{
-		return new Implementation<>(makeClassOrNull(type, instance), type, instance
-			.getName());
 	}
 
 }

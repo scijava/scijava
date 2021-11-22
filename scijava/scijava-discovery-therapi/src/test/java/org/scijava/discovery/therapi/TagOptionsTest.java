@@ -1,45 +1,33 @@
 
 package org.scijava.discovery.therapi;
 
-import java.lang.reflect.AnnotatedElement;
 import java.util.List;
-import java.util.ServiceLoader;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.scijava.discovery.Discovery;
-import org.scijava.parse2.Parser;
 
 public class TagOptionsTest {
 
-	private Parser parser;
-
-	@Before
-	public void setUp() {
-		parser = ServiceLoader.load(Parser.class).findFirst().get();
-	}
-
-	private List<Discovery<AnnotatedElement>> getTaggedDiscoveries(
+	private List<TherapiDiscovery> getTaggedDiscoveries(
 		String tagType)
 	{
-		return new TherapiDiscoverer(parser).elementsTaggedWith(tagType);
+		return new TherapiDiscoveryDiscoverer(tagType).discover(TherapiDiscovery.class);
 	}
 
 	@Test
 	public void optionsTest() {
-		List<Discovery<AnnotatedElement>> elements = getTaggedDiscoveries(
+		List<TherapiDiscovery> elements = getTaggedDiscoveries(
 			"optionsTest");
-		Discovery<AnnotatedElement> annotatedElement = elements.get(0);
+		TherapiDiscovery annotatedElement = elements.get(0);
 		Assert.assertEquals("e", annotatedElement.option("singleKey"));
 		Assert.assertEquals("[e1, e2]", annotatedElement.option("listKey"));
 	}
 
 	@Test
 	public void optionsPerLineTest() {
-		List<Discovery<AnnotatedElement>> elements = getTaggedDiscoveries(
+		List<TherapiDiscovery> elements = getTaggedDiscoveries(
 			"optionsPerLineTest");
-		Discovery<AnnotatedElement> annotatedElement = elements.get(0);
+		TherapiDiscovery annotatedElement = elements.get(0);
 		Assert.assertEquals("e", annotatedElement.option("singleKey"));
 		Assert.assertEquals("[e1, e2]", annotatedElement.option("listKey"));
 	}
@@ -50,9 +38,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void forgottenCommaTest() {
-		List<Discovery<AnnotatedElement>> elements = getTaggedDiscoveries(
+		List<TherapiDiscovery> elements = getTaggedDiscoveries(
 			"forgottenComma");
-		Discovery<AnnotatedElement> annotatedElement = elements.get(0);
+		TherapiDiscovery annotatedElement = elements.get(0);
 		Assert.assertThrows(IllegalArgumentException.class, //
 			() -> annotatedElement.option("singleKey"));
 	}
@@ -63,9 +51,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void forgottenQuoteTest() {
-		List<Discovery<AnnotatedElement>> elements = getTaggedDiscoveries(
+		List<TherapiDiscovery> elements = getTaggedDiscoveries(
 			"forgottenQuote");
-		Discovery<AnnotatedElement> annotatedElement = elements.get(0);
+		TherapiDiscovery annotatedElement = elements.get(0);
 		Assert.assertThrows(IllegalArgumentException.class, //
 			() -> annotatedElement.option("singleKey"));
 	}
@@ -76,9 +64,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void duplicateOptionTest() {
-		List<Discovery<AnnotatedElement>> elements = getTaggedDiscoveries(
+		List<TherapiDiscovery> elements = getTaggedDiscoveries(
 			"duplicateOption");
-		Discovery<AnnotatedElement> annotatedElement = elements.get(0);
+		TherapiDiscovery annotatedElement = elements.get(0);
 		Assert.assertEquals("[e1, e2]", annotatedElement.option("singleKey"));
 	}
 
@@ -87,15 +75,16 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void absentOptionTest() {
-		List<Discovery<AnnotatedElement>> elements = getTaggedDiscoveries(
+		List<TherapiDiscovery> elements = getTaggedDiscoveries(
 			"absentOption");
-		Discovery<AnnotatedElement> annotatedElement = elements.get(0);
+		TherapiDiscovery annotatedElement = elements.get(0);
 		Assert.assertEquals("", annotatedElement.option("singleKey"));
 	}
 
 	/**
 	 * @implNote optionsTest singleKey='e', listKey={'e1', 'e2'}
 	 */
+	@SuppressWarnings("unused")
 	public void foo() {}
 
 	/**
@@ -103,6 +92,7 @@ public class TagOptionsTest {
 	 * singleKey='e',
 	 * listKey={'e1', 'e2'}
 	 */
+	@SuppressWarnings("unused")
 	public void boo() {}
 
 	/**
@@ -110,6 +100,7 @@ public class TagOptionsTest {
 	 * 
 	 * @implNote forgottenComma singleKey='e' listKey={'e1', 'e2'}
 	 */
+	@SuppressWarnings("unused")
 	public void too() {}
 
 	/**
@@ -117,6 +108,7 @@ public class TagOptionsTest {
 	 * 
 	 * @implNote forgottenQuote singleKey=e, listKey={'e1', 'e2'}
 	 */
+	@SuppressWarnings("unused")
 	public void moo() {}
 
 	/**
@@ -124,6 +116,7 @@ public class TagOptionsTest {
 	 * 
 	 * @implNote duplicateOption singleKey='e', singleKey={'e1', 'e2'}
 	 */
+	@SuppressWarnings("unused")
 	public void coo() {}
 
 	/**
@@ -131,5 +124,6 @@ public class TagOptionsTest {
 	 * 
 	 * @implNote absentOption
 	 */
+	@SuppressWarnings("unused")
 	public void woo() {}
 }

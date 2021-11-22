@@ -32,16 +32,7 @@ package org.scijava.ops.engine.impl;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -49,39 +40,19 @@ import java.util.stream.Collectors;
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
 import org.scijava.log2.Logger;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.InfoChainGenerator;
-import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.*;
 import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.features.*;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.api.features.DependencyMatchingException;
-import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.api.features.OpMatcher;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
-import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
-import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRef;
-import org.scijava.ops.engine.matcher.impl.OpAdaptationInfo;
-import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.matcher.impl.*;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
@@ -127,10 +98,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Map<String, OpInfo> idDirectory;
 
 	/**
-	 * Data structure containing all known InfoChainGenerators
-	 */
-	private Set<InfoChainGenerator> infoChainGenerators;
-	/**
 	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRef}
 	 * and {@Hints} used to find an Op) and the {@link OpInstance} (wrapping an Op
 	 * with its backing {@link OpInfo}) that matched those requests. Used to
@@ -155,26 +122,20 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	public DefaultOpEnvironment(final TypeReifier typeService,
 		final Logger log, final OpHistory history,
-		final List<OpInfoGenerator> infoGenerators, final List<Discoverer> d)
+		final List<Discoverer> discoverers)
 	{
-		this.discoverers = d;
+		this.discoverers = discoverers;
 		this.typeService = typeService;
 		this.log = log;
 		this.history = history;
-		this.infoGenerators = infoGenerators;
 		matcher = new DefaultOpMatcher(getMatchingRoutines(this.discoverers));
 	}
 
 	public DefaultOpEnvironment(final TypeReifier typeService,
 		final Logger log, final OpHistory history,
-		final List<OpInfoGenerator> infoGenerators, final Discoverer... d)
+		final Discoverer... d)
 	{
-		this.discoverers = Arrays.asList(d);
-		this.typeService = typeService;
-		this.log = log;
-		this.history = history;
-		this.infoGenerators = infoGenerators;
-		matcher = new DefaultOpMatcher(getMatchingRoutines(this.discoverers));
+		this(typeService, log, history, Arrays.asList(d));
 	}
 
 	public static List<MatchingRoutine> getMatchingRoutines(
@@ -182,17 +143,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		List<MatchingRoutine> matchers = new ArrayList<>();
 		for (Discoverer d : discoverers) {
-			List<Class<MatchingRoutine>> implementingClasses = d.implsOfType(
-				MatchingRoutine.class);
-			List<MatchingRoutine> routines = implementingClasses.parallelStream().map(
-				c -> {
-					try {
-						return c.getConstructor().newInstance();
-					}
-					catch (Exception e) {
-						return null;
-					}
-				}).filter(r -> r != null).collect(Collectors.toList());
+			List<MatchingRoutine> routines = d.discover(MatchingRoutine.class);
 			matchers.addAll(routines);
 		}
 		return matchers;
@@ -227,7 +178,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		boolean simplifying = hints.contains(Simplification.IN_PROGRESS);
 		// if we aren't doing any
 		if (!(adapting || simplifying)) return infos;
-		return infos.parallelStream() //
+		return infos.stream() //
 			// filter out unadaptable ops
 			.filter(info -> !adapting || !info.declaredHints().contains(
 				Adaptation.FORBIDDEN)) //
@@ -305,7 +256,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public InfoChain chainFromID(String signature) {
 		if (idDirectory == null) initIdDirectory();
-		if (infoChainGenerators == null) initInfoChainGenerators();
+		List<InfoChainGenerator> infoChainGenerators = discoverers.stream() //
+				.flatMap(d -> d.discover(InfoChainGenerator.class).stream()) //
+				.collect(Collectors.toList());
 
 		InfoChainGenerator genOpt = InfoChainGenerator.findSuitableGenerator(
 			signature, infoChainGenerators);
@@ -518,7 +471,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private Class<?> getWrapperClass(Object op, OpInfo info) {
-		List<Class<?>> suitableWrappers = wrappers.keySet().parallelStream().filter(
+		List<Class<?>> suitableWrappers = wrappers.keySet().stream().filter(
 			wrapper -> wrapper.isInstance(op)).collect(Collectors.toList());
 		List<Class<?>> filteredWrappers = filterWrapperSuperclasses(
 			suitableWrappers);
@@ -562,35 +515,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (wrappers != null) return;
 		wrappers = new HashMap<>();
 		for (Discoverer d : discoverers)
-			for (Class<OpWrapper> cls : d.implsOfType(OpWrapper.class)) {
-				OpWrapper<?> wrapper;
-				try {
-					wrapper = cls.getDeclaredConstructor().newInstance();
+			for (OpWrapper wrapper : d.discover(OpWrapper.class))
 					wrappers.put(wrapper.type(), wrapper);
-				}
-				catch (Throwable t) {
-					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
-				}
-			}
-	}
-
-	private synchronized void initInfoChainGenerators() {
-		if (infoChainGenerators != null) return;
-		Set<InfoChainGenerator> generators = new HashSet<>();
-		for (Discoverer d : discoverers)
-			for (Class<InfoChainGenerator> cls : d.implsOfType(
-				InfoChainGenerator.class))
-			{
-				InfoChainGenerator wrapper;
-				try {
-					wrapper = cls.getDeclaredConstructor().newInstance();
-					generators.add(wrapper);
-				}
-				catch (Throwable t) {
-					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
-				}
-			}
-		infoChainGenerators = generators;
 	}
 
 	/**
@@ -815,10 +741,34 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private synchronized void initOpDirectory() {
 		if (opDirectory != null) return;
 		opDirectory = new HashMap<>();
-		for (final OpInfoGenerator generator : infoGenerators) {
-			List<OpInfo> infos = generator.generateInfos();
-			infos.forEach(addToOpIndex);
-		}
+		// add all OpInfos that are directly discoverable
+		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(addToOpIndex);
+		List<OpInfoGenerator> generators = infoGenerators();
+		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(o, generators));
+		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(o, generators));
+	}
+
+	/**
+	 * Generates a {@link List} of {@link OpInfo}s from {@code o} using a List of {@link OpInfoGenerator}s.
+	 * @param o the {@link Object} to parse {@link OpInfo}s from.
+	 * @param generators the {@link List} of {@link OpInfoGenerator}s
+	 * @return a {@link List} of {@link OpInfo}s
+	 */
+	private List<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
+		return generators.stream() //
+				.filter(g -> g.canGenerateFrom(o)) //
+				.flatMap(g -> g.generateInfosFrom(o).stream()) //
+				.collect(Collectors.toList());
+	}
+
+	private void registerOpsFrom(Object o, List<OpInfoGenerator> generators) {
+		opsFromObject(o, generators).stream().forEach(addToOpIndex);
+	}
+	
+	private List<OpInfoGenerator> infoGenerators() {
+		return discoverers.stream() //
+				.flatMap(d -> d.discover(OpInfoGenerator.class).stream()) //
+				.collect(Collectors.toList());
 	}
 
 	private synchronized void initIdDirectory() {
@@ -843,8 +793,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			return;
 		}
 		for (String opName : opInfo.names()) {
-			if (!opDirectory.containsKey(opName)) opDirectory.put(opName,
-				new TreeSet<>());
+			opDirectory.putIfAbsent(opName, new TreeSet<>());
 			boolean success = opDirectory.get(opName).add(opInfo);
 			if (!success) System.out.println("Did not add OpInfo " + opInfo);
 		}

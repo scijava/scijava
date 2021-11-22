@@ -7,45 +7,18 @@ import java.util.stream.Collectors;
 
 import org.scijava.InstantiableException;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.Discovery;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginIndex;
 import org.scijava.plugin.PluginInfo;
-import org.scijava.plugin.PluginService;
 import org.scijava.plugin.SciJavaPlugin;
 
 public class PluginBasedDiscoverer implements Discoverer {
 
-	private final PluginService p;
+	private final PluginIndex index;
 
-	public PluginBasedDiscoverer(PluginService p) {
-		this.p = p;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<Discovery<Class<T>>> discoveriesOfType(Class<T> c) {
-		if (!SciJavaPlugin.class.isAssignableFrom(c)) {
-			return Collections.emptyList();
-		}
-		List<PluginInfo<SciJavaPlugin>> infos = p.getPluginsOfType(
-			(Class<SciJavaPlugin>) c);
-		return infos.stream() //
-			.map(info -> makeDiscoveryOrNull(c, info)) //
-			.filter(Objects::nonNull).collect(Collectors.toList());
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> Discovery<Class<T>> makeDiscoveryOrNull(@SuppressWarnings("unused") Class<T> type,
-		PluginInfo<SciJavaPlugin> instance)
-	{
-		try {
-			Class<T> c = (Class<T>) instance.loadClass();
-			String tag = getTag(instance.getAnnotation());
-			return new Discovery<>(c, tag);
-		}
-		catch (InstantiableException exc) {
-			return null;
-		}
+	public PluginBasedDiscoverer() {
+		this.index = new PluginIndex();
+		this.index.discover();
 	}
 
 	private String getTag(Plugin annotation) {
@@ -54,4 +27,21 @@ public class PluginBasedDiscoverer implements Discoverer {
 		return String.join(" ", tagType, priority);
 	}
 
+	@Override
+	public <T> List<T> discover(Class<T> c) {
+		if (!SciJavaPlugin.class.isAssignableFrom(c))
+			return Collections.emptyList();
+		return discoverFrom((Class<? extends SciJavaPlugin>) c).stream().map(o -> (T) o).collect(Collectors.toList());
+	}
+
+	private <PT extends SciJavaPlugin> List<PT> discoverFrom(Class<PT> c) {
+		List<PluginInfo<PT>> infos = index.getPlugins(c);
+		return infos.parallelStream().map(info -> {
+			try {
+				return info.createInstance();
+			} catch (InstantiableException e) {
+				return null;
+			}
+		}).filter(Objects::nonNull).collect(Collectors.toList());
+	}
 }

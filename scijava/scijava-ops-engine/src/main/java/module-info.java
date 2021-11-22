@@ -49,7 +49,9 @@ module org.scijava.ops.engine {
 	requires therapi.runtime.javadoc;
 
 	uses javax.annotation.processing.Processor;
+	uses org.scijava.discovery.Discoverer;
 	uses org.scijava.ops.api.InfoChainGenerator;
+	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
 	uses org.scijava.ops.api.features.MatchingRoutine;
 	uses org.scijava.ops.spi.Op;
@@ -57,10 +59,18 @@ module org.scijava.ops.engine {
 	uses org.scijava.parse2.Parser;
 	uses org.scijava.types.TypeExtractor;
 
+	provides org.scijava.discovery.Discoverer with
+ 		org.scijava.ops.engine.impl.TagBasedOpInfoDiscoverer;
+
 	provides org.scijava.ops.api.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.impl.AdaptationInfoChainGenerator,
 		org.scijava.ops.engine.impl.DefaultInfoChainGenerator,
 		org.scijava.ops.engine.simplify.SimplificationInfoChainGenerator;
+
+	provides org.scijava.ops.api.OpInfoGenerator with
+	    org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator,
+	    org.scijava.ops.engine.impl.PluginBasedClassOpInfoGenerator,
+	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator;
 
 	provides org.scijava.ops.api.OpWrapper with
 		org.scijava.ops.engine.matcher.impl.OpWrappers.ProducerOpWrapper,
@@ -80,6 +90,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function14OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function15OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function16OpWrapper,
+		org.scijava.ops.engine.matcher.impl.OpWrappers.Computer0OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Computer1OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Computer2OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Computer3OpWrapper,

@@ -55,9 +55,11 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(OpAdaptationPriorityTest.class, "opcollection");
-		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
-		discoverer.registerAll(ComputersToFunctionsViaSource.class.getDeclaredClasses(), "op");
+		discoverer.register("opcollection", new OpAdaptationPriorityTest());
+		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		discoverer.register("op", adapters);
+		adapters = objsFromNoArgConstructors(ComputersToFunctionsViaSource.class.getDeclaredClasses());
+		discoverer.register("op", adapters);
 	}
 
 	public static class PriorityThing {

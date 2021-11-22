@@ -54,8 +54,8 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(FunctionToIterables.class, "opcollection");
-		discoverer.register(OpBuilderTestOps.class, "opcollection");
+		discoverer.register("opcollection", new FunctionToIterables());
+		discoverer.register("opcollection", new OpBuilderTestOps());
 	}
 
 	@Test

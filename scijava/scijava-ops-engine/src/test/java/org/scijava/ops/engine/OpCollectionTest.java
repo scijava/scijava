@@ -41,7 +41,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(MathOpCollection.class, "opcollection");
+		discoverer.register("opcollection", new MathOpCollection());
 	}
 
 	Nil<Double> nilDouble = new Nil<>() {

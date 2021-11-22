@@ -44,9 +44,9 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(FunctionToComputerAdaptTestOps.class, "opcollection");
-		discoverer.register(CopyOpCollection.class, "opcollection");
-		discoverer.registerAll(FunctionsToComputers.class.getDeclaredClasses(), "op");
+		discoverer.register("opcollection", new FunctionToComputerAdaptTestOps());
+		discoverer.register("opcollection", new CopyOpCollection());
+		discoverer.register("op", objsFromNoArgConstructors(FunctionsToComputers.class.getDeclaredClasses()));
 	}
 
 	@Test

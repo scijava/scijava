@@ -2,11 +2,11 @@ package org.scijava.ops.engine;
 
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.Discovery;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpInfo;
@@ -21,24 +21,29 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 	@Test
 	public void opDiscoveryRegressionIT() {
 		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<Discovery<Class<Op>>> discoveries = d.discoveriesOfType(Op.class);
+		final List<Op> discoveries = d.discover(Op.class);
 		Assert.assertEquals(235, discoveries.size());
 
+		@SuppressWarnings("unused")
 		final Logger l = new StderrLoggerFactory().create();
-		final OpInfoGenerator g = new OpClassBasedClassOpInfoGenerator(l, d);
-		final List<OpInfo> infos = g.generateInfos();
+		final OpInfoGenerator g = new OpClassBasedClassOpInfoGenerator();
+		final List<OpInfo> infos = discoveries.stream() //
+				.flatMap(c -> g.generateInfosFrom(c).stream()) //
+				.collect(Collectors.toList());
 		Assert.assertEquals(235, infos.size());
 	}
 
 	@Test
 	public void opCollectionDiscoveryRegressionIT() {
 		final Discoverer d = Discoverer.using(ServiceLoader::load);
-		final List<Discovery<Class<OpCollection>>> discoveries = d.discoveriesOfType(
-				OpCollection.class);
+		final List<OpCollection> discoveries = d.discover(OpCollection.class);
 		Assert.assertEquals(16, discoveries.size());
+		@SuppressWarnings("unused")
 		final Logger l = new StderrLoggerFactory().create();
-		final OpInfoGenerator g = new OpCollectionInfoGenerator(l, d);
-		final List<OpInfo> infos = g.generateInfos();
+		final OpInfoGenerator g = new OpCollectionInfoGenerator();
+		final List<OpInfo> infos = discoveries.stream() //
+				.flatMap(c -> g.generateInfosFrom(c).stream()) //
+				.collect(Collectors.toList());
 		Assert.assertEquals(264, infos.size());
 	}
 

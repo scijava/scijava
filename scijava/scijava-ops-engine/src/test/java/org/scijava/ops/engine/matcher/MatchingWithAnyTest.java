@@ -24,8 +24,9 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(MatchingWithAnyTest.class, "opcollection");
-		discoverer.register(ComputersToFunctionsViaSource.Computer2ToFunction2ViaSource.class, "op");
+		discoverer.register("opcollection", new MatchingWithAnyTest());
+		discoverer.register("op",
+				new ComputersToFunctionsViaSource.Computer2ToFunction2ViaSource());
 	}
 
 	@Test

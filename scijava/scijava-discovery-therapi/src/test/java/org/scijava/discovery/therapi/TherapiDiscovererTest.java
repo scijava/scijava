@@ -2,53 +2,53 @@ package org.scijava.discovery.therapi;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.scijava.discovery.Discovery;
-import org.scijava.parse2.Parser;
+import org.scijava.discovery.Discoverer;
 
 public class TherapiDiscovererTest {
 
-	private Parser parser;
-
-	@Before
-	public void setUp() {
-		parser = ServiceLoader.load(Parser.class).findFirst().get();
-	}
-
-	private List<Discovery<AnnotatedElement>> getTaggedDiscoveries(
-		String tagType)
+	private Discoverer discoverer()
 	{
-		return new TherapiDiscoverer(parser).elementsTaggedWith(tagType);
-	}
-
-	private List<AnnotatedElement> getTaggedElements(String tagType) {
-		return getTaggedDiscoveries(tagType).stream() //
-				.map(d -> d.discovery()) //
-				.collect(Collectors.toList());
+		return new TherapiDiscoveryDiscoverer("test");
 	}
 
 	@Test
 	public void discoverClass() {
-		List<AnnotatedElement> elements = getTaggedElements("test");
-		Assert.assertTrue(elements.contains(ClassTest.class));
+		List<TherapiDiscovery> elements = discoverer().discover(TherapiDiscovery.class);
+		Assert.assertTrue(elements.stream().anyMatch(e -> e.discovery() == ClassTest.class));
 	}
 
 	@Test
-	public void discoverField() throws NoSuchFieldException, SecurityException {
-		List<AnnotatedElement> elements = getTaggedElements("test");
-		Assert.assertTrue(elements.contains(this.getClass().getDeclaredField("fieldTest")));
+	public void discoverField() throws SecurityException {
+		List<TherapiDiscovery> elements = discoverer().discover(TherapiDiscovery.class);
+		Assert.assertTrue(elements.stream().anyMatch(d -> {
+			try {
+				AnnotatedElement actual = d.discovery();
+				AnnotatedElement expected = this.getClass().getDeclaredField("fieldTest");
+				return expected.equals(actual);
+			}
+			catch (NoSuchFieldException ex) {
+				return false;
+			}
+		}));
 	}
 
 	@Test
-	public void discoverMethod() throws NoSuchMethodException, SecurityException {
-		List<AnnotatedElement> elements = getTaggedElements("test");
-		Assert.assertTrue(elements.contains(this.getClass().getDeclaredMethod("methodTest")));
+	public void discoverMethod() throws SecurityException {
+		List<TherapiDiscovery> elements = discoverer().discover(TherapiDiscovery.class);
+		Assert.assertTrue(elements.stream().anyMatch(d -> {
+			try {
+				AnnotatedElement actual = d.discovery();
+				AnnotatedElement expected = this.getClass().getDeclaredMethod("methodTest");
+				return expected.equals(actual);
+			}
+			catch (NoSuchMethodException ex) {
+				return false;
+			}
+		}));
 	}
 
 	/**

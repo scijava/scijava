@@ -55,8 +55,8 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(ComputerToIterables.class, "opcollection");
-		discoverer.register(OpBuilderTestOps.class, "opcollection");
+		discoverer.register("opcollection", new ComputerToIterables());
+		discoverer.register("opcollection", new OpBuilderTestOps());
 	}
 
 	@Test

@@ -1,16 +1,11 @@
 
 package org.scijava.ops.engine;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,16 +13,10 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.StaticDiscoverer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.engine.impl.DefaultOpEnvironment;
 import org.scijava.ops.engine.impl.DefaultOpHistory;
-import org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator;
-import org.scijava.ops.engine.impl.OpCollectionInfoGenerator;
-import org.scijava.ops.engine.impl.PluginBasedClassOpInfoGenerator;
-import org.scijava.ops.engine.impl.TagBasedOpInfoGenerator;
 import org.scijava.ops.engine.matcher.impl.AdaptationMatchingRoutine;
 import org.scijava.ops.engine.matcher.impl.OpWrappers;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
@@ -37,11 +26,11 @@ import org.scijava.types.TypeReifier;
 
 public abstract class AbstractTestEnvironment {
 
-	protected static List<Class<? extends MatchingRoutine>> routines() {
+	protected static List<MatchingRoutine> routines() {
 		return Arrays.asList( //
-			RuntimeSafeMatchingRoutine.class, //
-			AdaptationMatchingRoutine.class, //
-			SimplificationMatchingRoutine.class //
+				new RuntimeSafeMatchingRoutine(), //
+				new AdaptationMatchingRoutine(), //
+				new SimplificationMatchingRoutine() //
 		);
 	}
 
@@ -69,25 +58,45 @@ public abstract class AbstractTestEnvironment {
 		logger = null;
 	}
 
+	protected static <T> Optional<T> objFromNoArgConstructor(Class<T> c) {
+		try {
+			return Optional.of(c.getDeclaredConstructor().newInstance());
+		}
+		catch (Throwable t) {
+			return Optional.empty();
+		}
+	}
+
+	protected static Object[] objsFromNoArgConstructors(Class<?>[] arr) {
+		return Arrays.stream(arr).map(c -> objFromNoArgConstructor(c).get()).toArray();
+	}
+
+	private static List<OpWrapper<?>> opWrappers() {
+		return Arrays.stream((Class<OpWrapper<?>>[]) OpWrappers.class.getDeclaredClasses()) //
+				.map(c -> objFromNoArgConstructor(c)) //
+				.filter(o -> o.isPresent()) //
+				.map(o -> o.get()) //
+				.collect(Collectors.toList());
+	}
+
 	protected static OpEnvironment barebonesEnvironment(
-		List<Class<? extends MatchingRoutine>> routines, List<Class<?>> opClasses)
+		List<MatchingRoutine> routines, List<Class<?>> opClasses)
 	{
 		// register needed classes in StaticDiscoverer
 		discoverer = new StaticDiscoverer();
-		discoverer.registerAll(routines, "matchingroutine");
-		discoverer.registerAll(OpWrappers.class.getDeclaredClasses(), "opwrapper");
-		discoverer.registerAll(opClasses, "");
-		// register possibly useful OpInfoGenerators
-		List<OpInfoGenerator> generators = new ArrayList<>();
-		generators.add(new OpCollectionInfoGenerator(logger, discoverer));
-		generators.add(new OpClassBasedClassOpInfoGenerator(logger, discoverer));
-		generators.add(new PluginBasedClassOpInfoGenerator(logger, discoverer));
-		generators.add(new TagBasedOpInfoGenerator(logger, discoverer));
+		discoverer.register("", opClasses);
+
+		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
+				.onlyFor( //
+						OpWrapper.class, //
+						MatchingRoutine.class, //
+						OpInfoGenerator.class, //
+						InfoChainGenerator.class //
+				);
 
 		history = new DefaultOpHistory();
 		// return Op Environment
-		return new DefaultOpEnvironment(types, logger, history,
-			generators, discoverer);
+		return new DefaultOpEnvironment(types, logger, history, discoverer, serviceLoading);
 	}
 
 	protected static boolean arrayEquals(double[] arr1, Double... arr2) {

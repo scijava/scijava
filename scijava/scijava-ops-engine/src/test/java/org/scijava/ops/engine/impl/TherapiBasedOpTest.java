@@ -17,6 +17,8 @@ import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.engine.matcher.impl.OpWrappers;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.parse2.Parser;
@@ -51,18 +53,16 @@ public class TherapiBasedOpTest {
 
 	{
 		// register needed classes in StaticDiscoverer
-		discoverer = new TherapiDiscoverer(parser);
-		// register possibly useful OpInfoGenerators
-		StaticDiscoverer d = new StaticDiscoverer();
-		d.register(RuntimeSafeMatchingRoutine.class, "matchingroutine");
-		d.registerAll(OpWrappers.class.getDeclaredClasses(), "opwrapper");
-		List<OpInfoGenerator> generators = new ArrayList<>();
-		generators.add(new TagBasedOpInfoGenerator(logger, discoverer));
+		discoverer = new TagBasedOpInfoDiscoverer();
+		Discoverer d2 = Discoverer.using(ServiceLoader::load).onlyFor( //
+				OpWrapper.class, //
+				MatchingRoutine.class //
+		);
 
 		history = new DefaultOpHistory();
 		// return Op Environment
-		return new DefaultOpEnvironment(types, logger, history, generators,
-			discoverer, d);
+		return new DefaultOpEnvironment(types, logger, history,
+			discoverer, d2);
 	}
 
 	private static final String FIELD_STRING = "This OpField is discoverable using Therapi!";

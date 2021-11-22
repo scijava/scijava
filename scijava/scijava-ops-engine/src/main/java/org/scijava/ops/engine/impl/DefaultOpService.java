@@ -100,22 +100,9 @@ public class DefaultOpService extends AbstractService implements OpService {
 		Logger log = new StderrLoggerFactory().create();
 		Parser parser = ServiceLoader.load(Parser.class).findFirst().get();
 		OpHistory history = history();
-		List<Discoverer> discoverers = new ArrayList<>();
-		Discoverer d1 = new PluginBasedDiscoverer(context().getService(PluginService.class));
-		discoverers.add(d1);
-		Discoverer d2 = Discoverer.using(ServiceLoader::load);
-		discoverers.add(d2);
-		List<OpInfoGenerator> infoGenerators = new ArrayList<>(Arrays.asList(
-			new PluginBasedClassOpInfoGenerator(log, discoverers),
-			new OpClassBasedClassOpInfoGenerator(log, discoverers),
-			new OpCollectionInfoGenerator(log, discoverers),
-			new TagBasedOpInfoGenerator(log, discoverers)));
-		if (parser != null) {
-			Discoverer d3 = new TherapiDiscoverer(parser);
-			discoverers.add(d3);
-		}
-		TypeReifier types = new DefaultTypeReifier(log, discoverers);
-		env = new DefaultOpEnvironment(types, log, history, infoGenerators, discoverers.toArray(Discoverer[]::new));
+		List<Discoverer> ds = Discoverer.all(ServiceLoader::load);
+		TypeReifier types = new DefaultTypeReifier(log, ds);
+		env = new DefaultOpEnvironment(types, log, history, ds);
 	}
 
 	private synchronized void initHistory() {

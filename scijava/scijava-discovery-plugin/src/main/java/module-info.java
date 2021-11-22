@@ -5,4 +5,6 @@ module org.scijava.discovery.plugin {
 
 	requires org.scijava.discovery;
 	requires transitive org.scijava;
+
+	provides org.scijava.discovery.Discoverer with org.scijava.discovery.plugin.PluginBasedDiscoverer;
 }

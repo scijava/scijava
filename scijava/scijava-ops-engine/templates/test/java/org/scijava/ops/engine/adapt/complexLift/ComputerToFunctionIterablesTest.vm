@@ -60,11 +60,13 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.registerAll(ComputersToFunctionsAndLift.class.getDeclaredClasses(), "op");
-		discoverer.register(FunctionToIterables.class, "opcollection");
-		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
-		discoverer.register(CreateOpCollection.class, "opcollection");
-		discoverer.register(OpBuilderTestOps.class, "opcollection");
+		Object[] lifters = objsFromNoArgConstructors(ComputersToFunctionsAndLift.class.getDeclaredClasses());
+		discoverer.register("op", lifters);
+		discoverer.register("opcollection", new FunctionToIterables());
+		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		discoverer.register("op", adapters);
+		discoverer.register("opcollection", new CreateOpCollection());
+		discoverer.register("opcollection", new OpBuilderTestOps());
 	}
 
 #foreach($arity in [1..$maxArity])

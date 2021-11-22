@@ -1,6 +1,9 @@
 
-package org.scijava.discovery;
+package org.scijava.discovery.therapi;
 
+import org.scijava.discovery.Discoverer;
+
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Map;
@@ -13,9 +16,9 @@ import java.util.function.Supplier;
  * @author Gabriel Selzer
  * @param <T> the generic {@link Type} of this discovery.
  */
-public class Discovery<T> {
+public class TherapiDiscovery {
 
-	private final T discovery;
+	private final AnnotatedElement discovery;
 
 	private final String tagType;
 
@@ -23,22 +26,22 @@ public class Discovery<T> {
 
 	private Map<String, ?> tagOptions = null;
 
-	public Discovery(T discovery, String tagType) {
+	public TherapiDiscovery(AnnotatedElement discovery, String tagType) {
 		this(discovery, tagType, () -> Collections.emptyMap());
 	}
 
-	public Discovery(T discovery, String tagType, Map<String, ?> tagOptions) {
+	public TherapiDiscovery(AnnotatedElement discovery, String tagType, Map<String, ?> tagOptions) {
 		this(discovery, tagType, () -> tagOptions);
 		this.tagOptions = tagOptions;
 	}
 
-	public Discovery(T discovery, String tagType, Supplier<Map<String, ?>> optionGenerator) {
+	public TherapiDiscovery(AnnotatedElement discovery, String tagType, Supplier<Map<String, ?>> optionGenerator) {
 		this.discovery = discovery;
 		this.tagType = tagType;
 		this.optionGenerator = optionGenerator;
 	}
 
-	public T discovery() {
+	public AnnotatedElement discovery() {
 		return discovery;
 	}
 

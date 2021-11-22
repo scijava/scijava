@@ -46,10 +46,10 @@ public class OpsTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(MathOpCollection.class, "opcollection");
-		discoverer.register(Zero.class, "opcollection");
-		discoverer.register(Sqrt.class, "opcollection");
-		discoverer.register(Add.class, "opcollection");
+		discoverer.register("opcollection", new MathOpCollection());
+		discoverer.register("opcollection", new Zero());
+		discoverer.register("opcollection", new Sqrt());
+		discoverer.register("opcollection", new Add());
 	}
 
 	private static Nil<Double> nilDouble = new Nil<>() {

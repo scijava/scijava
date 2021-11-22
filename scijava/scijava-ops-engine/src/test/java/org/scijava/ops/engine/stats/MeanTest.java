@@ -18,10 +18,10 @@ public class MeanTest <N extends Number> extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.registerAll(Size.class.getDeclaredClasses(), "op");
-		discoverer.registerAll(Mean.class.getDeclaredClasses(), "op");
-		discoverer.register(Add.class, "opcollection");
-		discoverer.register(MathOpCollection.class, "opcollection");
+		discoverer.register("op", new Size.StatsSizeFunction(), new Size.StatsSizeFunctionDouble<>());
+		discoverer.register("op", new Mean.MeanFunction());
+		discoverer.register("opcollection", new Add());
+		discoverer.register("opcollection", new MathOpCollection());
 	}
 
 	@Test

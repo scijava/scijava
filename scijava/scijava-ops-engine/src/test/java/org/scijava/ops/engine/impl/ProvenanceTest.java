@@ -15,10 +15,7 @@ import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
@@ -38,24 +35,17 @@ import org.scijava.types.Nil;
 
 public class ProvenanceTest extends AbstractTestEnvironment implements OpCollection {
 
-	private static final Collection<? extends Class<?>> INFO_CHAIN_GENERATORS =
-		Arrays.asList( //
-			AdaptationInfoChainGenerator.class, //
-			DefaultInfoChainGenerator.class, //
-			SimplificationInfoChainGenerator.class //
-		);
-
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(ProvenanceTest.class, "opcollection");
-		discoverer.register(FunctionToArrays.class, "opcollection");
-		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
-		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
-		discoverer.register(PrimitiveLossReporters.class, "opcollection");
-		discoverer.register(CopyOpCollection.class, "opcollection");
-		discoverer.register(CreateOpCollection.class, "opcollection");
-		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
-		discoverer.registerAll(INFO_CHAIN_GENERATORS, "infochaingenerator");
+		discoverer.register("opcollection", new ProvenanceTest());
+		discoverer.register("opcollection", new FunctionToArrays());
+		discoverer.register("opcollection", new PrimitiveSimplifiers());
+		discoverer.register("opcollection", new PrimitiveArraySimplifiers());
+		discoverer.register("opcollection", new PrimitiveLossReporters());
+		discoverer.register("opcollection", new CopyOpCollection());
+		discoverer.register("opcollection", new CreateOpCollection());
+		Object[] adaptors = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		discoverer.register("op", adaptors);
 	}
 
 	@OpField(names = "test.provenance")

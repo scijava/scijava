@@ -50,7 +50,7 @@ public class LiftTest extends AbstractTestEnvironment {
 	@BeforeClass
 	public static void AddNeededOps() {
 		Object[] ops = objsFromNoArgConstructors(TestOps.class.getDeclaredClasses());
-		discoverer.register("op", ops);
+		discoverer.register(ops);
 	}
 
 	Nil<Double> nilDouble = new Nil<>() {

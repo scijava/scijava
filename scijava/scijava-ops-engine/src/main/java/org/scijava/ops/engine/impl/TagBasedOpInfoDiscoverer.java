@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
 import org.scijava.Context;
 import org.scijava.Priority;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
-import org.scijava.discovery.therapi.TherapiDiscovery;
+import org.scijava.discovery.therapi.TaggedElement;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.engine.hint.DefaultHints;
@@ -21,7 +21,7 @@ import org.scijava.parse2.Parser;
 import org.scijava.util.VersionUtils;
 
 /**
- * Generates {@link OpInfo}s using a {@link TherapiDiscovery}. The tag syntax is
+ * Generates {@link OpInfo}s using a {@link TaggedElement}. The tag syntax is
  * expected to be as follows:
  * <p>
  * {@code @implNote op names=<op names, comma delimited> [priority=<op priority>]}
@@ -72,7 +72,7 @@ public class TagBasedOpInfoDiscoverer extends TherapiDiscoverer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected <U> U convert(TherapiDiscovery discovery, Class<U> info) {
+	protected <U> U convert(TaggedElement discovery, Class<U> info) {
 		// Obtain op metadata
 		String[] names;
 		String opType;
@@ -98,7 +98,7 @@ public class TagBasedOpInfoDiscoverer extends TherapiDiscoverer {
 			return null;
 	}
 
-	private String[] getOpNames(TherapiDiscovery d) {
+	private String[] getOpNames(TaggedElement d) {
 		String names = d.option("names");
 		String name = d.option("name");
 		if (names.isEmpty() && name.isEmpty()) {
@@ -110,12 +110,12 @@ public class TagBasedOpInfoDiscoverer extends TherapiDiscoverer {
 		return OpUtils.parseOpNames(name);
 	}
 
-	private static double getOpPriority(TherapiDiscovery d) {
+	private static double getOpPriority(TaggedElement d) {
 		String priority = d.option("priority");
 		return priority.isEmpty() ? Priority.NORMAL : Double.parseDouble(priority);
 	}
 
-	private static String getOpType(TherapiDiscovery d) {
+	private static String getOpType(TaggedElement d) {
 		return d.option("type");
 	}
 

@@ -43,7 +43,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@BeforeClass
 	public static void AddNeededOps() {
 		Object[] ops = objsFromNoArgConstructors(TestOps.class.getDeclaredClasses());
-		discoverer.register("op", ops);
+		discoverer.register(ops);
 	}
 
 	private static Nil<Double> nilDouble = new Nil<>() {

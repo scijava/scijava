@@ -3,6 +3,7 @@ package org.scijava.discovery.test;
 
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,7 +22,8 @@ public class ServiceLoaderDiscovererTest {
 
 	@SafeVarargs
 	private static <T> void assertDiscoveryRequirements(Discoverer d, Class<T> discovery, Class<? extends T>... impls) {
-		List<Class<T>> implementingClasses = d.implsOfType(discovery);
+		List<Class<T>> implementingClasses = d.discover(discovery).stream().map(o -> (Class<T>) o.getClass()).collect(
+				Collectors.toList());
 		for(Class<? extends T> cls : impls)
 			Assert.assertTrue(implementingClasses.contains(cls));
 

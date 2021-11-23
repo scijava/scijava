@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * @author Gabriel Selzer
  * @param <T> the generic {@link Type} of this discovery.
  */
-public class TherapiDiscovery {
+public class TaggedElement {
 
 	private final AnnotatedElement discovery;
 
@@ -26,16 +26,16 @@ public class TherapiDiscovery {
 
 	private Map<String, ?> tagOptions = null;
 
-	public TherapiDiscovery(AnnotatedElement discovery, String tagType) {
+	public TaggedElement(AnnotatedElement discovery, String tagType) {
 		this(discovery, tagType, () -> Collections.emptyMap());
 	}
 
-	public TherapiDiscovery(AnnotatedElement discovery, String tagType, Map<String, ?> tagOptions) {
+	public TaggedElement(AnnotatedElement discovery, String tagType, Map<String, ?> tagOptions) {
 		this(discovery, tagType, () -> tagOptions);
 		this.tagOptions = tagOptions;
 	}
 
-	public TherapiDiscovery(AnnotatedElement discovery, String tagType, Supplier<Map<String, ?>> optionGenerator) {
+	public TaggedElement(AnnotatedElement discovery, String tagType, Supplier<Map<String, ?>> optionGenerator) {
 		this.discovery = discovery;
 		this.tagType = tagType;
 		this.optionGenerator = optionGenerator;

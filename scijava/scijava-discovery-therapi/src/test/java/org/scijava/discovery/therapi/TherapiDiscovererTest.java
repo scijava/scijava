@@ -12,18 +12,18 @@ public class TherapiDiscovererTest {
 
 	private Discoverer discoverer()
 	{
-		return new TherapiDiscoveryDiscoverer("test");
+		return new TaggedElementDiscoverer("test");
 	}
 
 	@Test
 	public void discoverClass() {
-		List<TherapiDiscovery> elements = discoverer().discover(TherapiDiscovery.class);
+		List<TaggedElement> elements = discoverer().discover(TaggedElement.class);
 		Assert.assertTrue(elements.stream().anyMatch(e -> e.discovery() == ClassTest.class));
 	}
 
 	@Test
 	public void discoverField() throws SecurityException {
-		List<TherapiDiscovery> elements = discoverer().discover(TherapiDiscovery.class);
+		List<TaggedElement> elements = discoverer().discover(TaggedElement.class);
 		Assert.assertTrue(elements.stream().anyMatch(d -> {
 			try {
 				AnnotatedElement actual = d.discovery();
@@ -38,7 +38,7 @@ public class TherapiDiscovererTest {
 
 	@Test
 	public void discoverMethod() throws SecurityException {
-		List<TherapiDiscovery> elements = discoverer().discover(TherapiDiscovery.class);
+		List<TaggedElement> elements = discoverer().discover(TaggedElement.class);
 		Assert.assertTrue(elements.stream().anyMatch(d -> {
 			try {
 				AnnotatedElement actual = d.discovery();

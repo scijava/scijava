@@ -19,7 +19,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register("opcollection", new OpMethodDependencyPositionTest());
+		discoverer.register(new OpMethodDependencyPositionTest());
 	}
 
 	@OpField(names = "test.stringToLong")

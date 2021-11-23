@@ -27,7 +27,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 				.filter(m -> m.getName().equals("implNote") && m.getComment().toString().startsWith(tagType))
 				.map(m -> m.getComment().toString()).findFirst();
 	};
-	private final BiFunction<Map.Entry<ClassJavadoc, String>, String, TherapiDiscovery> classFinder = (e,
+	private final BiFunction<Map.Entry<ClassJavadoc, String>, String, TaggedElement> classFinder = (e,
 			tagType) -> {
 		try {
 			Class<?> taggedClass = getClass(e.getValue());
@@ -35,7 +35,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 			if (tag.isEmpty())
 				return null;
 			Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
-			return new TherapiDiscovery(taggedClass, tagType, tagOptions);
+			return new TaggedElement(taggedClass, tagType, tagOptions);
 		} catch (ClassNotFoundException exc) {
 			return null;
 		}
@@ -137,9 +137,9 @@ public abstract class TherapiDiscoverer implements Discoverer {
 
 	public abstract String tagType();
 
-	protected abstract <U> U convert(TherapiDiscovery e, Class<U> c);
+	protected abstract <U> U convert(TaggedElement e, Class<U> c);
 
-	private <U> List<U> convertEach(List<TherapiDiscovery> elements, Class<U> c) {
+	private <U> List<U> convertEach(List<TaggedElement> elements, Class<U> c) {
 		return elements.parallelStream() //
 				.map(e -> convert(e, c)) //
 				.collect(Collectors.toList());
@@ -149,11 +149,11 @@ public abstract class TherapiDiscoverer implements Discoverer {
 	public <U> List<U> discover(Class<U> c) {
 		if (!canDiscover(c))
 			return Collections.emptyList();
-		List<TherapiDiscovery> elements = elementsTaggedWith(tagType());
+		List<TaggedElement> elements = elementsTaggedWith(tagType());
 		return convertEach(elements, c);
 	}
 
-	public List<TherapiDiscovery> elementsTaggedWith(String tagType) {
+	public List<TaggedElement> elementsTaggedWith(String tagType) {
 		// combine class and module path resources into a single list
 		List<String> paths = classAndModulePathResources();
 
@@ -161,9 +161,9 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		// retained.
 		Map<ClassJavadoc, String> javadocData = getJavadocs(paths);
 
-		List<TherapiDiscovery> taggedClasses = discoverTaggedClasses(tagType, javadocData);
-		List<TherapiDiscovery> taggedMethods = discoverTaggedMethods(tagType, javadocData);
-		List<TherapiDiscovery> taggedFields = discoverTaggedFields(tagType, javadocData);
+		List<TaggedElement> taggedClasses = discoverTaggedClasses(tagType, javadocData);
+		List<TaggedElement> taggedMethods = discoverTaggedMethods(tagType, javadocData);
+		List<TaggedElement> taggedFields = discoverTaggedFields(tagType, javadocData);
 		// return concatenation of classes, methods, and fields.
 		return Stream.of(taggedClasses, taggedMethods, taggedFields) //
 				.flatMap(Collection::stream) //
@@ -209,7 +209,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		return parser.parse(tagBody.replaceAll("\\s+", ""), true).asMap();
 	}
 
-	private TherapiDiscovery mapFieldToDiscovery(FieldJavadoc javadoc, String tagType, Field[] fields) {
+	private TaggedElement mapFieldToDiscovery(FieldJavadoc javadoc, String tagType, Field[] fields) {
 		Optional<String> tag = getTag.apply(javadoc, tagType);
 		if (tag.isEmpty())
 			return null;
@@ -220,10 +220,10 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		if (taggedField.isEmpty())
 			return null;
 		Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
-		return new TherapiDiscovery(taggedField.get(), tagType, tagOptions);
+		return new TaggedElement(taggedField.get(), tagType, tagOptions);
 	}
 
-	private List<TherapiDiscovery> fieldsToDiscoveries(Map.Entry<ClassJavadoc, String> entry,
+	private List<TaggedElement> fieldsToDiscoveries(Map.Entry<ClassJavadoc, String> entry,
 			String tagType) {
 		Field[] fields = extractDeclaredFields(entry);
 		// stream FieldJavadocs of the given ClassJavadoc
@@ -233,7 +233,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 				.collect(Collectors.toList());
 	}
 
-	private TherapiDiscovery mapMethodToDiscovery(MethodJavadoc javadoc, String tagType, Method[] methods) {
+	private TaggedElement mapMethodToDiscovery(MethodJavadoc javadoc, String tagType, Method[] methods) {
 		Optional<String> tag = getTag.apply(javadoc, tagType);
 		if (tag.isEmpty())
 			return null;
@@ -242,13 +242,13 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		if (taggedMethod.isEmpty())
 			return null;
 		Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
-		return new TherapiDiscovery(taggedMethod.get(), tagType, tagOptions);
+		return new TaggedElement(taggedMethod.get(), tagType, tagOptions);
 	}
 
 	/**
 	 * Using a string {@code className}, finds a list of tagged methods
 	 */
-	private List<TherapiDiscovery> methodsToDiscoveries(Map.Entry<ClassJavadoc, String> entry,
+	private List<TaggedElement> methodsToDiscoveries(Map.Entry<ClassJavadoc, String> entry,
 			String tagType) {
 		Method[] methods = extractDeclaredMethods(entry);
 
@@ -275,7 +275,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		}
 	}
 
-	private List<TherapiDiscovery> discoverTaggedClasses(String tagType,
+	private List<TaggedElement> discoverTaggedClasses(String tagType,
 			Map<ClassJavadoc, String> javadocData) {
 		return javadocData.entrySet().parallelStream() //
 				.map(e -> classFinder.apply(e, tagType)) //
@@ -283,7 +283,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 				.collect(Collectors.toList());
 	}
 
-	private List<TherapiDiscovery> discoverTaggedFields(String tagType,
+	private List<TaggedElement> discoverTaggedFields(String tagType,
 			Map<ClassJavadoc, String> javadocData) {
 		return javadocData.entrySet().parallelStream() //
 				.map(e -> fieldsToDiscoveries(e, tagType)) //
@@ -291,7 +291,7 @@ public abstract class TherapiDiscoverer implements Discoverer {
 				.collect(Collectors.toList());
 	}
 
-	private List<TherapiDiscovery> discoverTaggedMethods(String tagType,
+	private List<TaggedElement> discoverTaggedMethods(String tagType,
 			Map<ClassJavadoc, String> javadocData) {
 		return javadocData.entrySet().parallelStream() //
 				.map(e -> methodsToDiscoveries(e, tagType)) //

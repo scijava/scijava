@@ -3,7 +3,6 @@ package org.scijava.ops.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -23,10 +22,8 @@ import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.matcher.impl.AdaptationInfoChainGenerator;
 import org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers;
 import org.scijava.ops.engine.simplify.PrimitiveSimplifiers;
-import org.scijava.ops.engine.simplify.SimplificationInfoChainGenerator;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
@@ -37,15 +34,15 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register("opcollection", new ProvenanceTest());
-		discoverer.register("opcollection", new FunctionToArrays());
-		discoverer.register("opcollection", new PrimitiveSimplifiers());
-		discoverer.register("opcollection", new PrimitiveArraySimplifiers());
-		discoverer.register("opcollection", new PrimitiveLossReporters());
-		discoverer.register("opcollection", new CopyOpCollection());
-		discoverer.register("opcollection", new CreateOpCollection());
+		discoverer.register(new ProvenanceTest());
+		discoverer.register(new FunctionToArrays());
+		discoverer.register(new PrimitiveSimplifiers());
+		discoverer.register(new PrimitiveArraySimplifiers());
+		discoverer.register(new PrimitiveLossReporters());
+		discoverer.register(new CopyOpCollection());
+		discoverer.register(new CreateOpCollection());
 		Object[] adaptors = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
-		discoverer.register("op", adaptors);
+		discoverer.register(adaptors);
 	}
 
 	@OpField(names = "test.provenance")

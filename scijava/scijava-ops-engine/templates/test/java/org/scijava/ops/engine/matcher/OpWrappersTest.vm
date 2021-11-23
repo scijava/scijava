@@ -32,7 +32,7 @@ public class OpWrappersTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register("opCollection", new OpBuilderTestOps());
+		discoverer.register(new OpBuilderTestOps());
 	}
 
 	@Test

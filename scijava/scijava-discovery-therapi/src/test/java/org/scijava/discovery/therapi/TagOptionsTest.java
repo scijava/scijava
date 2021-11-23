@@ -8,26 +8,26 @@ import org.junit.Test;
 
 public class TagOptionsTest {
 
-	private List<TherapiDiscovery> getTaggedDiscoveries(
+	private List<TaggedElement> getTaggedDiscoveries(
 		String tagType)
 	{
-		return new TherapiDiscoveryDiscoverer(tagType).discover(TherapiDiscovery.class);
+		return new TaggedElementDiscoverer(tagType).discover(TaggedElement.class);
 	}
 
 	@Test
 	public void optionsTest() {
-		List<TherapiDiscovery> elements = getTaggedDiscoveries(
+		List<TaggedElement> elements = getTaggedDiscoveries(
 			"optionsTest");
-		TherapiDiscovery annotatedElement = elements.get(0);
+		TaggedElement annotatedElement = elements.get(0);
 		Assert.assertEquals("e", annotatedElement.option("singleKey"));
 		Assert.assertEquals("[e1, e2]", annotatedElement.option("listKey"));
 	}
 
 	@Test
 	public void optionsPerLineTest() {
-		List<TherapiDiscovery> elements = getTaggedDiscoveries(
+		List<TaggedElement> elements = getTaggedDiscoveries(
 			"optionsPerLineTest");
-		TherapiDiscovery annotatedElement = elements.get(0);
+		TaggedElement annotatedElement = elements.get(0);
 		Assert.assertEquals("e", annotatedElement.option("singleKey"));
 		Assert.assertEquals("[e1, e2]", annotatedElement.option("listKey"));
 	}
@@ -38,9 +38,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void forgottenCommaTest() {
-		List<TherapiDiscovery> elements = getTaggedDiscoveries(
+		List<TaggedElement> elements = getTaggedDiscoveries(
 			"forgottenComma");
-		TherapiDiscovery annotatedElement = elements.get(0);
+		TaggedElement annotatedElement = elements.get(0);
 		Assert.assertThrows(IllegalArgumentException.class, //
 			() -> annotatedElement.option("singleKey"));
 	}
@@ -51,9 +51,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void forgottenQuoteTest() {
-		List<TherapiDiscovery> elements = getTaggedDiscoveries(
+		List<TaggedElement> elements = getTaggedDiscoveries(
 			"forgottenQuote");
-		TherapiDiscovery annotatedElement = elements.get(0);
+		TaggedElement annotatedElement = elements.get(0);
 		Assert.assertThrows(IllegalArgumentException.class, //
 			() -> annotatedElement.option("singleKey"));
 	}
@@ -64,9 +64,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void duplicateOptionTest() {
-		List<TherapiDiscovery> elements = getTaggedDiscoveries(
+		List<TaggedElement> elements = getTaggedDiscoveries(
 			"duplicateOption");
-		TherapiDiscovery annotatedElement = elements.get(0);
+		TaggedElement annotatedElement = elements.get(0);
 		Assert.assertEquals("[e1, e2]", annotatedElement.option("singleKey"));
 	}
 
@@ -75,9 +75,9 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void absentOptionTest() {
-		List<TherapiDiscovery> elements = getTaggedDiscoveries(
+		List<TaggedElement> elements = getTaggedDiscoveries(
 			"absentOption");
-		TherapiDiscovery annotatedElement = elements.get(0);
+		TaggedElement annotatedElement = elements.get(0);
 		Assert.assertEquals("", annotatedElement.option("singleKey"));
 	}
 

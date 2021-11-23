@@ -34,9 +34,9 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register("opcollection", new JavadocParameterTest());
-		discoverer.register("op", new JavadocOp());
-		discoverer.register("op", new JavadocComplexOp());
+		discoverer.register(new JavadocParameterTest());
+		discoverer.register(new JavadocOp());
+		discoverer.register(new JavadocComplexOp());
 	}
 
 	/**

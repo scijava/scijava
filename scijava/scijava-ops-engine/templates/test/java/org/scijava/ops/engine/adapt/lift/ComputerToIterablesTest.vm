@@ -55,8 +55,8 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register("opcollection", new ComputerToIterables());
-		discoverer.register("opcollection", new OpBuilderTestOps());
+		discoverer.register(new ComputerToIterables());
+		discoverer.register(new OpBuilderTestOps());
 	}
 
 #foreach($arity in [1..$maxArity])

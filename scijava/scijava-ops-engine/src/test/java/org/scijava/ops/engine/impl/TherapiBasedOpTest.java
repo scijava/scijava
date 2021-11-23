@@ -1,7 +1,5 @@
 package org.scijava.ops.engine.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ServiceLoader;
 
 import org.junit.AfterClass;
@@ -9,18 +7,14 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.StaticDiscoverer;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.function.Producer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.engine.matcher.impl.OpWrappers;
-import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.parse2.Parser;
 import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.TypeReifier;

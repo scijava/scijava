@@ -3,14 +3,13 @@ package org.scijava.ops.engine;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.StaticDiscoverer;
+import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.*;
@@ -42,7 +41,7 @@ public abstract class AbstractTestEnvironment {
 	protected static OpHistory history;
 	protected static Logger logger;
 	protected static TypeReifier types;
-	protected static StaticDiscoverer discoverer;
+	protected static ManualDiscoverer discoverer;
 
 	@BeforeClass
 	public static void setUp() {
@@ -83,7 +82,7 @@ public abstract class AbstractTestEnvironment {
 		List<MatchingRoutine> routines, List<Class<?>> opClasses)
 	{
 		// register needed classes in StaticDiscoverer
-		discoverer = new StaticDiscoverer();
+		discoverer = new ManualDiscoverer();
 		discoverer.register("", opClasses);
 
 		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //

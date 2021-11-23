@@ -32,8 +32,6 @@ package org.scijava.ops.engine.impl;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -42,15 +40,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.StaticDiscoverer;
+import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.engine.matcher.impl.OpWrappers;
-import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
@@ -79,9 +75,9 @@ public class OpCachingTest implements OpCollection {
 						InfoChainGenerator.class //
 				);
 		// register needed classes in StaticDiscoverer
-		StaticDiscoverer discoverer = new StaticDiscoverer();
-		discoverer.register("opcollection", new OpCachingTest());
-		discoverer.register("op", new ComplicatedOp());
+		ManualDiscoverer discoverer = new ManualDiscoverer();
+		discoverer.register(new OpCachingTest());
+		discoverer.register(new ComplicatedOp());
 
 		// return Op Environment
 		ops = new DefaultOpEnvironment(types, logger, history, serviceLoading, discoverer);

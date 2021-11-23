@@ -38,7 +38,7 @@ public class CopyOpCollectionTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register("opcollection", new CopyOpCollection());
+		discoverer.register(new CopyOpCollection());
 	}
 
 	@Test

@@ -5,12 +5,13 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 import org.scijava.Context;
 import org.scijava.Priority;
-import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.discovery.therapi.TaggedElement;
+import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.engine.hint.DefaultHints;
@@ -34,12 +35,20 @@ import org.scijava.util.VersionUtils;
  * 
  * @author Gabriel Selzer
  */
-public class TagBasedOpInfoDiscoverer extends TherapiDiscoverer {
+public class TherapiOpInfoDiscoverer extends TherapiDiscoverer {
 
 	private static final String TAGTYPE = "op";
 
-	public TagBasedOpInfoDiscoverer() {
-		super(ServiceLoader.load(Parser.class).findFirst().get());
+	public TherapiOpInfoDiscoverer() {
+		super(serviceLoadParser());
+	}
+	
+	public static Parser serviceLoadParser() {
+		Optional<Parser> optional = ServiceLoader.load(Parser.class).findFirst();
+		if (optional.isEmpty())
+			throw new IllegalArgumentException("Tried to create a TherapiOpInfoDiscoverer without a Parser available!" //
+					+ " Ensure a Parser implementation is provided via module!");
+		return optional.get();
 	}
 
 	private OpInfo opClassGenerator(Class<?> cls, double priority, String[] names) {

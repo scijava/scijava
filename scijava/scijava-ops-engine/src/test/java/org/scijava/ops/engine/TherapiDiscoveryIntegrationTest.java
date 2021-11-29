@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.impl.TagBasedOpInfoDiscoverer;
+import org.scijava.ops.engine.impl.TherapiOpInfoDiscoverer;
 import org.scijava.parse2.Parser;
 
 public class TherapiDiscoveryIntegrationTest {
@@ -15,7 +15,7 @@ public class TherapiDiscoveryIntegrationTest {
 	@Test
 	public void opDiscoveryRegressionIT() {
 		Parser p = ServiceLoader.load(Parser.class).findFirst().get();
-		final Discoverer d = new TagBasedOpInfoDiscoverer();
+		final Discoverer d = new TherapiOpInfoDiscoverer();
 		final List<OpInfo> discoveries = d.discover(OpInfo.class);
 		Assert.assertEquals(5, discoveries.size());
 	}

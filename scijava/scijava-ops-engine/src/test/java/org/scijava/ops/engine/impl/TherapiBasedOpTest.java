@@ -47,7 +47,7 @@ public class TherapiBasedOpTest {
 
 	{
 		// register needed classes in StaticDiscoverer
-		discoverer = new TagBasedOpInfoDiscoverer();
+		discoverer = new TherapiOpInfoDiscoverer();
 		Discoverer d2 = Discoverer.using(ServiceLoader::load).onlyFor( //
 				OpWrapper.class, //
 				MatchingRoutine.class //

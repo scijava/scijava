@@ -217,6 +217,16 @@ public interface OpEnvironment {
 	void register(OpInfo info);
 
 	/**
+	 * Generates all {@link OpInfo}s this {@link OpEnvironment} knows how to create,
+	 * and makes them known to this {@link OpEnvironment}.
+	 * 
+	 * @param o the {@link Object} <b>containing</b> some {@link OpInfo}s. If it is
+	 *          instead desired to turn this {@link Object} into an {@code op}, use
+	 *          {{@link #opify(Class, double, String...)}} instead.
+	 */
+	void registerInfosFrom(Object o);
+
+	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to
 	 * {@link #op} that <b>does not</b> pass a {@link Hints} will <b>copy</b> the
 	 * Hints passed here (to prevent multiple Op calls from accessing/changing the

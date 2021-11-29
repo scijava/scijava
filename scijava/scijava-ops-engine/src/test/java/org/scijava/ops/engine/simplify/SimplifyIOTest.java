@@ -18,10 +18,10 @@ public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollect
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(new SimplifyIOTest());
-		discoverer.register(new PrimitiveSimplifiers());
-		discoverer.register(new PrimitiveArraySimplifiers());
-		discoverer.register(new CopyOpCollection());
+		ops.makeDiscoverable(new SimplifyIOTest());
+		ops.makeDiscoverable(new PrimitiveSimplifiers());
+		ops.makeDiscoverable(new PrimitiveArraySimplifiers());
+		ops.makeDiscoverable(new CopyOpCollection());
 	}
 
 	@OpField(names = "test.math.square")

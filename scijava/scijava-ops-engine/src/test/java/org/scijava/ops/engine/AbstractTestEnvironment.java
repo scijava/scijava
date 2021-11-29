@@ -3,8 +3,10 @@ package org.scijava.ops.engine;
 
 import static org.junit.Assert.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.ServiceLoader;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,39 +18,21 @@ import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.engine.impl.DefaultOpEnvironment;
 import org.scijava.ops.engine.impl.DefaultOpHistory;
-import org.scijava.ops.engine.matcher.impl.AdaptationMatchingRoutine;
-import org.scijava.ops.engine.matcher.impl.OpWrappers;
-import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
-import org.scijava.ops.engine.matcher.impl.SimplificationMatchingRoutine;
 import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.TypeReifier;
 
 public abstract class AbstractTestEnvironment {
 
-	protected static List<MatchingRoutine> routines() {
-		return Arrays.asList( //
-				new RuntimeSafeMatchingRoutine(), //
-				new AdaptationMatchingRoutine(), //
-				new SimplificationMatchingRoutine() //
-		);
-	}
-
-	protected static List<Class<?>> opContainingClasses() {
-		return Collections.emptyList();
-	}
-
 	protected static OpEnvironment ops;
 	protected static OpHistory history;
 	protected static Logger logger;
 	protected static TypeReifier types;
-	protected static ManualDiscoverer discoverer;
 
 	@BeforeClass
 	public static void setUp() {
 		logger = new StderrLoggerFactory().create();
-		types = new DefaultTypeReifier(logger, Discoverer.using(
-			ServiceLoader::load));
-		ops = barebonesEnvironment(routines(), opContainingClasses());
+		types = new DefaultTypeReifier(logger, Discoverer.using(ServiceLoader::load));
+		ops = barebonesEnvironment();
 	}
 
 	@AfterClass
@@ -60,30 +44,22 @@ public abstract class AbstractTestEnvironment {
 	protected static <T> Optional<T> objFromNoArgConstructor(Class<T> c) {
 		try {
 			return Optional.of(c.getDeclaredConstructor().newInstance());
-		}
-		catch (Throwable t) {
+		} catch (Throwable t) {
 			return Optional.empty();
 		}
 	}
 
 	protected static Object[] objsFromNoArgConstructors(Class<?>[] arr) {
-		return Arrays.stream(arr).map(c -> objFromNoArgConstructor(c).get()).toArray();
+		return Arrays.stream(arr) //
+				.map(AbstractTestEnvironment::objFromNoArgConstructor) //
+				.filter(Optional::isPresent) //
+				.map(Optional::get) //
+				.toArray();
 	}
 
-	private static List<OpWrapper<?>> opWrappers() {
-		return Arrays.stream((Class<OpWrapper<?>>[]) OpWrappers.class.getDeclaredClasses()) //
-				.map(c -> objFromNoArgConstructor(c)) //
-				.filter(o -> o.isPresent()) //
-				.map(o -> o.get()) //
-				.collect(Collectors.toList());
-	}
-
-	protected static OpEnvironment barebonesEnvironment(
-		List<MatchingRoutine> routines, List<Class<?>> opClasses)
-	{
+	protected static OpEnvironment barebonesEnvironment() {
 		// register needed classes in StaticDiscoverer
-		discoverer = new ManualDiscoverer();
-		discoverer.register("", opClasses);
+		ManualDiscoverer discoverer = new ManualDiscoverer();
 
 		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
 				.onlyFor( //
@@ -102,9 +78,7 @@ public abstract class AbstractTestEnvironment {
 		return Arrays.deepEquals(Arrays.stream(arr1).boxed().toArray(Double[]::new), arr2);
 	}
 
-	protected static <T> void assertIterationsEqual(final Iterable<T> expected,
-		final Iterable<T> actual)
-	{
+	protected static <T> void assertIterationsEqual(final Iterable<T> expected, final Iterable<T> actual) {
 		final Iterator<T> e = expected.iterator();
 		final Iterator<T> a = actual.iterator();
 		while (e.hasNext()) {

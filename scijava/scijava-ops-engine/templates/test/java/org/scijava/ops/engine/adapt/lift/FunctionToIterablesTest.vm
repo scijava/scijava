@@ -54,8 +54,8 @@ public class FunctionToIterablesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(new FunctionToIterables());
-		discoverer.register(new OpBuilderTestOps());
+		ops.makeDiscoverable(new FunctionToIterables());
+		ops.makeDiscoverable(new OpBuilderTestOps());
 	}
 
 #foreach($arity in [1..$maxArity])

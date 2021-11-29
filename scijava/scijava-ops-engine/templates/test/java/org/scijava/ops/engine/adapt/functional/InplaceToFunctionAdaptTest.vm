@@ -52,11 +52,11 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(new OpBuilderTestOps());
-		discoverer.register(new CreateOpCollection());
-		discoverer.register(new CopyOpCollection());
+		ops.makeDiscoverable(new OpBuilderTestOps());
+		ops.makeDiscoverable(new CreateOpCollection());
+		ops.makeDiscoverable(new CopyOpCollection());
 		Object[] adapters = objsFromNoArgConstructors(InplacesToFunctions.class.getDeclaredClasses());
-		discoverer.register(adapters);
+		ops.makeDiscoverable(adapters);
 	}
 
 

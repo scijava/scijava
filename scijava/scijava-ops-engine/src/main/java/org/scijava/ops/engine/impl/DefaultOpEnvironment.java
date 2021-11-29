@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.log2.Logger;
 import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.*;
@@ -70,6 +71,8 @@ import org.scijava.util.VersionUtils;
 public class DefaultOpEnvironment implements OpEnvironment {
 
 	private final List<Discoverer> discoverers;
+
+	private final ManualDiscoverer manDiscoverer;
 
 	private final OpMatcher matcher;
 
@@ -118,7 +121,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final Logger log, final OpHistory history,
 		final List<Discoverer> discoverers)
 	{
-		this.discoverers = discoverers;
+		this.discoverers = new ArrayList<>(discoverers);
+		this.manDiscoverer = new ManualDiscoverer();
+		this.discoverers.add(this.manDiscoverer);
 		this.typeService = typeService;
 		this.log = log;
 		this.history = history;
@@ -283,17 +288,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public void register(final OpInfo info) {
-		if (opDirectory == null) initOpDirectory();
-		addToOpIndex.accept(info, log);
-	}
-
-	@Override
-	public void registerInfosFrom(Object o) {
-		List<OpInfo> infos = discoverers.parallelStream() //
-				.flatMap(d -> d.discover(OpInfoGenerator.class).stream()) //
-				.flatMap(g -> g.generateInfosFrom(o).stream()).collect(Collectors.toList());
-		infos.forEach(this::register);
+	public void makeDiscoverable(Object... objects) {
+		for (Object o : objects) {
+			if (o.getClass().isArray())
+				makeDiscoverable(o);
+			else
+				this.manDiscoverer.register(o);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

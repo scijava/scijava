@@ -21,10 +21,10 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(new SimplificationPriorityTest());
-		discoverer.register(new IdentityLossReporter());
-		discoverer.register(new Identity());
-		discoverer.register(new LossReporterWrapper());
+		ops.makeDiscoverable(new SimplificationPriorityTest());
+		ops.makeDiscoverable(new IdentityLossReporter());
+		ops.makeDiscoverable(new Identity());
+		ops.makeDiscoverable(new LossReporterWrapper());
 	}
 
 	/** The Thing we will be converting from */

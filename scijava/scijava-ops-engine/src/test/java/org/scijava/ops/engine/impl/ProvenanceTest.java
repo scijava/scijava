@@ -34,15 +34,15 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(new ProvenanceTest());
-		discoverer.register(new FunctionToArrays());
-		discoverer.register(new PrimitiveSimplifiers());
-		discoverer.register(new PrimitiveArraySimplifiers());
-		discoverer.register(new PrimitiveLossReporters());
-		discoverer.register(new CopyOpCollection());
-		discoverer.register(new CreateOpCollection());
+		ops.makeDiscoverable(new ProvenanceTest());
+		ops.makeDiscoverable(new FunctionToArrays());
+		ops.makeDiscoverable(new PrimitiveSimplifiers());
+		ops.makeDiscoverable(new PrimitiveArraySimplifiers());
+		ops.makeDiscoverable(new PrimitiveLossReporters());
+		ops.makeDiscoverable(new CopyOpCollection());
+		ops.makeDiscoverable(new CreateOpCollection());
 		Object[] adaptors = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
-		discoverer.register(adaptors);
+		ops.makeDiscoverable(adaptors);
 	}
 
 	@OpField(names = "test.provenance")

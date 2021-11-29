@@ -22,8 +22,10 @@ public class ManualDiscoverer implements Discoverer {
 	}
 
 	public void register(Object[]... objects) {
-		for (Object[] o : objects) {
-			register(o);
+		for (Object[] arr : objects) {
+			for (Object o : arr) {
+				set.add(o);
+			}
 		}
 	}
 
@@ -31,11 +33,6 @@ public class ManualDiscoverer implements Discoverer {
 		for (Object o : objects) {
 			set.add(o);
 		}
-	}
-
-	public void register(String tag, Iterable<?> objects) {
-		for (Object o : objects)
-			set.add(o);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,3 +1,4 @@
+
 package org.scijava.ops.engine;
 
 import org.junit.Assert;
@@ -38,7 +39,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	public void testRegister() {
 		String opName = "test.opifyOp";
 		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, opName);
-		ops.register(opifyOpInfo);
+		ops.makeDiscoverable(opifyOpInfo);
 
 		String actual = ops.op(opName).input().outType(String.class).create();
 

@@ -211,20 +211,11 @@ public interface OpEnvironment {
 	OpInfo opify(Class<?> opClass, double priority, String... names);
 
 	/**
-	 * Makes the {@link OpInfo} {@code info} known to this {@link OpEnvironment}.
-	 * @param info the {@link OpInfo} to be registered
+	 * Makes all elements within a {@code Object[]} known to this {@link OpEnvironment}
+	 *
+	 * @param objects the {@link Object}s that should be made discoverable to this {@link OpEnvironment}
 	 */
-	void register(OpInfo info);
-
-	/**
-	 * Generates all {@link OpInfo}s this {@link OpEnvironment} knows how to create,
-	 * and makes them known to this {@link OpEnvironment}.
-	 * 
-	 * @param o the {@link Object} <b>containing</b> some {@link OpInfo}s. If it is
-	 *          instead desired to turn this {@link Object} into an {@code op}, use
-	 *          {{@link #opify(Class, double, String...)}} instead.
-	 */
-	void registerInfosFrom(Object o);
+	void makeDiscoverable(Object... objects);
 
 	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to

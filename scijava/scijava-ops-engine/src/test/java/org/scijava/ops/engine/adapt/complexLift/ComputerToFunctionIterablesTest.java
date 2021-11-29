@@ -61,12 +61,12 @@ public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 	@BeforeClass
 	public static void AddNeededOps() {
 		Object[] lifters = objsFromNoArgConstructors(ComputersToFunctionsAndLift.class.getDeclaredClasses());
-		discoverer.register(lifters);
-		discoverer.register(new FunctionToIterables());
+		ops.makeDiscoverable(lifters);
+		ops.makeDiscoverable(new FunctionToIterables());
 		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
-		discoverer.register(adapters);
-		discoverer.register(new CreateOpCollection());
-		discoverer.register(new OpBuilderTestOps());
+		ops.makeDiscoverable(adapters);
+		ops.makeDiscoverable(new CreateOpCollection());
+		ops.makeDiscoverable(new OpBuilderTestOps());
 	}
 
 	@Test

@@ -28,8 +28,8 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(new InfiniteOp());
-		discoverer.register(new CountingOp());
+		ops.makeDiscoverable(new InfiniteOp());
+		ops.makeDiscoverable(new CountingOp());
 	}
 
 	/**

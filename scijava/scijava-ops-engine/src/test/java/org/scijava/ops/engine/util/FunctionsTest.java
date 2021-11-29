@@ -45,9 +45,9 @@ public class FunctionsTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(new Sqrt());
-		discoverer.register(new Add());
-		discoverer.register(new Power());
+		ops.makeDiscoverable(new Sqrt());
+		ops.makeDiscoverable(new Add());
+		ops.makeDiscoverable(new Power());
 	}
 
 	private static Nil<Double> nilDouble = new Nil<>() {

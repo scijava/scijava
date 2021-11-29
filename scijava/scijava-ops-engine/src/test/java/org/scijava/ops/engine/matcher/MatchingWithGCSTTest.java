@@ -23,7 +23,7 @@ public class MatchingWithGCSTTest extends AbstractTestEnvironment implements OpC
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(new MatchingWithGCSTTest());
+		ops.makeDiscoverable(new MatchingWithGCSTTest());
 	}
 
 	interface Thing {

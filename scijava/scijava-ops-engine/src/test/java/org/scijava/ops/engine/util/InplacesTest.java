@@ -42,8 +42,8 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(new Sqrt());
-		discoverer.register(new Add());
+		ops.makeDiscoverable(new Sqrt());
+		ops.makeDiscoverable(new Add());
 	}
 
 	private static Nil<double[]> nilDoubleArray = new Nil<>() {

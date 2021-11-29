@@ -26,8 +26,8 @@ public class InfoChainTest extends AbstractTestEnvironment implements OpCollecti
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(new InfoChainTest());
-		discoverer.register(new ComplexOp());
+		ops.makeDiscoverable(new InfoChainTest());
+		ops.makeDiscoverable(new ComplexOp());
 	}
 
 	public static final String S = "this Op is cool";

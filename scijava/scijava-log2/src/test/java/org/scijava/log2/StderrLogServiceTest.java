@@ -29,13 +29,13 @@
 
 package org.scijava.log2;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.scijava.log2.LogLevel.WARN;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-
-import org.junit.Test;
 
 /**
  * Tests {@link StderrLoggerFactory}.
@@ -49,8 +49,8 @@ public class StderrLogServiceTest {
 	public void testDefaultLevel() {
 		final Logger log = new StderrLoggerFactory().create();
 		int level = log.getLevel();
-		assertTrue("default level (" + level + //
-			") is at least INFO(" + WARN + ")", level >= WARN);
+		assertTrue(level >= WARN, "default level (" + level + //
+				") is at least INFO(" + WARN + ")");
 	}
 
 	@Test

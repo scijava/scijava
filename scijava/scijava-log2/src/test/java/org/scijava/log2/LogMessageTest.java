@@ -29,14 +29,14 @@
 
 package org.scijava.log2;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link LogMessage}.
@@ -53,11 +53,11 @@ public class LogMessageTest {
 		LogMessage message = new LogMessage(LogSource.newRoot(), LogLevel.DEBUG, 42, new NullPointerException());
 		// process
 		String s = message.toString();
-		//test
-		Assert.assertTrue("Log message contains level", s.contains(LogLevel.prefix(message.level())));
-		Assert.assertTrue("Log message contains msg", s.contains(message.text()));
-		Assert.assertTrue("Log message contains throwable", s.contains(message.throwable().toString()));
-		Assert.assertTrue("Log message contains stack trace", s.contains(nameOfThisMethod));
+		// test
+		assertTrue(s.contains(LogLevel.prefix(message.level())), "Log message contains level");
+		assertTrue(s.contains(message.text()), "Log message contains msg");
+		assertTrue(s.contains(message.throwable().toString()), "Log message contains throwable");
+		assertTrue(s.contains(nameOfThisMethod), "Log message contains stack trace");
 	}
 
 	@Test
@@ -70,12 +70,12 @@ public class LogMessageTest {
 		String s = message.toString();
 
 		// test
-		Assert.assertTrue("Log message contains level", s.contains(LogLevel.prefix(message.level())));
+		Assertions.assertTrue(s.contains(LogLevel.prefix(message.level())), "Log message contains level");
 	}
 
 	@Test
 	public void testAttachments() {
-		LogMessage message = new LogMessage(LogSource.newRoot(), LogLevel.ERROR, "Message")	;
+		LogMessage message = new LogMessage(LogSource.newRoot(), LogLevel.ERROR, "Message");
 		assertTrue(message.attachments().isEmpty());
 		Object object = new Object();
 		message.attach(object);

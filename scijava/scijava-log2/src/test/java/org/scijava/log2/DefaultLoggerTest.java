@@ -29,14 +29,13 @@
 
 package org.scijava.log2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link DefaultLogger}
@@ -45,12 +44,13 @@ import org.junit.Test;
  */
 public class DefaultLoggerTest {
 
-	private Logger logger;
-	private TestLogListener listener;
+	private static Logger logger;
+	private static TestLogListener listener;
 
-	@Before
-	public void setup() {
-		logger = new DefaultLogger(message -> {}, LogSource.newRoot(), LogLevel.INFO);
+	@BeforeAll
+	public static void setup() {
+		logger = new DefaultLogger(message -> {
+		}, LogSource.newRoot(), LogLevel.INFO);
 		listener = new TestLogListener();
 		logger.addLogListener(listener);
 	}
@@ -84,7 +84,7 @@ public class DefaultLoggerTest {
 		subB.error("Hello World!");
 
 		assertTrue(listener.hasLogged(m -> m.source().equals(subB.getSource())));
-		assertEquals(Arrays.asList("subA"), subA.getSource().path());
+		assertEquals(List.of("subA"), subA.getSource().path());
 		assertEquals(Arrays.asList("subA", "subB"), subB.getSource().path());
 	}
 

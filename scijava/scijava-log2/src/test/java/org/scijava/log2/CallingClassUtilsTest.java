@@ -29,9 +29,9 @@
 
 package org.scijava.log2;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link CallingClassUtils}.

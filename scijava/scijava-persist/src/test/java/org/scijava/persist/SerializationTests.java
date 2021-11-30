@@ -3,11 +3,12 @@ package org.scijava.persist;
 
 import com.google.gson.Gson;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.scijava.Context;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SerializationTests {
 
@@ -22,7 +23,7 @@ public class SerializationTests {
 		gson = ScijavaGsonHelper.getGson(context);
 	}
 
-	@Before
+	@BeforeEach
 	public void openFiji() {
 		// Initializes static SourceService and Display Service and plugins for
 		// serialization
@@ -33,7 +34,7 @@ public class SerializationTests {
 		gson = ScijavaGsonHelper.getGson(context, true);
 	}
 
-	@After
+	@AfterEach
 	public void closeFiji() throws Exception {
 		context.dispose();
 		context = null;
@@ -77,6 +78,6 @@ public class SerializationTests {
 		Object oRestored = gson.fromJson(json, c);
 		String json2 = gson.toJson(oRestored, c);
 		System.out.println(json2);
-		Assert.assertEquals(json, json2);
+		assertEquals(json, json2);
 	}
 }

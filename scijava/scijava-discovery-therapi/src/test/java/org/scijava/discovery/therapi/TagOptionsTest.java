@@ -46,16 +46,14 @@ public class TagOptionsTest {
 	}
 
 	/**
-	 * Tests failure upon malformed tag declaration. In this case, failure is
-	 * expected when a tag does not surround a value with quotes.
+	 * Tests ability to parse options without quotes.
 	 */
 	@Test
 	public void forgottenQuoteTest() {
 		List<TaggedElement> elements = getTaggedDiscoveries(
 			"forgottenQuote");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertThrows(IllegalArgumentException.class, //
-			() -> annotatedElement.option("singleKey"));
+		Assert.assertEquals("e", annotatedElement.option("singleKey"));
 	}
 
 	/**

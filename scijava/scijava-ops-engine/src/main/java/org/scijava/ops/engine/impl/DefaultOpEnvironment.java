@@ -288,10 +288,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public void makeDiscoverable(Object... objects) {
+	public void register(Object... objects) {
 		for (Object o : objects) {
 			if (o.getClass().isArray())
-				makeDiscoverable(o);
+				register(o);
 			else
 				this.manDiscoverer.register(o);
 		}

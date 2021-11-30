@@ -56,8 +56,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 
 	@BeforeClass
 	public static void addNeededOps() {
-		ops.makeDiscoverable(new FunctionToArraysTest());
-		ops.makeDiscoverable(new FunctionToArrays());
+		ops.register(new FunctionToArraysTest());
+		ops.register(new FunctionToArrays());
 	}
 
 	/**

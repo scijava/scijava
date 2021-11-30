@@ -2,6 +2,7 @@ package org.scijava.discovery.therapi;
 
 import org.scijava.parse2.Parser;
 
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 public class TaggedElementDiscoverer extends TherapiDiscoverer {
@@ -21,7 +22,7 @@ public class TaggedElementDiscoverer extends TherapiDiscoverer {
 		return tagType;
 	}
 
-	@Override protected <U> U convert(TaggedElement e, Class<U> c) {
-		return (U) e;
+	@Override protected <U> Optional<U> convert(TaggedElement e, Class<U> c) {
+		return (Optional<U>) Optional.of(e);
 	}
 }

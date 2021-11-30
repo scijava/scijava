@@ -42,8 +42,8 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {
-		ops.makeDiscoverable(new TestDouble());
-		ops.makeDiscoverable(new TestFloat());
+		ops.register(new TestDouble());
+		ops.register(new TestFloat());
 	}
 	
 	@OpClass(names = "test.priority", priority = Priority.HIGH)

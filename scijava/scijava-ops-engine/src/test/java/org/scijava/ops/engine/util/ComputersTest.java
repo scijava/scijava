@@ -42,8 +42,8 @@ public class ComputersTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {
-		ops.makeDiscoverable(new Sqrt());
-		ops.makeDiscoverable(new Add());
+		ops.register(new Sqrt());
+		ops.register(new Add());
 	}
 
 	private static Nil<double[]> nilDoubleArray = new Nil<>() {

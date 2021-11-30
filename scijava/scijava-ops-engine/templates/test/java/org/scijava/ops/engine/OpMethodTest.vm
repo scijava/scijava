@@ -50,7 +50,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 
 	@BeforeClass
 	public static void addNeededOps() {
-		ops.makeDiscoverable(new OpMethodTestOps());
+		ops.register(new OpMethodTestOps());
 	}
 
 	// -- Functions -- //

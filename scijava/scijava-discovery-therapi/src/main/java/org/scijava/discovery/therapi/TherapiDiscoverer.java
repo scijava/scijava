@@ -3,88 +3,15 @@ package org.scijava.discovery.therapi;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.parse2.Parser;
 
-import com.github.therapi.runtimejavadoc.*;
-
 public abstract class TherapiDiscoverer implements Discoverer {
-
-	private final Parser parser;
-	private BiFunction<BaseJavadoc, String, Optional<String>> getTag = (javadoc, tagType) -> {
-		return javadoc.getOther().stream() //
-				.filter(m -> m.getName().equals("implNote") && m.getComment().toString().startsWith(tagType))
-				.map(m -> m.getComment().toString()).findFirst();
-	};
-	private final BiFunction<Map.Entry<ClassJavadoc, String>, String, TaggedElement> classFinder = (e,
-			tagType) -> {
-		try {
-			Class<?> taggedClass = getClass(e.getValue());
-			Optional<String> tag = getTag.apply(e.getKey(), tagType);
-			if (tag.isEmpty())
-				return null;
-			Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
-			return new TaggedElement(taggedClass, tagType, tagOptions);
-		} catch (ClassNotFoundException exc) {
-			return null;
-		}
-
-	};
-
-	public TherapiDiscoverer(Parser parser) {
-		this.parser = parser;
-	}
-
-	/**
-	 * list files in the given directory and subdirs (with recursion)
-	 * 
-	 * @param path the directory to recurse through
-	 * @return a list of all files contained within the root directory {@code path}
-	 */
-	private static List<File> getJavadocedFiles(String path) {
-		List<File> filesList = new ArrayList<>();
-		final File file = new File(path);
-		if (file.isDirectory()) {
-			recurse(filesList, file);
-		} else if (file.getPath().endsWith(".jar")) {
-			try {
-				for (String s : getJarContent(path))
-					if (s.endsWith("__Javadoc.json")) {
-						filesList.add(new File(s));
-					}
-			} catch (IOException exc) {
-				// TODO Auto-generated catch block
-				exc.printStackTrace();
-			}
-		} else {
-			if (path.endsWith("__Javadoc.json"))
-				filesList.add(file);
-		}
-		return filesList;
-	}
-
-	private static void recurse(List<File> filesList, File f) {
-		File[] list = f.listFiles();
-		for (File file : list) {
-			if (file.isDirectory()) {
-				recurse(filesList, file);
-			} else {
-				if (file.getPath().endsWith("__Javadoc.json"))
-					filesList.add(file);
-			}
-		}
-	}
 
 	private static Class<?> getClass(String name) throws ClassNotFoundException {
 		return getClassLoader().loadClass(name);
@@ -118,7 +45,6 @@ public abstract class TherapiDiscoverer implements Discoverer {
 	 * 
 	 * @param jarPath the path to a jar
 	 * @return the contents of the jar
-	 * @throws IOException
 	 */
 	private static List<String> getJarContent(String jarPath) throws IOException {
 		List<String> content = new ArrayList<>();
@@ -133,15 +59,72 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		return content;
 	}
 
+	/**
+	 * list files in the given directory and subdirs (with recursion)
+	 * 
+	 * @param path the directory to recurse through
+	 * @return a list of all files contained within the root directory {@code path}
+	 */
+	private static List<File> getJavadocedFiles(String path) {
+		List<File> filesList = new ArrayList<>();
+		final File file = new File(path);
+		if (file.isDirectory()) {
+			recurse(filesList, file);
+		} else if (file.getPath().endsWith(".jar")) {
+			try {
+				for (String s : getJarContent(path))
+					if (s.endsWith("__Javadoc.json")) {
+						filesList.add(new File(s));
+					}
+			} catch (IOException exc) {
+				// TODO Auto-generated catch block
+				exc.printStackTrace();
+			}
+		} else {
+			if (path.endsWith("__Javadoc.json"))
+				filesList.add(file);
+		}
+		return filesList;
+	}
+
+	private static void recurse(List<File> filesList, File f) {
+		File[] list = f.listFiles();
+		if (list == null)
+			return;
+		for (File file : list) {
+			if (file.isDirectory()) {
+				recurse(filesList, file);
+			} else {
+				if (file.getPath().endsWith("__Javadoc.json"))
+					filesList.add(file);
+			}
+		}
+	}
+
+	private final Parser parser;
+
+	public TherapiDiscoverer(Parser parser) {
+		this.parser = parser;
+	}
+
 	public abstract boolean canDiscover(Class<?> cls);
 
-	public abstract String tagType();
+	private List<String> classAndModulePathResources() {
+		// get classpath resources
+		List<String> paths = new ArrayList<>(
+				Arrays.asList(System.getProperty("java.class.path").split(File.pathSeparator)));
+		// add modulepath resources
+		paths.addAll(Arrays.asList(System.getProperty("jdk.module.path").split(File.pathSeparator)));
+		return paths;
+	}
 
-	protected abstract <U> U convert(TaggedElement e, Class<U> c);
+	protected abstract <U> Optional<U> convert(TaggedElement e, Class<U> c);
 
 	private <U> List<U> convertEach(List<TaggedElement> elements, Class<U> c) {
 		return elements.parallelStream() //
 				.map(e -> convert(e, c)) //
+				.filter(Optional::isPresent) //
+				.map(Optional::get) //
 				.collect(Collectors.toList());
 	}
 
@@ -157,29 +140,16 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		// combine class and module path resources into a single list
 		List<String> paths = classAndModulePathResources();
 
-		// for each path element, find the list of files whose javadoc has been
-		// retained.
-		Map<ClassJavadoc, String> javadocData = getJavadocs(paths);
+		// for each path element, find the list of classes along that path with recorded
+		// javadoc
+		List<Class<?>> classesWithJavadoc = javadocClasses(paths);
 
-		List<TaggedElement> taggedClasses = discoverTaggedClasses(tagType, javadocData);
-		List<TaggedElement> taggedMethods = discoverTaggedMethods(tagType, javadocData);
-		List<TaggedElement> taggedFields = discoverTaggedFields(tagType, javadocData);
-		// return concatenation of classes, methods, and fields.
-		return Stream.of(taggedClasses, taggedMethods, taggedFields) //
-				.flatMap(Collection::stream) //
+		return classesWithJavadoc.parallelStream() //
+				.flatMap(c -> TherapiDiscoveryUtils.taggedElementsFrom(c, tagType, parser).stream()) //
 				.collect(Collectors.toList());
 	}
 
-	private List<String> classAndModulePathResources() {
-		// get classpath resources
-		List<String> paths = new ArrayList<>(
-				Arrays.asList(System.getProperty("java.class.path").split(File.pathSeparator)));
-		// add modulepath resources
-		paths.addAll(Arrays.asList(System.getProperty("jdk.module.path").split(File.pathSeparator)));
-		return paths;
-	}
-
-	private Map<ClassJavadoc, String> getJavadocs(List<String> paths) {
+	private List<Class<?>> javadocClasses(List<String> paths) {
 		// for each path, find the list of classes whose javadoc has been retained
 		Map<String, List<String>> javadocedFiles = new HashMap<>();
 		paths.parallelStream().forEach(p -> {
@@ -190,113 +160,24 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		});
 
 		// for each javadoc'd class, find its javadoc.
-		Map<ClassJavadoc, String> javadocData = new HashMap<>();
-		javadocedFiles.entrySet().parallelStream().forEach(e -> {
+		List<Class<?>> javadocData = new ArrayList<>();
+		javadocedFiles.forEach((key, value) -> {
 			Class<?> c;
 			try {
-				c = getClass(e.getValue().get(0));
-				e.getValue().parallelStream().forEach(s -> javadocData.put(RuntimeJavadoc.getJavadoc(s, c), s));
-			} catch (ClassNotFoundException exc) {
-				return;
+				c = getClass(value.get(0));
+				value.parallelStream().filter(path -> TherapiDiscoveryUtils.hasJavadoc(path, c)).forEach(path -> {
+					try {
+						javadocData.add(c.getClassLoader().loadClass(path));
+					} catch (ClassNotFoundException ex) {
+						ex.printStackTrace();
+					}
+				});
+			} catch (ClassNotFoundException ignored) {
 			}
 		});
 
 		return javadocData;
 	}
 
-	private Map<String, ?> itemsFromTag(String tagType, String tag) {
-		String tagBody = tag.substring(tag.indexOf(tagType) + tagType.length()).trim();
-		return parser.parse(tagBody.replaceAll("\\s+", ""), true).asMap();
-	}
-
-	private TaggedElement mapFieldToDiscovery(FieldJavadoc javadoc, String tagType, Field[] fields) {
-		Optional<String> tag = getTag.apply(javadoc, tagType);
-		if (tag.isEmpty())
-			return null;
-
-		Optional<Field> taggedField = Arrays.stream(fields) //
-				.filter(field -> javadoc.getName().equals(field.getName())) //
-				.findAny();
-		if (taggedField.isEmpty())
-			return null;
-		Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
-		return new TaggedElement(taggedField.get(), tagType, tagOptions);
-	}
-
-	private List<TaggedElement> fieldsToDiscoveries(Map.Entry<ClassJavadoc, String> entry,
-			String tagType) {
-		Field[] fields = extractDeclaredFields(entry);
-		// stream FieldJavadocs of the given ClassJavadoc
-		return entry.getKey().getFields().parallelStream() //
-				.map(j -> mapFieldToDiscovery(j, tagType, fields)) //
-				.filter(Objects::nonNull) //
-				.collect(Collectors.toList());
-	}
-
-	private TaggedElement mapMethodToDiscovery(MethodJavadoc javadoc, String tagType, Method[] methods) {
-		Optional<String> tag = getTag.apply(javadoc, tagType);
-		if (tag.isEmpty())
-			return null;
-
-		Optional<Method> taggedMethod = Arrays.stream(methods).filter(m -> javadoc.matches(m)).findAny(); //
-		if (taggedMethod.isEmpty())
-			return null;
-		Supplier<Map<String, ?>> tagOptions = () -> itemsFromTag(tagType, tag.get());
-		return new TaggedElement(taggedMethod.get(), tagType, tagOptions);
-	}
-
-	/**
-	 * Using a string {@code className}, finds a list of tagged methods
-	 */
-	private List<TaggedElement> methodsToDiscoveries(Map.Entry<ClassJavadoc, String> entry,
-			String tagType) {
-		Method[] methods = extractDeclaredMethods(entry);
-
-		// stream MethodJavadocs of the given ClassJavadoc
-		return entry.getKey().getMethods().parallelStream() //
-				.map(j -> mapMethodToDiscovery(j, tagType, methods)) //
-				.filter(Objects::nonNull) //
-				.collect(Collectors.toList());
-	}
-
-	private Method[] extractDeclaredMethods(Entry<ClassJavadoc, String> entry) {
-		try {
-			return getClass(entry.getValue()).getDeclaredMethods();
-		} catch (ClassNotFoundException exc) {
-			return new Method[0];
-		}
-	}
-
-	private Field[] extractDeclaredFields(Entry<ClassJavadoc, String> entry) {
-		try {
-			return getClass(entry.getValue()).getDeclaredFields();
-		} catch (ClassNotFoundException exc) {
-			return new Field[0];
-		}
-	}
-
-	private List<TaggedElement> discoverTaggedClasses(String tagType,
-			Map<ClassJavadoc, String> javadocData) {
-		return javadocData.entrySet().parallelStream() //
-				.map(e -> classFinder.apply(e, tagType)) //
-				.filter(c -> c != null) //
-				.collect(Collectors.toList());
-	}
-
-	private List<TaggedElement> discoverTaggedFields(String tagType,
-			Map<ClassJavadoc, String> javadocData) {
-		return javadocData.entrySet().parallelStream() //
-				.map(e -> fieldsToDiscoveries(e, tagType)) //
-				.flatMap(list -> list.parallelStream()) //
-				.collect(Collectors.toList());
-	}
-
-	private List<TaggedElement> discoverTaggedMethods(String tagType,
-			Map<ClassJavadoc, String> javadocData) {
-		return javadocData.entrySet().parallelStream() //
-				.map(e -> methodsToDiscoveries(e, tagType)) //
-				.flatMap(list -> list.parallelStream()) //
-				.collect(Collectors.toList());
-	}
-
+	public abstract String tagType();
 }

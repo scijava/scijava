@@ -20,9 +20,9 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		ops.makeDiscoverable(new AdaptationHintTest());
-		ops.makeDiscoverable(new FunctionsToComputers.Function1ToComputer1());
-		ops.makeDiscoverable(new CopyOpCollection());
+		ops.register(new AdaptationHintTest());
+		ops.register(new FunctionsToComputers.Function1ToComputer1());
+		ops.register(new CopyOpCollection());
 	}
 
 	@OpField(names = "test.adaptation.hints")

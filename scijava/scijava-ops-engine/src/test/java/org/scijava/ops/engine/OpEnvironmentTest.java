@@ -39,7 +39,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	public void testRegister() {
 		String opName = "test.opifyOp";
 		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, opName);
-		ops.makeDiscoverable(opifyOpInfo);
+		ops.register(opifyOpInfo);
 
 		String actual = ops.op(opName).input().outType(String.class).create();
 

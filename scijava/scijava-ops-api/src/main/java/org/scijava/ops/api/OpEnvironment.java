@@ -211,11 +211,15 @@ public interface OpEnvironment {
 	OpInfo opify(Class<?> opClass, double priority, String... names);
 
 	/**
-	 * Makes all elements within a {@code Object[]} known to this {@link OpEnvironment}
+	 * Registers all elements within a {@code Object[]} to this {@link OpEnvironment}
 	 *
 	 * @param objects the {@link Object}s that should be made discoverable to this {@link OpEnvironment}
 	 */
-	void makeDiscoverable(Object... objects);
+	void register(Object... objects);
+
+	/**
+	 *
+	 */
 
 	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to

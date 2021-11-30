@@ -52,8 +52,8 @@ public class ComputerToArraysTest extends AbstractTestEnvironment implements OpC
 
 	@BeforeClass
 	public static void addNeededOps() {
-		ops.makeDiscoverable(new ComputerToArraysTest());
-		ops.makeDiscoverable(new ComputerToArrays());
+		ops.register(new ComputerToArraysTest());
+		ops.register(new ComputerToArrays());
 	}
 	
 	/**

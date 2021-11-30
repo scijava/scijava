@@ -29,16 +29,16 @@
 
 package org.scijava.ops.engine.impl;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.function.Producer;
@@ -47,11 +47,7 @@ import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.*;
 import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeReifier;
@@ -60,7 +56,7 @@ public class OpCachingTest implements OpCollection {
 
 	private OpEnvironment ops;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		Logger logger = new StderrLoggerFactory().create();
 		TypeReifier types = new DefaultTypeReifier(logger, Discoverer.using(
@@ -122,10 +118,9 @@ public class OpCachingTest implements OpCollection {
 
 		// assert there is exactly one Op in the cache
 		OpInstance<?> cachedInstance = opCache.values().iterator().next();
-		Assert.assertEquals(opCache.size(), 1, 0);
-		Assert.assertEquals(
-			"Object in cache was not the same Object that was returned!", basicOp,
-			cachedInstance.op());
+		Assertions.assertEquals(opCache.size(), 1, 0);
+		Assertions.assertEquals(basicOp, cachedInstance.op(),
+			"Object in cache was not the same Object that was returned!");
 
 		// assert that the same call to the matcher returns our Object
 		MatchingConditions cachedConditions = opCache.keySet().iterator().next();
@@ -138,9 +133,8 @@ public class OpCachingTest implements OpCollection {
 
 		Producer<String> invadedOp = defOpEnv.op("test.basicOp").input().outType(
 			String.class).producer();
-		Assert.assertEquals(
-			"Op returned did not match the Op inserted into the cache!", invadedOp
-				.create(), newProducer.create());
+		Assertions.assertEquals(newProducer.create(), invadedOp.create(),
+			"Op returned did not match the Op inserted into the cache!");
 	}
 
 	@Test
@@ -155,27 +149,26 @@ public class OpCachingTest implements OpCollection {
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
 
 		// assert there are exactly two Ops in the cache
-		Assert.assertEquals(opCache.size(), 2, 0);
+		Assertions.assertEquals(opCache.size(), 2, 0);
 
 		// assert that complicatedOp is in the cache (
 		Optional<MatchingConditions> complicatedOptional = opCache.keySet().stream()
 			.filter(condition -> condition.ref().getName().equals(
 				"test.complicatedOp")).findFirst();
-		Assert.assertFalse("test.complicatedOp not in cache!", complicatedOptional
-			.isEmpty());
-		Assert.assertTrue("Object in cache was not an instance of ComplicatedOp!",
-			opCache.get(complicatedOptional.get()).op() instanceof ComplicatedOp);
+		Assertions.assertFalse(complicatedOptional
+					.isEmpty(), "test.complicatedOp not in cache!");
+		Assertions.assertTrue(
+				opCache.get(complicatedOptional.get()).op() instanceof ComplicatedOp,
+				"Object in cache was not an instance of ComplicatedOp!");
 
 		// assert that basic Op is also in the cache
 		Optional<MatchingConditions> basicOptional = opCache.keySet().stream()
 			.filter(condition -> condition.ref().getName().equals("test.basicOp"))
 			.findFirst();
-		Assert.assertFalse(
-			"test.basicOp not in cache despite being an OpDependency of test.complicatedOp",
-			basicOptional.isEmpty());
-		Assert.assertEquals(
-			"Object in cache was not the same Object that was returned!", opCache.get(
-				basicOptional.get()).op(), basicOp);
+		Assertions.assertFalse(basicOptional.isEmpty(),
+				"test.basicOp not in cache despite being an OpDependency of test.complicatedOp");
+		Assertions.assertEquals(opCache.get(basicOptional.get()).op(), basicOp,
+				"Object in cache was not the same Object that was returned!");
 	}
 
 }

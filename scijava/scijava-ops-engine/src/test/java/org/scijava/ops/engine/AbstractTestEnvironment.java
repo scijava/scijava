@@ -1,15 +1,15 @@
 
 package org.scijava.ops.engine;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.log2.Logger;
@@ -28,14 +28,14 @@ public abstract class AbstractTestEnvironment {
 	protected static Logger logger;
 	protected static TypeReifier types;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUp() {
 		logger = new StderrLoggerFactory().create();
 		types = new DefaultTypeReifier(logger, Discoverer.using(ServiceLoader::load));
 		ops = barebonesEnvironment();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void tearDown() {
 		ops = null;
 		logger = null;
@@ -82,10 +82,10 @@ public abstract class AbstractTestEnvironment {
 		final Iterator<T> e = expected.iterator();
 		final Iterator<T> a = actual.iterator();
 		while (e.hasNext()) {
-			assertTrue("Fewer elements than expected", a.hasNext());
+			assertTrue(a.hasNext(), "Fewer elements than expected");
 			assertEquals(e.next(), a.next());
 		}
-		assertFalse("More elements than expected", a.hasNext());
+		assertFalse(a.hasNext(), "More elements than expected");
 	}
 
 }

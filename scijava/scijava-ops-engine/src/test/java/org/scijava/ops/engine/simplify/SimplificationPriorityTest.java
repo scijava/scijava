@@ -4,9 +4,9 @@ package org.scijava.ops.engine.simplify;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.AbstractTestEnvironment;
@@ -19,7 +19,7 @@ import org.scijava.ops.spi.OpField;
 public class SimplificationPriorityTest extends AbstractTestEnvironment
 		implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new SimplificationPriorityTest());
 		ops.register(new IdentityLossReporter());
@@ -52,7 +52,7 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment
 
 		Double output = ops.op("test.thing").input(thing1, thing2).outType(
 			Double.class).apply();
-		Assert.assertEquals(1., output, 0.);
+		Assertions.assertEquals(1., output, 0.);
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class SimplificationPriorityTest extends AbstractTestEnvironment
 
 		Double output = ops.op("test.thing").input(thing1).outType(
 			Double.class).apply();
-		Assert.assertEquals(2., output, 0.);
+		Assertions.assertEquals(2., output, 0.);
 	}
 
 	@OpHints(hints = {Simplification.FORBIDDEN})

@@ -37,8 +37,8 @@ package org.scijava.ops.engine.adapt.lift;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
@@ -52,7 +52,7 @@ import org.scijava.types.Nil;
  */
 public class FunctionToIterablesTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new FunctionToIterables());
 		ops.register(new OpBuilderTestOps());

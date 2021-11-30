@@ -31,15 +31,15 @@ package org.scijava.ops.engine;
 
 import java.util.function.BiFunction;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.math.MathOpCollection;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 
 public class OpCollectionTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new MathOpCollection());
 	}

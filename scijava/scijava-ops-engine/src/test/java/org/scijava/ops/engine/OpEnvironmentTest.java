@@ -1,8 +1,8 @@
 
 package org.scijava.ops.engine;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
@@ -22,17 +22,17 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 	@Test
 	public void testClassOpification() {
 		OpInfo opifyOpInfo = ops.opify(OpifyOp.class);
-		Assert.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
+		Assertions.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
-		Assert.assertEquals(Priority.NORMAL, opifyOpInfo.priority(), 0.);
+		Assertions.assertEquals(Priority.NORMAL, opifyOpInfo.priority(), 0.);
 	}
 
 	@Test
 	public void testClassOpificationWithPriority() {
 		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH);
-		Assert.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
+		Assertions.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
-		Assert.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);
+		Assertions.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		String actual = ops.op(opName).input().outType(String.class).create();
 
 		String expected = new OpifyOp().getString();
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

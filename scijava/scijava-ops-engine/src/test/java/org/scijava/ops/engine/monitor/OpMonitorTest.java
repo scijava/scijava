@@ -8,14 +8,17 @@ import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.types.Nil;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests correct functionality of {@link OpMonitor}
@@ -26,7 +29,7 @@ import org.scijava.types.Nil;
  */
 public class OpMonitorTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new InfiniteOp());
 		ops.register(new CountingOp());
@@ -35,7 +38,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	/**
 	 * Basic test of cancellation on the same thread
 	 */
-	@Test(expected = CancellationException.class)
+	@Test
 	public void testCancellation() {
 		Function<OpMonitor, BigInteger> bigOp = OpBuilder.matchFunction(ops, "test.opMonitor", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {});
@@ -43,7 +46,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 		monitor.cancel();
 		// NOTE: we have to cancel the op before we call it because the execution of
 		// this Op and the test that call it are on the same thread.
-		bigOp.apply(monitor);
+		assertThrows(CancellationException.class, () -> bigOp.apply(monitor));
 	}
 
 	/**
@@ -52,7 +55,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	 * @throws InterruptedException
 	 *             - should not happen
 	 */
-	@Test(expected = CancellationException.class)
+	@Test
 	public void testCancellationDifferentThread() throws InterruptedException {
 		Function<OpMonitor, BigInteger> bigOp = OpBuilder.matchFunction(ops, "test.opMonitor", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {});
@@ -61,10 +64,10 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 			Future<BigInteger> future = Executors.newSingleThreadExecutor().submit(() -> bigOp.apply(monitor));
 			monitor.cancel();
 			future.get();
+			fail();
 		} catch (ExecutionException exc) {
 			Throwable cancellationException = exc.getCause();
-			Assert.assertTrue(cancellationException instanceof CancellationException);
-			throw (CancellationException) cancellationException;
+			Assertions.assertTrue(cancellationException instanceof CancellationException);
 		}
 	}
 	
@@ -83,8 +86,8 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 			progress = monitor.getProgress();
 		}
 		BigInteger bi = future.get();
-		Assert.assertTrue(bi.equals(target));
-		Assert.assertEquals(monitor.getProgress(), 1, 0);
+		Assertions.assertTrue(bi.equals(target));
+		Assertions.assertEquals(monitor.getProgress(), 1, 0);
 	}
 
 }

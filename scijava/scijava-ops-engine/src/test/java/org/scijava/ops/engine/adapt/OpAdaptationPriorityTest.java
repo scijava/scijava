@@ -29,13 +29,13 @@
 
 package org.scijava.ops.engine.adapt;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.engine.AbstractTestEnvironment;
@@ -53,7 +53,7 @@ import org.scijava.ops.spi.OpField;
  */
 public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new OpAdaptationPriorityTest());
 		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());

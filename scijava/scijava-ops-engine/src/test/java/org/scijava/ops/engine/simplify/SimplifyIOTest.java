@@ -1,12 +1,12 @@
 package org.scijava.ops.engine.simplify;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
@@ -16,7 +16,7 @@ import org.scijava.ops.spi.OpField;
 
 public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollection{
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new SimplifyIOTest());
 		ops.register(new PrimitiveSimplifiers());

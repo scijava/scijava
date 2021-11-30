@@ -29,7 +29,8 @@
 
 package org.scijava.ops.engine.matcher;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -41,8 +42,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.matcher.impl.MatchingUtils;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
@@ -59,13 +60,14 @@ public class MatchingUtilsTest {
 	private void assertAll(Class<?> from, boolean condition, Type... tos) {
 		for (Type to : tos) {
 			if (to instanceof ParameterizedType) {
-				assertTrue(GenericAssignability.checkGenericAssignability(from, (ParameterizedType) to, false) == condition);
+				assertTrue(GenericAssignability.checkGenericAssignability(from, (ParameterizedType) to,
+						false) == condition);
 			} else {
 				assertTrue(Types.isAssignable(from, to, new HashMap<TypeVariable<?>, Type>()) == condition);
 			}
 		}
 	}
-	
+
 	@Test
 	public <E, N extends Number> void genericAssignabilityVarToVar() {
 		abstract class Single<I> implements Supplier<I> {
@@ -81,7 +83,7 @@ public class MatchingUtilsTest {
 
 		assertAll(Single.class, true, y1, y2);
 		assertAll(Single.class, false, n1);
-		
+
 		assertAll(SingleBounded.class, true, y2);
 		assertAll(SingleBounded.class, false, y1, n1);
 	}
@@ -276,9 +278,10 @@ public class MatchingUtilsTest {
 
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class, true, y5);
 		assertAll(SingleVarBoundedNestedWildcardMultipleOccurenceUsedNested.class, false, n5);
-		
-		abstract class SingleVarMultipleOccurenceUsedNested<I> implements Function<I, List<I>> {}
-		
+
+		abstract class SingleVarMultipleOccurenceUsedNested<I> implements Function<I, List<I>> {
+		}
+
 		Nil<Function<Integer, List<Number>>> n6 = new Nil<>() {
 		};
 		assertAll(SingleVarMultipleOccurenceUsedNested.class, false, n6);
@@ -342,7 +345,7 @@ public class MatchingUtilsTest {
 		};
 		Nil<Function<Iterable<Integer>, Integer>> n5 = new Nil<>() {
 		};
-		
+
 		assertAll(BExtendsI.class, true, y1, y2, y3);
 		assertAll(BExtendsI.class, false, n1, n2, n3, n4, n5);
 
@@ -371,7 +374,7 @@ public class MatchingUtilsTest {
 
 		Nil<BiFunction<Iterable<Double>, Iterable<Double>, List<String>>> y1 = new Nil<>() {
 		};
-		
+
 		assertAll(IBoundedByNImplicitely.class, true, y1);
 	}
 
@@ -401,7 +404,7 @@ public class MatchingUtilsTest {
 		assertAll(DoubleVarBoundedAndWildcard.class, true, y1, y2);
 		assertAll(DoubleVarBoundedAndWildcard.class, false, n1, n2, n3, n4, n5, n6);
 	}
-	
+
 	@Test
 	public void genericAssignabilityWildcards() {
 		abstract class Wildcards implements Function<List<? extends Number>, List<? extends Number>> {
@@ -421,22 +424,25 @@ public class MatchingUtilsTest {
 		assertAll(Wildcards.class, true, y1);
 		assertAll(Wildcards.class, false, n1, n2, n3, n4);
 	}
-	
+
 	@Test
 	public void genericAssignabilityWildcardExtendingTypeVar() {
-		abstract class StrangeConsumer<T extends Number> implements
-			BiConsumer<List<? extends T>, T>
-		{}
-		
-		Nil<BiConsumer<List<? extends Number>, Number>> y1 = new Nil<>() {};
-		Nil<BiConsumer<List<? extends Integer>, Integer>> y2 = new Nil<>() {};
-		Nil<BiConsumer<List<? extends Number>, ? extends Number>> y3 = new Nil<>() {};
+		abstract class StrangeConsumer<T extends Number> implements BiConsumer<List<? extends T>, T> {
+		}
 
-		Nil<BiConsumer<List<? extends Integer>, Double>> n1 = new Nil<>() {};
+		Nil<BiConsumer<List<? extends Number>, Number>> y1 = new Nil<>() {
+		};
+		Nil<BiConsumer<List<? extends Integer>, Integer>> y2 = new Nil<>() {
+		};
+		Nil<BiConsumer<List<? extends Number>, ? extends Number>> y3 = new Nil<>() {
+		};
+
+		Nil<BiConsumer<List<? extends Integer>, Double>> n1 = new Nil<>() {
+		};
 
 		assertAll(StrangeConsumer.class, true, y1, y2, y3);
 		assertAll(StrangeConsumer.class, false, n1);
-		
+
 	}
 
 	/**
@@ -485,16 +491,20 @@ public class MatchingUtilsTest {
 				return null;
 			}
 		}
-		Nil<Function<Double[], Double>> doubleFunction = new Nil<>() {};
+		Nil<Function<Double[], Double>> doubleFunction = new Nil<>() {
+		};
 		assertAll(Foo.class, true, doubleFunction);
 		assertAll(Bar.class, false, doubleFunction);
 	}
 
 	@Test
 	public void testGenericArrayToWildcardWithinParameterizedType() {
-		abstract class Foo<T extends Number> implements List<T[]> {}
-		final Nil<List<? extends Double[]>> upperType = new Nil<>() {};
-		final Nil<List<? super Double[]>> lowerType = new Nil<>() {};
+		abstract class Foo<T extends Number> implements List<T[]> {
+		}
+		final Nil<List<? extends Double[]>> upperType = new Nil<>() {
+		};
+		final Nil<List<? super Double[]>> lowerType = new Nil<>() {
+		};
 
 		// Since it is legal to write
 		// List<? extends Double[]> list = new Foo<>() {...};
@@ -504,47 +514,58 @@ public class MatchingUtilsTest {
 
 	@Test
 	public <T extends Number> void testSuperWildcardToSuperWildcard() {
-		final Nil<List<? super T>> listT = new Nil<>() {};
-		final Nil<List<? super Number>> listWildcard = new Nil<>() {};
+		final Nil<List<? super T>> listT = new Nil<>() {
+		};
+		final Nil<List<? super Number>> listWildcard = new Nil<>() {
+		};
 
 		// unfortunately we cannot use assertAll since it is impossible to create a
 		// Class implementing List<? super T>
 		boolean success = GenericAssignability.checkGenericAssignability(listT.getType(),
-			(ParameterizedType) listWildcard.getType(), false);
-		Assert.assertTrue(success);
+				(ParameterizedType) listWildcard.getType(), false);
+		Assertions.assertTrue(success);
 	}
 
 	@Test
 	public void testNonReifiableFunction() {
 		Function<Double[], Double[]> fooFunc = (in) -> in;
-		final Nil<Function<Double[], Double[]>> doubleFunc = new Nil<>() {};
-		final Nil<Function<Integer[], Integer[]>> integerFunc = new Nil<>() {};
+		final Nil<Function<Double[], Double[]>> doubleFunc = new Nil<>() {
+		};
+		final Nil<Function<Integer[], Integer[]>> integerFunc = new Nil<>() {
+		};
 
-		boolean successDouble = GenericAssignability.checkGenericAssignability(fooFunc
-			.getClass(), (ParameterizedType) doubleFunc.getType(), false);
-		Assert.assertTrue(successDouble);
-		boolean successInteger = GenericAssignability.checkGenericAssignability(fooFunc
-			.getClass(), (ParameterizedType) integerFunc.getType(), false);
-		Assert.assertTrue(successInteger);
+		boolean successDouble = GenericAssignability.checkGenericAssignability(fooFunc.getClass(),
+				(ParameterizedType) doubleFunc.getType(), false);
+		Assertions.assertTrue(successDouble);
+		boolean successInteger = GenericAssignability.checkGenericAssignability(fooFunc.getClass(),
+				(ParameterizedType) integerFunc.getType(), false);
+		Assertions.assertTrue(successInteger);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testIsAssignableNullToNull() {
-		GenericAssignability.checkGenericAssignability(null, null, false);
+		assertThrows(NullPointerException.class,
+				() -> GenericAssignability.checkGenericAssignability(null, null, false));
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testIsAssignableClassToNull() {
-		GenericAssignability.checkGenericAssignability(Object.class, null, false);
+		assertThrows(NullPointerException.class,
+				() -> GenericAssignability.checkGenericAssignability(Object.class, null, false));
 	}
 
 	@Test
 	public <T extends Number> void testIsAssignableT() {
-		final Nil<T> t = new Nil<>() {};
-		final Nil<List<T>> listT = new Nil<>() {};
-		final Nil<List<Number>> listNumber = new Nil<>() {};
-		final Nil<List<Integer>> listInteger = new Nil<>() {};
-		final Nil<List<? extends Number>> listExtendsNumber = new Nil<>() {};
+		final Nil<T> t = new Nil<>() {
+		};
+		final Nil<List<T>> listT = new Nil<>() {
+		};
+		final Nil<List<Number>> listNumber = new Nil<>() {
+		};
+		final Nil<List<Integer>> listInteger = new Nil<>() {
+		};
+		final Nil<List<? extends Number>> listExtendsNumber = new Nil<>() {
+		};
 
 		assertAll(List.class, true, listT, listNumber, listInteger, listExtendsNumber);
 		assertAll(List.class, false, t);
@@ -552,23 +573,28 @@ public class MatchingUtilsTest {
 
 	@Test
 	public <T extends Number> void testIsAssignableOutputToObject() {
-		final Type fooSource = new Nil<Function<T, List<T>>>() {}.getType();
-		final Type fooFunc = new Nil<Function<Double, Object>>() {}.getType();
+		final Type fooSource = new Nil<Function<T, List<T>>>() {
+		}.getType();
+		final Type fooFunc = new Nil<Function<Double, Object>>() {
+		}.getType();
 
-		Assert.assertFalse(GenericAssignability.checkGenericAssignability(fooSource,
-			(ParameterizedType) fooFunc, false));
-		Assert.assertTrue(GenericAssignability.checkGenericAssignability(fooSource,
-			(ParameterizedType) fooFunc, true));
+		Assertions.assertFalse(
+				GenericAssignability.checkGenericAssignability(fooSource, (ParameterizedType) fooFunc, false));
+		Assertions.assertTrue(
+				GenericAssignability.checkGenericAssignability(fooSource, (ParameterizedType) fooFunc, true));
 
 	}
 
-	class Thing<T> {}
-	
-	class StrangeThing<N extends Number, T> extends Thing<T> {}
-	
+	class Thing<T> {
+	}
+
+	class StrangeThing<N extends Number, T> extends Thing<T> {
+	}
+
 	/**
-	 * {@link MatchingUtils#checkGenericOutputsAssignability(Type[], Type[], HashMap)} not yet fully
-	 * implemented. If this is done, all the tests below should not fail.
+	 * {@link MatchingUtils#checkGenericOutputsAssignability(Type[], Type[], HashMap)}
+	 * not yet fully implemented. If this is done, all the tests below should not
+	 * fail.
 	 */
 	@Test
 	public <N> void testOutputAssignability() {

@@ -4,8 +4,8 @@ package org.scijava.ops.engine.hints;
 
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
@@ -20,7 +20,7 @@ import org.scijava.ops.spi.OpField;
 
 public class SimplificationHintTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new SimplificationHintTest());
 		ops.register(new IdentityLossReporter());

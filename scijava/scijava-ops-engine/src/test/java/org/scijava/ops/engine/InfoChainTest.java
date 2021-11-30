@@ -4,9 +4,9 @@ package org.scijava.ops.engine;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
@@ -24,7 +24,7 @@ import org.scijava.types.Nil;
  */
 public class InfoChainTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new InfoChainTest());
 		ops.register(new ComplexOp());
@@ -41,7 +41,7 @@ public class InfoChainTest extends AbstractTestEnvironment implements OpCollecti
 		InfoChain chain = new InfoChain(info);
 		Nil<Producer<String>> nil = new Nil<>() {};
 		Producer<String> op = ops.opFromInfoChain(chain, nil);
-		Assert.assertEquals(S, op.create());
+		Assertions.assertEquals(S, op.create());
 	}
 
 	@Test
@@ -57,14 +57,14 @@ public class InfoChainTest extends AbstractTestEnvironment implements OpCollecti
 
 		Nil<Producer<String>> nil = new Nil<>() {};
 		Producer<String> op = ops.opFromInfoChain(chain, nil);
-		Assert.assertEquals(S, op.create());
+		Assertions.assertEquals(S, op.create());
 	}
 
 	private OpInfo singularInfoOfName(String name) {
 		Iterator<OpInfo> infos = ops.infos(name).iterator();
-		Assert.assertTrue(infos.hasNext());
+		Assertions.assertTrue(infos.hasNext());
 		OpInfo info = infos.next();
-		Assert.assertFalse(infos.hasNext());
+		Assertions.assertFalse(infos.hasNext());
 		return info;
 	}
 

@@ -1,5 +1,4 @@
 module org.scijava.ops.api {
-
 	exports org.scijava.ops.api;
 	exports org.scijava.ops.api.features;
 
@@ -8,4 +7,5 @@ module org.scijava.ops.api {
 	requires transitive org.scijava.struct;
 	requires org.scijava.types;
 
+	uses org.scijava.ops.api.OpInfoGenerator;
 }

@@ -34,13 +34,11 @@
 
 package org.scijava.ops.engine.adapt.complexLift;
 
-import static org.junit.Assert.assertArrayEquals;
-
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
@@ -48,6 +46,8 @@ import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToIterables;
 import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.types.Nil;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 /**
  * Tests the adaptation of {@link Computers} running on a type into
@@ -58,7 +58,7 @@ import org.scijava.types.Nil;
  */
 public class ComputerToFunctionIterablesTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		Object[] lifters = objsFromNoArgConstructors(ComputersToFunctionsAndLift.class.getDeclaredClasses());
 		ops.register(lifters);

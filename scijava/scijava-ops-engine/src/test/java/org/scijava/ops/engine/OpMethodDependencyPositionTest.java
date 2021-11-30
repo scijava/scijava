@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
@@ -17,7 +17,7 @@ import org.scijava.ops.spi.OpMethod;
 public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new OpMethodDependencyPositionTest());
 	}

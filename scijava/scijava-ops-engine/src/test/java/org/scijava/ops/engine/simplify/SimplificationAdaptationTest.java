@@ -1,8 +1,8 @@
 package org.scijava.ops.engine.simplify;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
@@ -14,7 +14,7 @@ import org.scijava.ops.spi.OpField;
 public class SimplificationAdaptationTest<T> extends AbstractTestEnvironment
 		implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new SimplificationAdaptationTest());
 		ops.register(new PrimitiveSimplifiers());
@@ -40,7 +40,7 @@ public class SimplificationAdaptationTest<T> extends AbstractTestEnvironment
 		Double[] expected = { 1., 1., 0. };
 		Double[] actual = ops.op("test.math.modulus").input(inArr, modulus)
 			.outType(Double[].class).apply();
-		Assert.assertArrayEquals(expected, actual);
+		Assertions.assertArrayEquals(expected, actual);
 	}
 
 }

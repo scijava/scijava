@@ -28,10 +28,10 @@
  */
 
 package org.scijava.ops.engine;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.Op;
@@ -40,7 +40,7 @@ import org.scijava.types.Nil;
 
 public class OpPriorityTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new TestDouble());
 		ops.register(new TestFloat());

@@ -1,12 +1,12 @@
 
 package org.scijava.ops.engine.simplify;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.BiFunction;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
 import org.scijava.ops.engine.conversionLoss.impl.LossReporterWrapper;
@@ -24,7 +24,7 @@ import org.scijava.ops.spi.OpField;
  */
 public class SimplifyTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new SimplifyTest());
 		ops.register(new PrimitiveSimplifiers());

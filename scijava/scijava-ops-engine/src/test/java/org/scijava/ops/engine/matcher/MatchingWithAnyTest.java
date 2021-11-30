@@ -1,12 +1,13 @@
 package org.scijava.ops.engine.matcher;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.engine.AbstractTestEnvironment;
@@ -22,7 +23,7 @@ import org.scijava.types.Any;
  */
 public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new MatchingWithAnyTest());
 		ops.register(new ComputersToFunctionsViaSource.Computer2ToFunction2ViaSource());
@@ -47,11 +48,13 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCo
 	 * easily be avoided by making TypeExtractors for any class for which this kind
 	 * of exception can happen.
 	 */
-	@Test(expected = ClassCastException.class)
+	@Test
 	public void testExceptionalThing() {
 
 		ExceptionalThing<Double> ething = new ExceptionalThing<>(0.5);
-		Double d = ops.op("test.exceptionalAny").input(ething).outType(Double.class).apply();
+		assertThrows(ClassCastException.class, () -> {
+			Double d = ops.op("test.exceptionalAny").input(ething).outType(Double.class).apply();
+		});
 
 	}
 

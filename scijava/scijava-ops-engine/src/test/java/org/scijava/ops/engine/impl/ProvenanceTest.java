@@ -8,9 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
@@ -32,7 +32,7 @@ import org.scijava.types.Nil;
 
 public class ProvenanceTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new ProvenanceTest());
 		ops.register(new FunctionToArrays());
@@ -52,13 +52,13 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 	public void testProvenance() {
 		String s = ops.op("test.provenance").input().outType(String.class).create();
 		List<RichOp<?>> executionsUpon = history.executionsUpon(s);
-		Assert.assertEquals(1, executionsUpon.size());
+		Assertions.assertEquals(1, executionsUpon.size());
 		// Assert only one info in the execution hierarchy
 		InfoChain executionHierarchy = history.opExecutionChain(executionsUpon
 			.get(0));
-		Assert.assertEquals(0, executionHierarchy.dependencies().size());
+		Assertions.assertEquals(0, executionHierarchy.dependencies().size());
 		OpInfo info = executionHierarchy.info();
-		Assert.assertTrue(info.implementationName().contains(this.getClass()
+		Assertions.assertTrue(info.implementationName().contains(this.getClass()
 			.getPackageName()));
 	}
 
@@ -94,21 +94,21 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 		List<RichOp<?>> history1 = history.executionsUpon(out1);
 		List<RichOp<?>> history2 = history.executionsUpon(out2);
 
-		Assert.assertEquals(1, history1.size());
+		Assertions.assertEquals(1, history1.size());
 		InfoChain opExecutionChain = history.opExecutionChain(history1.get(
 			0));
-		Assert.assertEquals(0, opExecutionChain.dependencies().size());
+		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		String expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.baz";
-		Assert.assertEquals(expected, opExecutionChain.info().getAnnotationBearer()
+		Assertions.assertEquals(expected, opExecutionChain.info().getAnnotationBearer()
 			.toString());
 
-		Assert.assertEquals(1, history2.size());
+		Assertions.assertEquals(1, history2.size());
 		opExecutionChain = history.opExecutionChain(history2.get(0));
-		Assert.assertEquals(0, opExecutionChain.dependencies().size());
+		Assertions.assertEquals(0, opExecutionChain.dependencies().size());
 		expected =
 			"public final java.util.function.Function org.scijava.ops.engine.impl.ProvenanceTest.bar";
-		Assert.assertEquals(expected, opExecutionChain.info().getAnnotationBearer()
+		Assertions.assertEquals(expected, opExecutionChain.info().getAnnotationBearer()
 			.toString());
 	}
 
@@ -152,7 +152,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 
 		// Assert two executions upon this Object, once from the mapped function, once from the mapper
 		List<RichOp<?>> executionsUpon = history.executionsUpon(out);
-		Assert.assertEquals(2, executionsUpon.size());
+		Assertions.assertEquals(2, executionsUpon.size());
 	}
 
 	@Test
@@ -171,15 +171,14 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 		Iterator<OpInfo> mapperInfos = ops.infos("test.provenanceMapper")
 			.iterator();
 		OpInfo mapperInfo = mapperInfos.next();
-		Assert.assertTrue(executionChain.info().equals(mapperInfo));
+		Assertions.assertTrue(executionChain.info().equals(mapperInfo));
 		// Assert mapped is in the execution chain
 		Iterator<OpInfo> mappedInfos = ops.infos("test.provenanceMapped")
 			.iterator();
 		OpInfo mappedInfo = mappedInfos.next();
-		Assert.assertEquals("Expected only one dependency of the mapper Op!", 1,
-			executionChain.dependencies().size());
-		Assert.assertTrue(executionChain.dependencies().get(0).info().equals(
-			mappedInfo));
+		Assertions.assertEquals(1, executionChain.dependencies().size(),
+				"Expected only one dependency of the mapper Op!");
+		Assertions.assertTrue(executionChain.dependencies().get(0).info().equals(mappedInfo));
 	}
 
 	@Test
@@ -194,16 +193,16 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 
 		// Assert that two Ops operated on the return.
 		List<RichOp<?>> mutators = history.executionsUpon(out);
-		Assert.assertEquals(2, mutators.size());
+		Assertions.assertEquals(2, mutators.size());
 
 		// Run the mapped Op, assert still two runs on the mapper
 		Thing out1 = ops.op("test.provenanceMapped").input(2.).outType(Thing.class)
 			.apply(hints);
 		mutators = history.executionsUpon(out);
-		Assert.assertEquals(2, mutators.size());
+		Assertions.assertEquals(2, mutators.size());
 		// Assert one run on the mapped Op as well
 		mutators = history.executionsUpon(out1);
-		Assert.assertEquals(1, mutators.size());
+		Assertions.assertEquals(1, mutators.size());
 
 	}
 
@@ -213,7 +212,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 		Function<Double, Thing> mapper = ops.op("test.provenanceMapped").input(5.0)
 			.outType(Thing.class).function(hints);
 		InfoChain chain = history.opExecutionChain(mapper);
-		Assert.assertEquals(0, chain.dependencies().size());
+		Assertions.assertEquals(0, chain.dependencies().size());
 		String signature = chain.signature();
 		Nil<Function<Double, Thing>> special = new Nil<>() {};
 		@SuppressWarnings("unused")
@@ -271,7 +270,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 		Integer[] actual = { 0, 0, 0 };
 		fromString.compute(in, actual);
 		Integer[] expected = { 1, 2, 3 };
-		Assert.assertArrayEquals(expected, actual);
+		Assertions.assertArrayEquals(expected, actual);
 	}
 
 	@Test
@@ -285,14 +284,14 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 		Integer[] in = { 1, 2, 3 };
 		Integer[] actual = fromString.apply(in);
 		Integer[] expected = { 1, 2, 3 };
-		Assert.assertArrayEquals(expected, actual);
+		Assertions.assertArrayEquals(expected, actual);
 	}
 
 	private OpInfo singularInfoOfName(String name) {
 		Iterator<OpInfo> infos = ops.infos(name).iterator();
-		Assert.assertTrue(infos.hasNext());
+		Assertions.assertTrue(infos.hasNext());
 		OpInfo info = infos.next();
-		Assert.assertFalse(infos.hasNext());
+		Assertions.assertFalse(infos.hasNext());
 		return info;
 	}
 

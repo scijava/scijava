@@ -3,15 +3,15 @@ package org.scijava.ops.engine;
 
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 
 public class OpMethodInParentTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new SuperOpMethodHousingClass());
 		ops.register(new SuperOpMethodHousingInterface());
@@ -23,7 +23,7 @@ public class OpMethodInParentTest extends AbstractTestEnvironment {
 			String.class).apply();
 		String expected = "This string came from " +
 			SuperOpMethodHousingClass.class;
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -32,7 +32,7 @@ public class OpMethodInParentTest extends AbstractTestEnvironment {
 			String.class).apply();
 		String expected = "This string came from " +
 			SuperOpMethodHousingInterface.class;
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

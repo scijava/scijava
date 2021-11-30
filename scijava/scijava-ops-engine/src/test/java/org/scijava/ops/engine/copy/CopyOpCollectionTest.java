@@ -29,14 +29,14 @@
 
 package org.scijava.ops.engine.copy;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 
 public class CopyOpCollectionTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new CopyOpCollection());
 	}
@@ -47,7 +47,7 @@ public class CopyOpCollectionTest extends AbstractTestEnvironment {
 		double[] output = {4, 5, 6};
 		ops.op("cp").input(input).output(output).compute();
 		
-		Assert.assertArrayEquals(input, output, 0.);
+		Assertions.assertArrayEquals(input, output, 0.);
 	}
 
 }

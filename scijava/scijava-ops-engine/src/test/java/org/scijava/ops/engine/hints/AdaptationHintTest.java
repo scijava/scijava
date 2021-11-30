@@ -2,8 +2,8 @@ package org.scijava.ops.engine.hints;
 
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
@@ -18,7 +18,7 @@ import org.scijava.ops.spi.OpField;
 
 public class AdaptationHintTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new AdaptationHintTest());
 		ops.register(new FunctionsToComputers.Function1ToComputer1());

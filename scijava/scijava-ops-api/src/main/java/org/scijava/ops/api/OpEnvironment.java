@@ -226,6 +226,15 @@ public interface OpEnvironment {
 	Collection<OpInfo> infosFrom(Object o);
 
 	/**
+	 * Creates some {@link OpInfo}s from {@code o}
+	 * @param o the {@link Object} to create {@link OpInfo}s from
+	 * @return a {@link Collection} of {@link OpInfo}s
+	 */
+	default void registerInfosFrom(Object o) {
+		register(infosFrom(o));
+	}
+
+	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to
 	 * {@link #op} that <b>does not</b> pass a {@link Hints} will <b>copy</b> the
 	 * Hints passed here (to prevent multiple Op calls from accessing/changing the

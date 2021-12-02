@@ -35,8 +35,8 @@ public class TherapiBasedOpTest {
 			ServiceLoader::load));
 		parser = ServiceLoader.load(Parser.class).findFirst().get();
 		ops = barebonesEnvironment();
-		ops.register(ops.infosFrom(new TherapiBasedOpTest()));
-		ops.register(ops.infosFrom(new TherapiOpClass()));
+		ops.registerInfosFrom(new TherapiBasedOpTest());
+		ops.registerInfosFrom(new TherapiOpClass());
 	}
 
 	@AfterClass

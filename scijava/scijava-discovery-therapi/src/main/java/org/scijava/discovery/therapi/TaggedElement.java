@@ -14,7 +14,6 @@ import java.util.function.Supplier;
  * differentiating metadata.
  * 
  * @author Gabriel Selzer
- * @param <T> the generic {@link Type} of this discovery.
  */
 public class TaggedElement {
 

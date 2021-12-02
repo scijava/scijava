@@ -13,6 +13,7 @@ import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.parse2.Parser;
@@ -26,7 +27,6 @@ public class TherapiBasedOpTest {
 	protected static Logger logger;
 	protected static TypeReifier types;
 	protected static Parser parser;
-	protected static TherapiDiscoverer discoverer;
 
 	@BeforeClass
 	public static void setUp() {
@@ -35,6 +35,8 @@ public class TherapiBasedOpTest {
 			ServiceLoader::load));
 		parser = ServiceLoader.load(Parser.class).findFirst().get();
 		ops = barebonesEnvironment();
+		ops.register(ops.infosFrom(new TherapiBasedOpTest()));
+		ops.register(ops.infosFrom(new TherapiOpClass()));
 	}
 
 	@AfterClass
@@ -47,16 +49,15 @@ public class TherapiBasedOpTest {
 
 	{
 		// register needed classes in StaticDiscoverer
-		discoverer = new TherapiOpInfoDiscoverer();
 		Discoverer d2 = Discoverer.using(ServiceLoader::load).onlyFor( //
 				OpWrapper.class, //
-				MatchingRoutine.class //
+				MatchingRoutine.class, //
+				OpInfoGenerator.class //
 		);
 
 		history = new DefaultOpHistory();
 		// return Op Environment
-		return new DefaultOpEnvironment(types, logger, history,
-			discoverer, d2);
+		return new DefaultOpEnvironment(types, logger, history, d2);
 	}
 
 	private static final String FIELD_STRING = "This OpField is discoverable using Therapi!";
@@ -69,7 +70,7 @@ public class TherapiBasedOpTest {
 	public final Producer<String> therapiFunction = () -> FIELD_STRING;
 
 	@Test
-	public void therapiOpFieldTest() {
+	public void therapiOpFieldTest() throws NoSuchFieldException {
 		String actual = ops.op("test.therapiOpField").input().outType(String.class).create();
 		String expected = FIELD_STRING;
 		Assert.assertEquals(expected, actual);

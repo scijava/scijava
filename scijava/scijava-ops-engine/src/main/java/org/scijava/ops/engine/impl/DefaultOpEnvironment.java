@@ -292,9 +292,20 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		for (Object o : objects) {
 			if (o.getClass().isArray())
 				register(o);
+			else if (o instanceof Iterable<?>) {
+				((Iterable<?>) o).forEach(this::register);
+			}
 			else
 				this.manDiscoverer.register(o);
 		}
+	}
+	
+	@Override
+	public Collection<OpInfo> infosFrom(Object o) {
+		return infoGenerators().parallelStream() //
+				.filter(g -> g.canGenerateFrom(o)) //
+				.flatMap(g -> g.generateInfosFrom(o).stream()) //
+				.collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -641,7 +652,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param generators the {@link List} of {@link OpInfoGenerator}s
 	 * @return a {@link List} of {@link OpInfo}s
 	 */
-	private List<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
+	private Collection<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
 		return generators.stream() //
 				.filter(g -> g.canGenerateFrom(o)) //
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //

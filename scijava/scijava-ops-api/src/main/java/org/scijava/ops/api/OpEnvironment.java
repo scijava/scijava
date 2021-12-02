@@ -30,6 +30,7 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import org.scijava.types.Nil;
 
@@ -218,8 +219,11 @@ public interface OpEnvironment {
 	void register(Object... objects);
 
 	/**
-	 *
+	 * Creates some {@link OpInfo}s from {@code o}
+	 * @param o the {@link Object} to create {@link OpInfo}s from
+	 * @return a {@link Collection} of {@link OpInfo}s
 	 */
+	Collection<OpInfo> infosFrom(Object o);
 
 	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to

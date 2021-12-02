@@ -35,7 +35,7 @@ public class TherapiOpInfoGenerator implements OpInfoGenerator {
 
 	@Override
 	public boolean canGenerateFrom(Object o) {
-		return false;
+		return TherapiDiscoveryUtils.hasJavadoc(o.getClass());
 	}
 
 	@Override

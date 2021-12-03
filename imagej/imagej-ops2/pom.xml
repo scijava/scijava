@@ -209,13 +209,13 @@
 		<license.copyrightOwners>ImageJ developers.</license.copyrightOwners>
 		<license.projectName>ImageJ software for multidimensional image processing and analysis.</license.projectName>
 
-		<!-- NB While we depend on old scijava-common -->
-		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},org.scijava.*,com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
+		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${imagej-ops2.allowedDuplicateClasses}</allowedDuplicateClasses>
 
 		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
 		<releaseProfiles>deploy-to-imagej</releaseProfiles>
-		<therapi.packages></therapi.packages>
+
+		<therapi.packages />
 	</properties>
 
 	<build>
@@ -263,10 +263,6 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>parsington</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -343,6 +339,12 @@
 		<dependency>
 			<groupId>io.scif</groupId>
 			<artifactId>scifio</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-threads</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

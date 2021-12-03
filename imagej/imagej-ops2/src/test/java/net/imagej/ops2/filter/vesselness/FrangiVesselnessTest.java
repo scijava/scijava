@@ -29,71 +29,36 @@
 
 package net.imagej.ops2.filter.vesselness;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import io.scif.img.IO;
 
 import java.net.URL;
 
+import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.Context;
-import org.scijava.cache.CacheService;
-import org.scijava.ops.engine.OpService;
-import org.scijava.plugin.PluginService;
-import org.scijava.thread.ThreadService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the Frangi Vesselness operation.
  * 
  * @author Gabe Selzer
  */
-public class FrangiVesselnessTest{
-	
-	protected static Context context;
-	protected static OpService ops;
-
-	@BeforeAll public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
-			ThreadService.class, PluginService.class);
-		ops = context.service(OpService.class);
-	}
-
-	@AfterAll
-	public static void tearDown() {
-		context.dispose();
-		context = null;
-		ops = null;
-	}
-	
-	private Img<FloatType> openFloatImg(final String resourcePath) {
-		final URL url = getClass().getResource(resourcePath);
-		return IO.openFloat(url.getPath()).getImg();
-	}
+public class FrangiVesselnessTest extends AbstractOpTest {
 
 	@Test
-	public void regressionTest() throws Exception {
-		// compute input image
-		final int w = 256, h = 256;
-		final double[] inputValues = new double[256 * 256];
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				inputValues[w * y + x] = Math.tan(0.3 * x) + Math.tan(0.1 * y);
-			}
-		}
-		final Img<DoubleType> inputImg = ArrayImgs.doubles(inputValues, w, h);
+	public void regressionTest() {
 
-		// load expected output image
-		final Img<FloatType> expectedOutput = openFloatImg("Result.tif");
+		// load in input image and expected output image.
+		Img<DoubleType> inputImg = regressionInput();
+		Img<FloatType> expectedOutput = regressionOutput();
 
 		// create output image
 		final long[] dims = new long[inputImg.numDimensions()];
@@ -121,6 +86,31 @@ public class FrangiVesselnessTest{
 			expectedRA.setPosition(cursor);
 			assertEquals(expectedRA.get().get(), actualRA.get().get(), 0);
 		}
+	}
+
+	private Img<DoubleType> regressionInput() {
+		// create img
+		Img<DoubleType> inputImg = ArrayImgs.doubles(8, 8);
+		setVesselPosValues(inputImg, new DoubleType(1.), new DoubleType(0.));
+		return inputImg;
+	}
+
+	private Img<FloatType> regressionOutput() {
+		Img<FloatType> expectedOutput = ArrayImgs.floats(8, 8);
+		setVesselPosValues(expectedOutput, new FloatType(0.0031375182f), new FloatType(0));
+		return expectedOutput;
+	}
+
+	private <T extends RealType<T>> void setVesselPosValues(Img<T> img, T vesselVal, T otherVal) {
+		Cursor<T> inputCursor = img.localizingCursor();
+		// for each position, set to one if column at vesselPos, 0 otherwise
+		int vesselPos = 4;
+		while(inputCursor.hasNext()) {
+			inputCursor.fwd();
+			double[] pos = inputCursor.positionAsDoubleArray();
+			inputCursor.get().set(pos[1] == vesselPos ? vesselVal : otherVal);
+		}
+
 	}
 
 }

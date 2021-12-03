@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.coloc;
 
-import io.scif.SCIFIOService;
 import io.scif.img.ImgIOException;
 import io.scif.img.ImgOpener;
 import io.scif.services.FormatService;
@@ -56,13 +55,24 @@ import net.imglib2.view.Views;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.scijava.Context;
-import org.scijava.app.StatusService;
-import org.scijava.cache.CacheService;
+import org.scijava.discovery.Discoverer;
 import org.scijava.io.location.FileLocation;
+import org.scijava.log2.Logger;
+import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.OpService;
-import org.scijava.plugin.PluginService;
-import org.scijava.thread.ThreadService;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.engine.DefaultOpEnvironment;
+import org.scijava.ops.engine.DefaultOpHistory;
+import org.scijava.threads.DefaultThreadManager;
+import org.scijava.threads.ThreadManager;
+import org.scijava.types.DefaultTypeReifier;
+import org.scijava.types.TypeReifier;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.ServiceLoader;
 
 /** Abstract base class for coloc op unit tests. */
 public abstract class ColocalisationTest {
@@ -76,15 +86,13 @@ public abstract class ColocalisationTest {
 	protected Img<UnsignedByteType> positiveCorrelationImageCh1;
 	protected Img<UnsignedByteType> positiveCorrelationImageCh2;
 
-	protected static Context context;
-	protected static OpService ops;
+	protected static OpEnvironment ops;
+	protected static ThreadManager threads;
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
-			ThreadService.class, StatusService.class, SCIFIOService.class,
-			FormatService.class, PluginService.class);
-		ops = context.service(OpService.class);
+		ops = new DefaultOpEnvironment();
+		threads = new DefaultThreadManager();
 	}
 	
 	protected static OpBuilder op(String name) {
@@ -120,7 +128,7 @@ public abstract class ColocalisationTest {
 //		InputStream is = TestImageAccessor.class.getResourceAsStream(relPath);
 //		BufferedInputStream bis = new BufferedInputStream(is);
 
-		final ImgOpener opener = new ImgOpener(context);
+		final ImgOpener opener = new ImgOpener();
 
 		// HACK: Read data from file system for now.
 		// Until this is fixed, the test will not pass when run from a JAR file.

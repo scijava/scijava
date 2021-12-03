@@ -39,7 +39,6 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -55,7 +54,7 @@ public class HistogramOfOrientedGradients2DTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 
 		Img<FloatType> hogTestImg = openFloatImg("HoG2DResult.tif");
 		Img<FloatType> hogInputImg = openFloatImg("HoG2DInput.png");

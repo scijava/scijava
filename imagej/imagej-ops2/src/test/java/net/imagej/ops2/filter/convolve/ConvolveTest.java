@@ -55,7 +55,6 @@
 //import net.imglib2.view.Views;
 //
 //import org.junit.jupiter.api.Test;
-//import org.scijava.thread.ThreadService;
 //
 ///**
 // * Tests involving convolvers.
@@ -149,19 +148,19 @@
 //
 //		// Op used to pad the input
 //		final BinaryFunctionOp<RandomAccessibleInterval<FloatType>, Dimensions, RandomAccessibleInterval<FloatType>> padOp =
-//			(BinaryFunctionOp) OpBuilder.matchFunction(ops.env(), PadInputFFTMethods.class,
+//			(BinaryFunctionOp) OpBuilder.matchFunction(ops, PadInputFFTMethods.class,
 //				RandomAccessibleInterval.class, RandomAccessibleInterval.class,
 //				Dimensions.class, true);
 //
 //		// Op used to pad the kernel
 //		final BinaryFunctionOp<RandomAccessibleInterval<FloatType>, Dimensions, RandomAccessibleInterval<FloatType>> padKernelOp =
-//			(BinaryFunctionOp) OpBuilder.matchFunction(ops.env(), PadShiftKernelFFTMethods.class,
+//			(BinaryFunctionOp) OpBuilder.matchFunction(ops, PadShiftKernelFFTMethods.class,
 //				RandomAccessibleInterval.class, RandomAccessibleInterval.class,
 //				Dimensions.class, true);
 //
 //		// Op used to create the complex FFTs
 //		UnaryFunctionOp<Dimensions, RandomAccessibleInterval<ComplexFloatType>> createOp =
-//			(UnaryFunctionOp) OpBuilder.matchFunction(ops.env(), CreateOutputFFTMethods.class,
+//			(UnaryFunctionOp) OpBuilder.matchFunction(ops, CreateOutputFFTMethods.class,
 //				RandomAccessibleInterval.class, Dimensions.class,
 //				new ComplexFloatType(), true);
 //

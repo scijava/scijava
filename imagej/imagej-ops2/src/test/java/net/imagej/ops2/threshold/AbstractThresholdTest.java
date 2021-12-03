@@ -84,7 +84,7 @@ public class AbstractThresholdTest extends AbstractOpTest {
 			}
 		}
 		
-		createFunc = OpBuilder.matchFunction(ops.env(), "image.histogram", new Nil<Img<UnsignedShortType>>() {}, new Nil<Integer>() {}, new Nil<Histogram1d<UnsignedShortType>>() {});
+		createFunc = OpBuilder.matchFunction(ops, "image.histogram", new Nil<Img<UnsignedShortType>>() {}, new Nil<Integer>() {}, new Nil<Histogram1d<UnsignedShortType>>() {});
 	}
 
 	protected Histogram1d<UnsignedShortType> histogram() {

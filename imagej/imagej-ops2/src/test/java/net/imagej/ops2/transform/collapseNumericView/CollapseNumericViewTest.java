@@ -80,7 +80,7 @@ public class CollapseNumericViewTest extends AbstractOpTest {
 		assertEquals(il2.numDimensions(), opr.numDimensions());
 
 		BiFunction<RandomAccessible<NativeARGBDoubleType>, Integer, CompositeView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFuncRA = OpBuilder
-				.matchFunction(ops.env(), "transform.collapseNumericView",
+				.matchFunction(ops, "transform.collapseNumericView",
 						new Nil<RandomAccessible<NativeARGBDoubleType>>() {
 				}, new Nil<Integer>() {
 				},

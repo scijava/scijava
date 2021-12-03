@@ -1,16 +1,16 @@
 
 package org.scijava.ops.engine.log;
 
-import static org.scijava.log.LogLevel.DEBUG;
-import static org.scijava.log.LogLevel.ERROR;
-import static org.scijava.log.LogLevel.INFO;
-import static org.scijava.log.LogLevel.TRACE;
-import static org.scijava.log.LogLevel.WARN;
+import static org.scijava.log2.LogLevel.DEBUG;
+import static org.scijava.log2.LogLevel.ERROR;
+import static org.scijava.log2.LogLevel.INFO;
+import static org.scijava.log2.LogLevel.TRACE;
+import static org.scijava.log2.LogLevel.WARN;
 
-import org.scijava.log.LogLevel;
-import org.scijava.log.LogListener;
-import org.scijava.log.LogMessage;
-import org.scijava.log.LogSource;
+import org.scijava.log2.LogLevel;
+import org.scijava.log2.LogListener;
+import org.scijava.log2.LogMessage;
+import org.scijava.log2.LogSource;
 
 /**
  * TODO: Dummy class. To be replaced or properly implemented later. See:

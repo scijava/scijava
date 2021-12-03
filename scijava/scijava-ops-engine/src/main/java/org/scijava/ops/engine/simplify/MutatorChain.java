@@ -7,7 +7,7 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.types.Nil;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 public class MutatorChain implements Comparable<MutatorChain>{
 
@@ -64,7 +64,8 @@ public class MutatorChain implements Comparable<MutatorChain>{
 
 	private synchronized void generateSimpleChain() {
 		if (simpleChain != null) return;
-		Type specialType = Types.parameterize(Function.class, input, simple);
+		Type[] typeArgs = { input, simple };
+		Type specialType = Types.parameterize(Function.class, typeArgs);
 		simpleChain = env.chainFromInfo(simplifier, Nil.of(specialType));
 	}
 
@@ -75,7 +76,8 @@ public class MutatorChain implements Comparable<MutatorChain>{
 
 	private synchronized void generateFocusChain() {
 		if (focusChain != null) return;
-		Type specialType = Types.parameterize(Function.class, unfocused, output);
+		Type[] typeArgs = { unfocused, output };
+		Type specialType = Types.parameterize(Function.class, typeArgs);
 		focusChain = env.chainFromInfo(focuser, Nil.of(specialType));
 	}
 

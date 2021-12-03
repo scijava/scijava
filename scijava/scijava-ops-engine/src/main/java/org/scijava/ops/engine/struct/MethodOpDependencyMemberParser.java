@@ -16,8 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberParser;
-import org.scijava.struct.Struct;
-import org.scijava.struct.ValidityException;
+import org.scijava.common3.validity.ValidityException;
 
 /**
  * Looks for {@link OpDependency} annotations on

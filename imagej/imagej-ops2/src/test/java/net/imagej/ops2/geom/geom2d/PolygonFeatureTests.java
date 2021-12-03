@@ -296,29 +296,6 @@ public class PolygonFeatureTests extends AbstractFeatureTest {
 				EPSILON, "geom.verticesCount");
 	}
 
-	// TODO: Fails due to isAssignable being unable to confirm that a LabelRegion
-	// is a RandomAccessibleInterval<BoolType>
-	@Test
-	public void labelRegionToPolygonConverter() {
-		// ground truth computed with matlab
-		final LabelRegionToPolygonConverter c = new LabelRegionToPolygonConverter();
-		c.setContext(ops.context());
-		final Polygon2D test = c.convert(ROI, Polygon2D.class);
-		final List<? extends RealLocalizable> expected = GeomUtils.vertices(
-			contour);
-		final List<? extends RealLocalizable> received = GeomUtils.vertices(test);
-		assertEquals(expected.size(), received.size(),
-			"Number of polygon points differs.");
-		for (int i = 0; i < contour.numVertices(); i++) {
-			assertEquals(expected.get(i).getDoublePosition(0), received.get(i)
-				.getDoublePosition(0), EPSILON, "Polygon point " + i +
-					" differs in x-coordinate.");
-			assertEquals(expected.get(i).getDoublePosition(1), received.get(i)
-				.getDoublePosition(1), EPSILON, "Polygon point " + i +
-					" differs in y-coordinate.");
-		}
-	}
-
 	@Test
 	public void centroid() {
 		// ground truth computed with matlab

@@ -95,7 +95,7 @@ public class DefaultDetectJunctionsTest extends AbstractOpTest {
 		lines.add(new DefaultWritablePolyline(list4));
 
 		List<RealPoint> results;
-		results = ops.env().op("segment.detectJunctions").input(lines, threshold)
+		results = ops.op("segment.detectJunctions").input(lines, threshold)
 			.outType(new Nil<List<RealPoint>>()
 			{}).apply();
 

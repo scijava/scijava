@@ -45,7 +45,6 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -62,7 +61,7 @@ public class WatershedBinaryTest extends AbstractOpTest {
 		Img<FloatType> watershedTestImg = openFloatImg(WatershedTest.class, "watershed_test_image.png");
 
 		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 
 		// threshold it
 		RandomAccessibleInterval<BitType> thresholdedImg = ops.op("create.img")

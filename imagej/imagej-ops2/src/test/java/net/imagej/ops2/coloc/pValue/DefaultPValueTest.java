@@ -42,7 +42,6 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -82,7 +81,7 @@ public class DefaultPValueTest extends ColocalisationTest {
 	 * @param result
 	 */
 	private void assertColoc(double expectedPValue, double expectedColocValue, double[] expectedColocValuesArray, double... result) {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		Img<FloatType> ch1 = ArrayImgs.floats(1); // NB: Images will be ignored.
 		Img<FloatType> ch2 = ch1;
 
@@ -98,7 +97,7 @@ public class DefaultPValueTest extends ColocalisationTest {
 				});
 
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> wrapped =
-			ops.env().bakeLambdaType(op,
+			ops.bakeLambdaType(op,
 				new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>()
 				{}.getType());
 

@@ -63,7 +63,7 @@ public class ExtendPeriodicViewTest extends AbstractOpTest {
 	@Test
 	public void extendPeriodicTest() {
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessible<DoubleType>> extendFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.extendPeriodicView", raiNil,
+				.matchFunction(ops, "transform.extendPeriodicView", raiNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

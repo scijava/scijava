@@ -3,7 +3,6 @@ package org.scijava.ops.api.features;
 
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.plugin.Plugin;
 
 /**
  * A plugin type employing a particular strategy to generate an
@@ -45,9 +44,8 @@ public interface MatchingRoutine extends
 	}
 
 	/**
-	 * Since {@link MatchingRoutine}s should be {@link Plugin}s, we should be able
-	 * to scrape the priority off of the plugin annotation.
-	 * 
+	 * The priority of this {@link MatchingRoutine}
+	 *
 	 * @return the priority
 	 */
 	double priority();

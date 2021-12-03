@@ -64,7 +64,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-struct</archive>
+			<archive>https://forum.image.sc/tag/scijava</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -94,7 +94,8 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>

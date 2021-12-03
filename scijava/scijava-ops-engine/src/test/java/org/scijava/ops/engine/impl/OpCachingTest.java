@@ -47,6 +47,8 @@ import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
+import org.scijava.ops.engine.DefaultOpEnvironment;
+import org.scijava.ops.engine.DefaultOpHistory;
 import org.scijava.ops.spi.*;
 import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.Nil;

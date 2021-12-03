@@ -3,7 +3,7 @@ package org.scijava.ops.engine;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.Priority;
+import org.scijava.priority.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;

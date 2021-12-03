@@ -56,7 +56,7 @@ public class CreateKernelLogTest extends AbstractOpTest {
 		final double sigma = 5.0;
 		final double[] sigmas = { sigma, sigma };
 
-		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Double, Integer, RandomAccessibleInterval<DoubleType>> func1 = OpBuilder.matchFunction(ops,
 				"create.kernelLog", new Nil<Double>() {
 				}, new Nil<Integer>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
@@ -65,7 +65,7 @@ public class CreateKernelLogTest extends AbstractOpTest {
 		final RandomAccessibleInterval<DoubleType> logKernel = //
 				func1.apply(sigma, sigmas.length);
 
-		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = OpBuilder.matchFunction(ops.env(), "create.kernelLog",
+		Function<double[], RandomAccessibleInterval<DoubleType>> func2 = OpBuilder.matchFunction(ops, "create.kernelLog",
 				new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

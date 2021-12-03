@@ -34,6 +34,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
+import org.scijava.util.MersenneTwisterFast;
+
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
@@ -49,11 +53,6 @@ import net.imglib2.roi.labeling.LabelingType;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.FloatType;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
-import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
 
 /**
  * Test for the seeded watershed op.
@@ -75,7 +74,7 @@ public class WatershedSeededTest extends AbstractOpTest {
 		}
 
 		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 
 		// create 3 seeds
 		Img<BitType> bits = ArrayImgs.bits(dims);

@@ -41,7 +41,6 @@ import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.service.AbstractService;
 
 /**
  * Default implementation of {@link OpMatcher}. Used for finding Ops which match
@@ -49,7 +48,7 @@ import org.scijava.service.AbstractService;
  *
  * @author David Kolb
  */
-public class DefaultOpMatcher extends AbstractService implements OpMatcher {
+public class DefaultOpMatcher implements OpMatcher {
 
 	private final List<MatchingRoutine> matchers;
 

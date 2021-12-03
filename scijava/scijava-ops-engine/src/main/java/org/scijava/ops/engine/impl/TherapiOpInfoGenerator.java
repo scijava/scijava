@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-import org.scijava.Context;
 import org.scijava.discovery.therapi.TaggedElement;
 import org.scijava.discovery.therapi.TherapiDiscoveryUtils;
+import org.scijava.meta.Versions;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.engine.OpUtils;
@@ -20,7 +20,6 @@ import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.parse2.Parser;
-import org.scijava.util.VersionUtils;
 
 public class TherapiOpInfoGenerator implements OpInfoGenerator {
 
@@ -85,23 +84,23 @@ public class TherapiOpInfoGenerator implements OpInfoGenerator {
 	}
 
 	private static OpInfo opClassGenerator(Class<?> cls, double priority, String[] names) {
-		String version = VersionUtils.getVersion(cls);
+		String version = Versions.getVersion(cls);
 		return new OpClassInfo(cls, version, new DefaultHints(), priority, names);
 	}
 
 	private static OpInfo opMethodGenerator(Method m, String opType, double priority, String[] names) {
 		Class<?> cls;
 		try {
-			cls = Context.getClassLoader().loadClass(opType);
+			cls = TherapiOpInfoGenerator.class.getClassLoader().loadClass(opType);
 		} catch (ClassNotFoundException exc) {
 			return null;
 		}
-		String version = VersionUtils.getVersion(m.getDeclaringClass());
+		String version = Versions.getVersion(m.getDeclaringClass());
 		return new OpMethodInfo(m, cls, version, new DefaultHints(), priority, names);
 	}
 
 	private static OpInfo opFieldGenerator(Field f, double priority, String[] names) {
-		String version = VersionUtils.getVersion(f.getDeclaringClass());
+		String version = Versions.getVersion(f.getDeclaringClass());
 		Object instance;
 		try {
 			instance = f.getDeclaringClass().getDeclaredConstructor().newInstance();

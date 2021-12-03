@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.scijava.ValidityProblem;
-import org.scijava.types.Types;
+import org.scijava.common3.Classes;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
 
 public final class Structs {
 
@@ -92,8 +93,8 @@ public final class Structs {
 	public static boolean isImmutable(final Class<?> type) {
 		// NB: All eight primitive types, as well as the boxed primitive
 		// wrapper classes, as well as strings, are immutable objects.
-		return Types.isNumber(type) || Types.isText(type) || //
-			Types.isBoolean(type);
+		return Classes.isNumber(type) || Classes.isText(type) || //
+			Classes.isBoolean(type);
 	}
 
 }

@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.scijava.Priority;
-import org.scijava.ValidityProblem;
+import org.scijava.common3.compare.CompareUtils;
+import org.scijava.common3.validity.ValidityProblem;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
@@ -17,18 +19,15 @@ import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
+import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
-import org.scijava.util.MiscUtils;
-import org.scijava.util.VersionUtils;
-
 
 public class SimplifiedOpInfo implements OpInfo {
 
@@ -211,7 +210,7 @@ public class SimplifiedOpInfo implements OpInfo {
 	/**
 	 * Creates a <b>simplified</b> version of the original Op, whose parameter
 	 * types are dictated by the {@code focusedType}s of this info's
-	 * {@link Simplifier}s. The resulting Op will use {@code simplifier}s to
+	 * Simplifiers. The resulting Op will use {@code simplifier}s to
 	 * simplify the inputs, and then will use this info's {@code focuser}s to
 	 * focus the simplified inputs into types suitable for the original Op.
 	 * 
@@ -245,7 +244,7 @@ public class SimplifiedOpInfo implements OpInfo {
 		if (this.priority() > that.priority()) return -1;
 
 		// compare implementation names 
-		int implNameDiff = MiscUtils.compare(this.implementationName(), that.implementationName());
+		int implNameDiff = CompareUtils.compare(this.implementationName(), that.implementationName());
 		if(implNameDiff != 0) return implNameDiff; 
 
 		// compare structs if the OpInfos are "sibling" SimplifiedOpInfos
@@ -265,7 +264,7 @@ public class SimplifiedOpInfo implements OpInfo {
 
 	@Override
 	public String version() {
-		return VersionUtils.getVersion(this.getClass());
+		return Versions.getVersion(this.getClass());
 	}
 
 	/**

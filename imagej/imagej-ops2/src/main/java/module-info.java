@@ -1,7 +1,7 @@
 module net.imagej.ops2 {
 	exports net.imagej.ops2;
 	
-	// -- Open plugins to scijava-common
+	// -- Open plugins to scijava-ops, therapi
 	opens net.imagej.ops2.coloc to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc.icq to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc.kendallTau to therapi.runtime.javadoc, org.scijava.ops.engine;
@@ -52,7 +52,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.image.ascii to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.cooccurrenceMatrix to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.distancetransform to therapi.runtime.javadoc, org.scijava.ops.engine;
-	opens net.imagej.ops2.image.equation to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.fill to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.histogram to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.integral to therapi.runtime.javadoc, org.scijava.ops.engine;
@@ -148,4 +147,5 @@ module net.imagej.ops2 {
 			net.imagej.ops2.types.OutOfBoundsRandomValueFactoryTypeExtractor,
 			net.imagej.ops2.types.RAITypeExtractor;
 
+	uses org.scijava.ops.api.features.MatchingRoutine;
 }

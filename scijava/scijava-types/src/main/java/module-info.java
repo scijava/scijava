@@ -7,8 +7,8 @@ module org.scijava.types {
 	opens org.scijava.types to org.scijava;
 
 	requires transitive com.google.common;
+	requires transitive org.scijava.common3;
 	requires transitive org.scijava.discovery;
-	requires org.scijava.discovery.plugin;
 	requires transitive org.scijava.log2;
 
 	uses org.scijava.types.TypeExtractor;

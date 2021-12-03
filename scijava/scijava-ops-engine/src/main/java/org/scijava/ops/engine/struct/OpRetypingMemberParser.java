@@ -11,7 +11,7 @@ import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
-import org.scijava.struct.ValidityException;
+import org.scijava.common3.validity.ValidityException;
 
 public class OpRetypingMemberParser implements
 	MemberParser<RetypingRequest, Member<?>>

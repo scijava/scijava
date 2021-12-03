@@ -70,7 +70,7 @@ public class TranslateViewTest extends AbstractOpTest {
 	@Test
 	public void defaultTranslateTest() {
 
-		BiFunction<Img<DoubleType>, long[], MixedTransformView<DoubleType>> translateFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Img<DoubleType>, long[], MixedTransformView<DoubleType>> translateFunc = OpBuilder.matchFunction(ops,
 				"transform.translateView", new Nil<Img<DoubleType>>() {
 		}, new Nil<long[]>() {
 		}, new Nil<MixedTransformView<DoubleType>>() {
@@ -92,7 +92,7 @@ public class TranslateViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalTranslate() {
 
-		BiFunction<Img<DoubleType>, long[], IntervalView<DoubleType>> translateFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Img<DoubleType>, long[], IntervalView<DoubleType>> translateFunc = OpBuilder.matchFunction(ops,
 				"transform.translateView", new Nil<Img<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<IntervalView<DoubleType>>() {

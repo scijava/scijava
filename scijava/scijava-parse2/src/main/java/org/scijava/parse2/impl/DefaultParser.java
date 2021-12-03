@@ -34,12 +34,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.scijava.collections.ObjectArray;
 import org.scijava.parse2.Item;
 import org.scijava.parse2.Items;
 import org.scijava.parse2.Parser;
 import org.scijava.parsington.Variable;
 import org.scijava.parsington.eval.DefaultEvaluator;
-import org.scijava.util.ObjectArray;
 
 /**
  * Default service for parsing strings.

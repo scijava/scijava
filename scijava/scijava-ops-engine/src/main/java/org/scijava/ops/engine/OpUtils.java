@@ -37,8 +37,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.ValidityProblem;
 import org.scijava.ops.api.OpCandidate;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
@@ -47,7 +48,6 @@ import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.struct.ValidityException;
 import org.scijava.struct.ValueAccessible;
 import org.scijava.types.Types;
 
@@ -117,9 +117,48 @@ public final class OpUtils {
 				.collect(Collectors.toList());
 	}
 
-	public static void checkHasSingleOutput(Struct struct) throws ValidityException {
-		final long numOutputs = struct.members().stream() //
-			.filter(m -> m.isOutput()).count();
+	public static List<Member<?>> inputs(OpCandidate candidate) {
+		return inputs(candidate.struct());
+	}
+
+	public static List<Member<?>> inputs(final Struct struct) {
+		return struct.members().stream() //
+				.filter(member -> member.isInput()) //
+				.collect(Collectors.toList());
+	}
+	
+	public static Type[] inputTypes(OpCandidate candidate) {
+		return getTypes(inputs(candidate.struct()));
+	}
+
+	public static Type[] inputTypes(Struct struct) {
+		return getTypes(inputs(struct));
+	}
+
+	public static Member<?> output(OpCandidate candidate) {
+		return candidate.opInfo().output();
+	}
+
+	public static Type outputType(OpCandidate candidate) {
+		return output(candidate).getType();
+	}
+
+	public static List<Member<?>> outputs(final Struct struct) {
+		return struct.members().stream() //
+				.filter(member -> member.isOutput()) //
+				.collect(Collectors.toList());
+	}
+
+	public static List<MemberInstance<?>> outputs(StructInstance<?> op) {
+		return op.members().stream() //
+				.filter(memberInstance -> memberInstance.member().isOutput()) //
+				.collect(Collectors.toList());
+	}
+
+	public static void checkHasSingleOutput(Struct struct) throws
+			ValidityException
+	{
+		final int numOutputs = OpUtils.outputs(struct).size();
 		if (numOutputs != 1) {
 			final String error = numOutputs == 0 //
 				? "No output parameters specified. Must specify exactly one." //

@@ -41,7 +41,6 @@ import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -98,7 +97,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 
 	@Test
 	public void testPValue() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -107,7 +106,7 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
 			mean, spread, sigma, 0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			OpBuilder.matchFunction(ops.env(), "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.66, value.getPValue(), 0.0);

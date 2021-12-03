@@ -43,8 +43,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.scijava.Priority;
-import org.scijava.ValidityProblem;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
+import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
@@ -55,12 +56,12 @@ import org.scijava.ops.engine.util.Adapt;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpMethod;
+import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
 
@@ -73,7 +74,6 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
-import org.scijava.util.VersionUtils;
 
 /**
  * @author Marcel Wiedenmann
@@ -91,12 +91,12 @@ public class OpMethodInfo implements OpInfo {
 	private final Hints hints;
 
 	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final String... names) {
-		this(method, opType, VersionUtils.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
+		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
 	}
 
 	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final double priority,
 			final String... names) {
-		this(method, opType, VersionUtils.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
+		this(method, opType, Versions.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
 	}
 
 	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final String... names) {

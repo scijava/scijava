@@ -56,17 +56,17 @@ public class EvalTest extends AbstractOpTest {
 		vars.put("c", 5);
 
 		// TODO: can we use ops.run here?
-		Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object> evaluator = ops.env().op("eval",
+		Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object> evaluator = ops.op("eval",
 				new Nil<Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>>() {},
 				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpEnvironment>() {} },
 				new Nil<Object>() {});
 
-		assertEquals(7., evaluator.apply("a+c", vars, ops.env()));
-		assertEquals(3., evaluator.apply("c-a", vars, ops.env()));
-		assertEquals(6., evaluator.apply("a*b", vars, ops.env()));
-		assertEquals(2.5, evaluator.apply("c/a", vars, ops.env()));
-		assertEquals(1., evaluator.apply("c%a", vars, ops.env()));
-		assertEquals(17., evaluator.apply("a+b*c", vars, ops.env()));
+		assertEquals(7., evaluator.apply("a+c", vars, ops));
+		assertEquals(3., evaluator.apply("c-a", vars, ops));
+		assertEquals(6., evaluator.apply("a*b", vars, ops));
+		assertEquals(2.5, evaluator.apply("c/a", vars, ops));
+		assertEquals(1., evaluator.apply("c%a", vars, ops));
+		assertEquals(17., evaluator.apply("a+b*c", vars, ops));
 	}
 
 }

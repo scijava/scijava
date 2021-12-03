@@ -59,7 +59,7 @@ public class DropSingletonDimensionsViewTest extends AbstractOpTest {
 	public void dropSingletonDimensionsTest() {
 
 		Function<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>> dropFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.dropSingletonDimensionsView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.matchFunction(ops, "transform.dropSingletonDimensionsView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
 

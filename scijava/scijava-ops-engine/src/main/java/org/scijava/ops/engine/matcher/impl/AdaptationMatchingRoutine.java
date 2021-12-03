@@ -29,6 +29,7 @@ import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
+import org.scijava.priority.Priority;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
@@ -225,12 +226,9 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW
-	 */
 	@Override
 	public double priority() {
-		return -100.;
+		return Priority.LOW;
 	}
 
 }

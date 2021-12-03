@@ -24,6 +24,7 @@ import org.scijava.ops.api.features.MatchingResult;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
 import org.scijava.types.Types.TypeVarInfo;
@@ -326,12 +327,9 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		return true;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.HIGH
-	 */
 	@Override
 	public double priority() {
-		return 100.;
+		return Priority.HIGH;
 	}
 
 }

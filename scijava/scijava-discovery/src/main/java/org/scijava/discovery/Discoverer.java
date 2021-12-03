@@ -57,6 +57,10 @@ public interface Discoverer {
 		};
 	}
 
+	static Iterable<Discoverer> allProvided() {
+		return ServiceLoader.load(Discoverer.class);
+	}
+
 	/**
 	 * Gets all {@link Discoverer}s made available through {@link ServiceLoader}, as
 	 * well as a {@link Discoverer} that is itself backed by {@link ServiceLoader}.

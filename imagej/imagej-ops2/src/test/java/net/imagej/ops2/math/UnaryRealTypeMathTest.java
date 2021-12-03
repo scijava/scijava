@@ -526,7 +526,7 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 		final DoubleType out = new DoubleType();
 		final long seed = 0xcafebabe12345678L;
 		final Random rng = new Random(seed);
-		final Computers.Arity2<DoubleType, Random, DoubleType> op = OpBuilder.matchComputer(ops.env(), "math.randomGaussian",
+		final Computers.Arity2<DoubleType, Random, DoubleType> op = OpBuilder.matchComputer(ops, "math.randomGaussian",
 				new Nil<DoubleType>() {}, new Nil<Random>() {}, new Nil<DoubleType>() {});
 		op.compute(in, rng, out);
 		assertEquals(o, out.get(), 0);
@@ -547,7 +547,7 @@ public class UnaryRealTypeMathTest extends AbstractOpTest {
 		final DoubleType out = new DoubleType();
 		final long seed = 0xcafebabe12345678L;
 		final Random rng = new Random(seed);
-		final Computers.Arity2<DoubleType, Random, DoubleType> op = OpBuilder.matchComputer(ops.env(), "math.randomUniform",
+		final Computers.Arity2<DoubleType, Random, DoubleType> op = OpBuilder.matchComputer(ops, "math.randomUniform",
 				new Nil<DoubleType>() {}, new Nil<Random>() {}, new Nil<DoubleType>() {});
 		op.compute(in, rng, out);
 		assertEquals(o, out.get(), 0);

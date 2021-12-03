@@ -76,7 +76,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-ops-api</archive>
+			<archive>https://forum.image.sc/tag/scijava</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -106,10 +106,6 @@
 	</properties>
 	<dependencies>
 		<!-- SciJava dependencies -->
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-function</artifactId>

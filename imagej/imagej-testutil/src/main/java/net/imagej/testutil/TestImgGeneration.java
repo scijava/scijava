@@ -34,7 +34,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
 
-import org.scijava.util.MersenneTwisterFast;
+import org.scijava.common3.MersenneTwisterFast;
 
 public class TestImgGeneration {
 

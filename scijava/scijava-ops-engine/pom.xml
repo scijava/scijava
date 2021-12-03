@@ -76,7 +76,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-ops-engine</archive>
+			<archive>https://forum.image.sc/tag/scijava</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -111,13 +111,32 @@
 				<groupId>com.alexecollins.maven.plugin</groupId>
 				<artifactId>script-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 	<dependencies>
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
+			<artifactId>scijava-collections</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-meta</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -136,17 +155,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery-plugin</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery-therapi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-log2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-priority</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -65,7 +65,7 @@ public class InterpolateViewTest extends AbstractOpTest {
 	public void defaultInterpolateTest() {
 
 		BiFunction<RandomAccessible<DoubleType>, FloorInterpolatorFactory<DoubleType>, RealRandomAccessible<DoubleType>> interpolateFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.interpolateView", new Nil<RandomAccessible<DoubleType>>() {
+				.matchFunction(ops, "transform.interpolateView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<FloorInterpolatorFactory<DoubleType>>() {
 				}, new Nil<RealRandomAccessible<DoubleType>>() {
 				});

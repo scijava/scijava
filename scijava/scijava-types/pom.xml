@@ -64,7 +64,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/tags/scijava-types</archive>
+			<archive>https://forum.image.sc/tag/scijava</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -94,12 +94,12 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery</artifactId>
+			<artifactId>scijava-common3</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-discovery-plugin</artifactId>
+			<artifactId>scijava-discovery</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -123,6 +123,12 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-testutil</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -48,7 +48,6 @@ import net.imglib2.util.Pair;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -66,7 +65,7 @@ public class FFTTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testFFT3DOp() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		final int min = expensiveTestsEnabled ? 115 : 9;
 		final int max = expensiveTestsEnabled ? 120 : 11;
 		for (int i = min; i < max; i++) {
@@ -95,7 +94,7 @@ public class FFTTest extends AbstractOpTest {
 	@Test
 	public void testFastFFT3DOp() {
 
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 
 		final int min = expensiveTestsEnabled ? 120 : 9;
 		final int max = expensiveTestsEnabled ? 130 : 11;

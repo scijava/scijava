@@ -108,9 +108,9 @@
 		<!-- SciJava dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
+			<artifactId>scijava-common3</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-
 		<!-- ImgLib2 dependencies -->
 		<dependency>
 			<groupId>net.imglib2</groupId>

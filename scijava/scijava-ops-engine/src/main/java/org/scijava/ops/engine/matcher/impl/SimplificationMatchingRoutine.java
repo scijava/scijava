@@ -4,6 +4,7 @@ package org.scijava.ops.engine.matcher.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.scijava.priority.Priority;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
@@ -43,19 +44,17 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 					env);
 				simpleInfos.add(gen.generateSuitableInfo(env, ref, hints));
 			}
-			catch (Throwable e) {
-				continue;
+			catch (Throwable t) {
+				// NB: If we cannot generate the simplification,
+				// move on to the next info
 			}
 		}
 		return simpleInfos;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW - 1
-	 */
 	@Override
 	public double priority() {
-		return -100. - 1;
+		return Priority.LOW - 1;
 	}
 
 }

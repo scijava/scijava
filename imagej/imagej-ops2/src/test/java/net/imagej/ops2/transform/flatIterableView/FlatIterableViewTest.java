@@ -64,7 +64,7 @@ public class FlatIterableViewTest extends AbstractOpTest {
 	@Test
 	public void defaultFlatIterableTest() {
 		Function<RandomAccessibleInterval<DoubleType>, IterableInterval<DoubleType>> flatIterableFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.flatIterableView", raiNil, iiNil);
+				.matchFunction(ops, "transform.flatIterableView", raiNil, iiNil);
 
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });
 

@@ -5,9 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.scijava.ValidityProblem;
 import org.scijava.struct.MemberParser;
@@ -25,23 +23,16 @@ public class FieldParameterMemberParser implements
 		if (source == null) return null;
 		Class<?> c = source.getDeclaringClass();
 		// obtain a parameterData (preferably one that scrapes the javadoc)
-		ParameterData paramData;
-		try {
-			paramData = new JavadocParameterData(source);
-		}
-		catch (IllegalArgumentException e) {
-			paramData = new SynthesizedParameterData();
-		}
+		ParameterData paramData = new LazilyGeneratedFieldParameterData(source);
 		source.setAccessible(true);
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
-		final Set<String> names = new HashSet<>();
 		final Type fieldType = Types.fieldType(source, c);
 
 		org.scijava.struct.Structs.checkModifiers(source.toString() + ": ", problems, source
 			.getModifiers(), false, Modifier.FINAL);
-		FunctionalParameters.parseFunctionalParameters(items, names, problems, fieldType,
+		FunctionalParameters.parseFunctionalParameters(items, problems, fieldType,
 			paramData);
 		// Fail if there were any problems.
 		if (!problems.isEmpty()) {

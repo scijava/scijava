@@ -7,7 +7,7 @@ import org.scijava.types.Nil;
  * A subtype of {@link LossReporter} that reports 0 loss. This makes declaring
  * lossless {@code LossReporter}s cleaner.
  * 
- * @author G
+ * @author Gabriel Selzer
  * @param <T>
  * @param <R>
  */

@@ -18,7 +18,7 @@ import org.scijava.types.Types;
 public class FunctionalParameters {
 
 	public static void parseFunctionalParameters(
-		final ArrayList<SynthesizedParameterMember<?>> items, final Set<String> names,
+		final ArrayList<SynthesizedParameterMember<?>> items,
 		final ArrayList<ValidityProblem> problems, Type type, ParameterData data)
 	{
 		// Search for the functional method of 'type' and map its signature to
@@ -37,14 +37,12 @@ public class FunctionalParameters {
 		List<SynthesizedParameterMember<?>> fmtMembers = data.synthesizeMembers(fmts);
 	
 		for (SynthesizedParameterMember<?> m : fmtMembers) {
-			String key = m.getKey();
 			final Type itemType = m.getType();
 	
-			final boolean valid = org.scijava.struct.Structs.checkValidity(m, key, Types.raw(itemType), false,
-				names, problems);
+			final boolean valid = org.scijava.struct.Structs.checkValidity(m, () -> m.getKey(), Types.raw(itemType), false,
+				problems);
 			if (!valid) continue;
 			items.add(m);
-			names.add(m.getKey());
 		}
 	}
 

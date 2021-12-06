@@ -3,6 +3,8 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
 
+import org.scijava.function.Producer;
+import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 
@@ -14,49 +16,69 @@ import org.scijava.struct.Member;
  */
 public class SynthesizedParameterMember<T> implements Member<T> {
 
-	/** Type, or a subtype thereof, which houses the field. */
-	private final Type itemType;
+	/** {@link FunctionalMethodType} describing this Member */
+	private final FunctionalMethodType fmt;
+
+	/** Producer able to generate the parameter name */
+	private final Producer<String> nameGenerator;
 
 	/** Name of the parameter */
-	private final String name;
+	private String name = null;
 
-	/** Description of the parameter */
-	private final String description;
+	/** Producer able to generate the parameter descriptor */
+	private final Producer<String> descriptionGenerator;
 
-	/** IO status of the parameter */
-	private final ItemIO itemIO;
+	private String description = null;
 
-	public SynthesizedParameterMember(final Type itemType,
-		final String name, final String description, final ItemIO ioType)
+	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> synthesizerGenerator)
 	{
-		this.itemType = itemType;
-		this.name = name;
-		this.description = description;
-		this.itemIO = ioType;
+		this.fmt = fmt;
+		this.nameGenerator = () -> synthesizerGenerator.create().name(fmt);
+		this.descriptionGenerator = () -> synthesizerGenerator.create().description(fmt);
+	}
+
+	public SynthesizedParameterMember(final Type itemType, final String name,
+		final String description, final ItemIO ioType)
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	// -- Member methods --
 
 	@Override
 	public String getKey() {
+		if (name == null) generateName();
 		return name;
+	}
+
+	private synchronized void generateName() {
+		if (name != null) return;
+		String temp = nameGenerator.create();
+		name = temp;
 	}
 
 	@Override
 	public String getDescription() {
+		if (description == null) generateDescription();
 		return description;
+	}
+
+	private synchronized void generateDescription() {
+		if (description != null) return;
+		String temp = descriptionGenerator.create();
+		description = temp;
 	}
 
 	@Override
 	public Type getType() {
-		return itemType;
+		return fmt.type();
 	}
 
 	@Override
 	public ItemIO getIOType() {
-		return itemIO;
+		return fmt.itemIO();
 	}
-	
+
 	@Override
 	public boolean isStruct() {
 		return false;

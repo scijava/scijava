@@ -103,8 +103,10 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<!--  <enforcer.skip>true</enforcer.skip>-->
-		<scijava-ops-engine.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</scijava-ops-engine.allowedDuplicateClasses>
+		<scijava-ops-engine.allowedDuplicateClasses>
+			${scijava.allowedDuplicateClasses},
+			com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*
+		</scijava-ops-engine.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-ops-engine.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<build>
@@ -168,7 +170,7 @@
 		<dependency>
 			<groupId>com.github.therapi</groupId>
 			<artifactId>therapi-runtime-javadoc</artifactId>
-			<version>0.12.0</version>
+			<version>${therapi-runtime-javadoc.version}</version>
 		</dependency>
 
 		<!-- Test scope dependencies -->

@@ -31,9 +31,11 @@
 package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.struct.Member;
 
 /**
  * @author Marcel Wiedenmann
@@ -42,14 +44,37 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	OpDependencyMember<T>
 {
 
-	private String key;
-	private Type type;
+	private final Supplier<String> keyGenerator;
+	private final Supplier<String> descriptionGenerator;
+	private final Type type;
 	private final OpDependency annotation;
 
 	public AnnotatedOpDependencyMember(String key, Type type,
 		final OpDependency annotation)
 	{
-		this.key = key;
+		this(key, "", type, annotation);
+	}
+
+	public AnnotatedOpDependencyMember(String key, String description, Type type,
+		final OpDependency annotation)
+	{
+		this(() -> key, () -> description, type, annotation);
+	}
+
+	/**
+	 * This constructor is ideal for situations where obtaining the key or
+	 * description are computationally expensive.
+	 * 
+	 * @param keyGenerator the {@link Supplier} able to generate the key
+	 * @param descriptionGenerator the {@link Supplier} able to generate the description
+	 * @param type the {@link Type} of this {@link Member}
+	 * @param annotation
+	 */
+	public AnnotatedOpDependencyMember(Supplier<String> keyGenerator, Supplier<String> descriptionGenerator, Type type,
+		final OpDependency annotation)
+	{
+		this.keyGenerator = keyGenerator;
+		this.descriptionGenerator = descriptionGenerator;
 		this.type = type;
 		this.annotation = annotation;
 	}
@@ -74,13 +99,12 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 
 	@Override
 	public String getKey() {
-		return key;
+		return keyGenerator.get();
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO: consider more implementation here
-		return "";
+		return descriptionGenerator.get();
 	}
 
 	@Override

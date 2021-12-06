@@ -22,7 +22,7 @@ import org.scijava.util.Types;
  * Compiles a list of all needed Mutators (either Simplifiers or Focuser
  * {@link Function}s) for a given {@link SimplifiedOpCandidate}.
  * 
- * @author G
+ * @author Gabriel Selzer
  */
 public class SimplificationMetadata {
 

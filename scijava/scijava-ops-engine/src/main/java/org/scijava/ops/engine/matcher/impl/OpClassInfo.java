@@ -101,7 +101,7 @@ public class OpClassInfo implements OpInfo {
 	public Type opType() {
 		// TODO: Check whether this is correct!
 		return Types.parameterizeRaw(opClass);
-		//return opClass;
+//		return opClass;
 	}
 
 	@Override

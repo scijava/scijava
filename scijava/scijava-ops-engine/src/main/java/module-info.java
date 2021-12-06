@@ -18,7 +18,6 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.conversionLoss to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.log to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.matcher to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.conversionLoss.impl to therapi.runtime.javadoc, org.scijava;
@@ -30,6 +29,8 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.stats to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
+
+	requires java.desktop;
 
 	requires org.scijava;
 	requires org.scijava.discovery;

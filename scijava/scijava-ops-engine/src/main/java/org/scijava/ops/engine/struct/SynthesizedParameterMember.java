@@ -37,12 +37,6 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 		this.descriptionGenerator = () -> synthesizerGenerator.create().description(fmt);
 	}
 
-	public SynthesizedParameterMember(final Type itemType, final String name,
-		final String description, final ItemIO ioType)
-	{
-		throw new UnsupportedOperationException();
-	}
-
 	// -- Member methods --
 
 	@Override

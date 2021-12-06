@@ -144,6 +144,8 @@ public interface OpEnvironment {
 
 	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType);
 
+	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType, final Hints hints);
+
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
 	}

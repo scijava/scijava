@@ -10,7 +10,7 @@ import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.engine.matcher.OpMatcher;
+import org.scijava.ops.api.features.OpMatcher;
 
 public class ManualOpCandidate extends OpCandidate {
 
@@ -18,9 +18,6 @@ public class ManualOpCandidate extends OpCandidate {
 		OpMatcher matcher)
 	{
 		super(env, ref, info, generateTypeVarAssigns(ref, info));
-		if (!matcher.typesMatch(this)) throw new IllegalArgumentException(
-			"OpInfo " + info +
-				" cannot satisfy the requirements contained within OpRef " + ref);
 	}
 
 	private static Map<TypeVariable<?>, Type> generateTypeVarAssigns(OpRef ref,

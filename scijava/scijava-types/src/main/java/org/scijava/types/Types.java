@@ -1929,13 +1929,9 @@ public final class Types {
 
 			@Override
 			public int hashCode() {
-				int result = 71 << 4;
-				result |= raw.hashCode();
-				result <<= 4;
-				result |= Objects.hashCode(useOwner);
-				result <<= 8;
-				result |= Arrays.hashCode(typeArguments);
-				return result;
+				// NB Aligned with Guava's ParameterizedTypeImpl's hashCode function.
+				return (useOwner == null ? 0 : useOwner.hashCode()) ^ Arrays.asList(
+					typeArguments).hashCode() ^ raw.hashCode();
 			}
 		}
 
@@ -2599,6 +2595,12 @@ public final class Types {
 						"missing assignment type for type variable " + type);
 				}
 				return replacementType;
+			}
+			if (type instanceof GenericArrayType && typeVarAssigns != null) {
+				final GenericArrayType genArrType = (GenericArrayType) type;
+				final Type replacementType = Types.substituteTypeVariables(genArrType
+					.getGenericComponentType(), typeVarAssigns);
+				return new GenericArrayTypeImpl(replacementType);
 			}
 			return type;
 		}

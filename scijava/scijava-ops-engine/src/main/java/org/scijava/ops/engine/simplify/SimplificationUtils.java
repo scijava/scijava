@@ -8,7 +8,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,6 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
-import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 import org.scijava.types.inference.InterfaceInference;
@@ -159,39 +157,6 @@ public class SimplificationUtils {
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
 		GenericAssignability.inferTypeVariables(new Type[] {mutatorInferFrom}, new Type[] {inferFrom}, map);
 		return Types.mapVarToTypes(unresolvedType, map);
-	}
-
-	/**
-	 * Finds required mutators (i.e. simplifier or focuser).
-	 * 
-	 * @param env - the {@link OpEnvironment} to query for the needed Op
-	 * @param mutatorInfos - the {@link OpInfo}s for which Ops are needed
-	 * @param originalInputs - the concrete input {@link Type} of the Op.
-	 * @param mutatedInputs - the concrete output {@link Type} of the Op.
-	 * @return a set of {@code Op}s, instantiated from {@code mutatorInfo}s, that
-	 *         satisfy the prescribed input/output types.
-	 */
-	public static List<Function<?, ?>> findArgMutators(OpEnvironment env, List<OpInfo> mutatorInfos,
-		Type[] originalInputs, Type[] mutatedInputs)
-	{
-		if (mutatorInfos.size() != originalInputs.length)
-			throw new IllegalStateException(
-				"Mismatch between number of argument mutators and arguments in ref:\n");
-		
-		List<Function<?, ?>> mutators = new ArrayList<>();
-		for(int i = 0; i < mutatorInfos.size(); i++) {
-			Function<?, ?> mutator = findArgMutator(env, mutatorInfos.get(i), originalInputs[i], mutatedInputs[i]);
-			mutators.add(mutator);
-		}
-		return mutators;
-	}
-	
-	public static Function<?, ?> findArgMutator(OpEnvironment env, OpInfo mutatorInfo, Type originalInput, Type mutatedInput){
-			Type opType = Types.parameterize(Function.class, new Type[] {originalInput, mutatedInput});
-			Function<?, ?> mutator = (Function<?, ?>) env.op(mutatorInfo,
-				Nil.of(opType), new Nil<?>[] { Nil.of(originalInput) }, Nil.of(
-					mutatedInput));
-			return mutator;
 	}
 
 	/**

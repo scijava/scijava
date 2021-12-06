@@ -21,6 +21,8 @@ import org.scijava.struct.ValidityException;
  */
 public interface OpInfo extends Comparable<OpInfo> {
 
+	static final String IMPL_DECLARATION = "|Vanilla:";
+
 	/** name(s) of the op. */
 	List<String> names();
 
@@ -79,4 +81,10 @@ public interface OpInfo extends Comparable<OpInfo> {
 		if (this.priority() > that.priority()) return -1;
 		return this.implementationName().compareTo(that.implementationName());
 	}
+
+	/** The version of the Op */
+	String version();
+
+	/** A unique identifier for an Op */
+	String id();
 }

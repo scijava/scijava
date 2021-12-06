@@ -41,10 +41,10 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
 import org.scijava.plugin.Plugin;
@@ -64,17 +64,19 @@ public class OpClassInfo implements OpInfo {
 
 	private final List<String> names;
 	private final Class<?> opClass;
+	private final String version;
 	private Struct struct;
 	private ValidityException validityException;
 	private final double priority;
 	private final Hints hints;
 
-	public OpClassInfo(final Class<?> opClass, final String... names) {
-		this(opClass, priorityFromAnnotation(opClass), names);
+	public OpClassInfo(final Class<?> opClass, final String version, final String... names) {
+		this(opClass, version, priorityFromAnnotation(opClass), names);
 	}
 
-	public OpClassInfo(final Class<?> opClass, final double priority, final String... names) {
+	public OpClassInfo(final Class<?> opClass, final String version, final double priority, final String... names) {
 		this.opClass = opClass;
+		this.version = version;
 		this.names = Arrays.asList(names);
 		List<ValidityProblem> problems = new ArrayList<>();
 		try {
@@ -197,6 +199,30 @@ public class OpClassInfo implements OpInfo {
 		return OpUtils.opString(this);
 	}
 
+	@Override
+	public String version() {
+		return version;
+	}
+
+	/**
+	 * For a {@link Class}, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The fully qualified name of the class
+	 * <li>The version of the class containing the field, with a preceding
+	 * {@code @}
+	 * </ol>
+	 * <p>
+	 * For example, for a field class {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
+	}
+
 	// -- Helper methods
 
 	private static double priorityFromAnnotation(Class<?> annotationBearer) {
@@ -205,8 +231,8 @@ public class OpClassInfo implements OpInfo {
 	}
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
 	}
 
 }

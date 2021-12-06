@@ -1,8 +1,6 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import com.google.common.collect.Streams;
-
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -11,20 +9,21 @@ import java.util.function.Function;
 
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.struct.FunctionalMethodType;
-import org.scijava.struct.ItemIO;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
+import org.scijava.types.Nil;
 
 /**
  * {@link OpInfo} for ops that have been adapted to some other Op type.
@@ -34,20 +33,24 @@ import org.scijava.struct.ValidityException;
  */
 public class OpAdaptationInfo implements OpInfo {
 
-	private OpInfo srcInfo;
-	private Type type;
-	private Function<Object, Object> adaptor;
+	protected static final String IMPL_DECLARATION = "|Adaptation:";
+	protected static final String ADAPTOR = "|Adaptor:";
+	protected static final String ORIGINAL = "|OriginalOp:";
+
+	private final OpInfo srcInfo;
+	private final InfoChain adaptorChain;
+	private final Type type;
 	private final Hints hints;
 
 	private Struct struct;
 	private ValidityException validityException;
 
 	public OpAdaptationInfo(OpInfo srcInfo, Type type,
-		Function<Object, Object> adaptor)
+		InfoChain adaptorChain)
 	{
 		this.srcInfo = srcInfo;
+		this.adaptorChain = adaptorChain;
 		this.type = type;
-		this.adaptor = adaptor;
 
 		// NOTE: since the source Op has already been shown to be valid, there is
 		// not
@@ -66,11 +69,7 @@ public class OpAdaptationInfo implements OpInfo {
 		if (!problems.isEmpty()) validityException = new ValidityException(
 			problems);
 
-		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints()
-			.values());
-		hintList.remove(Adaptation.ALLOWED);
-		hintList.add(Adaptation.FORBIDDEN);
-		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
+		this.hints = srcInfo.declaredHints().plus(Adaptation.FORBIDDEN);
 	}
 
 	@Override
@@ -106,7 +105,7 @@ public class OpAdaptationInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName() + " adapted to " + type.toString();
+		return srcInfo.implementationName() + ADAPTOR + adaptorChain.signature();
 	}
 
 	/**
@@ -114,8 +113,13 @@ public class OpAdaptationInfo implements OpInfo {
 	 */
 	@Override
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
+		@SuppressWarnings("unchecked")
+		OpInstance<Function<Object, Object>> adaptorInstance =
+			(OpInstance<Function<Object, Object>>) adaptorChain.op(
+				new Nil<Function<Object, Object>>()
+				{}.getType());
 		final Object op = srcInfo.createOpInstance(dependencies).object();
-		final Object adaptedOp = adaptor.apply(op);
+		final Object adaptedOp = adaptorInstance.op().apply(op);
 		return struct().createInstance(adaptedOp);
 	}
 
@@ -132,6 +136,39 @@ public class OpAdaptationInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return srcInfo.getAnnotationBearer();
+	}
+
+	/**
+	 * Returns the version of the adapted Op.
+	 * <p>
+	 * Note that {@code adaptorInfo.version()} is used as the Op returned is an
+	 * inner class of the adaptor Op, and will thus have the same version as the
+	 * adaptor.
+	 */
+	@Override
+	public String version() {
+		return adaptorChain.info().version();
+	}
+
+	/**
+	 * For an adapted Op, we define the implementation name as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}
+	 * <li>The adaptation delimiter
+	 * <li>The implementation name of the <b>original info</b>
+	 * </ol>
+	 * <p>
+	 * For example, for a source {@code com.example.foo.Bar@1.0.0} with adaptor
+	 * {@code com.example.foo.BazAdaptor@1.0.0} with delimiter
+	 * {@code |Adaptation|}, you might have
+	 * <p>
+	 * {@code com.example.foo.BazAdaptor@1.0.0{}|Adaptation|com.example.foo.Bar@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return IMPL_DECLARATION + ADAPTOR + adaptorChain.signature() + ORIGINAL + srcInfo.id();
 	}
 
 }

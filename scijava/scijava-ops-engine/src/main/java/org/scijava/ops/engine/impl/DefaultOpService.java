@@ -39,8 +39,8 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.log.LogService;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.engine.OpHistoryService;
 import org.scijava.ops.engine.OpService;
 import org.scijava.ops.serviceloader.ServiceLoaderDiscoverer;
 import org.scijava.plugin.Plugin;
@@ -61,6 +61,8 @@ import org.scijava.types.TypeService;
 public class DefaultOpService extends AbstractService implements OpService {
 
 	private OpEnvironment env;
+
+	private OpHistory history;
 
 	/**
 	 * Begins declaration of an op matching request for locating an op with a
@@ -84,13 +86,19 @@ public class DefaultOpService extends AbstractService implements OpService {
 		return env;
 	}
 
+	@Override
+	public OpHistory history() {
+		if (history == null) initHistory();
+		return history;
+	}
+
 	// -- Helper methods - lazy initialization --
 
 	private synchronized void initEnv() {
 		if (env != null) return;
 		LogService log = context().getService(LogService.class);
 		TypeService types = context().getService(TypeService.class);
-		OpHistoryService history = context().getService(OpHistoryService.class);
+		OpHistory history = history();
 		Discoverer d1 = new PluginBasedDiscoverer(context());
 		Discoverer d2 = new ServiceLoaderDiscoverer();
 		List<OpInfoGenerator> infoGenerators = Arrays.asList(
@@ -99,6 +107,12 @@ public class DefaultOpService extends AbstractService implements OpService {
 			new OpCollectionInfoGenerator(d1, d2));
 		env = new DefaultOpEnvironment(types, log, history, infoGenerators, d1, d2);
 	}
+
+	private synchronized void initHistory() {
+		if (history != null) return;
+		history = new DefaultOpHistory();
+	}
+	
 }
 
 class PluginBasedDiscoverer implements Discoverer {

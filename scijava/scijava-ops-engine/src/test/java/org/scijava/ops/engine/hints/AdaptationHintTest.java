@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpHints;
-import org.scijava.ops.engine.BaseOpHints.Adaptation;
+import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.hint.DefaultHints;
-import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.function.Computers;
@@ -26,21 +26,19 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 	public void testAdaptation() {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
-		hints.setHint(Adaptation.ALLOWED);
-		ops.env().setHints(hints);
+		ops.env().setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Computers.Arity1<Double[], Double[]> adaptable = ops.op(
 			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
 			.computer();
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints.setHint(Adaptation.FORBIDDEN);
-		ops.env().setHints(hints);
+		hints = hints.plus(Adaptation.FORBIDDEN);
+		ops.env().setDefaultHints(hints);
 		try {
 			ops.op("test.adaptation.hints").inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
-		} catch( IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		} catch( OpMatchingException e) {
 		}
 	}
 
@@ -48,19 +46,17 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 	public void testAdaptationPerCallHints() {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
-		hints.setHint(Adaptation.ALLOWED);
 		@SuppressWarnings("unused")
 		Computers.Arity1<Double[], Double[]> adaptable = ops.op(
 			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
 			.computer(hints);
 		// make sure we cannot find the Op when adaptation is not allowed
-		hints.setHint(Adaptation.FORBIDDEN);
+		hints = hints.plus(Adaptation.FORBIDDEN);
 		try {
 			ops.op("test.adaptation.hints").inType(Double[].class).outType(
 				Double[].class).computer(hints);
 			throw new IllegalStateException("This op call should not match!");
-		} catch( IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		} catch( OpMatchingException e) {
 		}
 	}
 
@@ -72,8 +68,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 	public void testNonAdaptableOp() {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
-		hints.setHint(Adaptation.ALLOWED);
-		ops.env().setHints(hints);
+		ops.env().setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
 			"test.adaptation.unadaptable").inType(Double[].class).outType(Double[].class)
@@ -84,8 +79,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 			ops.op("test.adaptation.unadaptable").inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
-		} catch( IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		} catch( OpMatchingException e) {
 		}
 	}
 
@@ -93,7 +87,6 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 	public void testNonAdaptableOpPerCallHints() {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
-		hints.setHint(Adaptation.ALLOWED);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
 			"test.adaptation.unadaptable").inType(Double[].class).outType(Double[].class)
@@ -104,8 +97,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment {
 			ops.op("test.adaptation.unadaptable").inType(Double[].class).outType(
 				Double[].class).computer(hints);
 			throw new IllegalStateException("This op call should not match!");
-		} catch( IllegalArgumentException e) {
-			assertTrue(e.getCause() instanceof OpMatchingException);
+		} catch( OpMatchingException e) {
 		}
 	}
 

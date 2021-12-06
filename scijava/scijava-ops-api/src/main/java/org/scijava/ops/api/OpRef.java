@@ -49,31 +49,31 @@ public interface OpRef {
 	// -- OpRef methods --
 
 	/** Gets the name of the op. */
-	public String getName();
+	String getName();
 
 	/** Gets the type which the op must match. */
-	public Type getType();
+	Type getType();
 
 	/**
 	 * Gets the op's output type constraint, or null for no constraint.
 	 */
-	public Type getOutType();
+	Type getOutType();
 
 	/** Gets the op's arguments. */
-	public Type[] getArgs();
+	Type[] getArgs();
 
 	/**
 	 * Gets a label identifying the op's scope (i.e., its name and/or types).
 	 */
-	public String getLabel();
+	String getLabel();
 
-	public boolean typesMatch(final Type opType);
+	boolean typesMatch(final Type opType);
 
 	/**
 	 * Determines whether the specified type satisfies the op's required types
 	 * using {@link Types#isApplicable(Type[], Type[])}.
 	 */
-	public boolean typesMatch(final Type opType, final Map<TypeVariable<?>, Type> typeVarAssigns);
+	boolean typesMatch(final Type opType, final Map<TypeVariable<?>, Type> typeVarAssigns);
 
 	// -- Object methods --
 
@@ -118,7 +118,7 @@ public interface OpRef {
 
 	// -- Utility methods --
 
-	public static Type[] filterNulls(final Type... types) {
+	static Type[] filterNulls(final Type... types) {
 		Type[] ts = Arrays.stream(types).filter(t -> t != null).toArray(Type[]::new);
 		return ts == null ? null : ts;
 	}

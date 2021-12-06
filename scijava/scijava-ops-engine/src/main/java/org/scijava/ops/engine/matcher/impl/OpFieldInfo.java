@@ -40,10 +40,10 @@ import java.util.List;
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.spi.OpField;
 import org.scijava.struct.Struct;
@@ -60,6 +60,7 @@ public class OpFieldInfo implements OpInfo {
 
 	private final Object instance;
 	private final Field field;
+	private final String version;
 	private final List<String> names;
 
 	private Struct struct;
@@ -67,8 +68,9 @@ public class OpFieldInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpFieldInfo(final Object instance, final Field field, final String... names) {
+	public OpFieldInfo(final Object instance, final Field field, final String version, final String... names) {
 		this.instance = instance;
+		this.version = version;
 		this.field = field;
 		this.names = Arrays.asList(names);
 
@@ -139,7 +141,11 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		return field.getDeclaringClass().getName() + "." + field.getName();
+		// Get generic string without modifiers and return type
+		String fullyQualifiedField = field.toGenericString();
+		String packageName = field.getDeclaringClass().getPackageName();
+		int classNameIndex = fullyQualifiedField.indexOf(packageName);
+		return fullyQualifiedField.substring(classNameIndex);
 	}
 
 	@Override
@@ -177,6 +183,32 @@ public class OpFieldInfo implements OpInfo {
 		return field;
 	}
 
+	@Override
+	public String version() {
+		return version;
+	}
+
+	/**
+	 * For an {@link OpField}, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The fully qualified name of the class containing the field
+	 * <li>The method field
+	 * <li>The version of the class containing the field, with a preceding
+	 * {@code @}
+	 * </ol>
+	 * <p>
+	 * For example, for a field {@code baz} in class
+	 * {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar.baz@1.0.0}
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
+	}
+
 	// -- Object methods --
 
 	@Override
@@ -200,8 +232,8 @@ public class OpFieldInfo implements OpInfo {
 	// -- Helper methods -- //
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
 	}
 
 }

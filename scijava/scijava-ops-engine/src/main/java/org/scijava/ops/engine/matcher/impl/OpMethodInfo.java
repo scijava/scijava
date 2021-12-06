@@ -47,10 +47,10 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.engine.hint.ImmutableHints;
+import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Adapt;
@@ -81,6 +81,7 @@ import javassist.NotFoundException;
 public class OpMethodInfo implements OpInfo {
 
 	private final Method method;
+	private final String version;
 	private final List<String> names;
 	private Type opType;
 	private Struct struct;
@@ -88,7 +89,7 @@ public class OpMethodInfo implements OpInfo {
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method, final String... names) {
+	public OpMethodInfo(final Method method, final String version, final String... names) {
 		final List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public methods
 		if (!Modifier.isPublic(method.getModifiers())) {
@@ -103,6 +104,7 @@ public class OpMethodInfo implements OpInfo {
 				" must be static."));
 		}
 		this.method = method;
+		this.version = version;
 		this.names = Arrays.asList(names);
 		this.hints = formHints(method.getAnnotation(OpHints.class));
 		// determine the functional interface this Op should implement
@@ -150,10 +152,11 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String implementationName() {
-		// TODO: This includes all of the modifiers etc. of the method which are not
-		// necessary to identify it. Use something custom? We need to be careful
-		// because of method overloading, so just using the name is not sufficient.
-		return method.toGenericString();
+		// Get generic string without modifiers and return type
+		String fullyQualifiedMethod = method.toGenericString();
+		String packageName = method.getDeclaringClass().getPackageName();
+		int classNameIndex = fullyQualifiedMethod.indexOf(packageName);
+		return fullyQualifiedMethod.substring(classNameIndex);
 	}
 
 	@Override
@@ -206,32 +209,39 @@ public class OpMethodInfo implements OpInfo {
 
 		// Create wrapper class
 		String className = formClassName(m);
-		CtClass cc = pool.makeClass(className);
-
-		// Add implemented interface
-		CtClass jasOpType = pool.get(Types.raw(opType).getName());
-		cc.addInterface(jasOpType);
-
-		// Add OpDependency fields
 		List<OpDependencyMember<?>> depMembers = OpUtils.dependencies(struct());
-		for (int i = 0; i < depMembers.size(); i++) {
-			CtField f = createDependencyField(pool, cc, depMembers.get(i), i);
-			cc.addField(f);
+		Class<?> c;
+		try {
+			CtClass cc = pool.makeClass(className);
+
+			// Add implemented interface
+			CtClass jasOpType = pool.get(Types.raw(opType).getName());
+			cc.addInterface(jasOpType);
+
+			// Add OpDependency fields
+			for (int i = 0; i < depMembers.size(); i++) {
+				CtField f = createDependencyField(pool, cc, depMembers.get(i), i);
+				cc.addField(f);
+			}
+
+			// Add constructor
+			CtConstructor constructor = CtNewConstructor.make(createConstructor(
+				depMembers, cc), cc);
+			cc.addConstructor(constructor);
+
+			// add functional interface method
+			CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(m),
+				cc);
+			cc.addMethod(functionalMethod);
+			c = cc.toClass(MethodHandles.lookup());
 		}
-
-		// Add constructor
-		CtConstructor constructor = CtNewConstructor.make(createConstructor(
-			depMembers, cc), cc);
-		cc.addConstructor(constructor);
-
-		// add functional interface method
-		CtMethod functionalMethod = CtNewMethod.make(createFunctionalMethod(m), cc);
-		cc.addMethod(functionalMethod);
+		catch (Exception e) {
+			c = this.getClass().getClassLoader().loadClass(className);
+		}
 
 		// Return Op instance
 		Class<?>[] depClasses = depMembers.stream().map(dep -> dep.getRawType())
 			.toArray(Class[]::new);
-		Class<?> c = cc.toClass(MethodHandles.lookup());
 		return c.getDeclaredConstructor(depClasses).newInstance(dependencies
 			.toArray());
 	}
@@ -326,14 +336,17 @@ public class OpMethodInfo implements OpInfo {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns a "simple" name for {@code Class<?> c}.
+	 * <p>
+	 * Since this should be a java identifier, it cannot have illegal characters;
+	 * thus we replace illegal characters with an underscore.
+	 * 
+	 * @param c the {@link Class} for which we need an identifier
+	 * @return a {@link String} that can identify the class
+	 */
 	private String getParameterName(Class<?> c) {
-		if (!c.isArray()) return c.getSimpleName();
-		// TODO: if c is an array, simpleName will include brackets (which is
-		// illegal in a class name). To differentiate Object[] from Object, we map
-		// Object[] to ObjectArr. This is not truly extensible, since someone
-		// could create an ObjectArr class which might conflict, so it would be
-		// best to find a better solution.
-		return  c.getComponentType().getSimpleName() + "Arr";
+		return c.getSimpleName().replaceAll("[^a-zA-Z0-9_]", "_");
 	}
 
 	@Override
@@ -344,6 +357,32 @@ public class OpMethodInfo implements OpInfo {
 	@Override
 	public ValidityException getValidityException() {
 		return validityException;
+	}
+
+	@Override
+	public String version() {
+		return version;
+	}
+
+	/**
+	 * For an {@link OpMethod}, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The fully qualified name of the class containing the method
+	 * <li>The method name
+	 * <li>The method parameters
+	 * <li>The version of the class containing the method, with a preceding
+	 * {@code @}
+	 * </ol>
+	 * <p>
+	 * For example, for a method {@code baz(Double in1, String in2)} in class
+	 * {@code com.example.foo.Bar}, you might have
+	 * <p>
+	 * {@code com.example.foo.Bar.baz(Double in1,String in2)@1.0.0}
+	 */
+	@Override
+	public String id() {
+		return OpInfo.IMPL_DECLARATION + implementationName() + "@" + version();
 	}
 
 	// -- Object methods --
@@ -373,8 +412,8 @@ public class OpMethodInfo implements OpInfo {
 	// -- Helper methods -- //
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new ImmutableHints(new String[0]);
-		return new ImmutableHints(h.hints());
+		if (h == null) return new DefaultHints();
+		return new DefaultHints(h.hints());
 	}
 
 }

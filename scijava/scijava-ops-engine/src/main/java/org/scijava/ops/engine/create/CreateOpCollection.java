@@ -22,6 +22,12 @@ public class CreateOpCollection {
 
 	@OpField(names = "create, src, source", priority = Priority.LOW, params = "array, arrayLike")
 	public static final Function<Double[], Double[]> createDoubleArrayInputAware = from -> new Double[from.length];
+
+	@OpField(names = "create, src, source", priority = Priority.LOW, params = "array, arrayLike")
+	public static final Function<int[], int[]> createintArrayInputAware = from -> new int[from.length];
+
+	@OpField(names = "create, src, source", priority = Priority.LOW, params = "array, arrayLike")
+	public static final Function<Integer[], Integer[]> createIntegerArrayInputAware = from -> new Integer[from.length];
 	
 	@OpField(names = "create, src, source", priority = Priority.LOW, params = "array1, array2, arrayLike")
 	public static final BiFunction<double[], double[], double[]> createDoubleArrayBiInputAware = (i1, i2) -> {

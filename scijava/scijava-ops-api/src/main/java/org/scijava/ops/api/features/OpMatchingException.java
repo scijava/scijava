@@ -1,4 +1,4 @@
-package org.scijava.ops.engine.matcher;
+package org.scijava.ops.api.features;
 
 import org.scijava.ops.api.OpRef;
 

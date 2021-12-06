@@ -16,8 +16,9 @@ public class MatchingConditions {
 		this.hints = hints;
 	}
 
-	public static MatchingConditions from(OpRef r, Hints h, boolean generateMatchingID) {
-		return new MatchingConditions(r, h.getCopy(generateMatchingID));
+	public static MatchingConditions from(OpRef r, Hints h) {
+		Hints hintCopy = h.copy();
+		return new MatchingConditions(r, hintCopy);
 	}
 
 	public OpRef ref() {

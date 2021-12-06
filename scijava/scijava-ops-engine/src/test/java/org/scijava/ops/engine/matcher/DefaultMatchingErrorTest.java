@@ -6,6 +6,8 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.function.Computers;
+import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
@@ -33,10 +35,10 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 				.function();
 			Assert.fail();
 		}
-		catch (IllegalArgumentException e) {
+		catch (OpMatchingException e) {
 			Assert.assertTrue(e.getMessage().startsWith(
-				"org.scijava.ops.engine.matcher.OpMatchingException: " +
-					"Multiple 'test.duplicateOp/java.util.function.Function<java.lang.Double, java.lang.Double>' " +
+				"Multiple 'test.duplicateOp/" +
+					"java.util.function.Function<java.lang.Double, java.lang.Double>' " +
 					"ops of priority 0.0:"));
 		}
 	}
@@ -51,10 +53,8 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 				.apply();
 			Assert.fail("Expected DependencyMatchingException");
 		}
-		catch (IllegalArgumentException e) {
-			Throwable cause = e.getCause();
-			Assert.assertTrue(cause instanceof DependencyMatchingException);
-			String message = cause.getMessage();
+		catch (DependencyMatchingException e) {
+			String message = e.getMessage();
 			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 		}
 	}
@@ -69,10 +69,8 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 			ops.op("test.outsideOp").input(1.).outType(Double.class).apply();
 			Assert.fail("Expected DependencyMatchingException");
 		}
-		catch (IllegalArgumentException e) {
-			Throwable cause = e.getCause();
-			Assert.assertTrue(cause instanceof DependencyMatchingException);
-			String message = cause.getMessage();
+		catch (DependencyMatchingException e) {
+			String message = e.getMessage();
 			Assert.assertTrue(message.contains("Name: \"test.missingDependencyOp\""));
 			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 		}
@@ -89,11 +87,9 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 			ops.op("test.adaptMissingDep").input(d).outType(Double[].class).apply();
 			Assert.fail("Expected DependencyMatchingException");
 		}
-		catch (IllegalArgumentException e) {
-			Throwable cause = e.getCause();
-			Assert.assertTrue(cause instanceof DependencyMatchingException);
-			String message = cause.getMessage();
-			Assert.assertTrue(message.contains("adapted"));
+		catch (DependencyMatchingException e) {
+			String message = e.getMessage();
+			Assert.assertTrue(message.contains("Adaptor:"));
 			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 
 		}

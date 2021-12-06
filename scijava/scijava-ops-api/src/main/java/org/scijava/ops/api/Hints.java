@@ -1,54 +1,53 @@
 
 package org.scijava.ops.api;
 
-import java.util.Deque;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Arrays;
 
 /**
- * A basic interface for storing and accessing Hints. The general structure for a Hint is
+ * A basic interface for storing and accessing Hints. The general structure for
+ * a Hint is
  * <p>
  * {@code hint = hintType.option}
  * <p>
  * <ul>
- * <li>{@code hintType} designates the category of hint (for example, {@code Simplification} in {@link Simplification})
- * <li>{@code option} designates the preference within the category (for example, {@code ALLOWED} in {@link Simplification})
- * <li>{@code hint} is the combination of {@code hintType} and {@code option} with a delimiting {@code .}
+ * <li>{@code hintType} designates the category of hint
+ * <li>{@code option} designates the preference within the category
+ * <li>{@code hint} is the combination of {@code hintType} and {@code option}
+ * with a delimiting {@code .}
  * </ul>
- *
+ * <p>
+ * For example, you might want a {@code hintType} to designate preferences on
+ * lossiness (as a tradeoff for performance). That {@code hintType} might be
+ * {@code Lossiness}, with {@option}s {@code LOSSLESS} and {@LOSSY}.
+ * 
  * @author Gabriel Selzer
  */
 public interface Hints {
 
-	public String setHint(String hint);
+	Hints plus(String... hints);
 
-	public String getHint(String hintType);
+	Hints minus(String... hints);
 
-	public boolean containsHint(String hint);
+	boolean contains(String hint);
 
-	public boolean containsHintType(String hintType);
+	default boolean containsNone(String... hints) {
+		return !containsAny(hints);
+	}
 
-	public Map<String, String> getHints();
+	default boolean containsAny(String... hints) {
+		return Arrays.stream(hints).anyMatch(hint -> contains(hint));
+	}
+
+	default boolean containsAll(String... hints) {
+		return Arrays.stream(hints).allMatch(hint -> contains(hint));
+	}
 
 	/**
 	 * Generates a new {@link Hints} with identical hints.
 	 * 
-	 * @param generateID designates whether the returned {@link Hints} should
-	 *          designate a new execution chain ID, or whether it should maintain
-	 *          the ID of this {@link Hints}
 	 * @return a new {@link Hints} Object with the same hints as this
 	 *         {@link Hints}
 	 */
-	public Hints getCopy(boolean generateID);
-
-	/**
-	 * Returns the {@link UUID} uniquely identifying the an associated
-	 * {@link Deque} in the {@link OpHistory}
-	 * 
-	 * @return the {@link UUID} corresponding to the execution chain (logged
-	 *         within the {@link OpHistory}) in which these {@link Hints} are
-	 *         being used.
-	 */
-	public UUID executionChainID();
+	Hints copy();
 
 }

@@ -11,8 +11,8 @@ module org.scijava.ops.engine {
 	exports org.scijava.ops.engine.util;
 
 	opens org.scijava.ops.engine.util.internal to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.monitor to therapi.runtime.javadoc;
+	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.create to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.matcher.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.conversionLoss to therapi.runtime.javadoc;
@@ -37,7 +37,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.discovery;
 	requires org.scijava.function;
 	requires org.scijava.struct;
-	requires org.scijava.ops.api;
+	requires transitive org.scijava.ops.api;
 	requires org.scijava.ops.serviceloader;
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;

@@ -50,7 +50,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.OpMatcher;
@@ -137,7 +137,7 @@ public class DefaultOpMatcher extends AbstractService implements OpMatcher {
 
 	private Iterable<OpInfo> getInfos(OpEnvironment env, OpRef ref, Hints hints) {
 		Iterable<OpInfo> suitableInfos = env.infos(ref.getName(), hints);
-		if(hints.containsHint(Simplification.IN_PROGRESS)) {
+		if(hints.contains(Simplification.IN_PROGRESS) && !hints.contains(Simplification.FORBIDDEN)) {
 			Set<OpInfo> simpleInfos = new HashSet<>();
 			for(OpInfo info: suitableInfos) {
 				boolean functionallyAssignable = Types.isAssignable(Types.raw(info.opType()), Types.raw(ref.getType()));

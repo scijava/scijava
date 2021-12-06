@@ -9,13 +9,13 @@ import java.util.Objects;
 import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
-import org.scijava.ops.engine.hint.ImmutableHints;
-import org.scijava.ops.engine.matcher.OpMatchingException;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.ops.spi.Op;
@@ -29,9 +29,18 @@ import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.util.MiscUtils;
+import org.scijava.util.VersionUtils;
 
 
 public class SimplifiedOpInfo implements OpInfo {
+
+	protected static final String IMPL_DECLARATION = "|Simplification:";
+	protected static final String INPUT_SIMPLIFIER_DELIMITER = "|InputSimplifier:";
+	protected static final String INPUT_FOCUSER_DELIMITER = "|InputFocuser:";
+	protected static final String OUTPUT_SIMPLIFIER_DELIMITER = "|OutputSimplifier:";
+	protected static final String OUTPUT_FOCUSER_DELIMITER = "|OutputFocuser:";
+	protected static final String OUTPUT_COPIER_DELIMITER = "|OutputCopier:";
+	protected static final String ORIGINAL_INFO = "|OriginalInfo:";
 
 	private final OpInfo srcInfo;
 	private final SimplificationMetadata metadata;
@@ -43,6 +52,10 @@ public class SimplifiedOpInfo implements OpInfo {
 	private ValidityException validityException;
 
 	public SimplifiedOpInfo(OpInfo info, OpEnvironment env, SimplificationMetadata metadata) {
+		this(info, metadata, calculatePriority(info, metadata, env));
+	}
+
+	public SimplifiedOpInfo(OpInfo info, SimplificationMetadata metadata, double priority) {
 		List<ValidityProblem> problems = new ArrayList<>();
 		this.srcInfo = info;
 		this.metadata = metadata;
@@ -64,11 +77,8 @@ public class SimplifiedOpInfo implements OpInfo {
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);
 		this.struct = Structs.from(r, problems, new OpRetypingMemberParser());
 
-		this.priority = calculatePriority(info, metadata, env);
-		List<String> hintList = new ArrayList<>(srcInfo.declaredHints().getHints().values());
-		hintList.remove(Simplification.ALLOWED);
-		hintList.add(Simplification.FORBIDDEN);
-		this.hints = new ImmutableHints(hintList.toArray(String[]::new));
+		this.priority = priority;
+		this.hints = srcInfo.declaredHints().plus(Simplification.FORBIDDEN);
 
 		if(!problems.isEmpty()) {
 			validityException = new ValidityException(problems);
@@ -173,16 +183,15 @@ public class SimplifiedOpInfo implements OpInfo {
 			LossReporter<T, R> op = env.op("lossReporter", specialTypeNil, new Nil[] {
 				Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(Double.class));
 			return op.apply(from, to);
-		} catch(IllegalArgumentException e) {
-			if (e.getCause() instanceof OpMatchingException)
-				return Double.POSITIVE_INFINITY;
-			throw e;
+		}
+		catch (OpMatchingException e) {
+			return Double.POSITIVE_INFINITY;
 		}
 	}
 
 	@Override
 	public String implementationName() {
-		return srcInfo.implementationName();
+		return srcInfo.implementationName() + " simplified to a " + opType();
 	}
 
 	@Override
@@ -255,6 +264,51 @@ public class SimplifiedOpInfo implements OpInfo {
 		return theseMembers.hashCode() - thoseMembers.hashCode();
 	}
 
+	@Override
+	public String version() {
+		return VersionUtils.getVersion(this.getClass());
+	}
 
+	/**
+	 * For a simplified Op, we define the implementation as the concatenation
+	 * of:
+	 * <ol>
+	 * <li>The signature of all input simplifiers
+	 * <li>The signature of all input focusers
+	 * <li>The signature of the output simplifier
+	 * <li>The signature of the output focuser
+	 * <li>The signature of the output copier
+	 * <li>The id of the source Op
+	 * </ol>
+	 * <p>
+	 */
+	@Override
+	public String id() {
+		// original Op
+		StringBuilder sb = new StringBuilder(IMPL_DECLARATION);
+		// input simplifiers
+		for (InfoChain i : metadata.inputSimplifierChains()) {
+			sb.append(INPUT_SIMPLIFIER_DELIMITER);
+			sb.append(i.signature());
+		}
+		// input focusers
+		for (InfoChain i : metadata.inputFocuserChains()) {
+			sb.append(INPUT_FOCUSER_DELIMITER);
+			sb.append(i.signature());
+		}
+		// output simplifier
+		sb.append(OUTPUT_SIMPLIFIER_DELIMITER);
+		sb.append(metadata.outputSimplifierChain().signature());
+		// output focuser
+		sb.append(OUTPUT_FOCUSER_DELIMITER);
+		sb.append(metadata.outputFocuserChain().signature());
 
+		// output copier
+		sb.append(OUTPUT_COPIER_DELIMITER);
+		sb.append(metadata.copyOpChain().signature());
+		// original info
+		sb.append(ORIGINAL_INFO);
+		sb.append(srcInfo().id());
+		return sb.toString();
+	}
 }

@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.geom.geom2d;
 
-import java.awt.geom.Area;
-
 import net.imglib2.RealLocalizable;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -41,7 +39,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
 /**
- * Specific implementation of {@link Area} for a Polygon2D.
+ * Computes the size (i.e. area) of a {@link Polygon2D}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  */

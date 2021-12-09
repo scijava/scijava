@@ -20,8 +20,6 @@ module org.scijava.ops.engine {
 	opens $package to $opensToString.call($package, $scijavaPackages, $therapiPackages);
 #end
 
-	requires java.desktop;
-
 	requires org.scijava;
 	requires org.scijava.discovery;
 	requires org.scijava.function;

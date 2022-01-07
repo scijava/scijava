@@ -50,6 +50,7 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
+import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an Op implementation defined as a class.
@@ -66,6 +67,10 @@ public class OpClassInfo implements OpInfo {
 	private ValidityException validityException;
 	private final double priority;
 	private final Hints hints;
+
+	public OpClassInfo(final Class<?> opClass, final Hints hints, final String... names) {
+		this(opClass, VersionUtils.getVersion(opClass), hints, Priority.NORMAL, names);
+	}
 
 	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final String... names) {
 		this(opClass, version, hints, Priority.NORMAL, names);

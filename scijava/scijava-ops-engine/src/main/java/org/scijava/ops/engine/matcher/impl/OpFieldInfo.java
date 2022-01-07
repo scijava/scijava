@@ -49,6 +49,7 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
+import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an Op implementation defined as a field.
@@ -67,6 +68,14 @@ public class OpFieldInfo implements OpInfo {
 	private ValidityException validityException;
 
 	private final Hints hints;
+
+	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final String... names) {
+		this(instance, field, VersionUtils.getVersion(field.getDeclaringClass()), hints, Priority.NORMAL, names);
+	}
+
+	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final double priority, final String... names) {
+		this(instance, field, VersionUtils.getVersion(field.getDeclaringClass()), hints, Priority.NORMAL, names);
+	}
 
 	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final String... names) {
 		this(instance, field, version, hints, Priority.NORMAL, names);

@@ -73,6 +73,7 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+import org.scijava.util.VersionUtils;
 
 /**
  * @author Marcel Wiedenmann
@@ -88,6 +89,15 @@ public class OpMethodInfo implements OpInfo {
 	private final double priority;
 
 	private final Hints hints;
+
+	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final String... names) {
+		this(method, opType, VersionUtils.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
+	}
+
+	public OpMethodInfo(final Method method, final Class<?> opType, final Hints hints, final double priority,
+			final String... names) {
+		this(method, opType, VersionUtils.getVersion(method.getDeclaringClass()), hints, Priority.NORMAL, names);
+	}
 
 	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final String... names) {
 		this(method, opType, version, hints, Priority.NORMAL, names);

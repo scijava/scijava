@@ -337,7 +337,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	/**
 	 * Creates an Op instance from an {@link OpInfo} with the provided
 	 * {@link MatchingConditions} as the guidelines for {@link OpInfo} selection.
-	 * This Op instance is put into the {@code opCache}, and is retrievable via
+	 * This Op instance is put into the {@link #opCache}, and is retrievable via
 	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions)}
 	 * 
 	 * @param ref the {@link OpRef} request
@@ -363,7 +363,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	/**
 	 * Finds an Op instance matching the request described by {@link OpRef}
-	 * {@code ref} and stores this Op in {@code opCache}. NB the return must be an
+	 * {@code ref} and stores this Op in {@link #opCache}. NB the return must be an
 	 * {@link Object} here (instead of some type variable T where T is the Op
 	 * type} since there is no way to ensure that the {@code OpRef} can provide
 	 * that T (since the OpRef could require that the Op returned is of multiple

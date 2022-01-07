@@ -23,7 +23,7 @@ import javassist.NotFoundException;
 public final class LambdaTypeBaker {
 
 	/**
-	 * Prevents instantation of this public utility class
+	 * Prevents instantiation of this public utility class
 	 */
 	private LambdaTypeBaker() {}
 

@@ -361,15 +361,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return conditions;
 	}
 
-	private RichOp<?> wrapViaCache(MatchingConditions conditions) {
-		OpInstance<?> instance = getInstance(conditions);
-		return wrap(instance, conditions.hints());
-	}
-
-	private RichOp<?> wrap(OpInstance<?> instance, Hints hints) {
-		return wrapOp(instance, hints);
-	}
-
 	/**
 	 * Finds an Op instance matching the request described by {@link OpRef}
 	 * {@code ref} and stores this Op in {@code opCache}. NB the return must be an
@@ -575,6 +566,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return inferOpRef(mappedDependencyType, dependencyName,
 			typeVarAssigns);
 	}
+
+	private RichOp<?> wrapViaCache(MatchingConditions conditions) {
+		OpInstance<?> instance = getInstance(conditions);
+		return wrap(instance, conditions.hints());
+	}
+
+	private RichOp<?> wrap(OpInstance<?> instance, Hints hints) {
+		return wrapOp(instance, hints);
+	}
+
 
 	/**
 	 * Tries to infer a {@link OpRef} from a functional Op type. E.g. the type:

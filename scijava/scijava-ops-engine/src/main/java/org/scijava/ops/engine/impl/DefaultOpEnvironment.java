@@ -405,10 +405,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpInstance<?> op = instantiateOp(candidate, conditions.hints());
 
 		// cache instance
-		cacheOp(conditions, op);
-	}
-
-	private void cacheOp(MatchingConditions conditions, OpInstance<?> op) {
 		opCache.putIfAbsent(conditions, op);
 	}
 

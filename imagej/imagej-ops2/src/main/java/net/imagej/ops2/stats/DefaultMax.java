@@ -40,7 +40,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.max}. Leans on other Ops.
+ * Op to calculate the {@code stats.max}. Leans on other Ops.
  * 
  * @author Gabriel Selzer
  * @param <T> input type

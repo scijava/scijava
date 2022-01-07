@@ -37,7 +37,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.moment4AboutMean} using
+ * Op to calculate the {@code stats.moment4AboutMean} using
  * {@code stats.mean} and {@code stats.size}.
  * 
  * @author Gabriel Selzer

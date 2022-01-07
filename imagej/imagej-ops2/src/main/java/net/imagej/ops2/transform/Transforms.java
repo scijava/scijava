@@ -36,7 +36,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 
 /**
- * {@link OpCollection} containing all of the transform {@link Op}s.
+ * {@link OpCollection} containing all of the transform Ops.
  *
  * TODO move these type variables into each Op?
  *

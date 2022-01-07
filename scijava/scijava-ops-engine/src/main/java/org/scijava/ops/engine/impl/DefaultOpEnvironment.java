@@ -428,11 +428,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	/**
-	 * Wraps the matched op into an {@link Op} that knows its generic typing.
+	 * Wraps the matched op into an Op that knows its generic typing.
 	 * 
 	 * @param instance - the {@link OpInstance} to wrap.
 	 * @param hints - the {@link Hints} used to create the {@link OpInstance}
-	 * @return an {@link Op} wrapping of op.
+	 * @return an Op wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> RichOp<T> wrapOp(OpInstance<T> instance, Hints hints)

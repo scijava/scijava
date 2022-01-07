@@ -35,7 +35,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.sumOfInverses}.
+ * Op to calculate the {@code stats.sumOfInverses}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

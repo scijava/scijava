@@ -39,7 +39,7 @@ import net.imglib2.util.ValuePair;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.minMax}.
+ * Op to calculate the {@code stats.minMax}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

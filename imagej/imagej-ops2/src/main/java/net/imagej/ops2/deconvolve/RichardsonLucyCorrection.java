@@ -73,7 +73,7 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 	@OpDependency(name = "copy.rai")
 	private Function<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> copy;
 
-//	@OpDependency(name = "math.divide") TODO: match an op here?
+//	@OpDependency(name = "math.divide") TODO: match an Op here?
 	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<I>> divide = (denomResult, numer) -> {
 		final O tmp = Util.getTypeFromInterval(denomResult).createVariable();
 		LoopBuilder.setImages(denomResult, numer).forEachPixel((d, n) -> {

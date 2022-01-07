@@ -13,7 +13,7 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.ValidityException;
 
 /**
- * Metadata about an op implementation.
+ * Metadata about an Op implementation.
  * 
  * @author Curtis Rueden
  * @author David Kolb

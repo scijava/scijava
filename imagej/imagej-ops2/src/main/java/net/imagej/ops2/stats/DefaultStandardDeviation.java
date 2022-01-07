@@ -37,7 +37,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.stdDev} using
+ * Op to calculate the {@code stats.stdDev} using
  * {@code stats.variance}.
  * 
  * @author Gabriel Selzer

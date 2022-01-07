@@ -15,7 +15,7 @@ import org.scijava.parse2.Parser;
  * <p>
  * {@code @implNote op names=<op names, comma delimited> [priority=<op priority>]}
  * <p>
- * For example, an op wishing to be discoverable with names "foo.bar" and
+ * For example, an Op wishing to be discoverable with names "foo.bar" and
  * "foo.baz", with a priority of 100, should be declared as
  * <p>
  * {@code @implNote op names=foo.bar,foo.baz priority=100}

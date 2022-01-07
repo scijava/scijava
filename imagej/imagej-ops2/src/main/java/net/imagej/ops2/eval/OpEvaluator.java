@@ -48,7 +48,7 @@ import org.scijava.parsington.eval.Evaluator;
 import org.scijava.types.Nil;
 
 /**
- * A Parsington {@link Evaluator} using available {@link Op}s.
+ * A Parsington {@link Evaluator} using available Ops.
  * 
  * @author Curtis Rueden
  */

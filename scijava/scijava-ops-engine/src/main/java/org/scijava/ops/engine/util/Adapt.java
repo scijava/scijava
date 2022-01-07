@@ -17,7 +17,7 @@ import org.scijava.function.Producer;
 import org.scijava.ops.spi.Op;
 
 /**
- * Utility providing adaptation between {@link Op} types.
+ * Utility providing adaptation between Op types.
  */
 public class Adapt {
 

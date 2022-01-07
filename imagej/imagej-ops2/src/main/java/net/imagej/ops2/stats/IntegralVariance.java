@@ -42,7 +42,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.variance} from an integral image
+ * Op to calculate the {@code stats.variance} from an integral image
  * using a specialized {@code Cursor} implementation.
  *
  * @param <I>

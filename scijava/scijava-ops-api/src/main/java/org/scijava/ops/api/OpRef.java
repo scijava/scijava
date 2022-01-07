@@ -38,7 +38,7 @@ import java.util.Objects;
 import org.scijava.types.Types;
 
 /**
- * Data structure which identifies an op by name and/or type(s) and/or argument
+ * Data structure which identifies an Op by name and/or type(s) and/or argument
  * type(s), along with a list of input arguments.
  *
  * @author Christian Dietz (University of Konstanz)

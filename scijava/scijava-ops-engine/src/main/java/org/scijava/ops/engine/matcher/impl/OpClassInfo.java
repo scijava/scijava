@@ -52,7 +52,7 @@ import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
 /**
- * Metadata about an op implementation defined as a class.
+ * Metadata about an Op implementation defined as a class.
  * 
  * @author Curtis Rueden
  * @author David Kolb

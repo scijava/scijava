@@ -56,9 +56,9 @@ import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
 
 /**
- * Base class for {@link Op} unit testing.
+ * Base class for Op unit testing.
  * <p>
- * <i>All</i> {@link Op} unit tests need to have an {@link OpService} instance.
+ * <i>All</i> Op unit tests need to have an {@link OpService} instance.
  * Following the DRY principle, we should implement it only once. Here.
  * </p>
  *

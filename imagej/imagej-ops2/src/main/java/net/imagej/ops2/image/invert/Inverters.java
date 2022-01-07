@@ -118,7 +118,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	}
 
 	public static <T extends RealType<T>> T minValue(T type) {
-		// TODO: Consider making minValue an op.
+		// TODO: Consider making minValue an Op.
 		final T min = type.createVariable();
 		if (type instanceof UnboundedIntegerType)
 			min.setReal(0);
@@ -129,7 +129,7 @@ public class Inverters<T extends RealType<T>, I extends IntegerType<I>> {
 	}
 
 	public static <T extends RealType<T>> T maxValue(T type) {
-		// TODO: Consider making maxValue an op.
+		// TODO: Consider making maxValue an Op.
 		final T max = type.createVariable();
 		if (max instanceof Unsigned128BitType) {
 			final Unsigned128BitType t = (Unsigned128BitType) max;

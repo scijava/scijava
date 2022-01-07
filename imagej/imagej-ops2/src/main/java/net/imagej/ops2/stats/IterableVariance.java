@@ -35,7 +35,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.variance} using the online algorithm
+ * Op to calculate the {@code stats.variance} using the online algorithm
  * from Knuth and Welford.
  * 
  * @author Daniel Seebacher (University of Konstanz)

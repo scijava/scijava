@@ -51,7 +51,7 @@ import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
 /**
- * Metadata about an op implementation defined as a field.
+ * Metadata about an Op implementation defined as a field.
  * 
  * @author Curtis Rueden
  */

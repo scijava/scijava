@@ -159,7 +159,7 @@ public class SimplifiedOpInfo implements OpInfo {
 	}
 
 	/**
-	 * Calls a {@code lossReporter} {@link Op} to determine the <b>worst-case</b>
+	 * Calls a {@code lossReporter} Op to determine the <b>worst-case</b>
 	 * loss from a {@code T} to a {@code R}. If no {@code lossReporter} exists for
 	 * such a conversion, we assume infinite loss.
 	 * 

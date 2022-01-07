@@ -36,7 +36,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code imageMoments.centralMoment10} directly.
+ * Op to calculate the {@code imageMoments.centralMoment10} directly.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

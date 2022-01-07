@@ -37,7 +37,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.kurtosis} using {@code stats.stdDev}
+ * Op to calculate the {@code stats.kurtosis} using {@code stats.stdDev}
  * and {@code stats.moment4AboutMean}.
  * 
  * @author Daniel Seebacher (University of Konstanz)

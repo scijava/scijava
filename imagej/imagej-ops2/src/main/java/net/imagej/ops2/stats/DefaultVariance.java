@@ -42,7 +42,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.variance} using the
+ * Op to calculate the {@code stats.variance} using the
  * {@code stats.stdDev} using the two-pass algorithm.
  * 
  * @author Daniel Seebacher (University of Konstanz)

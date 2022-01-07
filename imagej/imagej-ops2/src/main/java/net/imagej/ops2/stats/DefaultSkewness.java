@@ -37,7 +37,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.skewness} using
+ * Op to calculate the {@code stats.skewness} using
  * {@code stats.moment3AboutMean} and {@code stats.stdDev}.
  * 
  * @author Daniel Seebacher (University of Konstanz)

@@ -39,7 +39,7 @@ import net.imglib2.roi.labeling.LabelRegion;
 import org.scijava.ops.spi.Op;
 
 /**
- * This {@link Op} computes the centroid of a {@link IterableRegion} (Label).
+ * This Op computes the centroid of a {@link IterableRegion} (Label).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @implNote op names='geom.centroid', priority='2'

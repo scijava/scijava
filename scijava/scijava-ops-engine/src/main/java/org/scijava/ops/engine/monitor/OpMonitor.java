@@ -34,7 +34,7 @@ import org.scijava.ops.engine.log.Logger;
 import org.scijava.ops.spi.Op;
 
 /**
- * Used as a bridge between the {@link Op} and the user. Allows the user to
+ * Used as a bridge between the Op and the user. Allows the user to
  * cancel any Op as well as allowing the Op to notify the user of the Op's
  * progress and of any warnings encountered through the course of computation.
  * 
@@ -65,7 +65,7 @@ public interface OpMonitor {
 	void cancel();
 
 	/**
-	 * Returns a {@link Logger} for use by the {@link Op}.
+	 * Returns a {@link Logger} for use by the Op.
 	 * 
 	 * @return a {@link Logger}.
 	 */
@@ -75,7 +75,7 @@ public interface OpMonitor {
 	 * Sets the progress of the computation monitored by this {@link OpMonitor}
 	 * 
 	 * @param progress
-	 *            - the progress <i>p</i> of the {@link Op}'s computation. 0 &lt;=
+	 *            - the progress <i>p</i> of the Op's computation. 0 &lt;=
 	 *            <i>p</i> &lt;= 1
 	 */
 	void setProgress(double progress);
@@ -83,7 +83,7 @@ public interface OpMonitor {
 	/**
 	 * Returns the completion progress of the Op's computation as a decimal.
 	 * 
-	 * @return progress - the progress <i>p</i> of the {@link Op}'s computation. 0
+	 * @return progress - the progress <i>p</i> of the Op's computation. 0
 	 *         &lt;= <i>p</i> &lt;= 1
 	 */
 	double getProgress();

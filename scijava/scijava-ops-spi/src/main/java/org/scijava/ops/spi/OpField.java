@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import org.scijava.Priority;
 
-/** Annotates an op declared as a field in an {@link OpCollection}. */
+/** Annotates an Op declared as a field in an {@link OpCollection}. */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface OpField {

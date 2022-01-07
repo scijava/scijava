@@ -94,7 +94,7 @@ public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends Re
 	@OpDependency(name = "filter.correlate")
 	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlater;
 
-//	@OpDependency(name = "math.divide") TODO: match an op here?
+//	@OpDependency(name = "math.divide") TODO: match an Op here?
 	private BiConsumer<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> divide = (numerResult, denom) -> {
 		final O tmp = Util.getTypeFromInterval(numerResult).createVariable();
 		LoopBuilder.setImages(numerResult, denom).forEachPixel((n, d) -> {

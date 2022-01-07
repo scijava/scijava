@@ -109,16 +109,7 @@ public class SimplifiedOpRef implements OpRef {
 	 * Adaptation is similarly forbidden, as to convert most Op types to
 	 * {@link Arity1} you would need an identical copy Op.
 	 * <p>
-	 * NB We create the {@link Hints} using the construction
-	 * {@code new DefaultHints(hints.getHints())} instead of using the
-	 * construction {@code hints.copy(true)} because we <b>do not</b> want to
-	 * ensure that we are not passing a {@code SimplificationHints} to the
-	 * matcher. We need to forbid simplification to prevent an infinite loop, but
-	 * the Simplification hint type is restricted to
-	 * {@code Simplification.IN_PROGRESS} by the {@code SimplificationHints}. This
-	 * is likely a bug, but would be best fixed by sliming down the {@link Hints}
-	 * implementations.
-	 * 
+	 *
 	 * @param copyType - the {@link Type} that we need to be able to copy
 	 * @param hints
 	 * @return an {@code Op} able to copy data between {@link Object}s of
@@ -126,6 +117,7 @@ public class SimplifiedOpRef implements OpRef {
 	 * @throws OpMatchingException
 	 */
 	private static InfoChain simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
+		// prevent further simplification/adaptation
 		Hints hintsCopy = hints.copy() //
 			.plus(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);
 

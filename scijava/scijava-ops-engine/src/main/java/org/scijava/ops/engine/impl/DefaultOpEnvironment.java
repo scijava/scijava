@@ -353,8 +353,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		MatchingConditions conditions = MatchingConditions.from(ref, hints);
 
 		// create new OpCandidate from ref and info
-		OpCandidate candidate = new ManualOpCandidate(this, ref, info,
-			this.matcher);
+		OpCandidate candidate = new OpCandidate(this, ref, info);
 
 		instantiateAndCache(conditions, candidate);
 

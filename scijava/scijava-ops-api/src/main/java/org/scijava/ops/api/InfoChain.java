@@ -9,6 +9,18 @@ import java.util.stream.Collectors;
 
 /**
  * A data structure wrangling a hierarchy of {@link OpInfo}s.
+ * 
+ * This {@link InfoChain} contains:
+ * <ol>
+ * <li>An {@link OpInfo} describing the Op</li>
+ * <li>A {@link List} of {@link OpInfo}s that should be mapped to the Op
+ * dependencies of this Op, <b>in the order that they are presented by the
+ * Op</b>.</li>
+ * </ol>
+ * <p>
+ * This {@link InfoChain} is also able to generate a {@link String} uniquely
+ * identifying itself.
+ * </p>
  *
  * @author Gabriel Selzer
  */

@@ -25,10 +25,10 @@ public class OpRetypingMemberParser implements
 	 * <p>
 	 * This method makes a couple of assumptions:
 	 * <ol>
-	 * <li>That {@code srcStruct} is valid
+	 * <li>That {@code srcStruct} is valid</li>
 	 * <li>That there are {@code inputs.length} input {@link Member}s in
-	 * {@code srcStruct}
-	 * <li>That there is <b>one</b> output {@link Member} in {@code srcStruct}
+	 * {@code srcStruct}</li>
+	 * <li>That there is <b>one</b> output {@link Member} in {@code srcStruct}</li>
 	 * </ol>
 	 * We should consider adding the evalutation of these assumptions
 	 * 

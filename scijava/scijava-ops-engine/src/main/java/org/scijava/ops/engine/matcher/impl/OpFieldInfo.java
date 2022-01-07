@@ -206,10 +206,10 @@ public class OpFieldInfo implements OpInfo {
 	 * For an {@link OpField}, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The fully qualified name of the class containing the field
-	 * <li>The method field
+	 * <li>The fully qualified name of the class containing the field</li>
+	 * <li>The method field</li>
 	 * <li>The version of the class containing the field, with a preceding
-	 * {@code @}
+	 * {@code @}</li>
 	 * </ol>
 	 * <p>
 	 * For example, for a field {@code baz} in class

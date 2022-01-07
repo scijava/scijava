@@ -47,9 +47,9 @@ public class SimplificationUtils {
 	 * {@link SimplifiedOpRef}s. This method assumes that:
 	 * <ul>
 	 * <li>{@code originalOpRefType} is (or is a subtype of) some
-	 * {@link FunctionalInterface}
+	 * {@link FunctionalInterface}</li>
 	 * <li>all {@link TypeVariable}s declared by that {@code FunctionalInterface}
-	 * are present in the signature of that interface's single abstract method.
+	 * are present in the signature of that interface's single abstract method.</li>
 	 * </ul>
 	 * 
 	 * @param originalOpType - the {@link Type} declared by the source
@@ -143,8 +143,8 @@ public class SimplificationUtils {
 	 * {@code inferFrom}. We can then use these mappings to resolve the type
 	 * variables of {@code unresolvedType}. This method assumes that:
 	 * <ul>
-	 * <li> {@code inferFrom} is assignable to {@code mutatorInferFrom}
-	 * <li> There are no vacuous generics in {@code unresolvedType}
+	 * <li> {@code inferFrom} is assignable to {@code mutatorInferFrom}</li>
+	 * <li> There are no vacuous generics in {@code unresolvedType}</li>
 	 * </ul>
 	 * 
 	 * @param inferFrom - the concrete input/output type that we would like to pass to the mutator.
@@ -219,10 +219,10 @@ public class SimplificationUtils {
 	/**
 	 * Creates a Class given an Op and a set of {@link Simplifier}s. This class:
 	 * <ul>
-	 * <li>is of the same functional type as the given Op
+	 * <li>is of the same functional type as the given Op</li>
 	 * <li>has type arguments that are of the simplified form of the type
 	 * arguments of the given Op (these arguments are dictated by the list of
-	 * {@code Simplifier}s.
+	 * {@code Simplifier}s.</li>
 	 * <li>
 	 * 
 	 * @param originalOp - the Op that will be simplified
@@ -415,10 +415,10 @@ public class SimplificationUtils {
 	 * must:
 	 * <ol>
 	 * <li>Simplify all inputs using the {@link Function}s provided by the
-	 * {@link SimplifiedOpRef}
+	 * {@link SimplifiedOpRef}</li>
 	 * <li>Focus the simplified inputs using the {@link Function}s provided by the
-	 * {@link SimplifiedOpInfo}
-	 * <li>Call the {@code Op} using the focused inputs.
+	 * {@link SimplifiedOpInfo}</li>
+	 * <li>Call the {@code Op} using the focused inputs.</li>
 	 * </ol>
 	 * <b>NB</b> The Javassist compiler
 	 * <a href="https://www.javassist.org/tutorial/tutorial3.html#generics">does

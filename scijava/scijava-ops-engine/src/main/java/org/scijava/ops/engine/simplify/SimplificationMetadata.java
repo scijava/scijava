@@ -201,11 +201,11 @@ public class SimplificationMetadata {
 	/**
 	 * The constructor to the simplified Op takes:
 	 * <ol>
-	 * <li>All input simplifiers
-	 * <li>All input focusers
-	 * <li>The output simplifier
-	 * <li>The output focuser
-	 * <li>The original Op
+	 * <li>All input simplifiers</li>
+	 * <li>All input focusers</li>
+	 * <li>The output simplifier</li>
+	 * <li>The output focuser</li>
+	 * <li>The original Op</li>
 	 * </ol>
 	 * This Op returns the {@link Class}es of those arguments <b>in that
 	 * order</b>. Note that the {@link Class} of all arugments other than the
@@ -231,11 +231,11 @@ public class SimplificationMetadata {
 	/**
 	 * The constructor to the simplified Op takes:
 	 * <ol>
-	 * <li>All input simplifiers
-	 * <li>All input focusers
-	 * <li>The output simplifier
-	 * <li>The output focuser
-	 * <li>The original Op
+	 * <li>All input simplifiers</li>
+	 * <li>All input focusers</li>
+	 * <li>The output simplifier</li>
+	 * <li>The output focuser</li>
+	 * <li>The original Op</li>
 	 * </ol>
 	 * This Op returns those arguments <b>in that order</b>.
 	 * 

@@ -406,11 +406,11 @@ public class OpMethodInfo implements OpInfo {
 	 * For an {@link OpMethod}, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The fully qualified name of the class containing the method
-	 * <li>The method name
-	 * <li>The method parameters
+	 * <li>The fully qualified name of the class containing the method</li>
+	 * <li>The method name</li>
+	 * <li>The method parameters</li>
 	 * <li>The version of the class containing the method, with a preceding
-	 * {@code @}
+	 * {@code @}</li>
 	 * </ol>
 	 * <p>
 	 * For example, for a method {@code baz(Double in1, String in2)} in class

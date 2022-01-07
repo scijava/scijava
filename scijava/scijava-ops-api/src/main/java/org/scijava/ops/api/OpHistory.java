@@ -7,9 +7,9 @@ import java.util.List;
  * Log describing each execution of an Op. This class is designed to answer two
  * questions:
  * <ol>
- * <li>What Op(s) produced and/or mutated this output?
+ * <li>What Op(s) produced and/or mutated this output?</li>
  * <li>Given an {@link Object} op, what {@link OpInfo}s (including dependencies)
- * were utilized to implement that Op's functionality?
+ * were utilized to implement that Op's functionality?</li>
  * </ol>
  * The answers to these two questions allow users to produce an entire
  * {@code List<Graph<OpInfo>>}, containing all of the information needed to

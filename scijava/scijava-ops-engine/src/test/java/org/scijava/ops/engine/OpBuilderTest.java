@@ -51,34 +51,34 @@ import org.scijava.ops.api.OpBuilder;
  * Input TYPES are given (IT):
  * <p>
  * <ol>
- * <li>The output is unspecified (OU):
+ * <li>The output is unspecified (OU):</li>
  * <ol type="a">
- * <li>match: Function, Inplace
- * <li>run: none
+ * <li>match: Function, Inplace</li>
+ * <li>run: none</li>
  * </ol>
- * <li>The output type is given (OT):
+ * <li>The output type is given (OT):</li>
  * <ol type="a">
- * <li>match: Function, Computer
- * <li>run: none
+ * <li>match: Function, Computer</li>
+ * <li>run: none</li>
  * </ol>
  * </ol>
  * Input VALUES are given (IV) (N.B. this case applies for Arity0):
  * <p>
  * <ol>
- * <li>The output is unspecified (OU):
+ * <li>The output is unspecified (OU):</li>
  * <ol type="a">
- * <li>match: Function, Inplace
- * <li>run: apply, mutate
+ * <li>match: Function, Inplace</li>
+ * <li>run: apply, mutate</li>
  * </ol>
- * <li>The output type is given (OT):
+ * <li>The output type is given (OT):</li>
  * <ol type="a">
- * <li>match: Function, Computer
- * <li>run: apply
+ * <li>match: Function, Computer</li>
+ * <li>run: apply</li>
  * </ol>
- * <li>The output value is given (OV):
+ * <li>The output value is given (OV):</li>
  * <ol type="a">
- * <li>match: Computer
- * <li>run: compute
+ * <li>match: Computer</li>
+ * <li>run: compute</li>
  * </ol>
  * </ol>
  * 

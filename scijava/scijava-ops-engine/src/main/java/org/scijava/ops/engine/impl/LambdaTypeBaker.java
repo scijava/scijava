@@ -87,8 +87,8 @@ public final class LambdaTypeBaker {
 	/**
 	 * Creates a Class given an Op and the reified {@link Type}. This class:
 	 * <ul>
-	 * <li>is of the same functional type as the given Op
-	 * <li>knows its generic type by nature of being a {@link GenericTyped}
+	 * <li>is of the same functional type as the given Op</li>
+	 * <li>knows its generic type by nature of being a {@link GenericTyped}</li>
 	 * </ul>
 	 * 
 	 * @param originalOp - the Op that will be simplified

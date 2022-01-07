@@ -210,9 +210,9 @@ public class OpClassInfo implements OpInfo {
 	 * For a {@link Class}, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The fully qualified name of the class
+	 * <li>The fully qualified name of the class</li>
 	 * <li>The version of the class containing the field, with a preceding
-	 * {@code @}
+	 * {@code @}</li>
 	 * </ol>
 	 * <p>
 	 * For example, for a field class {@code com.example.foo.Bar}, you might have

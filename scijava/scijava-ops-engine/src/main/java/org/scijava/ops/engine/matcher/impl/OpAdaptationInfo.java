@@ -154,9 +154,9 @@ public class OpAdaptationInfo implements OpInfo {
 	 * For an adapted Op, we define the implementation name as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}
-	 * <li>The adaptation delimiter
-	 * <li>The implementation name of the <b>original info</b>
+	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}</li>
+	 * <li>The adaptation delimiter</li>
+	 * <li>The implementation name of the <b>original info</b></li>
 	 * </ol>
 	 * <p>
 	 * For example, for a source {@code com.example.foo.Bar@1.0.0} with adaptor

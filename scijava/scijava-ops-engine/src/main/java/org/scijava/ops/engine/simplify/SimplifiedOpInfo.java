@@ -119,17 +119,17 @@ public class SimplifiedOpInfo implements OpInfo {
 	 * following:
 	 * <ul>
 	 * <li>{@link Priority#VERY_LOW} to ensure that simplifications are not chosen
-	 * over a direct match.
+	 * over a direct match.</li>
 	 * <li>The {@link OpInfo#priority} of the source info to ensure that a
 	 * simplification of a higher-priority Op wins out over a simplification of a
-	 * lower-priority Op, all else equal.
+	 * lower-priority Op, all else equal.</li>
 	 * <li>a penalty defined as a lossiness heuristic of this simplification. This
-	 * penalty is the sum of:
+	 * penalty is the sum of:</li>
 	 * <ul>
 	 * <li>the loss undertaken by converting each of the Op's inputs from the ref
-	 * type to the info type
+	 * type to the info type</li>
 	 * <li>the loss undertaken by converting each of the Op's outputs from the info
-	 * type to the ref type
+	 * type to the ref type</li>
 	 * </ul>
 	 * </ul>
 	 */
@@ -273,12 +273,12 @@ public class SimplifiedOpInfo implements OpInfo {
 	 * For a simplified Op, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The signature of all input simplifiers
-	 * <li>The signature of all input focusers
-	 * <li>The signature of the output simplifier
-	 * <li>The signature of the output focuser
-	 * <li>The signature of the output copier
-	 * <li>The id of the source Op
+	 * <li>The signature of all input simplifiers</li>
+	 * <li>The signature of all input focusers</li>
+	 * <li>The signature of the output simplifier</li>
+	 * <li>The signature of the output focuser</li>
+	 * <li>The signature of the output copier</li>
+	 * <li>The id of the source Op</li>
 	 * </ol>
 	 * <p>
 	 */

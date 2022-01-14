@@ -86,9 +86,7 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-discovery-therapi.allowedDuplicateClasses>
-			${scijava.allowedDuplicateClasses}
-		</scijava-discovery-therapi.allowedDuplicateClasses>
+		<scijava-discovery-therapi.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-discovery-therapi.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-discovery-therapi.allowedDuplicateClasses}</allowedDuplicateClasses>
 		<therapi.packages></therapi.packages>
 	</properties>

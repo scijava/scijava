@@ -101,9 +101,7 @@
 
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>SciJava developers.</license.copyrightOwners>
-		<scijava-discovery-test.allowedDuplicateClasses>
-			${scijava.allowedDuplicateClasses}
-		</scijava-discovery-test.allowedDuplicateClasses>
+		<scijava-discovery-test.allowedDuplicateClasses>${scijava.allowedDuplicateClasses}</scijava-discovery-test.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-discovery-test.allowedDuplicateClasses}</allowedDuplicateClasses>
 	</properties>
 	<dependencies>

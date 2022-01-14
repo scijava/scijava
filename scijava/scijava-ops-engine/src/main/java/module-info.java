@@ -70,7 +70,6 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.api.OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
-			org.scijava.ops.engine.impl.PluginBasedClassOpInfoGenerator,
 			org.scijava.ops.engine.impl.TherapiOpInfoGenerator;
 
 	provides org.scijava.ops.api.OpWrapper with

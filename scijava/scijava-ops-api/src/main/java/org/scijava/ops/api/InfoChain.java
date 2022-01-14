@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A data structure wrangling a hierarchy of {@link OpInfo}s.
+ * A data structure wrangling a hierarchy of {@link OpInfo}s, created for every
+ * Op match and called upon to instantiate any number of Op instances.
  * 
  * This {@link InfoChain} contains:
  * <ol>
@@ -21,8 +22,11 @@ import java.util.stream.Collectors;
  * This {@link InfoChain} is also able to generate a {@link String} uniquely
  * identifying itself.
  * </p>
+ * <b>NOTE</b>: This class is <b>not</b> responsible for generating
+ * {@link RichOp}s.
  *
  * @author Gabriel Selzer
+ * @see RichOp#infoChain()
  */
 public class InfoChain {
 

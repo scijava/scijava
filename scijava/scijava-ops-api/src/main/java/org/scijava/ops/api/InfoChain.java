@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * A data structure wrangling a hierarchy of {@link OpInfo}s, created for every
- * Op match and called upon to instantiate any number of Op instances.
+ * Op match and called upon to instantiate any number of {@link OpInstance}s.
  * 
  * This {@link InfoChain} contains:
  * <ol>

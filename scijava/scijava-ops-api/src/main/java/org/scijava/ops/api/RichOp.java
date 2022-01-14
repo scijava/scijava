@@ -7,9 +7,13 @@ import org.scijava.types.GenericTyped;
 
 /**
  * An {@link OpInstance} with state (i.e. an {@link OpMetadata})
+ * <p>
+ * Each {@link RichOp} has <b>one</b> {@link OpInstance}, and <b>one</b>
+ * {@link OpMetadata}.
+ * </p>
  * 
  * @author Gabriel Selzer
- * @param <T>
+ * @param <T> the functional {@link Type} of the wrapped Op
  */
 public interface RichOp<T> extends GenericTyped {
 

@@ -178,11 +178,6 @@
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.github.therapi</groupId>
-			<artifactId>therapi-runtime-javadoc</artifactId>
-			<version>${therapi-runtime-javadoc.version}</version>
-		</dependency>
 
 		<!-- Test scope dependencies -->
 		<dependency>

@@ -34,6 +34,7 @@ import org.scijava.util.VersionUtils;
 
 public class SimplifiedOpInfo implements OpInfo {
 
+	/** Identifiers for declaring a simplification in an Op signature **/
 	protected static final String IMPL_DECLARATION = "|Simplification:";
 	protected static final String INPUT_SIMPLIFIER_DELIMITER = "|InputSimplifier:";
 	protected static final String INPUT_FOCUSER_DELIMITER = "|InputFocuser:";

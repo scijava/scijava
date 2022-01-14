@@ -33,6 +33,7 @@ import org.scijava.types.Nil;
  */
 public class OpAdaptationInfo implements OpInfo {
 
+	/** Identifiers used for an adapted Op in a signature **/
 	protected static final String IMPL_DECLARATION = "|Adaptation:";
 	protected static final String ADAPTOR = "|Adaptor:";
 	protected static final String ORIGINAL = "|OriginalOp:";

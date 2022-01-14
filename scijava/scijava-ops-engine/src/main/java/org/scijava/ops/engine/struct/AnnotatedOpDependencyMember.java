@@ -76,7 +76,7 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 	/**
 	 * This constructor is ideal for situations where obtaining the key or
 	 * description are computationally expensive.
-	 * 
+	 *
 	 * @param keyGenerator the {@link Supplier} able to generate the key
 	 * @param descriptionGenerator the {@link Supplier} able to generate the description
 	 * @param type the {@link Type} of this {@link Member}

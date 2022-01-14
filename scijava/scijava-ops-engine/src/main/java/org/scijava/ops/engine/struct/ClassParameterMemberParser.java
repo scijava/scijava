@@ -36,7 +36,7 @@ public class ClassParameterMemberParser implements
 			opMethod = getDeclaredOpMethod(source);
 		}
 		catch (NoSuchMethodException e1) {
-			problems.add(new ValidityProblem("OpClass " + source +
+			problems.add(new ValidityProblem("Class " + source.getName() +
 				" does not have a functional method!"));
 			throw new ValidityException(problems);
 		}

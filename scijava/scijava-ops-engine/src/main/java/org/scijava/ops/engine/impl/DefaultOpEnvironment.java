@@ -245,7 +245,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (!(specialType.getType() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
-		OpInstance<T> instance = (OpInstance<T>) chain.op(specialType.getType());
+		OpInstance<T> instance = (OpInstance<T>) chain.newInstance(specialType.getType());
 		Hints hints = getDefaultHints();
 		RichOp<T> wrappedOp = wrapOp(instance, hints);
 		return wrappedOp.asOpType();
@@ -423,7 +423,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
 		InfoChain adaptorChain = new DependencyRichOpInfoChain(candidate
 			.opInfo(), conditions);
-		return adaptorChain.op(candidate.getType());
+		return adaptorChain.newInstance(candidate.getType());
 	}
 
 	/**

@@ -76,16 +76,16 @@ public class SimplificationMetadata {
 		this.opType = Types.raw(info.opType());
 		
 		this.refSimplifiers = refSimplifiers;
-		this.inputSimplifiers = refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
+		this.inputSimplifiers = refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.newInstance().op()).collect(Collectors.toList());
 
 		this.infoFocusers = infoFocusers;
-		this.inputFocusers = infoFocusers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
+		this.inputFocusers = infoFocusers.stream().map(chain -> (Function<?, ?>) chain.newInstance().op()).collect(Collectors.toList());
 
 		this.infoSimplifier = infoSimplifier;
-		this.outputSimplifier = (Function<?, ?>) infoSimplifier.op().op();
+		this.outputSimplifier = (Function<?, ?>) infoSimplifier.newInstance().op();
 
 		this.refFocuser = refFocuser;
-		this.outputFocuser = (Function<?, ?>) refFocuser.op().op();
+		this.outputFocuser = (Function<?, ?>) refFocuser.newInstance().op();
 
 		this.copyOpChain = outputCopier;
 
@@ -111,22 +111,22 @@ public class SimplificationMetadata {
 
 	private static List<Function<?, ?>> inputSimplifiers(List<InfoChain> refSimplifiers)
 	{
-		return refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
+		return refSimplifiers.stream().map(chain -> (Function<?, ?>) chain.newInstance().op()).collect(Collectors.toList());
 	}
 
 	private static List<Function<?, ?>> inputFocusers(List<InfoChain> infoFocusers)
 	{
-		return infoFocusers.stream().map(chain -> (Function<?, ?>) chain.op().op()).collect(Collectors.toList());
+		return infoFocusers.stream().map(chain -> (Function<?, ?>) chain.newInstance().op()).collect(Collectors.toList());
 	}
 
 	private static Function<?, ?> outputSimplifier(InfoChain infoSimplifier)
 	{
-		return (Function<?, ?>) infoSimplifier.op().op();
+		return (Function<?, ?>) infoSimplifier.newInstance().op();
 	}
 
 	private static Function<?, ?> outputFocuser(InfoChain refFocuser)
 	{
-		return (Function<?, ?>) refFocuser.op().op();
+		return (Function<?, ?>) refFocuser.newInstance().op();
 	}
 
 	public List<Function<?, ?>> inputSimpilfiers() {
@@ -195,7 +195,7 @@ public class SimplificationMetadata {
 
 	public Computers.Arity1<?, ?> copyOp() {
 		// TODO: Should we prevent multiple instantiations?
-		return (Arity1<?, ?>) copyOpChain.get().op().op();
+		return (Arity1<?, ?>) copyOpChain.get().newInstance().op();
 	}
 
 	/**

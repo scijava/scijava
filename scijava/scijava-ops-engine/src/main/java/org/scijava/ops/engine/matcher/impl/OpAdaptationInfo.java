@@ -115,7 +115,7 @@ public class OpAdaptationInfo implements OpInfo {
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		@SuppressWarnings("unchecked")
 		OpInstance<Function<Object, Object>> adaptorInstance =
-			(OpInstance<Function<Object, Object>>) adaptorChain.op(
+			(OpInstance<Function<Object, Object>>) adaptorChain.newInstance(
 				new Nil<Function<Object, Object>>()
 				{}.getType());
 		final Object op = srcInfo.createOpInstance(dependencies).object();

@@ -79,17 +79,17 @@ public class InfoChain {
 		return info;
 	}
 
-	public OpInstance<?> op() {
+	public OpInstance<?> newInstance() {
 		return OpInstance.of(generateOp(), this, info.opType());
 	}
 
-	public OpInstance<?> op(Type opType) {
+	public OpInstance<?> newInstance(Type opType) {
 		return OpInstance.of(generateOp(), this, opType);
 	}
 
 	protected Object generateOp() {
 		List<Object> dependencyInstances = dependencies().stream() //
-			.map(d -> d.op().op()) //
+			.map(d -> d.newInstance().op()) //
 			.collect(Collectors.toList());
 		Object op = info().createOpInstance(dependencyInstances).object();
 		return op;

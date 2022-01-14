@@ -11,6 +11,7 @@ import java.util.List;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.OpUtils;
 import org.scijava.struct.MemberParser;
+import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
@@ -28,7 +29,7 @@ public class ClassParameterMemberParser implements
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
 
 		// NB: Reject abstract classes.
-		org.scijava.struct.Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
+		Structs.checkModifiers(source.getName() + ": ", problems, source.getModifiers(), true, Modifier.ABSTRACT);
 
 		// Obtain source's Op method.
 		Method opMethod;

@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
@@ -443,7 +442,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 				"==> 	java.util.List<java.lang.String> bar -> the second input\n" +
 				"	 Outputs:\n" +
 				"		java.util.List<java.lang.Long> output -> foo + bar\n" + ")\n";
-		actual = OpUtils.opString(info, info.inputs().get(1));
+		actual = info.opString(info.inputs().get(1));
 		Assertions.assertEquals(expected, actual);
 	}
 

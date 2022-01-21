@@ -48,7 +48,7 @@ import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Adapt;
@@ -203,7 +203,7 @@ public class OpMethodInfo implements OpInfo {
 	{
 
 		// Case 1: no dependencies - lambdaMetaFactory is fastest
-		if (OpUtils.dependencies(struct()).size() == 0) {
+		if (dependencies().size() == 0) {
 			try {
 				method.setAccessible(true);
 				MethodHandle handle = MethodHandles.lookup().unreflect(method);
@@ -247,7 +247,7 @@ public class OpMethodInfo implements OpInfo {
 
 		// Create wrapper class
 		String className = formClassName(m);
-		List<OpDependencyMember<?>> depMembers = OpUtils.dependencies(struct());
+		List<OpDependencyMember<?>> depMembers = dependencies();
 		Class<?> c;
 		try {
 			CtClass cc = pool.makeClass(className);
@@ -345,7 +345,7 @@ public class OpMethodInfo implements OpInfo {
 			"(");
 
 		// method inputs
-		int applyInputs = OpUtils.inputs(struct()).size();
+		int applyInputs = inputs().size();
 		for (int i = 0; i < applyInputs; i++) {
 			sb.append(" Object in" + i);
 			if (i < applyInputs - 1) sb.append(",");
@@ -439,7 +439,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpUtils.opString(this);
+		return opString();
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingResult;
 import org.scijava.ops.api.features.MatchingRoutine;
@@ -161,7 +161,6 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		final Type[] refArgTypes = candidate.paddedArgs();
 		final Type refType = candidate.getRef().getType();
 		final Type infoType = candidate.opInfo().opType();
-		Type[] candidateArgTypes = OpUtils.inputTypes(candidate);
 		Type implementedInfoType = Types.getExactSuperType(infoType, Types.raw(
 			refType));
 		if (!(implementedInfoType instanceof ParameterizedType)) {
@@ -170,7 +169,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		}
 		Type[] implTypeParams = ((ParameterizedType) implementedInfoType)
 			.getActualTypeArguments();
-		candidateArgTypes = candidate.opInfo().struct().members().stream()//
+		Type[] candidateArgTypes = candidate.opInfo().struct().members().stream()//
 			.map(member -> member.isInput() ? member.getType() : null) //
 			.toArray(Type[]::new);
 		for (int i = 0; i < implTypeParams.length; i++) {
@@ -226,7 +225,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		final Type[] paddedArgs)
 	{
 		int i = 0;
-		for (final Member<?> member : OpUtils.inputs(candidate)) {
+		for (final Member<?> member : candidate.opInfo().inputs()) {
 			if (paddedArgs[i++] == null && member.isRequired()) {
 				candidate.setStatus(StatusCode.REQUIRED_ARG_IS_NULL, null, member);
 				return true;
@@ -250,7 +249,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		if (refOutType == null) return true; // no constraints on output types
 
 		if (candidate.opInfo().output().isInput()) return true;
-		final Type candidateOutType = OpUtils.outputType(candidate);
+		final Type candidateOutType = candidate.opInfo().outputType();
 		final int conflictingIndex = MatchingUtils.checkGenericOutputsAssignability(
 			new Type[] { candidateOutType }, new Type[] { refOutType }, typeBounds);
 		if (conflictingIndex != -1) {
@@ -312,7 +311,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	private boolean typesPerfectMatch(final OpCandidate candidate) {
 		int i = 0;
 		Type[] paddedArgs = candidate.paddedArgs();
-		for (final Type t : OpUtils.inputTypes(candidate)) {
+		for (final Type t : candidate.opInfo().inputTypes()) {
 			if (paddedArgs[i] != null) {
 				if (!t.equals(paddedArgs[i])) return false;
 			}
@@ -320,7 +319,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 		}
 
 		final Type outputType = candidate.getRef().getOutType();
-		if (!Objects.equals(outputType, OpUtils.outputType(candidate)))
+		if (!Objects.equals(outputType, candidate.opInfo().outputType()))
 			return false;
 
 		candidate.setStatus(StatusCode.MATCH);

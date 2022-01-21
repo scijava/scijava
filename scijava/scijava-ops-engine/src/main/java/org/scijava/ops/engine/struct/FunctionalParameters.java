@@ -8,7 +8,7 @@ import java.util.List;
 import org.scijava.ValidityProblem;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;

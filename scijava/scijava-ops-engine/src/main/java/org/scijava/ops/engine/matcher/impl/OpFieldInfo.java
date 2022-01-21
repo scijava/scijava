@@ -41,7 +41,7 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.spi.OpField;
 import org.scijava.struct.Struct;
@@ -240,7 +240,7 @@ public class OpFieldInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpUtils.opString(this);
+		return opString();
 	}
 
 }

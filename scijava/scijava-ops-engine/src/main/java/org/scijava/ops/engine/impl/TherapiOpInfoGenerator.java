@@ -14,7 +14,7 @@ import org.scijava.discovery.therapi.TaggedElement;
 import org.scijava.discovery.therapi.TherapiDiscoveryUtils;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;

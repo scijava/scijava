@@ -31,6 +31,7 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +87,7 @@ public class OpCandidate {
 		this.info = info;
 		this.typeVarAssigns = typeVarAssigns;
 
-		this.paddedArgs = OpUtils.padTypes(this, getRef().getArgs());
+		this.paddedArgs = padTypes(this, getRef().getArgs());
 		this.reifiedType = getReifiedType(ref, info, typeVarAssigns);
 	}
 
@@ -216,7 +217,7 @@ public class OpCandidate {
 		}
 		final String msg = message;
 		if (msg != null)
-			sb.append(": " + msg);
+			sb.append(": ").append(msg);
 
 		return sb.toString();
 	}
@@ -249,6 +250,60 @@ public class OpCandidate {
 			throw new IllegalArgumentException(
 					"OpInfo " + info + " cannot satisfy the requirements contained within OpRef " + ref);
 		return typeVarAssigns;
+	}
+
+	private Type[] padTypes(final OpCandidate candidate, Type[] types) {
+		final Object[] padded = padArgs(candidate, (Object[]) types);
+		return Arrays.copyOf(padded, padded.length, Type[].class);
+	}
+
+	private Object[] padArgs(final OpCandidate candidate,
+			Object... args) {
+		List<Member<?>> members;
+		String argName;
+		members = candidate.opInfo().inputs();
+		argName = "args";
+
+		int inputCount = 0, requiredCount = 0;
+		for (final Member<?> item : members) {
+			inputCount++;
+			if (!item.isRequired())
+				requiredCount++;
+		}
+		if (args.length == inputCount) {
+			// correct number of arguments
+			return args;
+		}
+		if (args.length > inputCount) {
+			// too many arguments
+			candidate.setStatus(StatusCode.TOO_MANY_ARGS,
+					"\nNumber of " + argName + " given: " + args.length + "  >  " +
+							"Number of " + argName + " of op: " + inputCount);
+			return null;
+		}
+		if (args.length < requiredCount) {
+			// too few arguments
+			candidate.setStatus(StatusCode.TOO_FEW_ARGS,
+					"\nNumber of " + argName + " given: " + args.length + "  <  " +
+							"Number of required " + argName + " of op: " + requiredCount);
+			return null;
+		}
+
+		// pad optional parameters with null (from right to left)
+		final int argsToPad = inputCount - args.length;
+		final int optionalCount = inputCount - requiredCount;
+		final int optionalsToFill = optionalCount - argsToPad;
+		final Object[] paddedArgs = new Object[inputCount];
+		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
+		for (final Member<?> item : members) {
+			if (!item.isRequired() && optionalIndex++ >= optionalsToFill) {
+				// skip this optional parameter (pad with null)
+				paddedIndex++;
+				continue;
+			}
+			paddedArgs[paddedIndex++] = args[argIndex++];
+		}
+		return paddedArgs;
 	}
 
 }

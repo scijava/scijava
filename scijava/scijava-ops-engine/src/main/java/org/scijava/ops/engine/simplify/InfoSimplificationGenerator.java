@@ -13,7 +13,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.types.Types;
 
 
@@ -27,9 +27,7 @@ public class InfoSimplificationGenerator {
 	public InfoSimplificationGenerator(OpInfo info, OpEnvironment env) {
 		this.info = info;
 		this.env = env;
-		Type[] args = OpUtils.inputs(info.struct()).stream() //
-				.map(m -> m.getType()) //
-				.toArray(Type[]::new);
+		Type[] args = info.inputTypes().toArray(Type[]::new);
 		this.focuserSets = SimplificationUtils.focusArgs(env, args);
 		Type outType = info.output().getType();
 		this.outputSimplifiers = SimplificationUtils.getSimplifiers(env, outType);

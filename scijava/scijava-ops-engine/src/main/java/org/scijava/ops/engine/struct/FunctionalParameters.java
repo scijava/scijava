@@ -12,6 +12,7 @@ import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
+import org.scijava.struct.Structs;
 import org.scijava.types.Types;
 
 public class FunctionalParameters {
@@ -38,7 +39,7 @@ public class FunctionalParameters {
 		for (SynthesizedParameterMember<?> m : fmtMembers) {
 			final Type itemType = m.getType();
 	
-			final boolean valid = org.scijava.struct.Structs.checkValidity(m, () -> m.getKey(), Types.raw(itemType), false,
+			final boolean valid = Structs.checkValidity(m, m.getKey(), Types.raw(itemType), false,
 				problems);
 			if (!valid) continue;
 			items.add(m);

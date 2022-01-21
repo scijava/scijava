@@ -16,7 +16,7 @@ public interface Member<T> {
 	/** Unique name of the member. */
 	String getKey();
 
-	/** Description of the member. */
+	/** Non-null description. The default description is an empty string */
 	default String getDescription() {
 		return "";
 	}

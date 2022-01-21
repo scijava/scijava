@@ -116,7 +116,7 @@ public class ReductionUtils {
 
 	private static String memberNames(ReducedOpInfo reducedInfo) {
 		Stream<String> memberNames = //
-			Streams.concat(Arrays.stream(OpUtils.inputTypes(reducedInfo.struct())), //
+			Streams.concat(reducedInfo.inputTypes().stream(), //
 				Stream.of(reducedInfo.output().getType())) //
 				.map(type -> getClassName(Types.raw(type)));
 		Iterable<String> iterableNames = (Iterable<String>) memberNames::iterator;
@@ -229,9 +229,9 @@ public class ReductionUtils {
 		}
 		sb.append("op." + srcM.getName() + "(");
 		int i;
-		List<Member<?>> totalArguments = OpUtils.inputs(info.srcInfo().struct());
-		int totalArgs = OpUtils.inputs(info.srcInfo().struct()).size();
-		long totalOptionals = OpUtils.inputs(info.srcInfo().struct())
+		List<Member<?>> totalArguments = info.srcInfo().inputs();
+		int totalArgs = totalArguments.size();
+		long totalOptionals = totalArguments
 			.parallelStream().filter(member -> !member.isRequired())
 			.count();
 		long neededOptionals = totalOptionals - info.paramsReduced();

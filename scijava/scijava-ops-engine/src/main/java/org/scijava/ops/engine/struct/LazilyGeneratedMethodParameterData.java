@@ -16,7 +16,6 @@ import org.scijava.ops.engine.reduce.ReductionUtils;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
-import org.scijava.struct.Struct;
 
 import com.github.therapi.runtimejavadoc.MethodJavadoc;
 import com.github.therapi.runtimejavadoc.OtherJavadoc;

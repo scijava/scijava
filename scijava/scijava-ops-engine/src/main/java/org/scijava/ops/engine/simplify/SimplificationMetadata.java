@@ -1,4 +1,3 @@
-
 package org.scijava.ops.engine.simplify;
 
 import java.lang.reflect.Type;

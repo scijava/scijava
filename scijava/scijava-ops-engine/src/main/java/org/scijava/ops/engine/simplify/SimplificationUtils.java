@@ -170,12 +170,12 @@ public class SimplificationUtils {
 	}
 
 	/**
-	 * Obtains all {@link Simplifier}s known to the environment that can operate
+	 * Obtains all simplifiers known to the environment that can operate
 	 * on {@code t}. If no {@code Simplifier}s are known to explicitly work on
 	 * {@code t}, an {@link Identity} simplifier will be created.
 	 * 
 	 * @param t - the {@link Type} we are interested in simplifying.
-	 * @return a list of {@link Simplifier}s that can simplify {@code t}.
+	 * @return a list of simplifiers that can simplify {@code t}.
 	 */
 	public static List<OpInfo> getSimplifiers(OpEnvironment env, Type t) {
 		// TODO: optimize
@@ -199,12 +199,12 @@ public class SimplificationUtils {
 
 
 	/**
-	 * Obtains all {@link Simplifier}s known to the environment that can operate
+	 * Obtains all simplifiers known to the environment that can operate
 	 * on {@code t}. If no {@code Simplifier}s are known to explicitly work on
 	 * {@code t}, an {@link Identity} simplifier will be created.
 	 * 
 	 * @param t - the {@link Type} we are interested in simplifying.
-	 * @return a list of {@link Simplifier}s that can simplify {@code t}.
+	 * @return a list of simplifiers that can simplify {@code t}.
 	 */
 	public static List<OpInfo> getFocusers(OpEnvironment env, Type t) {
 		// TODO: optimize
@@ -217,7 +217,7 @@ public class SimplificationUtils {
 	}
 	
 	/**
-	 * Creates a Class given an Op and a set of {@link Simplifier}s. This class:
+	 * Creates a Class given an Op and a set of simplifiers. This class:
 	 * <ul>
 	 * <li>is of the same functional type as the given Op</li>
 	 * <li>has type arguments that are of the simplified form of the type

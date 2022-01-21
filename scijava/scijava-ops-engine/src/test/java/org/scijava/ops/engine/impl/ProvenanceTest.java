@@ -246,14 +246,20 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	 */
 	@Test
 	public void testOpWithDependencyRecoveryFromString() {
-		OpInfo info = singularInfoOfName("test.provenanceMapper");
-		OpInfo dependency = singularInfoOfName("test.provenanceMapped");
-		InfoChain depChain = new InfoChain(dependency);
-		InfoChain chain = new InfoChain(info, Collections.singletonList(depChain));
-		String signature = chain.signature();
-		Nil<Function<Double[], Thing>> special = new Nil<>() {};
-		@SuppressWarnings("unused")
-		Function<Double[], Thing> actual = ops.opFromSignature(signature, special);
+		// Get the Op
+		Function<Double[], Thing> mapper = ops //
+				.op("test.provenanceMapper") //
+				.input(new Double[] {5.0, 10.0, 15.0}) //
+				.outType(Thing.class) //
+				.function();
+		// Get the signature from the Op
+		String signature = history.signatureOf(mapper);
+		// Generate the Op from the signature and an Op type
+		Nil<Function<Double, Thing>> specialType = new Nil<>() {};
+		Function<Double, Thing> actual = ops //
+				.opFromSignature(signature, specialType);
+		// Assert Op similarity
+		Assertions.assertTrue(wrappedOpEquality(mapper, actual));
 	}
 
 	/**
@@ -378,14 +384,6 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	}
 
 	// -- Helper Methods -- //
-
-	private OpInfo singularInfoOfName(String name) {
-		Iterator<OpInfo> infos = ops.infos(name).iterator();
-		Assertions.assertTrue(infos.hasNext());
-		OpInfo info = infos.next();
-		Assertions.assertFalse(infos.hasNext());
-		return info;
-	}
 
 	/**
 	 * This method returns {@code true} iff:

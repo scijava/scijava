@@ -657,6 +657,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		List<OpInfoGenerator> generators = infoGenerators();
 		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(o, generators));
 		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(o, generators));
+		Set<OpInfo> infos = opDirectory.values().stream().flatMap(Collection::stream).map(info -> opsFromObject(info, generators)).flatMap(Collection::stream).collect(
+				Collectors.toSet());
+		infos.forEach(info -> addToOpIndex.accept(info, log));
 	}
 
 	/**

@@ -10,6 +10,11 @@ import java.lang.annotation.Annotation;
  */
 public class BaseOpHints {
 
+	public static class Reduction {
+		public static final String PREFIX = "reduction";
+		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";
+	}
+
 	public static class Simplification {
 		public static final String PREFIX = "simplification";
 		public static final String FORBIDDEN = PREFIX + ".FORBIDDEN";

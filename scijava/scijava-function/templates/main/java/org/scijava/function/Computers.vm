@@ -37,14 +37,19 @@ public final class Computers {
 
 	/**
 	 * All known computer types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}. It might be
+	 * nice to use a BiMap from e.g. Google Guava, but that would require a
+	 * dependency on that component :(
 	 */
-	public static final HashMap<Class<?>, Integer> ALL_COMPUTERS;
+	public static final HashMap<Integer, Class<?>> ALL_COMPUTERS;
+	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
 
 	static {
 		ALL_COMPUTERS = new HashMap<>();
+		ALL_ARITIES = new HashMap<>();
 #foreach($arity in $arities)
-		ALL_COMPUTERS.put(Computers.Arity${arity}.class, $arity);
+		ALL_COMPUTERS.put($arity, Computers.Arity${arity}.class);
+		ALL_ARITIES.put(Computers.Arity${arity}.class, $arity);
 #end
 	}
 
@@ -56,7 +61,28 @@ public final class Computers {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isComputer(Class<?> c) {
-		return ALL_COMPUTERS.containsKey(c);
+		return ALL_COMPUTERS.containsValue(c);
+	}
+
+	/**
+	 * @param arity an {@code int} corresponding to a {@code Computer} of that
+	 *          arity.
+	 * @return the {@code Computer} of arity {@code arity}.
+	 * @throws IllegalArgumentException iff there is no known {@code Computer} of
+	 *           arity {@code arity}.
+	 */
+	public static Class<?> computerOfArity(int arity) {
+		if (ALL_COMPUTERS.containsKey(arity)) return ALL_COMPUTERS.get(arity);
+		throw new IllegalArgumentException("No Computer of arity " + arity);
+	}
+
+	/**
+	 * @param c the {@link Class} of unknown arity
+	 * @return the arity of {@code c}, or {@code -1} if {@code c} is <b>not</b> a
+	 *         {@code Computer}.
+	 */
+	public static int arityOf(Class<?> c) {
+		return ALL_ARITIES.getOrDefault(c, -1);
 	}
 
 #foreach($arity in $arities)

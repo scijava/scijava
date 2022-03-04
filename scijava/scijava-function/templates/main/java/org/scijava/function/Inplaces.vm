@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -53,17 +54,20 @@ public final class Inplaces {
 	 * All known inplace types and their arities and mutable positions. The
 	 * entries are sorted by arity and mutable position.
 	 */
-	public static final Map<Class<?>, InplaceInfo> ALL_INPLACES;
+	public static final Map<InplaceInfo, Class<?>> ALL_INPLACES;
+	public static final Map<Class<?>, InplaceInfo> ALL_ARITIES;
 
 	static {
-		final Map<Class<?>, InplaceInfo> inplaces = new LinkedHashMap<>(22);
+		ALL_INPLACES = new HashMap<>();
+		ALL_ARITIES = new HashMap<>();
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 #set($inplaceIndex = $a - 1)
-		inplaces.put($inplaceClass.call($arity, $a), new InplaceInfo(${arity}, $inplaceIndex));
+        InplaceInfo info_${arity}_${a} = new InplaceInfo(${arity}, $inplaceIndex);
+		ALL_INPLACES.put(info_${arity}_${a}, $inplaceClass.call($arity, $a));
+		ALL_ARITIES.put($inplaceClass.call($arity, $a), info_${arity}_${a});
 #end
 #end
-		ALL_INPLACES = Collections.unmodifiableMap(inplaces);
 	}
 
 	/**
@@ -74,14 +78,39 @@ public final class Inplaces {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isInplace(Class<?> c) {
-		return ALL_INPLACES.containsKey(c);
+		return ALL_ARITIES.containsKey(c);
 	}
 
 	public static List<Class<?>> getInplacesOfArity(final int arity) {
 		return ALL_INPLACES.entrySet().stream() //
-			.filter(e -> e.getValue().arity() == arity) //
-			.map(Entry<Class<?>, InplaceInfo>::getKey) //
+			.filter(e -> e.getKey().arity() == arity) //
+			.map(Entry::getValue) //
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * @param arity an {@code int} corresponding to a {@code Inplace} of that
+	 *          arity.
+	 * @param mutableIndex an {@code int} corresponding to a the mutable index of d
+	 *          arity.
+	 * @return the {@code Inplace} of arity {@code arity}.
+	 * @throws IllegalArgumentException iff there is no known {@code Inplace} of
+	 *           arity {@code arity}.
+	 */
+	public static Class<?> inplaceOfArity(int arity, int mutableIndex) {
+		InplaceInfo info = new InplaceInfo(arity, mutableIndex);
+		if (ALL_INPLACES.containsKey(info)) return ALL_INPLACES.get(info);
+		throw new IllegalArgumentException("No Inplace of arity " + arity +
+			" and mutable index " + mutableIndex);
+	}
+
+	/**
+	 * @param c the {@link Class} of unknown arity
+	 * @return the arity of {@code c}, or {@code -1} if {@code c} is <b>not</b> a
+	 *         {@code Inplace}.
+	 */
+	public static InplaceInfo arityOf(Class<?> c) {
+		return ALL_ARITIES.getOrDefault(c, new InplaceInfo(-1, -1));
 	}
 
 	@FunctionalInterface

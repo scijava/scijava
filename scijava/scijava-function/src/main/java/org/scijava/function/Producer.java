@@ -18,6 +18,7 @@ import java.util.function.Supplier;
  * @param <O>
  *            The type of objects produced.
  */
+@FunctionalInterface
 public interface Producer<O> extends Supplier<O> {
 	O create();
 

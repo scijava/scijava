@@ -29,10 +29,7 @@
 
 package org.scijava.ops.engine.matcher.impl;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +40,7 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.struct.FieldInstance;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
 import org.scijava.ops.spi.OpField;
 import org.scijava.priority.Priority;
@@ -111,8 +109,8 @@ public class OpFieldInfo implements OpInfo {
 		// ALLOWED!
 		try {
 			Type structType = Types.fieldType(field, field.getDeclaringClass());
-			struct = Structs.from(field, structType, problems, new FieldParameterMemberParser());
-//			struct = ParameterStructs.structOf(field);
+			FieldInstance fieldInstance = new FieldInstance(field, instance);
+			struct = Structs.from(fieldInstance, structType, problems, new FieldParameterMemberParser());
 			OpUtils.checkHasSingleOutput(struct);
 			// NB: Contextual parameters not supported for now.
 		} catch (ValidityException e) {

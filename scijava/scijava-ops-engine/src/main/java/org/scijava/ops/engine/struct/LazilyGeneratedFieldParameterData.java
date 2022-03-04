@@ -7,12 +7,16 @@ import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
+import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.reduce.ReductionUtils;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.types.inference.InterfaceInference;
 
@@ -27,13 +31,13 @@ import org.scijava.types.inference.InterfaceInference;
  */
 public class LazilyGeneratedFieldParameterData implements ParameterData {
 
-	private static final Map<Field, MethodParamInfo> paramDataMap =
+	private static final Map<FieldInstance, MethodParamInfo> paramDataMap =
 		new HashMap<>();
 
-	private final Field f;
+	private final FieldInstance fieldInstance;
 
-	public LazilyGeneratedFieldParameterData(Field f) {
-		this.f = f;
+	public LazilyGeneratedFieldParameterData(FieldInstance fieldInstance) {
+		this.fieldInstance = fieldInstance;
 	}
 
 	/**
@@ -77,37 +81,40 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 	}
 
 	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
-		Field f)
+		FieldInstance fieldInstance)
 	{
-		if (!paramDataMap.containsKey(f)) generateFieldParamInfo(fmts, f);
-		return paramDataMap.get(f);
+		if (!paramDataMap.containsKey(fieldInstance)) generateFieldParamInfo(fmts, fieldInstance);
+		return paramDataMap.get(fieldInstance);
 	}
 
 	public static synchronized void generateFieldParamInfo(
-		List<FunctionalMethodType> fmts, Field f)
+		List<FunctionalMethodType> fmts, FieldInstance fieldInstance)
 	{
-		if (paramDataMap.containsKey(f)) return;
+		if (paramDataMap.containsKey(fieldInstance)) return;
 
-		Method sam = InterfaceInference.singularAbstractMethod(f.getType());
-		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(f);
+		Method sam = InterfaceInference.singularAbstractMethod(fieldInstance.field().getType());
+		FieldJavadoc doc = RuntimeJavadoc.getJavadoc(fieldInstance.field());
 		long numIns = sam.getParameterCount();
 		long numOuts = 1; // There is always one output
 
 		// determine the Op inputs/outputs
+		Boolean[] paramOptionality = getParameterOptionality(fieldInstance.instance(),
+				fieldInstance.field(), (int) numIns, new ArrayList<>());
 
 		if (hasCustomJavadoc(doc.getOther(), numIns, numOuts)) {
-			paramDataMap.put(f, javadocFieldParamInfo(fmts, doc));
+			paramDataMap.put(fieldInstance, javadocFieldParamInfo(fmts, doc, paramOptionality));
 		}
 		else {
-			paramDataMap.put(f, synthesizedMethodParamInfo(fmts));
+			paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts, paramOptionality));
 		}
 	}
 
 	private static MethodParamInfo javadocFieldParamInfo(
-		List<FunctionalMethodType> fmts, FieldJavadoc doc)
+		List<FunctionalMethodType> fmts, FieldJavadoc doc, Boolean[] paramOptionality)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts.size());
+		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts.size());
 
 		List<OtherJavadoc> others = doc.getOther();
 		int otherIndex = 0;
@@ -133,6 +140,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 					fmtNames.put(fmt, param);
 					fmtDescriptions.put(fmt, "");
 				}
+				fmtOptionality.put(fmt, paramOptionality[i]);
 			}
 			// if the taglet is an output, it should just have a description
 			else {
@@ -140,7 +148,8 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 				fmtDescriptions.put(fmt, param);
 			}
 		}
-		return new MethodParamInfo(fmtNames, fmtDescriptions);
+
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
 	}
 
 	/**
@@ -159,18 +168,21 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 	}
 
 	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts)
+		List<FunctionalMethodType> fmts, Boolean[] paramOptionality)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts.size());
+		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts.size());
 
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
+		int optionalIndex = 0;
 		for (FunctionalMethodType fmt : fmts) {
 			fmtDescriptions.put(fmt, "");
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.put(fmt, "input" + ins++);
+					fmtOptionality.put(fmt, paramOptionality[optionalIndex++]);
 					break;
 				case OUTPUT:
 					fmtNames.put(fmt, "output" + outs++);
@@ -185,7 +197,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 					throw new RuntimeException("Unexpected ItemIO type encountered!");
 			}
 		}
-		return new MethodParamInfo(fmtNames, fmtDescriptions);
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
 	}
 
 	@Override
@@ -193,11 +205,47 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		List<FunctionalMethodType> fmts)
 	{
 		Producer<MethodParamInfo> p = //
-			() -> LazilyGeneratedFieldParameterData.getInfo(fmts, f);
+			() -> LazilyGeneratedFieldParameterData.getInfo(fmts, fieldInstance);
 
 		return fmts.stream() //
 			.map(fmt -> new SynthesizedParameterMember<>(fmt, p)) //
 			.collect(Collectors.toList());
 	}
+
+	// Helper methods
+	private static Boolean[] getParameterOptionality(Object instance, Field field,
+			int opParams, List<ValidityProblem> problems)
+	{
+
+		Class<?> fieldClass;
+		try {
+			fieldClass = field.get(instance).getClass();
+		}
+		catch (IllegalArgumentException | IllegalAccessException exc) {
+			// TODO Auto-generated catch block
+			problems.add(new ValidityProblem(exc));
+			return ReductionUtils.generateAllRequiredArray(opParams);
+		}
+		List<Method> fMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(fieldClass);
+		Class<?> fIface = OpUtils.findFunctionalInterface(fieldClass);
+		List<Method> fIfaceMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(fIface);
+
+		if (fMethodsWithOptionals.isEmpty() && fIfaceMethodsWithOptionals.isEmpty()) {
+			return ReductionUtils.generateAllRequiredArray(opParams);
+		}
+		if (!fMethodsWithOptionals.isEmpty() && !fIfaceMethodsWithOptionals.isEmpty()) {
+			problems.add(new ValidityProblem(
+					"Multiple methods from the op type have optional parameters!"));
+			return ReductionUtils.generateAllRequiredArray(opParams);
+		}
+		if (fMethodsWithOptionals.isEmpty()) {
+			return ReductionUtils.findParameterOptionality(fIfaceMethodsWithOptionals.get(0));
+		}
+		if (fIfaceMethodsWithOptionals.isEmpty()) {
+			return ReductionUtils.findParameterOptionality(fMethodsWithOptionals.get(0));
+		}
+		return ReductionUtils.generateAllRequiredArray(opParams);
+	}
+
 
 }

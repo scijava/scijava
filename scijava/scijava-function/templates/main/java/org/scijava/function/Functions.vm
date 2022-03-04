@@ -35,14 +35,19 @@ public final class Functions {
 
 	/**
 	 * All known function types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}. It might be
+	 * nice to use a BiMap from e.g. Google Guava, but that would require a
+	 * dependency on that component :(
 	 */
 	public static final HashMap<Integer, Class<?>> ALL_FUNCTIONS;
+	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
 
 	static {
 		ALL_FUNCTIONS = new HashMap<>(10);
+		ALL_ARITIES = new HashMap<>(10);
 #foreach($arity in [0..$maxArity])
 		ALL_FUNCTIONS.put($arity, ${functionArity.call($arity)}.class);
+		ALL_ARITIES.put(${functionArity.call($arity)}.class, $arity);
 #end
 	}
 
@@ -54,7 +59,41 @@ public final class Functions {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isFunction(Class<?> c) {
-		return ALL_FUNCTIONS.containsValue(c);
+		try {
+			Class<?> superType = superType(c);
+			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
+	public static Class<?> superType(Class<?> c) {
+		if (ALL_FUNCTIONS.containsValue(c)) return c;
+		for(Class<?> func : ALL_ARITIES.keySet()) {
+			if (func.isAssignableFrom(c)) return func;
+		}
+		throw new IllegalArgumentException(c + " is not a subclass of any known Functions!");
+	}
+
+	/**
+	 * @param arity an {@code int} corresponding to a {@code Function} of that
+	 *          arity.
+	 * @return the {@code Function} of arity {@code arity}.
+	 * @throws IllegalArgumentException iff there is no known {@link Function} of
+	 *           arity {@code arity}.
+	 */
+	public static Class<?> functionOfArity(int arity) {
+		if (ALL_FUNCTIONS.containsKey(arity)) return ALL_FUNCTIONS.get(arity);
+		throw new IllegalArgumentException("No Function of arity " + arity);
+	}
+
+	/**
+	 * @param c the {@link Class} of unknown arity
+	 * @return the arity of {@code c}, or {@code -1} if {@code c} is <b>not</b> a
+	 *         {@code Function}.
+	 */
+	public static int arityOf(Class<?> c) {
+		return ALL_ARITIES.getOrDefault(c, -1);
 	}
 
 #foreach($arity in $arities)

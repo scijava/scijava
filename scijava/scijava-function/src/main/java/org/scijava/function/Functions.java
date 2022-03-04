@@ -34,29 +34,50 @@ public final class Functions {
 
 	/**
 	 * All known function types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}. It might be
+	 * nice to use a BiMap from e.g. Google Guava, but that would require a
+	 * dependency on that component :(
 	 */
 	public static final HashMap<Integer, Class<?>> ALL_FUNCTIONS;
+	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
 
 	static {
 		ALL_FUNCTIONS = new HashMap<>(10);
+		ALL_ARITIES = new HashMap<>(10);
 		ALL_FUNCTIONS.put(0, Producer.class);
+		ALL_ARITIES.put(Producer.class, 0);
 		ALL_FUNCTIONS.put(1, Function.class);
+		ALL_ARITIES.put(Function.class, 1);
 		ALL_FUNCTIONS.put(2, BiFunction.class);
+		ALL_ARITIES.put(BiFunction.class, 2);
 		ALL_FUNCTIONS.put(3, Functions.Arity3.class);
+		ALL_ARITIES.put(Functions.Arity3.class, 3);
 		ALL_FUNCTIONS.put(4, Functions.Arity4.class);
+		ALL_ARITIES.put(Functions.Arity4.class, 4);
 		ALL_FUNCTIONS.put(5, Functions.Arity5.class);
+		ALL_ARITIES.put(Functions.Arity5.class, 5);
 		ALL_FUNCTIONS.put(6, Functions.Arity6.class);
+		ALL_ARITIES.put(Functions.Arity6.class, 6);
 		ALL_FUNCTIONS.put(7, Functions.Arity7.class);
+		ALL_ARITIES.put(Functions.Arity7.class, 7);
 		ALL_FUNCTIONS.put(8, Functions.Arity8.class);
+		ALL_ARITIES.put(Functions.Arity8.class, 8);
 		ALL_FUNCTIONS.put(9, Functions.Arity9.class);
+		ALL_ARITIES.put(Functions.Arity9.class, 9);
 		ALL_FUNCTIONS.put(10, Functions.Arity10.class);
+		ALL_ARITIES.put(Functions.Arity10.class, 10);
 		ALL_FUNCTIONS.put(11, Functions.Arity11.class);
+		ALL_ARITIES.put(Functions.Arity11.class, 11);
 		ALL_FUNCTIONS.put(12, Functions.Arity12.class);
+		ALL_ARITIES.put(Functions.Arity12.class, 12);
 		ALL_FUNCTIONS.put(13, Functions.Arity13.class);
+		ALL_ARITIES.put(Functions.Arity13.class, 13);
 		ALL_FUNCTIONS.put(14, Functions.Arity14.class);
+		ALL_ARITIES.put(Functions.Arity14.class, 14);
 		ALL_FUNCTIONS.put(15, Functions.Arity15.class);
+		ALL_ARITIES.put(Functions.Arity15.class, 15);
 		ALL_FUNCTIONS.put(16, Functions.Arity16.class);
+		ALL_ARITIES.put(Functions.Arity16.class, 16);
 	}
 
 	/**
@@ -67,7 +88,41 @@ public final class Functions {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isFunction(Class<?> c) {
-		return ALL_FUNCTIONS.containsValue(c);
+		try {
+			Class<?> superType = superType(c);
+			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
+	public static Class<?> superType(Class<?> c) {
+		if (ALL_FUNCTIONS.containsValue(c)) return c;
+		for(Class<?> func : ALL_ARITIES.keySet()) {
+			if (func.isAssignableFrom(c)) return func;
+		}
+		throw new IllegalArgumentException(c + " is not a subclass of any known Functions!");
+	}
+
+	/**
+	 * @param arity an {@code int} corresponding to a {@code Function} of that
+	 *          arity.
+	 * @return the {@code Function} of arity {@code arity}.
+	 * @throws IllegalArgumentException iff there is no known {@link Function} of
+	 *           arity {@code arity}.
+	 */
+	public static Class<?> functionOfArity(int arity) {
+		if (ALL_FUNCTIONS.containsKey(arity)) return ALL_FUNCTIONS.get(arity);
+		throw new IllegalArgumentException("No Function of arity " + arity);
+	}
+
+	/**
+	 * @param c the {@link Class} of unknown arity
+	 * @return the arity of {@code c}, or {@code -1} if {@code c} is <b>not</b> a
+	 *         {@code Function}.
+	 */
+	public static int arityOf(Class<?> c) {
+		return ALL_ARITIES.getOrDefault(c, -1);
 	}
 
 	/**

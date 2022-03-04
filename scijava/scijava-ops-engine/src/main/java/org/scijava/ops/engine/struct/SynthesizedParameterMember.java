@@ -30,12 +30,22 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 
 	private String description = null;
 
+	private boolean isRequired;
+
 	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> synthesizerGenerator)
+	{
+		this(fmt, synthesizerGenerator, true);
+	}
+
+	public SynthesizedParameterMember(final FunctionalMethodType fmt, final Producer<MethodParamInfo> synthesizerGenerator, boolean isRequired)
 	{
 		this.fmt = fmt;
 		this.nameGenerator = () -> synthesizerGenerator.create().name(fmt);
 		this.descriptionGenerator = () -> synthesizerGenerator.create().description(fmt);
+		this.isRequired = !synthesizerGenerator.create().optionality(fmt);
 	}
+
+
 
 	// -- Member methods --
 
@@ -77,4 +87,7 @@ public class SynthesizedParameterMember<T> implements Member<T> {
 	public boolean isStruct() {
 		return false;
 	}
+
+	@Override
+	public boolean isRequired() {return isRequired;}
 }

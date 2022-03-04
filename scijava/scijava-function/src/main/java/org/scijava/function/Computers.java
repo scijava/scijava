@@ -37,29 +37,50 @@ public final class Computers {
 
 	/**
 	 * All known computer types and their arities. The entries are sorted by
-	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}.
+	 * arity, i.e., the {@code i}-th entry has an arity of {@code i}. It might be
+	 * nice to use a BiMap from e.g. Google Guava, but that would require a
+	 * dependency on that component :(
 	 */
-	public static final HashMap<Class<?>, Integer> ALL_COMPUTERS;
+	public static final HashMap<Integer, Class<?>> ALL_COMPUTERS;
+	public static final HashMap<Class<?>, Integer> ALL_ARITIES;
 
 	static {
 		ALL_COMPUTERS = new HashMap<>();
-		ALL_COMPUTERS.put(Computers.Arity0.class, 0);
-		ALL_COMPUTERS.put(Computers.Arity1.class, 1);
-		ALL_COMPUTERS.put(Computers.Arity2.class, 2);
-		ALL_COMPUTERS.put(Computers.Arity3.class, 3);
-		ALL_COMPUTERS.put(Computers.Arity4.class, 4);
-		ALL_COMPUTERS.put(Computers.Arity5.class, 5);
-		ALL_COMPUTERS.put(Computers.Arity6.class, 6);
-		ALL_COMPUTERS.put(Computers.Arity7.class, 7);
-		ALL_COMPUTERS.put(Computers.Arity8.class, 8);
-		ALL_COMPUTERS.put(Computers.Arity9.class, 9);
-		ALL_COMPUTERS.put(Computers.Arity10.class, 10);
-		ALL_COMPUTERS.put(Computers.Arity11.class, 11);
-		ALL_COMPUTERS.put(Computers.Arity12.class, 12);
-		ALL_COMPUTERS.put(Computers.Arity13.class, 13);
-		ALL_COMPUTERS.put(Computers.Arity14.class, 14);
-		ALL_COMPUTERS.put(Computers.Arity15.class, 15);
-		ALL_COMPUTERS.put(Computers.Arity16.class, 16);
+		ALL_ARITIES = new HashMap<>();
+		ALL_COMPUTERS.put(0, Computers.Arity0.class);
+		ALL_ARITIES.put(Computers.Arity0.class, 0);
+		ALL_COMPUTERS.put(1, Computers.Arity1.class);
+		ALL_ARITIES.put(Computers.Arity1.class, 1);
+		ALL_COMPUTERS.put(2, Computers.Arity2.class);
+		ALL_ARITIES.put(Computers.Arity2.class, 2);
+		ALL_COMPUTERS.put(3, Computers.Arity3.class);
+		ALL_ARITIES.put(Computers.Arity3.class, 3);
+		ALL_COMPUTERS.put(4, Computers.Arity4.class);
+		ALL_ARITIES.put(Computers.Arity4.class, 4);
+		ALL_COMPUTERS.put(5, Computers.Arity5.class);
+		ALL_ARITIES.put(Computers.Arity5.class, 5);
+		ALL_COMPUTERS.put(6, Computers.Arity6.class);
+		ALL_ARITIES.put(Computers.Arity6.class, 6);
+		ALL_COMPUTERS.put(7, Computers.Arity7.class);
+		ALL_ARITIES.put(Computers.Arity7.class, 7);
+		ALL_COMPUTERS.put(8, Computers.Arity8.class);
+		ALL_ARITIES.put(Computers.Arity8.class, 8);
+		ALL_COMPUTERS.put(9, Computers.Arity9.class);
+		ALL_ARITIES.put(Computers.Arity9.class, 9);
+		ALL_COMPUTERS.put(10, Computers.Arity10.class);
+		ALL_ARITIES.put(Computers.Arity10.class, 10);
+		ALL_COMPUTERS.put(11, Computers.Arity11.class);
+		ALL_ARITIES.put(Computers.Arity11.class, 11);
+		ALL_COMPUTERS.put(12, Computers.Arity12.class);
+		ALL_ARITIES.put(Computers.Arity12.class, 12);
+		ALL_COMPUTERS.put(13, Computers.Arity13.class);
+		ALL_ARITIES.put(Computers.Arity13.class, 13);
+		ALL_COMPUTERS.put(14, Computers.Arity14.class);
+		ALL_ARITIES.put(Computers.Arity14.class, 14);
+		ALL_COMPUTERS.put(15, Computers.Arity15.class);
+		ALL_ARITIES.put(Computers.Arity15.class, 15);
+		ALL_COMPUTERS.put(16, Computers.Arity16.class);
+		ALL_ARITIES.put(Computers.Arity16.class, 16);
 	}
 
 	/**
@@ -70,7 +91,28 @@ public final class Computers {
 	 * @throws NullPointerException If {@code c} is {@code null}.
 	 */
 	public static boolean isComputer(Class<?> c) {
-		return ALL_COMPUTERS.containsKey(c);
+		return ALL_COMPUTERS.containsValue(c);
+	}
+
+	/**
+	 * @param arity an {@code int} corresponding to a {@code Computer} of that
+	 *          arity.
+	 * @return the {@code Computer} of arity {@code arity}.
+	 * @throws IllegalArgumentException iff there is no known {@code Computer} of
+	 *           arity {@code arity}.
+	 */
+	public static Class<?> computerOfArity(int arity) {
+		if (ALL_COMPUTERS.containsKey(arity)) return ALL_COMPUTERS.get(arity);
+		throw new IllegalArgumentException("No Computer of arity " + arity);
+	}
+
+	/**
+	 * @param c the {@link Class} of unknown arity
+	 * @return the arity of {@code c}, or {@code -1} if {@code c} is <b>not</b> a
+	 *         {@code Computer}.
+	 */
+	public static int arityOf(Class<?> c) {
+		return ALL_ARITIES.getOrDefault(c, -1);
 	}
 
 

@@ -31,10 +31,7 @@ package org.scijava.ops.engine;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.OpCandidate;
@@ -232,5 +229,23 @@ public final class OpUtils {
 		}
 		
 		return nonDefaults.get(0);
+	}
+
+	/**
+	 * Returns the index of the argument that is both the input and the output. <b>If there is no such argument (i.e. the Op produces a pure output), -1 is returned</b>
+	 *
+	 * @return the index of the mutable argument.
+	 */
+	public static int ioArgIndex(final OpInfo info) {
+		List<Member<?>> inputs = OpUtils.inputs(info.struct());
+		Optional<Member<?>>
+				ioArg = inputs.stream().filter(m -> m.isInput() && m.isOutput()).findFirst();
+		if(ioArg.isEmpty()) return -1;
+		Member<?> ioMember = ioArg.get();
+		return inputs.indexOf(ioMember);
+	}
+
+	public static boolean hasPureOutput(final OpInfo info) {
+		return ioArgIndex(info) == -1;
 	}
 }

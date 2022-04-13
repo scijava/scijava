@@ -2,11 +2,15 @@
 package org.scijava.ops.engine.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.OpExecution;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
@@ -39,8 +43,9 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	// -- DATA STRCUTURES -- //
 
 	/**
-	 * {@link Map} responsible for recording the {@link InfoChain} of {@link OpInfo}s
-	 * involved to produce the result of a particular matching call
+	 * {@link Map} responsible for recording the {@link InfoChain} of
+	 * {@link OpInfo}s involved to produce the result of a particular matching
+	 * call
 	 */
 	private final Map<RichOp<?>, InfoChain> dependencyChain = new WeakHashMap<>();
 
@@ -59,7 +64,7 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 	public List<RichOp<?>> executionsUpon(Object o) {
 		if (o.getClass().isPrimitive()) throw new IllegalArgumentException(
 			"Cannot determine the executions upon a primitive as they are passed by reference!");
-		return mutationMap.get(o);
+		return mutationMap.getOrDefault(o, Collections.emptyList());
 	}
 
 	@Override
@@ -69,28 +74,15 @@ public class DefaultOpHistory extends AbstractService implements OpHistory {
 
 	// -- HISTORY MAINTENANCE API -- //
 
-	/**
-	 * Logs an Op execution in the history
-	 * <p>
-	 * TODO: It would be nice if different Objects returned different Objects with
-	 * the same hash code would hash differently. For example, if two Ops return a
-	 * {@link Double} of the same value, they will appear as the same Object, and
-	 * asking for the execution history on either of the {@link Object}s will
-	 * suggest that both executions mutated both {@link Object}s. This would
-	 * really hamper the simplicity of the implementation, however.
-	 * 
-	 * @param op the {@link RichOp} being executed
-	 * @param output the output of the Op execution
-	 */
-	@Override
-	public void addExecution(RichOp<?> op, Object output) {
-		if (!mutationMap.containsKey(output)) updateList(output);
-		resolveExecution(op, output);
-	}
-
 	@Override
 	public void logOp(RichOp<?> op) {
 		dependencyChain.put(op, op.infoChain());
+	}
+
+	@Override
+	public void logOutput(RichOp<?> op, Object output) {
+		if (!mutationMap.containsKey(output)) updateList(output);
+		resolveExecution(op, output);
 	}
 
 	// -- HELPER METHODS -- //

@@ -30,16 +30,20 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
 
+	requires java.compiler;
+
 	requires org.scijava;
 	requires org.scijava.discovery;
 	requires org.scijava.function;
+	requires org.scijava.progress;
 	requires org.scijava.struct;
 	requires transitive org.scijava.ops.api;
 	requires org.scijava.ops.serviceloader;
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;
+
 	requires javassist;
-	requires java.compiler;
+
 	requires therapi.runtime.javadoc;
 
 	uses javax.annotation.processing.Processor;

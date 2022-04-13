@@ -477,10 +477,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints hints)
 	{
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
-		final List<InfoChain> depChains = conditions.stream().map(op -> op
-			.metadata().info()).collect(Collectors.toList());
-		final InfoChain chain = new InfoChain(candidate.opInfo(), depChains);
-		return chain.op();
+		InfoChain adaptorChain = new DependencyInstantiatedInfoChain(candidate
+			.opInfo(), conditions);
+		return adaptorChain.op();
 	}
 
 	/**

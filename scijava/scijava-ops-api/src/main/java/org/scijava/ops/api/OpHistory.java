@@ -2,6 +2,7 @@
 package org.scijava.ops.api;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Log describing each execution of an Op. This class is designed to answer two
@@ -52,18 +53,17 @@ public interface OpHistory {
 	// -- HISTORY MAINTENANCE API -- //
 
 	/**
-	 * Logs a {@link RichOp} execution in the history
-	 * 
-	 * @param op the Op executed to produce {@code output}
-	 * @param output the output produced by {@code op}
-	 */
-	void addExecution(RichOp<?> op, Object output);
-
-	/**
 	 * Logs the creation of {@link RichOp}
 	 * 
 	 * @param op the {@link RichOp} containing relevant information
 	 */
 	void logOp(RichOp<?> op);
+
+	/**
+	 * Logs the {@link Object} output of the {@link RichOp} {@code op}.
+	 * @param op the {@link RichOp} producing {@code output}
+	 * @param output the {@link Object} output of {@code e}
+	 */
+	void logOutput(RichOp<?> op, Object output);
 
 }

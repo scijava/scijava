@@ -134,9 +134,9 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Thing out = ops.op("test.provenanceMapper").input(array).outType(
 			Thing.class).apply();
 
-		// Assert only one execution upon this Object
+		// Assert two executions upon this Object, once from the mapped function, once from the mapper
 		List<RichOp<?>> executionsUpon = ops.history().executionsUpon(out);
-		Assert.assertEquals(1, executionsUpon.size());
+		Assert.assertEquals(2, executionsUpon.size());
 	}
 
 	@Test
@@ -176,15 +176,15 @@ public class ProvenanceTest extends AbstractTestEnvironment {
 		Thing out = ops.op("test.provenanceMapper").input(array).outType(
 			Thing.class).apply(hints);
 
-		// Assert only one run of the Base Op
+		// Assert that two Ops operated on the return.
 		List<RichOp<?>> history = ops.history().executionsUpon(out);
-		Assert.assertEquals(1, history.size());
+		Assert.assertEquals(2, history.size());
 
-		// Run the mapped Op, assert still one run on the mapper
+		// Run the mapped Op, assert still two runs on the mapper
 		Thing out1 = ops.op("test.provenanceMapped").input(2.).outType(Thing.class)
 			.apply(hints);
 		history = ops.history().executionsUpon(out);
-		Assert.assertEquals(1, history.size());
+		Assert.assertEquals(2, history.size());
 		// Assert one run on the mapped Op as well
 		history = ops.history().executionsUpon(out1);
 		Assert.assertEquals(1, history.size());

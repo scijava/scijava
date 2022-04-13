@@ -7,6 +7,7 @@ import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.History;
+import org.scijava.progress.Progress;
 
 /**
  * An abstract implementation of {@link RichOp}. While this class has <b>no
@@ -43,14 +44,15 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	}
 
 	@Override
-	public void preprocess(Object... inputs) {}
+	public void preprocess(Object... inputs) {
+		Progress.register(this);
+	}
 
 	@Override
 	public void postprocess(Object output) {
 		// Log a new execution
-		if (!metadata.hints().contains(History.SKIP_RECORDING)) {
-			metadata.history().addExecution(this, output);
-		}
+		metadata.history().logOutput(this, output);
+		Progress.complete();
 	}
 
 }

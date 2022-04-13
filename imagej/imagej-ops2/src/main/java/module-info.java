@@ -125,7 +125,10 @@ module net.imagej.ops2 {
 	requires net.imglib2.roi;
 	requires org.joml;
 	requires org.scijava;
+	requires org.scijava.function;
+	requires org.scijava.ops.api;
 	requires org.scijava.ops.engine;
+	requires org.scijava.ops.spi;
 	requires org.scijava.parsington;
 	requires org.scijava.types;
 	
@@ -135,8 +138,5 @@ module net.imagej.ops2 {
 	requires jama;
 	requires imglib2.algorithm.fft;
 	requires mines.jtk;
-	requires org.scijava.function;
-	requires org.scijava.ops.api;
-	requires org.scijava.ops.spi;
 
 }

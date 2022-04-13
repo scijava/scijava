@@ -30,8 +30,6 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
 
-	requires java.desktop;
-
 	requires org.scijava;
 	requires org.scijava.discovery;
 	requires org.scijava.function;

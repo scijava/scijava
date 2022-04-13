@@ -116,7 +116,7 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.types.maxValue to org.scijava, org.scijava.ops.engine;
 	opens net.imagej.ops2.types.minValue to org.scijava, org.scijava.ops.engine;
 	
-	requires java.desktop;
+	requires java.xml; // TEMP: for org.scijava:scijava-common org.scijava.util.POM
 	requires java.scripting;
 	requires net.imagej;
 	requires net.imagej.mesh;
@@ -125,7 +125,10 @@ module net.imagej.ops2 {
 	requires net.imglib2.roi;
 	requires org.joml;
 	requires org.scijava;
+	requires org.scijava.function;
+	requires org.scijava.ops.api;
 	requires org.scijava.ops.engine;
+	requires org.scijava.ops.spi;
 	requires org.scijava.parsington;
 	requires org.scijava.types;
 	
@@ -135,8 +138,5 @@ module net.imagej.ops2 {
 	requires jama;
 	requires imglib2.algorithm.fft;
 	requires mines.jtk;
-	requires org.scijava.function;
-	requires org.scijava.ops.api;
-	requires org.scijava.ops.spi;
 
 }

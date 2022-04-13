@@ -106,6 +106,7 @@
 			com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*
 		</scijava-ops-engine.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${scijava-ops-engine.allowedDuplicateClasses}</allowedDuplicateClasses>
+		<therapi.packages></therapi.packages>
 	</properties>
 	<build>
 		<plugins>
@@ -134,6 +135,11 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery-therapi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

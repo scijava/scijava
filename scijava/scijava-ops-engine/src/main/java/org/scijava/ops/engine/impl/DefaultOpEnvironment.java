@@ -183,7 +183,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		List<MatchingRoutine> matchers = new ArrayList<>();
 		for (Discoverer d : discoverers) {
-			List<Class<MatchingRoutine>> implementingClasses = d.implementingClasses(
+			List<Class<MatchingRoutine>> implementingClasses = d.implsOfType(
 				MatchingRoutine.class);
 			List<MatchingRoutine> routines = implementingClasses.parallelStream().map(
 				c -> {
@@ -333,7 +333,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public OpInfo opify(final Class<?> opClass, final double priority,
 		final String... names)
 	{
-		return new OpClassInfo(opClass, VersionUtils.getVersion(opClass), priority,
+		return new OpClassInfo(opClass, VersionUtils.getVersion(opClass), new DefaultHints(), priority,
 			names);
 	}
 
@@ -564,7 +564,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (wrappers != null) return;
 		wrappers = new HashMap<>();
 		for (Discoverer d : discoverers)
-			for (Class<OpWrapper> cls : d.implementingClasses(OpWrapper.class)) {
+			for (Class<OpWrapper> cls : d.implsOfType(OpWrapper.class)) {
 				OpWrapper<?> wrapper;
 				try {
 					wrapper = cls.getDeclaredConstructor().newInstance();
@@ -580,7 +580,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (infoChainGenerators != null) return;
 		Set<InfoChainGenerator> generators = new HashSet<>();
 		for (Discoverer d : discoverers)
-			for (Class<InfoChainGenerator> cls : d.implementingClasses(
+			for (Class<InfoChainGenerator> cls : d.implsOfType(
 				InfoChainGenerator.class))
 			{
 				InfoChainGenerator wrapper;

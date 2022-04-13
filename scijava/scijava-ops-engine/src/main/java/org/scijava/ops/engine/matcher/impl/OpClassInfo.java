@@ -41,13 +41,10 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
-import org.scijava.plugin.Plugin;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
@@ -70,24 +67,24 @@ public class OpClassInfo implements OpInfo {
 	private final double priority;
 	private final Hints hints;
 
-	public OpClassInfo(final Class<?> opClass, final String version, final String... names) {
-		this(opClass, version, priorityFromAnnotation(opClass), names);
+	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final String... names) {
+		this(opClass, version, hints, Priority.NORMAL, names);
 	}
 
-	public OpClassInfo(final Class<?> opClass, final String version, final double priority, final String... names) {
+	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final double priority, final String... names) {
 		this.opClass = opClass;
 		this.version = version;
 		this.names = Arrays.asList(names);
 		List<ValidityProblem> problems = new ArrayList<>();
 		try {
-			struct = Structs.from(opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
+			struct = Structs.from(opClass, opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
 			OpUtils.checkHasSingleOutput(struct);
 		} catch (ValidityException e) {
 			validityException = e;
 		} 
 		this.priority = priority;
 
-		hints = formHints(opClass.getAnnotation(OpHints.class));
+		this.hints = hints;
 	}
 
 	// -- OpInfo methods --
@@ -225,14 +222,5 @@ public class OpClassInfo implements OpInfo {
 
 	// -- Helper methods
 
-	private static double priorityFromAnnotation(Class<?> annotationBearer) {
-		final Plugin opAnnotation = annotationBearer.getAnnotation(Plugin.class);
-		return opAnnotation == null ? Priority.NORMAL : opAnnotation.priority();
-	}
-
-	private Hints formHints(OpHints h) {
-		if (h == null) return new DefaultHints();
-		return new DefaultHints(h.hints());
-	}
 
 }

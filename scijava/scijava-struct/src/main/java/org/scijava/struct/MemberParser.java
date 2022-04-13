@@ -18,10 +18,11 @@ public interface MemberParser<S, M extends Member<?>> {
 	 * returned
 	 * 
 	 * @param source the {@link Object} to parse
+	 * @param structType TODO
 	 * @return a {@link List} of {@link Member}s parsed from {@code source}
 	 * @throws {@link ValidityException} when the source of the {@link Member}s is
 	 *           improperly declared, formatted
 	 */
-	List<M> parse(S source) throws ValidityException;
+	List<M> parse(S source, Type structType) throws ValidityException;
 
 }

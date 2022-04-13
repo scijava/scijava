@@ -19,7 +19,7 @@ public class ClassParameterMemberParser implements
 {
 
 	@Override
-	public List<SynthesizedParameterMember<?>> parse(Class<?> source)
+	public List<SynthesizedParameterMember<?>> parse(Class<?> source, Type structType)
 		throws ValidityException
 	{
 		if (source == null) return null;

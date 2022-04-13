@@ -47,10 +47,8 @@ import org.scijava.Priority;
 import org.scijava.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpUtils;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Adapt;
@@ -58,6 +56,7 @@ import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.struct.Member;
+import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
@@ -86,11 +85,58 @@ public class OpMethodInfo implements OpInfo {
 	private Type opType;
 	private Struct struct;
 	private final ValidityException validityException;
+	private final double priority;
 
 	private final Hints hints;
 
-	public OpMethodInfo(final Method method, final String version, final String... names) {
+	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final String... names) {
+		this(method, opType, version, hints, Priority.NORMAL, names);
+	}
+
+	public OpMethodInfo(final Method method, final Class<?> opType, final String version, final Hints hints, final double priority, final String... names) {
+		this.method = method;
+		this.version = version;
+		this.names = Arrays.asList(names);
+		this.hints = hints;
+		this.priority = priority;
+
 		final List<ValidityProblem> problems = new ArrayList<>();
+		checkModifiers(method, problems);
+
+		this.opType = findOpType(method, opType, problems);
+		this.struct = generateStruct(method, opType, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
+
+		validityException = problems.isEmpty() ? null : new ValidityException(
+			problems);
+	}
+
+	@SafeVarargs
+	private Struct generateStruct(Method m, Type structType,
+		List<ValidityProblem> problems,
+		MemberParser<Method, ? extends Member<?>>... memberParsers)
+	{
+		try {
+			return Structs.from(m, structType, problems, memberParsers);
+		} catch (IllegalArgumentException e) {
+			problems.add(new ValidityProblem(e));
+			return null;
+		}
+	}
+
+	private Type findOpType(Method m, Class<?> opType,
+		List<ValidityProblem> problems)
+	{
+		try {
+			return OpMethodUtils.getOpMethodType(opType,
+				method);
+		}
+		catch (IllegalArgumentException e) {
+			problems.add(new ValidityProblem(e));
+			return null;
+		}
+	}
+
+	private void checkModifiers(Method m, List<ValidityProblem> problems) {
 		// Reject all non public methods
 		if (!Modifier.isPublic(method.getModifiers())) {
 			problems.add(new ValidityProblem("Method to parse: " + method +
@@ -103,23 +149,6 @@ public class OpMethodInfo implements OpInfo {
 			problems.add(new ValidityProblem("Method to parse: " + method +
 				" must be static."));
 		}
-		this.method = method;
-		this.version = version;
-		this.names = Arrays.asList(names);
-		this.hints = formHints(method.getAnnotation(OpHints.class));
-		// determine the functional interface this Op should implement
-		final OpMethod methodAnnotation = method.getAnnotation(OpMethod.class);
-		try {
-			opType = OpMethodUtils.getOpMethodType(methodAnnotation.type(),
-				method);
-			struct = Structs.from(method, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
-//			struct = ParameterStructs.structOf(method.getDeclaringClass(), method);
-		}
-		catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem(e));
-		}
-		validityException = problems.isEmpty() ? null : new ValidityException(
-			problems);
 	}
 
 	// -- OpInfo methods --
@@ -146,8 +175,7 @@ public class OpMethodInfo implements OpInfo {
 
 	@Override
 	public double priority() {
-		final OpMethod opMethod = method.getAnnotation(OpMethod.class);
-		return opMethod == null ? Priority.NORMAL : opMethod.priority();
+		return priority;
 	}
 
 	@Override
@@ -407,13 +435,6 @@ public class OpMethodInfo implements OpInfo {
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return method;
-	}
-
-	// -- Helper methods -- //
-
-	private Hints formHints(OpHints h) {
-		if (h == null) return new DefaultHints();
-		return new DefaultHints(h.hints());
 	}
 
 }

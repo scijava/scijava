@@ -26,7 +26,7 @@ public class MethodOpDependencyMemberParser implements
 	private static final Map<Method, MethodJavadoc> methodDocMap = new ConcurrentHashMap<>();
 
 	@Override
-	public List<MethodParameterOpDependencyMember<?>> parse(Method source)
+	public List<MethodParameterOpDependencyMember<?>> parse(Method source, Type structType)
 		throws ValidityException
 	{
 		if (source == null) return null;

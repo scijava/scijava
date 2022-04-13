@@ -16,9 +16,8 @@ import org.scijava.types.Types;
 public class MethodParameterMemberParser implements
 	MemberParser<Method, SynthesizedParameterMember<?>>
 {
-
 	@Override
-	public List<SynthesizedParameterMember<?>> parse(Method source)
+	public List<SynthesizedParameterMember<?>> parse(Method source, Type structType)
 		throws ValidityException
 	{
 		if (source == null) return null;
@@ -30,16 +29,15 @@ public class MethodParameterMemberParser implements
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();
-		final OpMethod methodAnnotation = source.getAnnotation(OpMethod.class);
 
 		// Determine functional type
 		Type functionalType;
 		try {
-			functionalType = OpMethodUtils.getOpMethodType(methodAnnotation.type(), source);
+			functionalType = OpMethodUtils.getOpMethodType(Types.raw(structType), source);
 		}
 		catch (IllegalArgumentException e) {
 			problems.add(new ValidityProblem(e.getMessage()));
-			functionalType = Types.parameterizeRaw(methodAnnotation.type());
+			functionalType = Types.parameterizeRaw(Types.raw(structType));
 		}
 
 		// Parse method level @Parameter annotations.

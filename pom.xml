@@ -48,11 +48,13 @@
 		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej-testutil</module>
 		<module>scijava/scijava-discovery</module>
+		<module>scijava/scijava-discovery-therapi</module>
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-engine</module>
 		<module>scijava/scijava-ops-serviceloader</module>
 		<module>scijava/scijava-ops-spi</module>
+		<module>scijava/scijava-parse2</module>
 		<module>scijava/scijava-persist</module>
 		<module>scijava/scijava-progress</module>
 		<module>scijava/scijava-struct</module>
@@ -98,6 +100,7 @@
 		<therapi.version>0.12.0</therapi.version>
 		<therapi-runtime-javadoc.version>${therapi.version}</therapi-runtime-javadoc.version>
 		<therapi-runtime-javadoc-scribe.version>${therapi.version}</therapi-runtime-javadoc-scribe.version>
+		<therapi.packages>-</therapi.packages>
 	</properties>
 
 	<build>
@@ -117,6 +120,10 @@
 							<version>${scijava-common.version}</version>
 						</path>
 					</annotationProcessorPaths>
+					<fork>true</fork>
+					<compilerArgs>
+						<arg>-Ajavadoc.packages="${therapi.packages}"</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>

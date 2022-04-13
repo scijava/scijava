@@ -221,4 +221,62 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<profiles>
+		<!--
+		This profile lets Eclipse M2E work with the script-maven-plugin.
+		-->
+		<profile>
+			<id>only-eclipse-incubator</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<!--
+										NB: Make Eclipse union the metadata indices on every build; see:
+										https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html
+										-->
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>com.alexecollins.maven.plugin</groupId>
+												<artifactId>script-maven-plugin</artifactId>
+												<versionRange>${script-maven-plugin.version}</versionRange>
+												<goals>
+													<goal>execute</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute>
+													<runOnConfiguration>true</runOnConfiguration>
+													<!--
+													NB: You might think we could run the annotations
+													union script once only, at configuration time.
+													Unfortunately, when configuration happens in Eclipse,
+													the plugin annotations have not yet been generated.
+													So let's redo the union on every incremental build.
+													That'll show 'em!
+													-->
+													<runOnIncremental>true</runOnIncremental>
+												</execute>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 </project>

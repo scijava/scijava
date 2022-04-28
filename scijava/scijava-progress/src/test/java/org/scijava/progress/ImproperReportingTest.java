@@ -57,61 +57,95 @@ public class ImproperReportingTest {
 	};
 
 	/**
-	 * A progressible Task that defines fewer stages than it completes
+	 * Tests that tasks who updated progress past the defined maximum result in a
+	 * thrown error.
 	 */
-	public final Supplier<Integer> tooFewStageTask = () -> {
-		Progress.defineTotalProgress(2);
-		int totalStages = 3;
-		for (int i = 0; i < totalStages; i++) {
-			Progress.setStageMax(1);
-			Progress.update();
-		}
-		return totalStages;
-	};
-
-	/**
-	 * A progressible task that defines more stages than it completes
-	 */
-	public final Supplier<Integer> tooManyStageTask = () -> {
-		Progress.defineTotalProgress(3);
-		int totalStages = 2;
-		for (int i = 0; i < totalStages; i++) {
-			Progress.setStageMax(1);
-			Progress.update();
-		}
-		return totalStages;
-	};
-
-	/**
-	 * A progressible task that defines fewer subtasks than it runs
-	 * 
-	 * @param subtask the subtask being run
-	 * @return the summation of each subtask
-	 */
-	public static Integer tooFewSubTaskTask(Function<Integer, Integer> subtask) {
-		Progress.defineTotalProgress(0, 2);
-		return IntStream.range(0, 3) //
-			.map(i -> subtask.apply(4)) //
-			.sum();
+	@Test
+	public void testDefineTooFewStages() {
+		assertISEFromTask( //
+			// task
+			() -> {
+				// defines 2 stages
+				Progress.defineTotalProgress(2);
+				// but completes 3 stages
+				for (int i = 0; i < 3; i++) {
+					Progress.setStageMax(1);
+					Progress.update();
+				}
+				return "All done";
+			});
 	}
 
 	/**
-	 * A progressible task that defines more subtasks than it runs
-	 * 
-	 * @param subtask the subtask being run
-	 * @return the summation of each subtask
+	 * Tests that tasks who did not complete as many stages as they said they
+	 * would results in a thrown error.
 	 */
-	public static Integer tooManySubTaskTask(Function<Integer, Integer> subtask) {
-		Progress.defineTotalProgress(0, 3);
-		return IntStream.range(0, 2) //
-			.map(i -> subtask.apply(4)) //
-			.sum();
+	@Test
+	public void testDefineTooManyStages() {
+		assertISEFromTask( //
+			// task
+			() -> {
+				// defines 3 stages
+				Progress.defineTotalProgress(3);
+				// but completes 2 stages
+				for (int i = 0; i < 2; i++) {
+					Progress.setStageMax(1);
+					Progress.update();
+				}
+				return "All done!";
+			});
 	}
 
 	/**
 	 * A testing subtask
 	 */
-	private final Function<Integer, Integer> subtask = (in) -> in;
+	private final Function<Integer, Integer> subtask = (in) -> {
+		return in;
+	};
+
+	/**
+	 * Tests that tasks who updated progress past the defined maximum result in a
+	 * thrown error.
+	 */
+	@Test
+	public void testDefineTooFewSubTasks() {
+		assertISEFromTask( //
+			// task
+			() -> {
+				// define 2 subtasks
+				Progress.defineTotalProgress(0, 2);
+				// but complete 3 subtasks
+				for( int i = 0; i < 3; i++) {
+						// Call subtask
+						Progress.register(subtask);
+						subtask.apply(4);
+						Progress.complete();
+					}
+				return "All done!";
+			});
+	}
+
+	/**
+	 * Tests that tasks who did not complete as many subtasks as they said they
+	 * would results in a thrown error.
+	 */
+	@Test
+	public void testDefineTooManySubTasks() {
+		assertISEFromTask( //
+			// task
+			() -> {
+				// define 3 subtasks
+				Progress.defineTotalProgress(0, 3);
+				// but run 2 subtasks
+				for(int i = 0; i < 2; i++) {
+					// Call subtask
+					Progress.register(subtask);
+					subtask.apply(4);
+					Progress.complete();
+				}
+				return "All done!";
+			});
+	}
 
 	/**
 	 * Tests that tasks who update progress without defining total progress result
@@ -125,55 +159,9 @@ public class ImproperReportingTest {
 		Progress.complete();
 	}
 
-	/**
-	 * Tests that tasks who updated progress past the defined maximum result in a
-	 * thrown error.
-	 */
-	@Test
-	public void testDefineTooFewStages() {
-		Supplier<Integer> task = tooFewStageTask;
-		Assertions.assertThrows(IllegalStateException.class, () -> {
-			Progress.register(task);
-			task.get();
-			Progress.complete();
-		});
-	}
+	// -- Helper methods -- //
 
-	/**
-	 * Tests that tasks who did not complete as many stages as they said they
-	 * would results in a thrown error.
-	 */
-	@Test
-	public void testDefineTooManyStages() {
-		Supplier<Integer> task = tooManyStageTask;
-		Assertions.assertThrows(IllegalStateException.class, () -> {
-			Progress.register(task);
-			task.get();
-			Progress.complete();
-		});
-	}
-
-	/**
-	 * Tests that tasks who updated progress past the defined maximum result in a
-	 * thrown error.
-	 */
-	@Test
-	public void testDefineTooFewSubTasks() {
-		Supplier<Integer> task = () -> tooFewSubTaskTask(subtask);
-		Assertions.assertThrows(IllegalStateException.class, () -> {
-			Progress.register(task);
-			task.get();
-			Progress.complete();
-		});
-	}
-
-	/**
-	 * Tests that tasks who did not complete as many subtasks as they said they
-	 * would results in a thrown error.
-	 */
-	@Test
-	public void testDefineTooManySubTasks() {
-		Supplier<Integer> task = () -> tooManySubTaskTask(subtask);
+	private void assertISEFromTask(Supplier<?> task) {
 		Assertions.assertThrows(IllegalStateException.class, () -> {
 			Progress.register(task);
 			task.get();

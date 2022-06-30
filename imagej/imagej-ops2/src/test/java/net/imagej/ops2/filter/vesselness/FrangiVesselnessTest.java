@@ -48,10 +48,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.Context;
 import org.scijava.cache.CacheService;
-import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.PluginService;
-import org.scijava.script.ScriptService;
 import org.scijava.thread.ThreadService;
 
 /**
@@ -65,9 +63,8 @@ public class FrangiVesselnessTest{
 	protected static OpService ops;
 
 	@BeforeAll public static void setUp() {
-		context =
-				new Context(OpService.class, CacheService.class, ThreadService.class,
-						ScriptService.class, PluginService.class);
+		context = new Context(OpService.class, CacheService.class,
+			ThreadService.class, PluginService.class);
 		ops = context.service(OpService.class);
 	}
 
@@ -78,46 +75,45 @@ public class FrangiVesselnessTest{
 		ops = null;
 	}
 	
-	private static OpBuilder op(String name) {
-		return ops.op(name);
-	}
-	
-	private Img<FloatType> openFloatImg(
-		final String resourcePath)
-	{
+	private Img<FloatType> openFloatImg(final String resourcePath) {
 		final URL url = getClass().getResource(resourcePath);
 		return IO.openFloat(url.getPath()).getImg();
 	}
 
 	@Test
 	public void regressionTest() throws Exception {
+		// compute input image
+		final int w = 256, h = 256;
+		final double[] inputValues = new double[256 * 256];
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				inputValues[w * y + x] = Math.tan(0.3 * x) + Math.tan(0.1 * y);
+			}
+		}
+		final Img<DoubleType> inputImg = ArrayImgs.doubles(inputValues, w, h);
 
-		// load in input image and expected output image.
-		Img<DoubleType> inputImg = ArrayImgs.doubles(256, 256);
-		ops.op("image.equation")
-				.input("Math.tan(0.3*p[0]) + Math.tan(0.1*p[1])", context.getService(ScriptService.class))
-				.output(inputImg).compute();
-		Img<FloatType> expectedOutput = ((Img<FloatType>) openFloatImg("Result.tif"));
+		// load expected output image
+		final Img<FloatType> expectedOutput = openFloatImg("Result.tif");
 
-		// create ouput image
-		long[] dims = new long[inputImg.numDimensions()];
+		// create output image
+		final long[] dims = new long[inputImg.numDimensions()];
 		inputImg.dimensions(dims);
-		Img<FloatType> actualOutput = ArrayImgs.floats(dims);
+		final Img<FloatType> actualOutput = ArrayImgs.floats(dims);
 
 		// scale over which the filter operates (sensitivity)
-		int scale = 1;
+		final int scale = 1;
 
 		// physical spacing between data points (1,1 since I got it from the
 		// computer)
-		double[] spacing = { 1, 1 };
+		final double[] spacing = { 1, 1 };
 
 		// run the op
 		ops.op("filter.frangiVesselness").input(inputImg, spacing, scale).output(actualOutput).compute();
 
 		// compare the output image data to that stored in the file.
-		Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();
-		RandomAccess<FloatType> actualRA = actualOutput.randomAccess();
-		RandomAccess<FloatType> expectedRA = expectedOutput.randomAccess();
+		final Cursor<FloatType> cursor = Views.iterable(actualOutput).localizingCursor();
+		final RandomAccess<FloatType> actualRA = actualOutput.randomAccess();
+		final RandomAccess<FloatType> expectedRA = expectedOutput.randomAccess();
 
 		while (cursor.hasNext()) {
 			cursor.fwd();

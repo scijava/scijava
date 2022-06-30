@@ -30,6 +30,7 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import org.scijava.types.Nil;
 
@@ -211,10 +212,27 @@ public interface OpEnvironment {
 	OpInfo opify(Class<?> opClass, double priority, String... names);
 
 	/**
-	 * Makes the {@link OpInfo} {@code info} known to this {@link OpEnvironment}.
-	 * @param info the {@link OpInfo} to be registered
+	 * Registers all elements within a {@code Object[]} to this {@link OpEnvironment}
+	 *
+	 * @param objects the {@link Object}s that should be made discoverable to this {@link OpEnvironment}
 	 */
-	void register(OpInfo info);
+	void register(Object... objects);
+
+	/**
+	 * Creates some {@link OpInfo}s from {@code o}
+	 * @param o the {@link Object} to create {@link OpInfo}s from
+	 * @return a {@link Collection} of {@link OpInfo}s
+	 */
+	Collection<OpInfo> infosFrom(Object o);
+
+	/**
+	 * Creates some {@link OpInfo}s from {@code o}
+	 * @param o the {@link Object} to create {@link OpInfo}s from
+	 * @return a {@link Collection} of {@link OpInfo}s
+	 */
+	default void registerInfosFrom(Object o) {
+		register(infosFrom(o));
+	}
 
 	/**
 	 * Sets the {@link Hints} for the {@link OpEnvironment}. Every Call to

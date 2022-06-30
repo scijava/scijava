@@ -20,8 +20,8 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(OpsAsParametersTest.class, "opCollection");
-		discoverer.register(FuncClass.class, "op");
+		ops.register(new OpsAsParametersTest());
+		ops.register(new FuncClass());
 	}
 
 	@OpField(names = "test.parameter.computer")

@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface OpInfoGenerator {
 
-	List<OpInfo> generateInfos();
+	boolean canGenerateFrom(Object o);
+
+	List<OpInfo> generateInfosFrom(Object o);
 
 }

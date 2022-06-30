@@ -52,8 +52,8 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(InplaceToArraysTest.class, "opcollection");
-		discoverer.register(InplaceToArrays.class, "opcollection");
+		ops.register(new InplaceToArraysTest());
+		ops.register(new InplaceToArrays());
 	}
 
 	/**

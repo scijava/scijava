@@ -1,12 +1,7 @@
 
 package org.scijava.types;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.scijava.discovery.Discoverer;
@@ -65,13 +60,10 @@ public class DefaultTypeReifier implements TypeReifier {
 	}
 
 	private List<TypeExtractor<?>> getInstances() {
-		return discoverers.parallelStream().map(d -> {
-			return d.implsOfType(TypeExtractor.class) //
-				.parallelStream() //
-				.map(cls -> getInstance(cls)) //
+		return discoverers.parallelStream() //
+				.flatMap(d -> d.discover(TypeExtractor.class).stream()) //
+				.map(t -> (TypeExtractor<?>) t) //
 				.collect(Collectors.toList());
-		}).flatMap(l -> l.parallelStream()).filter(Objects::nonNull).collect(
-			Collectors.toList());
 	}
 
 	private TypeExtractor<?> getInstance(

@@ -22,10 +22,10 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(SimplificationHintTest.class, "opcollection");
-		discoverer.register(IdentityLossReporter.class, "op");
-		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
-		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
+		ops.register(new SimplificationHintTest());
+		ops.register(new IdentityLossReporter());
+		ops.register(new PrimitiveSimplifiers());
+		ops.register(new PrimitiveArraySimplifiers());
 	}
 
 	@OpField(names = "test.simplification.hints")

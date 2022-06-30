@@ -44,9 +44,10 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(ComputerToFunctionAdaptTestOps.class, "opcollection");
-		discoverer.register(CreateOpCollection.class, "opcollection");
-		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
+		ops.register(new ComputerToFunctionAdaptTestOps());
+		ops.register(new CreateOpCollection());
+		Object[] objects = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		ops.register(objects);
 	}
 
 	@Test

@@ -5,47 +5,28 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.discovery.Discoverer;
-import org.scijava.log2.Logger;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.api.*;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
+import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.VersionUtils;
 
-public class OpCollectionInfoGenerator extends DiscoveryBasedOpInfoGenerator {
-
-	public OpCollectionInfoGenerator(Logger log, Discoverer... d) {
-		super(log, d);
-	}
-
-	public OpCollectionInfoGenerator(Logger log, Collection<Discoverer> d) {
-		super(log, d);
-	}
+public class OpCollectionInfoGenerator implements OpInfoGenerator {
 
 	private Hints formHints(OpHints h) {
 		if (h == null) return new DefaultHints();
 		return new DefaultHints(h.hints());
 	}
 
-	@Override
-	protected Class<?> implClass() {
-		return OpCollection.class;
-	}
-
-	@Override
 	protected List<OpInfo> processClass(Class<?> cls) {
 		String version = VersionUtils.getVersion(cls);
 		List<OpInfo> collectionInfos = new ArrayList<>();
@@ -60,10 +41,6 @@ public class OpCollectionInfoGenerator extends DiscoveryBasedOpInfoGenerator {
 					.map(f -> generateFieldInfo(f, instance.get(), version)) //
 					.collect(Collectors.toList());
 			collectionInfos.addAll(fieldInfos);
-		}
-		else {
-			log.warn("Skipping OpFieldInfo generation for Class" + cls +
-				": Cannot obtain an instance of declaring class");
 		}
 		// add OpMethodInfos
 		final List<OpMethodInfo> methodInfos = //
@@ -107,4 +84,11 @@ public class OpCollectionInfoGenerator extends DiscoveryBasedOpInfoGenerator {
 			parsedOpNames);
 	}
 
+	@Override public boolean canGenerateFrom(Object o) {
+		return o instanceof OpCollection;
+	}
+
+	@Override public List<OpInfo> generateInfosFrom(Object o) {
+		return processClass(o.getClass());
+	}
 }

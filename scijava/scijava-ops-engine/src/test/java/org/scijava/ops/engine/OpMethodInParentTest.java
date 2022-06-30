@@ -13,8 +13,8 @@ public class OpMethodInParentTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(SuperOpMethodHousingClass.class, "op");
-		discoverer.register(SuperOpMethodHousingInterface.class, "op");
+		ops.register(new SuperOpMethodHousingClass());
+		ops.register(new SuperOpMethodHousingInterface());
 	}
 
 	@Test

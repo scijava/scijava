@@ -44,9 +44,9 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(FunctionToComputerAdaptTestOps.class, "opcollection");
-		discoverer.register(CopyOpCollection.class, "opcollection");
-		discoverer.registerAll(FunctionsToComputers.class.getDeclaredClasses(), "op");
+		ops.register(new FunctionToComputerAdaptTestOps());
+		ops.register(new CopyOpCollection());
+		ops.register(objsFromNoArgConstructors(FunctionsToComputers.class.getDeclaredClasses()));
 	}
 #foreach($arity in [1..$maxArity])
 

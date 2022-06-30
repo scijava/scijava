@@ -26,15 +26,15 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(SimplifyTest.class, "opcollection");
-		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
-		discoverer.register(PrimitiveLossReporters.class, "opcollection");
-		discoverer.register(IdentityLossReporter.class, "op");
-		discoverer.register(Identity.class, "op");
-		discoverer.register(LossReporterWrapper.class, "opwrapper");
-		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
-		discoverer.register(CopyOpCollection.class, "opcollection");
-		discoverer.register(CreateOpCollection.class, "opcollection");
+		ops.register(new SimplifyTest());
+		ops.register(new PrimitiveSimplifiers());
+		ops.register(new PrimitiveLossReporters());
+		ops.register(new IdentityLossReporter());
+		ops.register(new Identity());
+		ops.register(new LossReporterWrapper());
+		ops.register(new PrimitiveArraySimplifiers());
+		ops.register(new CopyOpCollection());
+		ops.register(new CreateOpCollection());
 	}
 
 	@OpField(names = "test.math.powDouble", params = "base, exponent, result")

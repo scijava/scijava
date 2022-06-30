@@ -30,9 +30,9 @@ public class PluginDiscovererTest {
 
 	@Test
 	public void testPluginDiscovery() {
-		Discoverer d = new PluginBasedDiscoverer(plugins);
-		List<Class<TestPlugin>> implsOfType = d.implsOfType(TestPlugin.class);
-		Assert.assertTrue(implsOfType.contains(TestPluginImpl.class));
+		Discoverer d = new PluginBasedDiscoverer();
+		List<TestPlugin> discoveries = d.discover(TestPlugin.class);
+		Assert.assertTrue(discoveries.stream().anyMatch(o -> o.getClass() == TestPluginImpl.class));
 	}
 
 }

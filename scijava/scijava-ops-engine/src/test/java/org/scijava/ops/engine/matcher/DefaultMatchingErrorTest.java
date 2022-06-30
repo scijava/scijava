@@ -23,14 +23,14 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(DefaultMatchingErrorTest.class, "opcollection");
-		discoverer.register(DependentOp.class, "opcollection");
-		discoverer.register(FurtherDependentOp.class, "opcollection");
-		discoverer.register(MissingDependencyOp.class, "opcollection");
-		discoverer.register(MissingDependencyOpArr1.class, "opcollection");
-		discoverer.register(MissingDependencyOpArr2.class, "opcollection");
-		discoverer.register(ComputersToFunctionsViaFunction.Computer1ToFunction1ViaFunction.class, "op");
-		discoverer.register(CreateOpCollection.class, "opcollection");
+		ops.register(new DefaultMatchingErrorTest());
+		ops.register(new DependentOp());
+		ops.register(new FurtherDependentOp());
+		ops.register(new MissingDependencyOp());
+		ops.register(new MissingDependencyOpArr1());
+		ops.register(new MissingDependencyOpArr2());
+		ops.register(new ComputersToFunctionsViaFunction.Computer1ToFunction1ViaFunction());
+		ops.register(new CreateOpCollection());
 	}
 
 	@OpField(names = "test.duplicateOp")

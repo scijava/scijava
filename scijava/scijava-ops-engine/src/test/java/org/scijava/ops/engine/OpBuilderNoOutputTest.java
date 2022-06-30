@@ -26,7 +26,7 @@ public class OpBuilderNoOutputTest<T extends Number> extends
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(OpBuilderNoOutputTest.class, "opcollection");
+		ops.register(new OpBuilderNoOutputTest());
 	}
 
 	public final String opName = "test.noOutput";

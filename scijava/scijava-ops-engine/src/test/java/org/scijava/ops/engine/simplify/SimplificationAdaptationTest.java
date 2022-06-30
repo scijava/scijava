@@ -16,12 +16,13 @@ public class SimplificationAdaptationTest<T> extends AbstractTestEnvironment
 
 	@BeforeClass
 	public static void AddNeededOps() {
-		discoverer.register(SimplificationAdaptationTest.class, "opcollection");
-		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
-		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
-		discoverer.register(CopyOpCollection.class, "opcollection");
-		discoverer.register(CreateOpCollection.class, "opcollection");
-		discoverer.registerAll(ComputersToFunctionsViaFunction.class.getDeclaredClasses(), "op");
+		ops.register(new SimplificationAdaptationTest());
+		ops.register(new PrimitiveSimplifiers());
+		ops.register(new PrimitiveArraySimplifiers());
+		ops.register(new CopyOpCollection());
+		ops.register(new CreateOpCollection());
+		Object[] adapters = objsFromNoArgConstructors(ComputersToFunctionsViaFunction.class.getDeclaredClasses());
+		ops.register(adapters);
 	}
 
 	@OpField(names = "test.math.modulus")

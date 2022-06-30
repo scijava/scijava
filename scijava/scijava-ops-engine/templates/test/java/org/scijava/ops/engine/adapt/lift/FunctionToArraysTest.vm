@@ -56,8 +56,8 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 
 	@BeforeClass
 	public static void addNeededOps() {
-		discoverer.register(FunctionToArraysTest.class, "opcollection");
-		discoverer.register(FunctionToArrays.class, "opcollection");
+		ops.register(new FunctionToArraysTest());
+		ops.register(new FunctionToArrays());
 	}
 
 	/**

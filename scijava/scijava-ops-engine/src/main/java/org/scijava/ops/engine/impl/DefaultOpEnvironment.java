@@ -32,63 +32,34 @@ package org.scijava.ops.engine.impl;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
+import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.log2.Logger;
-import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.InfoChainGenerator;
-import org.scijava.ops.api.OpCandidate;
-import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpDependencyMember;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
-import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.*;
+import org.scijava.ops.api.features.*;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.api.features.DependencyMatchingException;
-import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.api.features.OpMatcher;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
 import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRef;
-import org.scijava.ops.engine.matcher.impl.OpAdaptationInfo;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
-import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
 import org.scijava.util.VersionUtils;
 
 /**
@@ -101,18 +72,15 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private final List<Discoverer> discoverers;
 
-	private OpMatcher matcher;
+	private final ManualDiscoverer manDiscoverer;
 
-	private Logger log;
+	private final OpMatcher matcher;
 
-	private TypeReifier typeService;
+	private final Logger log;
 
-	private OpHistory history;
+	private final TypeReifier typeService;
 
-	/**
-	 * The {@link OpInfoGenerator}s providing {@link OpInfo}s to this environment
-	 */
-	private List<OpInfoGenerator> infoGenerators;
+	private final OpHistory history;
 
 	/**
 	 * Data structure storing all known Ops, grouped by name. This reduces the
@@ -127,12 +95,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private Map<String, OpInfo> idDirectory;
 
 	/**
-	 * Data structure containing all known InfoChainGenerators
-	 */
-	private Set<InfoChainGenerator> infoChainGenerators;
-	/**
 	 * Map containing pairs of {@link MatchingConditions} (i.e. the {@link OpRef}
-	 * and {@Hints} used to find an Op) and the {@link OpInstance} (wrapping an Op
+	 * and {@link Hints} used to find an Op) and the {@link OpInstance} (wrapping an Op
 	 * with its backing {@link OpInfo}) that matched those requests. Used to
 	 * quickly return Ops when the matching conditions are identical to those of a
 	 * previous call.
@@ -155,26 +119,22 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	public DefaultOpEnvironment(final TypeReifier typeService,
 		final Logger log, final OpHistory history,
-		final List<OpInfoGenerator> infoGenerators, final List<Discoverer> d)
+		final List<Discoverer> discoverers)
 	{
-		this.discoverers = d;
+		this.discoverers = new ArrayList<>(discoverers);
+		this.manDiscoverer = new ManualDiscoverer();
+		this.discoverers.add(this.manDiscoverer);
 		this.typeService = typeService;
 		this.log = log;
 		this.history = history;
-		this.infoGenerators = infoGenerators;
 		matcher = new DefaultOpMatcher(getMatchingRoutines(this.discoverers));
 	}
 
 	public DefaultOpEnvironment(final TypeReifier typeService,
 		final Logger log, final OpHistory history,
-		final List<OpInfoGenerator> infoGenerators, final Discoverer... d)
+		final Discoverer... d)
 	{
-		this.discoverers = Arrays.asList(d);
-		this.typeService = typeService;
-		this.log = log;
-		this.history = history;
-		this.infoGenerators = infoGenerators;
-		matcher = new DefaultOpMatcher(getMatchingRoutines(this.discoverers));
+		this(typeService, log, history, Arrays.asList(d));
 	}
 
 	public static List<MatchingRoutine> getMatchingRoutines(
@@ -182,17 +142,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		List<MatchingRoutine> matchers = new ArrayList<>();
 		for (Discoverer d : discoverers) {
-			List<Class<MatchingRoutine>> implementingClasses = d.implsOfType(
-				MatchingRoutine.class);
-			List<MatchingRoutine> routines = implementingClasses.parallelStream().map(
-				c -> {
-					try {
-						return c.getConstructor().newInstance();
-					}
-					catch (Exception e) {
-						return null;
-					}
-				}).filter(r -> r != null).collect(Collectors.toList());
+			List<MatchingRoutine> routines = d.discover(MatchingRoutine.class);
 			matchers.addAll(routines);
 		}
 		return matchers;
@@ -201,7 +151,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public Set<OpInfo> infos() {
 		if (opDirectory == null) initOpDirectory();
-		return opDirectory.values().stream().flatMap(list -> list.stream()).collect(
+		return opDirectory.values().stream().flatMap(Collection::stream).collect(
 			Collectors.toSet());
 	}
 
@@ -227,7 +177,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		boolean simplifying = hints.contains(Simplification.IN_PROGRESS);
 		// if we aren't doing any
 		if (!(adapting || simplifying)) return infos;
-		return infos.parallelStream() //
+		return infos.stream() //
 			// filter out unadaptable ops
 			.filter(info -> !adapting || !info.declaredHints().contains(
 				Adaptation.FORBIDDEN)) //
@@ -305,7 +255,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public InfoChain chainFromID(String signature) {
 		if (idDirectory == null) initIdDirectory();
-		if (infoChainGenerators == null) initInfoChainGenerators();
+		List<InfoChainGenerator> infoChainGenerators = discoverers.stream() //
+				.flatMap(d -> d.discover(InfoChainGenerator.class).stream()) //
+				.collect(Collectors.toList());
 
 		InfoChainGenerator genOpt = InfoChainGenerator.findSuitableGenerator(
 			signature, infoChainGenerators);
@@ -336,9 +288,24 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public void register(final OpInfo info) {
-		if (opDirectory == null) initOpDirectory();
-		addToOpIndex.accept(info);
+	public void register(Object... objects) {
+		for (Object o : objects) {
+			if (o.getClass().isArray())
+				register(o);
+			else if (o instanceof Iterable<?>) {
+				((Iterable<?>) o).forEach(this::register);
+			}
+			else
+				this.manDiscoverer.register(o);
+		}
+	}
+	
+	@Override
+	public Collection<OpInfo> infosFrom(Object o) {
+		return infoGenerators().parallelStream() //
+				.filter(g -> g.canGenerateFrom(o)) //
+				.flatMap(g -> g.generateInfosFrom(o).stream()) //
+				.collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -360,17 +327,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return (OpInstance<T>) getInstance(conditions);
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T> RichOp<T> findRichOp(final OpInfo info, final Nil<T> specialType,
-		Hints hints) throws OpMatchingException
-	{
-		OpInstance<T> instance = findOp(info, specialType, hints);
-		return (RichOp<T>) wrap(instance, hints);
-	}
-
 	private Type[] toTypes(Nil<?>... nils) {
-		return Arrays.stream(nils).filter(n -> n != null).map(n -> n.getType())
-			.toArray(Type[]::new);
+		return Arrays.stream(nils) //
+				.filter(Objects::nonNull) //
+				.map(Nil::getType) //
+				.toArray(Type[]::new);
 	}
 
 	/**
@@ -385,7 +346,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 *          conditions1
 	 * @return the {@link MatchingConditions} that will return the Op described by
 	 *         {@code info} from the op cache
-	 * @throws OpMatchingException
 	 */
 	private MatchingConditions insertCacheHit(final OpRef ref, final Hints hints,
 		final OpInfo info)
@@ -407,8 +367,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private RichOp<?> wrap(OpInstance<?> instance, Hints hints) {
-		RichOp<?> wrappedOp = wrapOp(instance, hints);
-		return wrappedOp;
+		return wrapOp(instance, hints);
 	}
 
 	/**
@@ -468,7 +427,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * Creates an instance of the Op from the {@link OpCandidate} <b>with its
 	 * required {@link OpDependency} fields</b>.
 	 * 
-	 * @param candidate
+	 * @param candidate the {@link OpCandidate} to be instantiated
+	 * @param hints the {@link Hints} to use in instantiation
 	 * @return an Op with all needed dependencies
 	 */
 	private OpInstance<?> instantiateOp(final OpCandidate candidate,
@@ -518,7 +478,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private Class<?> getWrapperClass(Object op, OpInfo info) {
-		List<Class<?>> suitableWrappers = wrappers.keySet().parallelStream().filter(
+		List<Class<?>> suitableWrappers = wrappers.keySet().stream().filter(
 			wrapper -> wrapper.isInstance(op)).collect(Collectors.toList());
 		List<Class<?>> filteredWrappers = filterWrapperSuperclasses(
 			suitableWrappers);
@@ -527,10 +487,10 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			" does not match a wrappable Op type.");
 		if (filteredWrappers.size() > 1) throw new IllegalArgumentException(
 			"Matched op Type " + info.opType().getClass() +
-				" matches multiple Op types: " + filteredWrappers.toString());
+				" matches multiple Op types: " + filteredWrappers);
 		if (!Types.isAssignable(Types.raw(info.opType()), filteredWrappers.get(0)))
 			throw new IllegalArgumentException(Types.raw(info.opType()) +
-				"cannot be wrapped as a " + filteredWrappers.get(0).getClass());
+				"cannot be wrapped as a " + filteredWrappers.get(0));
 		return filteredWrappers.get(0);
 	}
 
@@ -562,35 +522,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (wrappers != null) return;
 		wrappers = new HashMap<>();
 		for (Discoverer d : discoverers)
-			for (Class<OpWrapper> cls : d.implsOfType(OpWrapper.class)) {
-				OpWrapper<?> wrapper;
-				try {
-					wrapper = cls.getDeclaredConstructor().newInstance();
+			for (OpWrapper wrapper : d.discover(OpWrapper.class))
 					wrappers.put(wrapper.type(), wrapper);
-				}
-				catch (Throwable t) {
-					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
-				}
-			}
-	}
-
-	private synchronized void initInfoChainGenerators() {
-		if (infoChainGenerators != null) return;
-		Set<InfoChainGenerator> generators = new HashSet<>();
-		for (Discoverer d : discoverers)
-			for (Class<InfoChainGenerator> cls : d.implsOfType(
-				InfoChainGenerator.class))
-			{
-				InfoChainGenerator wrapper;
-				try {
-					wrapper = cls.getDeclaredConstructor().newInstance();
-					generators.add(wrapper);
-				}
-				catch (Throwable t) {
-					log.warn("OpWrapper " + cls + " not instantiated. Due to " + t);
-				}
-			}
-		infoChainGenerators = generators;
 	}
 
 	/**
@@ -637,125 +570,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return dependencyChains;
 	}
 
-	/**
-	 * Adapts an Op with the name of ref into a type that can be SAFELY cast to
-	 * ref.
-	 * <p>
-	 * NB This method <b>cannot</b> use the {@link OpMatcher} to find a suitable
-	 * {@code adapt} Op. The premise of adaptation depends on the ability to
-	 * examine the applicability of all {@code adapt} Ops with the correct output
-	 * type. We need to check all of them because we do not know whether:
-	 * <ul>
-	 * <li>The dependencies will exist for a particular {@code adapt} Op
-	 * <li>The Op we want exists with the correct type for the input of the
-	 * {@code adapt} Op.
-	 * </ul>
-	 * 
-	 * @param ref - the type of Op that we are looking to adapt to.
-	 * @return {@link OpCandidate} - an Op that has been adapted to conform the
-	 *         the ref type (if one exists).
-	 */
-	private OpCandidate adaptOp(OpRef ref, Hints hints) {
-
-		List<DependencyMatchingException> depExceptions = new ArrayList<>();
-		for (final OpInfo adaptor : infos("adapt")) {
-			Type adaptTo = adaptor.output().getType();
-			Map<TypeVariable<?>, Type> map = new HashMap<>();
-			// make sure that the adaptor outputs the correct type
-			if (!adaptOpOutputSatisfiesRefTypes(adaptTo, map, ref)) continue;
-			// make sure that the adaptor is a Function (so we can cast it later)
-			if (Types.isInstance(adaptor.opType(), Function.class)) {
-				log.debug(adaptor + " is an illegal adaptor Op: must be a Function");
-				continue;
-			}
-
-			if (adaptor instanceof SimplifiedOpInfo) {
-				log.debug(adaptor + " has been simplified. This is likely a typo.");
-			}
-
-			try {
-				// resolve adaptor dependencies
-				final List<RichOp<?>> dependencies = resolveOpDependencies(adaptor, map,
-					hints);
-				InfoChain adaptorChain = new DependencyRichOpInfoChain(adaptor,
-					dependencies);
-
-				// grab the first type parameter from the OpInfo and search for
-				// an Op that will then be adapted (this will be the only input of the
-				// adaptor since we know it is a Function)
-				Type srcOpType = Types.substituteTypeVariables(adaptor.inputs().get(0)
-					.getType(), map);
-				final OpRef srcOpRef = inferOpRef(srcOpType, ref.getName(), map);
-				final OpCandidate srcCandidate = findAdaptationCandidate(srcOpRef,
-					hints);
-				map.putAll(srcCandidate.typeVarAssigns());
-				Type adapterOpType = Types.substituteTypeVariables(adaptor.output()
-					.getType(), map);
-				OpAdaptationInfo adaptedInfo = new OpAdaptationInfo(srcCandidate
-					.opInfo(), adapterOpType, adaptorChain);
-				OpCandidate adaptedCandidate = new OpCandidate(this, ref, adaptedInfo,
-					map);
-				adaptedCandidate.setStatus(StatusCode.MATCH);
-				return adaptedCandidate;
-			}
-			catch (DependencyMatchingException d) {
-				depExceptions.add(d);
-			}
-			catch (OpMatchingException e1) {
-				log.trace(e1);
-			}
-		}
-
-		// no adaptors available.
-		if (depExceptions.size() == 0) {
-			throw new OpMatchingException(
-				"Op adaptation failed: no adaptable Ops of type " + ref.getName());
-		}
-		StringBuilder sb = new StringBuilder();
-		for (DependencyMatchingException d : depExceptions) {
-			sb.append("\n\n" + d.getMessage());
-		}
-		throw new DependencyMatchingException(sb.toString());
-	}
-
-	private OpCandidate findAdaptationCandidate(final OpRef srcOpRef,
-		final Hints hints)
-	{
-		Hints adaptationHints = hints.plus(Adaptation.IN_PROGRESS);
-		final OpCandidate srcCandidate = findOpCandidate(srcOpRef, adaptationHints);
-		return srcCandidate;
-	}
-
-	private boolean adaptOpOutputSatisfiesRefTypes(Type adaptTo,
-		Map<TypeVariable<?>, Type> map, OpRef ref)
-	{
-		Type opType = ref.getType();
-		// TODO: clean this logic -- can this just be ref.typesMatch() ?
-		if (opType instanceof ParameterizedType) {
-			if (!GenericAssignability.checkGenericAssignability(adaptTo,
-				(ParameterizedType) opType, map, true))
-			{
-				return false;
-			}
-		}
-		else if (!Types.isAssignable(opType, adaptTo, map)) {
-			return false;
-		}
-		return true;
-	}
-
 	private OpRef inferOpRef(OpDependencyMember<?> dependency,
 		Map<TypeVariable<?>, Type> typeVarAssigns) 
 	{
 		final Type mappedDependencyType = Types.mapVarToTypes(new Type[] {
 			dependency.getType() }, typeVarAssigns)[0];
 		final String dependencyName = dependency.getDependencyName();
-		final OpRef inferredRef = inferOpRef(mappedDependencyType, dependencyName,
+		return inferOpRef(mappedDependencyType, dependencyName,
 			typeVarAssigns);
-		if (inferredRef != null) return inferredRef;
-		throw new OpMatchingException("Could not infer functional " +
-			"method inputs and outputs of Op dependency field: " + dependency
-				.getKey());
 	}
 
 	/**
@@ -778,23 +600,25 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * functional method of the specified type. Also see
 	 * {@link FunctionalParameters#findFunctionalMethodTypes(Type)}.
 	 *
-	 * @param type
-	 * @param name
+	 * @param type the functional {@link Type} of the {@code op} we're looking for
+	 * @param name the name of the {@code op} we're looking for
+	 * @param typeVarAssigns the mappings of {@link TypeVariable}s to {@link Type}s 
 	 * @return null if the specified type has no functional method
 	 */
-	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns)
-			{
+	private OpRef inferOpRef(Type type, String name, Map<TypeVariable<?>, Type> typeVarAssigns) {
 		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
-		if (fmts == null)
-			return null;
 
 		EnumSet<ItemIO> inIos = EnumSet.of(ItemIO.INPUT, ItemIO.CONTAINER, ItemIO.MUTABLE);
 		EnumSet<ItemIO> outIos = EnumSet.of(ItemIO.OUTPUT, ItemIO.CONTAINER, ItemIO.MUTABLE);
 
-		Type[] inputs = fmts.stream().filter(fmt -> inIos.contains(fmt.itemIO())).map(fmt -> fmt.type())
+		Type[] inputs = fmts.stream() //
+				.filter(fmt -> inIos.contains(fmt.itemIO())) //
+				.map(FunctionalMethodType::type) //
 				.toArray(Type[]::new);
 
-		Type[] outputs = fmts.stream().filter(fmt -> outIos.contains(fmt.itemIO())).map(fmt -> fmt.type())
+		Type[] outputs = fmts.stream() //
+				.filter(fmt -> outIos.contains(fmt.itemIO())) //
+				.map(FunctionalMethodType::type) //
 				.toArray(Type[]::new);
 
 		Type[] mappedInputs = Types.mapVarToTypes(inputs, typeVarAssigns);
@@ -815,10 +639,34 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private synchronized void initOpDirectory() {
 		if (opDirectory != null) return;
 		opDirectory = new HashMap<>();
-		for (final OpInfoGenerator generator : infoGenerators) {
-			List<OpInfo> infos = generator.generateInfos();
-			infos.forEach(addToOpIndex);
-		}
+		// add all OpInfos that are directly discoverable
+		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(info, log));
+		List<OpInfoGenerator> generators = infoGenerators();
+		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(o, generators));
+		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(o, generators));
+	}
+
+	/**
+	 * Generates a {@link List} of {@link OpInfo}s from {@code o} using a List of {@link OpInfoGenerator}s.
+	 * @param o the {@link Object} to parse {@link OpInfo}s from.
+	 * @param generators the {@link List} of {@link OpInfoGenerator}s
+	 * @return a {@link List} of {@link OpInfo}s
+	 */
+	private Collection<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
+		return generators.stream() //
+				.filter(g -> g.canGenerateFrom(o)) //
+				.flatMap(g -> g.generateInfosFrom(o).stream()) //
+				.collect(Collectors.toList());
+	}
+
+	private void registerOpsFrom(Object o, List<OpInfoGenerator> generators) {
+		opsFromObject(o, generators).forEach(info -> addToOpIndex.accept(info, log));
+	}
+	
+	private List<OpInfoGenerator> infoGenerators() {
+		return discoverers.stream() //
+				.flatMap(d -> d.discover(OpInfoGenerator.class).stream()) //
+				.collect(Collectors.toList());
 	}
 
 	private synchronized void initIdDirectory() {
@@ -826,12 +674,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		idDirectory = new HashMap<>();
 		if (opDirectory == null) initOpDirectory();
 
-		opDirectory.values().stream().flatMap(c -> c.stream()).forEach(info -> {
-			idDirectory.put(info.id(), info);
-		});
+		opDirectory.values().stream() //
+				.flatMap(Collection::stream) //
+				.forEach(info -> idDirectory.put(info.id(), info));
 	}
 
-	private final Consumer<OpInfo> addToOpIndex = (final OpInfo opInfo) -> {
+	private final BiConsumer<OpInfo, Logger> addToOpIndex = (final OpInfo opInfo, final Logger log) -> {
 		if (opInfo.names() == null || opInfo.names().size() == 0) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" +
 				"Op implementation must provide name.");
@@ -843,8 +691,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			return;
 		}
 		for (String opName : opInfo.names()) {
-			if (!opDirectory.containsKey(opName)) opDirectory.put(opName,
-				new TreeSet<>());
+			opDirectory.putIfAbsent(opName, new TreeSet<>());
 			boolean success = opDirectory.get(opName).add(opInfo);
 			if (!success) System.out.println("Did not add OpInfo " + opInfo);
 		}
@@ -857,13 +704,13 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	/**
-	 * Sets the default {@Hints} used for finding Ops.
+	 * Sets the default {@link Hints} used for finding Ops.
 	 * <p>
 	 * Note that this method is <b>not</b> thread safe and is provided for
-	 * convenience. If the user wishes to use {@Hints} in a thread-safe manner,
+	 * convenience. If the user wishes to use {@link Hints} in a thread-safe manner,
 	 * they should use
 	 * {@link DefaultOpEnvironment#op(String, Nil, Nil[], Nil, Hints)} if using
-	 * different {@Hint}s for different calls. Alternatively, this method can be
+	 * different {@link Hints} for different calls. Alternatively, this method can be
 	 * called before all Ops called in parallel without issues.
 	 */
 	@Override

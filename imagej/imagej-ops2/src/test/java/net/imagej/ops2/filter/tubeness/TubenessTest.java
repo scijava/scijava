@@ -29,19 +29,17 @@
 
 package net.imagej.ops2.filter.tubeness;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.concurrent.ExecutorService;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-import org.scijava.testutil.AssertIterations;
-import org.scijava.thread.ThreadService;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.img.Img;
+import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
+
+import org.junit.jupiter.api.Test;
+import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests {@link DefaultTubeness}.
@@ -63,8 +61,7 @@ public class TubenessTest extends AbstractOpTest {
 				.outType(new Nil<Img<DoubleType>>() {}).apply();
 		ops.op("filter.tubeness").input(input, es, sigma).output(actual).compute();
 
-		assertTrue(AssertIterations.equal(expected, actual));
-
+		ImgLib2Assert.assertImageEquals(expected, actual);
 	}
 
 }

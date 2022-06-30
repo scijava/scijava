@@ -13,33 +13,28 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.scijava.Priority;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpCandidate;
-import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpCandidate.StatusCode;
+import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.DependencyMatchingException;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.impl.DependencyInstantiatedInfoChain;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.ops.engine.struct.FunctionalParameters;
-import org.scijava.plugin.Plugin;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 
-@Plugin(type = MatchingRoutine.class, priority = Priority.LOW)
 public class AdaptationMatchingRoutine implements MatchingRoutine {
 
 	@Override
@@ -228,6 +223,14 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 			throw new OpMatchingException(error);
 		}
 		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW
+	 */
+	@Override
+	public double priority() {
+		return -100.;
 	}
 
 }

@@ -29,9 +29,9 @@
 
 package net.imagej.ops2.coloc.kendallTau;
 
-import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;

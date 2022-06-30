@@ -17,13 +17,11 @@ import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
-import org.scijava.plugin.Plugin;
 
 public class OpWrappers {
 
 	// -- producer --
 
-	@Plugin(type = OpWrapper.class)
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
@@ -66,7 +64,6 @@ public class OpWrappers {
 
 #foreach($arity in [1..$maxArity])
 #set($fg = $functionGenerics.call($arity))
-	@Plugin(type = OpWrapper.class)
 	public static class Function${arity}OpWrapper$generics.call($arity) //
 		implements //
 		OpWrapper<$fg>
@@ -114,7 +111,6 @@ public class OpWrappers {
 
 #foreach($arity in [0..$maxArity])
 #set($cg = $computerGenerics.call($arity))
-	@Plugin(type = OpWrapper.class)
 	public static class Computer${arity}OpWrapper$generics.call($arity) //
 		implements //
 		OpWrapper<$cg>
@@ -161,7 +157,6 @@ public class OpWrappers {
 #foreach($arity in [1..$maxArity])
 #foreach($a in [1..$arity])
 #set($ig = $inplaceGenerics.call($arity, $a))
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace${inplaceSuffix.call($arity, $a)}OpWrapper$inplaceTypeParams.call($arity, $a) //
 		implements //
 		OpWrapper<$ig> //

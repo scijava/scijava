@@ -17,13 +17,11 @@ import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
-import org.scijava.plugin.Plugin;
 
 public class OpWrappers {
 
 	// -- producer --
 
-	@Plugin(type = OpWrapper.class)
 	public static class ProducerOpWrapper<T> implements OpWrapper<Producer<T>> {
 
 		@Override
@@ -64,7 +62,6 @@ public class OpWrappers {
 
 	// -- functions --
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function1OpWrapper<I, O> //
 		implements //
 		OpWrapper<Function<I, O>>
@@ -107,7 +104,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function2OpWrapper<I1, I2, O> //
 		implements //
 		OpWrapper<BiFunction<I1, I2, O>>
@@ -150,7 +146,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function3OpWrapper<I1, I2, I3, O> //
 		implements //
 		OpWrapper<Functions.Arity3<I1, I2, I3, O>>
@@ -193,7 +188,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function4OpWrapper<I1, I2, I3, I4, O> //
 		implements //
 		OpWrapper<Functions.Arity4<I1, I2, I3, I4, O>>
@@ -236,7 +230,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function5OpWrapper<I1, I2, I3, I4, I5, O> //
 		implements //
 		OpWrapper<Functions.Arity5<I1, I2, I3, I4, I5, O>>
@@ -279,7 +272,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function6OpWrapper<I1, I2, I3, I4, I5, I6, O> //
 		implements //
 		OpWrapper<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>>
@@ -322,7 +314,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function7OpWrapper<I1, I2, I3, I4, I5, I6, I7, O> //
 		implements //
 		OpWrapper<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>>
@@ -365,7 +356,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function8OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, O> //
 		implements //
 		OpWrapper<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>
@@ -408,7 +398,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> //
 		implements //
 		OpWrapper<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>
@@ -451,7 +440,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> //
 		implements //
 		OpWrapper<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>
@@ -494,7 +482,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> //
 		implements //
 		OpWrapper<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>
@@ -537,7 +524,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> //
 		implements //
 		OpWrapper<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>
@@ -580,7 +566,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function13OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> //
 		implements //
 		OpWrapper<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>
@@ -623,7 +608,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function14OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> //
 		implements //
 		OpWrapper<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>
@@ -666,7 +650,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function15OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> //
 		implements //
 		OpWrapper<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>
@@ -709,7 +692,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Function16OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> //
 		implements //
 		OpWrapper<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>
@@ -754,7 +736,6 @@ public class OpWrappers {
 
 	// -- computers --
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer0OpWrapper<O> //
 		implements //
 		OpWrapper<Computers.Arity0<O>>
@@ -795,7 +776,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer1OpWrapper<I, O> //
 		implements //
 		OpWrapper<Computers.Arity1<I, O>>
@@ -836,7 +816,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer2OpWrapper<I1, I2, O> //
 		implements //
 		OpWrapper<Computers.Arity2<I1, I2, O>>
@@ -877,7 +856,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer3OpWrapper<I1, I2, I3, O> //
 		implements //
 		OpWrapper<Computers.Arity3<I1, I2, I3, O>>
@@ -918,7 +896,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer4OpWrapper<I1, I2, I3, I4, O> //
 		implements //
 		OpWrapper<Computers.Arity4<I1, I2, I3, I4, O>>
@@ -959,7 +936,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer5OpWrapper<I1, I2, I3, I4, I5, O> //
 		implements //
 		OpWrapper<Computers.Arity5<I1, I2, I3, I4, I5, O>>
@@ -1000,7 +976,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer6OpWrapper<I1, I2, I3, I4, I5, I6, O> //
 		implements //
 		OpWrapper<Computers.Arity6<I1, I2, I3, I4, I5, I6, O>>
@@ -1041,7 +1016,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer7OpWrapper<I1, I2, I3, I4, I5, I6, I7, O> //
 		implements //
 		OpWrapper<Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>>
@@ -1082,7 +1056,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer8OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, O> //
 		implements //
 		OpWrapper<Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>
@@ -1123,7 +1096,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> //
 		implements //
 		OpWrapper<Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>
@@ -1164,7 +1136,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> //
 		implements //
 		OpWrapper<Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>
@@ -1205,7 +1176,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> //
 		implements //
 		OpWrapper<Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>
@@ -1246,7 +1216,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> //
 		implements //
 		OpWrapper<Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>
@@ -1287,7 +1256,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer13OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> //
 		implements //
 		OpWrapper<Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>
@@ -1328,7 +1296,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer14OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> //
 		implements //
 		OpWrapper<Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>
@@ -1369,7 +1336,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer15OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> //
 		implements //
 		OpWrapper<Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>
@@ -1410,7 +1376,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Computer16OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> //
 		implements //
 		OpWrapper<Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>
@@ -1453,7 +1418,6 @@ public class OpWrappers {
 
 	// -- inplaces --
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace1OpWrapper<IO> //
 		implements //
 		OpWrapper<Inplaces.Arity1<IO>> //
@@ -1495,7 +1459,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace2_1OpWrapper<IO, I2> //
 		implements //
 		OpWrapper<Inplaces.Arity2_1<IO, I2>> //
@@ -1537,7 +1500,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace2_2OpWrapper<I1, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity2_2<I1, IO>> //
@@ -1579,7 +1541,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace3_1OpWrapper<IO, I2, I3> //
 		implements //
 		OpWrapper<Inplaces.Arity3_1<IO, I2, I3>> //
@@ -1621,7 +1582,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace3_2OpWrapper<I1, IO, I3> //
 		implements //
 		OpWrapper<Inplaces.Arity3_2<I1, IO, I3>> //
@@ -1663,7 +1623,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace3_3OpWrapper<I1, I2, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity3_3<I1, I2, IO>> //
@@ -1705,7 +1664,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace4_1OpWrapper<IO, I2, I3, I4> //
 		implements //
 		OpWrapper<Inplaces.Arity4_1<IO, I2, I3, I4>> //
@@ -1747,7 +1705,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace4_2OpWrapper<I1, IO, I3, I4> //
 		implements //
 		OpWrapper<Inplaces.Arity4_2<I1, IO, I3, I4>> //
@@ -1789,7 +1746,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace4_3OpWrapper<I1, I2, IO, I4> //
 		implements //
 		OpWrapper<Inplaces.Arity4_3<I1, I2, IO, I4>> //
@@ -1831,7 +1787,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace4_4OpWrapper<I1, I2, I3, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity4_4<I1, I2, I3, IO>> //
@@ -1873,7 +1828,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace5_1OpWrapper<IO, I2, I3, I4, I5> //
 		implements //
 		OpWrapper<Inplaces.Arity5_1<IO, I2, I3, I4, I5>> //
@@ -1915,7 +1869,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace5_2OpWrapper<I1, IO, I3, I4, I5> //
 		implements //
 		OpWrapper<Inplaces.Arity5_2<I1, IO, I3, I4, I5>> //
@@ -1957,7 +1910,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace5_3OpWrapper<I1, I2, IO, I4, I5> //
 		implements //
 		OpWrapper<Inplaces.Arity5_3<I1, I2, IO, I4, I5>> //
@@ -1999,7 +1951,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace5_4OpWrapper<I1, I2, I3, IO, I5> //
 		implements //
 		OpWrapper<Inplaces.Arity5_4<I1, I2, I3, IO, I5>> //
@@ -2041,7 +1992,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace5_5OpWrapper<I1, I2, I3, I4, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity5_5<I1, I2, I3, I4, IO>> //
@@ -2083,7 +2033,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace6_1OpWrapper<IO, I2, I3, I4, I5, I6> //
 		implements //
 		OpWrapper<Inplaces.Arity6_1<IO, I2, I3, I4, I5, I6>> //
@@ -2125,7 +2074,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace6_2OpWrapper<I1, IO, I3, I4, I5, I6> //
 		implements //
 		OpWrapper<Inplaces.Arity6_2<I1, IO, I3, I4, I5, I6>> //
@@ -2167,7 +2115,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace6_3OpWrapper<I1, I2, IO, I4, I5, I6> //
 		implements //
 		OpWrapper<Inplaces.Arity6_3<I1, I2, IO, I4, I5, I6>> //
@@ -2209,7 +2156,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace6_4OpWrapper<I1, I2, I3, IO, I5, I6> //
 		implements //
 		OpWrapper<Inplaces.Arity6_4<I1, I2, I3, IO, I5, I6>> //
@@ -2251,7 +2197,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace6_5OpWrapper<I1, I2, I3, I4, IO, I6> //
 		implements //
 		OpWrapper<Inplaces.Arity6_5<I1, I2, I3, I4, IO, I6>> //
@@ -2293,7 +2238,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace6_6OpWrapper<I1, I2, I3, I4, I5, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity6_6<I1, I2, I3, I4, I5, IO>> //
@@ -2335,7 +2279,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_1OpWrapper<IO, I2, I3, I4, I5, I6, I7> //
 		implements //
 		OpWrapper<Inplaces.Arity7_1<IO, I2, I3, I4, I5, I6, I7>> //
@@ -2377,7 +2320,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_2OpWrapper<I1, IO, I3, I4, I5, I6, I7> //
 		implements //
 		OpWrapper<Inplaces.Arity7_2<I1, IO, I3, I4, I5, I6, I7>> //
@@ -2419,7 +2361,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_3OpWrapper<I1, I2, IO, I4, I5, I6, I7> //
 		implements //
 		OpWrapper<Inplaces.Arity7_3<I1, I2, IO, I4, I5, I6, I7>> //
@@ -2461,7 +2402,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_4OpWrapper<I1, I2, I3, IO, I5, I6, I7> //
 		implements //
 		OpWrapper<Inplaces.Arity7_4<I1, I2, I3, IO, I5, I6, I7>> //
@@ -2503,7 +2443,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_5OpWrapper<I1, I2, I3, I4, IO, I6, I7> //
 		implements //
 		OpWrapper<Inplaces.Arity7_5<I1, I2, I3, I4, IO, I6, I7>> //
@@ -2545,7 +2484,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_6OpWrapper<I1, I2, I3, I4, I5, IO, I7> //
 		implements //
 		OpWrapper<Inplaces.Arity7_6<I1, I2, I3, I4, I5, IO, I7>> //
@@ -2587,7 +2525,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace7_7OpWrapper<I1, I2, I3, I4, I5, I6, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity7_7<I1, I2, I3, I4, I5, I6, IO>> //
@@ -2629,7 +2566,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_1<IO, I2, I3, I4, I5, I6, I7, I8>> //
@@ -2671,7 +2607,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_2<I1, IO, I3, I4, I5, I6, I7, I8>> //
@@ -2713,7 +2648,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_3<I1, I2, IO, I4, I5, I6, I7, I8>> //
@@ -2755,7 +2689,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_4<I1, I2, I3, IO, I5, I6, I7, I8>> //
@@ -2797,7 +2730,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_5<I1, I2, I3, I4, IO, I6, I7, I8>> //
@@ -2839,7 +2771,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_6<I1, I2, I3, I4, I5, IO, I7, I8>> //
@@ -2881,7 +2812,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8> //
 		implements //
 		OpWrapper<Inplaces.Arity8_7<I1, I2, I3, I4, I5, I6, IO, I8>> //
@@ -2923,7 +2853,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace8_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity8_8<I1, I2, I3, I4, I5, I6, I7, IO>> //
@@ -2965,7 +2894,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_1<IO, I2, I3, I4, I5, I6, I7, I8, I9>> //
@@ -3007,7 +2935,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_2<I1, IO, I3, I4, I5, I6, I7, I8, I9>> //
@@ -3049,7 +2976,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_3<I1, I2, IO, I4, I5, I6, I7, I8, I9>> //
@@ -3091,7 +3017,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_4<I1, I2, I3, IO, I5, I6, I7, I8, I9>> //
@@ -3133,7 +3058,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_5<I1, I2, I3, I4, IO, I6, I7, I8, I9>> //
@@ -3175,7 +3099,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_6<I1, I2, I3, I4, I5, IO, I7, I8, I9>> //
@@ -3217,7 +3140,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_7<I1, I2, I3, I4, I5, I6, IO, I8, I9>> //
@@ -3259,7 +3181,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9> //
 		implements //
 		OpWrapper<Inplaces.Arity9_8<I1, I2, I3, I4, I5, I6, I7, IO, I9>> //
@@ -3301,7 +3222,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace9_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity9_9<I1, I2, I3, I4, I5, I6, I7, I8, IO>> //
@@ -3343,7 +3263,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10>> //
@@ -3385,7 +3304,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10>> //
@@ -3427,7 +3345,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10>> //
@@ -3469,7 +3386,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10>> //
@@ -3511,7 +3427,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10>> //
@@ -3553,7 +3468,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10>> //
@@ -3595,7 +3509,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10>> //
@@ -3637,7 +3550,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10>> //
@@ -3679,7 +3591,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10> //
 		implements //
 		OpWrapper<Inplaces.Arity10_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10>> //
@@ -3721,7 +3632,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace10_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity10_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO>> //
@@ -3763,7 +3673,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3805,7 +3714,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3847,7 +3755,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3889,7 +3796,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11>> //
@@ -3931,7 +3837,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11>> //
@@ -3973,7 +3878,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11>> //
@@ -4015,7 +3919,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11>> //
@@ -4057,7 +3960,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11>> //
@@ -4099,7 +4001,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11>> //
@@ -4141,7 +4042,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11> //
 		implements //
 		OpWrapper<Inplaces.Arity11_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11>> //
@@ -4183,7 +4083,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace11_11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity11_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO>> //
@@ -4225,7 +4124,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4267,7 +4165,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4309,7 +4206,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4351,7 +4247,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4393,7 +4288,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12>> //
@@ -4435,7 +4329,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12>> //
@@ -4477,7 +4370,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12>> //
@@ -4519,7 +4411,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12>> //
@@ -4561,7 +4452,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12>> //
@@ -4603,7 +4493,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12>> //
@@ -4645,7 +4534,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12> //
 		implements //
 		OpWrapper<Inplaces.Arity12_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12>> //
@@ -4687,7 +4575,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace12_12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity12_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO>> //
@@ -4729,7 +4616,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4771,7 +4657,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4813,7 +4698,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4855,7 +4739,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4897,7 +4780,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4939,7 +4821,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13>> //
@@ -4981,7 +4862,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13>> //
@@ -5023,7 +4903,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13>> //
@@ -5065,7 +4944,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13>> //
@@ -5107,7 +4985,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13>> //
@@ -5149,7 +5026,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13>> //
@@ -5191,7 +5067,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13> //
 		implements //
 		OpWrapper<Inplaces.Arity13_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13>> //
@@ -5233,7 +5108,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace13_13OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity13_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO>> //
@@ -5275,7 +5149,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5317,7 +5190,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5359,7 +5231,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5401,7 +5272,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5443,7 +5313,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5485,7 +5354,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5527,7 +5395,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14>> //
@@ -5569,7 +5436,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14>> //
@@ -5611,7 +5477,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14>> //
@@ -5653,7 +5518,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14>> //
@@ -5695,7 +5559,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14>> //
@@ -5737,7 +5600,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14>> //
@@ -5779,7 +5641,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_13OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14> //
 		implements //
 		OpWrapper<Inplaces.Arity14_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14>> //
@@ -5821,7 +5682,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace14_14OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity14_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO>> //
@@ -5863,7 +5723,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5905,7 +5764,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5947,7 +5805,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -5989,7 +5846,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -6031,7 +5887,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -6073,7 +5928,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -6115,7 +5969,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15>> //
@@ -6157,7 +6010,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15>> //
@@ -6199,7 +6051,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15>> //
@@ -6241,7 +6092,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15>> //
@@ -6283,7 +6133,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15>> //
@@ -6325,7 +6174,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15>> //
@@ -6367,7 +6215,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_13OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15>> //
@@ -6409,7 +6256,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_14OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15> //
 		implements //
 		OpWrapper<Inplaces.Arity15_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15>> //
@@ -6451,7 +6297,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace15_15OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity15_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO>> //
@@ -6493,7 +6338,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_1OpWrapper<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_1<IO, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6535,7 +6379,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_2OpWrapper<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_2<I1, IO, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6577,7 +6420,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_3OpWrapper<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_3<I1, I2, IO, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6619,7 +6461,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_4OpWrapper<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_4<I1, I2, I3, IO, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6661,7 +6502,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_5OpWrapper<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_5<I1, I2, I3, I4, IO, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6703,7 +6543,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_6OpWrapper<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_6<I1, I2, I3, I4, I5, IO, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6745,7 +6584,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_7OpWrapper<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_7<I1, I2, I3, I4, I5, I6, IO, I8, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6787,7 +6625,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_8OpWrapper<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_8<I1, I2, I3, I4, I5, I6, I7, IO, I9, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6829,7 +6666,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_9OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_9<I1, I2, I3, I4, I5, I6, I7, I8, IO, I10, I11, I12, I13, I14, I15, I16>> //
@@ -6871,7 +6707,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_10OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_10<I1, I2, I3, I4, I5, I6, I7, I8, I9, IO, I11, I12, I13, I14, I15, I16>> //
@@ -6913,7 +6748,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_11OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, IO, I12, I13, I14, I15, I16>> //
@@ -6955,7 +6789,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_12OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, IO, I13, I14, I15, I16>> //
@@ -6997,7 +6830,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_13OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, IO, I14, I15, I16>> //
@@ -7039,7 +6871,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_14OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, IO, I15, I16>> //
@@ -7081,7 +6912,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_15OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16> //
 		implements //
 		OpWrapper<Inplaces.Arity16_15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, IO, I16>> //
@@ -7123,7 +6953,6 @@ public class OpWrappers {
 		}
 	}
 
-	@Plugin(type = OpWrapper.class)
 	public static class Inplace16_16OpWrapper<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO> //
 		implements //
 		OpWrapper<Inplaces.Arity16_16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, IO>> //

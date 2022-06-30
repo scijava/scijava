@@ -32,7 +32,7 @@ package net.imagej.ops2.eval;
 import java.util.Map;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.engine.OpService;
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.plugin.Plugin;
 
@@ -48,7 +48,7 @@ import org.scijava.plugin.Plugin;
  * @see OpEvaluator
  */
 @Plugin(type = Op.class, name = "eval")
-public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpService, Object>
+public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>
 {
 
 	/**
@@ -60,7 +60,7 @@ public class DefaultEval implements Functions.Arity3<String, Map<String, Object>
 	 * @return the output
 	 */
 	@Override
-	public Object apply(final String input, final Map<String, Object> vars, final OpService ops) {
+	public Object apply(final String input, final Map<String, Object> vars, final OpEnvironment ops) {
 		OpEvaluator e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);
 		return e.evaluate(input);

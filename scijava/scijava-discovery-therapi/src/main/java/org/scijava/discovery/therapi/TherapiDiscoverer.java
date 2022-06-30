@@ -31,13 +31,13 @@ import java.util.stream.Stream;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.Discovery;
-import org.scijava.parse2.ParseService;
+import org.scijava.parse2.Parser;
 
 public class TherapiDiscoverer implements Discoverer {
 
-	private ParseService parser;
+	private Parser parser;
 
-	public TherapiDiscoverer(ParseService parser) {
+	public TherapiDiscoverer(Parser parser) {
 		this.parser = parser;
 	}
 

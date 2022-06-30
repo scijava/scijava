@@ -36,13 +36,13 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 
 /**
  * Tests {@link OpBuilder}. For each arity, we test the following matches and
@@ -86,6 +86,11 @@ import org.scijava.ops.engine.AbstractTestEnvironment;
  * @author Gabriel Selzer
  */
 public class OpBuilderTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(OpBuilderTestOps.class, "opcollection");
+	}
 
 	final double[] halves = new double[10];
 	{

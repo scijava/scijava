@@ -2,15 +2,11 @@
 package org.scijava.ops.api;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.plugin.SciJavaPlugin;
-
-public interface InfoChainGenerator extends SciJavaPlugin {
+public interface InfoChainGenerator {
 
 	public static final Character DEP_START_DELIM = '{';
 	public static final Character DEP_END_DELIM = '}';

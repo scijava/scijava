@@ -33,9 +33,9 @@ public class ClassParameterMemberParser implements
 		// Obtain source's Op method.
 		Method opMethod;
 		try {
-			opMethod = getOpMethod(source);
+			opMethod = getDeclaredOpMethod(source);
 		}
-		catch (NoSuchMethodException e) {
+		catch (NoSuchMethodException e1) {
 			problems.add(new ValidityProblem("OpClass " + source +
 				" does not have a functional method!"));
 			throw new ValidityException(problems);
@@ -54,8 +54,8 @@ public class ClassParameterMemberParser implements
 	}
 
 	/**
-	 * Finds the abstract {@link FunctionalInterface} method implemented by the Op
-	 * {@code c}
+	 * Returns the declared {@link FunctionalInterface} method implemented by the Op
+	 * {@code c}, or, as a fallback, the functional method w.r.t. its declaration.
 	 * 
 	 * @param c the Op {@link Class}
 	 * @return the {@link Method} of the {@link FunctionalInterface} implemented
@@ -63,13 +63,17 @@ public class ClassParameterMemberParser implements
 	 * @throws NoSuchMethodException when {@code c} does not implement its
 	 *           functional method
 	 */
-	private Method getOpMethod(Class<?> c) throws NoSuchMethodException {
+	private Method getDeclaredOpMethod(Class<?> c) throws NoSuchMethodException {
 		// NB this is the functional method w.r.t. the interface, not w.r.t. the Op
 		Method fMethod = OpUtils.findFunctionalMethod(c);
 		Type[] paramTypes = Types.getExactParameterTypes(fMethod, c);
 		Class<?>[] rawParamTypes = Arrays.stream(paramTypes).map(t -> Types.raw(t))
 			.toArray(Class[]::new);
-		return c.getMethod(fMethod.getName(), rawParamTypes);
+		try {
+			return c.getMethod(fMethod.getName(), rawParamTypes);
+		} catch(NoSuchMethodException e) {
+			return fMethod;
+		}
 	}
 
 }

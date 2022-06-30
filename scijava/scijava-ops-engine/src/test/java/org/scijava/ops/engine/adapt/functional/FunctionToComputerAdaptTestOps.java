@@ -42,10 +42,8 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class FunctionToComputerAdaptTestOps {
+public class FunctionToComputerAdaptTestOps implements OpCollection {
 
 	@OpField(names = "test.FtC")
 	public static final Function<double[], double[]> toComp1 = (in) -> {

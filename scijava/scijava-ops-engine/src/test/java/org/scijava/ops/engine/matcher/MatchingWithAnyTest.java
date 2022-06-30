@@ -2,26 +2,31 @@ package org.scijava.ops.engine.matcher;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Type;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaSource;
+import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 import org.scijava.types.Any;
-import org.scijava.types.TypeExtractor;
 
 /**
  * Tests op matcher functionality with {@link Any} types.
  * 
  * @author Gabriel Selzer
  */
-public class MatchingWithAnyTest extends AbstractTestEnvironment {
+public class MatchingWithAnyTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(MatchingWithAnyTest.class, "opcollection");
+		discoverer.register(ComputersToFunctionsViaSource.Computer2ToFunction2ViaSource.class, "op");
+	}
 
 	@Test
 	public void testAny() {
@@ -50,56 +55,47 @@ public class MatchingWithAnyTest extends AbstractTestEnvironment {
 
 	}
 
-	@Plugin(type = TypeExtractor.class, priority = Priority.LOW)
-	public static class ThingTypeExtractor implements TypeExtractor<Thing<?>> {
-
-		@Override
-		public Type reify(final Thing<?> o, final int n) {
-			if (n != 0)
-				throw new IndexOutOfBoundsException();
-
-			return new Any();
-		}
-
-		@Override
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		public Class<Thing<?>> getRawType() {
-			return (Class) Thing.class;
-		}
-
-	}
-
 	// TODO: Note that this wouldn't work for Computer -> Function because here
 	// LiftFunctionToArrayTransformer is the first transformer which is asked for
 	// source refs. This transformer doesn't support Any and would fail.
 	// TODO: can we remove this test?
 	@Test
-	public void testRunAnyFunction1FromComputer2() {
+	public void testRunAnyFunction2FromComputer2() {
 		final int in1 = 11;
 		final long in2 = 31;
 		final StringContainer out = ops.op("test.integerAndLongAndNotAnyComputer").input(in1, in2).outType(StringContainer.class).apply();
 		assertEquals(Long.toString(in1 + in2), out.getValue());
 	}
-	
-}
 
-@Plugin(type = Op.class, name = "test.functionAndLongToLong")
-class FunctionAndLongToLong implements BiFunction<Function<Long, Long>, Long, Long> {
+	@OpField(names = "test.functionAndLongToLong")
+	public final BiFunction<Function<Long, Long>, Long, Long> funcAndLongToLong = //
+		(t, u) -> t.apply(u);
 
-	@Override
-	public Long apply(Function<Long, Long> t, Long u) {
-		return t.apply(u);
-	}
-	
-}
+	@OpField(names = "test.integerAndLongAndNotAnyComputer")
+	public final Computers.Arity2<Integer, Long, StringContainer> integerAndLongAndNotAnyComputer = //
+		(in1, in2, out) -> out.setValue(Long.toString(in1 + in2));
 
-@Plugin(type = Op.class, name = "test.integerAndLongAndNotAnyComputer")
-class IntegerAndLongAndNotAnyComputer implements Computers.Arity2<Integer, Long, StringContainer> {
+	@OpField(names = "create, create.stringContainer")
+	public final Producer<StringContainer> stringContainerCreator = //
+		StringContainer::new;
 
-	@Override
-	public void compute(Integer in1, Long in2, StringContainer out) {
-		out.setValue(Long.toString(in1 + in2));
-	}
+	@OpField(names = "test.any")
+	public final Function<Thing<String>, Double> thingFunction = //
+		(t) -> t.create("Hello");
+
+	@OpField(names = "test.exceptionalAny")
+	public final Function<ExceptionalThing<String>, Double> exceptionalThingFunction = //
+		(t) -> {
+			String s = t.getU();
+			return t.create("Hello");
+		};
+
+	@OpField(names = "test.nestedAny")
+	public final Function<NestedThing<String, Thing<String>>, Double> nestedThingFunction = //
+		(t) -> {
+			return 5.;
+		};
+
 }
 
 class StringContainer {
@@ -115,14 +111,6 @@ class StringContainer {
 	}
 }
 
-@Plugin(type = Op.class, name = "create, create.stringContainer")
-class StringContainerCreator implements Producer<StringContainer> {
-
-	@Override
-	public StringContainer create() {
-		return new StringContainer();
-	}
-}
 
 class Thing<U> {
 
@@ -155,33 +143,4 @@ class NestedThing<U, V extends Thing<?>> {
 	}
 }
 
-@Plugin(type = Op.class, name = "test.any")
-class ThingFunction implements Function<Thing<String>, Double> {
 
-	@Override
-	public Double apply(Thing<String> t) {
-		return t.create("Hello");
-	}
-
-}
-
-@Plugin(type = Op.class, name = "test.exceptionalAny")
-class ExceptionalThingFunction implements Function<ExceptionalThing<String>, Double> {
-
-	@Override
-	public Double apply(ExceptionalThing<String> t) {
-		String s = t.getU();
-		return t.create("Hello");
-	}
-
-}
-
-@Plugin(type = Op.class, name = "test.nestedAny")
-class NestedThingFunction implements Function<NestedThing<String, Thing<String>>, Double> {
-
-	@Override
-	public Double apply(NestedThing<String, Thing<String>> t) {
-		return 5.;
-	}
-
-}

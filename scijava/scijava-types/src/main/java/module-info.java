@@ -7,5 +7,14 @@ module org.scijava.types {
 	opens org.scijava.types to org.scijava;
 
 	requires transitive com.google.common;
-	requires org.scijava;
+	requires transitive org.scijava.discovery;
+	requires org.scijava.discovery.plugin;
+	requires transitive org.scijava.log2;
+
+	uses org.scijava.types.TypeExtractor;
+
+	provides org.scijava.types.TypeExtractor with
+			org.scijava.types.extractors.MapTypeExtractor,
+			org.scijava.types.extractors.IterableTypeExtractor;
+
 }

@@ -5,19 +5,33 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.features.DependencyMatchingException;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
+import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
+public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(DefaultMatchingErrorTest.class, "opcollection");
+		discoverer.register(DependentOp.class, "opcollection");
+		discoverer.register(FurtherDependentOp.class, "opcollection");
+		discoverer.register(MissingDependencyOp.class, "opcollection");
+		discoverer.register(MissingDependencyOpArr1.class, "opcollection");
+		discoverer.register(MissingDependencyOpArr2.class, "opcollection");
+		discoverer.register(ComputersToFunctionsViaFunction.Computer1ToFunction1ViaFunction.class, "op");
+		discoverer.register(CreateOpCollection.class, "opcollection");
+	}
 
 	@OpField(names = "test.duplicateOp")
 	public final Function<Double, Double> duplicateA = (in) -> in;
@@ -100,8 +114,8 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment {
 
 }
 
-@Plugin(type = Op.class, name = "test.furtherOutsideOp")
-class FurtherDependentOp implements Function<Double, Double> {
+@OpClass(names = "test.furtherOutsideOp")
+class FurtherDependentOp implements Function<Double, Double>, Op {
 
 	@OpDependency(name = "test.outsideOp")
 	private Function<Double, Double> op;
@@ -117,8 +131,8 @@ class FurtherDependentOp implements Function<Double, Double> {
 
 }
 
-@Plugin(type = Op.class, name = "test.outsideOp")
-class DependentOp implements Function<Double, Double> {
+@OpClass(names = "test.outsideOp")
+class DependentOp implements Function<Double, Double>, Op {
 
 	@OpDependency(name = "test.missingDependencyOp")
 	private Function<Double, Double> op;
@@ -134,8 +148,8 @@ class DependentOp implements Function<Double, Double> {
 
 }
 
-@Plugin(type = Op.class, name = "test.missingDependencyOp")
-class MissingDependencyOp implements Function<Double, Double> {
+@OpClass(names = "test.missingDependencyOp")
+class MissingDependencyOp implements Function<Double, Double>, Op {
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;
@@ -151,8 +165,8 @@ class MissingDependencyOp implements Function<Double, Double> {
 
 }
 
-@Plugin(type = Op.class, name = "test.adaptMissingDep")
-class MissingDependencyOpArr1 implements Computers.Arity1<Double[], Double[]> {
+@OpClass(names = "test.adaptMissingDep")
+class MissingDependencyOpArr1 implements Computers.Arity1<Double[], Double[]>, Op {
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;
@@ -166,8 +180,8 @@ class MissingDependencyOpArr1 implements Computers.Arity1<Double[], Double[]> {
 
 }
 
-@Plugin(type = Op.class, name = "test.adaptMissingDep")
-class MissingDependencyOpArr2 implements Function<Double, Double> {
+@OpClass(names = "test.adaptMissingDep")
+class MissingDependencyOpArr2 implements Function<Double, Double>, Op {
 
 	@OpDependency(name = "test.nonexistingOp")
 	private Function<Double, Double> op;

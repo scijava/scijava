@@ -9,13 +9,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.engine.monitor.DefaultOpMonitor;
-import org.scijava.ops.engine.monitor.OpMonitor;
+import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.types.Nil;
 
 /**
@@ -27,12 +26,18 @@ import org.scijava.types.Nil;
  */
 public class OpMonitorTest extends AbstractTestEnvironment {
 
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(InfiniteOp.class, "op");
+		discoverer.register(CountingOp.class, "op");
+	}
+
 	/**
 	 * Basic test of cancellation on the same thread
 	 */
 	@Test(expected = CancellationException.class)
 	public void testCancellation() {
-		Function<OpMonitor, BigInteger> bigOp = OpBuilder.matchFunction(ops.env(), "test.opMonitor", new Nil<OpMonitor>() {},
+		Function<OpMonitor, BigInteger> bigOp = OpBuilder.matchFunction(ops, "test.opMonitor", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {});
 		OpMonitor monitor = new DefaultOpMonitor();
 		monitor.cancel();
@@ -49,7 +54,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	 */
 	@Test(expected = CancellationException.class)
 	public void testCancellationDifferentThread() throws InterruptedException {
-		Function<OpMonitor, BigInteger> bigOp = OpBuilder.matchFunction(ops.env(), "test.opMonitor", new Nil<OpMonitor>() {},
+		Function<OpMonitor, BigInteger> bigOp = OpBuilder.matchFunction(ops, "test.opMonitor", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {});
 		OpMonitor monitor = new DefaultOpMonitor();
 		try {
@@ -65,7 +70,7 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 	
 	@Test
 	public void testProgress() throws InterruptedException, ExecutionException{
-		BiFunction<OpMonitor, BigInteger, BigInteger> bigOp = OpBuilder.matchFunction(ops.env(), "test.progress", new Nil<OpMonitor>() {},
+		BiFunction<OpMonitor, BigInteger, BigInteger> bigOp = OpBuilder.matchFunction(ops, "test.progress", new Nil<OpMonitor>() {},
 				new Nil<BigInteger>() {}, new Nil<BigInteger>() {});
 		
 		OpMonitor monitor = new DefaultOpMonitor();
@@ -84,8 +89,8 @@ public class OpMonitorTest extends AbstractTestEnvironment {
 
 }
 
-@Plugin(type = Op.class, name = "test.opMonitor")
-class InfiniteOp implements Function<OpMonitor, BigInteger> {
+@OpClass(names = "test.opMonitor")
+class InfiniteOp implements Function<OpMonitor, BigInteger>, Op {
 
 	@Override
 	public BigInteger apply(OpMonitor opMonitor) {
@@ -102,8 +107,8 @@ class InfiniteOp implements Function<OpMonitor, BigInteger> {
 
 }
 
-@Plugin(type = Op.class, name = "test.progress")
-class CountingOp implements BiFunction<OpMonitor, BigInteger, BigInteger> {
+@OpClass(names = "test.progress")
+class CountingOp implements BiFunction<OpMonitor, BigInteger, BigInteger>, Op {
 
 	@Override
 	public BigInteger apply(OpMonitor opMonitor, BigInteger target) {

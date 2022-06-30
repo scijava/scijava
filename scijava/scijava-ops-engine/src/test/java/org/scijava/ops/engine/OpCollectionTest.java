@@ -31,18 +31,25 @@ package org.scijava.ops.engine;
 
 import java.util.function.BiFunction;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.scijava.ops.engine.math.MathOpCollection;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 
 public class OpCollectionTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(MathOpCollection.class, "opcollection");
+	}
 
 	Nil<Double> nilDouble = new Nil<>() {
 	};
 	
 	@Test
 	public void testOpCollection() throws ValidityException {
-		BiFunction<Double, Double, Double> divFunction = ops.env().op( //
+		BiFunction<Double, Double, Double> divFunction = ops.op( //
 				"math.div", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -50,7 +57,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 1.0 == divFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> addFunction = ops.env().op( //
+		BiFunction<Double, Double, Double> addFunction = ops.op( //
 				"math.add", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -58,7 +65,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 4.0 == addFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> mulFunction = ops.env().op( //
+		BiFunction<Double, Double, Double> mulFunction = ops.op( //
 				"math.mul", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //
@@ -66,7 +73,7 @@ public class OpCollectionTest extends AbstractTestEnvironment {
 		);
 		assert 4.0 == mulFunction.apply(2.0, 2.0);
 		
-		BiFunction<Double, Double, Double> subFunction = ops.env().op( //
+		BiFunction<Double, Double, Double> subFunction = ops.op( //
 				"math.sub", new Nil<BiFunction<Double, Double, Double>>() {
 				}, //
 				new Nil[] { nilDouble, nilDouble }, //

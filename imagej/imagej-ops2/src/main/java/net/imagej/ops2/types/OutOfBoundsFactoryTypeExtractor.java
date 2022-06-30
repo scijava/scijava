@@ -36,11 +36,10 @@ import java.lang.reflect.Type;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 
 import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory} objects.
@@ -52,14 +51,10 @@ import org.scijava.plugin.Plugin;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBoundsFactory<?, ?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final OutOfBoundsFactory<?, ?> o, final int n) {
+	public Type reify(final TypeReifier t, final OutOfBoundsFactory<?, ?> o, final int n) {
 		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
 		
 		return new Any();
@@ -71,5 +66,14 @@ public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBound
 	public Class<OutOfBoundsFactory<?, ?>> getRawType() {
 		return (Class) OutOfBoundsFactory.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
+	}
+
 
 }

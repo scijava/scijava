@@ -29,26 +29,23 @@
 
 package net.imagej.ops2.morphology.blackTopHat;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
-import net.imglib2.IterableInterval;
 import net.imglib2.algorithm.morphology.BlackTopHat;
 import net.imglib2.algorithm.neighborhood.DiamondShape;
 import net.imglib2.algorithm.neighborhood.HorizontalLineShape;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.img.Img;
+import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.numeric.integer.ByteType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.testutil.AssertIterations;
 import org.scijava.types.Nil;
 
 /**
@@ -72,7 +69,7 @@ public class BlackTopHatTest extends AbstractOpTest {
 		final Img<ByteType> out1 = ops.op("morphology.BlackTopHat").input(in, shapes, 1)
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final Img<ByteType> out2 = BlackTopHat.blackTopHat(in, shape, 1);
-		assertTrue(AssertIterations.equal(out2, out1));
+		ImgLib2Assert.assertImageEquals(out2, out1);
 	}
 
 	@Test
@@ -82,9 +79,9 @@ public class BlackTopHatTest extends AbstractOpTest {
 		shapes.add(new DiamondShape(1));
 		shapes.add(new RectangleShape(1, false));
 		shapes.add(new HorizontalLineShape(2, 1, false));
-		final IterableInterval<ByteType> out1 = ops.op("morphology.BlackTopHat").input(in, shapes, 1)
-				.outType(new Nil<IterableInterval<ByteType>>() {}).apply();
+		final Img<ByteType> out1 = ops.op("morphology.BlackTopHat").input(in, shapes, 1)
+				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final Img<ByteType> out2 = BlackTopHat.blackTopHat(in, shapes, 1);
-		assertTrue(AssertIterations.equal(out2, out1));
+		ImgLib2Assert.assertImageEquals(out2, out1);
 	}
 }

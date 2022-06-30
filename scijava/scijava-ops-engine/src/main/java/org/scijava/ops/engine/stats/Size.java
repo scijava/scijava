@@ -5,41 +5,38 @@ import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 public class Size {
 
-	@Plugin(type = Op.class, name = "stats.size")
-	public static class StatsSizeFunction<T> implements Function<Iterable<T>, Long>{
+	@OpClass(names = "stats.size")
+	public static class StatsSizeFunction<T> implements
+		Function<Iterable<T>, Long>, Op
+	{
 
 		/**
 		 * @param iterable the data to operate over
 		 * @return the size of the dataset
 		 */
-			/**
-		 * TODO
-		 * 
-		 * @param iterable
-		 * @param size
-		 */
-	@Override
+		@Override
 		public Long apply(Iterable<T> iterable) {
 			return StreamSupport.stream(iterable.spliterator(), false).count();
 		}
 	}
 
-	   @Plugin(type = Op.class, name = "stats.size")
-	    public static class StatsSizeFunctionDouble<T> implements Function<Iterable<T>, Double>{
+	@OpClass(names = "stats.size")
+	public static class StatsSizeFunctionDouble<T> implements
+		Function<Iterable<T>, Double>, Op
+	{
 
-	       	        /**
-	         * TODO
-	         * 
-	         * @param iterable
-	         * @param size
-	         */
- @Override
-	        public Double apply(Iterable<T> iterable) {
-	            return (double) StreamSupport.stream(iterable.spliterator(), false).count();
-	        }
-	    }
+		/**
+		 * @param iterable the data to operate over
+		 * @return the size of the dataset
+		 */
+		@Override
+		public Double apply(Iterable<T> iterable) {
+			return (double) StreamSupport.stream(iterable.spliterator(), false)
+				.count();
+		}
+	}
 }

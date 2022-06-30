@@ -8,14 +8,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Test;
 
-public class ModuleTest extends AbstractTestEnvironment {
+public class ModuleTest {
 
 	String moduleBaseDirectory = "src/main/java/org/scijava";
 
@@ -43,8 +42,7 @@ public class ModuleTest extends AbstractTestEnvironment {
 	}
 
 	private Set<String> getPackagesExported(String path) {
-		try {
-			Stream<String> stream = Files.lines(Paths.get(path));
+		try (Stream<String> stream = Files.lines(Paths.get(path))){
 			// remove outside whitespace
 			Set<String> exportedPackages = stream.map(str -> str.trim())
 				// consider only opens
@@ -56,7 +54,7 @@ public class ModuleTest extends AbstractTestEnvironment {
 			return exportedPackages;
 		}
 		catch (IOException e) {
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 

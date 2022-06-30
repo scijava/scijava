@@ -41,6 +41,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.features.DependencyMatchingException;
 
 public class MeshFeatureTests extends AbstractFeatureTest {
 	private static final double EPSILON = 10e-12;
@@ -56,8 +57,8 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 	@Test
 	public void boxivityMesh() {
 		try {
-			ops.op("geom.boxivity").input(mesh).apply();
-		} catch (IllegalArgumentException e) {
+			ops.op("geom.boxivity").input(mesh).outType(DoubleType.class).apply();
+		} catch (DependencyMatchingException e) {
 			// DefaultSmallestOrientedBoundingBox is not implemented.
 		}
 	}

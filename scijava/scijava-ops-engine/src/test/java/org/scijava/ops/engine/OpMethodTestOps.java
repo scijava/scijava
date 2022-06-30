@@ -41,10 +41,8 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class OpMethodTestOps {
+public class OpMethodTestOps implements OpCollection {
 
 	// -- Functions -- //
 	@OpMethod(names = "test.multiplyNumericStrings", type = Producer.class)

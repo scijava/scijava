@@ -39,10 +39,7 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Converts {@link Computers} operating on single types to {@link Computers}
@@ -52,8 +49,7 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+public class ComputerToIterables<I, I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements OpCollection {
 
 	@OpField(names = "adapt")
 	public final Function<Computers.Arity0<O>, Computers.Arity0<Iterable<O>>> liftComputer0 = 

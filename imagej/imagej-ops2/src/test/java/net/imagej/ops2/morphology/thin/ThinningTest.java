@@ -29,21 +29,19 @@
 
 package net.imagej.ops2.morphology.thin;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.ops2.features.AbstractFeatureTest;
 import net.imglib2.img.Img;
+import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.scijava.testutil.AssertIterations;
 import org.scijava.types.Nil;
 
 /**
- * Tests for {@link net.imagej.ops2.Ops.Morphology} thinning ops.
+ * Tests for morphology thinning ops.
  *
  * @author Kyle Harrington
  */
@@ -65,14 +63,14 @@ public class ThinningTest extends AbstractOpTest {
 	public void testThinGuoHall() {
 		final Img<BitType> out = ops.op("morphology.thinGuoHall").input(in).outType(new Nil<Img<BitType>>() {}).apply();
 		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_guoHall.tif")).output(target).compute();
-		assertTrue(AssertIterations.equal(target, out));
+		ImgLib2Assert.assertImageEquals(target, out);
 	}
 
 	@Test
 	public void testThinHilditch() {
 		final Img<BitType> out = ops.op("morphology.thinHilditch").input(in).outType(new Nil<Img<BitType>>() {}).apply();
 		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_hilditch.tif")).output(target).compute();
-		assertTrue(AssertIterations.equal(target, out));
+		ImgLib2Assert.assertImageEquals(target, out);
 	}
 
 	@Test
@@ -80,13 +78,13 @@ public class ThinningTest extends AbstractOpTest {
 		final Img<BitType> out = ops.op("morphology.thinMorphological").input(in).outType(new Nil<Img<BitType>>() {})
 				.apply();
 		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_morphological.tif")).output(target).compute();
-		assertTrue(AssertIterations.equal(target, out));
+		ImgLib2Assert.assertImageEquals(target, out);
 	}
 
 	@Test
 	public void testZhangSuen() {
 		final Img<BitType> out = ops.op("morphology.thinZhangSuen").input(in).outType(new Nil<Img<BitType>>() {}).apply();
 		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_zhangSuen.tif")).output(target).compute();
-		assertTrue(AssertIterations.equal(target, out));
+		ImgLib2Assert.assertImageEquals(target, out);
 	}
 }

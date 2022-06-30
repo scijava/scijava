@@ -33,19 +33,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.function.Computers;
-import org.scijava.function.Inplaces;
-import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
-import org.scijava.types.Nil;
+import org.scijava.ops.spi.OpMethod;
 
 /**
  * Tests the construction of {@link OpMethod}s.
@@ -53,52 +46,13 @@ import org.scijava.types.Nil;
  * @author Gabriel Selzer
  * @author Marcel Wiedenmann
  */
-@Plugin(type = OpCollection.class)
-public class OpMethodTest extends AbstractTestEnvironment {
+public class OpMethodTest extends AbstractTestEnvironment implements OpCollection {
 
-//	@Test
-//	public void testParseIntegerOp() {
-//		// Will match a lambda created and returned by createParseIntegerOp() below.
-//		final Function<String, Integer> parseIntegerOp = ops.op("test.parseInteger")
-//			.inType(String.class).outType(Integer.class).function();
-//
-//		final String numericString = "42";
-//		final Integer parsedInteger = parseIntegerOp.apply(numericString);
-//		assertEquals(Integer.parseInt(numericString), (int) parsedInteger);
-//	}
-//
-//	@Test
-//	public void testMultiplyNumericStringsOpMethod() {
-//		// Will match a lambda created and returned by
-//		// createMultiplyNumericStringsOp(..), which itself captured a lambda
-//		// created and returned by createParseIntegerOp().
-//		final BiFunction<String, String, Integer> multiplyNumericStringsOp = ops.op(
-//			"test.multiplyNumericStrings").inType(String.class, String.class).outType(
-//				Integer.class).function();
-//
-//		final String numericString1 = "3";
-//		final String numericString2 = "18";
-//		final Integer multipliedNumericStrings = multiplyNumericStringsOp.apply(
-//			numericString1, numericString2);
-//		assertEquals(Integer.parseInt(numericString1) * Integer.parseInt(
-//			numericString2), (int) multipliedNumericStrings);
-//	}
-//
-//	@OpMethod(names = "test.parseInteger", type = Function.class)
-//	// Refers to the input parameter of the function that's returned by this
-//	// factory method.
-//	// Refers to the output parameter of the function.
-//	public static Integer createParseIntegerOp(String in) {
-//		return Integer.parseInt(in);
-//	}
-//
-//	@OpMethod(names = "test.multiplyNumericStrings", type = BiFunction.class)
-//	public static Integer createMultiplyNumericStringsOp(final String in1,
-//		final String in2, @OpDependency(
-//			name = "test.parseInteger") Function<String, Integer> parseIntegerOp)
-//	{
-//		return parseIntegerOp.apply(in1) * parseIntegerOp.apply(in2);
-//	}
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(OpMethodTestOps.class, "opcollection");
+	}
+
 	// -- Functions -- //
 
 	@Test

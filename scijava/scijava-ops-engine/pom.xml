@@ -139,12 +139,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-discovery-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-discovery-therapi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
-			<artifactId>scijava-ops-serviceloader</artifactId>
+			<artifactId>scijava-log2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

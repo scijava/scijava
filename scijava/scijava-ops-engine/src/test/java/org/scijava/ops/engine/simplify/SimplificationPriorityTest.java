@@ -5,17 +5,27 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
+import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
+import org.scijava.ops.engine.conversionLoss.impl.LossReporterWrapper;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class SimplificationPriorityTest extends AbstractTestEnvironment {
+public class SimplificationPriorityTest extends AbstractTestEnvironment
+		implements OpCollection {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(SimplificationPriorityTest.class, "opcollection");
+		discoverer.register(IdentityLossReporter.class, "op");
+		discoverer.register(Identity.class, "op");
+		discoverer.register(LossReporterWrapper.class, "opwrapper");
+	}
 
 	/** The Thing we will be converting from */
 	class FromThing {}

@@ -30,25 +30,32 @@
 package org.scijava.ops.engine;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.types.Nil;
 
 public class OpPriorityTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(TestDouble.class, "op");
+		discoverer.register(TestFloat.class, "op");
+	}
 	
-	@Plugin(type = Op.class, name = "test.priority", priority = Priority.HIGH)
-	private static final class testDouble implements Producer<Number>{
+	@OpClass(names = "test.priority", priority = Priority.HIGH)
+	private static final class TestDouble implements Producer<Number>, Op {
 		@Override
 		public Number create() {
 			return new Double(0.0);
 		}
 	}
 
-	@Plugin(type = Op.class, name = "test.priority", priority = Priority.LOW)
-	private static final class testFloat implements Producer<Number>{
+	@OpClass(names = "test.priority", priority = Priority.LOW)
+	private static final class TestFloat implements Producer<Number>, Op {
 		@Override
 		public Number create() {
 			return new Float(0.0);
@@ -58,7 +65,7 @@ public class OpPriorityTest extends AbstractTestEnvironment {
 	@Test
 	public void testOpPriority() {
 
-		Producer<Number> testFunc = ops.env().op("test.priority", new Nil<Producer<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
+		Producer<Number> testFunc = ops.op("test.priority", new Nil<Producer<Number>>() {}, new Nil[] {}, new Nil<Number>() {});
 		Number x = testFunc.create();
 		assertTrue(x instanceof Double);
 	}

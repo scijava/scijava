@@ -31,13 +31,19 @@ package org.scijava.ops.engine.util;
 
 import java.util.function.BiFunction;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.types.Nil;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.engine.util.Adapt;
+import org.scijava.ops.engine.TestOps;
+import org.scijava.types.Nil;
 
 public class AdaptersTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.registerAll(TestOps.class.getDeclaredClasses(), "op");
+	}
 
 	private static Nil<Double> nilDouble = new Nil<>() {
 	};
@@ -47,7 +53,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testComputerAsFunction() {
-		final Computers.Arity2<double[], double[], double[]> computer = ops.env().op( //
+		final Computers.Arity2<double[], double[], double[]> computer = ops.op( //
 				"test.adaptersC", new Nil<Computers.Arity2<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray, nilDoubleArray }, //
@@ -68,7 +74,7 @@ public class AdaptersTest extends AbstractTestEnvironment {
 	@Test
 	public void testFunctionAsComputer() {
 		// look up a function: Double result = math.add(Double v1, Double v2)
-		BiFunction<double[], double[], double[]> function = ops.env().op( //
+		BiFunction<double[], double[], double[]> function = ops.op( //
 				"test.adaptersF", new Nil<BiFunction<double[], double[], double[]>>() {
 				}, //
 				new Nil[] { nilDoubleArray, nilDoubleArray }, //

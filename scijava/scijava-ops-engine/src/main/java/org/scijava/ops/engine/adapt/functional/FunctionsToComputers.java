@@ -41,9 +41,8 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Collection of adaptation Ops to convert {@link Computers} into
@@ -54,8 +53,8 @@ import org.scijava.plugin.Plugin;
  */
 public class FunctionsToComputers {
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function0ToComputer0<O> implements Function<Producer<O>, Computers.Arity0<O>> {
+	@OpClass(names = "adapt")
+	public static class Function0ToComputer0<O> implements Function<Producer<O>, Computers.Arity0<O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -74,8 +73,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function1ToComputer1<I, O> implements Function<Function<I, O>, Computers.Arity1<I, O>> {
+	@OpClass(names = "adapt")
+	public static class Function1ToComputer1<I, O> implements Function<Function<I, O>, Computers.Arity1<I, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -94,8 +93,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function2ToComputer2<I1, I2, O> implements Function<BiFunction<I1, I2, O>, Computers.Arity2<I1, I2, O>> {
+	@OpClass(names = "adapt")
+	public static class Function2ToComputer2<I1, I2, O> implements Function<BiFunction<I1, I2, O>, Computers.Arity2<I1, I2, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -114,8 +113,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function3ToComputer3<I1, I2, I3, O> implements Function<Functions.Arity3<I1, I2, I3, O>, Computers.Arity3<I1, I2, I3, O>> {
+	@OpClass(names = "adapt")
+	public static class Function3ToComputer3<I1, I2, I3, O> implements Function<Functions.Arity3<I1, I2, I3, O>, Computers.Arity3<I1, I2, I3, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -134,8 +133,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function4ToComputer4<I1, I2, I3, I4, O> implements Function<Functions.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<I1, I2, I3, I4, O>> {
+	@OpClass(names = "adapt")
+	public static class Function4ToComputer4<I1, I2, I3, I4, O> implements Function<Functions.Arity4<I1, I2, I3, I4, O>, Computers.Arity4<I1, I2, I3, I4, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -154,8 +153,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function5ToComputer5<I1, I2, I3, I4, I5, O> implements Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<I1, I2, I3, I4, I5, O>> {
+	@OpClass(names = "adapt")
+	public static class Function5ToComputer5<I1, I2, I3, I4, I5, O> implements Function<Functions.Arity5<I1, I2, I3, I4, I5, O>, Computers.Arity5<I1, I2, I3, I4, I5, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -174,8 +173,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function6ToComputer6<I1, I2, I3, I4, I5, I6, O> implements Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<I1, I2, I3, I4, I5, I6, O>> {
+	@OpClass(names = "adapt")
+	public static class Function6ToComputer6<I1, I2, I3, I4, I5, I6, O> implements Function<Functions.Arity6<I1, I2, I3, I4, I5, I6, O>, Computers.Arity6<I1, I2, I3, I4, I5, I6, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -194,8 +193,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function7ToComputer7<I1, I2, I3, I4, I5, I6, I7, O> implements Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>> {
+	@OpClass(names = "adapt")
+	public static class Function7ToComputer7<I1, I2, I3, I4, I5, I6, I7, O> implements Function<Functions.Arity7<I1, I2, I3, I4, I5, I6, I7, O>, Computers.Arity7<I1, I2, I3, I4, I5, I6, I7, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -214,8 +213,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function8ToComputer8<I1, I2, I3, I4, I5, I6, I7, I8, O> implements Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>> {
+	@OpClass(names = "adapt")
+	public static class Function8ToComputer8<I1, I2, I3, I4, I5, I6, I7, I8, O> implements Function<Functions.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>, Computers.Arity8<I1, I2, I3, I4, I5, I6, I7, I8, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -234,8 +233,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function9ToComputer9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> implements Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>> {
+	@OpClass(names = "adapt")
+	public static class Function9ToComputer9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> implements Function<Functions.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>, Computers.Arity9<I1, I2, I3, I4, I5, I6, I7, I8, I9, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -254,8 +253,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function10ToComputer10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> implements Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>> {
+	@OpClass(names = "adapt")
+	public static class Function10ToComputer10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> implements Function<Functions.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>, Computers.Arity10<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -274,8 +273,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function11ToComputer11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> implements Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>> {
+	@OpClass(names = "adapt")
+	public static class Function11ToComputer11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> implements Function<Functions.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>, Computers.Arity11<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -294,8 +293,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function12ToComputer12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> implements Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>> {
+	@OpClass(names = "adapt")
+	public static class Function12ToComputer12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> implements Function<Functions.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>, Computers.Arity12<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -314,8 +313,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function13ToComputer13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> implements Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>> {
+	@OpClass(names = "adapt")
+	public static class Function13ToComputer13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> implements Function<Functions.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>, Computers.Arity13<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -334,8 +333,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function14ToComputer14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> implements Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>> {
+	@OpClass(names = "adapt")
+	public static class Function14ToComputer14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> implements Function<Functions.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>, Computers.Arity14<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -354,8 +353,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function15ToComputer15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> implements Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>> {
+	@OpClass(names = "adapt")
+	public static class Function15ToComputer15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> implements Function<Functions.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>, Computers.Arity15<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;
@@ -374,8 +373,8 @@ public class FunctionsToComputers {
 
 	}
 
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function16ToComputer16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>> {
+	@OpClass(names = "adapt")
+	public static class Function16ToComputer16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> implements Function<Functions.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>, Computers.Arity16<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O>>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;

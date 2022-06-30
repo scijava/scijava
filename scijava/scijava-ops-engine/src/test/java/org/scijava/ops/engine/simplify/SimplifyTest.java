@@ -5,11 +5,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.function.BiFunction;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
+import org.scijava.ops.engine.conversionLoss.impl.LossReporterWrapper;
+import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
+import org.scijava.ops.engine.copy.CopyOpCollection;
+import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Basic simplify test
@@ -17,8 +22,20 @@ import org.scijava.plugin.Plugin;
  * @author Gabriel Selzer
  * @author Curtis Rueden
  */
-@Plugin(type = OpCollection.class)
-public class SimplifyTest extends AbstractTestEnvironment {
+public class SimplifyTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(SimplifyTest.class, "opcollection");
+		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
+		discoverer.register(PrimitiveLossReporters.class, "opcollection");
+		discoverer.register(IdentityLossReporter.class, "op");
+		discoverer.register(Identity.class, "op");
+		discoverer.register(LossReporterWrapper.class, "opwrapper");
+		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
+		discoverer.register(CopyOpCollection.class, "opcollection");
+		discoverer.register(CreateOpCollection.class, "opcollection");
+	}
 
 	@OpField(names = "test.math.powDouble", params = "base, exponent, result")
 	public final BiFunction<Double, Double, Double> powOp = (b, e) -> Math.pow(b,

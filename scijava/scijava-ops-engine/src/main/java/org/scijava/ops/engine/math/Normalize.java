@@ -4,19 +4,19 @@ import java.util.Arrays;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 public class Normalize {
 
 	public static final String NAMES = "math.minmax";
 
-	@Plugin(type = Op.class, name = NAMES)
-	public static class MathMinMaxNormalizeFunction implements Functions.Arity3<double[], Double, Double, double[]> {
+	@OpClass(names = NAMES)
+	public static class MathMinMaxNormalizeFunction implements Functions.Arity3<double[], Double, Double, double[]>, Op {
 
 			/**
 		 * TODO
 		 * 
-		 * @param numbers
+		 * @param t
 		 * @param newMin
 		 * @param newMax
 		 */

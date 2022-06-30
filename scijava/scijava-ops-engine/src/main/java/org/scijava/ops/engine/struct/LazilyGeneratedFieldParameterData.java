@@ -118,6 +118,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 			String name = other.getName();
 			while (!validParameterTag(name)) {
 				other = others.get(otherIndex++);
+				name = other.getName();
 			}
 
 			// if the taglet is not output, it should have a name and description

@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Simplifies {@link List}s of types extending {@link Number}.
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = Op.class, name = "simplify")
-public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>{
+@OpClass(names = "simplify")
+public class PrimitiveListSimplifier<T extends Number> implements Function<List<T>, List<Number>>, Op {
 
 	@Override
 	/*

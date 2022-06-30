@@ -5,15 +5,16 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 /**
@@ -21,8 +22,13 @@ import org.scijava.types.Nil;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class InfoChainTest extends AbstractTestEnvironment {
+public class InfoChainTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(InfoChainTest.class, "opcollection");
+		discoverer.register(ComplexOp.class, "op");
+	}
 
 	public static final String S = "this Op is cool";
 
@@ -34,7 +40,7 @@ public class InfoChainTest extends AbstractTestEnvironment {
 		OpInfo info = singularInfoOfName("test.infoChain");
 		InfoChain chain = new InfoChain(info);
 		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.env().opFromInfoChain(chain, nil);
+		Producer<String> op = ops.opFromInfoChain(chain, nil);
 		Assert.assertEquals(S, op.create());
 	}
 
@@ -50,12 +56,12 @@ public class InfoChainTest extends AbstractTestEnvironment {
 			dependencyChain));
 
 		Nil<Producer<String>> nil = new Nil<>() {};
-		Producer<String> op = ops.env().opFromInfoChain(chain, nil);
+		Producer<String> op = ops.opFromInfoChain(chain, nil);
 		Assert.assertEquals(S, op.create());
 	}
 
 	private OpInfo singularInfoOfName(String name) {
-		Iterator<OpInfo> infos = ops.env().infos(name).iterator();
+		Iterator<OpInfo> infos = ops.infos(name).iterator();
 		Assert.assertTrue(infos.hasNext());
 		OpInfo info = infos.next();
 		Assert.assertFalse(infos.hasNext());
@@ -64,8 +70,8 @@ public class InfoChainTest extends AbstractTestEnvironment {
 
 }
 
-@Plugin(type = Op.class, name = "test.infoChainBase")
-class ComplexOp implements Producer<String> {
+@OpClass(names = "test.infoChainBase")
+class ComplexOp implements Producer<String>, Op {
 
 	@OpDependency(name = "test.infoChain")
 	private Producer<String> op;

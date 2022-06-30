@@ -30,9 +30,8 @@ public final class Structs {
 			memberInstance.get());
 	}
 
-	@SafeVarargs
 	public static <S> Struct from(S source, Type structType, List<ValidityProblem> problems,
-		MemberParser<S, ? extends Member<?>>... parsers)
+		@SuppressWarnings("unchecked") MemberParser<S, ? extends Member<?>>... parsers)
 	{
 		List<Member<?>> members = new ArrayList<>();
 		for (MemberParser<S, ? extends Member<?>> p : parsers) {

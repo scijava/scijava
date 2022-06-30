@@ -37,15 +37,13 @@ package org.scijava.ops.engine.adapt.lift;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
 /**
@@ -54,13 +52,18 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class FunctionToArraysTest extends AbstractTestEnvironment {
+public class FunctionToArraysTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(FunctionToArraysTest.class, "opcollection");
+		discoverer.register(FunctionToArrays.class, "opcollection");
+	}
 
 	/**
 	 * @author Gabriel Selzer
 	 */
-	private class NumericalThing extends AbstractTestEnvironment {
+	private class NumericalThing {
 
 		private int number;
 
@@ -81,7 +84,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction1ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -100,7 +103,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction2ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -119,7 +122,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction3ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -138,7 +141,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction4ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -157,7 +160,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction5ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -176,7 +179,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction6ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -195,7 +198,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction7ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -214,7 +217,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction8ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -233,7 +236,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction9ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -252,7 +255,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction10ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -271,7 +274,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction11ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -290,7 +293,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction12ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -309,7 +312,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction13ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -328,7 +331,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction14ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -347,7 +350,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction15ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()
@@ -366,7 +369,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment {
 	public void testFunction16ToArrays() {
 		NumericalThing[] input = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
-		NumericalThing[] output = ops.env() //
+		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
 			.input(input, input, input, input, input, input, input, input, input, input, input, input, input, input, input, input) //
 			.outType(new Nil<NumericalThing[]>()

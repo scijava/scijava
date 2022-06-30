@@ -37,10 +37,9 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.util.Util;
 
 import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on
@@ -52,20 +51,16 @@ import org.scijava.types.TypeService;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW)
 public class RAITypeExtractor implements
 	TypeExtractor<RandomAccessibleInterval<?>>
 {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final RandomAccessibleInterval<?> o, final int n) {
+	public Type reify(final TypeReifier t, final RandomAccessibleInterval<?> o, final int n) {
 		if (n != 0) throw new IndexOutOfBoundsException();
 
 		// type of the image
-		Type raiType = typeService.reify(Util.getTypeFromInterval(o));
+		Type raiType = t.reify(Util.getTypeFromInterval(o));
 		return raiType;
 	}
 
@@ -73,6 +68,14 @@ public class RAITypeExtractor implements
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<RandomAccessibleInterval<?>> getRawType() {
 		return (Class) RandomAccessibleInterval.class;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
 	}
 
 }

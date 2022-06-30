@@ -36,10 +36,9 @@ import java.lang.reflect.Type;
 import net.imglib2.img.NativeImg;
 
 import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link NativeImg} objects.
@@ -53,24 +52,20 @@ import org.scijava.types.TypeService;
  *
  * @author Gabriel Selzer
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.HIGH)
 public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final NativeImg<?, ?> o, final int n) {
+	public Type reify(final TypeReifier t, final NativeImg<?, ?> o, final int n) {
 		if (n < 0 || n > 1)
 			throw new IndexOutOfBoundsException();
 
 		// type of the image
 		if (n == 0) {
-			Type labelingType = typeService.reify(o.firstElement());
+			Type labelingType = t.reify(o.firstElement());
 			return labelingType;
 		}
 		// type of the backing array
-		return typeService.reify(o.update(o.cursor()));
+		return t.reify(o.update(o.cursor()));
 	}
 
 	@Override
@@ -78,5 +73,14 @@ public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
 	public Class<NativeImg<?, ?>> getRawType() {
 		return (Class) NativeImg.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.HIGH_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return 100;
+	}
+
 
 }

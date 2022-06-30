@@ -5,10 +5,8 @@ import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class PrimitiveArrayLossReporters {
+public class PrimitiveArrayLossReporters implements OpCollection {
 	
 	@OpHints(hints = {Simplification.FORBIDDEN})
 	@OpField(names = "lossReporter")

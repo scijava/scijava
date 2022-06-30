@@ -12,10 +12,8 @@ import java.util.Map;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.InfoChainGenerator;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Types;
 
-@Plugin(type = InfoChainGenerator.class)
 public class AdaptationInfoChainGenerator implements InfoChainGenerator {
 
 	@Override

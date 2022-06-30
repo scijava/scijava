@@ -37,10 +37,9 @@ import java.lang.reflect.Type;
 import net.imglib2.roi.labeling.LabelingMapping;
 
 import org.scijava.Priority;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeService;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -52,21 +51,17 @@ import org.scijava.plugin.Plugin;
  *
  * @author Curtis Rueden
  */
-@Plugin(type = TypeExtractor.class, priority = Priority.LOW_PRIORITY)
 public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMapping<?>> {
 
-	@Parameter
-	private TypeService typeService;
-
 	@Override
-	public Type reify(final LabelingMapping<?> o, final int n) {
+	public Type reify(final TypeReifier t, final LabelingMapping<?> o, final int n) {
 		if (n != 0)
 			throw new IndexOutOfBoundsException();
 
 		// determine the type arg of the mapping through looking at the Set of Labels
 		// (o.getLabels() returns a Set<T>, which can be reified by another TypeService
 		// plugin).
-		Type labelingMappingSet = typeService.reify(o.getLabels());
+		Type labelingMappingSet = t.reify(o.getLabels());
 		// sanity check, argType will always be a set so argType should always be a
 		// ParameterizedType
 		if (!(labelingMappingSet instanceof ParameterizedType))
@@ -80,5 +75,14 @@ public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMappi
 	public Class<LabelingMapping<?>> getRawType() {
 		return (Class) LabelingMapping.class;
 	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
+	 */
+	@Override
+	public double priority() {
+		return -100;
+	}
+
 
 }

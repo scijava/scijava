@@ -1,18 +1,11 @@
 package org.scijava.ops.engine;
 
-import java.lang.reflect.Type;
-import java.util.function.Function;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpService;
-import org.scijava.ops.engine.matcher.impl.OpClassInfo;
-import org.scijava.types.GenericTyped;
-import org.scijava.types.Nil;
 
 /**
  * Test class for {@link OpEnvironment} methods. NB this class does not test any
@@ -23,27 +16,11 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-public class OpEnvironmentTest extends AbstractTestEnvironment{
-	
-	@Test
-	public void testBakeType() {
-		Function<Double, Double> func = (in) -> in * 2;
-		Type funcType = new Nil<Function<Double, Double>>() {}.getType();
-
-		Function<Double, Double> wrappedFunction = ops.env().bakeLambdaType(func,
-			funcType);
-
-		Assert.assertTrue("wrappedFunction should be a GenericTyped but is not!",
-			wrappedFunction instanceof GenericTyped);
-		Type type = ((GenericTyped) wrappedFunction).getType();
-		Assert.assertEquals("wrappedFunction type " + type +
-			"is not equivalent to the provided type " + funcType + "!", funcType,
-			type);
-	}
+public class OpEnvironmentTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testClassOpification() {
-		OpInfo opifyOpInfo = ops.env().opify(OpifyOp.class);
+		OpInfo opifyOpInfo = ops.opify(OpifyOp.class);
 		Assert.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
 		Assert.assertEquals(Priority.NORMAL, opifyOpInfo.priority(), 0.);
@@ -51,7 +28,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment{
 
 	@Test
 	public void testClassOpificationWithPriority() {
-		OpInfo opifyOpInfo = ops.env().opify(OpifyOp.class, Priority.HIGH);
+		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH);
 		Assert.assertEquals(OpifyOp.class.getName(), opifyOpInfo.implementationName());
 		// assert default priority
 		Assert.assertEquals(Priority.HIGH, opifyOpInfo.priority(), 0.);
@@ -60,8 +37,8 @@ public class OpEnvironmentTest extends AbstractTestEnvironment{
 	@Test
 	public void testRegister() {
 		String opName = "test.opifyOp";
-		OpInfo opifyOpInfo = ops.env().opify(OpifyOp.class, Priority.HIGH, opName);
-		ops.env().register(opifyOpInfo);
+		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, opName);
+		ops.register(opifyOpInfo);
 
 		String actual = ops.op(opName).input().outType(String.class).create();
 

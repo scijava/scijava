@@ -7,15 +7,13 @@ import org.scijava.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Creation ops
  * @author Gabriel Selzer
  *
  */
-@Plugin(type = OpCollection.class)
-public class CreateOpCollection {
+public class CreateOpCollection implements OpCollection{
 
 	@OpField(names = "create, src, source", priority = Priority.LOW, params = "array, arrayLike")
 	public static final Function<double[], double[]> createdoubleArrayInputAware = from -> new double[from.length];

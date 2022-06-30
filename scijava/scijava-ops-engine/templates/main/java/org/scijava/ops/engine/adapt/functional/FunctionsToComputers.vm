@@ -41,9 +41,8 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Collection of adaptation Ops to convert {@link Computers} into
@@ -55,8 +54,8 @@ import org.scijava.plugin.Plugin;
 public class FunctionsToComputers {
 
 #foreach($arity in [0..$maxArity])
-	@Plugin(type = Op.class, name = "adapt")
-	public static class Function${arity}ToComputer${arity}$generics.call($arity) implements Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$generics.call($arity)> {
+	@OpClass(names = "adapt")
+	public static class Function${arity}ToComputer${arity}$generics.call($arity) implements Function<$functionArity.call($arity)$generics.call($arity), $computerArity.call($arity)$generics.call($arity)>, Op {
 
 		@OpDependency(name = "copy", adaptable = false)
 		Computers.Arity1<O, O> copyOp;

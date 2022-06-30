@@ -29,20 +29,29 @@
 
 package org.scijava.ops.engine.util;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.math.Add;
+import org.scijava.ops.engine.math.Sqrt;
 import org.scijava.types.Nil;
 
 public class InplacesTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(Sqrt.class, "opcollection");
+		discoverer.register(Add.class, "opcollection");
+	}
 
 	private static Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test
 	public void testUnaryInplaces() {
-		Inplaces.Arity1<double[]> inplaceSqrt = OpBuilder.matchInplace(ops.env(), "math.sqrt", nilDoubleArray);
+		Inplaces.Arity1<double[]> inplaceSqrt = OpBuilder.matchInplace(ops, "math.sqrt", nilDoubleArray);
 		final double[] a1 = { 4, 100, 36 };
 		inplaceSqrt.mutate(a1);
 		assert arrayEquals(a1, 2.0, 10.0, 6.0);
@@ -50,7 +59,7 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryInplaces() {
-		final Inplaces.Arity2_1<double[], double[]> inplaceAdd = OpBuilder.matchInplace1(ops.env(), "math.add", nilDoubleArray,
+		final Inplaces.Arity2_1<double[], double[]> inplaceAdd = OpBuilder.matchInplace1(ops, "math.add", nilDoubleArray,
 				nilDoubleArray);
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };

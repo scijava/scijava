@@ -6,7 +6,6 @@ import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
 /**
@@ -15,8 +14,7 @@ import org.scijava.types.Nil;
  * 
  * @author Gabriel Selzer
  */
-@Plugin(type = OpCollection.class)
-public class PrimitiveLossReporters {
+public class PrimitiveLossReporters implements OpCollection {
 	
 	@FunctionalInterface
 	static interface IntToDecimalReporter<T, R> extends LossReporter<T, R> {

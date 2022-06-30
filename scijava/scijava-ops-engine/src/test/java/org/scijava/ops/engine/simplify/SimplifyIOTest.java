@@ -5,16 +5,24 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class SimplifyIOTest extends AbstractTestEnvironment{
+public class SimplifyIOTest extends AbstractTestEnvironment implements OpCollection{
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(SimplifyIOTest.class, "opcollection");
+		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
+		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
+		discoverer.register(CopyOpCollection.class, "opcollection");
+	}
 
 	@OpField(names = "test.math.square")
 	public final Function<Double, Double> squareOp = in -> in * in;

@@ -37,18 +37,14 @@ import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
 /**
  * Helper ops for {@link OpBuilderTest}.
  *
  * @author Curtis Rueden
  */
-@Plugin(type = OpCollection.class)
-public class OpBuilderTestOps {
+public class OpBuilderTestOps implements OpCollection {
 
 	/*
 	 * -- FUNCTIONS --

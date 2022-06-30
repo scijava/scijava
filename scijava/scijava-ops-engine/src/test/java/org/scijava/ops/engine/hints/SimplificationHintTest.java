@@ -4,19 +4,29 @@ package org.scijava.ops.engine.hints;
 
 import java.util.function.Function;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
 import org.scijava.ops.engine.hint.DefaultHints;
+import org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers;
+import org.scijava.ops.engine.simplify.PrimitiveSimplifiers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class SimplificationHintTest extends AbstractTestEnvironment {
+public class SimplificationHintTest extends AbstractTestEnvironment implements OpCollection {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(SimplificationHintTest.class, "opcollection");
+		discoverer.register(IdentityLossReporter.class, "op");
+		discoverer.register(PrimitiveSimplifiers.class, "opcollection");
+		discoverer.register(PrimitiveArraySimplifiers.class, "opcollection");
+	}
 
 	@OpField(names = "test.simplification.hints")
 	public final Function<Double[], Double[]> op = (in) -> new Double[in.length];
@@ -25,14 +35,14 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 	public void testSimplification() {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
-		ops.env().setDefaultHints(hints);
+		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op(
 			"test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Simplification.FORBIDDEN);
-		ops.env().setDefaultHints(hints);
+		ops.setDefaultHints(hints);
 		try {
 			ops.op("test.simplification.hints").inType(Integer[].class).outType(
 				Integer[].class).function();
@@ -74,7 +84,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment {
 	public void testUnsimplifiableOp() {
 		// make sure we can find the Op when adaptation is allowed
 		Hints hints = new DefaultHints();
-		ops.env().setDefaultHints(hints);
+		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
 			"test.simplification.unsimplifiable").inType(Double[].class).outType(

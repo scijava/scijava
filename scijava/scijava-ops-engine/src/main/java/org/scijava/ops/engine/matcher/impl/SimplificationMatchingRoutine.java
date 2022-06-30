@@ -14,10 +14,8 @@ import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.simplify.InfoSimplificationGenerator;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Types;
 
-@Plugin(type = MatchingRoutine.class, priority = Priority.LOW - 1)
 public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 
 	@Override
@@ -52,6 +50,14 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 			}
 		}
 		return simpleInfos;
+	}
+
+	/**
+	 * Corresponds to org.scijava.Priority.LOW - 1
+	 */
+	@Override
+	public double priority() {
+		return -100. - 1;
 	}
 
 }

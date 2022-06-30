@@ -32,25 +32,39 @@
 * corresponding template in templates/ and rerun bin/generate.groovy.
 */
 
+
 package org.scijava.ops.engine.adapt.functional;
 
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.OpBuilderTestOps;
+import org.scijava.ops.engine.copy.CopyOpCollection;
+import org.scijava.ops.engine.create.CreateOpCollection;
 import org.scijava.types.Nil;
 
 public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(OpBuilderTestOps.class, "opcollection");
+		discoverer.register(CreateOpCollection.class, "opcollection");
+		discoverer.register(CopyOpCollection.class, "opcollection");
+		discoverer.registerAll(InplacesToFunctions.class.getDeclaredClasses(), "op");
+	}
+
 
 	/** Matches a 1-arity inplace1 as a function1 */
 	@Test
 	public void testInplace1_1ToFunction1() {
 		final double[] input = { 1, 2, 3 };
 		double[] expected = { 1.0, 2.0, 3.0 };
-		final double[] output = name("test.mulArrays1_1") //
+		final double[] output = ops.op("test.mulArrays1_1") //
 			.input(input) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -63,7 +77,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input1 = { 1, 2, 3 };
 		final double[] input2 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4.0, 9.0 };
-		final double[] output = name("test.mulArrays2_1") //
+		final double[] output = ops.op("test.mulArrays2_1") //
 			.input(input1, input2) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -76,7 +90,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input1 = { 1, 2, 3 };
 		final double[] input2 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4.0, 9.0 };
-		final double[] output = name("test.mulArrays2_2") //
+		final double[] output = ops.op("test.mulArrays2_2") //
 			.input(input1, input2) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -90,7 +104,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
-		final double[] output = name("test.mulArrays3_1") //
+		final double[] output = ops.op("test.mulArrays3_1") //
 			.input(input1, input2, input3) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -104,7 +118,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
-		final double[] output = name("test.mulArrays3_2") //
+		final double[] output = ops.op("test.mulArrays3_2") //
 			.input(input1, input2, input3) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -118,7 +132,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input2 = { 1, 2, 3 };
 		final double[] input3 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8.0, 27.0 };
-		final double[] output = name("test.mulArrays3_3") //
+		final double[] output = ops.op("test.mulArrays3_3") //
 			.input(input1, input2, input3) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -133,7 +147,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
-		final double[] output = name("test.mulArrays4_1") //
+		final double[] output = ops.op("test.mulArrays4_1") //
 			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -148,7 +162,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
-		final double[] output = name("test.mulArrays4_2") //
+		final double[] output = ops.op("test.mulArrays4_2") //
 			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -163,7 +177,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
-		final double[] output = name("test.mulArrays4_3") //
+		final double[] output = ops.op("test.mulArrays4_3") //
 			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -178,7 +192,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input3 = { 1, 2, 3 };
 		final double[] input4 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16.0, 81.0 };
-		final double[] output = name("test.mulArrays4_4") //
+		final double[] output = ops.op("test.mulArrays4_4") //
 			.input(input1, input2, input3, input4) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -194,7 +208,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
-		final double[] output = name("test.mulArrays5_1") //
+		final double[] output = ops.op("test.mulArrays5_1") //
 			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -210,7 +224,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
-		final double[] output = name("test.mulArrays5_2") //
+		final double[] output = ops.op("test.mulArrays5_2") //
 			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -226,7 +240,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
-		final double[] output = name("test.mulArrays5_3") //
+		final double[] output = ops.op("test.mulArrays5_3") //
 			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -242,7 +256,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
-		final double[] output = name("test.mulArrays5_4") //
+		final double[] output = ops.op("test.mulArrays5_4") //
 			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -258,7 +272,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input4 = { 1, 2, 3 };
 		final double[] input5 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32.0, 243.0 };
-		final double[] output = name("test.mulArrays5_5") //
+		final double[] output = ops.op("test.mulArrays5_5") //
 			.input(input1, input2, input3, input4, input5) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -275,7 +289,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
-		final double[] output = name("test.mulArrays6_1") //
+		final double[] output = ops.op("test.mulArrays6_1") //
 			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -292,7 +306,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
-		final double[] output = name("test.mulArrays6_2") //
+		final double[] output = ops.op("test.mulArrays6_2") //
 			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -309,7 +323,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
-		final double[] output = name("test.mulArrays6_3") //
+		final double[] output = ops.op("test.mulArrays6_3") //
 			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -326,7 +340,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
-		final double[] output = name("test.mulArrays6_4") //
+		final double[] output = ops.op("test.mulArrays6_4") //
 			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -343,7 +357,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
-		final double[] output = name("test.mulArrays6_5") //
+		final double[] output = ops.op("test.mulArrays6_5") //
 			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -360,7 +374,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input5 = { 1, 2, 3 };
 		final double[] input6 = { 1, 2, 3 };
 		double[] expected = { 1.0, 64.0, 729.0 };
-		final double[] output = name("test.mulArrays6_6") //
+		final double[] output = ops.op("test.mulArrays6_6") //
 			.input(input1, input2, input3, input4, input5, input6) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -378,7 +392,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_1") //
+		final double[] output = ops.op("test.mulArrays7_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -396,7 +410,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_2") //
+		final double[] output = ops.op("test.mulArrays7_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -414,7 +428,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_3") //
+		final double[] output = ops.op("test.mulArrays7_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -432,7 +446,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_4") //
+		final double[] output = ops.op("test.mulArrays7_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -450,7 +464,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_5") //
+		final double[] output = ops.op("test.mulArrays7_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -468,7 +482,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_6") //
+		final double[] output = ops.op("test.mulArrays7_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -486,7 +500,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input6 = { 1, 2, 3 };
 		final double[] input7 = { 1, 2, 3 };
 		double[] expected = { 1.0, 128.0, 2187.0 };
-		final double[] output = name("test.mulArrays7_7") //
+		final double[] output = ops.op("test.mulArrays7_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -505,7 +519,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_1") //
+		final double[] output = ops.op("test.mulArrays8_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -524,7 +538,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_2") //
+		final double[] output = ops.op("test.mulArrays8_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -543,7 +557,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_3") //
+		final double[] output = ops.op("test.mulArrays8_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -562,7 +576,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_4") //
+		final double[] output = ops.op("test.mulArrays8_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -581,7 +595,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_5") //
+		final double[] output = ops.op("test.mulArrays8_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -600,7 +614,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_6") //
+		final double[] output = ops.op("test.mulArrays8_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -619,7 +633,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_7") //
+		final double[] output = ops.op("test.mulArrays8_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -638,7 +652,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input7 = { 1, 2, 3 };
 		final double[] input8 = { 1, 2, 3 };
 		double[] expected = { 1.0, 256.0, 6561.0 };
-		final double[] output = name("test.mulArrays8_8") //
+		final double[] output = ops.op("test.mulArrays8_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -658,7 +672,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_1") //
+		final double[] output = ops.op("test.mulArrays9_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -678,7 +692,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_2") //
+		final double[] output = ops.op("test.mulArrays9_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -698,7 +712,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_3") //
+		final double[] output = ops.op("test.mulArrays9_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -718,7 +732,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_4") //
+		final double[] output = ops.op("test.mulArrays9_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -738,7 +752,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_5") //
+		final double[] output = ops.op("test.mulArrays9_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -758,7 +772,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_6") //
+		final double[] output = ops.op("test.mulArrays9_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -778,7 +792,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_7") //
+		final double[] output = ops.op("test.mulArrays9_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -798,7 +812,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_8") //
+		final double[] output = ops.op("test.mulArrays9_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -818,7 +832,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input8 = { 1, 2, 3 };
 		final double[] input9 = { 1, 2, 3 };
 		double[] expected = { 1.0, 512.0, 19683.0 };
-		final double[] output = name("test.mulArrays9_9") //
+		final double[] output = ops.op("test.mulArrays9_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -839,7 +853,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_1") //
+		final double[] output = ops.op("test.mulArrays10_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -860,7 +874,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_2") //
+		final double[] output = ops.op("test.mulArrays10_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -881,7 +895,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_3") //
+		final double[] output = ops.op("test.mulArrays10_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -902,7 +916,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_4") //
+		final double[] output = ops.op("test.mulArrays10_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -923,7 +937,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_5") //
+		final double[] output = ops.op("test.mulArrays10_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -944,7 +958,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_6") //
+		final double[] output = ops.op("test.mulArrays10_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -965,7 +979,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_7") //
+		final double[] output = ops.op("test.mulArrays10_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -986,7 +1000,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_8") //
+		final double[] output = ops.op("test.mulArrays10_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1007,7 +1021,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_9") //
+		final double[] output = ops.op("test.mulArrays10_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1028,7 +1042,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input9 = { 1, 2, 3 };
 		final double[] input10 = { 1, 2, 3 };
 		double[] expected = { 1.0, 1024.0, 59049.0 };
-		final double[] output = name("test.mulArrays10_10") //
+		final double[] output = ops.op("test.mulArrays10_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1050,7 +1064,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_1") //
+		final double[] output = ops.op("test.mulArrays11_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1072,7 +1086,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_2") //
+		final double[] output = ops.op("test.mulArrays11_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1094,7 +1108,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_3") //
+		final double[] output = ops.op("test.mulArrays11_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1116,7 +1130,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_4") //
+		final double[] output = ops.op("test.mulArrays11_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1138,7 +1152,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_5") //
+		final double[] output = ops.op("test.mulArrays11_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1160,7 +1174,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_6") //
+		final double[] output = ops.op("test.mulArrays11_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1182,7 +1196,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_7") //
+		final double[] output = ops.op("test.mulArrays11_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1204,7 +1218,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_8") //
+		final double[] output = ops.op("test.mulArrays11_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1226,7 +1240,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_9") //
+		final double[] output = ops.op("test.mulArrays11_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1248,7 +1262,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_10") //
+		final double[] output = ops.op("test.mulArrays11_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1270,7 +1284,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input10 = { 1, 2, 3 };
 		final double[] input11 = { 1, 2, 3 };
 		double[] expected = { 1.0, 2048.0, 177147.0 };
-		final double[] output = name("test.mulArrays11_11") //
+		final double[] output = ops.op("test.mulArrays11_11") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1293,7 +1307,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_1") //
+		final double[] output = ops.op("test.mulArrays12_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1316,7 +1330,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_2") //
+		final double[] output = ops.op("test.mulArrays12_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1339,7 +1353,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_3") //
+		final double[] output = ops.op("test.mulArrays12_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1362,7 +1376,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_4") //
+		final double[] output = ops.op("test.mulArrays12_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1385,7 +1399,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_5") //
+		final double[] output = ops.op("test.mulArrays12_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1408,7 +1422,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_6") //
+		final double[] output = ops.op("test.mulArrays12_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1431,7 +1445,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_7") //
+		final double[] output = ops.op("test.mulArrays12_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1454,7 +1468,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_8") //
+		final double[] output = ops.op("test.mulArrays12_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1477,7 +1491,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_9") //
+		final double[] output = ops.op("test.mulArrays12_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1500,7 +1514,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_10") //
+		final double[] output = ops.op("test.mulArrays12_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1523,7 +1537,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_11") //
+		final double[] output = ops.op("test.mulArrays12_11") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1546,7 +1560,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input11 = { 1, 2, 3 };
 		final double[] input12 = { 1, 2, 3 };
 		double[] expected = { 1.0, 4096.0, 531441.0 };
-		final double[] output = name("test.mulArrays12_12") //
+		final double[] output = ops.op("test.mulArrays12_12") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1570,7 +1584,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_1") //
+		final double[] output = ops.op("test.mulArrays13_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1594,7 +1608,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_2") //
+		final double[] output = ops.op("test.mulArrays13_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1618,7 +1632,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_3") //
+		final double[] output = ops.op("test.mulArrays13_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1642,7 +1656,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_4") //
+		final double[] output = ops.op("test.mulArrays13_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1666,7 +1680,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_5") //
+		final double[] output = ops.op("test.mulArrays13_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1690,7 +1704,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_6") //
+		final double[] output = ops.op("test.mulArrays13_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1714,7 +1728,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_7") //
+		final double[] output = ops.op("test.mulArrays13_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1738,7 +1752,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_8") //
+		final double[] output = ops.op("test.mulArrays13_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1762,7 +1776,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_9") //
+		final double[] output = ops.op("test.mulArrays13_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1786,7 +1800,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_10") //
+		final double[] output = ops.op("test.mulArrays13_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1810,7 +1824,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_11") //
+		final double[] output = ops.op("test.mulArrays13_11") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1834,7 +1848,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_12") //
+		final double[] output = ops.op("test.mulArrays13_12") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1858,7 +1872,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input12 = { 1, 2, 3 };
 		final double[] input13 = { 1, 2, 3 };
 		double[] expected = { 1.0, 8192.0, 1594323.0 };
-		final double[] output = name("test.mulArrays13_13") //
+		final double[] output = ops.op("test.mulArrays13_13") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1883,7 +1897,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_1") //
+		final double[] output = ops.op("test.mulArrays14_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1908,7 +1922,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_2") //
+		final double[] output = ops.op("test.mulArrays14_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1933,7 +1947,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_3") //
+		final double[] output = ops.op("test.mulArrays14_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1958,7 +1972,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_4") //
+		final double[] output = ops.op("test.mulArrays14_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -1983,7 +1997,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_5") //
+		final double[] output = ops.op("test.mulArrays14_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2008,7 +2022,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_6") //
+		final double[] output = ops.op("test.mulArrays14_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2033,7 +2047,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_7") //
+		final double[] output = ops.op("test.mulArrays14_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2058,7 +2072,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_8") //
+		final double[] output = ops.op("test.mulArrays14_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2083,7 +2097,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_9") //
+		final double[] output = ops.op("test.mulArrays14_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2108,7 +2122,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_10") //
+		final double[] output = ops.op("test.mulArrays14_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2133,7 +2147,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_11") //
+		final double[] output = ops.op("test.mulArrays14_11") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2158,7 +2172,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_12") //
+		final double[] output = ops.op("test.mulArrays14_12") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2183,7 +2197,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_13") //
+		final double[] output = ops.op("test.mulArrays14_13") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2208,7 +2222,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input13 = { 1, 2, 3 };
 		final double[] input14 = { 1, 2, 3 };
 		double[] expected = { 1.0, 16384.0, 4782969.0 };
-		final double[] output = name("test.mulArrays14_14") //
+		final double[] output = ops.op("test.mulArrays14_14") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2234,7 +2248,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_1") //
+		final double[] output = ops.op("test.mulArrays15_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2260,7 +2274,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_2") //
+		final double[] output = ops.op("test.mulArrays15_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2286,7 +2300,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_3") //
+		final double[] output = ops.op("test.mulArrays15_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2312,7 +2326,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_4") //
+		final double[] output = ops.op("test.mulArrays15_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2338,7 +2352,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_5") //
+		final double[] output = ops.op("test.mulArrays15_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2364,7 +2378,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_6") //
+		final double[] output = ops.op("test.mulArrays15_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2390,7 +2404,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_7") //
+		final double[] output = ops.op("test.mulArrays15_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2416,7 +2430,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_8") //
+		final double[] output = ops.op("test.mulArrays15_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2442,7 +2456,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_9") //
+		final double[] output = ops.op("test.mulArrays15_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2468,7 +2482,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_10") //
+		final double[] output = ops.op("test.mulArrays15_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2494,7 +2508,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_11") //
+		final double[] output = ops.op("test.mulArrays15_11") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2520,7 +2534,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_12") //
+		final double[] output = ops.op("test.mulArrays15_12") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2546,7 +2560,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_13") //
+		final double[] output = ops.op("test.mulArrays15_13") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2572,7 +2586,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_14") //
+		final double[] output = ops.op("test.mulArrays15_14") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2598,7 +2612,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input14 = { 1, 2, 3 };
 		final double[] input15 = { 1, 2, 3 };
 		double[] expected = { 1.0, 32768.0, 1.4348907E7 };
-		final double[] output = name("test.mulArrays15_15") //
+		final double[] output = ops.op("test.mulArrays15_15") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2625,7 +2639,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_1") //
+		final double[] output = ops.op("test.mulArrays16_1") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2652,7 +2666,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_2") //
+		final double[] output = ops.op("test.mulArrays16_2") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2679,7 +2693,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_3") //
+		final double[] output = ops.op("test.mulArrays16_3") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2706,7 +2720,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_4") //
+		final double[] output = ops.op("test.mulArrays16_4") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2733,7 +2747,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_5") //
+		final double[] output = ops.op("test.mulArrays16_5") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2760,7 +2774,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_6") //
+		final double[] output = ops.op("test.mulArrays16_6") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2787,7 +2801,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_7") //
+		final double[] output = ops.op("test.mulArrays16_7") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2814,7 +2828,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_8") //
+		final double[] output = ops.op("test.mulArrays16_8") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2841,7 +2855,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_9") //
+		final double[] output = ops.op("test.mulArrays16_9") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2868,7 +2882,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_10") //
+		final double[] output = ops.op("test.mulArrays16_10") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2895,7 +2909,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_11") //
+		final double[] output = ops.op("test.mulArrays16_11") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2922,7 +2936,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_12") //
+		final double[] output = ops.op("test.mulArrays16_12") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2949,7 +2963,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_13") //
+		final double[] output = ops.op("test.mulArrays16_13") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -2976,7 +2990,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_14") //
+		final double[] output = ops.op("test.mulArrays16_14") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -3003,7 +3017,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_15") //
+		final double[] output = ops.op("test.mulArrays16_15") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();
@@ -3030,7 +3044,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 		final double[] input15 = { 1, 2, 3 };
 		final double[] input16 = { 1, 2, 3 };
 		double[] expected = { 1.0, 65536.0, 4.3046721E7 };
-		final double[] output = name("test.mulArrays16_16") //
+		final double[] output = ops.op("test.mulArrays16_16") //
 			.input(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15, input16) //
 			.outType(new Nil<double[]>()
 			{}).apply();

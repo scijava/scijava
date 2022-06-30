@@ -29,20 +29,29 @@
 
 package org.scijava.ops.engine.util;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.math.Add;
+import org.scijava.ops.engine.math.Sqrt;
 import org.scijava.types.Nil;
 
 public class ComputersTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void addNeededOps() {
+		discoverer.register(Sqrt.class, "opcollection");
+		discoverer.register(Add.class, "opcollection");
+	}
 
 	private static Nil<double[]> nilDoubleArray = new Nil<>() {
 	};
 
 	@Test
 	public void testUnaryComputers() {
-		Computers.Arity1<double[], double[]> sqrtComputer = OpBuilder.matchComputer(ops.env(),
+		Computers.Arity1<double[], double[]> sqrtComputer = OpBuilder.matchComputer(ops,
 			"math.sqrt", nilDoubleArray, nilDoubleArray);
 
 		double[] result = new double[3];
@@ -53,7 +62,7 @@ public class ComputersTest extends AbstractTestEnvironment {
 	@Test
 	public void testBinaryComputers() {
 		Computers.Arity2<double[], double[], double[]> addComputer = //
-			OpBuilder.matchComputer(ops.env(), "math.add", nilDoubleArray, nilDoubleArray,
+			OpBuilder.matchComputer(ops, "math.add", nilDoubleArray, nilDoubleArray,
 				nilDoubleArray);
 
 		double[] result = new double[3];

@@ -39,10 +39,8 @@ import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
-public class ComputerToFunctionAdaptTestOps {
+public class ComputerToFunctionAdaptTestOps implements OpCollection {
 	
 	@OpField(names = "test.CtF")
 	public static final Computers.Arity1<double[], double[]> toFunc1 = (in, out) -> {

@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 
 import org.scijava.Priority;
 import org.scijava.discovery.Discoverer;
-import org.scijava.log.LogService;
+import org.scijava.log2.Logger;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.InfoChainGenerator;
@@ -87,7 +87,7 @@ import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.types.Nil;
-import org.scijava.types.TypeService;
+import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 import org.scijava.util.VersionUtils;
@@ -104,9 +104,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private OpMatcher matcher;
 
-	private LogService log;
+	private Logger log;
 
-	private TypeService typeService;
+	private TypeReifier typeService;
 
 	private OpHistory history;
 
@@ -154,8 +154,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 */
 	private Hints environmentHints = null;
 
-	public DefaultOpEnvironment(final TypeService typeService,
-		final LogService log, final OpHistory history,
+	public DefaultOpEnvironment(final TypeReifier typeService,
+		final Logger log, final OpHistory history,
 		final List<OpInfoGenerator> infoGenerators, final List<Discoverer> d)
 	{
 		this.discoverers = d;
@@ -166,8 +166,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		matcher = new DefaultOpMatcher(getMatchingRoutines(this.discoverers));
 	}
 
-	public DefaultOpEnvironment(final TypeService typeService,
-		final LogService log, final OpHistory history,
+	public DefaultOpEnvironment(final TypeReifier typeService,
+		final Logger log, final OpHistory history,
 		final List<OpInfoGenerator> infoGenerators, final Discoverer... d)
 	{
 		this.discoverers = Arrays.asList(d);
@@ -319,12 +319,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public <T> T bakeLambdaType(final T op, Type reifiedType) {
-		if (wrappers == null) initWrappers();
-		return LambdaTypeBaker.bakeLambdaType(op, reifiedType);
-	}
-
-	@Override
 	public OpInfo opify(final Class<?> opClass) {
 		return opify(opClass, Priority.NORMAL);
 	}
@@ -335,6 +329,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	{
 		return new OpClassInfo(opClass, VersionUtils.getVersion(opClass), new DefaultHints(), priority,
 			names);
+	}
+
+	@Override
+	public <T> T bakeLambdaType(T op, Type type) {
+		return LambdaTypeBaker.bakeLambdaType(op, type);
 	}
 
 	@Override
@@ -477,9 +476,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Hints hints)
 	{
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
-		InfoChain adaptorChain = new DependencyInstantiatedInfoChain(candidate
+		InfoChain adaptorChain = new DependencyRichOpInfoChain(candidate
 			.opInfo(), conditions);
-		return adaptorChain.op();
+		return adaptorChain.op(candidate.getType());
 	}
 
 	/**
@@ -679,7 +678,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				// resolve adaptor dependencies
 				final List<RichOp<?>> dependencies = resolveOpDependencies(adaptor, map,
 					hints);
-				InfoChain adaptorChain = new DependencyInstantiatedInfoChain(adaptor,
+				InfoChain adaptorChain = new DependencyRichOpInfoChain(adaptor,
 					dependencies);
 
 				// grab the first type parameter from the OpInfo and search for

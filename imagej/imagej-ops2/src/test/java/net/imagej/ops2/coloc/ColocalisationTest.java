@@ -63,7 +63,6 @@ import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.OpService;
 import org.scijava.plugin.PluginService;
 import org.scijava.thread.ThreadService;
-import org.scijava.types.TypeService;
 
 /** Abstract base class for coloc op unit tests. */
 public abstract class ColocalisationTest {
@@ -84,7 +83,7 @@ public abstract class ColocalisationTest {
 	public static void setUp() {
 		context = new Context(OpService.class, CacheService.class,
 			ThreadService.class, StatusService.class, SCIFIOService.class,
-			FormatService.class, PluginService.class, TypeService.class);
+			FormatService.class, PluginService.class);
 		ops = context.service(OpService.class);
 	}
 	

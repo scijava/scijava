@@ -37,10 +37,11 @@ package org.scijava.ops.engine.adapt.lift;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
-import org.scijava.ops.api.OpBuilder;
+import org.scijava.ops.engine.OpBuilderTestOps;
 import org.scijava.types.Nil;
 
 /**
@@ -50,6 +51,12 @@ import org.scijava.types.Nil;
  * @author Gabriel Selzer
  */
 public class FunctionToIterablesTest extends AbstractTestEnvironment {
+
+	@BeforeClass
+	public static void AddNeededOps() {
+		discoverer.register(FunctionToIterables.class, "opcollection");
+		discoverer.register(OpBuilderTestOps.class, "opcollection");
+	}
 
 	@Test
 	public void testFunction1ToIterables() {

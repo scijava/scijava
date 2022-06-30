@@ -35,9 +35,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * 
@@ -46,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  *
+ *@implNote op names='features.haralick.contrast'
  */
-@Plugin(type = Op.class, name = "features.haralick.contrast")
 public class DefaultContrast<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXMinusY")

@@ -34,7 +34,6 @@ import java.util.List;
 
 import net.imagej.ops2.features.AbstractFeatureTest;
 import net.imagej.ops2.geom.GeomUtils;
-import net.imagej.ops2.geom.geom2d.LabelRegionToPolygonConverter;
 import net.imglib2.RealLocalizable;
 import net.imglib2.RealPoint;
 import net.imglib2.roi.geom.real.Polygon2D;

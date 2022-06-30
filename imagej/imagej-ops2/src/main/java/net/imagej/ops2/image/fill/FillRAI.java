@@ -33,18 +33,15 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.Type;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Fill a {@link RandomAccessibleInterval} with some constant value. Operates in
  * parallel using imglib2's {@link LoopBuilder} utility
  * 
  * @author Gabriel Selzer
+ * @implNote op names='image.fill', priority='100.'
  */
-@Plugin(type = Op.class, name = "image.fill", priority = Priority.HIGH)
 public class FillRAI<T extends Type<T>> implements
 	Computers.Arity1<T, RandomAccessibleInterval<T>> 
 {

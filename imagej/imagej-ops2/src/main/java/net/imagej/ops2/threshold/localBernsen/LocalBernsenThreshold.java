@@ -38,16 +38,14 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
  * @param <T> input type
+ *@implNote op names='threshold.localBernsen'
  */
-@Plugin(type = Op.class, name = "threshold.localBernsen")
 public class LocalBernsenThreshold<T extends RealType<T>> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {

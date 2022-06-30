@@ -42,8 +42,6 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.OpExecutionException;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 import org.scijava.script.ScriptLanguage;
 import org.scijava.script.ScriptService;
 
@@ -60,8 +58,8 @@ import org.scijava.script.ScriptService;
  * </p>
  * 
  * @author Curtis Rueden
+ *@implNote op names='image.equation'
  */
-@Plugin(type = Op.class, name = "image.equation")
 public class DefaultEquation<T extends RealType<T>> implements
 	Computers.Arity2<String, ScriptService, IterableInterval<T>> 
 {

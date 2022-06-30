@@ -36,16 +36,14 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@code geom.majorAxis}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.majorAxis', label='Geometric (2D): Major Axis'
  */
-@Plugin(type = Op.class, name = "geom.majorAxis", label = "Geometric (2D): Major Axis")
 public class DefaultMajorAxis implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

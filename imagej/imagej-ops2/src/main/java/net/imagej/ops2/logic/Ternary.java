@@ -33,8 +33,6 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.Type;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An Op that works the same way as the <code>?:</code> operator. It sets the
@@ -42,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * <code>ifFalseVal</code> otherwise.
  * 
  * @author Leon Yang
+ *@implNote op names='logic.match'
  */
-@Plugin(type = Op.class, name = "logic.match")
 public class Ternary<I extends BooleanType<I>, O extends Type<O>> implements Computers.Arity3<I, O, O, O>
 
 {

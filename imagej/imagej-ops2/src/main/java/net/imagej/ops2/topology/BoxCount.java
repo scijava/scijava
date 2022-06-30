@@ -47,8 +47,6 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An N-dimensional box counting that can be used to estimate the fractal
@@ -324,7 +322,9 @@ public class BoxCount {
 	}
 }
 
-@Plugin(type = Op.class, name = "topology.boxCount")
+/**
+ *@implNote op names='topology.boxCount'
+ */
 class DefaultBoxCount<B extends BooleanType<B>> implements
 	Functions.Arity5<RandomAccessibleInterval<B>, Long, Long, Double, Long, List<ValuePair<DoubleType, DoubleType>>>
 {

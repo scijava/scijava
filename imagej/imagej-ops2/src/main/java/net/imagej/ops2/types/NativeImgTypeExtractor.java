@@ -35,8 +35,6 @@ import java.lang.reflect.Type;
 
 import net.imglib2.img.NativeImg;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 

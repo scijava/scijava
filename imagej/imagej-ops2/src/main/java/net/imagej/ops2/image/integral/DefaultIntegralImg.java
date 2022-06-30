@@ -34,10 +34,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.LongType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -49,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            The type of the input image.
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op name='image.integral', priority=-99
  */
-@Plugin(type = Op.class, name = "image.integral", priority = Priority.LOW + 1)
 public class DefaultIntegralImg<I extends RealType<I>, O extends RealType<O>> extends AbstractIntegralImg<I, O> {
 
 	@Override

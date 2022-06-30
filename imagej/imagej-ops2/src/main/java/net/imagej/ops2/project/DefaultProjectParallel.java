@@ -36,13 +36,14 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.util.Intervals;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "project",
-	priority = Priority.LOW + 1)
+/**
+ *
+ * @param <T>
+ * @param <V>
+ * @implNote op name='project', priority='99.'
+ */
 public class DefaultProjectParallel<T, V> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, RandomAccessibleInterval<V>>
 {

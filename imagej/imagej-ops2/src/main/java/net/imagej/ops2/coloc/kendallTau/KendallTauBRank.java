@@ -38,9 +38,6 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * This algorithm calculates Kendall's Tau-b rank correlation coefficient
  * <p>
@@ -72,8 +69,8 @@ import org.scijava.plugin.Plugin;
  * @author Johannes Schindelin
  * @author Ellen T Arena
  * @param <T>
+ *@implNote op names='coloc.kendallTau'
  */
-@Plugin(type = Op.class, name = "coloc.kendallTau")
 public class KendallTauBRank<T extends RealType<T>, U extends RealType<U>>
 		/* extends Algorithm<T> */ implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 

@@ -38,9 +38,7 @@ import net.imglib2.util.Pair;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * This algorithm calculates Li et al.'s ICQ (intensity correlation quotient).
@@ -49,8 +47,8 @@ import org.scijava.plugin.Plugin;
  *            Type of the first image
  * @param <U>
  *            Type of the second image
+ *@implNote op names='coloc.icq'
  */
-@Plugin(type = Op.class, name = "coloc.icq")
 public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 		implements Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> {
 
@@ -121,7 +119,9 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 
 }
 
-@Plugin(type = Op.class, name = "coloc.icq")
+/**
+ *@implNote op names='coloc.icq'
+ */
 class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
 		implements BiFunction<Iterable<T>, Iterable<U>, Double> {
 	

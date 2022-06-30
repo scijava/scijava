@@ -29,20 +29,15 @@
 
 package net.imagej.ops2.stats;
 
+import static java.util.Collections.swap;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.util.Intervals;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-import org.scijava.util.ArrayUtils;
-import org.scijava.util.DoubleArray;
-
-import static java.util.Collections.swap;
 
 /**
  * {@link Op} to calculate the n-th {@code stats.percentile}.
@@ -52,8 +47,8 @@ import static java.util.Collections.swap;
  * @author Jan Eglinger
  * @param <I> input type
  * @param <O> output type
+ *@implNote op names='stats.quantile'
  */
-@Plugin(type = Op.class, name = "stats.quantile")
 public class DefaultQuantile<I extends RealType<I>, O extends RealType<O>>
 implements Computers.Arity2<Iterable<I>, Double, O>
 {

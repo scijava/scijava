@@ -36,10 +36,6 @@ import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Op used to translate the center of an interval the origin. This is needed for
  * FFT operations
@@ -48,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padIntervalOrigin', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padIntervalOrigin", priority = Priority.HIGH)
 public class PaddingIntervalOrigin<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
 		implements BiFunction<I, Interval, O> {
 

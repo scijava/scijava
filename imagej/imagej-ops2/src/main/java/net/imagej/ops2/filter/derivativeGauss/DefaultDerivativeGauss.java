@@ -42,17 +42,15 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Performs the 2-D partial derivative Gaussian kernel convolutions on an image,
  * at a particular point.
  *
  * @author Gabe Selzer
+ *@implNote op names='filter.derivativeGauss'
  */
-@Plugin(type = Op.class, name = "filter.derivativeGauss")
 public class DefaultDerivativeGauss<T extends RealType<T>>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], int[], RandomAccessibleInterval<DoubleType>> {
 	

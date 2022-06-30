@@ -35,15 +35,13 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.Type;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Fill an {@link IterableInterval} with some constant value.
  * 
  * @author Leon Yang
+ *@implNote op names='image.fill'
  */
-@Plugin(type = Op.class, name = "image.fill")
 public class DefaultFill<T extends Type<T>> implements
 	Computers.Arity1<T, Iterable<T>> 
 {

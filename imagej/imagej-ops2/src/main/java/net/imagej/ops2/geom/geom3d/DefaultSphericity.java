@@ -34,11 +34,8 @@ import java.util.function.Function;
 import net.imagej.mesh.Mesh;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Sphericity}.
@@ -46,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * Based on https://en.wikipedia.org/wiki/Sphericity.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.sphericity', label='Geometric (3D): Sphericity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.sphericity", label = "Geometric (3D): Sphericity", priority = Priority.VERY_HIGH)
 public class DefaultSphericity implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.size")

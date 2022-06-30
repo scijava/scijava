@@ -36,12 +36,11 @@ import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "project", priority = Priority.LOW)
+/**
+ * @implNote op names='project', priority='-100.'
+ */
 public class ProjectRAIToIterableInterval<T, V>
 		implements Computers.Arity3<RandomAccessibleInterval<T>, Computers.Arity1<Iterable<T>, V>, Integer, IterableInterval<V>> {
 

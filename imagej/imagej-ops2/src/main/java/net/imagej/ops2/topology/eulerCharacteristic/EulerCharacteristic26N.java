@@ -34,8 +34,6 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An Op which calculates the euler characteristic (χ) of the given 3D binary image.<br>
@@ -65,8 +63,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  * @author Richard Domander (Royal Veterinary College, London)
  * @author David Legland  - original MatLab implementation
+ *@implNote op names='topology.eulerCharacteristic26N'
  */
-@Plugin(type = Op.class, name = "topology.eulerCharacteristic26N")
 public class EulerCharacteristic26N<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
     /** Δχ(v) for all configurations of a 2x2x2 voxel neighborhood */

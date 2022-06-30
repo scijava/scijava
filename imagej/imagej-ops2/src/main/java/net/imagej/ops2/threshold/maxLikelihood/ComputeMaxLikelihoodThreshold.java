@@ -35,9 +35,6 @@ import net.imagej.ops2.threshold.minimum.ComputeMinimumThreshold;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 // This plugin code ported from the original MatLab code of the max likelihood
 // threshold method (th_maxlik) as written in Antti Niemisto's 1.03 version of
 // the HistThresh Toolbox (relicensed BSD 2-12-13)
@@ -47,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * {@literal &} Rubin and Glasbey.
  *
  * @author Barry DeZonia
+ *@implNote op names='threshold.maxLikelihood'
  */
-@Plugin(type = Op.class, name = "threshold.maxLikelihood")
 public class ComputeMaxLikelihoodThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

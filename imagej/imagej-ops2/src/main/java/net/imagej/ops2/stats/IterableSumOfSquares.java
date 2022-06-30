@@ -33,7 +33,6 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.sumOfSquares}.
@@ -42,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ *@implNote op names='stats.sumOfSquares'
  */
-@Plugin(type = Op.class, name = "stats.sumOfSquares")
 public class IterableSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<Iterable<I>, O>
 {

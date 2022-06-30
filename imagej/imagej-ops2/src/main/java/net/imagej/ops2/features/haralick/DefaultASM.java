@@ -33,9 +33,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * 
  * Implementation of Angular Second Moment Haralick Feature
@@ -43,8 +40,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  *
+ *@implNote op names='features.haralick.asm'
  */
-@Plugin(type = Op.class, name = "features.haralick.asm")
 public class DefaultASM<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	/**

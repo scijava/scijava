@@ -34,9 +34,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Sobel filter implementation using separated sobel kernel.
@@ -45,9 +43,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <T>
  *            type of input
+ *@implNote op names='filter.sobel'
  */
-
-@Plugin(type = Op.class, name = "filter.sobel")
 public class SobelRAI<T extends RealType<T>>
 		implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 	

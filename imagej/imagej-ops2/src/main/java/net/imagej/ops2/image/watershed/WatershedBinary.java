@@ -32,20 +32,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -80,8 +76,8 @@ import org.scijava.plugin.Plugin;
  *            element type of mask
  *
  * @author Simon Schmid (University of Konstanz)
+ *@implNote op names='image.watershed'
  */
-@Plugin(type = Op.class, name = "image.watershed")
 public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -142,7 +138,9 @@ public class WatershedBinary<T extends BooleanType<T>, B extends BooleanType<B>>
 
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -167,7 +165,9 @@ class WatershedBinaryMaskless<T extends BooleanType<T>, B extends BooleanType<B>
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, double[], RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -196,7 +196,9 @@ class WatershedBinaryFunction<T extends BooleanType<T>, B extends BooleanType<B>
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinaryFunctionMaskless<T extends BooleanType<T>, B extends BooleanType<B>>
 		implements Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, double[], ExecutorService, ImgLabeling<Integer, IntType>> {
 

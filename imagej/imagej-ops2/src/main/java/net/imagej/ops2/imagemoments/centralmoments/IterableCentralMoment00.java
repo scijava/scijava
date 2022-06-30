@@ -33,10 +33,8 @@ import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.centralMoment00} directly.
@@ -47,8 +45,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='imageMoments.centralMoment00', label='Image Moment: CentralMoment00', priority='10000.'
  */
-@Plugin(type = Op.class, name = "imageMoments.centralMoment00", label = "Image Moment: CentralMoment00", priority = Priority.VERY_HIGH)
 public class IterableCentralMoment00<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<IterableInterval<I>, O> {
 

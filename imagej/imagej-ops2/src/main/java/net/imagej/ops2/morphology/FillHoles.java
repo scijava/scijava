@@ -38,17 +38,15 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Fills the holes of a BooleanType image.
  * 
  * @author Martin Horn (University of Konstanz)
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='morphology.fillHoles'
  */
-@Plugin(type = Op.class, name = "morphology.fillHoles")
 public class FillHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {

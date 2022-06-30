@@ -3,14 +3,15 @@ package org.scijava.persist;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.scijava.Context;
-import org.scijava.InstantiableException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import org.scijava.Context;
+import org.scijava.InstantiableException;
 
 /**
  * Get serializers that registers all scijava registered adapters and runtime

@@ -34,16 +34,13 @@ import java.util.function.Function;
 import net.imagej.mesh.Mesh;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.verticesCountConvexHull', label='Geometric (3D): Convex Hull Vertices Count', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.verticesCountConvexHull", label = "Geometric (3D): Convex Hull Vertices Count", priority = Priority.VERY_HIGH)
 public class DefaultVerticesCountConvexHullMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.convexHull")

@@ -25,19 +25,15 @@ import net.imglib2.view.SubsampleIntervalView;
 import net.imglib2.view.SubsampleView;
 import net.imglib2.view.TransformView;
 import net.imglib2.view.Views;
-import net.imglib2.view.composite.Composite;
 import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.CompositeView;
 import net.imglib2.view.composite.GenericComposite;
 import net.imglib2.view.composite.NumericComposite;
 import net.imglib2.view.composite.RealComposite;
 
-import org.scijava.Priority;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link OpCollection} containing all of the transform {@link Op}s.
@@ -61,180 +57,473 @@ import org.scijava.plugin.Plugin;
  * @param <E>
  *            - a {@link TypeVariable} extending {@link EuclideanSpace}
  */
-@Plugin(type = OpCollection.class)
 public class Transforms<T, R extends RealType<R>, N extends NumericType<N>, Y extends Type<Y>, F extends RandomAccessibleInterval<T>, E extends EuclideanSpace> {
 
-	@OpField(names = "transform.addDimensionView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.addDimensionView'
+	 */
 	public final Function<RandomAccessible<T>, MixedTransformView<T>> addDimensionView = Views::addDimension;
 
-	@OpField(names = "transform.addDimensionView", params = "input, min, max, result")
+	/**
+	 * @input input
+	 * @input min
+	 * @input max
+	 * @output result
+	 * @implNote op names='transform.addDimensionView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<T>, Long, Long, IntervalView<T>> addDimensionViewMinMax = Views::addDimension;
 
-	@OpField(names = "transform.collapseView", params = "input, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.collapseView', priority='-100.'
+	 */
 	public final Function<RandomAccessible<T>, CompositeView<T, ? extends GenericComposite<T>>> collapseViewRA = Views::collapse;
 
-	@OpField(names = "transform.collapseView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.collapseView'
+	 */
 	public final Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, ? extends GenericComposite<T>>> collapseViewRAI = Views::collapse;
 
-	@OpField(names = "transform.collapseRealView", params = "input, numChannels, result")
+	/**
+	 * @input input
+	 * @input numChannels
+	 * @output result
+	 * @implNote op names='transform.collapseRealView'
+	 */
 	public final BiFunction<RandomAccessible<R>, Integer, CompositeView<R, RealComposite<R>>> collapseRealViewRA = Views::collapseReal;
 
-	@OpField(names = "transform.collapseRealView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.collapseRealView'
+	 */
 	public final Function<RandomAccessibleInterval<R>, CompositeIntervalView<R, RealComposite<R>>> collapseRealViewRAI = Views::collapseReal;
 
-	@OpField(names = "transform.collapseNumericView", params = "input, numChannels, result")
+	/**
+	 * @input input
+	 * @input numChannels
+	 * @output result
+	 * @implNote op names='transform.collapseNumericView'
+	 */
 	public final BiFunction<RandomAccessible<N>, Integer, CompositeView<N, NumericComposite<N>>> collapseNumericViewRA = Views::collapseNumeric;
 
-	@OpField(names = "transform.collapseNumericView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.collapseNumericView'
+	 */
 	public final Function<RandomAccessibleInterval<N>, CompositeIntervalView<N, NumericComposite<N>>> collapseNumericViewRAI = Views::collapseNumeric;
 
-	@OpField(names = "transform.concatenateView", params = "concatenationAxis, inputs, result")
+	/**
+	 * @input concatenationAxis
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.concatenateView'
+	 */
 	public final BiFunction<Integer, RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> concatenateArray = Views::concatenate;
 
-	@OpField(names = "transform.concatenateView", params = "concatenationAxis, inputs, result")
+	/**
+	 * @input concatenationAxis
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.concatenateView'
+	 */
 	public final BiFunction<Integer, List<RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> concatenateList = Views::concatenate;
 
-	@OpField(names = "transform.concatenateView", params = "concatenationAxis, stackAccess, inputs, result")
+	/**
+	 * @input concatenationAxis
+	 * @input stackAccess
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.concatenateView'
+	 */
 	public final Functions.Arity3<Integer, StackAccessMode, RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> concatenateStackArray = Views::concatenate;
 
-	@OpField(names = "transform.concatenateView", params = "concatenationAxis, stackAccess, inputs, result")
+	/**
+	 * @input concatenationAxis
+	 * @input stackAccess
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.concatenateView'
+	 */
 	public final Functions.Arity3<Integer, StackAccessMode, List<RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> concatenateStackList = Views::concatenate;
 
-	@OpField(names = "transform.dropSingletonDimensionsView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.dropSingletonDimensionsView'
+	 */
 	public final Function<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> dropSingletonDimensions = Views::dropSingletonDimensions;
 
-	@OpField(names = "transform.extendView", params = "input, outofBoundsFactory, result")
+	/**
+	 * @input input
+	 * @input outofBoundsFactory
+	 * @output result
+	 * @implNote op names='transform.extendView'
+	 */
 	public final BiFunction<F, OutOfBoundsFactory<T, ? super F>, ExtendedRandomAccessibleInterval<T, F>> extendView = Views::extend;
 
-	@OpField(names = "transform.extendBorderView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.extendBorderView'
+	 */
 	public final Function<F, ExtendedRandomAccessibleInterval<T, F>> extendBorderView = Views::extendBorder;
 
-	@OpField(names = "transform.extendMirrorDoubleView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.extendMirrorDoubleView'
+	 */
 	public final Function<F, ExtendedRandomAccessibleInterval<T, F>> extendMirrorDoubleView = Views::extendMirrorDouble;
 
-	@OpField(names = "transform.extendMirrorSingleView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.extendMirrorSingleView'
+	 */
 	public final Function<F, ExtendedRandomAccessibleInterval<T, F>> extendMirrorSingleView = Views::extendMirrorSingle;
 
-	@OpField(names = "transform.extendPeriodicView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.extendPeriodicView'
+	 */
 	public final Function<F, ExtendedRandomAccessibleInterval<T, F>> extendPeriodicView = Views::extendPeriodic;
 
-	@OpField(names = "transform.extendRandomView", params = "input, min, max, result")
+	/**
+	 * @input input
+	 * @input min
+	 * @input max
+	 * @output result
+	 * @implNote op names='transform.extendRandomView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<R>, Double, Double, ExtendedRandomAccessibleInterval<R, RandomAccessibleInterval<R>>> extendRandomView = Views::extendRandom;
 
-	@OpField(names = "transform.extendValueView", params = "input, value, result")
+	/**
+	 * @input input
+	 * @input value
+	 * @output result
+	 * @implNote op names='transform.extendValueView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<Y>, Y, ExtendedRandomAccessibleInterval<Y, RandomAccessibleInterval<Y>>> extendValueView = Views::extendValue;
 
-	@OpField(names = "transform.extendZeroView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.extendZeroView'
+	 */
 	public final Function<RandomAccessibleInterval<N>, ExtendedRandomAccessibleInterval<N, RandomAccessibleInterval<N>>> extendZeroView = Views::extendZero;
 
-	@OpField(names = "transform.flatIterableView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.flatIterableView'
+	 */
 	public final Function<RandomAccessibleInterval<T>, IterableInterval<T>> flatIterbleView = Views::flatIterable;
 
-	@OpField(names = "transform.hyperSliceView", params = "input, dimesnion, position, result")
+	/**
+	 * @input input
+	 * @input dimension
+	 * @input position
+	 * @output result
+	 * @implNote op names='transform.hyperSliceView'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, Integer, Long, MixedTransformView<T>> hyperSliceRA = Views::hyperSlice;
 
-	@OpField(names = "transform.hyperSliceView", params = "input, dimension, position, result")
+	/**
+	 * @input input
+	 * @input dimension
+	 * @input position
+	 * @output result
+	 * @implNote op names='transform.hyperSliceView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<T>, Integer, Long, IntervalView<T>> hyperSliceRAI = Views::hyperSlice;
 
-	@OpField(names = "transform.hyperSlicesView", params = "input, axes, result")
+	/**
+	 * @input input
+	 * @input axes
+	 * @output result
+	 * @implNote op names='transform.hyperSlicesView'
+	 */
 	public final BiFunction<RandomAccessible<T>, int[], RandomAccessible<? extends RandomAccessible<T>>> hyperSlices = Views::hyperSlices;
 
-	@OpField(names = "transform.interpolateView", params = "input, interpolatorFactory, result")
+	/**
+	 * @input input
+	 * @input interpolatorFactory
+	 * @output result
+	 * @implNote op names='transform.interpolateView'
+	 */
 	public final BiFunction<E, InterpolatorFactory<T, E>, RealRandomAccessible<T>> interpolateView = Views::interpolate;
 
-	@OpField(names = "transform.intervalView", params = "input, min, max, result")
+	/**
+	 * @input input
+	 * @input min
+	 * @input max
+	 * @output result
+	 * @implNote op names='transform.intervalView'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, long[], long[], IntervalView<T>> intervalMinMax = Views::interval;
 
-	@OpField(names = "transform.intervalView", params = "input, interval, result")
+	/**
+	 * @input input
+	 * @input interval
+	 * @output result
+	 * @implNote op names='transform.intervalView'
+	 */
 	public final BiFunction<RandomAccessible<T>, Interval, IntervalView<T>> intervalWithInterval = Views::interval;
 
-	@OpField(names = "transform.invertAxisView", params = "input, dimension, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input dimension
+	 * @output result
+	 * @implNote op names='transform.invertAxisView', priority='-100.'
+	 */
 	public final BiFunction<RandomAccessible<T>, Integer, MixedTransformView<T>> invertAxisRA = Views::invertAxis;
 
-	@OpField(names = "transform.invertAxisView", params = "input, dimension, result")
+	/**
+	 * @input input
+	 * @input dimension
+	 * @output result
+	 * @implNote op names='transform.invertAxisView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, Integer, IntervalView<T>> invertAxisRAI = Views::invertAxis;
 
-	@OpField(names = "transform.offsetView", params = "input, offset, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input offset
+	 * @output result
+	 * @implNote op names='transform.offsetView', priority='-100.'
+	 */
 	public final BiFunction<RandomAccessible<T>, long[], MixedTransformView<T>> offsetRA = Views::offset;
 
-	@OpField(names = "transform.offsetView", params = "input, offset, result")
+	/**
+	 * @input input
+	 * @input offset
+	 * @output result
+	 * @implNote op names='transform.offsetView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, long[], IntervalView<T>> offsetRAI = Views::offset;
 
-	@OpField(names = "transform.offsetView", params = "input, intervalMin, intervalMax, result")
+	/**
+	 * @input input
+	 * @input intervalMin
+	 * @input intervalMax
+	 * @output result
+	 * @implNote op names='transform.offsetView'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, long[], long[], IntervalView<T>> offsetIntervalMinMax = Views::offsetInterval;
 
-	@OpField(names = "transform.offsetView", params = "input, interval, result")
+	/**
+	 * @input input
+	 * @input interval
+	 * @output result
+	 * @implNote op names='transform.offsetView'
+	 */
 	public final BiFunction<RandomAccessible<T>, Interval, IntervalView<T>> offsetInterval = Views::offsetInterval;
 
-	@OpField(names = "transform.permuteView", params = "input, fromAxis, toAxis, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input fromAxis
+	 * @input toAxis
+	 * @output result
+	 * @implNote op names='transform.permuteView', priority='-100.'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, Integer, Integer, MixedTransformView<T>> permuteRA = Views::permute;
 
-	@OpField(names = "transform.permuteView", params = "input, fromAxis, toAxis, result")
+	/**
+	 * @input input
+	 * @input fromAxis
+	 * @input toAxis
+	 * @output result
+	 * @implNote op names='transform.permuteView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<T>, Integer, Integer, IntervalView<T>> permuteRAI = Views::permute;
 
-	@OpField(names = "transform.permuteCoordinatesInverseView", params = "input, permutation, result")
+	/**
+	 * @input input
+	 * @input permutation
+	 * @output result
+	 * @implNote op names='transform.permuteCoordinatesInverseView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, int[], IntervalView<T>> permuteCoordinatesInverse = Views::permuteCoordinatesInverse;
 
-	@OpField(names = "transform.permuteCoordinatesInverseView", params = "input, permutation, dimension, result")
+	/**
+	 * @input input
+	 * @input permutation
+	 * @input dimension
+	 * @output result
+	 * @implNote op names='transform.permuteCoordinatesInverseView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<T>, int[], Integer, IntervalView<T>> permuteCoordinatesInverseSingleDim = Views::permuteCoordinatesInverse;
 
-	@OpField(names = "transform.permuteCoordinatesView", params = "input, permutation, result")
+	/**
+	 * @input input
+	 * @input permutation
+	 * @output result
+	 * @implNote op names='transform.permuteCoordinatesView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, int[], IntervalView<T>> permuteCoordinates = Views::permuteCoordinates;
 
-	@OpField(names = "transform.permuteCoordinatesView", params = "input, permutation, dimension, result")
+	/**
+	 * @input input
+	 * @input permutation
+	 * @input dimension
+	 * @output result
+	 * @implNote op names='transform.permuteCoordinatesView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<T>, int[], Integer, IntervalView<T>> permuteCoordinatesSingleDim = Views::permuteCoordinates;
 
-	@OpField(names = "transform.rasterView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.rasterView'
+	 */
 	public final Function<RealRandomAccessible<T>, RandomAccessibleOnRealRandomAccessible<T>> rasterize = Views::raster;
 
-	@OpField(names = "transform.rotateView", params = "input, fromAxis, toAxis, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input fromAxis
+	 * @input toAxis
+	 * @output result
+	 * @implNote op names='transform.rotateView', priority='-100.'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, Integer, Integer, MixedTransformView<T>> rotateRA = Views::rotate;
 
-	@OpField(names = "transform.rotateView", params = "input, fromAxis, toAxis, result")
+	/**
+	 * @input input
+	 * @input fromAxis
+	 * @input toAxis
+	 * @output result
+	 * @implNote op names='transform.rotateView'
+	 */
 	public final Functions.Arity3<RandomAccessibleInterval<T>, Integer, Integer, IntervalView<T>> rotateRAI = Views::rotate;
 
-	@OpField(names = "transform.shearView", params = "input, shearDimension, refDimension, result")
+	/**
+	 * @input input
+	 * @input shearDimension
+	 * @input refDimension
+	 * @output result
+	 * @implNote op names='transform.shearView'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, Integer, Integer, TransformView<T>> shear = Views::shear;
 
-	@OpField(names = "transform.shearView", params = "input, interval, shearDimension, refDimension, result")
+	/**
+	 * @input input
+	 * @input interval
+	 * @input shearDimension
+	 * @input refDimension
+	 * @output result
+	 * @implNote op names='transform.shearView'
+	 */
 	public final Functions.Arity4<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> shearInterval = Views::shear;
 
-	@OpField(names = "transform.stackView", params = "inputs, result")
+	/**
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.stackView'
+	 */
 	public final Function<List<? extends RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> stackList = Views::stack;
 
-	@OpField(names = "transform.stackView", params = "inputs, result")
+	/**
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.stackView'
+	 */
 	public final Function<RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> stackArray = Views::stack;
 
-	@OpField(names = "transform.stackView", params = "stackAccessMode, inputs, result")
+	/**
+	 * @input stackAccessMode
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.stackView'
+	 */
 	public final BiFunction<StackAccessMode, List<? extends RandomAccessibleInterval<T>>, RandomAccessibleInterval<T>> stackAccessList = Views::stack;
 
-	@OpField(names = "transform.stackView", params = "stackAccessMode, inputs, result")
+	/**
+	 * @input stackAccessMode
+	 * @input inputs
+	 * @output result
+	 * @implNote op names='transform.stackView'
+	 */
 	public final BiFunction<StackAccessMode, RandomAccessibleInterval<T>[], RandomAccessibleInterval<T>> stackAccessArray = Views::stack;
 
-	@OpField(names = "transform.subsampleView", params = "input, step, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input step
+	 * @output result
+	 * @implNote op names='transform.subsampleView', priority='-100.'
+	 */
 	public final BiFunction<RandomAccessible<T>, Long, SubsampleView<T>> subsampleRAUniform = Views::subsample;
 
-	@OpField(names = "transform.subsampleView", params = "input, steps, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input steps
+	 * @output result
+	 * @implNote op names='transform.subsampleView', priority='-100.'
+	 */
 	public final BiFunction<RandomAccessible<T>, long[], SubsampleView<T>> subsampleRANonuniform = Views::subsample;
 
-	@OpField(names = "transform.subsampleView", params = "input, step, result")
+	/**
+	 * @input input
+	 * @input step
+	 * @output result
+	 * @implNote op names='transform.subsampleView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, Long, SubsampleIntervalView<T>> subsampleRAIUniform = Views::subsample;
 
-	@OpField(names = "transform.subsampleView", params = "input, steps, result")
+	/**
+	 * @input input
+	 * @input steps
+	 * @output result
+	 * @implNote op names='transform.subsampleView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, long[], SubsampleIntervalView<T>> subsampleRAINonuniform = Views::subsample;
 
-	@OpField(names = "transform.translateView", params = "input, steps, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input steps
+	 * @output result
+	 * @implNote op names='transform.translateView', priority='-100.'
+	 */
 	public final BiFunction<RandomAccessible<T>, long[], MixedTransformView<T>> translateRA = Views::translate;
 
-	@OpField(names = "transform.translateView", params = "inputs, steps, result")
+	/**
+	 * @input input
+	 * @input steps
+	 * @output result
+	 * @implNote op names='transform.translateView'
+	 */
 	public final BiFunction<RandomAccessibleInterval<T>, long[], IntervalView<T>> translateRAI = Views::translate;
 
-	@OpField(names = "transform.unshearView", params = "input, shearDimesion, refDimension, result", priority = Priority.LOW)
+	/**
+	 * @input input
+	 * @input shearDimension
+	 * @input refDimension
+	 * @output result
+	 * @implNote op names='transform.unshearView', priority='-100.'
+	 */
 	public final Functions.Arity3<RandomAccessible<T>, Integer, Integer, TransformView<T>> unshearRA = Views::unshear;
 
-	@OpField(names = "transform.unshearView", params = "input, interval, shearDimension, refDimension, result")
+	/**
+	 * @input input
+	 * @input interval
+	 * @input shearDimension
+	 * @input refDimension
+	 * @output result
+	 * @implNote op names='transform.unshearView'
+	 */
 	public final Functions.Arity4<RandomAccessible<T>, Interval, Integer, Integer, IntervalView<T>> unshearRAI = Views::unshear;
 
-	@OpField(names = "transform.zeroMinView", params = "input, result")
+	/**
+	 * @input input
+	 * @output result
+	 * @implNote op names='transform.zeroMinView'
+	 */
 	public final Function<RandomAccessibleInterval<T>, IntervalView<T>> zeroMinView = Views::zeroMin;
 }

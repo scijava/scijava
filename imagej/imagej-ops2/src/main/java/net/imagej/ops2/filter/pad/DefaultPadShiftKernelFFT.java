@@ -36,11 +36,8 @@ import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.Priority;
 import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op used to pad the kernel using the default FFT padding scheme and shift the
@@ -50,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padShiftFFTKernel', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padShiftFFTKernel", priority = Priority.HIGH)
 public class DefaultPadShiftKernelFFT<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadShiftKernel<T, I, O> {
 

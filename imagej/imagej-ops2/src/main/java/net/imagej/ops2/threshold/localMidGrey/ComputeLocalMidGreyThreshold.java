@@ -35,11 +35,8 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Local threshold method which thresholds against the average of the maximum
@@ -47,9 +44,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localMidGrey', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localMidGrey",
-	priority = Priority.LOW)
 public class ComputeLocalMidGreyThreshold<T extends RealType<T>> implements
 	Computers.Arity3<Iterable<T>, T, Double, BitType>
 {

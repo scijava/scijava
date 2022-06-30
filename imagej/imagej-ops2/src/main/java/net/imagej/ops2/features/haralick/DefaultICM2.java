@@ -37,17 +37,15 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of Information Measure of Correlation 2 Haralick Feature
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.icm2'
  */
-@Plugin(type = Op.class, name = "features.haralick.icm2")
 public class DefaultICM2<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocHXY")

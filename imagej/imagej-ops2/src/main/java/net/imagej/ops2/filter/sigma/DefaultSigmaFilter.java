@@ -36,11 +36,8 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of {@link SigmaFilterOp}.
@@ -48,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @param <T>
  *            type
+ * @implNote op names='filter.sigma', priority='-100.'
  */
-@Plugin(type = Op.class, name = "filter.sigma", priority = Priority.LOW)
 public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, Double, Double, RandomAccessibleInterval<V>> {
 

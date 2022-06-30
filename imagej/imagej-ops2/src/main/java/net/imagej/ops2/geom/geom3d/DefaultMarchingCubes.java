@@ -43,9 +43,7 @@ import net.imglib2.view.Views;
 
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * This is a marching cubes implementation. It is inspired by Paul Bourke's
@@ -55,8 +53,8 @@ import org.scijava.plugin.Plugin;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  * @param <T>
  *            BooleanType
+ *@implNote op names='geom.marchingCubes'
  */
-@Plugin(type = Op.class, name = "geom.marchingCubes")
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
@@ -556,7 +554,9 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 
 }
 
-@Plugin(type = Op.class, name = "geom.marchingCubes")
+/**
+ *@implNote op names='geom.marchingCubes'
+ */
 class SimpleMarchingCubes<T extends BooleanType<T>>
 		implements Function<RandomAccessibleInterval<T>, Mesh> {
 	

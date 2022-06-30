@@ -15,34 +15,38 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.Nil;
 
-@Plugin(type = OpCollection.class)
 public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 	AbstractOpTest
 {
 
-	@OpField(names = "test.liftImg", params = "input, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Function<I, DoubleType> testOp = (in) -> new DoubleType(10d);
 
-	@OpField(names = "test.liftImg", params = "input1, input2, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final BiFunction<I, I, DoubleType> testOp2 = (in1,
 		in2) -> new DoubleType(20d);
 
-	@OpField(names = "test.liftImg", params = "input1, input2, input3, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Functions.Arity3<I, I, I, DoubleType> testOp3 = (in1, in2,
 		in3) -> new DoubleType(30d);
 
-	@OpField(names = "test.liftImg",
-		params = "input1, input2, input3, input4, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Functions.Arity4<I, I, I, I, DoubleType> testOp4 = (in1, in2,
 		in3, in4) -> new DoubleType(40d);
 
-	@OpField(names = "test.liftImg",
-		params = "input1, input2, input3, input4, input5, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Functions.Arity5<I, I, I, I, I, DoubleType> testOp5 = (in1, in2,
 		in3, in4, in5) -> new DoubleType(50d);
 

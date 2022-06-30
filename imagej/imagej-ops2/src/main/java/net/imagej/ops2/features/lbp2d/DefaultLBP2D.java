@@ -43,17 +43,15 @@ import net.imglib2.type.numeric.integer.LongType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of 2d local binary patterns
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @param <I>
+ *@implNote op names='features.lbp2d'
  */
-@Plugin(type = Op.class, name = "features.lbp2d")
 public class DefaultLBP2D<I extends RealType<I>>
 		implements Functions.Arity3<RandomAccessibleInterval<I>, Integer, Integer, ArrayList<LongType>> {
 

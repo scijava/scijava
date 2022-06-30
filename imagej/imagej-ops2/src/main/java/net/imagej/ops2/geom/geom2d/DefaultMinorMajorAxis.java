@@ -42,15 +42,12 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Generic implementation of {@code geom.secondMultiVariate}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='geom.secondMoment'
  */
-@Plugin(type = Op.class, name = "geom.secondMoment")
 public class DefaultMinorMajorAxis implements Function<Polygon2D, Pair<DoubleType, DoubleType>> {
 
 	/**

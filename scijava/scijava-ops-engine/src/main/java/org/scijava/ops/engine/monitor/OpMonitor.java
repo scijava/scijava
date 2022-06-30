@@ -31,6 +31,7 @@ package org.scijava.ops.engine.monitor;
 import java.util.concurrent.CancellationException;
 
 import org.scijava.ops.engine.log.Logger;
+import org.scijava.ops.spi.Op;
 
 /**
  * Used as a bridge between the {@link Op} and the user. Allows the user to
@@ -39,7 +40,6 @@ import org.scijava.ops.engine.log.Logger;
  * 
  * @author Gabriel Selzer
  * @author Marcel Wiedenmann
- *
  */
 public interface OpMonitor {
 

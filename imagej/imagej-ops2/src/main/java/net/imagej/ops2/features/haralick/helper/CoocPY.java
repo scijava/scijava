@@ -30,16 +30,13 @@ package net.imagej.ops2.features.haralick.helper;
 
 import java.util.function.Function;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * NB: Helper class. Internal usage only.
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.coocPY'
  */
-@Plugin(type = Op.class, name = "features.haralick.coocPY")
 public class CoocPY implements Function<double[][], double[]> {
 
 	/**

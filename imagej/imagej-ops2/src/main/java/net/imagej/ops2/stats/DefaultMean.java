@@ -32,11 +32,9 @@ package net.imagej.ops2.stats;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.max} using {@code stats.sum} and
@@ -46,9 +44,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='stats.mean', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.mean",
-	priority = Priority.HIGH)
 public class DefaultMean<I extends RealType<I>, O extends RealType<O>> 
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {

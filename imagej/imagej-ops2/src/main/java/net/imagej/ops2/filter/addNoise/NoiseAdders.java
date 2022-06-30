@@ -31,15 +31,11 @@ package net.imagej.ops2.filter.addNoise;
 
 import java.util.Random;
 
-import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Contains Ops designed to add noise to populated images.
@@ -51,7 +47,6 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  *            type of output
  */
-@Plugin(type = OpCollection.class)
 public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 
 	/**
@@ -68,8 +63,14 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 * {@link Iterable}. Since the {@link Random} is created upon every call of the
 	 * Op it ensures that given the same seed and input data the output will always
 	 * be the same.
+	 * @input input
+	 * @input rangeMin
+	 * @input rangeMax
+	 * @input rangeStdDev
+	 * @input seed
+	 * @container output
+	 * @implNote op names='filter.addNoise'
 	 */
-	@OpField(names = "filter.addNoise", params = "input, rangeMin, rangeMax, rangeStdDev, seed, output")
 	public final Computers.Arity5<RandomAccessibleInterval<I>, Double, Double, Double, Long, RandomAccessibleInterval<O>> addNoiseInterval = (
 			input, rangeMin, rangeMax, rangeStdDev, seed, output) -> {
 		addNoise(input, output, rangeMin, rangeMax, rangeStdDev, new Random(seed));
@@ -78,8 +79,13 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	/**
 	 * Convenience Op for when the user does not pass through a seed (default seed
 	 * taken from past implementation).
+	 * @input input
+	 * @input rangeMin
+	 * @input rangeMax
+	 * @input rangeStdDev
+	 * @container output
+	 * @implNote op names='filter.addNoise'
 	 */
-	@OpField(names = "filter.addNoise", params = "input, rangeMin, rangeMax, rangeStdDev, output")
 	public final Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Double, RandomAccessibleInterval<O>> addNoiseIntervalSeedless = (
 			input, rangeMin, rangeMax, rangeStdDev,
 			output) -> addNoiseInterval.compute(input, rangeMin, rangeMax, rangeStdDev, 0xabcdef1234567890L, output);
@@ -140,16 +146,22 @@ public class NoiseAdders<I extends RealType<I>, O extends RealType<O>> {
 	 *         {@link Random} is created upon every call of the Op it ensures that
 	 *         given the same seed and input data the output will always be the
 	 *         same.
+	 *
+	 * @input input
+	 * @input seed
+	 * @container output
+	 * @implNote op names='filter.addPoissonNoise'
 	 */
-	@OpField(names = "filter.addPoissonNoise", params = "input, seed, output")
 	public final Computers.Arity2<RandomAccessibleInterval<I>, Long, RandomAccessibleInterval<O>> addPoissonNoiseInterval = (input, seed,
 			output) -> addPoissonNoise(input, new Random(seed), output);
 
 	/**
 	 * Convenience Op for when the user does not pass through a seed (default seed
 	 * taken from past implementation).
+	 * @input input
+	 * @container output
+	 * @implNote op names='filter.addPoissonNoise'
 	 */
-	@OpField(names = "filter.addPoissonNoise", params = "input, output")
 	public final Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> addPoissonNoiseIntervalSeedless = (input,
 			output) -> addPoissonNoise(input, new Random(0xabcdef1234567890L), output);
 

@@ -34,16 +34,13 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Implementation of Texture Homogeneity Haralick Feature
  * 
  * @author Andreas Grauman (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.textureHomogeneity'
  */
-@Plugin(type = Op.class, name = "features.haralick.textureHomogeneity")
 public class DefaultTextureHomogeneity<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	/**

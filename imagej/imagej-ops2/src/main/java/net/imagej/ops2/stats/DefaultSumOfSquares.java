@@ -35,11 +35,9 @@ import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.sumOfSquares}. Leans on other Ops.
@@ -47,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Gabriel Selzer
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='stats.sumOfSquares', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.sumOfSquares", priority = Priority.HIGH)
 public class DefaultSumOfSquares<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<RandomAccessibleInterval<I>, O>
 {

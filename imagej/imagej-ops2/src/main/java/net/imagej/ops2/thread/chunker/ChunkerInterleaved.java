@@ -33,10 +33,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import org.scijava.Priority;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of a {@link ChunkerOp} that interleaves the chunks. In a
@@ -45,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * executable 2, k+2, 2k+2 and so on.
  * 
  * @author Michael Zinsmaier (University of Konstanz)
+ * @implNote op names='thread.chunker', priority='-10000.'
  */
-@Plugin(type = Op.class, name = "thread.chunker", priority = Priority.VERY_LOW)
 public class ChunkerInterleaved implements Inplaces.Arity3_1<Chunk, Long, ExecutorService>{
 
 	private String cancellationMsg;

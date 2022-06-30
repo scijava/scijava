@@ -32,7 +32,6 @@ package net.imagej.ops2.imagemoments.centralmoments;
 import java.util.List;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
@@ -41,7 +40,6 @@ import net.imglib2.util.Intervals;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.centralMoment02}.
@@ -52,8 +50,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='imageMoments.centralMoment02', label='Image Moment: CentralMoment02'
  */
-@Plugin(type = Op.class, name = "imageMoments.centralMoment02", label = "Image Moment: CentralMoment02")
 public class DefaultCentralMoment02<I extends RealType<I>, O extends RealType<O>>
 		implements AbstractImageMomentOp<I, O> {
 

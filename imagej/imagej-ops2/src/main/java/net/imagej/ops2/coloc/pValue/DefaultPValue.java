@@ -48,9 +48,7 @@ import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * This algorithm repeatedly executes a colocalization algorithm, computing a
@@ -58,8 +56,8 @@ import org.scijava.plugin.Plugin;
  * (2017) IEEE Signal Processing "Automated and Robust Quantification of
  * Colocalization in Dual-Color Fluorescence Microscopy: A Nonparametric
  * Statistical Approach".
+ *@implNote op names='coloc.pValue'
  */
-@Plugin(type = Op.class, name = "coloc.pValue")
 public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity7<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, Dimensions, Long, ExecutorService, PValueResult> {
 
@@ -192,7 +190,9 @@ public class DefaultPValue<T extends RealType<T>, U extends RealType<U>> impleme
 	}
 }
 
-@Plugin(type = Op.class, name = "coloc.pValue")
+/**
+ *@implNote op names='coloc.pValue'
+ */
 class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, Integer, ExecutorService, PValueResult> {
 
@@ -219,7 +219,9 @@ class PValueSimpleWithRandomizations<T extends RealType<T>, U extends RealType<U
 
 }
 
-@Plugin(type = Op.class, name = "coloc.pValue")
+/**
+ *@implNote op names='coloc.pValue'
+ */
 class PValueSimple<T extends RealType<T>, U extends RealType<U>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double>, ExecutorService, PValueResult> {
 

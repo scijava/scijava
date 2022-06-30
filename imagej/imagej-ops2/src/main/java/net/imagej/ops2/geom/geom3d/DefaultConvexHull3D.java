@@ -44,8 +44,6 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * This quickhull implementation is based on the paper
@@ -55,8 +53,8 @@ import org.scijava.plugin.Plugin;
  * implementation (http://www.cs.ubc.ca/~lloyd/java/quickhull3d.html).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='geom.convexHull'
  */
-@Plugin(type = Op.class, name = "geom.convexHull")
 public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 {
 
@@ -610,7 +608,9 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 
 }
 
-@Plugin(type = Op.class, name = "geom.convexHullEpsilon")
+/**
+ *@implNote op names='geom.convexHullEpsilon'
+ */
 class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 {
 

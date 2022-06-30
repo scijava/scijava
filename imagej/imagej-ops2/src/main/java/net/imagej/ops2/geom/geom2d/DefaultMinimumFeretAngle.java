@@ -36,11 +36,11 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Pair;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "geom.minimumFeretsAngle")
+/**
+ *@implNote op names='geom.minimumFeretsAngle'
+ */
 public class DefaultMinimumFeretAngle implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.minimumFeret")

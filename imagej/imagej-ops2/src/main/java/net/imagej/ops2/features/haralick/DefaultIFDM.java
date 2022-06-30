@@ -33,9 +33,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Implementation of Inverse Difference Moment Haralick Feature based on
  * http://www.uio.no/studier/emner/matnat/ifi/INF4300/h08/undervisningsmateriale/glcm.pdf
@@ -44,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='features.haralick.ifdm'
  */
-@Plugin(type = Op.class, name = "features.haralick.ifdm")
 public class DefaultIFDM<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	/**

@@ -49,9 +49,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 import org.scijava.util.IntArray;
 
 /**
@@ -64,8 +62,8 @@ import org.scijava.util.IntArray;
  * @author Ellen T Arena
  * @author Shulei Wang
  * @author Curtis Rueden
+ *@implNote op names='coloc.maxTKendallTau'
  */
-@Plugin(type = Op.class, name = "coloc.maxTKendallTau")
 public class MTKT<T extends RealType<T>, U extends RealType<U>>
 	implements Functions.Arity3<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Long, Double> 
 {
@@ -249,7 +247,9 @@ public class MTKT<T extends RealType<T>, U extends RealType<U>>
 
 }
 
-@Plugin(type = Op.class, name = "coloc.maxTKendallTau")
+/**
+ *@implNote op names='coloc.maxTKendallTau'
+ */
 class MTKTSimple<T extends RealType<T>, U extends RealType<U>>
 	implements BiFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<U>, Double> 
 {

@@ -32,16 +32,13 @@ package net.imagej.ops2.morphology.thin;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Thinning Operation
  *
  * @author Andreas Burger, University of Konstanz
  * @author Kyle Harrington, Beth Israel Deaconess Medical Center
+ *@implNote op names='morphology.thinMorphological'
  */
-@Plugin(type = Op.class, name = "morphology.thinMorphological")
 public class ThinMorphological extends AbstractThin {
 
 	/**

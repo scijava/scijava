@@ -34,11 +34,8 @@ import java.util.function.Function;
 import net.imagej.mesh.Mesh;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Compactness}.
@@ -50,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * (36*PI)/(area^3/volume^2).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.compactness', label='Geometric (3D): Compactness', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.compactness", label = "Geometric (3D): Compactness", priority = Priority.VERY_HIGH)
 public class DefaultCompactness implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.boundarySize")

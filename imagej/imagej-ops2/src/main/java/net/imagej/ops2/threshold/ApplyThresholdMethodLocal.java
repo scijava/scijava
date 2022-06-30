@@ -33,7 +33,6 @@ package net.imagej.ops2.threshold;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.histogram.Histogram1d;
@@ -42,9 +41,7 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Ops which compute and apply a local threshold to an image.
@@ -57,7 +54,9 @@ public final class ApplyThresholdMethodLocal {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	@Plugin(type = Op.class, name = "threshold.huang")
+	/**
+ *@implNote op names='threshold.huang'
+ */
 	public static class LocalHuang<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -71,7 +70,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.ij1")
+	/**
+ *@implNote op names='threshold.ij1'
+ */
 	public static class LocalIJ1<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -85,7 +86,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.intermodes")
+	/**
+ *@implNote op names='threshold.intermodes'
+ */
 	public static class LocalIntermodes<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -99,7 +102,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.isoData")
+	/**
+ *@implNote op names='threshold.isoData'
+ */
 	public static class LocalIsoData<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -113,7 +118,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.li")
+	/**
+ *@implNote op names='threshold.li'
+ */
 	public static class LocalLi<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -127,7 +134,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.maxEntropy")
+	/**
+ *@implNote op names='threshold.maxEntropy'
+ */
 	public static class LocalMaxEntropy<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -141,7 +150,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.maxLikelihood")
+	/**
+ *@implNote op names='threshold.maxLikelihood'
+ */
 	public static class LocalMaxLikelihood<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -155,7 +166,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.mean")
+	/**
+ *@implNote op names='threshold.mean'
+ */
 	public static class LocalHistogramBasedMean<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -169,7 +182,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.minError")
+	/**
+ *@implNote op names='threshold.minError'
+ */
 	public static class LocalMinError<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -183,7 +198,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.minimum")
+	/**
+ *@implNote op names='threshold.minimum'
+ */
 	public static class LocalMinimum<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -197,7 +214,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.moments")
+	/**
+ *@implNote op names='threshold.moments'
+ */
 	public static class LocalMoments<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -211,7 +230,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.otsu")
+	/**
+ *@implNote op names='threshold.otsu'
+ */
 	public static class LocalOtsu<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -225,7 +246,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.percentile")
+	/**
+ *@implNote op names='threshold.percentile'
+ */
 	public static class LocalPercentile<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -239,7 +262,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.renyiEntropy")
+	/**
+ *@implNote op names='threshold.renyiEntropy'
+ */
 	public static class LocalRenyiEntropy<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -253,7 +278,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.rosin")
+	/**
+ *@implNote op names='threshold.rosin'
+ */
 	public static class LocalRosin<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -267,7 +294,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.shanbhag")
+	/**
+ *@implNote op names='threshold.shanbhag'
+ */
 	public static class LocalShanbhag<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -281,7 +310,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.triangle")
+	/**
+ *@implNote op names='threshold.triangle'
+ */
 	public static class LocalTriangle<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{
@@ -295,7 +326,9 @@ public final class ApplyThresholdMethodLocal {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.yen")
+	/**
+ *@implNote op names='threshold.yen'
+ */
 	public static class LocalYen<T extends RealType<T>> extends
 		AbstractApplyLocalHistogramBasedThreshold<T>
 	{

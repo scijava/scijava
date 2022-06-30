@@ -40,10 +40,7 @@ import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.IntervalIndexer;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 
 
@@ -306,7 +303,9 @@ class NextPhaseCal<T extends RealType<T>> implements Callable<Void> {
 	}
 }
 
-@Plugin(type = Op.class, name = "image.distanceTransform", priority = Priority.LAST)
+/**
+ * @implNote op names='image.distanceTransform', priority='1e-300'
+ */
 class DefaultDistanceTransformCalibrationOp <B extends BooleanType<B>, T extends RealType<T>>implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>>{
 
 	/**

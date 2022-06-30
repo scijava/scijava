@@ -45,9 +45,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of Tamura's Directionality Feature
@@ -55,9 +53,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @param <I>
  * @param <O>
+ * @implNote op names='features.tamura.directionality'
  */
-@SuppressWarnings("rawtypes")
-@Plugin(type = Op.class, name = "features.tamura.directionality")
 public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity2<RandomAccessibleInterval<I>, Integer, O> {
 

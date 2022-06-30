@@ -37,10 +37,8 @@ package org.scijava.ops.engine.adapt.lift;
 import java.util.function.Function;
 
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.OpField;
 
 /**
  * Collection of ops designed to lift {@link Inplaces} to operate

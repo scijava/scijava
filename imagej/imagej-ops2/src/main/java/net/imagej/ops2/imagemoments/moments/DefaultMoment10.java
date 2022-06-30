@@ -32,15 +32,12 @@ package net.imagej.ops2.imagemoments.moments;
 import java.util.List;
 
 import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
-import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 
-import org.scijava.Priority;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.moment10}.
@@ -49,9 +46,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='imageMoments.moment10', label='Image Moment: Moment10', priority='10000.'
  */
-@Plugin(type = Op.class, name = "imageMoments.moment10", label = "Image Moment: Moment10",
-	priority = Priority.VERY_HIGH)
 public class DefaultMoment10<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

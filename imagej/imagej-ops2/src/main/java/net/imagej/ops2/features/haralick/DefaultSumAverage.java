@@ -36,17 +36,15 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of Sum Average Haralick Feature
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.sumAverage'
  */
-@Plugin(type = Op.class, name = "features.haralick.sumAverage")
 public class DefaultSumAverage<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXPlusY")

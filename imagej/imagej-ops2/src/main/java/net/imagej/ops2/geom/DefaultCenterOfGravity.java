@@ -39,15 +39,14 @@ import net.imglib2.roi.IterableRegion;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * This {@link Op} computes the center of gravity of a {@link IterableRegion}
  * (Label).
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='geom.centerOfGravity'
  */
-@Plugin(type = Op.class, name = "geom.centerOfGravity")
 public class DefaultCenterOfGravity<T extends RealType<T>> implements Function<IterableInterval<T>, RealLocalizable> {
 
 	/**

@@ -37,17 +37,15 @@ import net.imglib2.IterableInterval;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.util.Maps;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copies an {@link IterableInterval} into another {@link IterableInterval}
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ * @implNote op names='copy, copy.iterableInterval', priority='1.0'
  */
-@Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
 public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, IterableInterval<T>> {
 
 	// used internally
@@ -70,7 +68,9 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 	}
 }
 
-@Plugin(type = Op.class, name = "copy, copy.iterableInterval", priority = 1.0)
+/**
+ *@implNote op names='copy, copy.iterableInterval', priority='1.0'
+ */
 class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterval<T>> {
 
 	@OpDependency(name = "create.img")

@@ -31,12 +31,11 @@ package net.imagej.ops2.math.multiply;
 
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "math.complexConjugateMultiply", priority = Priority.LOW)
+/**
+ * @implNote op names='math.complexConjugateMultiply', priority='-100.'
+ */
 public class ComplexConjugateMultiplyOp<T extends ComplexType<T>> implements Computers.Arity2<T, T, T> {
 
 	// TODO: extend common abstract base class which implements Contingent

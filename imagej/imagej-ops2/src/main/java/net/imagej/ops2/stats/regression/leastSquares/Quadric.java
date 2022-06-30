@@ -38,8 +38,6 @@ import org.joml.Vector3d;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.random.Deterministic;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An op that fits a quadratic surface (quadric) into a set of points.
@@ -55,8 +53,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  *
  * @author Richard Domander (Royal Veterinary College, London)
+ *@implNote op names='stats.leastSquares'
  */
-@Plugin(type = Op.class, name = "stats.leastSquares")
 public class Quadric implements
 	Function<Collection<Vector3d>, Matrix4d> 
 {

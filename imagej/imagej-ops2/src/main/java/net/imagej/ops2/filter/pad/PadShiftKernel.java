@@ -40,9 +40,7 @@ import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op used to pad a kernel and shift the center of the kernel to the origin
@@ -51,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ *@implNote op names='filter.padShiftKernel'
  */
-@Plugin(type = Op.class, name = "filter.padShiftKernel")
 public class PadShiftKernel<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 	implements BiFunction<I, Dimensions, O> 
 {

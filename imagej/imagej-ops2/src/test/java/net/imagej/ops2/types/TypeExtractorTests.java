@@ -13,9 +13,6 @@ import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 import org.scijava.types.TypeExtractor;
 
 /**
@@ -24,10 +21,11 @@ import org.scijava.types.TypeExtractor;
  * @author Gabriel Selzer
  *
  */
-@Plugin(type = OpCollection.class)
 public class TypeExtractorTests extends AbstractOpTest {
 
-	@OpField(names = "test.oobcvfTypeExtractor", params = "oobf, output")
+	/**
+	 * @implNote op names='test.oobcvfTypeExtractor'
+	 */
 	public final Function<OutOfBoundsConstantValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, String> func = (
 			oobf) -> "oobcvf";
 
@@ -43,7 +41,9 @@ public class TypeExtractorTests extends AbstractOpTest {
 	}
 
 	// Test Op returns a string different from the one above
-	@OpField(names = "test.oobrvfTypeExtractor", params = "oobf, input, output")
+	/**
+	 * @implNote op names='test.oobrvfTypeExtractor'
+	 */
 	public final BiFunction<OutOfBoundsRandomValueFactory<UnsignedByteType, RandomAccessibleInterval<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>, String> funcRandom = ( oobf, rai) -> "oobrvf"; 
 	
 	@Test public void testOutOfBoundsRandomValueFactoryTypeExtractors() { 

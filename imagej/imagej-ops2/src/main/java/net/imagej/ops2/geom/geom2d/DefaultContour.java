@@ -44,9 +44,6 @@ import net.imglib2.type.Type;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Generic implementation of {@code geom.contour}.
  * 
@@ -56,8 +53,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @author Daniel Seebacher (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='geom.contour'
  */
-@Plugin(type = Op.class, name = "geom.contour")
 public class DefaultContour<B extends BooleanType<B>>
 		implements BiFunction<RandomAccessibleInterval<B>, Boolean, Polygon2D> {
 

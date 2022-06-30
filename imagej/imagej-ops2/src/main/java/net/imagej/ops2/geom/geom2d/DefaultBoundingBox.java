@@ -39,15 +39,12 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Generic implementation of {@code geom.boundingBox}.
  *
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='geom.boundingBox'
  */
-@Plugin(type = Op.class, name = "geom.boundingBox")
 public class DefaultBoundingBox implements Function<Polygon2D, Polygon2D> {
 
 	/**

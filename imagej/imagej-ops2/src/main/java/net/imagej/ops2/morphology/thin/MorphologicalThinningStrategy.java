@@ -33,14 +33,13 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.type.logic.BitType;
 
-import org.scijava.plugin.Plugin;
 
 /**
  * A Class implementing a standard morphological thinning.
  *
  * @author Andreas Burger, University of Konstanz
+ * @implNote thinningstrategy names='Morphological'
  */
-@Plugin(type = ThinningStrategy.class, name = "Morphological")
 public class MorphologicalThinningStrategy extends
 	Abstract3x3NeighbourhoodThinning
 {

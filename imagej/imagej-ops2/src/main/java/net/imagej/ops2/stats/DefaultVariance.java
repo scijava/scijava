@@ -36,13 +36,10 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.LongType;
 import net.imglib2.type.numeric.real.DoubleType;
-import net.imglib2.util.Util;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.variance} using the
@@ -57,8 +54,8 @@ import org.scijava.plugin.Plugin;
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Two-pass_algorithm">
  *      Wikipedia </a>
+ * @implNote op names='stats.variance', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.variance", priority = Priority.HIGH)
 public class DefaultVariance<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.mean")

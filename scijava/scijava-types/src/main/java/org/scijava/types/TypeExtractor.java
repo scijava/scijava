@@ -34,7 +34,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.SingletonPlugin;
 
 /**
  * A plugin for extracting generic {@link Type} from instances at runtime.

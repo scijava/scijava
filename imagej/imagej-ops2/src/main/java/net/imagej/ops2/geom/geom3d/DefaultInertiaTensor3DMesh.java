@@ -40,14 +40,13 @@ import org.apache.commons.math3.linear.BlockRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * This {@link Op} computes the 2nd multi variate of a {@link Mesh} (Label).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='geom.secondMoment'
  */
-@Plugin(type = Op.class, name = "geom.secondMoment")
 public class DefaultInertiaTensor3DMesh implements Function<Mesh, RealMatrix> {
 
 	@OpDependency(name = "geom.centroid")

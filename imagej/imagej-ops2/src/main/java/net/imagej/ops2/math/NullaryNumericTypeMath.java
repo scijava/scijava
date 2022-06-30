@@ -33,9 +33,6 @@ import net.imglib2.type.Type;
 import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
-import org.scijava.plugin.Plugin;
 
 /**
  * Nullary Ops of the {@code math} namespace which operate on
@@ -43,19 +40,21 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Leon Yang
  */
-@Plugin(type = OpCollection.class)
 public class NullaryNumericTypeMath <T extends Type<T>, N extends NumericType<N>>{
 
 	/**
 	 * Sets the output to a constant.
+	 * @input constant
+	 * @container output
+	 * @implNote op names='math.assign'
 	 */
-	@OpField(names = "math.assign", params = "constant, output")
 	public final Computers.Arity1<T, T> assigner = (constant, output) -> output.set(constant);
 
 	/**
 	 * Sets the output to zero.
+	 * @container output
+	 * @implNote op names='math.zero'
 	 */
-	@OpField(names = "math.zero", params = "output")
 	public final Computers.Arity0<N> zeroer = (output) -> output.setZero();
 
 }

@@ -32,14 +32,9 @@ package net.imagej.ops2.geom.geom3d;
 import net.imagej.mesh.Mesh;
 import net.imagej.ops2.geom.AbstractBoxivity;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.boxivity', label='Geometric (3D): Boxivity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.boxivity",
-	label = "Geometric (3D): Boxivity", priority = Priority.VERY_HIGH)
 public class DefaultBoxivityMesh extends AbstractBoxivity<Mesh> {
 }

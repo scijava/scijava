@@ -219,6 +219,7 @@
 
 		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
 		<releaseProfiles>deploy-to-imagej</releaseProfiles>
+		<therapi.packages></therapi.packages>
 	</properties>
 
 	<build>

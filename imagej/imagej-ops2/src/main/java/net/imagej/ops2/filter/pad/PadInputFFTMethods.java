@@ -35,12 +35,9 @@ import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.Priority;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op used to pad the image to a size that is compatible with FFTMethods
@@ -49,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padInputFFTMethods', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padInputFFTMethods", priority = Priority.HIGH)
 public class PadInputFFTMethods<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		extends PadInputFFT<T, I, O> {
 	

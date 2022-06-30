@@ -41,8 +41,6 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Performs a bilateral filter on an image.
@@ -50,9 +48,8 @@ import org.scijava.plugin.Plugin;
  * @author Gabe Selzer
  * @param <I>
  * @param <O>
+ *@implNote op names='filter.bilateral'
  */
-
-@Plugin(type = Op.class, name = "filter.bilateral")
 public class DefaultBilateral<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity4<RandomAccessibleInterval<I>, Double, Double, Integer, RandomAccessibleInterval<O>> {
 

@@ -33,17 +33,14 @@ import net.imglib2.RealLocalizable;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Computes the size (i.e. area) of a {@link Polygon2D}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.size', label='Geometric (2D): Size', priority = '9999.'
  */
-@Plugin(type = Op.class, name = "geom.size", label = "Geometric (2D): Size", priority = Priority.VERY_HIGH - 1)
 public class DefaultSizePolygon implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	/**

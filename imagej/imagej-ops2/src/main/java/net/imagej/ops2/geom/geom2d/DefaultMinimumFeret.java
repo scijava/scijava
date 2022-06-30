@@ -41,16 +41,14 @@ import net.imglib2.util.ValuePair;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Line;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Minimum Feret of a polygon.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ *@implNote op names='geom.minimumFeret'
  */
-@Plugin(type = Op.class, name = "geom.minimumFeret")
 public class DefaultMinimumFeret implements Function<Polygon2D, Pair<RealLocalizable, RealLocalizable>> {
 
 	@OpDependency(name = "geom.convexHull")

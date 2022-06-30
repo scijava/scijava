@@ -38,11 +38,8 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.composite.Composite;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -59,9 +56,8 @@ import org.scijava.plugin.Plugin;
  *
  * @see ComputeLocalPhansalkarThreshold
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op name='threshold.localPhansalkar', priority='-101.'
  */
-@Plugin(type = Op.class, name = "threshold.localPhansalkar",
-	priority = Priority.LOW - 1)
 public class ComputeLocalPhansalkarThresholdIntegral<T extends RealType<T>>
 	implements
 	Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType>

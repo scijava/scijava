@@ -42,13 +42,12 @@
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;
-//import org.scijava.plugin.Plugin;
 //
 ///**
 // * @author Martin Horn (University of Konstanz)
 // * @author Gabe Selzer
+// * @implNote op names='image.invert'
 // */
-//@Plugin(type = Op.class, name = "image.invert") 
 //public class InvertII<T extends RealType<T>> implements
 //	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> 
 //{

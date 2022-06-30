@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;

@@ -36,8 +36,6 @@ import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An equation operation which computes image values from coordinates using
@@ -45,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * coordinates
  * 
  * @author Brian Northan
+ *@implNote op names='image.equation'
  */
-@Plugin(type = Op.class, name = "image.equation")
 public class DefaultCoordinatesEquation<T extends RealType<T>, N extends Number>
 		implements Computers.Arity1<Function<long[], N>, IterableInterval<T>> {
 

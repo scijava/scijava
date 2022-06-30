@@ -32,16 +32,14 @@ package net.imagej.ops2.convert.clip;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copies the value of one {@link RealType} to another, and clips values which
  * are outside of the output types range.
  *
  * @author Martin Horn (University of Konstanz)
+ *@implNote op names='convert.clip'
  */
-@Plugin(type = Op.class, name = "convert.clip")
 public class ClipRealTypes<I extends RealType<I>, O extends RealType<O>>
 	implements Computers.Arity1<I, O>
 {

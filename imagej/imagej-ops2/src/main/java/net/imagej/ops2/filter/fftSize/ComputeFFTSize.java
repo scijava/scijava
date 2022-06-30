@@ -37,15 +37,13 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op that calculates FFT sizes.
  * 
  * @author Brian Northan
+ *@implNote op names='filter.fftSize'
  */
-@Plugin(type = Op.class, name = "filter.fftSize")
 public class ComputeFFTSize implements Functions.Arity5<Dimensions, long[], long[], Boolean, Boolean, Pair<long[], long[]>> {
 
 	/**

@@ -42,11 +42,8 @@ import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Computes Richardson Lucy correction factor for (@link
@@ -57,9 +54,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  * @param <O>
  * @param <C>
+ * @implNote op names='deconvolve.richardsonLucyCorrection', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucyCorrection",
-	priority = Priority.HIGH)
 public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<O>, C extends ComplexType<C>>
 	implements
 	Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>>

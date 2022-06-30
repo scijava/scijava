@@ -36,16 +36,14 @@ import net.imglib2.RealPoint;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@code geom.centroid}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.centroid', label='Geometric: Center of Gravity'
  */
-@Plugin(type = Op.class, name = "geom.centroid", label = "Geometric: Center of Gravity")
 public class CentroidPolygon implements Function<Polygon2D, RealLocalizable> {
 
 	@OpDependency(name = "geom.size")

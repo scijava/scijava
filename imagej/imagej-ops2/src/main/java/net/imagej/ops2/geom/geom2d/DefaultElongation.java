@@ -38,9 +38,7 @@ import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@code geom.mainElongation} based on
@@ -48,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * shape_descriptors_survey.pdf.
  * 
  * @author Tim-Oliver Buchholz, University of Konstanz
+ * @implNote op names='geom.mainElongation', label='Geometric (2D): Elongation'
  */
-@Plugin(type = Op.class, name = "geom.mainElongation", label = "Geometric (2D): Elongation")
 public class DefaultElongation implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.smallestEnclosingBoundingBox")

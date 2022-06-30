@@ -36,10 +36,7 @@ import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Forward FFT computer that operates on an RAI and wraps FFTMethods. The input
@@ -50,8 +47,8 @@ import org.scijava.plugin.Plugin;
  * @author Brian Northan
  * @param <T>
  * @param <C>
+ * @implNote op names='filter.fft', priority='0.'
  */
-@Plugin(type = Op.class, name = "filter.fft", priority = Priority.NORMAL)
 public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	implements Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>>
 {

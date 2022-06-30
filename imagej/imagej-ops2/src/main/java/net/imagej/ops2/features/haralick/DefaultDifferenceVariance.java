@@ -35,9 +35,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * 
@@ -48,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @author Tim-Oliver Buchholz (University of Konstanz)
  *
  *         Formula based on: http://haralick.org/journals/TexturalFeatures.pdf
+ *@implNote op names='features.haralick.differenceVariance'
  */
-@Plugin(type = Op.class, name = "features.haralick.differenceVariance")
 public class DefaultDifferenceVariance<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	@OpDependency(name = "features.haralick.coocPXMinusY")

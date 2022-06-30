@@ -32,11 +32,9 @@ package net.imagej.ops2.stats;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.moment4AboutMean} using
@@ -47,8 +45,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ * @implNote op names='stats.moment4AboutMean', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.moment4AboutMean", priority = Priority.HIGH)
 public class DefaultMoment4AboutMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.momentNAboutMean")

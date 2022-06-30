@@ -11,27 +11,33 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
-import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = OpCollection.class)
 public class LiftComputersToRAITest<I extends RealType<I>, O extends RealType<O>> extends AbstractOpTest {
 
-	@OpField(names = "test.liftImg", params = "input, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Computers.Arity1<I, O> testOp = (in, out) -> out.setReal(10.);
 
-	@OpField(names = "test.liftImg", params = "input1, input2, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Computers.Arity2<I, I, O> testOp2 = (in1, in2, out) -> out.setReal(20.);
 
-	@OpField(names = "test.liftImg", params = "input1, input2, input3, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Computers.Arity3<I, I, I, O> testOp3 = (in1, in2, in3, out) -> out.setReal(30.);
 
-	@OpField(names = "test.liftImg", params = "input1, input2, input3, input4, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Computers.Arity4<I, I, I, I, O> testOp4 = (in1, in2, in3, in4, out) -> out.setReal(40.);
 
-	@OpField(names = "test.liftImg", params = "input1, input2, input3, input4, input5, output")
+	/**
+	 * @implNote op names='test.liftImg'
+	 */
 	public final Computers.Arity5<I, I, I, I, I, O> testOp5 = (in1, in2, in3, in4, in5, out) -> out.setReal(50.);
 
 	@Test

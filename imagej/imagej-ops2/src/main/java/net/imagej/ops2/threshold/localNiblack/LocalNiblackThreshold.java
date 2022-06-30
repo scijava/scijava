@@ -45,14 +45,12 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.composite.Composite;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = "threshold.localNiblack",
-	priority = Priority.LOW)
+/**
+ * @implNote op names='threshold.localNiblack', priority='-100.'
+ */
 public class LocalNiblackThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity5<RandomAccessibleInterval<T>, Shape, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

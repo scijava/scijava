@@ -48,8 +48,8 @@ import net.imglib2.util.Pair;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Test FFT implementations

@@ -36,7 +36,6 @@ import java.math.BigInteger;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
-import net.imagej.types.UnboundedIntegerType;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;

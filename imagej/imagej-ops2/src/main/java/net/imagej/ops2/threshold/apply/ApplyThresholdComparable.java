@@ -32,8 +32,6 @@ package net.imagej.ops2.threshold.apply;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Applies a threshold value (the second input) to the given comparable object,
@@ -41,8 +39,8 @@ import org.scijava.plugin.Plugin;
  * threshold.
  *
  * @author Martin Horn (University of Konstanz)
+ *@implNote op names='threshold.apply'
  */
-@Plugin(type = Op.class, name = "threshold.apply")
 public class ApplyThresholdComparable<T> implements
 	Computers.Arity2<Comparable<? super T>, T, BitType>
 {

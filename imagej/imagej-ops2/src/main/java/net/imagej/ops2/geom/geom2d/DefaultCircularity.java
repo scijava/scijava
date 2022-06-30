@@ -35,9 +35,7 @@ import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@code geom.circularity}.
@@ -45,8 +43,8 @@ import org.scijava.plugin.Plugin;
  * Based on https://imagej.nih.gov/ij/plugins/circularity.html.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.circularity', label='Geometric (2D): Circularity'
  */
-@Plugin(type = Op.class, name = "geom.circularity", label = "Geometric (2D): Circularity")
 public class DefaultCircularity implements Computers.Arity1<Polygon2D, DoubleType> {
 
 	@OpDependency(name = "geom.size")

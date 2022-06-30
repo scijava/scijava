@@ -35,18 +35,15 @@ import java.util.Set;
 import net.imglib2.roi.labeling.LabelingMapping;
 import net.imglib2.roi.labeling.LabelingMapping.SerialisationAccess;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copies a {@link LabelingMapping} into another {@link LabelingMapping}
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <L>
+ * @implNote op names='copy, copy.labelingMapping', priority='10000.'
  */
-@Plugin(type = Op.class, name = "copy, copy.labelingMapping", priority = Priority.VERY_HIGH)
 public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<L>, LabelingMapping<L>> {
 
 	/**
@@ -64,7 +61,9 @@ public class CopyLabelingMapping<L> implements Computers.Arity1<LabelingMapping<
 
 }
 
-//@Plugin(type = Op.class, name = "copy.labelingMapping", priority = Priority.VERY_HIGH)
+///**
+// *@implNote op names='copy.labelingMapping', priority='10000.'
+// */
 //class CopyLabelingMappingFunction<L> implements Function<LabelingMapping<L>, LabelingMapping<L>> {
 //
 //	@OpDependency(name = "copy.labelingMapping")

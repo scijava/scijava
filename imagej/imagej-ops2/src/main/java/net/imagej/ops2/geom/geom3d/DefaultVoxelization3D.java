@@ -44,9 +44,7 @@ import net.imglib2.type.logic.BitType;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -59,8 +57,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  * 
  * @author Kyle Harrington (University of Idaho)
+ *@implNote op names='geom.voxelization'
  */
-@Plugin(type = Op.class, name = "geom.voxelization")
 public class DefaultVoxelization3D
 		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 

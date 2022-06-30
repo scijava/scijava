@@ -37,7 +37,6 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.minMax}.
@@ -46,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I>
  *            input type
+ *@implNote op names='stats.minMax'
  */
-@Plugin(type = Op.class, name = "stats.minMax")
 public class IterableMinMax<I extends RealType<I>> implements Function<Iterable<I>, Pair<I, I>> {
 
 	/**

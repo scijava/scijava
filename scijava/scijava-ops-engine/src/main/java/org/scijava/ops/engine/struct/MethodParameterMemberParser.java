@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.scijava.ValidityProblem;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
-import org.scijava.ops.spi.OpMethod;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;

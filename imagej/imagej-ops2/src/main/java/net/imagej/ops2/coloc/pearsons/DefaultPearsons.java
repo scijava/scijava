@@ -35,16 +35,13 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * A class that represents the mean calculation of the two source images in the
  * data container. It implements the FAST calculation for Pearson's Correlation.
  *
  * @author Ellen T Arena
+ *@implNote op names='coloc.pearsons'
  */
-@Plugin(type = Op.class, name = "coloc.pearsons")
 public class DefaultPearsons<T extends RealType<T>, U extends RealType<U>> implements
 	BiFunction<Iterable<T>, Iterable<U>, Double> 
 {

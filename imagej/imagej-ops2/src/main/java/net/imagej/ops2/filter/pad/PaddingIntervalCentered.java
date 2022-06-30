@@ -38,10 +38,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * Op used to calculate and return a centered padding interval given an input
  * RAI and the desired padded dimensions
@@ -50,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padIntervalCentered', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padIntervalCentered", priority = Priority.HIGH)
 public class PaddingIntervalCentered<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends Interval>
 		implements BiFunction<I, Dimensions, O> {
 

@@ -2,7 +2,6 @@
 package org.scijava.ops.api;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Log describing each execution of an Op. This class is designed to answer two

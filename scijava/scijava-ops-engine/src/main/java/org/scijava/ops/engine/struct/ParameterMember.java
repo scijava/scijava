@@ -16,7 +16,6 @@ import org.scijava.struct.Member;
  * </p>
  * 
  * @author Curtis Rueden
- * @see Parameter
  */
 public interface ParameterMember<T> extends Member<T> {
 
@@ -32,6 +31,7 @@ public interface ParameterMember<T> extends Member<T> {
 	}
 
 	/** Gets whether the parameter value must be specified (i.e., no default). */
+	@Override
 	default boolean isRequired() {
 		return true;
 	}

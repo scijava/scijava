@@ -38,17 +38,15 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.BooleanType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Extracts the holes from a binary image.
  *
  * @author Christian Dietz (University of Konstanz)
  * @author Daniel Seebacher (University of Konstanz)
+ *@implNote op names='morphology.extractHoles'
  */
-@Plugin(type = Op.class, name = "morphology.extractHoles")
 public class ExtractHoles<T extends BooleanType<T>> implements
 	Computers.Arity2<RandomAccessibleInterval<T>, Shape, RandomAccessibleInterval<T>>
 {
@@ -75,7 +73,9 @@ public class ExtractHoles<T extends BooleanType<T>> implements
 
 }
 
-@Plugin(type = Op.class, name = "morphology.extractHoles")
+/**
+ *@implNote op names='morphology.extractHoles'
+ */
 class SimpleExtractHolesComputer<T extends BooleanType<T>> implements
 	Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>>
 {

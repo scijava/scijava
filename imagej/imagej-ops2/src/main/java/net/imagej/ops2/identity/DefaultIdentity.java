@@ -30,15 +30,13 @@
 package net.imagej.ops2.identity;
 
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of the {@link IdentityOp} op.
  * 
  * @author Curtis Rueden
+ *@implNote op names='identity'
  */
-@Plugin(type = Op.class, name = "identity")
 public class DefaultIdentity<A> implements Inplaces.Arity1<A>
 {
 

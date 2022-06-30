@@ -40,7 +40,6 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.mean} from an integral image using a
@@ -49,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * @param <I>
  *            input type
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='stats.integralMean'
  */
-@Plugin(type = Op.class, name = "stats.integralMean")
 public class IntegralMean<I extends RealType<I>> implements Computers.Arity1<RectangleNeighborhood<? extends Composite<I>>, DoubleType> {
 
 	/**

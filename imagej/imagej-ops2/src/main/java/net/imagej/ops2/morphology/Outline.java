@@ -45,16 +45,14 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * The Op creates an output interval where the objects are hollow versions from
  * the input. Rectangles become outlines, solid cubes become surfaces etc.
  *
  * @author Richard Domander (Royal Veterinary College, London)
+ *@implNote op names='morphology.outline'
  */
-@Plugin(type = Op.class, name = "morphology.outline")
 public class Outline<B extends BooleanType<B>>
 		implements Computers.Arity2<RandomAccessibleInterval<B>, Boolean, RandomAccessibleInterval<BitType>> {
 

@@ -30,16 +30,13 @@ package net.imagej.ops2.features.haralick.helper;
 
 import java.util.function.Function;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * NB: Helper class. Internal usage only.
  * 
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
+ *@implNote op names='features.haralick.coocPXMinusY'
  */
-@Plugin(type = Op.class, name = "features.haralick.coocPXMinusY")
 public class CoocPXMinusY implements Function<double[][], double[]> {
 
 	/**

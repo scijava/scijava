@@ -32,12 +32,8 @@ package net.imagej.ops2.geom.geom2d;
 import net.imagej.ops2.geom.AbstractSolidity;
 import net.imglib2.roi.geom.real.Polygon2D;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.solidity', label='Geometric (2D): Solidity', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.solidity", label = "Geometric (2D): Solidity", priority = Priority.VERY_HIGH)
 public class DefaultSolidityPolygon extends AbstractSolidity<Polygon2D> {}

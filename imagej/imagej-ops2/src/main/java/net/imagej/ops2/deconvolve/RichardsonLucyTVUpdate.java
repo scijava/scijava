@@ -43,11 +43,8 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implements update step for Richardson-Lucy algorithm with total variation
@@ -58,9 +55,8 @@ import org.scijava.plugin.Plugin;
  * @author Brian Northan
  * @param <I> TODO Documentation
  * @param <T> TODO Documentation
+ * @implNote op names='deconvolve.richardsonLucyUpdate', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucyUpdate",
-	priority = Priority.HIGH)
 public class RichardsonLucyTVUpdate<T extends RealType<T> & NativeType<T>, I extends RandomAccessibleInterval<T>>
 	implements Computers.Arity3<I, Float, RandomAccessibleInterval<T>, I> 
 {

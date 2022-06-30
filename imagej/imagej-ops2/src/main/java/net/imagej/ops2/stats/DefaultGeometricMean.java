@@ -35,7 +35,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.geometricMean} using
@@ -47,8 +46,8 @@ import org.scijava.plugin.Plugin;
  *            input type
  * @param <O>
  *            output type
+ *@implNote op names='stats.geometricMean'
  */
-@Plugin(type = Op.class, name = "stats.geometricMean")
 public class DefaultGeometricMean<I extends RealType<I>, O extends RealType<O>> implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 
 	@OpDependency(name = "stats.size")

@@ -32,12 +32,8 @@ package net.imagej.ops2.geom.geom2d;
 import net.imagej.ops2.geom.AbstractBoundarySizeConvexHull;
 import net.imglib2.roi.geom.real.Polygon2D;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.boundarySizeConvexHull', label='Geometric (2D): Perimeter Convex Hull', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.boundarySizeConvexHull", label = "Geometric (2D): Perimeter Convex Hull", priority = Priority.VERY_HIGH)
 public class DefaultBoundarySizeConvexHullPolygon extends AbstractBoundarySizeConvexHull<Polygon2D> {}

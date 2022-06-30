@@ -43,13 +43,10 @@ import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Richardson Lucy function op that operates on (@link RandomAccessibleInterval)
@@ -61,8 +58,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  * @param <K>
  * @param <C>
+ * @implNote op names='deconvolve.richardsonLucy', priority='100.'
  */
-@Plugin(type = Op.class, name = "deconvolve.richardsonLucy", priority = Priority.HIGH)
 public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
 		Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {

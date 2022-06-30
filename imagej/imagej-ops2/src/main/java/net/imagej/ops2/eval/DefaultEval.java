@@ -33,8 +33,6 @@ import java.util.Map;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Evaluates an expression.
@@ -46,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Curtis Rueden
  * @see OpEvaluator
+ *@implNote op names='eval'
  */
-@Plugin(type = Op.class, name = "eval")
 public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>
 {
 

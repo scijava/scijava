@@ -35,19 +35,17 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.max}. Leans on other Ops.
  * 
  * @author Gabriel Selzer
  * @param <T> input type
+ * @implNote op names='stats.min', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.min", priority = Priority.HIGH)
 public class DefaultMin<T extends RealType<T>> implements Computers.Arity1<RandomAccessibleInterval<T>, T> {
 	
 	@OpDependency(name = "stats.minMax")

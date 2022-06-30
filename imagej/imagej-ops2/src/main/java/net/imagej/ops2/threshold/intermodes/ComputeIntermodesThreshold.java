@@ -34,10 +34,7 @@ import net.imagej.ops2.threshold.Thresholds;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.ops.engine.OpExecutionException;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 // NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
 // plugin found in Fiji (version 1.14).
@@ -47,9 +44,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ * @implNote op names='threshold.intermodes', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.intermodes",
-	priority = Priority.HIGH)
 public class ComputeIntermodesThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

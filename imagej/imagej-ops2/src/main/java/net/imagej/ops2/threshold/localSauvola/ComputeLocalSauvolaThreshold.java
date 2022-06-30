@@ -33,11 +33,8 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -56,9 +53,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  *
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localSauvola', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localSauvola",
-	priority = Priority.LOW)
 public class ComputeLocalSauvolaThreshold<T extends RealType<T>> implements
 	Computers.Arity4<Iterable<T>, T, Double, Double, BitType>
 {

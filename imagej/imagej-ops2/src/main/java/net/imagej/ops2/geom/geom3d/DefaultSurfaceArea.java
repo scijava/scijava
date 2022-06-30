@@ -34,17 +34,14 @@ import net.imagej.mesh.Triangle;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.BoundarySize}.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.boundarySize', label='Geometric (3D): Surface Area', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.boundarySize", label = "Geometric (3D): Surface Area", priority = Priority.VERY_HIGH)
 public class DefaultSurfaceArea implements Computers.Arity1<Mesh, DoubleType> {
 
 	/**

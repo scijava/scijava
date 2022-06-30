@@ -37,9 +37,7 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Normalizes an {@link RandomAccessibleInterval} given its minimum and maximum to
@@ -51,8 +49,8 @@ import org.scijava.plugin.Plugin;
  * @author Leon Yang
  * @param <I> - the type of the input image
  * @param <O> - the type of the output image
+ *@implNote op names='image.normalize'
  */
-@Plugin(type = Op.class, name = "image.normalize")
 public class NormalizeIILazy<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> {
 

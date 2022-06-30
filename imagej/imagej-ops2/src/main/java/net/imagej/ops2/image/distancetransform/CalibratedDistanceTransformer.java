@@ -36,8 +36,6 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Passes an input image of any dimension off to the correct Distance Transform
@@ -51,8 +49,8 @@ import org.scijava.plugin.Plugin;
  *            - the {@link BooleanType} of the input image
  * @param <T>
  *            - the {@link RealType} of the output image
+ *@implNote op names='image.distanceTransform'
  */
-@Plugin(type = Op.class, name = "image.distanceTransform")
 public class CalibratedDistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
 		implements Computers.Arity3<RandomAccessibleInterval<B>, double[], ExecutorService, RandomAccessibleInterval<T>> {
 

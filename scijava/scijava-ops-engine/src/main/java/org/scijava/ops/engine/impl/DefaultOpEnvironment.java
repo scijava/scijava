@@ -29,7 +29,6 @@
 
 package org.scijava.ops.engine.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;

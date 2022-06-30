@@ -38,12 +38,9 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Function that uses FFTMethods to perform a forward FFT
@@ -53,8 +50,8 @@ import org.scijava.plugin.Plugin;
  *            TODO Documentation
  * @param <C>
  *            TODO Documentation
+ * @implNote op names='filter.fft', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.fft", priority = Priority.HIGH)
 public class FFTMethodsOpF<T extends RealType<T>, C extends ComplexType<C>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, long[], Boolean, C, ExecutorService, RandomAccessibleInterval<C>> {
 

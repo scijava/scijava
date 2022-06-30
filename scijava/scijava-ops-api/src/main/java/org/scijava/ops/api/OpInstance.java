@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 
 import org.scijava.types.GenericTyped;
-import org.scijava.util.Types;
 
 /**
  * An instance of an {@link OpInfo}

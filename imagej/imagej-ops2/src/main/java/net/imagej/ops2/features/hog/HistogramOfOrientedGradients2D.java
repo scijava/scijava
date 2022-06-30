@@ -59,9 +59,7 @@ import net.imglib2.view.composite.GenericComposite;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Calculates a histogram of oriented gradients which is a feature descriptor.
@@ -76,8 +74,8 @@ import org.scijava.plugin.Plugin;
  * Human Detection" by Navneet Dalal and Bill Triggs, published 2005.
  * 
  * @author Simon Schmid (University of Konstanz)
+ *@implNote op names='features.hog'
  */
-@Plugin(type = Op.class, name = "features.hog")
 public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -275,7 +273,9 @@ public class HistogramOfOrientedGradients2D<T extends RealType<T>> implements
 	}
 }
 
-@Plugin(type = Op.class, name = "features.hog")
+/**
+ *@implNote op names='features.hog'
+ */
 class HistogramOfOrientedGradients2DFunction<T extends RealType<T>> implements
 		Functions.Arity4<RandomAccessibleInterval<T>, Integer, Integer, ExecutorService, RandomAccessibleInterval<T>> {
 

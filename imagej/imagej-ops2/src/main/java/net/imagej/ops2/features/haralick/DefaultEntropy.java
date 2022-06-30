@@ -33,9 +33,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 /**
  * 
  * Implementation of Entropy Haralick Feature Definition: -( sum_{i=1}^q
@@ -44,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * @author Andreas Graumann (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ *@implNote op names='features.haralick.entropy'
  */
-@Plugin(type = Op.class, name = "features.haralick.entropy")
 public class DefaultEntropy<T extends RealType<T>> extends AbstractHaralickFeature<T> {
 
 	// Avoid log 0

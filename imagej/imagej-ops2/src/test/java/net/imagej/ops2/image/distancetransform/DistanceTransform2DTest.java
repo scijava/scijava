@@ -30,17 +30,17 @@ package net.imagej.ops2.image.distancetransform;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-import org.scijava.thread.ThreadService;
-import org.scijava.util.MersenneTwisterFast;
-
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
+
+import org.junit.jupiter.api.Test;
+import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
+import org.scijava.util.MersenneTwisterFast;
 
 /**
  * @author Simon Schmid (University of Konstanz)

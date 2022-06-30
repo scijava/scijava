@@ -32,16 +32,14 @@ package net.imagej.ops2.copy;
 import net.imglib2.type.Type;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copy {@link Type} to another {@link Type}
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='copy, copy.type'
  */
-@Plugin(type = Op.class, name = "copy, copy.type")
 public class CopyType<T extends Type<T>> implements Computers.Arity1<T, T> {
 
 	/**

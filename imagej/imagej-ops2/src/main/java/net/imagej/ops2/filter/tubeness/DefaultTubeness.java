@@ -50,9 +50,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.Cancelable;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * The Tubeness filter: enhance filamentous structures of a specified thickness.
@@ -92,8 +90,8 @@ import org.scijava.plugin.Plugin;
  * @author Jean-Yves Tinevez
  * @param <T>
  *            the type of the source pixels. Must extends {@link RealType}.
+ *@implNote op names='filter.tubeness'
  */
-@Plugin(type = Op.class, name = "filter.tubeness")
 public class DefaultTubeness<T extends RealType<T>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
 		Cancelable {
@@ -254,7 +252,9 @@ public class DefaultTubeness<T extends RealType<T>> implements
 
 }
 
-@Plugin(type = Op.class, name = "filter.tubeness")
+/**
+ *@implNote op names='filter.tubeness'
+ */
 class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, ExecutorService, Double, IterableInterval<DoubleType>> {
 

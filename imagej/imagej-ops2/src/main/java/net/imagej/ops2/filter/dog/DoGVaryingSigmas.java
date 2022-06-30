@@ -37,9 +37,7 @@ import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.NumericType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Difference of Gaussians (DoG) implementation where sigmas can vary by
@@ -47,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='filter.DoG'
  */
-@Plugin(type = Op.class, name = "filter.DoG")
 public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, double[], double[], OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 
@@ -88,7 +86,9 @@ public class DoGVaryingSigmas<T extends NumericType<T> & NativeType<T>> implemen
 
 }
 
-@Plugin(type = Op.class, name = "filter.DoG")
+/**
+ *@implNote op names='filter.DoG'
+ */
 class DoGSingleSigma<T extends NumericType<T> & NativeType<T>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Double, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, ExecutorService, RandomAccessibleInterval<T>> {
 

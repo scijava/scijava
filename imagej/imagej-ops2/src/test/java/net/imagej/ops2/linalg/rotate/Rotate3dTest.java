@@ -39,8 +39,6 @@ import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.api.OpBuilder;
 
 /**
  * Tests for {@link Rotate3d}.

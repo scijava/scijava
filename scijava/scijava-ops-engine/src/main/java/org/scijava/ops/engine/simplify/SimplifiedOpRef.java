@@ -15,9 +15,9 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 

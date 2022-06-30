@@ -35,16 +35,13 @@ import net.imagej.mesh.Triangle;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.apache.commons.math3.util.MathArrays;
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Size}.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.size', label='Geometric (2D): Size', priority='9999.'
  */
-@Plugin(type = Op.class, name = "geom.size", label = "Geometric3D: Volume", priority = Priority.VERY_HIGH - 1)
 public class DefaultVolumeMesh implements Function<Mesh, DoubleType> {
 
 	/**

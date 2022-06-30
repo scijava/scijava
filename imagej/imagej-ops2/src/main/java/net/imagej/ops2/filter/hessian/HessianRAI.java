@@ -39,9 +39,7 @@ import net.imglib2.view.composite.CompositeIntervalView;
 import net.imglib2.view.composite.RealComposite;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Hessian filter using the sobel filter with separated kernel.
@@ -50,9 +48,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <T>
  *            type of input
+ *@implNote op names='filter.hessian'
  */
-
-@Plugin(type = Op.class, name = "filter.hessian")
 public class HessianRAI<T extends RealType<T>>
 		implements Function<RandomAccessibleInterval<T>, CompositeIntervalView<T, RealComposite<T>>> {
 

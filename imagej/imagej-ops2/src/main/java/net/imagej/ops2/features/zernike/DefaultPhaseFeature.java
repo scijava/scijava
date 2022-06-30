@@ -34,9 +34,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * 
@@ -48,8 +46,8 @@ import org.scijava.plugin.Plugin;
  *            Input Type
  * @param <O>
  *            Output Type
+ *@implNote op names='features.zernike.phase'
  */
-@Plugin(type = Op.class, name = "features.zernike.phase")
 public class DefaultPhaseFeature<T extends RealType<T>>
 		implements Computers.Arity3<IterableInterval<T>, Integer, Integer, DoubleType> {
 

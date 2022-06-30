@@ -34,8 +34,6 @@ import java.util.Comparator;
 import net.imglib2.type.logic.BitType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Applies a threshold value (the second input) to the given object using the
@@ -43,8 +41,8 @@ import org.scijava.plugin.Plugin;
  * compares above the threshold.
  *
  * @author Curtis Rueden
+ *@implNote op names='threshold.apply'
  */
-@Plugin(type = Op.class, name = "threshold.apply")
 public class ApplyThresholdComparator<T> implements Computers.Arity3<T, T, Comparator<? super T>, BitType>
 {
 

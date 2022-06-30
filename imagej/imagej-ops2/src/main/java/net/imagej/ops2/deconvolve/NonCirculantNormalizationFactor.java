@@ -47,12 +47,9 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Calculate non-circulant normalization factor. This is used as part of the
@@ -64,10 +61,8 @@ import org.scijava.plugin.Plugin;
  * @param <O>
  * @param <K>
  * @param <C>
+ * @implNote op names='deconvolve.normalizationFactor', priority='-100.'
  */
-
-@Plugin(type = Op.class, name = "deconvolve.normalizationFactor",
-	priority = Priority.LOW)
 public class NonCirculantNormalizationFactor<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 	implements Inplaces.Arity6_1<RandomAccessibleInterval<O>, Dimensions, Dimensions, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService>
 {

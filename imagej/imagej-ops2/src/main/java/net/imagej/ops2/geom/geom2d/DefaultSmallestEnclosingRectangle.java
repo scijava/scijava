@@ -40,16 +40,14 @@ import net.imglib2.roi.geom.real.DefaultWritablePolygon2D;
 import net.imglib2.roi.geom.real.Polygon2D;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@code geom.smallestBoundingBox}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
+ * @implNote op names='geom.smallestEnclosingBoundingBox', label='Geometric (2D): Smallest Enclosing Rectangle'
  */
-@Plugin(type = Op.class, name = "geom.smallestEnclosingBoundingBox", label = "Geometric (2D): Smallest Enclosing Rectangle")
 public class DefaultSmallestEnclosingRectangle implements Function<Polygon2D, Polygon2D> {
 
 	@OpDependency(name = "geom.convexHull")

@@ -4,14 +4,12 @@ package org.scijava.ops.engine.matcher.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.scijava.Priority;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.simplify.InfoSimplificationGenerator;
 import org.scijava.types.Types;

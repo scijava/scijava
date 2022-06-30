@@ -34,9 +34,7 @@ import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Ops which compute and apply a global threshold to an image.
@@ -51,7 +49,9 @@ public final class ApplyThresholdMethod {
 		// NB: Prevent instantiation of utility class.
 	}
 
-	@Plugin(type = Op.class, name = "threshold.huang")
+	/**
+ *@implNote op names='threshold.huang'
+ */
 	public static class Huang<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -65,7 +65,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.ij1")
+	/**
+ *@implNote op names='threshold.ij1'
+ */
 	public static class IJ1<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -79,7 +81,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.intermodes")
+	/**
+ *@implNote op names='threshold.intermodes'
+ */
 	public static class Intermodes<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -93,7 +97,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.isoData")
+	/**
+ *@implNote op names='threshold.isoData'
+ */
 	public static class IsoData<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -107,7 +113,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.li")
+	/**
+ *@implNote op names='threshold.li'
+ */
 	public static class Li<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -121,7 +129,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.maxEntropy")
+	/**
+ *@implNote op names='threshold.maxEntropy'
+ */
 	public static class MaxEntropy<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -135,7 +145,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.maxLikelihood")
+	/**
+ *@implNote op names='threshold.maxLikelihood'
+ */
 	public static class MaxLikelihood<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -149,7 +161,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.mean")
+	/**
+ *@implNote op names='threshold.mean'
+ */
 	public static class Mean<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -163,7 +177,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.minError")
+	/**
+ *@implNote op names='threshold.minError'
+ */
 	public static class MinError<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -177,7 +193,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.minimum")
+	/**
+ *@implNote op names='threshold.minimum'
+ */
 	public static class Minimum<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -191,7 +209,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.moments")
+	/**
+ *@implNote op names='threshold.moments'
+ */
 	public static class Moments<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -205,7 +225,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.otsu")
+	/**
+ *@implNote op names='threshold.otsu'
+ */
 	public static class Otsu<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -219,7 +241,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.percentile")
+	/**
+ *@implNote op names='threshold.percentile'
+ */
 	public static class Percentile<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -233,7 +257,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.renyiEntropy")
+	/**
+ *@implNote op names='threshold.renyiEntropy'
+ */
 	public static class RenyiEntropy<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -247,7 +273,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.rosin")
+	/**
+ *@implNote op names='threshold.rosin'
+ */
 	public static class Rosin<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -261,7 +289,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.shanbhag")
+	/**
+ *@implNote op names='threshold.shanbhag'
+ */
 	public static class Shanbhag<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -275,7 +305,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.triangle")
+	/**
+ *@implNote op names='threshold.triangle'
+ */
 	public static class Triangle<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{
@@ -289,7 +321,9 @@ public final class ApplyThresholdMethod {
 		}
 	}
 
-	@Plugin(type = Op.class, name = "threshold.yen")
+	/**
+ *@implNote op names='threshold.yen'
+ */
 	public static class Yen<T extends RealType<T>> extends
 		AbstractApplyThresholdImg<T>
 	{

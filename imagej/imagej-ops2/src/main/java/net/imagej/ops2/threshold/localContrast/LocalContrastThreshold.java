@@ -38,15 +38,13 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * @author Jonathan Hale
  * @author Stefan Helfrich (University of Konstanz)
+ *@implNote op names='threshold.localContrast'
  */
-@Plugin(type = Op.class, name = "threshold.localContrast")
 public class LocalContrastThreshold<T extends RealType<T>> implements
 	Computers.Arity3<RandomAccessibleInterval<T>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //
 			RandomAccessibleInterval<BitType>> {

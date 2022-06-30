@@ -56,9 +56,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -89,8 +87,8 @@ import org.scijava.plugin.Plugin;
  *            element type of mask
  *
  * @author Simon Schmid (University of Konstanz)
+ *@implNote op names='image.watershed'
  */
-@Plugin(type = Op.class, name = "image.watershed")
 public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -386,7 +384,9 @@ public class Watershed<T extends RealType<T>, B extends BooleanType<B>> implemen
 
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity3<RandomAccessibleInterval<T>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 	
@@ -409,7 +409,9 @@ class WatershedMaskless<T extends RealType<T>, B extends BooleanType<B>> impleme
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedFunction<T extends RealType<T>, B extends BooleanType<B>>
 		implements Functions.Arity4<RandomAccessibleInterval<T>, Boolean, Boolean, RandomAccessibleInterval<B>, ImgLabeling<Integer, IntType>> {
 
@@ -436,7 +438,9 @@ class WatershedFunction<T extends RealType<T>, B extends BooleanType<B>>
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Boolean, Boolean, ImgLabeling<Integer, IntType>> {
 

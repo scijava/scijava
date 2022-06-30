@@ -36,7 +36,6 @@ import java.util.function.Function;
 import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
 import net.imagej.ops2.threshold.ApplyLocalThresholdIntegral;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
@@ -46,11 +45,8 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.composite.Composite;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of the local mean threshold method for images. Makes use of
@@ -60,8 +56,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @author Martin Horn (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localMean', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW)
 public class LocalMeanThreshold<T extends RealType<T>> extends
 	ApplyLocalThresholdIntegral<T, DoubleType> implements
 	Computers.Arity4<RandomAccessibleInterval<T>, Shape, Double, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, //

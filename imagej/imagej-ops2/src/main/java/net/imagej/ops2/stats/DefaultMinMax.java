@@ -39,9 +39,7 @@ import net.imglib2.util.Pair;
 import net.imglib2.util.Util;
 import net.imglib2.util.ValuePair;
 
-import org.scijava.Priority;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code stats.minMax}.
@@ -50,8 +48,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I>
  *            input type
+ * @implNote op names='stats.minMax', priority='100.'
  */
-@Plugin(type = Op.class, name = "stats.minMax", priority = Priority.HIGH)
 public class DefaultMinMax<I extends RealType<I>> implements Function<RandomAccessibleInterval<I>, Pair<I, I>> {
 
 	/**

@@ -33,7 +33,6 @@ import java.util.HashMap;
 
 import net.imglib2.Cursor;
 import net.imglib2.FinalInterval;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
@@ -48,9 +47,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Intervals;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * 
@@ -60,8 +57,8 @@ import org.scijava.plugin.Plugin;
  *
  * @param <I>
  * @param <O>
+ *@implNote op names='features.tamura.coarseness'
  */
-@Plugin(type = Op.class, name = "features.tamura.coarseness")
 public class DefaultCoarsenessFeature<I extends RealType<I>, O extends RealType<O>>
 		implements Computers.Arity1<RandomAccessibleInterval<I>, O> {
 

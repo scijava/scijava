@@ -33,14 +33,13 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.type.logic.BitType;
 
-import org.scijava.plugin.Plugin;
 
 /**
  * Represents the thinning algorithm proposed by Z. Guo and R. W. Hall.
  *
  * @author Andreas Burger, University of Konstanz
+ * @implNote thinningstrategy names='GuoHall'
  */
-@Plugin(type = ThinningStrategy.class, name = "GuoHall")
 public class GuoHallThinningStrategy extends Abstract3x3NeighbourhoodThinning {
 
 	public GuoHallThinningStrategy() {

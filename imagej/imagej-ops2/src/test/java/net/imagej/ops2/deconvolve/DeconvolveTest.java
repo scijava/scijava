@@ -49,9 +49,9 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
 import org.scijava.function.Functions;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests {@code filter.deconvolve} ops.

@@ -38,17 +38,15 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copying {@link ImgLabeling} into another {@link ImgLabeling}
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ *@implNote op names='copy, copy.imgLabeling'
  */
-@Plugin(type = Op.class, name = "copy, copy.imgLabeling")
 public class CopyImgLabeling<T extends IntegerType<T> & NativeType<T>, L>
 		implements Computers.Arity1<ImgLabeling<L, T>, ImgLabeling<L, T>> {
 

@@ -37,9 +37,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Pair;
 
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generates an ASCII version of an image.
@@ -48,8 +46,8 @@ import org.scijava.plugin.Plugin;
  * </p>
  * 
  * @author Curtis Rueden
+ *@implNote op names='image.ascii'
  */
-@Plugin(type = Op.class, name = "image.ascii")
 public class DefaultASCII<T extends RealType<T>> implements Functions.Arity3<IterableInterval<T>, T, T, String>
 {
 

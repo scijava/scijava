@@ -33,15 +33,14 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.type.logic.BitType;
 
-import org.scijava.plugin.Plugin;
 
 /**
  * Implementation of the thinning algorithm proposed by T. Y. Zhang and C. Y.
  * Suen.
  *
  * @author Andreas Burger, University of Konstanz
+ * @implNote thinningstrategy names='ZhangSuen'
  */
-@Plugin(type = ThinningStrategy.class, name = "ZhangSuen")
 public class ZhangSuenThinningStrategy extends
 	Abstract3x3NeighbourhoodThinning
 {

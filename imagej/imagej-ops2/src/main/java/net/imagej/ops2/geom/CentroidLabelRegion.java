@@ -37,14 +37,13 @@ import net.imglib2.roi.IterableRegion;
 import net.imglib2.roi.labeling.LabelRegion;
 
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * This {@link Op} computes the centroid of a {@link IterableRegion} (Label).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.centroid', priority='2'
  */
-@Plugin(type = Op.class, name = "geom.centroid", priority = 2)
 public class CentroidLabelRegion implements Function<LabelRegion<?>, RealLocalizable> {
 
 	/**

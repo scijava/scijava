@@ -40,11 +40,8 @@ import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.Priority;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Op used to pad the image by extending the borders
@@ -53,8 +50,8 @@ import org.scijava.plugin.Plugin;
  * @param <T>
  * @param <I>
  * @param <O>
+ * @implNote op names='filter.padInput', priority='100.'
  */
-@Plugin(type = Op.class, name = "filter.padInput", priority = Priority.HIGH)
 public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		implements Functions.Arity3<I, Dimensions, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 

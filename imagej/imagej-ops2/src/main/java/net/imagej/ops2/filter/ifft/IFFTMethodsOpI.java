@@ -36,8 +36,6 @@ import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 
 import org.scijava.function.Inplaces;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * Inverse FFT inplace operator -- complex to complex only, output size must
@@ -46,8 +44,8 @@ import org.scijava.plugin.Plugin;
  * supported FFT size.
  * 
  * @author Brian Northan
+ *@implNote op names='filter.ifft'
  */
-@Plugin(type = Op.class, name = "filter.ifft")
 public class IFFTMethodsOpI<C extends ComplexType<C>>
 		implements Inplaces.Arity2_1<RandomAccessibleInterval<C>, ExecutorService> {
 

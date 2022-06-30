@@ -33,9 +33,7 @@ import net.imagej.ops2.imagemoments.AbstractImageMomentOp;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.centralMoment01} directly.
@@ -44,9 +42,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='imageMoments.centralMoment01', label='Image Moment: CentralMoment01', priority='10000.'
  */
-@Plugin(type = Op.class, name = "imageMoments.centralMoment01", label = "Image Moment: CentralMoment01",
-	priority = Priority.VERY_HIGH)
 public class DefaultCentralMoment01<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

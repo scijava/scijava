@@ -36,7 +36,6 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * {@link Op} to calculate the {@code imageMoments.normalizedCentralMoment21}.
@@ -45,9 +44,8 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz (University of Konstanz)
  * @param <I> input type
  * @param <O> output type
+ * @implNote op names='imageMoments.normalizedCentralMoment21', label='Image Moment: NormalizedCentralMoment21'
  */
-@Plugin(type = Op.class, name = "imageMoments.normalizedCentralMoment21",
-	label = "Image Moment: NormalizedCentralMoment21")
 public class DefaultNormalizedCentralMoment21<I extends RealType<I>, O extends RealType<O>>
 	implements AbstractImageMomentOp<I, O> 
 {

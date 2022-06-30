@@ -33,10 +33,6 @@ import net.imagej.ops2.threshold.AbstractComputeThresholdHistogram;
 import net.imglib2.histogram.Histogram1d;
 import net.imglib2.type.numeric.RealType;
 
-import org.scijava.Priority;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
-
 // NB - this plugin adapted from Gabriel Landini's code of his AutoThreshold
 // plugin found in Fiji (version 1.14).
 
@@ -45,9 +41,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Barry DeZonia
  * @author Gabriel Landini
+ * @implNote op names='threshold.percentile', priority='100.'
  */
-@Plugin(type = Op.class, name = "threshold.percentile",
-	priority = Priority.HIGH)
 public class ComputePercentileThreshold<T extends RealType<T>> extends
 	AbstractComputeThresholdHistogram<T>
 {

@@ -41,10 +41,10 @@ import net.imglib2.type.numeric.integer.ByteType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-import org.scijava.types.Nil;
+import org.junit.jupiter.api.Test;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests Gaussian convolution.

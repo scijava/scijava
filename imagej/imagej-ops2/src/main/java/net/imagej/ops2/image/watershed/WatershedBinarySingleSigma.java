@@ -32,7 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
-import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.BooleanType;
@@ -40,13 +39,10 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * <p>
@@ -80,8 +76,8 @@ import org.scijava.plugin.Plugin;
  *            element type of mask
  *
  * @author Simon Schmid (University of Konstanz)
+ *@implNote op names='image.watershed'
  */
-@Plugin(type = Op.class, name = "image.watershed")
 public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends BooleanType<B>> implements
 		Computers.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -137,7 +133,9 @@ public class WatershedBinarySingleSigma<T extends BooleanType<T>, B extends Bool
 
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Computers.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -162,7 +160,9 @@ class WatershedBinarySingleSigmaMaskless<T extends RealType<T>, B extends Boolea
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity6<RandomAccessibleInterval<T>, Boolean, Boolean, Double, RandomAccessibleInterval<B>, ExecutorService, ImgLabeling<Integer, IntType>> {
 
@@ -191,7 +191,9 @@ class WatershedBinarySingleSigmaFunction<T extends RealType<T>, B extends Boolea
 	}
 }
 
-@Plugin(type = Op.class, name = "image.watershed")
+/**
+ *@implNote op names='image.watershed'
+ */
 class WatershedBinarySigngleSigmaFunctionMaskless<T extends RealType<T>, B extends BooleanType<B>> implements
 		Functions.Arity5<RandomAccessibleInterval<T>, Boolean, Boolean, Double, ExecutorService, ImgLabeling<Integer, IntType>> {
 

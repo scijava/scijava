@@ -7,8 +7,6 @@ import java.util.ServiceLoader;
 import org.junit.Assert;
 import org.junit.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.discovery.test.ServiceBasedAdder;
-import org.scijava.discovery.test.ServiceBasedMultipliers;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 

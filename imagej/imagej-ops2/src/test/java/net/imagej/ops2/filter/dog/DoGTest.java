@@ -46,8 +46,8 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
 import org.scijava.thread.ThreadService;
+import org.scijava.types.Nil;
 
 /**
  * Tests Difference of Gaussians (DoG) implementations.

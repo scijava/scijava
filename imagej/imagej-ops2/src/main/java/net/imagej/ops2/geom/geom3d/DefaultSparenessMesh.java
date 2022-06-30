@@ -36,11 +36,8 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Generic implementation of {@link net.imagej.ops2.Ops.Geometric.Spareness}.
@@ -48,8 +45,8 @@ import org.scijava.plugin.Plugin;
  * Based on ImageJ1.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
+ * @implNote op names='geom.spareness', label='Geometric (3D): Spareness', priority='10000.'
  */
-@Plugin(type = Op.class, name = "geom.spareness", label = "Geometric (3D): Spareness", priority = Priority.VERY_HIGH)
 public class DefaultSparenessMesh implements Computers.Arity1<Mesh, DoubleType> {
 
 	@OpDependency(name = "geom.secondMoment")

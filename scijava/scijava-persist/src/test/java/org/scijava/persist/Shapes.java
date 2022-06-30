@@ -1,7 +1,6 @@
 
 package org.scijava.persist;
 
-import org.scijava.persist.IClassRuntimeAdapter;
 import org.scijava.plugin.Plugin;
 
 public class Shapes {

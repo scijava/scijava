@@ -38,19 +38,17 @@
 //import net.imglib2.type.numeric.integer.Unsigned128BitType;
 //import net.imglib2.type.numeric.integer.UnsignedLongType;
 //
-//import org.scijava.Priority;
 //import org.scijava.ops.spi.OpDependency;
 //import org.scijava.ops.spi.OpDependency;
 //import org.scijava.ops.core.Op;
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;
 //import org.scijava.functions.Computers;
-//import org.scijava.plugin.Plugin;
 //
 ///**
 // * @author Gabe Selzer
+// * @implNote op names='image.invert', priority='100.'
 // */
-//@Plugin(type = Op.class, name = "image.invert", priority = Priority.HIGH)
 //public class InvertIIInteger<T extends IntegerType<T>> implements
 //	Computers.Arity3<IterableInterval<T>, T, T, IterableInterval<T>> 
 //{

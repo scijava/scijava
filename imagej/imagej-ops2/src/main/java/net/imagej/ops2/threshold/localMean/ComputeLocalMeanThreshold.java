@@ -33,11 +33,8 @@ import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
-import org.scijava.Priority;
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Local threshold method that uses the mean and operates directly of RAIs.
@@ -45,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * @author Martin Horn (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names='threshold.localMean', priority='-100.'
  */
-@Plugin(type = Op.class, name = "threshold.localMean", priority = Priority.LOW)
 public class ComputeLocalMeanThreshold<T extends RealType<T>> implements
 	Computers.Arity3<Iterable<T>, T, Double, BitType>
 {

@@ -37,8 +37,6 @@ import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
-import org.scijava.plugin.Plugin;
 
 /**
  * An Op which calculates the correction needed to approximate the contribution of the image to the
@@ -67,8 +65,8 @@ import org.scijava.plugin.Plugin;
  * @author Richard Domander (Royal Veterinary College, London)
  * 
  * NB: Methods are public and static to help testing
+ *@implNote op names='topology.eulerCorrection'
  */
-@Plugin(type = Op.class, name = "topology.eulerCorrection")
 public class EulerCorrection<B extends BooleanType<B>>
         implements Computers.Arity1<RandomAccessibleInterval<B>, DoubleType> {
 

@@ -32,12 +32,9 @@ package net.imagej.ops2.copy;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.util.Intervals;
-import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.plugin.Plugin;
 
 /**
  * Copies a {@link RandomAccessibleInterval} into another
@@ -45,8 +42,8 @@ import org.scijava.plugin.Plugin;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
+ * @implNote op names='copy, copy.rai', priority='1.0'
  */
-@Plugin(type = Op.class, name = "copy, copy.rai", priority = 1.0)
 public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "copy")

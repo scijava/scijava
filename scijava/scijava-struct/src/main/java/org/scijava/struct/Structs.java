@@ -69,7 +69,7 @@ public final class Structs {
 		}
 	}
 
-	public static boolean checkValidity(Member<?> m, Supplier<String> name, Class<?> type,
+	public static boolean checkValidity(Member<?> m, String name, Class<?> type,
 		boolean isFinal, ArrayList<ValidityProblem> problems)
 	{
 		boolean valid = true;
@@ -81,7 +81,7 @@ public final class Structs {
 			// will be written to, but immutable parameters cannot be changed in
 			// such a manner, so it makes no sense to label them as such.
 			final String error = "Immutable " + m.getIOType() + " parameter: " +
-				name.get() + " (" + type.getName() + " is immutable)";
+				name + " (" + type.getName() + " is immutable)";
 			problems.add(new ValidityProblem(error));
 			valid = false;
 		}

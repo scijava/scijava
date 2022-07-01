@@ -45,36 +45,50 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 {
 
 	private final Supplier<String> keyGenerator;
+	private String key;
+	private boolean keyGenerated;
+
 	private final Supplier<String> descriptionGenerator;
+	private String description;
+	private boolean descriptionGenerated;
+
 	private final Type type;
 	private final OpDependency annotation;
 
-	public AnnotatedOpDependencyMember(String key, Type type,
-		final OpDependency annotation)
-	{
-		this(key, "", type, annotation);
-	}
-
+	/**
+	 * This constructor is ideal for situations where the key and description are readily available
+	 *
+	 * @param key the key
+	 * @param description the description
+	 * @param type the {@link Type} of this {@link Member}
+	 * @param annotation the {@link OpDependency} annotation
+	 */
 	public AnnotatedOpDependencyMember(String key, String description, Type type,
 		final OpDependency annotation)
 	{
 		this(() -> key, () -> description, type, annotation);
+		this.key = key;
+		this.keyGenerated = true;
+		this.description = description;
+		this.descriptionGenerated = true;
 	}
 
 	/**
 	 * This constructor is ideal for situations where obtaining the key or
 	 * description are computationally expensive.
-	 * 
+	 *
 	 * @param keyGenerator the {@link Supplier} able to generate the key
 	 * @param descriptionGenerator the {@link Supplier} able to generate the description
 	 * @param type the {@link Type} of this {@link Member}
-	 * @param annotation
+	 * @param annotation the {@link OpDependency} annotation
 	 */
 	public AnnotatedOpDependencyMember(Supplier<String> keyGenerator, Supplier<String> descriptionGenerator, Type type,
 		final OpDependency annotation)
 	{
 		this.keyGenerator = keyGenerator;
+		this.keyGenerated = false;
 		this.descriptionGenerator = descriptionGenerator;
+		this.descriptionGenerated = false;
 		this.type = type;
 		this.annotation = annotation;
 	}
@@ -99,12 +113,26 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 
 	@Override
 	public String getKey() {
-		return keyGenerator.get();
+		if (!keyGenerated) generateKey();
+		return key;
+	}
+
+	private synchronized void generateKey() {
+		if (keyGenerated) return;
+		key = keyGenerator.get();
+		keyGenerated = true;
 	}
 
 	@Override
 	public String getDescription() {
-		return descriptionGenerator.get();
+		if (!descriptionGenerated) generateDescription();
+		return description;
+	}
+
+	private synchronized void generateDescription() {
+		if (descriptionGenerated) return;
+		description = descriptionGenerator.get();
+		descriptionGenerated = true;
 	}
 
 	@Override
@@ -112,3 +140,4 @@ public abstract class AnnotatedOpDependencyMember<T> implements
 		return type;
 	}
 }
+

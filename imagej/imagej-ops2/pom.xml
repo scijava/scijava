@@ -210,11 +210,7 @@
 		<license.projectName>ImageJ software for multidimensional image processing and analysis.</license.projectName>
 
 		<!-- NB While we depend on old scijava-common -->
-		<imagej-ops2.allowedDuplicateClasses>
-			${scijava.allowedDuplicateClasses},
-			org.scijava.*,
-			com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*
-		</imagej-ops2.allowedDuplicateClasses>
+		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},org.scijava.*,com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${imagej-ops2.allowedDuplicateClasses}</allowedDuplicateClasses>
 
 		<!-- NB: Deploy releases to the ImageJ Maven repository. -->

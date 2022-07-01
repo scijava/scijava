@@ -37,9 +37,9 @@ package org.scijava.ops.engine.adapt.complexLift;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionToComputerAdaptTestOps;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
@@ -48,7 +48,7 @@ import org.scijava.ops.engine.copy.CopyOpCollection;
 
 public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		Object[] lifterOps = objsFromNoArgConstructors(FunctionsToComputersAndLift.class.getDeclaredClasses());
 		ops.register(lifterOps);
@@ -64,7 +64,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {2, 4}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {2, 4}, output.get(0), 0);
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {4, 8}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {4, 8}, output.get(0), 0);
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {6, 12}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {6, 12}, output.get(0), 0);
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {8, 16}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {8, 16}, output.get(0), 0);
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {10, 20}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {10, 20}, output.get(0), 0);
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {12, 24}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {12, 24}, output.get(0), 0);
 	}
 
 	@Test
@@ -112,7 +112,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {14, 28}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {14, 28}, output.get(0), 0);
 	}
 
 	@Test
@@ -120,7 +120,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {16, 32}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {16, 32}, output.get(0), 0);
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {18, 36}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {18, 36}, output.get(0), 0);
 	}
 
 	@Test
@@ -136,7 +136,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {20, 40}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {20, 40}, output.get(0), 0);
 	}
 
 	@Test
@@ -144,7 +144,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {22, 44}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {22, 44}, output.get(0), 0);
 	}
 
 	@Test
@@ -152,7 +152,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {24, 48}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {24, 48}, output.get(0), 0);
 	}
 
 	@Test
@@ -160,7 +160,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {26, 52}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {26, 52}, output.get(0), 0);
 	}
 
 	@Test
@@ -168,7 +168,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {28, 56}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {28, 56}, output.get(0), 0);
 	}
 
 	@Test
@@ -176,7 +176,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {30, 60}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {30, 60}, output.get(0), 0);
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class FunctionToComputerIterablesTest extends AbstractTestEnvironment {
 		List<double[]> in = Arrays.asList(new double[] { 2, 4 });
 		List<double[]> output = Arrays.asList(new double[] { 0, 0 });
 		ops.op("test.FtC").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).output(output).compute();
-		Assert.assertArrayEquals(new double[] {32, 64}, output.get(0), 0);
+		Assertions.assertArrayEquals(new double[] {32, 64}, output.get(0), 0);
 	}
 }
 

@@ -34,13 +34,13 @@
 
 package org.scijava.ops.engine.adapt.lift;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
@@ -53,7 +53,7 @@ import org.scijava.ops.engine.OpBuilderTestOps;
  */
 public class ComputerToIterablesTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new ComputerToIterables());
 		ops.register(new OpBuilderTestOps());

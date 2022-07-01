@@ -4,9 +4,9 @@ package org.scijava.ops.engine.matcher;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.features.DependencyMatchingException;
 import org.scijava.ops.api.features.OpMatchingException;
@@ -21,7 +21,7 @@ import org.scijava.ops.spi.OpField;
 
 public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new DefaultMatchingErrorTest());
 		ops.register(new DependentOp());
@@ -48,12 +48,12 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements
 		try {
 			ops.op("test.duplicateOp").inType(Double.class).outType(Double.class)
 				.function();
-			Assert.fail();
+			Assertions.fail();
 		}
 		catch (OpMatchingException e) {
-			Assert.assertTrue(e.getMessage().startsWith(
+			Assertions.assertTrue(e.getMessage().startsWith(
 				"No MatchingRoutine was able to produce a match!"));
-			Assert.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s
+			Assertions.assertTrue(Arrays.stream(e.getSuppressed()).anyMatch(s -> s
 				.getMessage().startsWith("Multiple 'test.duplicateOp/" +
 					"java.util.function.Function<java.lang.Double, java.lang.Double>' " +
 					"ops of priority 0.0:")));
@@ -68,11 +68,11 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements
 		try {
 			ops.op("test.missingDependencyOp").input(1.).outType(Double.class)
 				.apply();
-			Assert.fail("Expected DependencyMatchingException");
+			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
+			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 		}
 	}
 
@@ -84,12 +84,12 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements
 	public void missingNestedDependencyRegressionTest() {
 		try {
 			ops.op("test.outsideOp").input(1.).outType(Double.class).apply();
-			Assert.fail("Expected DependencyMatchingException");
+			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assert.assertTrue(message.contains("Name: \"test.missingDependencyOp\""));
-			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
+			Assertions.assertTrue(message.contains("Name: \"test.missingDependencyOp\""));
+			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 		}
 	}
 
@@ -102,12 +102,12 @@ public class DefaultMatchingErrorTest extends AbstractTestEnvironment implements
 		Double[] d = new Double[0];
 		try {
 			ops.op("test.adaptMissingDep").input(d).outType(Double[].class).apply();
-			Assert.fail("Expected DependencyMatchingException");
+			Assertions.fail("Expected DependencyMatchingException");
 		}
 		catch (DependencyMatchingException e) {
 			String message = e.getMessage();
-			Assert.assertTrue(message.contains("Adaptor:"));
-			Assert.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
+			Assertions.assertTrue(message.contains("Adaptor:"));
+			Assertions.assertTrue(message.contains("Name: \"test.nonexistingOp\""));
 
 		}
 	}

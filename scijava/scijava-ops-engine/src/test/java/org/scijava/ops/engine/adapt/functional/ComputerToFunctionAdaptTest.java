@@ -34,15 +34,15 @@
 
 package org.scijava.ops.engine.adapt.functional;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.create.CreateOpCollection;
 
 public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new ComputerToFunctionAdaptTestOps());
 		ops.register(new CreateOpCollection());
@@ -55,7 +55,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in).outType(double[].class).apply();
 		double[] expected = {2, 4}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in).outType(double[].class).apply();
 		double[] expected = {4, 8}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in).outType(double[].class).apply();
 		double[] expected = {6, 12}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in).outType(double[].class).apply();
 		double[] expected = {8, 16}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {10, 20}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {12, 24}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {14, 28}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {16, 32}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {18, 36}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {20, 40}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {22, 44}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -143,7 +143,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {24, 48}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {26, 52}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {28, 56}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -167,7 +167,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {30, 60}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 
 	@Test
@@ -175,7 +175,7 @@ public class ComputerToFunctionAdaptTest extends AbstractTestEnvironment {
 		double[] in = {2, 4};
 		double[] output = ops.op("test.CtF").input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in).outType(double[].class).apply();
 		double[] expected = {32, 64}; 
-		Assert.assertArrayEquals(expected, output, 0);
+		Assertions.assertArrayEquals(expected, output, 0);
 	}
 }
 

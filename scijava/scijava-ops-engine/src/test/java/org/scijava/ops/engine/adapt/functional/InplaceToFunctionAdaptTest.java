@@ -35,12 +35,12 @@
 
 package org.scijava.ops.engine.adapt.functional;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.OpBuilderTestOps;
@@ -50,7 +50,7 @@ import org.scijava.types.Nil;
 
 public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new OpBuilderTestOps());
 		ops.register(new CreateOpCollection());

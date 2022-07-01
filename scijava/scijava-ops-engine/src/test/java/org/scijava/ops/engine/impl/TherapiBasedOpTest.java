@@ -2,10 +2,10 @@ package org.scijava.ops.engine.impl;
 
 import java.util.ServiceLoader;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.therapi.TherapiDiscoverer;
 import org.scijava.function.Producer;
@@ -28,7 +28,7 @@ public class TherapiBasedOpTest {
 	protected static TypeReifier types;
 	protected static Parser parser;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUp() {
 		logger = new StderrLoggerFactory().create();
 		types = new DefaultTypeReifier(logger, Discoverer.using(
@@ -39,7 +39,7 @@ public class TherapiBasedOpTest {
 		ops.registerInfosFrom(new TherapiOpClass());
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void tearDown() {
 		ops = null;
 		logger = null;
@@ -73,21 +73,21 @@ public class TherapiBasedOpTest {
 	public void therapiOpFieldTest() throws NoSuchFieldException {
 		String actual = ops.op("test.therapiOpField").input().outType(String.class).create();
 		String expected = FIELD_STRING;
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void therapiOpClassTest() {
 		String actual = ops.op("test.therapiOpClass").input().outType(String.class).create();
 		String expected = CLASS_STRING;
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void therapiOpMethodTest() {
 		String actual = ops.op("test.therapiOpMethod").input().outType(String.class).create();
 		String expected = METHOD_STRING;
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class TherapiBasedOpTest {
 	public void therapiOpFieldPriorityTest() {
 		String actual = ops.op("test.therapiPriority").input().outType(String.class).create();
 		String expected = HIGH_PRIORITY_STRING;
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

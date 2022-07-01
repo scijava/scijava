@@ -36,9 +36,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.AbstractTestEnvironment;
@@ -47,7 +47,7 @@ import org.scijava.types.Nil;
 
 public class LiftTest extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		Object[] objects = objsFromNoArgConstructors(TestOps.class.getDeclaredClasses());
 		ops.register(objects);
@@ -65,11 +65,11 @@ public class LiftTest extends AbstractTestEnvironment {
 
 		Function<Iterable<Double>, Iterable<Double>> liftedToIterable = Maps.FunctionMaps.Iterables.liftBoth(powFunction);
 		Iterable<Double> res2 = liftedToIterable.apply(Arrays.asList(1.0, 2.0, 3.0, 4.0));
-		Assert.assertTrue(arrayEquals(toArray(res2), 2.0, 3.0, 4.0, 5.0));
+		Assertions.assertTrue(arrayEquals(toArray(res2), 2.0, 3.0, 4.0, 5.0));
 
 		Function<Double[], Double[]> liftedToArray = Maps.FunctionMaps.Arrays.liftBoth(powFunction, Double.class);
 		Double[] res3 = liftedToArray.apply(new Double[] { 1.0, 2.0, 3.0, 4.0 });
-		Assert.assertTrue(arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 2.0, 3.0, 4.0, 5.0));
+		Assertions.assertTrue(arrayEquals(Arrays.stream(res3).mapToDouble(d -> d).toArray(), 2.0, 3.0, 4.0, 5.0));
 	}
 
 	private static double[] toArray(Iterable<Double> iter) {
@@ -86,7 +86,7 @@ public class LiftTest extends AbstractTestEnvironment {
 		Iterable<double[]> res = wrap(new double[4]);
 		liftedToIterable.compute(wrap(new double[] { 1.0, 2.0, 3.0, 4.0 }), res);
 
-		Assert.assertTrue(arrayEquals(unwrap(res), 2.0, 3.0, 4.0, 5.0));
+		Assertions.assertTrue(arrayEquals(unwrap(res), 2.0, 3.0, 4.0, 5.0));
 	}
 
 	private static double[] unwrap(Iterable<double[]> ds) {

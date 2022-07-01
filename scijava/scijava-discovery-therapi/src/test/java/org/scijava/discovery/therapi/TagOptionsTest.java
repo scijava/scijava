@@ -1,35 +1,33 @@
 
 package org.scijava.discovery.therapi;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TagOptionsTest {
 
-	private List<TaggedElement> getTaggedDiscoveries(
-		String tagType)
-	{
+	private List<TaggedElement> getTaggedDiscoveries(String tagType) {
 		return new TaggedElementDiscoverer(tagType).discover(TaggedElement.class);
 	}
 
 	@Test
 	public void optionsTest() {
-		List<TaggedElement> elements = getTaggedDiscoveries(
-			"optionsTest");
+		List<TaggedElement> elements = getTaggedDiscoveries("optionsTest");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertEquals("e", annotatedElement.option("singleKey"));
-		Assert.assertEquals("[e1, e2]", annotatedElement.option("listKey"));
+		assertEquals("e", annotatedElement.option("singleKey"));
+		assertEquals("[e1, e2]", annotatedElement.option("listKey"));
 	}
 
 	@Test
 	public void optionsPerLineTest() {
-		List<TaggedElement> elements = getTaggedDiscoveries(
-			"optionsPerLineTest");
+		List<TaggedElement> elements = getTaggedDiscoveries("optionsPerLineTest");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertEquals("e", annotatedElement.option("singleKey"));
-		Assert.assertEquals("[e1, e2]", annotatedElement.option("listKey"));
+		assertEquals("e", annotatedElement.option("singleKey"));
+		assertEquals("[e1, e2]", annotatedElement.option("listKey"));
 	}
 
 	/**
@@ -38,11 +36,10 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void forgottenCommaTest() {
-		List<TaggedElement> elements = getTaggedDiscoveries(
-			"forgottenComma");
+		List<TaggedElement> elements = getTaggedDiscoveries("forgottenComma");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertThrows(IllegalArgumentException.class, //
-			() -> annotatedElement.option("singleKey"));
+		assertThrows(IllegalArgumentException.class, //
+				() -> annotatedElement.option("singleKey"));
 	}
 
 	/**
@@ -50,22 +47,20 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void forgottenQuoteTest() {
-		List<TaggedElement> elements = getTaggedDiscoveries(
-			"forgottenQuote");
+		List<TaggedElement> elements = getTaggedDiscoveries("forgottenQuote");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertEquals("e", annotatedElement.option("singleKey"));
+		assertEquals("e", annotatedElement.option("singleKey"));
 	}
 
 	/**
-	 * Tests duplicate definition behaviors. When a tag tries to define a tag
-	 * twice, we expect that the second definition overwrites the first.
+	 * Tests duplicate definition behaviors. When a tag tries to define a tag twice,
+	 * we expect that the second definition overwrites the first.
 	 */
 	@Test
 	public void duplicateOptionTest() {
-		List<TaggedElement> elements = getTaggedDiscoveries(
-			"duplicateOption");
+		List<TaggedElement> elements = getTaggedDiscoveries("duplicateOption");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertEquals("[e1, e2]", annotatedElement.option("singleKey"));
+		assertEquals("[e1, e2]", annotatedElement.option("singleKey"));
 	}
 
 	/**
@@ -73,25 +68,24 @@ public class TagOptionsTest {
 	 */
 	@Test
 	public void absentOptionTest() {
-		List<TaggedElement> elements = getTaggedDiscoveries(
-			"absentOption");
+		List<TaggedElement> elements = getTaggedDiscoveries("absentOption");
 		TaggedElement annotatedElement = elements.get(0);
-		Assert.assertEquals("", annotatedElement.option("singleKey"));
+		assertEquals("", annotatedElement.option("singleKey"));
 	}
 
 	/**
 	 * @implNote optionsTest singleKey='e', listKey={'e1', 'e2'}
 	 */
 	@SuppressWarnings("unused")
-	public void foo() {}
+	public void foo() {
+	}
 
 	/**
-	 * @implNote optionsPerLineTest
-	 * singleKey='e',
-	 * listKey={'e1', 'e2'}
+	 * @implNote optionsPerLineTest singleKey='e', listKey={'e1', 'e2'}
 	 */
 	@SuppressWarnings("unused")
-	public void boo() {}
+	public void boo() {
+	}
 
 	/**
 	 * A tagged element whose tag doesn't have a comma between options
@@ -99,7 +93,8 @@ public class TagOptionsTest {
 	 * @implNote forgottenComma singleKey='e' listKey={'e1', 'e2'}
 	 */
 	@SuppressWarnings("unused")
-	public void too() {}
+	public void too() {
+	}
 
 	/**
 	 * A tagged element whose tag doesn't have a quotes surrounding the value
@@ -107,7 +102,8 @@ public class TagOptionsTest {
 	 * @implNote forgottenQuote singleKey=e, listKey={'e1', 'e2'}
 	 */
 	@SuppressWarnings("unused")
-	public void moo() {}
+	public void moo() {
+	}
 
 	/**
 	 * A tagged element whose tag tries to define a key twice
@@ -115,7 +111,8 @@ public class TagOptionsTest {
 	 * @implNote duplicateOption singleKey='e', singleKey={'e1', 'e2'}
 	 */
 	@SuppressWarnings("unused")
-	public void coo() {}
+	public void coo() {
+	}
 
 	/**
 	 * A tagged element who has no options
@@ -123,5 +120,6 @@ public class TagOptionsTest {
 	 * @implNote absentOption
 	 */
 	@SuppressWarnings("unused")
-	public void woo() {}
+	public void woo() {
+	}
 }

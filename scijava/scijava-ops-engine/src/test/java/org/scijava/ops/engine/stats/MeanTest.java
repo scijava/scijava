@@ -1,13 +1,13 @@
 package org.scijava.ops.engine.stats;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.math.Add;
@@ -16,7 +16,7 @@ import org.scijava.types.Nil;
 
 public class MeanTest <N extends Number> extends AbstractTestEnvironment {
 
-	@BeforeClass
+	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new Size.StatsSizeFunction(), new Size.StatsSizeFunctionDouble<>());
 		ops.register(new Mean.MeanFunction());

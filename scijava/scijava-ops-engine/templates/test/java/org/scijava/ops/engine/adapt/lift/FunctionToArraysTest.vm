@@ -37,9 +37,9 @@ package org.scijava.ops.engine.adapt.lift;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
@@ -54,7 +54,7 @@ import org.scijava.types.Nil;
  */
 public class FunctionToArraysTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new FunctionToArraysTest());
 		ops.register(new FunctionToArrays());
@@ -92,7 +92,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 			{}).apply();
 
 		for (int i = 0; i < output.length; i++) {
-			Assert.assertEquals($arity * i, output[i].getNumber());
+			Assertions.assertEquals($arity * i, output[i].getNumber());
 		}
 	}
 

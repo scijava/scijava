@@ -10,9 +10,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.api.OpInfo;
@@ -32,7 +32,7 @@ import org.scijava.ops.spi.OpMethod;
  */
 public class JavadocParameterTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new JavadocParameterTest());
 		ops.register(new JavadocOp());
@@ -104,7 +104,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
 		isSuitableScrapedOpMethodInfo(info);
 	}
@@ -115,7 +115,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
 		isSuitableGenericOpMethodInfo(info);
 	}
@@ -126,7 +126,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
 		isSuitableGenericOpMethodInfo(info);
 	}
@@ -137,7 +137,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
 		isSuitableGenericOpMethodInfo(info);
 	}
@@ -174,27 +174,27 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
 
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputNames, new String[] { "foo" });
+		Assertions.assertArrayEquals(inputNames, new String[] { "foo" });
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m
 			.getDescription()).toArray(String[]::new);
-		Assert.assertArrayEquals(inputDescriptions, new String[] {
+		Assertions.assertArrayEquals(inputDescriptions, new String[] {
 			"the i/o argument"});
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("foo", outputName);
+		Assertions.assertEquals("foo", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("the i/o argument", outputDescription);
+		Assertions.assertEquals("the i/o argument", outputDescription);
 	}
 	
 	@Test
@@ -203,33 +203,33 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.methodDependency\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.methodDependency\"");
 		}
 
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputNames, new String[] { "foo" });
+		Assertions.assertArrayEquals(inputNames, new String[] { "foo" });
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m
 			.getDescription()).toArray(String[]::new);
-		Assert.assertArrayEquals(inputDescriptions, new String[] {
+		Assertions.assertArrayEquals(inputDescriptions, new String[] {
 			"the i/o argument"});
 
 		// assert dependency descriptions
 		String[] dependencyDescriptions = info.dependencies().stream().map(m -> m
 			.getDescription()).toArray(String[]::new);
-		Assert.assertArrayEquals(dependencyDescriptions, new String[] {
+		Assertions.assertArrayEquals(dependencyDescriptions, new String[] {
 			"the Op being wrapped"});
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("foo", outputName);
+		Assertions.assertEquals("foo", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("the i/o argument", outputDescription);
+		Assertions.assertEquals("the i/o argument", outputDescription);
 	}
 
 	/**
@@ -247,20 +247,20 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputNames, new String[] { "foo", "bar" });
+		Assertions.assertArrayEquals(inputNames, new String[] { "foo", "bar" });
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(inputDescriptions, new String[] { "the first input", "the second input" });
+		Assertions.assertArrayEquals(inputDescriptions, new String[] { "the first input", "the second input" });
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output", outputName);
+		Assertions.assertEquals("output", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("foo + bar", outputDescription);
+		Assertions.assertEquals("foo + bar", outputDescription);
 	}
 
 	/**
@@ -278,20 +278,20 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "input1", "input2" }, inputNames);
+		Assertions.assertArrayEquals(new String[] { "input1", "input2" }, inputNames);
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "", ""}, inputDescriptions);
+		Assertions.assertArrayEquals(new String[] { "", ""}, inputDescriptions);
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output1", outputName);
+		Assertions.assertEquals("output1", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("", outputDescription);
+		Assertions.assertEquals("", outputDescription);
 	}
 
 	/**
@@ -318,30 +318,30 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 		Iterator<OpInfo> infos = ops.infos("test.javadoc.fieldF").iterator();
 
 		if (!infos.hasNext()) {
-			Assert.fail("No OpInfos with name \"test.javadoc.fieldF\"");
+			Assertions.fail("No OpInfos with name \"test.javadoc.fieldF\"");
 		}
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.fieldF\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.fieldF\"");
 		}
 
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "in" }, inputNames);
+		Assertions.assertArrayEquals(new String[] { "in" }, inputNames);
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
+		Assertions.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output1", outputName);
+		Assertions.assertEquals("output1", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("the output", outputDescription);
+		Assertions.assertEquals("the output", outputDescription);
 	}
 	
 	@Test
@@ -349,30 +349,30 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 		Iterator<OpInfo> infos = ops.infos("test.javadoc.fieldC").iterator();
 
 		if (!infos.hasNext()) {
-			Assert.fail("No OpInfos with name \"test.javadoc.fieldC\"");
+			Assertions.fail("No OpInfos with name \"test.javadoc.fieldC\"");
 		}
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.fieldC\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.fieldC\"");
 		}
 
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "inList", "outList" }, inputNames);
+		Assertions.assertArrayEquals(new String[] { "inList", "outList" }, inputNames);
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "the input", "the preallocated output" }, inputDescriptions);
+		Assertions.assertArrayEquals(new String[] { "the input", "the preallocated output" }, inputDescriptions);
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("outList", outputName);
+		Assertions.assertEquals("outList", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("the preallocated output", outputDescription);
+		Assertions.assertEquals("the preallocated output", outputDescription);
 	}
 
 	@Test
@@ -380,37 +380,37 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 		Iterator<OpInfo> infos = ops.infos("test.javadoc.dependentClass").iterator();
 
 		if (!infos.hasNext()) {
-			Assert.fail("No OpInfos with name \"test.javadoc.dependentClass\"");
+			Assertions.fail("No OpInfos with name \"test.javadoc.dependentClass\"");
 		}
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.dependentClass\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.dependentClass\"");
 		}
 
 		// assert input names
 		String[] inputNames = info.inputs().stream().map(m -> m.getKey()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "t" }, inputNames);
+		Assertions.assertArrayEquals(new String[] { "t" }, inputNames);
 
 		// assert input descriptions
 		String[] inputDescriptions = info.inputs().stream().map(m -> m.getDescription()).toArray(
 			String[]::new);
-		Assert.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
+		Assertions.assertArrayEquals(new String[] { "the input" }, inputDescriptions);
 
 		// assert dependency description
 		String[] dependencyDescriptions = info.dependencies().stream().map(m -> m
 			.getDescription()).toArray(String[]::new);
-		Assert.assertArrayEquals(new String[] {
+		Assertions.assertArrayEquals(new String[] {
 			"Used to compute output for each element in the array" },
 			dependencyDescriptions);
 
 		// assert output name
 		String outputName = info.output().getKey();
-		Assert.assertEquals("output", outputName);
+		Assertions.assertEquals("output", outputName);
 
 		// assert output description
 		String outputDescription = info.output().getDescription();
-		Assert.assertEquals("the output", outputDescription);
+		Assertions.assertEquals("the output", outputDescription);
 	}
 
 	@Test
@@ -419,7 +419,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		OpInfo info = infos.next();
 		if (infos.hasNext()) {
-			Assert.fail("Multiple OpInfos with name \"test.javadoc.method\"");
+			Assertions.fail("Multiple OpInfos with name \"test.javadoc.method\"");
 		}
 
 		// test standard op string
@@ -432,7 +432,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 				"	 Outputs:\n" +
 				"		java.util.List<java.lang.Long> output -> foo + bar\n" + ")\n";
 		String actual = info.toString();
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 
 		// test special op string
 		expected =
@@ -444,7 +444,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 				"	 Outputs:\n" +
 				"		java.util.List<java.lang.Long> output -> foo + bar\n" + ")\n";
 		actual = OpUtils.opString(info, info.inputs().get(1));
-		Assert.assertEquals(expected, actual);
+		Assertions.assertEquals(expected, actual);
 	}
 
 }

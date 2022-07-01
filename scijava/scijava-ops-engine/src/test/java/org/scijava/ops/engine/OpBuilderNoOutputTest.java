@@ -5,9 +5,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
@@ -24,7 +24,7 @@ public class OpBuilderNoOutputTest<T extends Number> extends
 		AbstractTestEnvironment implements OpCollection
 {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new OpBuilderNoOutputTest());
 	}
@@ -50,6 +50,6 @@ public class OpBuilderNoOutputTest<T extends Number> extends
 	public void testNoParameterizedTypeOutputGiven() {
 		Object output = ops.op(opName).input(5.).apply();
 		Type expectedOutputType = new Nil<WrappedList<Double>>() {}.getType();
-		Assert.assertEquals(ops.genericType(output), expectedOutputType);
+		Assertions.assertEquals(ops.genericType(output), expectedOutputType);
 	}
 }

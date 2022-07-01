@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
@@ -16,9 +17,11 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new OpsAsParametersTest());
 		ops.register(new FuncClass());
@@ -35,7 +38,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		return output;
 	};
 
-	@Test(expected=OpMatchingException.class)
+	@Test
 	public void TestOpWithNonReifiableFunction() {
 
 		List<Number> list = new ArrayList<>();
@@ -43,7 +46,10 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		list.add(20.5);
 		list.add(4.0d);
 
-		List<Double> output = ops.op("test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {}).apply();
+		assertThrows(OpMatchingException.class, //
+				() -> ops.op("test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {
+				}).apply() //
+		);
 	}
 
 	@Test

@@ -34,9 +34,9 @@
 
 package org.scijava.ops.engine.adapt.lift;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.OpCollection;
@@ -50,7 +50,7 @@ import org.scijava.ops.spi.OpField;
  */
 public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new InplaceToArraysTest());
 		ops.register(new InplaceToArrays());
@@ -93,7 +93,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(1 * i, io[i].getNumber());
+			Assertions.assertEquals(1 * i, io[i].getNumber());
 		}
 	}
 
@@ -114,7 +114,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(2 * i, io[i].getNumber());
+			Assertions.assertEquals(2 * i, io[i].getNumber());
 		}
 	}
 
@@ -135,7 +135,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(2 * i, io[i].getNumber());
+			Assertions.assertEquals(2 * i, io[i].getNumber());
 		}
 	}
 
@@ -157,7 +157,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(3 * i, io[i].getNumber());
+			Assertions.assertEquals(3 * i, io[i].getNumber());
 		}
 	}
 
@@ -179,7 +179,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(3 * i, io[i].getNumber());
+			Assertions.assertEquals(3 * i, io[i].getNumber());
 		}
 	}
 
@@ -201,7 +201,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(3 * i, io[i].getNumber());
+			Assertions.assertEquals(3 * i, io[i].getNumber());
 		}
 	}
 
@@ -224,7 +224,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(4 * i, io[i].getNumber());
+			Assertions.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -247,7 +247,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(4 * i, io[i].getNumber());
+			Assertions.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -270,7 +270,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(4 * i, io[i].getNumber());
+			Assertions.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -293,7 +293,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(4 * i, io[i].getNumber());
+			Assertions.assertEquals(4 * i, io[i].getNumber());
 		}
 	}
 
@@ -317,7 +317,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(5 * i, io[i].getNumber());
+			Assertions.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -341,7 +341,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(5 * i, io[i].getNumber());
+			Assertions.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -365,7 +365,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(5 * i, io[i].getNumber());
+			Assertions.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -389,7 +389,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(5 * i, io[i].getNumber());
+			Assertions.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -413,7 +413,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(5 * i, io[i].getNumber());
+			Assertions.assertEquals(5 * i, io[i].getNumber());
 		}
 	}
 
@@ -438,7 +438,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(6 * i, io[i].getNumber());
+			Assertions.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -463,7 +463,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(6 * i, io[i].getNumber());
+			Assertions.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -488,7 +488,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(6 * i, io[i].getNumber());
+			Assertions.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -513,7 +513,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(6 * i, io[i].getNumber());
+			Assertions.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -538,7 +538,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(6 * i, io[i].getNumber());
+			Assertions.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -563,7 +563,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(6 * i, io[i].getNumber());
+			Assertions.assertEquals(6 * i, io[i].getNumber());
 		}
 	}
 
@@ -589,7 +589,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -615,7 +615,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -641,7 +641,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -667,7 +667,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -693,7 +693,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -719,7 +719,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -745,7 +745,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(7 * i, io[i].getNumber());
+			Assertions.assertEquals(7 * i, io[i].getNumber());
 		}
 	}
 
@@ -772,7 +772,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -799,7 +799,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -826,7 +826,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -853,7 +853,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -880,7 +880,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -907,7 +907,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -934,7 +934,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -961,7 +961,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(8 * i, io[i].getNumber());
+			Assertions.assertEquals(8 * i, io[i].getNumber());
 		}
 	}
 
@@ -989,7 +989,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1017,7 +1017,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1045,7 +1045,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1073,7 +1073,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1101,7 +1101,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1129,7 +1129,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1157,7 +1157,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1185,7 +1185,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1213,7 +1213,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(9 * i, io[i].getNumber());
+			Assertions.assertEquals(9 * i, io[i].getNumber());
 		}
 	}
 
@@ -1242,7 +1242,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1271,7 +1271,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1300,7 +1300,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1329,7 +1329,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1358,7 +1358,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1387,7 +1387,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1416,7 +1416,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1445,7 +1445,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1474,7 +1474,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1503,7 +1503,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(10 * i, io[i].getNumber());
+			Assertions.assertEquals(10 * i, io[i].getNumber());
 		}
 	}
 
@@ -1533,7 +1533,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1563,7 +1563,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1593,7 +1593,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1623,7 +1623,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1653,7 +1653,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1683,7 +1683,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1713,7 +1713,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1743,7 +1743,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1773,7 +1773,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1803,7 +1803,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1833,7 +1833,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(11 * i, io[i].getNumber());
+			Assertions.assertEquals(11 * i, io[i].getNumber());
 		}
 	}
 
@@ -1864,7 +1864,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -1895,7 +1895,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -1926,7 +1926,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -1957,7 +1957,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -1988,7 +1988,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2019,7 +2019,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2050,7 +2050,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2081,7 +2081,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2112,7 +2112,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2143,7 +2143,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2174,7 +2174,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2205,7 +2205,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(12 * i, io[i].getNumber());
+			Assertions.assertEquals(12 * i, io[i].getNumber());
 		}
 	}
 
@@ -2237,7 +2237,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2269,7 +2269,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2301,7 +2301,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2333,7 +2333,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2365,7 +2365,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2397,7 +2397,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2429,7 +2429,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2461,7 +2461,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2493,7 +2493,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2525,7 +2525,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2557,7 +2557,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2589,7 +2589,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2621,7 +2621,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(13 * i, io[i].getNumber());
+			Assertions.assertEquals(13 * i, io[i].getNumber());
 		}
 	}
 
@@ -2654,7 +2654,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2687,7 +2687,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2720,7 +2720,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2753,7 +2753,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2786,7 +2786,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2819,7 +2819,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2852,7 +2852,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2885,7 +2885,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2918,7 +2918,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2951,7 +2951,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -2984,7 +2984,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3017,7 +3017,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3050,7 +3050,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3083,7 +3083,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(14 * i, io[i].getNumber());
+			Assertions.assertEquals(14 * i, io[i].getNumber());
 		}
 	}
 
@@ -3117,7 +3117,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3151,7 +3151,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3185,7 +3185,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3219,7 +3219,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3253,7 +3253,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3287,7 +3287,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3321,7 +3321,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3355,7 +3355,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3389,7 +3389,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3423,7 +3423,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3457,7 +3457,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3491,7 +3491,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3525,7 +3525,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3559,7 +3559,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3593,7 +3593,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate15();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(15 * i, io[i].getNumber());
+			Assertions.assertEquals(15 * i, io[i].getNumber());
 		}
 	}
 
@@ -3628,7 +3628,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate1();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3663,7 +3663,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate2();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3698,7 +3698,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate3();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3733,7 +3733,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate4();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3768,7 +3768,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate5();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3803,7 +3803,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate6();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3838,7 +3838,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate7();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3873,7 +3873,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate8();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3908,7 +3908,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate9();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3943,7 +3943,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate10();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -3978,7 +3978,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate11();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4013,7 +4013,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate12();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4048,7 +4048,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate13();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4083,7 +4083,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate14();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4118,7 +4118,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate15();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 
@@ -4153,7 +4153,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 			.mutate16();
 
 		for (int i = 0; i < input.length; i++) {
-			Assert.assertEquals(16 * i, io[i].getNumber());
+			Assertions.assertEquals(16 * i, io[i].getNumber());
 		}
 	}
 

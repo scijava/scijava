@@ -29,14 +29,14 @@
 
 package org.scijava.ops.engine;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
 
@@ -48,7 +48,7 @@ import org.scijava.ops.spi.OpMethod;
  */
 public class OpMethodTest extends AbstractTestEnvironment implements OpCollection {
 
-	@BeforeClass
+	@BeforeAll
 	public static void addNeededOps() {
 		ops.register(new OpMethodTestOps());
 	}

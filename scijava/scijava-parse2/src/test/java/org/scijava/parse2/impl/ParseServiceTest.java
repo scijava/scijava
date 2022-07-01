@@ -29,20 +29,17 @@
 
 package org.scijava.parse2.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.scijava.parse2.Item;
 import org.scijava.parse2.Items;
 import org.scijava.parse2.Parser;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests {@link Parser}.
@@ -53,7 +50,7 @@ public class ParseServiceTest {
 
 	private Parser parser;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		parser = new DefaultParser();
 	}
@@ -123,7 +120,7 @@ public class ParseServiceTest {
 		// test that map iteration order is the same
 		int index = 0;
 		for (final Object value : map.values()) {
-			assertSame("" + index + ":", items.get(index++).value(), value);
+			assertSame(items.get(index++).value(), value, "" + index + ":");
 		}
 	}
 

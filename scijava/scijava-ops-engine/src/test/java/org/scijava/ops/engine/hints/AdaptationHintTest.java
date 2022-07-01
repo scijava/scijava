@@ -86,6 +86,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
 		} catch( OpMatchingException e) {
+			// NB: expected behavior.
 		}
 	}
 

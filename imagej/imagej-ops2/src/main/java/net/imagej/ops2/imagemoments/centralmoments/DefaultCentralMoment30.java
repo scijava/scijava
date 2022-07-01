@@ -42,7 +42,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code imageMoments.centralMoment30}.
+ * Op to calculate the {@code imageMoments.centralMoment30}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

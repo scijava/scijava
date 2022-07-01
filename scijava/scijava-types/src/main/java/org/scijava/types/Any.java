@@ -49,11 +49,11 @@ public class Any implements Type {
 	/**
 	 * This method returns true iff:
 	 * <ul>
-	 * <li>{@code obj} is an {@link Any}
+	 * <li>{@code obj} is an {@link Any}</li>
 	 * <li>{@code obj.getUpperBounds} is equal to {@code upperBounds}
-	 * (disregarding the order of each array)
+	 * (disregarding the order of each array)</li>
 	 * <li>{@code obj.getLowerBounds} is equal to {@code lowerBounds}
-	 * (disregarding the order of each array)
+	 * (disregarding the order of each array)</li>
 	 * <p>
 	 * This is a rather strict definition of equality, however it is necessary to
 	 * preserve transitivity.

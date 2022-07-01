@@ -8,9 +8,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A data structure wrangling a hierarchy of {@link OpInfo}s.
+ * A data structure wrangling a hierarchy of {@link OpInfo}s, created for every
+ * Op match and called upon to instantiate any number of {@link OpInstance}s.
+ * 
+ * This {@link InfoChain} contains:
+ * <ol>
+ * <li>An {@link OpInfo} describing the Op</li>
+ * <li>A {@link List} of {@link OpInfo}s that should be mapped to the Op
+ * dependencies of this Op, <b>in the order that they are presented by the
+ * Op</b>.</li>
+ * </ol>
+ * <p>
+ * This {@link InfoChain} is also able to generate a {@link String} uniquely
+ * identifying itself.
+ * </p>
+ * <b>NOTE</b>: This class is <b>not</b> responsible for generating
+ * {@link RichOp}s.
  *
  * @author Gabriel Selzer
+ * @see RichOp#infoChain()
  */
 public class InfoChain {
 
@@ -63,17 +79,17 @@ public class InfoChain {
 		return info;
 	}
 
-	public OpInstance<?> op() {
+	public OpInstance<?> newInstance() {
 		return OpInstance.of(generateOp(), this, info.opType());
 	}
 
-	public OpInstance<?> op(Type opType) {
+	public OpInstance<?> newInstance(Type opType) {
 		return OpInstance.of(generateOp(), this, opType);
 	}
 
 	protected Object generateOp() {
 		List<Object> dependencyInstances = dependencies().stream() //
-			.map(d -> d.op().op()) //
+			.map(d -> d.newInstance().op()) //
 			.collect(Collectors.toList());
 		Object op = info().createOpInstance(dependencyInstances).object();
 		return op;

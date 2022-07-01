@@ -36,7 +36,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.size} of an {@link Interval}.
+ * Op to calculate the {@code stats.size} of an {@link Interval}.
  * 
  * @author Gabriel Selzer
  * @param <I> input type

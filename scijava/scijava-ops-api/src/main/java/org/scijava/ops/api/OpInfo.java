@@ -13,14 +13,15 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.ValidityException;
 
 /**
- * Metadata about an op implementation.
+ * Metadata about an Op implementation.
  * 
  * @author Curtis Rueden
  * @author David Kolb
  */
 public interface OpInfo extends Comparable<OpInfo> {
 
-	static final String IMPL_DECLARATION = "|Vanilla:";
+	/** Identifier for an unaltered OpInfo in an Op signature **/
+	String IMPL_DECLARATION = "|Info:";
 
 	/** name(s) of the op. */
 	List<String> names();

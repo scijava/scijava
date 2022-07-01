@@ -65,17 +65,17 @@ import org.scijava.ops.spi.OpDependency;
  * the large eigenvalue is negative, we return its absolute value and otherwise
  * return 0.
  * <ul>
- * <li>Source image is filtered first by a gaussian with 𝜎 that sets its scale.
- * <li>The the Hessian matrix is calculated for each pixel.
+ * <li>Source image is filtered first by a gaussian with 𝜎 that sets its scale.</li>
+ * <li>The the Hessian matrix is calculated for each pixel.</li>
  * <li>We yield the eigenvalues of the Hessian matrix. The output of the
- * tubeness filter is a combination of these eigenvalues:
+ * tubeness filter is a combination of these eigenvalues:</li>
  * <ul>
  * <li>in 2D where <code>λ₂</code> is the largest eigenvalue:
  * <code>out = 𝜎 × 𝜎 × |λ₂|</code> if <code>λ₂</code> is negative, 0
- * otherwise.
+ * otherwise.</li>
  * <li>in 3D where <code>λ₂</code> and <code>λ₃</code> are the largest
  * eigenvalues:, <code>out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )</code> if <code>λ₂</code>
- * and <code>λ₃</code> are negative, 0 otherwise.
+ * and <code>λ₃</code> are negative, 0 otherwise.</li>
  * </ul>
  * </ul>
  * This results in enhancing filaments of roughly <code>𝜎 / sqrt(d)</code>

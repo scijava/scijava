@@ -42,7 +42,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * This {@link Op} computes the 2nd multi variate of a {@link Mesh} (Label).
+ * This Op computes the 2nd multi variate of a {@link Mesh} (Label).
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
  *@implNote op names='geom.secondMoment'

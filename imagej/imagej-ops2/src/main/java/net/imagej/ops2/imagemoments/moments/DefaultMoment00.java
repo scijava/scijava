@@ -39,7 +39,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code imageMoments.moment00}.
+ * Op to calculate the {@code imageMoments.moment00}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

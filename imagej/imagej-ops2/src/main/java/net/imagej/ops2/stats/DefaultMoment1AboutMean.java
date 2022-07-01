@@ -36,7 +36,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.moment1AboutMean}
+ * Op to calculate the {@code stats.moment1AboutMean}
  * <p>
  * Note that by definition &Sigma;(x<sub>i</sub>-&mu;)=0, thus the output of the
  * Op <b>must</b> be 0.

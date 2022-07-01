@@ -302,7 +302,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements OpCollect
 	};
 
 	@Test
-	public void testAdaptatorWithDependencies() {
+	public void testAdaptationWithDependencies() {
 		Function<Double[], Double[]> f = ops.op("test.provenanceComputer").inType(
 			Double[].class).outType(Double[].class).function();
 		@SuppressWarnings("unchecked")

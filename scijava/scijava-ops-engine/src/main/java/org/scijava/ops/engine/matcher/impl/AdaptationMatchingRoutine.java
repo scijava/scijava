@@ -56,9 +56,9 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 	 * examine the applicability of all {@code adapt} Ops with the correct output
 	 * type. We need to check all of them because we do not know whether:
 	 * <ul>
-	 * <li>The dependencies will exist for a particular {@code adapt} Op
+	 * <li>The dependencies will exist for a particular {@code adapt} Op</li>
 	 * <li>The Op we want exists with the correct type for the input of the
-	 * {@code adapt} Op.
+	 * {@code adapt} Op.</li>
 	 * </ul>
 	 * 
 	 * @param conditions the {@link MatchingConditions} the return must satisfy

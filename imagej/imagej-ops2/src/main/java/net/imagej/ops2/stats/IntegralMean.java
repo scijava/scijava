@@ -42,7 +42,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code stats.mean} from an integral image using a
+ * Op to calculate the {@code stats.mean} from an integral image using a
  * specialized {@code Cursor} implementation.
  *
  * @param <I>

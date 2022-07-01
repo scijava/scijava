@@ -235,12 +235,12 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 	/**
 	 * Asserts that the {@link OpInfo} has as inputs:
 	 * <ul>
-	 * <li> foo - the first input
-	 * <li> bar - the second input
+	 * <li> foo - the first input</li>
+	 * <li> bar - the second input</li>
 	 * </ul>
 	 * and as output:
 	 * <ul>
-	 * <li> output - foo + bar
+	 * <li> output - foo + bar</li>
 	 * </ul>
 	 */
 	private void isSuitableScrapedOpMethodInfo(OpInfo info) {
@@ -266,12 +266,12 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 	/**
 	 * Asserts that the {@link OpInfo} has as inputs:
 	 * <ul>
-	 * <li> input1
-	 * <li> input2
+	 * <li> input1</li>
+	 * <li> input2</li>
 	 * </ul>
 	 * and as output:
 	 * <ul>
-	 * <li> output
+	 * <li> output</li>
 	 * </ul>
 	 */
 	private void isSuitableGenericOpMethodInfo(OpInfo info) {

@@ -31,6 +31,7 @@ package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,10 +44,10 @@ import org.scijava.types.Types;
 
 /**
  * Container class for a possible operation match between an {@link OpRef} and
- * an {@link OpInfo}, as computed by the {@link OpMatcher}.
+ * an {@link OpInfo}.
  *
  * @author Curtis Rueden
- * @see OpMatcher
+ * @author Gabriel Selzer
  */
 public class OpCandidate {
 
@@ -87,6 +88,10 @@ public class OpCandidate {
 
 		this.paddedArgs = OpUtils.padTypes(this, getRef().getArgs());
 		this.reifiedType = getReifiedType(ref, info, typeVarAssigns);
+	}
+
+	public OpCandidate(final OpEnvironment env, final OpRef ref, final OpInfo info) {
+			this(env, ref, info, typeVarAssignsFromRefAndInfo(ref, info));
 	}
 
 	public static Type getReifiedType(OpRef ref, OpInfo info, Map<TypeVariable<?>, Type> typeVarAssigns) {
@@ -235,6 +240,15 @@ public class OpCandidate {
 	public Object createOp(List<?> dependencies)
 	{
 		return createOpInstance(dependencies).object();
+	}
+
+	// -- Helper methods -- //
+	private static Map<TypeVariable<?>, Type> typeVarAssignsFromRefAndInfo(final OpRef ref, final OpInfo info) {
+		Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
+		if (!ref.typesMatch(info.opType(), typeVarAssigns))
+			throw new IllegalArgumentException(
+					"OpInfo " + info + " cannot satisfy the requirements contained within OpRef " + ref);
+		return typeVarAssigns;
 	}
 
 }

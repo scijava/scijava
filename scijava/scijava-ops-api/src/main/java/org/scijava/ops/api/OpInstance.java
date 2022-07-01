@@ -7,7 +7,11 @@ import java.util.Objects;
 import org.scijava.types.GenericTyped;
 
 /**
- * An instance of an {@link OpInfo}
+ * An instance of an {@link OpInfo}. They can be constructed directly, but are
+ * easily generated from {@link InfoChain}s.
+ * <p>
+ * Each {@link OpInstance} has an Op and its corresponding {@link OpInfo}.
+ * </p>
  * 
  * @author Gabriel Selzer
  */

@@ -40,7 +40,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the n-th {@code stats.percentile}.
+ * Op to calculate the n-th {@code stats.percentile}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

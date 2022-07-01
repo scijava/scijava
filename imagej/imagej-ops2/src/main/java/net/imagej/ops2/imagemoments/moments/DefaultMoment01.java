@@ -40,7 +40,7 @@ import net.imglib2.util.Intervals;
 import org.scijava.ops.spi.Op;
 
 /**
- * {@link Op} to calculate the {@code imageMoments.moment01}.
+ * Op to calculate the {@code imageMoments.moment01}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

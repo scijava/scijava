@@ -89,7 +89,7 @@ public final class MatchingUtils {
 	 * Using a map where N was already bound to Integer (N -> Integer.class). This
 	 * method is useful for the following scenario: During ops matching, we first
 	 * check if the arguments (inputs) of the requested op are applicable to the
-	 * arguments of an op candidate. During this process, possible type variables
+	 * arguments of an Op candidate. During this process, possible type variables
 	 * may be inferred. The can then be used with this method to find out if the
 	 * outputs of the op candidate would be assignable to the output of the
 	 * requested op.

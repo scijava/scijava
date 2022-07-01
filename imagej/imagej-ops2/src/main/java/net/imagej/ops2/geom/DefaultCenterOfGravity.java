@@ -41,7 +41,7 @@ import net.imglib2.type.numeric.RealType;
 import org.scijava.ops.spi.Op;
 
 /**
- * This {@link Op} computes the center of gravity of a {@link IterableRegion}
+ * This Op computes the center of gravity of a {@link IterableRegion}
  * (Label).
  * 
  * @author Daniel Seebacher (University of Konstanz)

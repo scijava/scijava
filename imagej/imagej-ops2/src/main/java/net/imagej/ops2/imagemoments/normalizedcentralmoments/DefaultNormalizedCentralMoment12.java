@@ -38,7 +38,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code imageMoments.normalizedCentralMoment12}.
+ * Op to calculate the {@code imageMoments.normalizedCentralMoment12}.
  * 
  * @author Daniel Seebacher (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)

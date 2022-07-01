@@ -245,7 +245,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (!(specialType.getType() instanceof ParameterizedType))
 			throw new IllegalArgumentException("TODO");
 		@SuppressWarnings("unchecked")
-		OpInstance<T> instance = (OpInstance<T>) chain.op(specialType.getType());
+		OpInstance<T> instance = (OpInstance<T>) chain.newInstance(specialType.getType());
 		Hints hints = getDefaultHints();
 		RichOp<T> wrappedOp = wrapOp(instance, hints);
 		return wrappedOp.asOpType();
@@ -337,7 +337,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	/**
 	 * Creates an Op instance from an {@link OpInfo} with the provided
 	 * {@link MatchingConditions} as the guidelines for {@link OpInfo} selection.
-	 * This Op instance is put into the {@code opCache}, and is retrievable via
+	 * This Op instance is put into the {@link #opCache}, and is retrievable via
 	 * {@link DefaultOpEnvironment#wrapViaCache(MatchingConditions)}
 	 * 
 	 * @param ref the {@link OpRef} request
@@ -353,26 +353,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		MatchingConditions conditions = MatchingConditions.from(ref, hints);
 
 		// create new OpCandidate from ref and info
-		OpCandidate candidate = new ManualOpCandidate(this, ref, info,
-			this.matcher);
+		OpCandidate candidate = new OpCandidate(this, ref, info);
 
 		instantiateAndCache(conditions, candidate);
 
 		return conditions;
 	}
 
-	private RichOp<?> wrapViaCache(MatchingConditions conditions) {
-		OpInstance<?> instance = getInstance(conditions);
-		return wrap(instance, conditions.hints());
-	}
-
-	private RichOp<?> wrap(OpInstance<?> instance, Hints hints) {
-		return wrapOp(instance, hints);
-	}
-
 	/**
 	 * Finds an Op instance matching the request described by {@link OpRef}
-	 * {@code ref} and stores this Op in {@code opCache}. NB the return must be an
+	 * {@code ref} and stores this Op in {@link #opCache}. NB the return must be an
 	 * {@link Object} here (instead of some type variable T where T is the Op
 	 * type} since there is no way to ensure that the {@code OpRef} can provide
 	 * that T (since the OpRef could require that the Op returned is of multiple
@@ -405,10 +395,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		OpInstance<?> op = instantiateOp(candidate, conditions.hints());
 
 		// cache instance
-		cacheOp(conditions, op);
-	}
-
-	private void cacheOp(MatchingConditions conditions, OpInstance<?> op) {
 		opCache.putIfAbsent(conditions, op);
 	}
 
@@ -437,15 +423,15 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		final List<RichOp<?>> conditions = resolveOpDependencies(candidate, hints);
 		InfoChain adaptorChain = new DependencyRichOpInfoChain(candidate
 			.opInfo(), conditions);
-		return adaptorChain.op(candidate.getType());
+		return adaptorChain.newInstance(candidate.getType());
 	}
 
 	/**
-	 * Wraps the matched op into an {@link Op} that knows its generic typing.
+	 * Wraps the matched op into an Op that knows its generic typing.
 	 * 
 	 * @param instance - the {@link OpInstance} to wrap.
 	 * @param hints - the {@link Hints} used to create the {@link OpInstance}
-	 * @return an {@link Op} wrapping of op.
+	 * @return an Op wrapping of op.
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> RichOp<T> wrapOp(OpInstance<T> instance, Hints hints)
@@ -579,6 +565,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		return inferOpRef(mappedDependencyType, dependencyName,
 			typeVarAssigns);
 	}
+
+	private RichOp<?> wrapViaCache(MatchingConditions conditions) {
+		OpInstance<?> instance = getInstance(conditions);
+		return wrap(instance, conditions.hints());
+	}
+
+	private RichOp<?> wrap(OpInstance<?> instance, Hints hints) {
+		return wrapOp(instance, hints);
+	}
+
 
 	/**
 	 * Tries to infer a {@link OpRef} from a functional Op type. E.g. the type:

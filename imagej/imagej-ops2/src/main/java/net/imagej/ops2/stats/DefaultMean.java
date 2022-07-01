@@ -37,7 +37,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpDependency;
 
 /**
- * {@link Op} to calculate the {@code stats.max} using {@code stats.sum} and
+ * Op to calculate the {@code stats.max} using {@code stats.sum} and
  * {@code stats.size}.
  * 
  * @author Daniel Seebacher (University of Konstanz)

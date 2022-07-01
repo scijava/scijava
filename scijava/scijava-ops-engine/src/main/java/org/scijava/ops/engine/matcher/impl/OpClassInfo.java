@@ -50,9 +50,10 @@ import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
 import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
+import org.scijava.util.VersionUtils;
 
 /**
- * Metadata about an op implementation defined as a class.
+ * Metadata about an Op implementation defined as a class.
  * 
  * @author Curtis Rueden
  * @author David Kolb
@@ -66,6 +67,10 @@ public class OpClassInfo implements OpInfo {
 	private ValidityException validityException;
 	private final double priority;
 	private final Hints hints;
+
+	public OpClassInfo(final Class<?> opClass, final Hints hints, final String... names) {
+		this(opClass, VersionUtils.getVersion(opClass), hints, Priority.NORMAL, names);
+	}
 
 	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final String... names) {
 		this(opClass, version, hints, Priority.NORMAL, names);
@@ -205,9 +210,9 @@ public class OpClassInfo implements OpInfo {
 	 * For a {@link Class}, we define the implementation as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The fully qualified name of the class
+	 * <li>The fully qualified name of the class</li>
 	 * <li>The version of the class containing the field, with a preceding
-	 * {@code @}
+	 * {@code @}</li>
 	 * </ol>
 	 * <p>
 	 * For example, for a field class {@code com.example.foo.Bar}, you might have

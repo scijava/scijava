@@ -12,8 +12,8 @@ import org.scijava.ops.api.OpRef;
  * {@code C} is found to satisfy {@code B}. This will result in an
  * {@link OpMatchingException} thrown for Op {@code A}. We would want to know:
  * <ol>
- * <li>that the request for {@code A} was not fulfilled
- * <li>that no match could be found for {@code C}, which was the cause for (1)
+ * <li>that the request for {@code A} was not fulfilled</li>
+ * <li>that no match could be found for {@code C}, which was the cause for (1)</li>
  * </ol>
  * This logic can be generalized for an arbitrarily long Op chain.
  *

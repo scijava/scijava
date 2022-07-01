@@ -33,6 +33,7 @@ import org.scijava.types.Nil;
  */
 public class OpAdaptationInfo implements OpInfo {
 
+	/** Identifiers used for an adapted Op in a signature **/
 	protected static final String IMPL_DECLARATION = "|Adaptation:";
 	protected static final String ADAPTOR = "|Adaptor:";
 	protected static final String ORIGINAL = "|OriginalOp:";
@@ -115,7 +116,7 @@ public class OpAdaptationInfo implements OpInfo {
 	public StructInstance<?> createOpInstance(List<?> dependencies) {
 		@SuppressWarnings("unchecked")
 		OpInstance<Function<Object, Object>> adaptorInstance =
-			(OpInstance<Function<Object, Object>>) adaptorChain.op(
+			(OpInstance<Function<Object, Object>>) adaptorChain.newInstance(
 				new Nil<Function<Object, Object>>()
 				{}.getType());
 		final Object op = srcInfo.createOpInstance(dependencies).object();
@@ -154,9 +155,9 @@ public class OpAdaptationInfo implements OpInfo {
 	 * For an adapted Op, we define the implementation name as the concatenation
 	 * of:
 	 * <ol>
-	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}
-	 * <li>The adaptation delimiter
-	 * <li>The implementation name of the <b>original info</b>
+	 * <li>The signature of the <b>adaptor</b> {@link InfoChain}</li>
+	 * <li>The adaptation delimiter</li>
+	 * <li>The implementation name of the <b>original info</b></li>
 	 * </ol>
 	 * <p>
 	 * For example, for a source {@code com.example.foo.Bar@1.0.0} with adaptor

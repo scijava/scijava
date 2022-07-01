@@ -29,9 +29,6 @@
 
 package org.scijava.types;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +39,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
@@ -77,14 +75,14 @@ public class DefaultTypeReifierTest {
 	@Test
 	public void testClass() {
 		final Type stringType = types.reify("Hello");
-		assertEquals(String.class, stringType);
+		Assertions.assertEquals(String.class, stringType);
 	}
 
 	/** Tests type extraction for {@code null} objects. */
 	@Test
 	public void testNull() {
 		final Type nullType = types.reify(null);
-		assertTrue(Any.class.isInstance(nullType));
+		Assertions.assertTrue(Any.class.isInstance(nullType));
 	}
 
 	/** Tests type extraction for {@link Nil} objects. */
@@ -92,7 +90,7 @@ public class DefaultTypeReifierTest {
 	public void testNil() {
 		final Nil<List<Float>> nilFloatList = new Nil<List<Float>>() {};
 		final Type nilFloatListType = types.reify(nilFloatList);
-		assertEquals(nilFloatList.getType(), nilFloatListType);
+		Assertions.assertEquals(nilFloatList.getType(), nilFloatListType);
 	}
 
 	/** Tests type extraction for {@link GenericTyped} objects. */
@@ -105,7 +103,7 @@ public class DefaultTypeReifierTest {
 				return Number.class;
 			}
 		};
-		assertEquals(Number.class, types.reify(numberThing));
+		Assertions.assertEquals(Number.class, types.reify(numberThing));
 	}
 
 	/** Tests type extraction for {@link Iterable} objects. */
@@ -114,7 +112,7 @@ public class DefaultTypeReifierTest {
 		final List<String> stringList = //
 			new ArrayList<>(Collections.singletonList("Hi"));
 		final Type stringListType = types.reify(stringList);
-		assertEquals(new Nil<ArrayList<String>>() {}.getType(), stringListType);
+		Assertions.assertEquals(new Nil<ArrayList<String>>() {}.getType(), stringListType);
 	}
 
 	/** Tests type extraction for {@link Map} objects. */
@@ -123,7 +121,7 @@ public class DefaultTypeReifierTest {
 		final Map<String, Integer> mapSI = //
 			new HashMap<>(Collections.singletonMap("Curtis", 37));
 		final Type mapSIType = types.reify(mapSI);
-		assertEquals(new Nil<HashMap<String, Integer>>() {}.getType(), mapSIType);
+		Assertions.assertEquals(new Nil<HashMap<String, Integer>>() {}.getType(), mapSIType);
 	}
 
 	/** Tests nested type extraction of a complex object. */
@@ -144,7 +142,7 @@ public class DefaultTypeReifierTest {
 		testScores.add(highlights);
 
 		final Type testScoresType = types.reify(testScores);
-		assertEquals(new Nil<ArrayList<HashMap<String, ArrayList<Integer>>>>() {}
+		Assertions.assertEquals(new Nil<ArrayList<HashMap<String, ArrayList<Integer>>>>() {}
 			.getType(), testScoresType);
 	}
 
@@ -158,12 +156,12 @@ public class DefaultTypeReifierTest {
 		blueBag.add(new BlueThing());
 
 		final Type blueBagType = types.reify(blueBag);
-		assertEquals(new Nil<Bag<BlueThing>>() {}.getType(), blueBagType);
+		Assertions.assertEquals(new Nil<Bag<BlueThing>>() {}.getType(), blueBagType);
 
 		final Bag<RedThing> redBag = new Bag<>();
 		redBag.add(new RedThing());
 
 		final Type redBagType = types.reify(redBag);
-		assertEquals(new Nil<Bag<RedThing>>() {}.getType(), redBagType);
+		Assertions.assertEquals(new Nil<Bag<RedThing>>() {}.getType(), redBagType);
 	}
 }

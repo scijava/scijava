@@ -1,8 +1,6 @@
 
 package org.scijava.types.inference;
 
-import static org.junit.Assert.assertEquals;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -13,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.scijava.types.Any;
 import org.scijava.types.Nil;
 
@@ -50,7 +49,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVarT = (TypeVariable<?>) t;
 		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, false));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -74,7 +73,7 @@ public class InferTypeVariablesTest {
 		expected.put(typeVarT, new WildcardTypeMapping(typeVarT, mappedWildcard,
 			true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -95,7 +94,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVarT = (TypeVariable<?>) t;
 		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, false));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -114,7 +113,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -133,7 +132,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarT, new TypeMapping(typeVarT, Double.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -151,7 +150,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -169,7 +168,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -187,7 +186,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -205,7 +204,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarO, new TypeMapping(typeVarO, new Any(), true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -221,7 +220,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarO, new TypeMapping(typeVarO, FooThing.class, false));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -240,7 +239,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVarT = (TypeVariable<?>) new Nil<T>() {}.getType();
 		expected.put(typeVarT, new TypeMapping(typeVarT, Number.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -260,7 +259,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVarO = (TypeVariable<?>) new Nil<O>() {}.getType();
 		expected.put(typeVarO, new TypeMapping(typeVarO, Double.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -282,7 +281,7 @@ public class InferTypeVariablesTest {
 		Map<TypeVariable<?>, TypeMapping> expected = new HashMap<>();
 		expected.put(typeVarT, new TypeMapping(typeVarT, Number.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -305,7 +304,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVarT = (TypeVariable<?>) t.getType();
 		expected.put(typeVarT, new TypeMapping(typeVarT, Number.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 	}
 
 	@Test
@@ -332,7 +331,7 @@ public class InferTypeVariablesTest {
 			.getActualTypeArguments()[0];
 		expected.put(typeVarO, new TypeMapping(typeVarO, Double.class, false));
 
-		assertEquals(typeAssigns, expected);
+		Assertions.assertEquals(typeAssigns, expected);
 	}
 
 	@Test
@@ -354,7 +353,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVar = (TypeVariable<?>) t;
 		expected.put(typeVar, new TypeMapping(typeVar, Number.class, true));
 
-		assertEquals(expected, typeAssigns);
+		Assertions.assertEquals(expected, typeAssigns);
 
 		final Type[] types2 = { t, t };
 		final Type listWildcardNumber = new Nil<List<? extends Number>>() {}
@@ -377,7 +376,7 @@ public class InferTypeVariablesTest {
 		TypeVariable<?> typeVar2 = (TypeVariable<?>) t;
 		expected2.put(typeVar2, new TypeMapping(typeVar, Number.class, true));
 
-		assertEquals(expected2, typeAssigns2);
+		Assertions.assertEquals(expected2, typeAssigns2);
 	}
 
 }

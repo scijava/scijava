@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.scijava.ops.api.*;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 import org.scijava.ops.spi.Op;

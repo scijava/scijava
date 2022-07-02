@@ -14,7 +14,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Computers.Arity1;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.struct.Member;
 import org.scijava.util.Types;
 
@@ -259,7 +259,7 @@ public class SimplificationMetadata {
 	 * @return the index of the mutable argument.
 	 */
 	public int ioArgIndex() {
-		List<Member<?>> inputs = OpUtils.inputs(info.struct());
+		List<Member<?>> inputs = info.inputs();
 		Optional<Member<?>> ioArg = inputs.stream().filter(m -> m.isInput() && m.isOutput()).findFirst();
 		if(ioArg.isEmpty()) return -1;
 		Member<?> ioMember = ioArg.get();

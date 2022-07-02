@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.api;
+package org.scijava.ops.engine;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -38,7 +38,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.scijava.ValidityProblem;
+import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
+import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpRef;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
@@ -113,59 +117,15 @@ public final class OpUtils {
 				.collect(Collectors.toList());
 	}
 
-	public static List<Member<?>> inputs(OpCandidate candidate) {
-		return inputs(candidate.struct());
-	}
-
-	public static List<Member<?>> inputs(final Struct struct) {
-		return struct.members().stream() //
-				.filter(member -> member.isInput()) //
-				.collect(Collectors.toList());
-	}
-	
-	public static Type[] inputTypes(OpCandidate candidate) {
-		return getTypes(inputs(candidate.struct()));
-	}
-
-	public static Type[] inputTypes(Struct struct) {
-		return getTypes(inputs(struct));
-	}
-
-	public static Member<?> output(OpCandidate candidate) {
-		return candidate.opInfo().output();
-	}
-
-	public static Type outputType(OpCandidate candidate) {
-		return output(candidate).getType();
-	}
-
-	public static List<Member<?>> outputs(final Struct struct) {
-		return struct.members().stream() //
-				.filter(member -> member.isOutput()) //
-				.collect(Collectors.toList());
-	}
-
-	public static List<MemberInstance<?>> outputs(StructInstance<?> op) {
-		return op.members().stream() //
-				.filter(memberInstance -> memberInstance.member().isOutput()) //
-				.collect(Collectors.toList());
-	}
-
 	public static void checkHasSingleOutput(Struct struct) throws ValidityException {
-		final int numOutputs = OpUtils.outputs(struct).size();
+		final long numOutputs = struct.members().stream() //
+			.filter(m -> m.isOutput()).count();
 		if (numOutputs != 1) {
 			final String error = numOutputs == 0 //
 				? "No output parameters specified. Must specify exactly one." //
 				: "Multiple output parameters specified. Only a single output is allowed.";
 			throw new ValidityException(Collections.singletonList(new ValidityProblem(error)));
 		}
-	}
-
-	public static List<OpDependencyMember<?>> dependencies(Struct struct) {
-		return struct.members().stream() //
-			.filter(member -> member instanceof OpDependencyMember) //
-			.map(member -> (OpDependencyMember<?>) member) //
-			.collect(Collectors.toList());
 	}
 
 	public static Type[] types(OpCandidate candidate) {
@@ -176,127 +136,8 @@ public final class OpUtils {
 		return candidate.priority();
 	}
 
-	public static Type[] padTypes(final OpCandidate candidate, Type[] types) {
-		final Object[] padded = padArgs(candidate, false, (Object[]) types);
-		return Arrays.copyOf(padded, padded.length, Type[].class);
-	}
-	
-	public static Object[] padArgs(final OpCandidate candidate, final boolean secondary, Object... args) {
-		List<Member<?>> members;
-		String argName;
-		if (secondary) {
-			members = OpUtils.injectableMembers(candidate.struct());
-			argName = "secondary args";
-		} else {
-			members = OpUtils.inputs(candidate.struct());
-			argName = "args";
-		}
-		
-		int inputCount = 0, requiredCount = 0;
-		for (final Member<?> item : members) {
-			inputCount++;
-			if (!item.isRequired())
-				requiredCount++;
-		}
-		if (args.length == inputCount) {
-			// correct number of arguments
-			return args;
-		}
-		if (args.length > inputCount) {
-			// too many arguments
-			candidate.setStatus(StatusCode.TOO_MANY_ARGS,
-					"\nNumber of " + argName + " given: " + args.length + "  >  " + 
-					"Number of " + argName + " of op: " + inputCount);
-			return null;
-		}
-		if (args.length < requiredCount) {
-			// too few arguments
-			candidate.setStatus(StatusCode.TOO_FEW_ARGS,
-					"\nNumber of " + argName + " given: " + args.length + "  <  " + 
-					"Number of required " + argName + " of op: " + requiredCount);
-			return null;
-		}
-
-		// pad optional parameters with null (from right to left)
-		final int argsToPad = inputCount - args.length;
-		final int optionalCount = inputCount - requiredCount;
-		final int optionalsToFill = optionalCount - argsToPad;
-		final Object[] paddedArgs = new Object[inputCount];
-		int argIndex = 0, paddedIndex = 0, optionalIndex = 0;
-		for (final Member<?> item : members) {
-			if (!item.isRequired() && optionalIndex++ >= optionalsToFill) {
-				// skip this optional parameter (pad with null)
-				paddedIndex++;
-				continue;
-			}
-			paddedArgs[paddedIndex++] = args[argIndex++];
-		}
-		return paddedArgs;
-	}
-
-	public static List<Member<?>> injectableMembers(Struct struct) {
-		return struct.members()
-				.stream()
-				.filter(m -> m instanceof ValueAccessible)
-				.collect(Collectors.toList());
-	}
-
-	/**
-	 * Checks if incomplete type matching could have occurred. If we have
-	 * several matches that do not have equal output types, the output type may not
-	 * completely match the request as only raw type assignability will be checked
-	 * at the moment.
-	 * @param matches
-	 * @return
-	 */
-	public static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
-		Type outputType = null;
-		for (OpCandidate match : matches) {
-			Type ts = output(match).getType();
-			if (outputType == null || Objects.equals(outputType, ts)) {
-				outputType = ts;
-				continue;
-			} else {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public static Type[] getTypes(List<Member<?>> members) {
 		return members.stream().map(m -> m.getType()).toArray(Type[]::new);
-	}
-
-	public static String opString(final OpInfo info) {
-		return opString(info, null);
-	}
-
-	public static String opString(final OpInfo info, final Member<?> special) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(info.implementationName() + "(\n\t Inputs:\n");
-		for (final Member<?> arg : info.inputs()) {
-			appendParam(sb, arg, special);
-		}
-		sb.append("\t Outputs:\n");
-		appendParam(sb, info.output(), special);
-		sb.append(")\n");
-		return sb.toString();
-	}
-
-	private static void appendParam(final StringBuilder sb, final Member<?> arg,
-		final Member<?> special)
-	{
-		if (arg == special) sb.append("==> \t"); // highlight special item
-		else sb.append("\t\t");
-		sb.append(arg.getType().getTypeName());
-		sb.append(" ");
-		sb.append(arg.getKey());
-		if (!arg.getDescription().isEmpty()) {
-			sb.append(" -> ");
-			sb.append(arg.getDescription());
-		}
-		sb.append("\n");
-		return;
 	}
 
 	public static Class<?> findFirstImplementedFunctionalInterface(final OpRef opRef) {

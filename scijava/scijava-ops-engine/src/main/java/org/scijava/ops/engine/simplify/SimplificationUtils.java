@@ -23,7 +23,7 @@ import org.scijava.function.Mutable;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;

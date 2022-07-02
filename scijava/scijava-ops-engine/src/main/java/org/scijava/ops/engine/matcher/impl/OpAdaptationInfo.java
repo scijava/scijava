@@ -13,7 +13,7 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;

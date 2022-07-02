@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
@@ -17,6 +18,7 @@ import org.scijava.struct.ValidityException;
  * 
  * @author Curtis Rueden
  * @author David Kolb
+ * @author Gabriel Selzer
  */
 public interface OpInfo extends Comparable<OpInfo> {
 
@@ -37,12 +39,28 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** Gets the op's input parameters. */
 	default List<Member<?>> inputs() {
-		return OpUtils.inputs(struct());
+		return struct().members().stream() //
+			.filter(Member::isInput) //
+			.collect(Collectors.toList());
+	}
+
+	/** Gets the types of the op's input parameters. */
+	default List<Type> inputTypes() {
+		return inputs().stream() //
+			.map(Member::getType) //
+			.collect(Collectors.toList());
 	}
 
 	/** Gets the op's output parameters. */
+	default List<Member<?>> outputs() {
+		return struct().members().stream() //
+				.filter(Member::isOutput) //
+				.collect(Collectors.toList());
+	}
+
+	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
 	default Member<?> output() {
-		List<Member<?>> outputs = OpUtils.outputs(struct());
+		List<Member<?>> outputs = outputs();
 
 		if (outputs.size() == 0) throw new IllegalStateException(
 			"No outputs in Struct " + struct());
@@ -51,9 +69,17 @@ public interface OpInfo extends Comparable<OpInfo> {
 			"Multiple outputs in Struct " + struct());
 	}
 
+	/** Gets the op's output parameter, if there is <b>exactly</b> one. */
+	default Type outputType() {
+		return output().getType();
+	}
+
 	/** Gets the op's dependencies on other ops. */
 	default List<OpDependencyMember<?>> dependencies() {
-		return OpUtils.dependencies(struct());
+		return struct().members().stream() //
+			.filter(m -> m instanceof OpDependencyMember) //
+			.map(m -> (OpDependencyMember<?>) m) //
+			.collect(Collectors.toList());
 	}
 	
 	default OpCandidate createCandidate(OpEnvironment env, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
@@ -87,4 +113,56 @@ public interface OpInfo extends Comparable<OpInfo> {
 
 	/** A unique identifier for an Op */
 	String id();
+
+	/**
+	 * Writes a basic {@link String} describing this {@link OpInfo}
+	 * 
+	 * @return a descriptor for this {@link OpInfo}
+	 */
+	default String opString() {
+		return opString(null);
+	}
+
+	/**
+	 * Writes a basic {@link String} describing this {@link OpInfo} <b>with a
+	 * particular {@link Member} highlighted</b>.
+	 *
+	 * @param special the {@link Member} to highlight
+	 * @return a descriptor for this {@link OpInfo}
+	 */
+	default String opString(final Member<?> special) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(implementationName()).append("(\n\t Inputs:\n");
+		for (final Member<?> arg : inputs()) {
+			appendParam(sb, arg, special);
+		}
+		sb.append("\t Outputs:\n");
+		appendParam(sb, output(), special);
+		sb.append(")\n");
+		return sb.toString();
+	}
+
+	/**
+	 * Appends a {@link Member} to the {@link StringBuilder} writing the Op
+	 * string.
+	 * 
+	 * @param sb the {@link StringBuilder}
+	 * @param arg the {@link Member} being appended to {@code sb}
+	 * @param special the {@link Member} to highlight
+	 */
+	private void appendParam(final StringBuilder sb, final Member<?> arg,
+		final Member<?> special)
+	{
+		if (arg == special) sb.append("==> \t"); // highlight special item
+		else sb.append("\t\t");
+		sb.append(arg.getType().getTypeName());
+		sb.append(" ");
+		sb.append(arg.getKey());
+		if (!arg.getDescription().isEmpty()) {
+			sb.append(" -> ");
+			sb.append(arg.getDescription());
+		}
+		sb.append("\n");
+	}
+
 }

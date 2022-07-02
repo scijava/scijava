@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;

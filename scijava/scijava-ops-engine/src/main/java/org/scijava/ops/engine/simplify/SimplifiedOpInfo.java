@@ -12,13 +12,11 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
-import org.scijava.ops.spi.Op;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -237,7 +235,7 @@ public class SimplifiedOpInfo implements OpInfo {
 
 	@Override
 	public String toString() {
-		return OpUtils.opString(this);
+		return opString();
 	}
 	
 	@Override

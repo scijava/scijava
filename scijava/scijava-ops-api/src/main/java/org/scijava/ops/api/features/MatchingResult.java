@@ -1,12 +1,13 @@
 package org.scijava.ops.api.features;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.OpUtils;
 
 /**
  * Class representing the result from type matching done by a
@@ -91,9 +92,10 @@ public class MatchingResult {
 			sb.append("No matching '" + ref.getLabel() + "' op\n");
 		} else {
 			// multiple matches
-			final double priority = OpUtils.getPriority(matches.get(0));
-			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " + priority + ":\n");
-			if (OpUtils.typeCheckingIncomplete(matches)) {
+			final double priority = matches.get(0).priority();
+			sb.append("Multiple '" + ref.getLabel() + "' ops of priority " + priority +
+					":\n");
+			if (typeCheckingIncomplete(matches)) {
 				sb.append("Incomplete output type checking may have occured!\n");
 			}
 			int count = 0;
@@ -115,7 +117,7 @@ public class MatchingResult {
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
 			sb.append(++count + ". ");
-			sb.append("\t" + OpUtils.opString(candidate.opInfo(), candidate.getStatusItem()) + "\n");
+			sb.append("\t" + candidate.opInfo().opString(candidate.getStatusItem()) + "\n");
 			final String status = candidate.getStatus();
 			if (status != null)
 				sb.append("\t" + status + "\n");
@@ -129,5 +131,26 @@ public class MatchingResult {
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Checks if incomplete type matching could have occurred. If we have
+	 * several matches that do not have equal output types, the output type may not
+	 * completely match the request as only raw type assignability will be checked
+	 * at the moment.
+	 * @param matches the {@link List} of {@link OpCandidate}s to check
+	 * @return true iff incomplete type matching could have occurred.
+	 */
+	private static boolean typeCheckingIncomplete(List<OpCandidate> matches) {
+		Type outputType = null;
+		for (OpCandidate match : matches) {
+			Type ts = match.opInfo().outputType();
+			if (outputType == null || Objects.equals(outputType, ts)) {
+				outputType = ts;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 }

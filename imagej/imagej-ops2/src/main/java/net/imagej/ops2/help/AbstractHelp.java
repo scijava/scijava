@@ -35,7 +35,7 @@ import java.util.List;
 
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpUtils;
+import org.scijava.ops.engine.OpUtils;
 
 /**
  * Base class for help operations.
@@ -63,7 +63,7 @@ public abstract class AbstractHelp {
 
 		final StringBuilder sb = new StringBuilder("Available operations:");
 		for (final OpInfo info : infos) {
-			sb.append("\n\t" + OpUtils.opString(info));
+			sb.append("\n\t" + info.opString());
 		}
 
 		// TODO: ops cannot (yet) have descriptions.

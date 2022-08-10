@@ -31,7 +31,7 @@
 //
 //import java.math.BigInteger;
 //
-//import net.imagej.types.UnboundedIntegerType;
+//import net.imagej.ops2.util.UnboundedIntegerType;
 //import net.imglib2.IterableInterval;
 //import net.imglib2.type.numeric.IntegerType;
 //import net.imglib2.type.numeric.RealType;

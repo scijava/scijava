@@ -28,7 +28,7 @@
  */
 package net.imagej.ops2.features.zernike;
 
-import net.imagej.types.BigComplex;
+import net.imagej.ops2.util.BigComplex;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.type.numeric.RealType;

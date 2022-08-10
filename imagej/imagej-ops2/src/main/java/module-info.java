@@ -118,7 +118,6 @@ module net.imagej.ops2 {
 	
 	requires java.xml; // TEMP: for org.scijava:scijava-common org.scijava.util.POM
 	requires java.scripting;
-	requires net.imagej;
 	requires net.imagej.mesh;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;

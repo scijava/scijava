@@ -7,11 +7,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ValidityProblem;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.MemberParser;
-import org.scijava.struct.ValidityException;
-import org.scijava.util.ClassUtils;
+import org.scijava.common3.Annotations;
 
 public class ClassOpDependencyMemberParser implements
 	MemberParser<Class<?>, FieldOpDependencyMember<?>>
@@ -41,7 +41,7 @@ public class ClassOpDependencyMemberParser implements
 	private static void parseFieldOpDependencies(final List<FieldOpDependencyMember<?>> items,
 		final List<ValidityProblem> problems, Class<?> annotatedClass)
 	{
-		final List<Field> fields = ClassUtils.getAnnotatedFields(annotatedClass,
+		final List<Field> fields = Annotations.getAnnotatedFields(annotatedClass,
 			OpDependency.class);
 		for (final Field f : fields) {
 			f.setAccessible(true);

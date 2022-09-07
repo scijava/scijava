@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import net.imagej.ImgPlus;
-import net.imagej.ImgPlusMetadata;
 import net.imglib2.Cursor;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
@@ -227,23 +225,6 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final BiFunction<Dimensions, I, ImgLabeling<L, I>> imgLabelingFromDimsAndType = (dims,
 			type) -> imgLabelingFromDimsTypeAndFactory.apply(dims, type, Util.getSuitableImgFactory(dims, type));
-
-	/* ImgPlus */
-
-	/**
-	 * @input img
-	 * @output imgPlus
-	 * @implNote op names='create, create.imgPlus'
-	 */
-	public final Function<Img<T>, ImgPlus<T>> imgPlusFromImg = ImgPlus::new;
-
-	/**
-	 * @input img
-	 * @input imgPlugMetadata
-	 * @output imgPlus
-	 * @implNote op names='create, create.imgPlus'
-	 */
-	public final BiFunction<Img<T>, ImgPlusMetadata, ImgPlus<T>> imgPlusFromImgAndMetadata = ImgPlus::new;
 
 	/* Kernel */
 

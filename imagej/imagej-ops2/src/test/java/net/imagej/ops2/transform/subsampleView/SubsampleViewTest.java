@@ -69,7 +69,7 @@ public class SubsampleViewTest extends AbstractOpTest {
 	@Test
 	public void defaultSubsampleTest() {
 
-		BiFunction<Img<DoubleType>, Long, SubsampleView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Img<DoubleType>, Long, SubsampleView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 		}, new Nil<Long>() {
 		}, new Nil<SubsampleView<DoubleType>>() {
@@ -97,7 +97,7 @@ public class SubsampleViewTest extends AbstractOpTest {
 	@Test
 	public void defaultSubsampleStepsTest() {
 
-		BiFunction<Img<DoubleType>, long[], SubsampleView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Img<DoubleType>, long[], SubsampleView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 		}, new Nil<long[]>() {
 		}, new Nil<SubsampleView<DoubleType>>() {
@@ -125,7 +125,7 @@ public class SubsampleViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalSubsample() {
 
-		BiFunction<Img<DoubleType>, Long, SubsampleIntervalView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Img<DoubleType>, Long, SubsampleIntervalView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 		}, new Nil<Long>() {
 		}, new Nil<SubsampleIntervalView<DoubleType>>() {
@@ -155,7 +155,7 @@ public class SubsampleViewTest extends AbstractOpTest {
 	@Test
 	public void testIntervalSubsampleSteps() {
 
-		BiFunction<Img<DoubleType>, long[], SubsampleIntervalView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Img<DoubleType>, long[], SubsampleIntervalView<DoubleType>> subsampleFunc = OpBuilder.matchFunction(ops,
 				"transform.subsampleView", new Nil<Img<DoubleType>>() {
 				}, new Nil<long[]>() {
 				}, new Nil<SubsampleIntervalView<DoubleType>>() {

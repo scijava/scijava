@@ -43,7 +43,6 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -59,7 +58,7 @@ public class GaussTest extends AbstractOpTest {
 	public void gaussRegressionTest() {
 
 		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 
 		final Img<ByteType> in = TestImgGeneration.byteArray(true, new long[] { 10, 10 });
 		final Img<ByteType> out1 = ops.op("create.img").input(in, Util.getTypeFromInterval(in))

@@ -60,28 +60,28 @@ public class CreateKernelGaborTest extends AbstractOpTest {
 		final double[] period = { 4.0, 1.0 };
 
 		// define functions used in the test
-		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = OpBuilder.matchFunction(ops.env(),
+		Functions.Arity3<double[], double[], C, RandomAccessibleInterval<C>> createFunc = OpBuilder.matchFunction(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<C>() {
 				}, new Nil<RandomAccessibleInterval<C>>() {
 				});
 		BiFunction<Double, double[], RandomAccessibleInterval<DoubleType>> createFuncSingleSigma = OpBuilder
-				.matchFunction(ops.env(), "create.kernelGabor", new Nil<Double>() {
+				.matchFunction(ops, "create.kernelGabor", new Nil<Double>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = OpBuilder.matchFunction(ops.env(),
+		BiFunction<double[], double[], RandomAccessibleInterval<DoubleType>> createFuncDouble = OpBuilder.matchFunction(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = OpBuilder.matchFunction(ops.env(),
+		BiFunction<double[], double[], RandomAccessibleInterval<FloatType>> createFuncFloat = OpBuilder.matchFunction(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<FloatType>>() {
 				});
-		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = OpBuilder.matchFunction(ops.env(),
+		BiFunction<double[], double[], RandomAccessibleInterval<ComplexDoubleType>> createFuncComplexDouble = OpBuilder.matchFunction(ops,
 				"create.kernelGabor", new Nil<double[]>() {
 				}, new Nil<double[]>() {
 				}, new Nil<RandomAccessibleInterval<ComplexDoubleType>>() {

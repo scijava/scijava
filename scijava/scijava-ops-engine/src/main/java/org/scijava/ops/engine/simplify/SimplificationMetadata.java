@@ -16,11 +16,11 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.struct.Member;
-import org.scijava.util.Types;
+import org.scijava.types.Types;
 
 /**
  * Compiles a list of all needed Mutators (either Simplifiers or Focuser
- * {@link Function}s) for a given {@link SimplifiedOpCandidate}.
+ * {@link Function}s) for a given simplified Op.
  * 
  * @author Gabriel Selzer
  */

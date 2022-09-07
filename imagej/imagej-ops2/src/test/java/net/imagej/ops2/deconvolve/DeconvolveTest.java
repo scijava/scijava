@@ -50,7 +50,6 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -61,7 +60,7 @@ public class DeconvolveTest extends AbstractOpTest {
 	@Test
 	public void testDeconvolve() {
 
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		int[] size = new int[] { 225, 167 };
 
 		// create an input with a small sphere at the center
@@ -88,7 +87,7 @@ public class DeconvolveTest extends AbstractOpTest {
 				long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 				OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
 				ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
-				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.env().op("deconvolve.richardsonLucy",
+				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.op("deconvolve.richardsonLucy",
 						new Nil<Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
 								long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 								OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //

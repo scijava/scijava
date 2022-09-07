@@ -60,7 +60,7 @@ public class ZeroMinViewTest extends AbstractOpTest {
 	public void defaultZeroMinTest() {
 
 		Function<IntervalView<DoubleType>, IntervalView<DoubleType>> zeroMinFunc =
-			OpBuilder.matchFunction(ops.env(), "transform.zeroMinView",
+			OpBuilder.matchFunction(ops, "transform.zeroMinView",
 				new Nil<IntervalView<DoubleType>>()
 				{}, new Nil<IntervalView<DoubleType>>() {});
 		Img<DoubleType> img = new ArrayImgFactory<>(new DoubleType()).create(new int[] { 10, 10 });

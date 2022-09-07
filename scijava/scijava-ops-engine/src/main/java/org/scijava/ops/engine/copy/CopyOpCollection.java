@@ -1,6 +1,6 @@
 package org.scijava.ops.engine.copy;
 
-import org.scijava.Priority;
+import org.scijava.priority.Priority;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;

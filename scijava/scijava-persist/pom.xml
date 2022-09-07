@@ -94,6 +94,18 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.scijava</groupId>
+							<artifactId>scijava-common</artifactId>
+							<version>${scijava-common.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>com.alexecollins.maven.plugin</groupId>
 				<artifactId>script-maven-plugin</artifactId>
 			</plugin>
@@ -104,7 +116,6 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>

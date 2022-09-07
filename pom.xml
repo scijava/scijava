@@ -47,20 +47,25 @@
 	<modules>
 		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej-testutil</module>
+		<module>scijava/scijava-collections</module>
+		<module>scijava/scijava-common3</module>
 		<module>scijava/scijava-discovery</module>
 		<module>scijava/scijava-discovery-plugin</module>
 		<module>scijava/scijava-discovery-therapi</module>
 		<module>scijava/scijava-discovery-test</module>
 		<module>scijava/scijava-function</module>
 		<module>scijava/scijava-log2</module>
+		<module>scijava/scijava-meta</module>
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-engine</module>
 		<module>scijava/scijava-ops-spi</module>
 		<module>scijava/scijava-parse2</module>
 		<module>scijava/scijava-persist</module>
+		<module>scijava/scijava-priority</module>
 		<module>scijava/scijava-progress</module>
 		<module>scijava/scijava-struct</module>
 		<module>scijava/scijava-taglets</module>
+		<module>scijava/scijava-threads</module>
 		<module>scijava/scijava-testutil</module>
 		<module>scijava/scijava-types</module>
 	</modules>
@@ -97,7 +102,7 @@
 		<guava.version>28.2-jre</guava.version>
 		<geantyref.version>1.3.6</geantyref.version>
 
-		<script-maven.version>1.0.0</script-maven.version>
+		<script-maven-plugin.version>1.0.0</script-maven-plugin.version>
 		<jruby.version>9.2.11.1</jruby.version>
 		<therapi.version>0.12.0</therapi.version>
 		<therapi-runtime-javadoc.version>${therapi.version}</therapi-runtime-javadoc.version>
@@ -115,11 +120,6 @@
 							<groupId>com.github.therapi</groupId>
 							<artifactId>therapi-runtime-javadoc-scribe</artifactId>
 							<version>${therapi-runtime-javadoc-scribe.version}</version>
-						</path>
-						<path>
-							<groupId>org.scijava</groupId>
-							<artifactId>scijava-common</artifactId>
-							<version>${scijava-common.version}</version>
 						</path>
 					</annotationProcessorPaths>
 					<fork>true</fork>
@@ -142,36 +142,13 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<executions>
-				<!-- HACK: 
-					<execution>
-						<id>enforce-no-package-cycles</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoPackageCyclesRule
-									implementation="org.scijava.maven.plugin.enforcer.NoPackageCyclesRule" />
-							</rules>
-						</configuration>
-					</execution>
-					<execution>
-						<id>enforce-no-subpackage-dependence</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<phase>test</phase>
-						<configuration>
-							<rules>
-								<NoSubpackageDependenceRule
-									implementation="org.scijava.maven.plugin.enforcer.NoSubpackageDependenceRule" />
-							</rules>
-						</configuration>
-					</execution> 
-					 -->
-				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.scijava</groupId>
+						<artifactId>scijava-maven-plugin</artifactId>
+						<version>2.2.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -179,7 +156,7 @@
 				<plugin>
 					<groupId>com.alexecollins.maven.plugin</groupId>
 					<artifactId>script-maven-plugin</artifactId>
-					<version>${script-maven.version}</version>
+					<version>${script-maven-plugin.version}</version>
 					<executions>
 						<execution>
 							<id>union-metadata-indices</id>
@@ -234,9 +211,6 @@
 		</pluginManagement>
 	</build>
 	<profiles>
-		<!--
-		This profile lets Eclipse M2E work with the script-maven-plugin.
-		-->
 		<profile>
 			<id>only-eclipse-incubator</id>
 			<activation>
@@ -247,13 +221,20 @@
 			<build>
 				<pluginManagement>
 					<plugins>
+						<!--
+						Configure the Eclipse m2e plugin to support needed plugins.
+						-->
 						<plugin>
 							<groupId>org.eclipse.m2e</groupId>
 							<artifactId>lifecycle-mapping</artifactId>
+							<!--
+							NB: Eclipse cannot handle an overridden version property here!
+							The version needs to stay hardcoded at 1.0.0.
+							-->
 							<version>1.0.0</version>
 							<configuration>
 								<lifecycleMappingMetadata>
-									<pluginExecutions>
+									<pluginExecutions combine.children="append">
 										<!--
 										NB: Make Eclipse union the metadata indices on every build; see:
 										https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html

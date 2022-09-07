@@ -33,7 +33,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.OpService;
 
 /**
  * Abstract {@code ImageMomentOp}. Provides {@link OpService} and create the

@@ -31,26 +31,31 @@ package net.imagej.ops2.help;
 
 import java.util.function.BiFunction;
 
+import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpService;
 
 /**
  * Gets documentation for the given name.
  *
  * @author Mark Hiner
- * @implNote op names='help', priority='100.', description='Gets documentation for all Ops with the given name'
+ * @implNote op names='help', priority='100.', description='Gets documentation
+ *           for all Ops with the given name'
  */
-public class HelpForName extends AbstractHelp implements BiFunction<String, OpService, String> {
+public class HelpForName extends AbstractHelp implements
+	BiFunction<String, OpEnvironment, String>
+{
 
 	/**
-	 * TODO
+	 * Returns a {@link String} describing all Ops in {@code ops} of name
+	 * {@code name}
 	 *
-	 * @param name
-	 * @param opService
+	 * @param name the {@link String} against which Ops in {@code ops} should be
+	 *          matched
+	 * @param ops the {@link OpEnvironment} containing Ops
 	 */
 	@Override
-	public String apply(String name, OpService ops) {
-		final Iterable<OpInfo> allOps = ops.env().infos(name);
+	public String apply(String name, OpEnvironment ops) {
+		final Iterable<OpInfo> allOps = ops.infos(name);
 		help(allOps);
 		return help;
 	}

@@ -32,12 +32,14 @@ module org.scijava.ops.engine {
 
 	requires java.compiler;
 
-	requires org.scijava;
+	requires org.scijava.collections;
+	requires org.scijava.common3;
 	requires org.scijava.discovery;
-	requires org.scijava.discovery.plugin;
 	requires org.scijava.discovery.therapi;
 	requires org.scijava.function;
 	requires org.scijava.log2;
+	requires org.scijava.meta;
+	requires org.scijava.priority;
 	requires org.scijava.progress;
 	requires org.scijava.struct;
 	requires transitive org.scijava.ops.api;
@@ -68,7 +70,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.simplify.SimplificationInfoChainGenerator;
 
 	provides org.scijava.ops.api.OpInfoGenerator with
-	    org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator,
+	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
 			org.scijava.ops.engine.impl.TherapiOpInfoGenerator;
 

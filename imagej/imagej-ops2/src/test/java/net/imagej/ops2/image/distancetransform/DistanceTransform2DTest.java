@@ -30,6 +30,10 @@ package net.imagej.ops2.image.distancetransform;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
+import org.scijava.util.MersenneTwisterFast;
+
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.FinalInterval;
 import net.imglib2.RandomAccess;
@@ -37,10 +41,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
 
-import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
-import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author Simon Schmid (University of Konstanz)
@@ -52,7 +53,7 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		ThreadService ts = context.getService(ThreadService.class);
+		ExecutorService es = threads.getExecutorService();
 
 		// create 2D image
 		final RandomAccessibleInterval<BitType> in = ops.op("create.img")
@@ -67,14 +68,14 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 		/*
 		 * test normal DT
 		 */
-		ops.op("image.distanceTransform").input(in, ts.getExecutorService()).output(out).compute();
+		ops.op("image.distanceTransform").input(in, es).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 2.54, 1.77 };
-		ops.op("image.distanceTransform").input(in, calibration, ts.getExecutorService()).output(out)
+		ops.op("image.distanceTransform").input(in, calibration, es).output(out)
 				.compute();
 		compareResults(out, in, calibration);
 	}

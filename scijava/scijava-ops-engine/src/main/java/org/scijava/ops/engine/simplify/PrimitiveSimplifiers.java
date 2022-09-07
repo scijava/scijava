@@ -9,7 +9,7 @@ import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 
 /**
- * A set of {@link Simplifier}s dealing with boxed primitive types.
+ * A set of {@code simplify} Ops dealing with boxed primitive types.
  * 
  * @author Gabriel Selzer
  * @author Curtis Rueden

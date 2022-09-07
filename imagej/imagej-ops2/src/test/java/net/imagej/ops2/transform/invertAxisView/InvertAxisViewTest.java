@@ -67,7 +67,7 @@ public class InvertAxisViewTest extends AbstractOpTest {
 	public void defaultInvertAxisTest() {
 
 		BiFunction<RandomAccessible<DoubleType>, Integer, MixedTransformView<DoubleType>> invertFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.invertAxisView", new Nil<RandomAccessible<DoubleType>>() {
+				.matchFunction(ops, "transform.invertAxisView", new Nil<RandomAccessible<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<MixedTransformView<DoubleType>>() {
 				});
@@ -89,7 +89,7 @@ public class InvertAxisViewTest extends AbstractOpTest {
 	public void intervalInvertAxisTest() {
 
 		BiFunction<RandomAccessibleInterval<DoubleType>, Integer, IntervalView<DoubleType>> invertFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.invertAxisView", new Nil<RandomAccessibleInterval<DoubleType>>() {
+				.matchFunction(ops, "transform.invertAxisView", new Nil<RandomAccessibleInterval<DoubleType>>() {
 				}, new Nil<Integer>() {
 				}, new Nil<IntervalView<DoubleType>>() {
 				});

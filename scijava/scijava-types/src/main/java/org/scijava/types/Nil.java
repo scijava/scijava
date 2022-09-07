@@ -39,6 +39,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Set;
 
+import org.scijava.common3.Classes;
+
 /**
  * A "typed null" which knows its generic type, and can generate proxy objects
  * implementing that type's interfaces, with customizable behavior per interface
@@ -133,7 +135,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	// -- Static utility methods --
 
 	public static <T> Nil<T> of(final Class<T> rawType) {
-		return new Nil<T>(rawType) {};
+		return new Nil<>(rawType) {};
 	}
 
 	/**
@@ -141,7 +143,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	 * method callbacks.
 	 */
 	public static Nil<?> of(final Type type) {
-		return new Nil<Object>(type) {};
+		return new Nil<>(type) {};
 	}
 
 	/**
@@ -149,7 +151,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 	 * callbacks contained in the specified object.
 	 */
 	public static Nil<?> of(final Type type, final Object callbacks) {
-		return new Nil<Object>(type, callbacks) {};
+		return new Nil<>(type, callbacks) {};
 	}
 
 	// -- Object methods --
@@ -208,7 +210,7 @@ public abstract class Nil<T> implements GenericTyped, Proxyable<T>,
 		}
 		catch (final NoSuchMethodException exc) {
 			// NB: Default behavior is to do nothing and return null.
-			return Types.nullValue(method.getReturnType());
+			return Classes.nullValue(method.getReturnType());
 		}
 	}
 

@@ -9,16 +9,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.api.*;
 import org.scijava.ops.engine.OpUtils;
+import org.scijava.common3.Annotations;
+import org.scijava.meta.Versions;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpHints;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
-import org.scijava.util.ClassUtils;
-import org.scijava.util.VersionUtils;
 
 public class OpCollectionInfoGenerator implements OpInfoGenerator {
 
@@ -28,11 +31,11 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 	}
 
 	protected List<OpInfo> processClass(Class<?> cls) {
-		String version = VersionUtils.getVersion(cls);
+		String version = Versions.getVersion(cls);
 		List<OpInfo> collectionInfos = new ArrayList<>();
 
 		// add OpFieldInfos
-		final List<Field> fields = ClassUtils.getAnnotatedFields(cls,
+		final List<Field> fields = Annotations.getAnnotatedFields(cls,
 			OpField.class);
 		final Optional<Object> instance = getInstance(cls);
 		if (instance.isPresent()) {
@@ -44,7 +47,7 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		}
 		// add OpMethodInfos
 		final List<OpMethodInfo> methodInfos = //
-			ClassUtils.getAnnotatedMethods(cls, OpMethod.class).parallelStream() //
+			Annotations.getAnnotatedMethods(cls, OpMethod.class).parallelStream() //
 				.map(m -> generateMethodInfo(m, version)) //
 				.collect(Collectors.toList());
 		collectionInfos.addAll(methodInfos);

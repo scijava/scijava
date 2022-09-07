@@ -32,37 +32,22 @@
 
 package org.scijava.types;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.scijava.test.TestUtils.createTemporaryDirectory;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.scijava.testutil.ExampleTypes.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.jar.JarOutputStream;
@@ -70,7 +55,7 @@ import java.util.zip.ZipEntry;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.util.FileUtils;
+import org.scijava.common3.Classes;
 
 /**
  * Tests {@link Types}.
@@ -82,135 +67,6 @@ import org.scijava.util.FileUtils;
  */
 public class TypesTest {
 
-	/** Tests {@link Types#load}. */
-	@Test
-	public void testLoad() {
-		assertLoaded(boolean.class, "boolean");
-		assertLoaded(byte.class, "byte");
-		assertLoaded(char.class, "char");
-		assertLoaded(double.class, "double");
-		assertLoaded(float.class, "float");
-		assertLoaded(int.class, "int");
-		assertLoaded(long.class, "long");
-		assertLoaded(short.class, "short");
-		assertLoaded(void.class, "void");
-		assertLoaded(String.class, "string");
-		assertLoaded(Number.class, "java.lang.Number");
-		assertLoaded(boolean[].class, "boolean[]");
-		assertLoaded(byte[].class, "byte[]");
-		assertLoaded(char[].class, "char[]");
-		assertLoaded(double[].class, "double[]");
-		assertLoaded(float[].class, "float[]");
-		assertLoaded(int[].class, "int[]");
-		assertLoaded(long[].class, "long[]");
-		assertLoaded(short[].class, "short[]");
-		assertLoaded(null, "void[]");
-		assertLoaded(String[].class, "string[]");
-		assertLoaded(Number[].class, "java.lang.Number[]");
-		assertLoaded(boolean[][].class, "boolean[][]");
-		assertLoaded(byte[][].class, "byte[][]");
-		assertLoaded(char[][].class, "char[][]");
-		assertLoaded(double[][].class, "double[][]");
-		assertLoaded(float[][].class, "float[][]");
-		assertLoaded(int[][].class, "int[][]");
-		assertLoaded(long[][].class, "long[][]");
-		assertLoaded(short[][].class, "short[][]");
-		assertLoaded(null, "void[][]");
-		assertLoaded(String[][].class, "string[][]");
-		assertLoaded(Number[][].class, "java.lang.Number[][]");
-		assertLoaded(boolean[].class, "[Z");
-		assertLoaded(byte[].class, "[B");
-		assertLoaded(char[].class, "[C");
-		assertLoaded(double[].class, "[D");
-		assertLoaded(float[].class, "[F");
-		assertLoaded(int[].class, "[I");
-		assertLoaded(long[].class, "[J");
-		assertLoaded(short[].class, "[S");
-		assertLoaded(null, "[V");
-		assertLoaded(String[].class, "[Lstring;");
-		assertLoaded(Number[].class, "[Ljava.lang.Number;");
-		assertLoaded(boolean[][].class, "[[Z");
-		assertLoaded(byte[][].class, "[[B");
-		assertLoaded(char[][].class, "[[C");
-		assertLoaded(double[][].class, "[[D");
-		assertLoaded(float[][].class, "[[F");
-		assertLoaded(int[][].class, "[[I");
-		assertLoaded(long[][].class, "[[J");
-		assertLoaded(short[][].class, "[[S");
-		assertLoaded(null, "[[V");
-		assertLoaded(String[][].class, "[[Lstring;");
-		assertLoaded(Number[][].class, "[[Ljava.lang.Number;");
-	}
-
-	/** Tests {@link Types#load}. */
-	@Test
-	public void testLoadFailureQuiet() {
-		// test quiet failure
-		assertNull(Types.load("a.non.existent.class"));
-	}
-
-	/** Tests {@link Types#load}. */
-	@Test
-	public void testLoadFailureLoud() {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			Types.load("a.non.existent.class", false);
-		});
-	}
-
-	/** Tests {@link Types#location} with a class on the file system. */
-	@Test
-	public void testLocationUnpackedClass() throws IOException {
-		final File tmpDir = createTemporaryDirectory("class-utils-test-");
-		final String path = getClass().getName().replace('.', '/') + ".class";
-		final File classFile = new File(tmpDir, path);
-		assertTrue(classFile.getParentFile().exists() || classFile.getParentFile()
-			.mkdirs());
-		copy(getClass().getResource("/" + path).openStream(), new FileOutputStream(
-			classFile), true);
-
-		final ClassLoader classLoader = new URLClassLoader(new URL[] { tmpDir
-			.toURI().toURL() }, null);
-		final Class<?> c = Types.load(getClass().getName(), classLoader);
-		final URL location = Types.location(c);
-		assertEquals(tmpDir, FileUtils.urlToFile(location));
-		FileUtils.deleteRecursively(tmpDir);
-	}
-
-	/** Tests {@link Types#location} with a class in a JAR file. */
-	@Test
-	public void testLocationClassInJar() throws IOException {
-		final File tmpDir = createTemporaryDirectory("class-utils-test-");
-		final File jar = new File(tmpDir, "test.jar");
-		final JarOutputStream out = new JarOutputStream(new FileOutputStream(jar));
-		final String path = getClass().getName().replace('.', '/') + ".class";
-		out.putNextEntry(new ZipEntry(path));
-		copy(getClass().getResource("/" + path).openStream(), out, true);
-
-		final ClassLoader classLoader = new URLClassLoader(new URL[] { jar.toURI()
-			.toURL() }, null);
-		final Class<?> c = Types.load(getClass().getName(), classLoader);
-		final URL location = Types.location(c);
-		assertEquals(jar, FileUtils.urlToFile(location));
-		jar.deleteOnExit();
-	}
-
-	/** Tests quiet behavior of {@link Types#location(Class, boolean)}. */
-	@Test
-	public void testLocationFailureQuiet() {
-		final Class<?> weirdClass = loadCustomClass();
-		assertEquals("Hello", weirdClass.getName());
-		assertNull(Types.location(weirdClass));
-	}
-
-	/** Tests exceptions from {@link Types#location(Class, boolean)}. */
-	@Test
-	public void testLocationFailureLoud() {
-		final Class<?> weirdClass = loadCustomClass();
-		assertEquals("Hello", weirdClass.getName());
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			Types.location(weirdClass, false);
-		});
-	}
 
 	/** Tests {@link Types#name}. */
 	public void testName() {
@@ -248,7 +104,7 @@ public class TypesTest {
 	/** Tests {@link Types#raws}. */
 	@Test
 	public void testRaws() {
-		final Field field = Types.field(Thing.class, "thing");
+		final Field field = Classes.field(Thing.class, "thing");
 
 		// Object
 		assertAllTheSame(Types.raws(Types.fieldType(field, Thing.class)),
@@ -267,178 +123,6 @@ public class TypesTest {
 			Serializable.class, Cloneable.class);
 	}
 
-	/** Tests {@link Types#box(Class)}. */
-	@Test
-	public void testBox() {
-		final Class<Boolean> booleanType = Types.box(boolean.class);
-		assertSame(Boolean.class, booleanType);
-
-		final Class<Byte> byteType = Types.box(byte.class);
-		assertSame(Byte.class, byteType);
-
-		final Class<Character> charType = Types.box(char.class);
-		assertSame(Character.class, charType);
-
-		final Class<Double> doubleType = Types.box(double.class);
-		assertSame(Double.class, doubleType);
-
-		final Class<Float> floatType = Types.box(float.class);
-		assertSame(Float.class, floatType);
-
-		final Class<Integer> intType = Types.box(int.class);
-		assertSame(Integer.class, intType);
-
-		final Class<Long> longType = Types.box(long.class);
-		assertSame(Long.class, longType);
-
-		final Class<Short> shortType = Types.box(short.class);
-		assertSame(Short.class, shortType);
-
-		final Class<Void> voidType = Types.box(void.class);
-		assertSame(Void.class, voidType);
-
-		final Class<?>[] types = { //
-			Boolean.class, Byte.class, Character.class, Double.class, //
-			Float.class, Integer.class, Long.class, Short.class, //
-			Void.class, //
-			String.class, //
-			Number.class, BigInteger.class, BigDecimal.class, //
-			boolean[].class, byte[].class, char[].class, double[].class, //
-			float[].class, int[].class, long[].class, short[].class, //
-			Boolean[].class, Byte[].class, Character[].class, Double[].class, //
-			Float[].class, Integer[].class, Long[].class, Short[].class, //
-			Void[].class, //
-			Object.class, Object[].class, String[].class, //
-			Object[][].class, String[][].class, //
-			Collection.class, //
-			List.class, ArrayList.class, LinkedList.class, //
-			Set.class, HashSet.class, //
-			Map.class, HashMap.class, //
-			Collection[].class, List[].class, Set[].class, Map[].class };
-		for (final Class<?> c : types) {
-			final Class<?> type = Types.box(c);
-			assertSame(c, type);
-		}
-	}
-
-	/** Tests [@link Types#unbox(Class)}. */
-	@Test
-	public void testUnbox() {
-		// TODO
-	}
-
-	/** Tests {@link Types#nullValue(Class)}. */
-	@Test
-	public void testNullValue() {
-		final boolean booleanNull = Types.nullValue(boolean.class);
-		assertFalse(booleanNull);
-
-		final byte byteNull = Types.nullValue(byte.class);
-		assertEquals(0, byteNull);
-
-		final char charNull = Types.nullValue(char.class);
-		assertEquals('\0', charNull);
-
-		final double doubleNull = Types.nullValue(double.class);
-		assertEquals(0.0, doubleNull, 0.0);
-
-		final float floatNull = Types.nullValue(float.class);
-		assertEquals(0f, floatNull, 0f);
-
-		final int intNull = Types.nullValue(int.class);
-		assertEquals(0, intNull);
-
-		final long longNull = Types.nullValue(long.class);
-		assertEquals(0, longNull);
-
-		final short shortNull = Types.nullValue(short.class);
-		assertEquals(0, shortNull);
-
-		final Void voidNull = Types.nullValue(void.class);
-		assertNull(voidNull);
-
-		final Class<?>[] types = { //
-			Boolean.class, Byte.class, Character.class, Double.class, //
-			Float.class, Integer.class, Long.class, Short.class, //
-			Void.class, //
-			String.class, //
-			Number.class, BigInteger.class, BigDecimal.class, //
-			boolean[].class, byte[].class, char[].class, double[].class, //
-			float[].class, int[].class, long[].class, short[].class, //
-			Boolean[].class, Byte[].class, Character[].class, Double[].class, //
-			Float[].class, Integer[].class, Long[].class, Short[].class, //
-			Void[].class, //
-			Object.class, Object[].class, String[].class, //
-			Object[][].class, String[][].class, //
-			Collection.class, //
-			List.class, ArrayList.class, LinkedList.class, //
-			Set.class, HashSet.class, //
-			Map.class, HashMap.class, //
-			Collection[].class, List[].class, Set[].class, Map[].class };
-		for (final Class<?> c : types) {
-			final Object nullValue = Types.nullValue(c);
-			assertNull(nullValue, "Expected null for " + c.getName());
-		}
-	}
-
-	/** Tests {@link Types#field}. */
-	@Test
-	public void testField() {
-		final Field field = Types.field(Thing.class, "thing");
-		assertEquals("thing", field.getName());
-		assertSame(Object.class, field.getType());
-		assertTrue(field.getGenericType() instanceof TypeVariable);
-		assertEquals("T", ((TypeVariable<?>) field.getGenericType()).getName());
-	}
-
-	/** Tests {@link Types#method}. */
-	@Test
-	public void testMethod() {
-		final Method objectMethod = Types.method(Thing.class, "toString");
-		assertSame(Object.class, objectMethod.getDeclaringClass());
-		assertEquals("toString", objectMethod.getName());
-		assertSame(String.class, objectMethod.getReturnType());
-		assertEquals(0, objectMethod.getParameterTypes().length);
-
-		final Method wordsMethod = //
-			Types.method(Words.class, "valueOf", String.class);
-		// NB: What is going on under the hood to make the Enum
-		// subtype Words be the declaring class for the 'valueOf'
-		// method? The compiler must internally override the valueOf
-		// method for each enum type, to narrow the return type...
-		assertSame(Words.class, wordsMethod.getDeclaringClass());
-		assertEquals("valueOf", wordsMethod.getName());
-		assertSame(Words.class, wordsMethod.getReturnType());
-		assertEquals(1, wordsMethod.getParameterTypes().length);
-		assertSame(String.class, wordsMethod.getParameterTypes()[0]);
-	}
-
-	/** Tests {@link Types#array}. */
-	@Test
-	public void testArray() {
-		// 1-dimensional cases
-		assertSame(boolean[].class, Types.array(boolean.class));
-		assertSame(String[].class, Types.array(String.class));
-		assertSame(Number[].class, Types.array(Number.class));
-		assertSame(boolean[][].class, Types.array(boolean[].class));
-		assertSame(String[][].class, Types.array(String[].class));
-		assertSame(Number[][].class, Types.array(Number[].class));
-		try {
-			Types.array(void.class);
-			fail("Unexpected success creating void[]");
-		}
-		catch (final IllegalArgumentException exc) {}
-
-		// multidimensional cases
-		assertSame(Number[][].class, Types.array(Number.class, 2));
-		assertSame(boolean[][][].class, Types.array(boolean.class, 3));
-		assertSame(String.class, Types.array(String.class, 0));
-		try {
-			Types.array(char.class, -1);
-			fail("Unexpected success creating negative dimensional array");
-		}
-		catch (final IllegalArgumentException exc) {}
-	}
 
 	/** Tests {@link Types#component(Type)}. */
 	@Test
@@ -464,7 +148,7 @@ public class TypesTest {
 	/** Tests {@link Types#fieldType(Field, Class)}. */
 	@Test
 	public void testFieldType() {
-		final Field field = Types.field(Thing.class, "thing");
+		final Field field = Classes.field(Thing.class, "thing");
 
 		// T
 		final Type tType = Types.fieldType(field, Thing.class);
@@ -1008,7 +692,7 @@ public class TypesTest {
 		// TODO
 	}
 
-	/** Tests {@link Types#parameterizeWithOwner(Type, Class, Type...)}. */
+	/** Tests {@link Types#parameterizeWithOwner()}. */
 	@Test
 	public void testParameterizeWithOwner() {
 		// TODO
@@ -1016,121 +700,11 @@ public class TypesTest {
 
 	// -- Helper classes --
 
-	// TODO: Migrate these helper classes into ExampleTypes.
-
-	private static class Thing<T> {
-
-		@SuppressWarnings("unused")
-		private T thing;
-	}
-
-	private static class NumberThing<N extends Number> extends Thing<N> {
-		// NB: No implementation needed.
-	}
-
-	private static class IntegerThing extends NumberThing<Integer> {
-		// NB: No implementation needed.
-	}
-
-	private static class ComplexThing<T extends Serializable & Cloneable> extends
-		Thing<T>
-	{
-		// NB: No implementation needed.
-	}
-
-	private static class StrangeThing<S extends Number> extends Thing<Integer> {
-		// NB: No implementation needed.
-	}
-
-	private static class StrangerThing<R extends String> extends
-		StrangeThing<Double>
-	{
-		// NB: No implementation needed.
-	}
-
-	private static class RecursiveThing<T extends RecursiveThing<T>> extends
-		Thing<Integer>
-	{
-		// NB: No implementation needed.
-	}
-
-	private static interface Loop {
-		// NB: No implementation needed.
-	}
-
-	private static class CircularThing extends RecursiveThing<CircularThing>
-		implements Loop
-	{
-		// NB: No implementation needed.
-	}
-
-	private static class LoopingThing extends RecursiveThing<LoopingThing>
-		implements Loop
-	{
-		// NB: No implementation needed.
-	}
-	
-	interface NestedThing<I1, I2> extends Function<I1, I2>
-	{
-		// NB: No implementation needed.
-	}
-
-	/** Enumeration for testing conversion to enum types. */
-	public static enum Words {
-			FOO, BAR, FUBAR
-	}
-
 	// -- Helper methods --
-
-	/**
-	 * Copies bytes from an {@link InputStream} to an {@link OutputStream}.
-	 *
-	 * @param in the source
-	 * @param out the sink
-	 * @param closeOut whether to close the sink after we're done
-	 * @throws IOException
-	 */
-	private void copy(final InputStream in, final OutputStream out,
-		final boolean closeOut) throws IOException
-	{
-		final byte[] buffer = new byte[16384];
-		for (;;) {
-			final int count = in.read(buffer);
-			if (count < 0) break;
-			out.write(buffer, 0, count);
-		}
-		in.close();
-		if (closeOut) out.close();
-	}
-
-	private Class<?> loadCustomClass() {
-		// NB: The bytecode below was compiled from the following source:
-		//
-		// public class Hello {}
-		//
-		final byte[] bytecode = { -54, -2, -70, -66, 0, 0, 0, 52, 0, 13, 10, 0, 3,
-			0, 10, 7, 0, 11, 7, 0, 12, 1, 0, 6, 60, 105, 110, 105, 116, 62, 1, 0, 3,
-			40, 41, 86, 1, 0, 4, 67, 111, 100, 101, 1, 0, 15, 76, 105, 110, 101, 78,
-			117, 109, 98, 101, 114, 84, 97, 98, 108, 101, 1, 0, 10, 83, 111, 117, 114,
-			99, 101, 70, 105, 108, 101, 1, 0, 10, 72, 101, 108, 108, 111, 46, 106, 97,
-			118, 97, 12, 0, 4, 0, 5, 1, 0, 5, 72, 101, 108, 108, 111, 1, 0, 16, 106,
-			97, 118, 97, 47, 108, 97, 110, 103, 47, 79, 98, 106, 101, 99, 116, 0, 33,
-			0, 2, 0, 3, 0, 0, 0, 0, 0, 1, 0, 1, 0, 4, 0, 5, 0, 1, 0, 6, 0, 0, 0, 29,
-			0, 1, 0, 1, 0, 0, 0, 5, 42, -73, 0, 1, -79, 0, 0, 0, 1, 0, 7, 0, 0, 0, 6,
-			0, 1, 0, 0, 0, 1, 0, 1, 0, 8, 0, 0, 0, 2, 0, 9 };
-
-		class BytesClassLoader extends ClassLoader {
-
-			public Class<?> load(final String name, final byte[] b) {
-				return defineClass(name, b, 0, b.length);
-			}
-		}
-		return new BytesClassLoader().load("Hello", bytecode);
-	}
 
 	/** Convenience method to get the {@link Type} of a field. */
 	private Type type(final Class<?> c, final String fieldName) {
-		return Types.field(c, fieldName).getGenericType();
+		return Classes.field(c, fieldName).getGenericType();
 	}
 
 	/** Convenience method to call {@link Types#raw} on a field. */
@@ -1141,10 +715,6 @@ public class TypesTest {
 	/** Convenience method to call {@link Types#component} on a field. */
 	private Class<?> componentType(final Class<?> c, final String fieldName) {
 		return Types.raw(Types.component(type(c, fieldName)));
-	}
-
-	private void assertLoaded(final Class<?> c, final String name) {
-		assertSame(c, Types.load(name));
 	}
 
 	private void assertAllTheSame(final List<?> list, final Object... values) {

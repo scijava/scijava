@@ -6,10 +6,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ValidityProblem;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.engine.util.internal.OpMethodUtils;
 import org.scijava.struct.MemberParser;
-import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
 
 public class MethodParameterMemberParser implements

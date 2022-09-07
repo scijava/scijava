@@ -48,7 +48,6 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -197,7 +196,7 @@ public class MTKTTest extends ColocalisationTest {
 	// First, we can test no correlation.
 	@Test
 	public void testMTKTpValueNone() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		double[][] values = new double[10][2];
 	  double[] values1 = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 	  double[] values2 = { 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0 };
@@ -208,7 +207,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(vImage1, vImage2, op, 5, es).output(value).compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
@@ -217,7 +216,7 @@ public class MTKTTest extends ColocalisationTest {
 	// Second, we test fully correlated datasets (identical).
 	@Test
 	public void testMTKTpValueAll() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		double[][] values = new double[10][2];
 		double[] values1 = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
 		double[] values2 = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
@@ -228,7 +227,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<DoubleType> vImage1 = ArrayImgs.doubles(values1, values1.length);
 		Img<DoubleType> vImage2 = ArrayImgs.doubles(values2, values2.length);
 		BiFunction<RandomAccessibleInterval<DoubleType>, RandomAccessibleInterval<DoubleType>, Double> op =
-			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<RandomAccessibleInterval<DoubleType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(vImage1, vImage2, op, 5, es).output(value).compute();
 		assertEquals(0.0, value.getPValue(), 0.0);
@@ -237,7 +236,7 @@ public class MTKTTest extends ColocalisationTest {
 	// Thirdly, we test random datasets.
 	@Test
 	public void testMTKTpValueRandom() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -246,7 +245,7 @@ public class MTKTTest extends ColocalisationTest {
 		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
-			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
 		ops.op("coloc.pValue").input(ch1, ch2, op, 10, es).output(value).compute();
 		assertEquals(0.2, value.getPValue(), 0.0);
@@ -255,13 +254,13 @@ public class MTKTTest extends ColocalisationTest {
 	// Lastly, we test a 'real' image.
 	@Test
 	public void testMTKTpValueImage() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(zeroCorrelationImageCh1,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		BiFunction<RandomAccessibleInterval<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>, Double> op =
-			OpBuilder.matchFunction(ops.env(), "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
+			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});
 		final int[] blockSize = new int[cropCh1.numDimensions()];
 		for (int d = 0; d < blockSize.length; d++) {
 			final long size = (long) Math.floor(Math.sqrt(cropCh1.dimension(d)));

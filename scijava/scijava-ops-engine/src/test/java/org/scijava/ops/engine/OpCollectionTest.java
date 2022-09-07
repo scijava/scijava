@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.engine.math.MathOpCollection;
-import org.scijava.struct.ValidityException;
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.types.Nil;
 
 public class OpCollectionTest extends AbstractTestEnvironment {

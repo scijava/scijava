@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.ValidityProblem;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.engine.OpUtils;

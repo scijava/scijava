@@ -62,7 +62,7 @@ public class StackViewTest extends AbstractOpTest {
 	@Test
 	public void defaultStackTest() {
 		Function<List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc =
-			OpBuilder.matchFunction(ops.env(), "transform.stackView",
+			OpBuilder.matchFunction(ops, "transform.stackView",
 				new Nil<List<Img<DoubleType>>>()
 				{}, new Nil<RandomAccessibleInterval<DoubleType>>() {});
 
@@ -82,7 +82,7 @@ public class StackViewTest extends AbstractOpTest {
 	public void stackWithAccessModeTest() {
 
 		BiFunction<StackAccessMode, List<Img<DoubleType>>, RandomAccessibleInterval<DoubleType>> stackFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.stackView", new Nil<StackAccessMode>() {
+				.matchFunction(ops, "transform.stackView", new Nil<StackAccessMode>() {
 				}, new Nil<List<Img<DoubleType>>>() {
 				}, new Nil<RandomAccessibleInterval<DoubleType>>() {
 				});

@@ -36,8 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.ValidityProblem;
-import org.scijava.ops.api.features.OpMatcher;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;

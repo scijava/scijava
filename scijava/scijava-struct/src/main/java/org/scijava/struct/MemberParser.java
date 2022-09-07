@@ -1,6 +1,8 @@
 
 package org.scijava.struct;
 
+import org.scijava.common3.validity.ValidityException;
+
 import java.lang.reflect.Type;
 import java.util.List;
 

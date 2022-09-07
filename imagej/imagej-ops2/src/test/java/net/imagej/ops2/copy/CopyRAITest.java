@@ -151,7 +151,7 @@ public class CopyRAITest extends AbstractOpTest {
 
 		// create a copy op
 		final Computers.Arity1<IntervalView<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>> copy = OpBuilder
-				.matchComputer(ops.env(), "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {},
+				.matchComputer(ops, "copy.rai", new Nil<IntervalView<UnsignedByteType>>() {},
 						new Nil<RandomAccessibleInterval<UnsignedByteType>>() {});
 
 		assertNotNull(copy);

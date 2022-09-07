@@ -165,7 +165,8 @@ public abstract class TherapiDiscoverer implements Discoverer {
 			Class<?> c;
 			try {
 				c = getClass(value.get(0));
-				value.parallelStream().filter(path -> TherapiDiscoveryUtils.hasJavadoc(path, c)).forEach(path -> {
+				// TODO: Using parallelStream() here introduces unreliability...
+				value.stream().filter(path -> TherapiDiscoveryUtils.hasJavadoc(path, c)).forEach(path -> {
 					try {
 						javadocData.add(c.getClassLoader().loadClass(path));
 					} catch (ClassNotFoundException ex) {

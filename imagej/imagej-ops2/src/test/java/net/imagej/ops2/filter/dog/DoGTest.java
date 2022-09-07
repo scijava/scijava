@@ -46,7 +46,6 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
 import org.scijava.types.Nil;
 
 /**
@@ -58,7 +57,7 @@ public class DoGTest extends AbstractOpTest {
 
 	@Test
 	public void dogRAITest() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 
 		final double[] sigmas1 = new double[] { 1, 1 };
 		final double[] sigmas2 = new double[] { 2, 2 };
@@ -85,7 +84,7 @@ public class DoGTest extends AbstractOpTest {
 
 	@Test
 	public void dogRAISingleSigmasTest() {
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		final OutOfBoundsFactory<ByteType, Img<ByteType>> outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
 		final RandomAccessibleInterval<ByteType> res = ops.op("create.img")
 				.input(TestImgGeneration.byteArray(true, new long[] { 10, 10 }), new ByteType())

@@ -28,7 +28,7 @@
  */
 package net.imagej.ops2.features.zernike;
 
-import net.imagej.types.BigComplex;
+import net.imagej.ops2.util.BigComplex;
 
 /**
  * Class to hold a zernike moment, including its polynom, order, repition and

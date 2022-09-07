@@ -32,6 +32,7 @@ package net.imagej.ops2;
 import io.scif.img.IO;
 
 import java.net.URL;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 import net.imglib2.Cursor;
@@ -40,6 +41,7 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
+import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -48,17 +50,23 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.scijava.Context;
-import org.scijava.cache.CacheService;
-import org.scijava.ops.engine.OpService;
+import org.scijava.discovery.Discoverer;
+import org.scijava.log2.Logger;
+import org.scijava.log2.StderrLoggerFactory;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.engine.DefaultOpEnvironment;
+import org.scijava.ops.engine.DefaultOpHistory;
 import org.scijava.ops.spi.Op;
-import org.scijava.plugin.PluginService;
-import org.scijava.thread.ThreadService;
+import org.scijava.threads.DefaultThreadManager;
+import org.scijava.threads.ThreadManager;
+import org.scijava.types.DefaultTypeReifier;
+import org.scijava.types.TypeReifier;
 
 /**
  * Base class for Op unit testing.
  * <p>
- * <i>All</i> Op unit tests need to have an {@link OpService} instance.
+ * <i>All</i> {@link Op} unit tests need to have an {@link OpEnvironment} instance.
  * Following the DRY principle, we should implement it only once. Here.
  * </p>
  *
@@ -66,21 +74,18 @@ import org.scijava.thread.ThreadService;
  * @author Curtis Rueden
  */
 public abstract class AbstractOpTest{
-	
-	protected static Context context;
-	protected static OpService ops;
+
+	protected static OpEnvironment ops;
+	protected static ThreadManager threads;
 
 	@BeforeAll
 	public static void setUp() {
-		context = new Context(OpService.class, CacheService.class,
-			ThreadService.class, PluginService.class);
-		ops = context.service(OpService.class);
+		ops = new DefaultOpEnvironment();
+		threads = new DefaultThreadManager();
 	}
 
 	@AfterAll
 	public static void tearDown() {
-		context.dispose();
-		context = null;
 		ops = null;
 	}
 	
@@ -144,8 +149,8 @@ public abstract class AbstractOpTest{
 	}
 
 	public <T extends RealType<T>> double[] asArray(final Iterable<T> image) {
-		return StreamSupport.stream(image.spliterator(), false).mapToDouble(t -> t
-			.getRealDouble()).toArray();
+		return StreamSupport.stream(image.spliterator(), false).mapToDouble(
+				ComplexType::getRealDouble).toArray();
 	}
 
 }

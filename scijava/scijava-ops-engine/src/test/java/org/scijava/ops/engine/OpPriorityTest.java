@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.Priority;
+import org.scijava.priority.Priority;
 import org.scijava.function.Producer;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;

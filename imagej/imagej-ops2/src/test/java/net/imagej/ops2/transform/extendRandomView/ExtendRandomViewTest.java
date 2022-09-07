@@ -64,7 +64,7 @@ public class ExtendRandomViewTest extends AbstractOpTest {
 	@Test
 	public void extendRandomTest() {
 		Functions.Arity3<RandomAccessibleInterval<DoubleType>, Double, Double, RandomAccessible<DoubleType>> extendFunc = OpBuilder
-				.matchFunction(ops.env(), "transform.extendRandomView", raiNil, doubleNil, doubleNil,
+				.matchFunction(ops, "transform.extendRandomView", raiNil, doubleNil, doubleNil,
 						new Nil<RandomAccessible<DoubleType>>() {
 				});
 

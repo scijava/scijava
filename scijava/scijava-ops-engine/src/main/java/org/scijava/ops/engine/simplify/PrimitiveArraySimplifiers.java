@@ -3,11 +3,11 @@ package org.scijava.ops.engine.simplify;
 
 import java.util.function.Function;
 
+import org.scijava.collections.ObjectArray;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
-import org.scijava.util.ObjectArray;
 
 /**
  * A collection of Ops for simplifying and focusing primitive arrays

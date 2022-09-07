@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -209,13 +209,13 @@
 		<license.copyrightOwners>ImageJ developers.</license.copyrightOwners>
 		<license.projectName>ImageJ software for multidimensional image processing and analysis.</license.projectName>
 
-		<!-- NB While we depend on old scijava-common -->
-		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},org.scijava.*,com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
+		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${imagej-ops2.allowedDuplicateClasses}</allowedDuplicateClasses>
 
 		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
 		<releaseProfiles>deploy-to-imagej</releaseProfiles>
-		<therapi.packages></therapi.packages>
+
+		<therapi.packages />
 	</properties>
 
 	<build>
@@ -236,10 +236,6 @@
 
 	<dependencies>
 		<!-- ImageJ dependencies -->
-		<dependency>
-			<groupId>net.imagej</groupId>
-			<artifactId>imagej-common</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-mesh</artifactId>
@@ -267,10 +263,6 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>parsington</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.scijava</groupId>
-			<artifactId>scijava-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
@@ -347,6 +339,12 @@
 		<dependency>
 			<groupId>io.scif</groupId>
 			<artifactId>scifio</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-threads</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

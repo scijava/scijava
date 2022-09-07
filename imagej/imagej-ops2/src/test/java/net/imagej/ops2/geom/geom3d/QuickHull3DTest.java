@@ -31,7 +31,6 @@ package net.imagej.ops2.geom.geom3d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Random;
 
@@ -42,6 +41,7 @@ import net.imagej.mesh.naive.NaiveDoubleMesh;
 import net.imagej.ops2.AbstractOpTest;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -182,7 +182,7 @@ public class QuickHull3DTest extends AbstractOpTest {
 	 */
 	private void assertConvex(final Mesh convexHull, final double epsilon) {
 		final long facetCount = convexHull.triangles().size();
-		assumeTrue(facetCount <= Integer.MAX_VALUE);
+		Assumptions.assumeTrue(facetCount <= Integer.MAX_VALUE);
 		final Vector3D[] centroids = new Vector3D[(int) facetCount];
 		final Vector3D[] normals = new Vector3D[(int) facetCount];
 		int i = 0;

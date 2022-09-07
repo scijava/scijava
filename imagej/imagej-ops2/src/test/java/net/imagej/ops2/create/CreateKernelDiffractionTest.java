@@ -64,7 +64,7 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 		final DoubleType type = new DoubleType(); // pixel type of created kernel
 
 		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
-				.env().op("create.kernelDiffraction",
+				.op("create.kernelDiffraction",
 						new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
 						}, new Nil[] { new Nil<Dimensions>() {
 						}, new Nil<Double>() {
@@ -147,7 +147,7 @@ public class CreateKernelDiffractionTest extends AbstractOpTest {
 		final DoubleType type = new DoubleType(); // pixel type of created kernel
 		
 		Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>> createFunc = ops
-				.env().op("create.kernelDiffraction",
+				.op("create.kernelDiffraction",
 						new Nil<Functions.Arity9<Dimensions, Double, Double, Double, Double, Double, Double, Double, DoubleType, Img<DoubleType>>>() {
 						}, new Nil[] { new Nil<Dimensions>() {
 						}, new Nil<Double>() {

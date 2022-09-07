@@ -33,8 +33,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
-import org.scijava.plugin.Plugin;
-
 /**
  * A plugin for extracting generic {@link Type} from instances at runtime.
  * <p>
@@ -42,11 +40,7 @@ import org.scijava.plugin.Plugin;
  * runtime, for types which do not normally support it.
  * </p>
  * <p>
- * Type extractor plugins discoverable at runtime must implement this interface
- * and be annotated with @{@link Plugin} with attribute {@link Plugin#type()
- * type} = {@link TypeExtractor}.class.
- * </p>
- * 
+ *
  * @author Curtis Rueden
  */
 public interface TypeExtractor<T> extends Comparable<TypeExtractor<?>> {
@@ -62,13 +56,13 @@ public interface TypeExtractor<T> extends Comparable<TypeExtractor<?>> {
 	default ParameterizedType reify(final TypeReifier r, final T o) {
 		final TypeVariable<Class<T>>[] typeVars = getRawType().getTypeParameters();
 		if (typeVars.length == 0) {
-			throw new IllegalStateException("Class " + getRawType().getName() +
-				" is not a parameterized type");
+			throw new IllegalStateException("Class " + getRawType().getName() + " is not a parameterized type");
 		}
 		final Type[] types = new Type[typeVars.length];
 		for (int i = 0; i < types.length; i++) {
 			types[i] = reify(r, o, i);
-			if (types[i] == null) types[i] = new Any();
+			if (types[i] == null)
+				types[i] = new Any();
 		}
 		return Types.parameterize(getRawType(), types);
 	}
@@ -82,10 +76,11 @@ public interface TypeExtractor<T> extends Comparable<TypeExtractor<?>> {
 	 * @param n Index of the type parameter whose type should be extracted.
 	 * @return The reified Nth type parameter, or {@code null} if the extractor
 	 *         cannot process the object.
-	 * @throws IndexOutOfBoundsException if {@code n} is less than 0, or greater
-	 *           than {@code getType().getTypeParameters().length}.
+	 * @throws IndexOutOfBoundsException     if {@code n} is less than 0, or greater
+	 *                                       than
+	 *                                       {@code getType().getTypeParameters().length}.
 	 * @throws UnsupportedOperationException if the supported class does not have
-	 *           any type parameters.
+	 *                                       any type parameters.
 	 */
 	default Type reify(final TypeReifier r, final T o, final int n) {
 		final Type type = reify(r, o);

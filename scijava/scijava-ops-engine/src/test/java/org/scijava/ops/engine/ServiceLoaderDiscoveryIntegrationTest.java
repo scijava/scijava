@@ -11,7 +11,7 @@ import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.engine.impl.OpClassBasedClassOpInfoGenerator;
+import org.scijava.ops.engine.impl.OpClassOpInfoGenerator;
 import org.scijava.ops.engine.impl.OpCollectionInfoGenerator;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
@@ -26,7 +26,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 
 		@SuppressWarnings("unused")
 		final Logger l = new StderrLoggerFactory().create();
-		final OpInfoGenerator g = new OpClassBasedClassOpInfoGenerator();
+		final OpInfoGenerator g = new OpClassOpInfoGenerator();
 		final List<OpInfo> infos = discoveries.stream() //
 				.flatMap(c -> g.generateInfosFrom(c).stream()) //
 				.collect(Collectors.toList());

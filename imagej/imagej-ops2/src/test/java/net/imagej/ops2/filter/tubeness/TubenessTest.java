@@ -31,15 +31,13 @@ package net.imagej.ops2.filter.tubeness;
 
 import java.util.concurrent.ExecutorService;
 
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.img.Img;
 import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.thread.ThreadService;
-import org.scijava.types.Nil;
 
 /**
  * Tests {@link DefaultTubeness}.
@@ -56,7 +54,7 @@ public class TubenessTest extends AbstractOpTest {
 		final double scale = 5;
 		final double sigma = scale / Math.sqrt(2);
 
-		ExecutorService es = context.getService(ThreadService.class).getExecutorService();
+		ExecutorService es = threads.getExecutorService();
 		Img<DoubleType> actual = ops.op("create.img").input(input, new DoubleType())
 				.outType(new Nil<Img<DoubleType>>() {}).apply();
 		ops.op("filter.tubeness").input(input, es, sigma).output(actual).compute();

@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.struct.ValidityException;
 
 /**
  * Metadata about an Op implementation.

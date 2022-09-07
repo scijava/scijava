@@ -37,20 +37,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.Priority;
-import org.scijava.ValidityProblem;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
+import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.ClassOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.ClassParameterMemberParser;
+import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.struct.ValidityException;
 import org.scijava.types.Types;
-import org.scijava.util.VersionUtils;
 
 /**
  * Metadata about an Op implementation defined as a class.
@@ -69,7 +69,7 @@ public class OpClassInfo implements OpInfo {
 	private final Hints hints;
 
 	public OpClassInfo(final Class<?> opClass, final Hints hints, final String... names) {
-		this(opClass, VersionUtils.getVersion(opClass), hints, Priority.NORMAL, names);
+		this(opClass, Versions.getVersion(opClass), hints, Priority.NORMAL, names);
 	}
 
 	public OpClassInfo(final Class<?> opClass, final String version, final Hints hints, final String... names) {

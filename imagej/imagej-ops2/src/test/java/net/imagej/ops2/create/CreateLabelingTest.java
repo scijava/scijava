@@ -69,7 +69,7 @@ public class CreateLabelingTest extends AbstractOpTest {
 		final MersenneTwisterFast randomGenerator = new MersenneTwisterFast(SEED);
 
 		// TODO can we keep this?
-		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Dimensions, IntType, ImgLabeling<String, IntType>> createFunc = OpBuilder.matchFunction(ops,
 				"create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgLabeling<String, IntType>>() {
@@ -100,7 +100,7 @@ public class CreateLabelingTest extends AbstractOpTest {
 		final Dimensions dim = new FinalDimensions(10, 10, 10);
 
 		Functions.Arity3<Dimensions, IntType, ImgFactory<IntType>, ImgLabeling<String, IntType>> createFunc = OpBuilder
-				.matchFunction(ops.env(), "create.imgLabeling", new Nil<Dimensions>() {
+				.matchFunction(ops, "create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgFactory<IntType>>() {
 				}, new Nil<ImgLabeling<String, IntType>>() {
@@ -135,7 +135,7 @@ public class CreateLabelingTest extends AbstractOpTest {
 	@SuppressWarnings("unchecked")
 	private <I> ImgLabeling<I, ?> createLabelingWithType(final I type) {
 
-		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = OpBuilder.matchFunction(ops.env(),
+		BiFunction<Dimensions, IntType, ImgLabeling<I, IntType>> createFunc = OpBuilder.matchFunction(ops,
 				"create.imgLabeling", new Nil<Dimensions>() {
 				}, new Nil<IntType>() {
 				}, new Nil<ImgLabeling<I, IntType>>() {

@@ -71,7 +71,7 @@ public class ProjectTest extends AbstractOpTest {
 		out1 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 		out2 = TestImgGeneration.unsignedByteArray(false, 10, 10);
 
-		op = OpBuilder.matchComputer(ops.env(), "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
+		op = OpBuilder.matchComputer(ops, "stats.sum", new Nil<Iterable<UnsignedByteType>>() {},
 				new Nil<UnsignedByteType>() {});
 	}
 

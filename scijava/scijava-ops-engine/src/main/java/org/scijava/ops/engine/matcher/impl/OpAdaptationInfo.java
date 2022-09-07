@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.scijava.ValidityProblem;
+import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpDependencyMember;
@@ -22,7 +23,6 @@ import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
 import org.scijava.struct.Structs;
-import org.scijava.struct.ValidityException;
 import org.scijava.types.Nil;
 
 /**

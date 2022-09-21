@@ -250,7 +250,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	}
 
 	protected static Img<FloatType> getTestImage2D() {
-		return openFloatImg(AbstractFeatureTest.class, "features/2d_geometric_features_testlabel.tif");
+		return openRelativeFloatImg(AbstractFeatureTest.class, "features/2d_geometric_features_testlabel.tif");
 	}
 	
 	protected static Polygon2D getPolygon() {
@@ -270,7 +270,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	}
 
 	protected static Img<FloatType> getTestImage3D() {
-		return openFloatImg(AbstractFeatureTest.class, "features/3d_geometric_features_testlabel.tif");
+		return openRelativeFloatImg(AbstractFeatureTest.class, "features/3d_geometric_features_testlabel.tif");
 	}
 	
 	protected static Mesh getMesh() {

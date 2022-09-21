@@ -48,7 +48,7 @@ public class TubenessTest extends AbstractOpTest {
 
 	@Test
 	public void testTubeness() {
-		Img<UnsignedByteType> input = openUnsignedByteType(DefaultTubeness.class, "TubesInput.png");
+		Img<UnsignedByteType> input = openRelativeUnsignedByteImg(DefaultTubeness.class, "TubesInput.png");
 		Img<DoubleType> expected = openDoubleImg("tube.tif");
 
 		final double scale = 5;

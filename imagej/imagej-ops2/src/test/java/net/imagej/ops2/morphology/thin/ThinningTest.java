@@ -51,7 +51,7 @@ public class ThinningTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void initialize() {
-		Img<FloatType> testImg = openFloatImg(AbstractOpTest.class, "features/3d_geometric_features_testlabel.tif");
+		Img<FloatType> testImg = openRelativeFloatImg(AbstractOpTest.class, "features/3d_geometric_features_testlabel.tif");
 		in = ops.op("create.img").input(testImg, new BitType()).outType(new Nil<Img<BitType>>() {}).apply();
 		target = ops.op("create.img").input(in, new BitType()).outType(new Nil<Img<BitType>>() {}).apply();
 		ops.op("convert.bit").input(testImg).output(in).compute();
@@ -61,14 +61,14 @@ public class ThinningTest extends AbstractOpTest {
 	@Test
 	public void testThinGuoHall() {
 		final Img<BitType> out = ops.op("morphology.thinGuoHall").input(in).outType(new Nil<Img<BitType>>() {}).apply();
-		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_guoHall.tif")).output(target).compute();
+		ops.op("convert.bit").input(openRelativeFloatImg(AbstractThin.class, "result_guoHall.tif")).output(target).compute();
 		ImgLib2Assert.assertImageEquals(target, out);
 	}
 
 	@Test
 	public void testThinHilditch() {
 		final Img<BitType> out = ops.op("morphology.thinHilditch").input(in).outType(new Nil<Img<BitType>>() {}).apply();
-		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_hilditch.tif")).output(target).compute();
+		ops.op("convert.bit").input(openRelativeFloatImg(AbstractThin.class, "result_hilditch.tif")).output(target).compute();
 		ImgLib2Assert.assertImageEquals(target, out);
 	}
 
@@ -76,14 +76,14 @@ public class ThinningTest extends AbstractOpTest {
 	public void testMorphological() {
 		final Img<BitType> out = ops.op("morphology.thinMorphological").input(in).outType(new Nil<Img<BitType>>() {})
 				.apply();
-		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_morphological.tif")).output(target).compute();
+		ops.op("convert.bit").input(openRelativeFloatImg(AbstractThin.class, "result_morphological.tif")).output(target).compute();
 		ImgLib2Assert.assertImageEquals(target, out);
 	}
 
 	@Test
 	public void testZhangSuen() {
 		final Img<BitType> out = ops.op("morphology.thinZhangSuen").input(in).outType(new Nil<Img<BitType>>() {}).apply();
-		ops.op("convert.bit").input(openFloatImg(AbstractThin.class, "result_zhangSuen.tif")).output(target).compute();
+		ops.op("convert.bit").input(openRelativeFloatImg(AbstractThin.class, "result_zhangSuen.tif")).output(target).compute();
 		ImgLib2Assert.assertImageEquals(target, out);
 	}
 }

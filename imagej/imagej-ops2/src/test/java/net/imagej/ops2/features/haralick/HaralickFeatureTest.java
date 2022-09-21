@@ -59,7 +59,7 @@ public class HaralickFeatureTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void loadImage() {
-		img = openUnsignedByteType(AbstractOpTest.class, "features/haralick_test_img.tif");
+		img = openRelativeUnsignedByteImg(AbstractOpTest.class, "features/haralick_test_img.tif");
 	}
 
 	@Test

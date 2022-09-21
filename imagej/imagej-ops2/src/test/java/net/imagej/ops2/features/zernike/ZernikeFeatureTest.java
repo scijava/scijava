@@ -30,7 +30,7 @@ package net.imagej.ops2.features.zernike;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import net.imagej.ops2.features.AbstractFeatureTest;
+import net.imagej.ops2.AbstractFeatureTest;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.Test;

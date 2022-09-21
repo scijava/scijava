@@ -35,7 +35,7 @@ import java.util.Iterator;
 
 import net.imagej.mesh.Mesh;
 import net.imagej.mesh.Triangle;
-import net.imagej.ops2.features.AbstractFeatureTest;
+import net.imagej.ops2.AbstractFeatureTest;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.type.numeric.real.DoubleType;
 

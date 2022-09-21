@@ -30,7 +30,6 @@
 package net.imagej.ops2.morphology.thin;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.ops2.features.AbstractFeatureTest;
 import net.imglib2.img.Img;
 import net.imglib2.test.ImgLib2Assert;
 import net.imglib2.type.logic.BitType;
@@ -52,7 +51,7 @@ public class ThinningTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void initialize() {
-		Img<FloatType> testImg = openFloatImg(AbstractFeatureTest.class, "3d_geometric_features_testlabel.tif");
+		Img<FloatType> testImg = openFloatImg(AbstractOpTest.class, "features/3d_geometric_features_testlabel.tif");
 		in = ops.op("create.img").input(testImg, new BitType()).outType(new Nil<Img<BitType>>() {}).apply();
 		target = ops.op("create.img").input(in, new BitType()).outType(new Nil<Img<BitType>>() {}).apply();
 		ops.op("convert.bit").input(testImg).output(in).compute();

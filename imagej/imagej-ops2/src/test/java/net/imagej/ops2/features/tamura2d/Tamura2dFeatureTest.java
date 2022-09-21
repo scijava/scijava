@@ -31,7 +31,7 @@ package net.imagej.ops2.features.tamura2d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import net.imagej.ops2.features.AbstractFeatureTest;
+import net.imagej.ops2.AbstractFeatureTest;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.type.numeric.integer.ByteType;

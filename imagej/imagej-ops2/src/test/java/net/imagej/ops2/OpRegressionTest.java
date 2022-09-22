@@ -29,6 +29,8 @@
 package net.imagej.ops2;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,4 +44,10 @@ public class OpRegressionTest extends AbstractOpTest {
 		assertEquals(expected, actual);
 	}
 
+
+	@Test
+	public void opDescriptionRegressionIT() {
+		// Ensure no ops have a null description
+		StreamSupport.stream(ops.infos().spliterator(), false).map(Object::toString).collect(Collectors.toSet());
+	}
 }

@@ -218,15 +218,6 @@
 		<therapi.packages />
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 	<repositories>
 		<repository>
 			<id>scijava.public</id>

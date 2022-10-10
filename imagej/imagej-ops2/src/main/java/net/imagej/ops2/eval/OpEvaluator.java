@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ import org.scijava.ops.spi.Op;
 import org.scijava.parsington.Operator;
 import org.scijava.parsington.Operators;
 import org.scijava.parsington.Variable;
-import org.scijava.parsington.eval.AbstractStandardStackEvaluator;
+import org.scijava.parsington.eval.DefaultStackEvaluator;
 import org.scijava.parsington.eval.Evaluator;
 import org.scijava.types.Nil;
 
@@ -52,7 +52,7 @@ import org.scijava.types.Nil;
  * 
  * @author Curtis Rueden
  */
-public class OpEvaluator extends AbstractStandardStackEvaluator {
+public class OpEvaluator extends DefaultStackEvaluator {
 
 	private final OpEnvironment ops;
 

@@ -75,7 +75,7 @@
 		<url>https://github.com/scijava/scijava/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Github Actions</system>
+		<system>GitHub Actions</system>
 		<url>https://github.com/scijava/incubator/actions</url>
 	</ciManagement>
 

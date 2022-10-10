@@ -75,8 +75,8 @@
 		<url>https://github.com/scijava/scijava/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.com/scijava/incubator</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
 	</ciManagement>
 
 	<properties>

@@ -120,6 +120,7 @@ module net.imagej.ops2 {
 	requires net.imagej.mesh;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;
+	requires net.imglib2.algorithm.fft2;
 	requires net.imglib2.roi;
 	requires org.joml;
 	requires org.scijava;
@@ -134,7 +135,6 @@ module net.imagej.ops2 {
 	requires commons.math3;
 	requires ojalgo;
 	requires jama;
-	requires imglib2.algorithm.fft;
 	requires mines.jtk;
 
 	provides org.scijava.types.TypeExtractor with

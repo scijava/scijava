@@ -150,7 +150,7 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Computer which sets a outputPixel to <code>input.get() + 1</code>. Generally,
+	 * Computer which sets a outputPixel to {@code input.get() + 1}. Generally,
 	 * this computer is invalid as input to neighborhood maps.
 	 *
 	 * @author Jonathan Hale

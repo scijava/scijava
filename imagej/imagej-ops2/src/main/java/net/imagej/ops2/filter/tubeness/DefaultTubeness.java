@@ -70,15 +70,15 @@ import org.scijava.ops.spi.OpDependency;
  * <li>We yield the eigenvalues of the Hessian matrix. The output of the
  * tubeness filter is a combination of these eigenvalues:</li>
  * <ul>
- * <li>in 2D where <code>λ₂</code> is the largest eigenvalue:
- * <code>out = 𝜎 × 𝜎 × |λ₂|</code> if <code>λ₂</code> is negative, 0
+ * <li>in 2D where {@code λ₂} is the largest eigenvalue:
+ * {@code out = 𝜎 × 𝜎 × |λ₂|} if {@code λ₂} is negative, 0
  * otherwise.</li>
- * <li>in 3D where <code>λ₂</code> and <code>λ₃</code> are the largest
- * eigenvalues:, <code>out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )</code> if <code>λ₂</code>
- * and <code>λ₃</code> are negative, 0 otherwise.</li>
+ * <li>in 3D where {@code λ₂} and {@code λ₃} are the largest
+ * eigenvalues:, {@code out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )} if {@code λ₂}
+ * and {@code λ₃} are negative, 0 otherwise.</li>
  * </ul>
  * </ul>
- * This results in enhancing filaments of roughly <code>𝜎 / sqrt(d)</code>
+ * This results in enhancing filaments of roughly {@code 𝜎 / sqrt(d)}
  * thickness.
  * <p>
  * Port of the tubeness filter of the VIB package, with original authors Mark

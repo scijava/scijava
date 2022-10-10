@@ -29,7 +29,7 @@
 package net.imagej.ops2.coloc;
 
 /**
- * Sorts and <code>int[]</code> according to a custom comparator.
+ * Sorts an {@code int[]} according to a custom comparator.
  * <p>
  * This is an implementation of introsort, i.e. it is stable because
  * it tries the quicksort algorithm first and falls back to the heap

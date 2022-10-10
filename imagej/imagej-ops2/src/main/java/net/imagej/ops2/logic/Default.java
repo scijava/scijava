@@ -35,7 +35,7 @@ import net.imglib2.type.Type;
 import org.scijava.function.Computers;
 
 /**
- * An Op that sets the output to the <code>defaultVal</code> iff the input is
+ * An Op that sets the output to the {@code defaultVal} iff the input is
  * evaluated as false.
  * 
  * @author Leon Yang

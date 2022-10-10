@@ -101,7 +101,7 @@ public class Versions {
 	/**
 	 * Looks up the build number (typically an SCM revision) of the specified
 	 * class. This information is retrieved from the JAR manifest's
-	 * <code>Implementation-Build</code> entry, or null if no such value exists.
+	 * {@code Implementation-Build} entry, or null if no such value exists.
 	 *
 	 * @param c - Look up this class's build number
 	 * @return Build number of specified {@link Class} or null if not found.

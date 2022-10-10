@@ -448,29 +448,27 @@ public class MatchingUtilsTest {
 	/**
 	 * Suppose we have a
 	 *
-	 * <pre>
-	 * class Foo&lt;I extends Number&gt implements Function&lt;I[], Double&gt;
-	 * </pre>
+	 * <pre>{@code
+	 * class Foo<I extends Number> implements Function<I[], Double>
+	 * }</pre>
 	 *
 	 * It is legal to write
 	 *
-	 * <pre>
-	 *
-	 * Function&lt;Double[], Double[]&gt; fooFunc = new Foo&lt;&gt;();
-	 * </pre>
+	 * <pre>{@code
+	 * Function<Double[], Double[]> fooFunc = new Foo<>();
+	 * }</pre>
 	 *
 	 * If we instead have a
 	 *
-	 * <pre>
-	 * class Bar implements Function&lt;O[], Double&gt;
-	 * </pre>
+	 * <pre>{@code
+	 * class Bar implements Function<O[], Double>
+	 * }</pre>
 	 *
-	 * where <code>O extends Number</code>, is <strong>not</strong> legal to write
+	 * where {@code O extends Number}, is <strong>not</strong> legal to write
 	 *
-	 * <pre>
-	 *
-	 * Function&lt;Double[], Double[]&gt; barFunc = new Bar&lt;&gt;();
-	 * </pre>
+	 * <pre>{@code
+	 * Function<Double[], Double[]> barFunc = new Bar<>();
+	 * }</pre>
 	 *
 	 * @param <O>
 	 */

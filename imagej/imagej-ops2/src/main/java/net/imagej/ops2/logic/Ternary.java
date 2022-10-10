@@ -35,8 +35,8 @@ import net.imglib2.type.Type;
 import org.scijava.function.Computers;
 
 /**
- * An Op that works the same way as the <code>?:</code> operator. It sets the
- * output to the <code>ifTrueVal</code> if the input is evaluated as true, or
+ * An Op that works the same way as the {@code ?:} operator. It sets the
+ * output to the {@code ifTrueVal} if the input is evaluated as true, or
  * <code>ifFalseVal</code> otherwise.
  * 
  * @author Leon Yang

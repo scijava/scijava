@@ -65,16 +65,16 @@ public interface Discoverer {
 	 * Gets all {@link Discoverer}s made available through {@link ServiceLoader}, as
 	 * well as a {@link Discoverer} that is itself backed by {@link ServiceLoader}.
 	 * <p>
-	 * It is <b>highly</b> recommended to call this method using <code>
+	 * It is <b>highly</b> recommended to call this method using {@code
 	 *   List<Discoverer> discoverers = Discoverers.all(ServiceLoader::load);
-	 * </code>
+	 * }
 	 * 
 	 * @param func A callbacks used to get the module scope of the caller. Through
 	 *             {@code func}, the {@link ServiceLoader}-based {@link Discoverer}
-	 *             is capable of discovering all interfaces `use`d by the caller
+	 *             is capable of discovering all interfaces {@code use}d by the caller
 	 *             module. If we instead called {@link ServiceLoader#load(Class)}
 	 *             directly, we'd only be able to discover implmentations whose
-	 *             interface was `use`d by `module org.scijava.discovery`.
+	 *             interface was {@code use}d by {@code module org.scijava.discovery}.
 	 *             <p>
 	 *             It is in the user's best interest to make this {@link Function}
 	 *             as general as possible.

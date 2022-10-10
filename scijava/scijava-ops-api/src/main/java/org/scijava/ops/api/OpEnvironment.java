@@ -167,14 +167,12 @@ public interface OpEnvironment {
 	 * simply call
 	 * <p>
 	 *
-	 * <pre>
-	 * <code>
+	 * <pre>{@code
 	 * op("adapt")
-	 *   .input(computer)
-	 *   .outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {})
+	 *  input(computer)
+	 *   .outType(new Nil<Computers.Arity1<Iterable<Double>, Iterable<Double>>>() {})
 	 *   .apply()
-	 * </code>
-	 * </pre>
+	 * }</pre>
 	 *
 	 * since the type parameters of {@code computer} are not retained at runtime.
 	 * <p>

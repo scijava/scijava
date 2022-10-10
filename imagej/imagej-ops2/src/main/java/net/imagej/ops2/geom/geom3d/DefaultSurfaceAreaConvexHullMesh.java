@@ -29,7 +29,7 @@
 
 package net.imagej.ops2.geom.geom3d;
 
-import net.imagej.mesh.Mesh;
+import net.imagej.mesh2.Mesh;
 import net.imagej.ops2.geom.AbstractBoundarySizeConvexHull;
 
 /**

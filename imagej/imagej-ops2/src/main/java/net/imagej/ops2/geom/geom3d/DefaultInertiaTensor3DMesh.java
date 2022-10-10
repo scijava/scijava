@@ -31,8 +31,8 @@ package net.imagej.ops2.geom.geom3d;
 
 import java.util.function.Function;
 
-import net.imagej.mesh.Mesh;
-import net.imagej.mesh.Triangle;
+import net.imagej.mesh2.Mesh;
+import net.imagej.mesh2.Triangle;
 import net.imglib2.RealLocalizable;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;

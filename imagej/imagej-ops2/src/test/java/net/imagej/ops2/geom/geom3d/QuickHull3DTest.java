@@ -34,10 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
-import net.imagej.mesh.Mesh;
-import net.imagej.mesh.Triangle;
-import net.imagej.mesh.Vertices;
-import net.imagej.mesh.naive.NaiveDoubleMesh;
+import net.imagej.mesh2.Mesh;
+import net.imagej.mesh2.NaiveDoubleMesh;
+import net.imagej.mesh2.Triangle;
+import net.imagej.mesh2.Vertices;
 import net.imagej.ops2.AbstractOpTest;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;

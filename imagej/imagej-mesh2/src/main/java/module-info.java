@@ -1,4 +1,4 @@
-/*
+/*-
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
@@ -26,15 +26,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+module net.imagej.mesh2 {
+	exports net.imagej.mesh2;
 
-package net.imagej.ops2.geom.geom3d;
+	requires net.imglib2;
+	requires org.scijava.collections;
 
-import net.imagej.mesh2.Mesh;
-import net.imagej.ops2.geom.AbstractBoxivity;
-
-/**
- * @author Tim-Oliver Buchholz (University of Konstanz)
- * @implNote op names='geom.boxivity', label='Geometric (3D): Boxivity', priority='10000.'
- */
-public class DefaultBoxivityMesh extends AbstractBoxivity<Mesh> {
+	// FIXME: these module names derive from filenames and are thus unstable
+	requires commons.math3;
 }

@@ -33,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Iterator;
 
-import net.imagej.mesh.Mesh;
-import net.imagej.mesh.Triangle;
+import net.imagej.mesh2.Mesh;
+import net.imagej.mesh2.Triangle;
 import net.imagej.ops2.AbstractFeatureTest;
 import net.imglib2.roi.labeling.LabelRegion;
 import net.imglib2.type.numeric.real.DoubleType;

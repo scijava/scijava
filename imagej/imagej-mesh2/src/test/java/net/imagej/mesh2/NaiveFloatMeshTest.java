@@ -1,8 +1,8 @@
-/*
+/*-
  * #%L
  * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2022 ImageJ2 developers.
+ * Copyright (C) 2016 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,14 +27,17 @@
  * #L%
  */
 
-package net.imagej.ops2.geom.geom3d;
-
-import net.imagej.mesh2.Mesh;
-import net.imagej.ops2.geom.AbstractBoxivity;
+package net.imagej.mesh2;
 
 /**
- * @author Tim-Oliver Buchholz (University of Konstanz)
- * @implNote op names='geom.boxivity', label='Geometric (3D): Boxivity', priority='10000.'
+ * Tests {@link NaiveFloatMesh}.
+ *
+ * @author Curtis Rueden
  */
-public class DefaultBoxivityMesh extends AbstractBoxivity<Mesh> {
+public class NaiveFloatMeshTest extends AbstractMeshTest {
+
+	@Override
+	public Mesh createMesh() {
+		return new NaiveFloatMesh();
+	}
 }

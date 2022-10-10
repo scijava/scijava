@@ -212,9 +212,6 @@
 		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${imagej-ops2.allowedDuplicateClasses}</allowedDuplicateClasses>
 
-		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
-		<releaseProfiles>deploy-to-imagej</releaseProfiles>
-
 		<therapi.packages />
 	</properties>
 

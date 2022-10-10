@@ -39,7 +39,7 @@ import org.scijava.parse2.Item;
 import org.scijava.parse2.Items;
 import org.scijava.parse2.Parser;
 import org.scijava.parsington.Variable;
-import org.scijava.parsington.eval.DefaultEvaluator;
+import org.scijava.parsington.eval.DefaultTreeEvaluator;
 
 /**
  * Default service for parsing strings.
@@ -96,7 +96,7 @@ public class DefaultParser implements
 		}
 
 		private void parseItems(final String arg, final boolean strict) {
-			final DefaultEvaluator e = new DefaultEvaluator();
+			final DefaultTreeEvaluator e = new DefaultTreeEvaluator();
 			e.setStrict(strict);
 			final Object result = e.evaluate("(" + arg + ")");
 			if (result == null) {

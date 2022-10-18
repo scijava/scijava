@@ -31,7 +31,6 @@ package net.imagej.ops2.features.haralick;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.ops2.features.AbstractFeatureTest;
 import net.imagej.ops2.image.cooccurrenceMatrix.MatrixOrientation2D;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
@@ -60,7 +59,7 @@ public class HaralickFeatureTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void loadImage() {
-		img = openUnsignedByteType(AbstractFeatureTest.class, "haralick_test_img.tif");
+		img = openRelativeUnsignedByteImg(AbstractOpTest.class, "features/haralick_test_img.tif");
 	}
 
 	@Test

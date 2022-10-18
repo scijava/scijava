@@ -95,35 +95,56 @@ public abstract class AbstractOpTest{
 		return seed = 3170425 * seed + 132102;
 	}
 
-
-
+	/**
+	 * Open a sample image from a resource path relative to {@link AbstractOpTest}
+	 */
 	public Img<FloatType> openFloatImg(final String resourcePath) {
-		return openFloatImg(getClass(), resourcePath);
+		return openRelativeFloatImg(getClass(), resourcePath);
 	}
 
+	/**
+	 * Open a sample image from a resource path relative to {@link AbstractOpTest}
+	 */
 	public Img<DoubleType> openDoubleImg(final String resourcePath) {
-		return openDoubleImg(getClass(), resourcePath);
+		return openRelativeDoubleImg(getClass(), resourcePath);
 	}
 
-	public static Img<FloatType> openFloatImg(final Class<?> c,
+	/**
+	 * Open a sample image from a resource path relative to {@link AbstractOpTest}
+	 */
+	public Img<UnsignedByteType> openUnsignedByteImg(final String resourcePath)
+	{
+		return openRelativeUnsignedByteImg(getClass(), resourcePath);
+	}
+
+	/**
+	 * Open a sample image from a resource path relative to a specified base class
+	 */
+	public static Img<FloatType> openRelativeFloatImg(final Class<?> base,
 		final String resourcePath)
 	{
-		final URL url = c.getResource(resourcePath);
+		final URL url = base.getResource(resourcePath);
 		return IO.openFloat(url.getPath()).getImg();
 	}
 
-	public static Img<UnsignedByteType> openUnsignedByteType(final Class<?> c,
+	/**
+	 * Open a sample image from a resource path relative to a specified base class
+	 */
+	public static Img<DoubleType> openRelativeDoubleImg(final Class<?> base,
 		final String resourcePath)
 	{
-		final URL url = c.getResource(resourcePath);
-		return IO.openUnsignedByte(url.getPath()).getImg();
+		final URL url = base.getResource(resourcePath);
+		return IO.openDouble(url.getPath()).getImg();
 	}
 
-	public static Img<DoubleType> openDoubleImg(final Class<?> c,
+	/**
+	 * Open a sample image from a resource path relative to a specified base class
+	 */
+	public static Img<UnsignedByteType> openRelativeUnsignedByteImg(final Class<?> base,
 		final String resourcePath)
 	{
-		final URL url = c.getResource(resourcePath);
-		return IO.openDouble(url.getPath()).getImg();
+		final URL url = base.getResource(resourcePath);
+		return IO.openUnsignedByte(url.getPath()).getImg();
 	}
 
 	public static <T> RandomAccessible<T> deinterval(

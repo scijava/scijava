@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
-import net.imagej.ops2.features.AbstractFeatureTest;
+import net.imagej.ops2.AbstractFeatureTest;
 import net.imglib2.type.numeric.integer.LongType;
 
 import org.junit.jupiter.api.Test;

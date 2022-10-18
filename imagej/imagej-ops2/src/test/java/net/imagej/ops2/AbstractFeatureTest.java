@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops2.features;
+package net.imagej.ops2;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -41,7 +41,6 @@ import java.util.Random;
 
 import net.imagej.mesh.Mesh;
 import net.imagej.mesh.naive.NaiveDoubleMesh;
-import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccess;
@@ -251,13 +250,13 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	}
 
 	protected static Img<FloatType> getTestImage2D() {
-		return openFloatImg(AbstractFeatureTest.class, "2d_geometric_features_testlabel.tif");
+		return openRelativeFloatImg(AbstractFeatureTest.class, "features/2d_geometric_features_testlabel.tif");
 	}
 	
 	protected static Polygon2D getPolygon() {
 		final List<RealPoint> vertices = new ArrayList<>();
 		try {
-			Files.lines(Paths.get(AbstractFeatureTest.class.getResource("2d_geometric_features_polygon.txt").toURI()))
+			Files.lines(Paths.get(AbstractFeatureTest.class.getResource("features/2d_geometric_features_polygon.txt").toURI()))
 										.forEach(l -> {
 											String[] coord = l.split(" ");
 											RealPoint v = new RealPoint(new double[]{	Double.parseDouble(coord[0]), 
@@ -271,7 +270,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 	}
 
 	protected static Img<FloatType> getTestImage3D() {
-		return openFloatImg(AbstractFeatureTest.class, "3d_geometric_features_testlabel.tif");
+		return openRelativeFloatImg(AbstractFeatureTest.class, "features/3d_geometric_features_testlabel.tif");
 	}
 	
 	protected static Mesh getMesh() {
@@ -280,7 +279,7 @@ public class AbstractFeatureTest extends AbstractOpTest {
 		final Map<Vector3D, Long> indexMap = new HashMap<>();
 		final LongArray indices = new LongArray();
 		try {
-			Files.lines(Paths.get(AbstractFeatureTest.class.getResource("3d_geometric_features_mesh.txt").toURI()))
+			Files.lines(Paths.get(AbstractFeatureTest.class.getResource("features/3d_geometric_features_mesh.txt").toURI()))
 										.forEach(l -> {
 											String[] coord = l.split(" ");
 											final double x = Double.parseDouble(coord[0]);

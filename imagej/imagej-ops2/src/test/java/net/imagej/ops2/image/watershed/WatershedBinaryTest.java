@@ -58,7 +58,7 @@ public class WatershedBinaryTest extends AbstractOpTest {
 	@Test
 	public void test() {
 		// load test image
-		Img<FloatType> watershedTestImg = openFloatImg(WatershedTest.class, "watershed_test_image.png");
+		Img<FloatType> watershedTestImg = openRelativeFloatImg(WatershedTest.class, "watershed_test_image.png");
 
 		// retrieve an ExecutorService TODO is there a better way to do this?
 		ExecutorService es = threads.getExecutorService();

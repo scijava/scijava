@@ -104,7 +104,7 @@ class MapNeighborhoodAllRAI<I, O> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity1<Iterable<I>, O> centerAwareOp,
+		final Computers.Arity1<Iterable<I>, O> op,
 		final RandomAccessibleInterval<O> out)
 	{
 		// generate a neighborhood image with the bounds of the input
@@ -113,7 +113,7 @@ class MapNeighborhoodAllRAI<I, O> implements
 
 		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded()
 			.forEachPixel((neighborhood, outPixel) -> {
-				centerAwareOp.compute(neighborhood, outPixel);
+				op.compute(neighborhood, outPixel);
 			});
 	}
 

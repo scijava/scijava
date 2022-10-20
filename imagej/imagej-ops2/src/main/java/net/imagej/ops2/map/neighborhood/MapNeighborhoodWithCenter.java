@@ -95,7 +95,7 @@ public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomA
  * We also assume that the input and output have identical dimensions.
  * 
  * @author Gabriel Selzer
- *@implNote op names='map.neighborhood', priority='100.'
+ * @implNote op names='map.neighborhood', priority='100.'
  */
 class MapNeighborhoodWithCenterAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, RandomAccessibleInterval<O>>

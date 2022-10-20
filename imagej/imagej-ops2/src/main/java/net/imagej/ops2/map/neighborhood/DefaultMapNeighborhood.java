@@ -88,7 +88,7 @@ public class DefaultMapNeighborhood<I, O> implements
  * We also assume that the input and output have identical dimensions.
  * 
  * @author Gabriel Selzer
- *@implNote op names='map.neighborhood', priority='100.'
+ * @implNote op names='map.neighborhood', priority='100.'
  */
 class MapNeighborhoodAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, RandomAccessibleInterval<O>>

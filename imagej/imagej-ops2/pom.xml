@@ -14,11 +14,11 @@
 
 	<name>ImageJ Ops 2</name>
 	<description>ImageJ Operations 2: a framework for reusable algorithms.</description>
-	<url>http://imagej.net/ImageJ_Ops</url>
+	<url>https://imagej.net/libs/imagej-ops</url>
 	<inceptionYear>2014</inceptionYear>
 	<organization>
 		<name>ImageJ</name>
-		<url>http://imagej.net/</url>
+		<url>https://imagej.net/</url>
 	</organization>
 	<licenses>
 		<license>
@@ -31,7 +31,7 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>http://imagej.net/User:Rueden</url>
+			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -59,7 +59,7 @@
 		<developer>
 			<id>dietzc</id>
 			<name>Christian Dietz</name>
-			<url>http://imagej.net/User:Dietzc</url>
+			<url>https://imagej.net/people/dietzc</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -73,7 +73,7 @@
 		<developer>
 			<id>bnorthan</id>
 			<name>Brian Northan</name>
-			<url>http://imagej.net/User:Bnorthan</url>
+			<url>https://imagej.net/people/bnorthan</url>
 			<roles>
 				<role>developer</role>
 				<role>debugger</role>
@@ -84,7 +84,7 @@
 		<developer>
 			<id>gab1one</id>
 			<name>Gabriel Einsdorf</name>
-			<url>http://imagej.net/User:Gab1one</url>
+			<url>https://imagej.net/people/gab1one</url>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -106,7 +106,7 @@
 		</contributor>
 		<contributor>
 			<name>Johannes Schindelin</name>
-			<url>http://imagej.net/User:Schindelin</url>
+			<url>https://imagej.net/people/dscho</url>
 			<roles><role>founder</role></roles>
 			<properties><id>dscho</id></properties>
 		</contributor>
@@ -116,12 +116,12 @@
 		</contributor>
 		<contributor>
 			<name>Richard Domander</name>
-			<url>http://imagej.net/User:Rdom</url>
+			<url>https://imagej.net/people/rimadoma</url>
 			<properties><id>rimadoma</id></properties>
 		</contributor>
 		<contributor>
 			<name>Jan Eglinger</name>
-			<url>http://imagej.net/User:Eglinger</url>
+			<url>https://imagej.net/people/imagejan</url>
 			<properties><id>imagejan</id></properties>
 		</contributor>
 		<contributor>
@@ -134,7 +134,7 @@
 		</contributor>
 		<contributor>
 			<name>Kyle Harrington</name>
-			<url>http://imagej.net/User:Kharrington</url>
+			<url>https://imagej.net/people/kephale</url>
 			<properties><id>kephale</id></properties>
 		</contributor>
 		<contributor>
@@ -143,17 +143,17 @@
 		</contributor>
 		<contributor>
 			<name>Stefan Helfrich</name>
-			<url>http://imagej.net/User:Stelfrich</url>
+			<url>https://imagej.net/people/stelfrich</url>
 			<properties><id>stelfrich</id></properties>
 		</contributor>
 		<contributor>
 			<name>Mark Hiner</name>
-			<url>http://imagej.net/User:Hinerm</url>
+			<url>https://imagej.net/people/hinerm</url>
 			<properties><id>hinerm</id></properties>
 		</contributor>
 		<contributor>
 			<name>Aparna Pal</name>
-			<url>http://imagej.net/User:Apal4</url>
+			<url>https://imagej.net/people/apal4</url>
 			<properties><id>apal4</id></properties>
 		</contributor>
 		<contributor>
@@ -166,12 +166,12 @@
 		</contributor>
 		<contributor>
 			<name>Alison Walter</name>
-			<url>http://imagej.net/User:Awalter2</url>
+			<url>https://imagej.net/people/awalter17</url>
 			<properties><id>awalter17</id></properties>
 		</contributor>
 		<contributor>
 			<name>Leon Yang</name>
-			<url>http://imagej.net/User:Leon</url>
+			<url>https://imagej.net/people/lnyng</url>
 			<properties><id>lnyng</id></properties>
 		</contributor>
 		<contributor>
@@ -183,7 +183,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
-			<archive>https://forum.image.sc/</archive>
+			<archive>https://forum.image.sc/tag/imagej2</archive>
 		</mailingList>
 	</mailingLists>
 
@@ -198,34 +198,23 @@
 		<url>https://github.com/imagej/imagej-ops2/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.org/scijava/incubator</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
 	</ciManagement>
 
 	<properties>
 		<package-name>net.imagej.ops2</package-name>
 		<main-class>net.imagej.ops2.About</main-class>
+
 		<license.licenseName>bsd_2</license.licenseName>
-		<license.copyrightOwners>ImageJ developers.</license.copyrightOwners>
-		<license.projectName>ImageJ software for multidimensional image processing and analysis.</license.projectName>
+		<license.copyrightOwners>ImageJ2 developers.</license.copyrightOwners>
+		<license.projectName>ImageJ2 software for multidimensional image processing and analysis.</license.projectName>
 
 		<imagej-ops2.allowedDuplicateClasses>${scijava.allowedDuplicateClasses},com.github.therapi.runtimejavadoc.repack.com.eclipsesource.json.*</imagej-ops2.allowedDuplicateClasses>
 		<allowedDuplicateClasses>${imagej-ops2.allowedDuplicateClasses}</allowedDuplicateClasses>
 
-		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
-		<releaseProfiles>deploy-to-imagej</releaseProfiles>
-
 		<therapi.packages />
 	</properties>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 	<repositories>
 		<repository>
@@ -235,10 +224,10 @@
 	</repositories>
 
 	<dependencies>
-		<!-- ImageJ dependencies -->
 		<dependency>
 			<groupId>net.imagej</groupId>
-			<artifactId>imagej-mesh</artifactId>
+			<artifactId>imagej-mesh2</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- ImgLib2 dependencies -->
@@ -288,11 +277,6 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<!-- Do not remove - Maven incorrectly identifies it as an unused dependency!  -->
-			<groupId>org.scijava</groupId>
-			<artifactId>scripting-javascript</artifactId>
 		</dependency>
 
 		<!-- Third party dependencies -->

@@ -30,7 +30,7 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/User:Rueden</url>
+			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -54,7 +54,7 @@
 	<contributors>
 		<contributor>
 			<name>Christian Dietz</name>
-			<url>https://imagej.net/User:Dietzc</url>
+			<url>https://imagej.net/people/dietzc</url>
 			<roles>
 				<role>founder</role>
 			</roles>
@@ -91,8 +91,8 @@
 		<url>https://github.com/scijava/scijava-ops-engine/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.com/scijava/incubator</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
 	</ciManagement>
 
 	<properties>
@@ -105,22 +105,7 @@
 		<allowedDuplicateClasses>${scijava-ops-engine.allowedDuplicateClasses}</allowedDuplicateClasses>
 		<therapi.packages></therapi.packages>
 	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>9</source>
-                    <target>9</target>
-                </configuration>
-            </plugin>
-        </plugins>
-	</build>
+
 	<dependencies>
 		<!-- SciJava dependencies -->
 		<dependency>

@@ -15,7 +15,7 @@ import org.scijava.types.Nil;
 
 /**
  * Ensures correct behavior in {@link OpBuilder} calls <b>where no output type
- * or <code>Object</code> is given</b>.
+ * or {@code Object} is given</b>.
  *
  * @author Gabriel Selzer
  * @see OpBuilderTest

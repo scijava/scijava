@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -150,7 +150,7 @@ public class MapNeighborhoodTest extends AbstractOpTest {
 	}
 
 	/**
-	 * Computer which sets a outputPixel to <code>input.get() + 1</code>. Generally,
+	 * Computer which sets a outputPixel to {@code input.get() + 1}. Generally,
 	 * this computer is invalid as input to neighborhood maps.
 	 *
 	 * @author Jonathan Hale

@@ -10,6 +10,7 @@ module org.scijava.types {
 	requires transitive org.scijava.common3;
 	requires transitive org.scijava.discovery;
 	requires transitive org.scijava.log2;
+	requires org.scijava.priority;
 
 	uses org.scijava.types.TypeExtractor;
 

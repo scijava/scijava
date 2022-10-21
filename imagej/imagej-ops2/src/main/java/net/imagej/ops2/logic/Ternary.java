@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,8 +35,8 @@ import net.imglib2.type.Type;
 import org.scijava.function.Computers;
 
 /**
- * An Op that works the same way as the <code>?:</code> operator. It sets the
- * output to the <code>ifTrueVal</code> if the input is evaluated as true, or
+ * An Op that works the same way as the {@code ?:} operator. It sets the
+ * output to the {@code ifTrueVal} if the input is evaluated as true, or
  * <code>ifFalseVal</code> otherwise.
  * 
  * @author Leon Yang

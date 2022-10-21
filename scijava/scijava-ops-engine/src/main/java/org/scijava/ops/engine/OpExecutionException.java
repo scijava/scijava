@@ -37,7 +37,7 @@ package org.scijava.ops.engine;
 public class OpExecutionException extends RuntimeException {
 
 	/**
-	 * Constructs a <code>OpExecutionException</code> with the specified reason
+	 * Constructs an {@code OpExecutionException} with the specified reason
 	 * for failure.
 	 * 
 	 * @param s the reason for the failure
@@ -47,7 +47,7 @@ public class OpExecutionException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs a <code>OpExecutionException</code> with the specified cause.
+	 * Constructs an {@code OpExecutionException} with the specified cause.
 	 * 
 	 * @param cause the cause of the failure
 	 */
@@ -56,7 +56,7 @@ public class OpExecutionException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs a <code>OpExecutionException</code> with the specified reason
+	 * Constructs an {@code OpExecutionException} with the specified reason
 	 * for failure and cause.
 	 * 
 	 * @param message the reason for the failure

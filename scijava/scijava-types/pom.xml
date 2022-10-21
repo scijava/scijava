@@ -30,7 +30,7 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/User:Rueden</url>
+			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -79,8 +79,8 @@
 		<url>https://github.com/scijava/scijava-types/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.com/scijava/incubator</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/scijava/incubator/actions</url>
 	</ciManagement>
 
 	<properties>
@@ -105,6 +105,11 @@
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-log2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-priority</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -48,7 +48,6 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.Views;
 
-import org.scijava.Cancelable;
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
 
@@ -70,15 +69,15 @@ import org.scijava.ops.spi.OpDependency;
  * <li>We yield the eigenvalues of the Hessian matrix. The output of the
  * tubeness filter is a combination of these eigenvalues:</li>
  * <ul>
- * <li>in 2D where <code>λ₂</code> is the largest eigenvalue:
- * <code>out = 𝜎 × 𝜎 × |λ₂|</code> if <code>λ₂</code> is negative, 0
+ * <li>in 2D where {@code λ₂} is the largest eigenvalue:
+ * {@code out = 𝜎 × 𝜎 × |λ₂|} if {@code λ₂} is negative, 0
  * otherwise.</li>
- * <li>in 3D where <code>λ₂</code> and <code>λ₃</code> are the largest
- * eigenvalues:, <code>out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )</code> if <code>λ₂</code>
- * and <code>λ₃</code> are negative, 0 otherwise.</li>
+ * <li>in 3D where {@code λ₂} and {@code λ₃} are the largest
+ * eigenvalues:, {@code out = 𝜎 × 𝜎 × sqrt( λ₂ * λ₃ )} if {@code λ₂}
+ * and {@code λ₃} are negative, 0 otherwise.</li>
  * </ul>
  * </ul>
- * This results in enhancing filaments of roughly <code>𝜎 / sqrt(d)</code>
+ * This results in enhancing filaments of roughly {@code 𝜎 / sqrt(d)}
  * thickness.
  * <p>
  * Port of the tubeness filter of the VIB package, with original authors Mark
@@ -93,32 +92,20 @@ import org.scijava.ops.spi.OpDependency;
  *@implNote op names='filter.tubeness'
  */
 public class DefaultTubeness<T extends RealType<T>> implements
-		Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>,
-		Cancelable {
+	Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>>
+{
 
-	/** Reason for cancelation, or null if not canceled. */
-	private String cancelReason;
-	
 	@OpDependency(name = "create.imgFactory")
 	private Function<Dimensions, ImgFactory<DoubleType>> createFactoryOp;
-	
+
 	//TODO: make sure this works
 	@OpDependency(name = "project")
 	private Computers.Arity3<RandomAccessibleInterval<DoubleType>, Computers.Arity1<Iterable<DoubleType>, DoubleType>, Integer, IterableInterval<DoubleType>> projector;
 
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @param executorService
-	 * @param sigma
-	 * @param calibration
-	 * @param output
-	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, ExecutorService es, final Double sigma,
-			final double[] calibration, final IterableInterval<DoubleType> tubeness) {
-		cancelReason = null;
+		final double[] calibration, final IterableInterval<DoubleType> tubeness)
+	{
 
 		final int numDimensions = input.numDimensions();
 		// Sigmas in pixel units.
@@ -156,15 +143,9 @@ public class DefaultTubeness<T extends RealType<T>> implements
 			HessianMatrix.calculateMatrix(Views.extendBorder(input), gaussian, gradient, hessian,
 					new OutOfBoundsBorderFactory<>(), nThreads, es, sigma);
 
-			if (isCanceled())
-				return;
-
 			// Hessian eigenvalues.
 			final RandomAccessibleInterval<DoubleType> evs = TensorEigenValues.calculateEigenValuesSymmetric(hessian,
 					TensorEigenValues.createAppropriateResultImg(hessian, factory, new DoubleType()), nThreads, es);
-
-			if (isCanceled())
-				return;
 
 			final Computers.Arity1<Iterable<DoubleType>, DoubleType> method;
 			switch (numDimensions) {
@@ -205,7 +186,6 @@ public class DefaultTubeness<T extends RealType<T>> implements
 				output.setZero();
 			else
 				output.set(sigma * sigma * Math.abs(val));
-
 		}
 	}
 
@@ -228,28 +208,8 @@ public class DefaultTubeness<T extends RealType<T>> implements
 				output.setZero();
 			else
 				output.set(sigma * sigma * Math.sqrt(val1 * val2));
-
 		}
 	}
-
-	// -- Cancelable methods --
-
-	@Override
-	public boolean isCanceled() {
-		return cancelReason != null;
-	}
-
-	/** Cancels the command execution, with the given reason for doing so. */
-	@Override
-	public void cancel(final String reason) {
-		cancelReason = reason == null ? "" : reason;
-	}
-
-	@Override
-	public String getCancelReason() {
-		return cancelReason;
-	}
-
 }
 
 /**
@@ -261,18 +221,9 @@ class DefaultTubenessWithoutCalibration<T extends RealType<T>> implements
 	@OpDependency(name = "filter.tubeness")
 	Computers.Arity4<RandomAccessibleInterval<T>, ExecutorService, Double, double[], IterableInterval<DoubleType>> tubenessOp;
 
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @param executorService
-	 * @param sigma
-	 * @param output
-	 */
 	@Override
 	public void compute(RandomAccessibleInterval<T> in1, ExecutorService in2, Double in3,
 			IterableInterval<DoubleType> out) {
 		tubenessOp.compute(in1, in2, in3, new double[] {}, out);
 	}
-	
 }

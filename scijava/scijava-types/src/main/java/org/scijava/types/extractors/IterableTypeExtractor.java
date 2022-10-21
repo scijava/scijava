@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
@@ -61,7 +62,7 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 		// can we make this more efficient (possibly a parallel stream)?
 		Type[] types = StreamSupport.stream(o.spliterator(), false) //
 			.limit(typesToCheck) //
-			.map(s -> t.reify(s)) //
+			.map(t::reify) //
 			.toArray(Type[]::new);
 
 		return Types.greatestCommonSuperType(types, true);
@@ -74,12 +75,9 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 		return (Class) Iterable.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 }

@@ -1,8 +1,8 @@
 /*
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,8 +38,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import net.imagej.mesh.Mesh;
-import net.imagej.mesh.naive.NaiveDoubleMesh;
+import net.imagej.mesh2.Mesh;
+import net.imagej.mesh2.NaiveDoubleMesh;
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
@@ -81,7 +81,7 @@ public class DefaultConvexHull3D implements Function<Mesh, Mesh>
 	public Mesh apply(final Mesh input) {
 		Mesh output = new NaiveDoubleMesh();
 		Set<Vertex> vertices = new LinkedHashSet<>();
-		for (final net.imagej.mesh.Vertex v : input.vertices()) {
+		for (final net.imagej.mesh2.Vertex v : input.vertices()) {
 			final Vertex vertex = new Vertex(v.x(), v.y(), v.z());
 			vertices.add(vertex);
 		}
@@ -623,7 +623,7 @@ class DefaultConvexHull3DEpsilon implements Function<Mesh, Double>
 	@Override
 	public Double apply(final Mesh input) {
 		Set<Vertex> vertices = new LinkedHashSet<>();
-		for (final net.imagej.mesh.Vertex v : input.vertices()) {
+		for (final net.imagej.mesh2.Vertex v : input.vertices()) {
 			final Vertex vertex = new Vertex(v.x(), v.y(), v.z());
 			vertices.add(vertex);
 		}

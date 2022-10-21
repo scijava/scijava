@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -67,12 +68,9 @@ public class MapTypeExtractor implements TypeExtractor<Map<?, ?>> {
 		return (Class) Map.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 }

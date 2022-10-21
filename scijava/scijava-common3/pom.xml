@@ -30,7 +30,7 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>https://imagej.net/User:Rueden</url>
+			<url>https://imagej.net/people/ctrueden</url>
 			<roles>
 				<role>founder</role>
 				<role>lead</role>
@@ -75,7 +75,7 @@
 		<url>https://github.com/scijava/scijava/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Github Actions</system>
+		<system>GitHub Actions</system>
 		<url>https://github.com/scijava/incubator/actions</url>
 	</ciManagement>
 

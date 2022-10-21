@@ -174,8 +174,8 @@ public final class MatchingUtils {
 	}
 
 	/**
-	 * Finds the levels of casting between <code>origin</code> and
-	 * <code>dest</code>. Returns 0 if dest and origin are the same. Returns -1 if
+	 * Finds the levels of casting between {@code origin} and
+	 * {@code dest}. Returns 0 if dest and origin are the same. Returns -1 if
 	 * dest is not assignable from origin.
 	 */
 	public static int findCastLevels(final Class<?> dest, final Class<?> origin) {

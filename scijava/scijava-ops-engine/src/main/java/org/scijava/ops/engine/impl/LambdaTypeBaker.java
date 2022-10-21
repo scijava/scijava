@@ -40,14 +40,12 @@ public final class LambdaTypeBaker {
 	 * simply call
 	 * <p>
 	 *
-	 * <pre>
-	 * <code>
+	 * <pre>{@code
 	 * op("adapt")
 	 *   .input(computer)
 	 *   .outType(new Nil&lt;Computers.Arity1&lt;Iterable&lt;Double&gt;, Iterable&lt;Double&gt;&gt;&gt;() {})
 	 *   .apply()
-	 * </code>
-	 * </pre>
+	 * }</pre>
 	 *
 	 * since the type parameters of {@code computer} are not retained at runtime.
 	 * <p>

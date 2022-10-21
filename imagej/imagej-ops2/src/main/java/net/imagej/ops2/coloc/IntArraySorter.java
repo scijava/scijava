@@ -1,8 +1,8 @@
 /*-
  * #%L
- * ImageJ software for multidimensional image processing and analysis.
+ * ImageJ2 software for multidimensional image processing and analysis.
  * %%
- * Copyright (C) 2014 - 2018 ImageJ developers.
+ * Copyright (C) 2014 - 2022 ImageJ2 developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,7 +29,7 @@
 package net.imagej.ops2.coloc;
 
 /**
- * Sorts and <code>int[]</code> according to a custom comparator.
+ * Sorts an {@code int[]} according to a custom comparator.
  * <p>
  * This is an implementation of introsort, i.e. it is stable because
  * it tries the quicksort algorithm first and falls back to the heap

@@ -29,16 +29,14 @@
 
 package net.imagej.mesh2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Tests for {@link Mesh}.

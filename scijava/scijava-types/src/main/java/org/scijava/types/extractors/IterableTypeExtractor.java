@@ -61,7 +61,7 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 		// can we make this more efficient (possibly a parallel stream)?
 		Type[] types = StreamSupport.stream(o.spliterator(), false) //
 			.limit(typesToCheck) //
-			.map(s -> t.reify(s)) //
+			.map(t::reify) //
 			.toArray(Type[]::new);
 
 		return Types.greatestCommonSuperType(types, true);

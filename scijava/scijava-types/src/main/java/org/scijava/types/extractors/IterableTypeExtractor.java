@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
@@ -74,12 +75,9 @@ public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
 		return (Class) Iterable.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 }

@@ -51,7 +51,7 @@ public abstract class AbstractMeshTest {
     public abstract Mesh createMesh();
 
     @Test
-    public void testMesh() throws Exception {
+    public void testMesh() {
         // Initialize the mesh.
         final Mesh mesh = createMesh();
         assertSame(mesh, mesh.vertices().mesh());
@@ -145,8 +145,7 @@ public abstract class AbstractMeshTest {
     }
 
     @Test
-    public void testTriangleNormal() throws URISyntaxException, IOException {
-
+    public void testTriangleNormal() {
         Mesh inputMesh = new NaiveDoubleMesh();
         inputMesh.vertices().add(1, 1, 1);
         inputMesh.vertices().add(1, -1, 1);

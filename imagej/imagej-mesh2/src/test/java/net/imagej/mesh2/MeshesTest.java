@@ -160,8 +160,7 @@ public class MeshesTest {
 	}
 
 	private static Img<FloatType> getTestImage3D() {
-		try {
-			final InputStream is = MeshesTest.class.getResourceAsStream("/3d_geometric_features_testlabel.bin");
+		try (final InputStream is = MeshesTest.class.getResourceAsStream("/3d_geometric_features_testlabel.bin")) {
 			return ArrayImgs.floats(ArrayIO.floats(is), 13, 12, 10);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -173,18 +172,18 @@ public class MeshesTest {
 		// To prevent duplicates, map each (x, y, z) triple to its own index.
 		final Map<Vector3D, Long> indexMap = new HashMap<>();
 		final LongArray indices = new LongArray();
-		try {
-			Files.lines(Paths.get(MeshesTest.class.getResource("/3d_geometric_features_mesh.txt").toURI()))
-					.forEach(l -> {
-						String[] coord = l.split(" ");
-						final double x = Double.parseDouble(coord[0]);
-						final double y = Double.parseDouble(coord[1]);
-						final double z = Double.parseDouble(coord[2]);
-						final Vector3D vertex = new Vector3D(x, y, z);
-						final long vIndex = indexMap.computeIfAbsent(vertex, //
-								v -> m.vertices().add(x, y, z));
-						indices.add(vIndex);
-					});
+		final URL url = MeshesTest.class.getResource("/3d_geometric_features_mesh.txt");
+		try (Stream<String> lines = Files.lines(Paths.get(url.toURI()))) {
+			lines.forEach(l -> {
+				String[] coord = l.split(" ");
+				final double x = Double.parseDouble(coord[0]);
+				final double y = Double.parseDouble(coord[1]);
+				final double z = Double.parseDouble(coord[2]);
+				final Vector3D vertex = new Vector3D(x, y, z);
+				final long vIndex = indexMap.computeIfAbsent(vertex, //
+						v -> m.vertices().add(x, y, z));
+				indices.add(vIndex);
+			});
 		} catch (IOException | URISyntaxException exc) {
 			exc.printStackTrace();
 		}

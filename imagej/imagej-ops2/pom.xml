@@ -216,15 +216,6 @@
 		<therapi.packages />
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.alexecollins.maven.plugin</groupId>
-				<artifactId>script-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 	<repositories>
 		<repository>
 			<id>scijava.public</id>
@@ -286,11 +277,6 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<!-- Do not remove - Maven incorrectly identifies it as an unused dependency!  -->
-			<groupId>org.scijava</groupId>
-			<artifactId>scripting-javascript</artifactId>
 		</dependency>
 
 		<!-- Third party dependencies -->

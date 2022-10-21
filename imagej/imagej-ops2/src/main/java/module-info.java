@@ -143,7 +143,6 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.types.maxValue to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.types.minValue to therapi.runtime.javadoc, org.scijava.ops.engine;
 	
-	requires java.xml; // TEMP: for org.scijava:scijava-common org.scijava.util.POM
 	requires java.scripting;
 	requires net.imagej.mesh2;
 	requires net.imglib2;
@@ -151,12 +150,14 @@ module net.imagej.ops2 {
 	requires net.imglib2.algorithm.fft2;
 	requires net.imglib2.roi;
 	requires org.joml;
-	requires org.scijava;
+	requires org.scijava.collections;
 	requires org.scijava.function;
+	requires org.scijava.meta;
 	requires org.scijava.ops.api;
 	requires org.scijava.ops.engine;
 	requires org.scijava.ops.spi;
 	requires org.scijava.parsington;
+	requires org.scijava.priority;
 	requires org.scijava.types;
 	
 	// FIXME: these module names derive from filenames and are thus unstable

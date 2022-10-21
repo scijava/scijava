@@ -34,6 +34,7 @@ import java.lang.reflect.Type;
 
 import net.imglib2.roi.labeling.LabelingMapping;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -72,12 +73,9 @@ public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMappi
 		return (Class) LabelingMapping.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 

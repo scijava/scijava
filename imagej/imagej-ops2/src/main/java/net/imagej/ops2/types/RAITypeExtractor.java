@@ -34,6 +34,7 @@ import java.lang.reflect.Type;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.util.Util;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -66,12 +67,9 @@ public class RAITypeExtractor implements
 		return (Class) RandomAccessibleInterval.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 }

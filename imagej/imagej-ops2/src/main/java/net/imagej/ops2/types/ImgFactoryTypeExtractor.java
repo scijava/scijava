@@ -34,6 +34,7 @@ import java.lang.reflect.Type;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImg;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -63,12 +64,9 @@ public class ImgFactoryTypeExtractor implements TypeExtractor<ImgFactory<?>> {
 		return (Class) ImgFactory.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 }

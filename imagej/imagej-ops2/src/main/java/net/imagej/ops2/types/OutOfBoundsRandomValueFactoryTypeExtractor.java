@@ -36,6 +36,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
@@ -77,12 +78,9 @@ public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor
 		return (Class) OutOfBoundsRandomValueFactory.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.NORMAL
-	 */
 	@Override
 	public double priority() {
-		return 0;
+		return Priority.NORMAL;
 	}
 
 

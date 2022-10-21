@@ -29,8 +29,8 @@
 
 package net.imagej.ops2;
 
-import org.scijava.util.POM;
-import org.scijava.util.VersionUtils;
+import org.scijava.meta.POM;
+import org.scijava.meta.Versions;
 
 /**
  * Main entry point which displays information about the component.
@@ -43,7 +43,7 @@ public class About {
 		final String artifactId)
 	{
 		final POM pom = POM.getPOM(c, groupId, artifactId);
-		final String version = VersionUtils.getVersion(c, groupId, artifactId);
+		final String version = Versions.getVersion(c, groupId, artifactId);
 		final StringBuilder sb = new StringBuilder();
 
 		final String projectName = pom.getProjectName();

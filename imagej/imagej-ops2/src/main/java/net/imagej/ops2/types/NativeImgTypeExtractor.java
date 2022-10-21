@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 
 import net.imglib2.img.NativeImg;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -70,12 +71,9 @@ public class NativeImgTypeExtractor implements TypeExtractor<NativeImg<?, ?>> {
 		return (Class) NativeImg.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.HIGH_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return 100;
+		return Priority.HIGH;
 	}
 
 

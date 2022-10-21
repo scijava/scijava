@@ -46,10 +46,10 @@ import net.imglib2.util.Intervals;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
+import org.scijava.collections.IntArray;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.util.IntArray;
 
 /**
  * This algorithm calculates Maximum Trunctated Kendall Tau (MTKT) from Wang et

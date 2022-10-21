@@ -32,15 +32,13 @@ package net.imagej.ops2.morphology.thin;
 import net.imglib2.RandomAccessible;
 import net.imglib2.type.logic.BitType;
 
-import org.scijava.plugin.SingletonPlugin;
-
 /**
  * An interface for a simple thinning strategy employed by the thinningOp.
  *
  * @author Andreas Burger, University of Konstanz
  */
 
-public interface ThinningStrategy extends SingletonPlugin {
+public interface ThinningStrategy {
 
 	/**
 	 * This method should determine whether to keep a foreground pixel or not.

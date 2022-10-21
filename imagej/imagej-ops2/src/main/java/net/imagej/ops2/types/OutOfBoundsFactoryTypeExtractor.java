@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
@@ -63,12 +64,9 @@ public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBound
 		return (Class) OutOfBoundsFactory.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 

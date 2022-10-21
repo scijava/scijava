@@ -35,6 +35,7 @@ import java.lang.reflect.Type;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.view.Views;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
@@ -73,12 +74,9 @@ public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>
 		return (Class) ImgLabeling.class;
 	}
 
-	/**
-	 * Corresponds to org.scijava.Priority.LOW_PRIORITY
-	 */
 	@Override
 	public double priority() {
-		return -100;
+		return Priority.LOW;
 	}
 
 }

@@ -51,7 +51,6 @@
 		<module>scijava/scijava-collections</module>
 		<module>scijava/scijava-common3</module>
 		<module>scijava/scijava-discovery</module>
-		<module>scijava/scijava-discovery-plugin</module>
 		<module>scijava/scijava-discovery-therapi</module>
 		<module>scijava/scijava-discovery-test</module>
 		<module>scijava/scijava-function</module>

@@ -16,7 +16,7 @@ public class OpMetadata {
 	/* The hierarchy of OpInfos used to make the Op */
 	private final InfoChain info;
 	/* The set of Hints used to in the initial Op call */
-	private final Hints hints;
+	private Hints hints;
 	/* The OpHistory used by the Op */
 	private final OpHistory history;
 
@@ -63,4 +63,12 @@ public class OpMetadata {
 		return history;
 	}
 
+	/**
+	 * Sets the {@link Hints} for this Op
+	 *
+	 * @param hints New {@link Hints} to use for this Op
+	 */
+	public void setHints(Hints hints) {
+		this.hints = hints;
+	}
 }

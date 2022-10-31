@@ -38,6 +38,9 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
+import org.scijava.ops.api.OpMetadata;
+import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.features.BaseOpHints;
 
 /**
  * Evaluates a {@link UnaryComputerOp} for each {@link Neighborhood} on the
@@ -88,7 +91,7 @@ public class DefaultMapNeighborhood<I, O> implements
  * We also assume that the input and output have identical dimensions.
  * 
  * @author Gabriel Selzer
- *@implNote op names='map.neighborhood', priority='100.'
+ * @implNote op names='map.neighborhood', priority='100.'
  */
 class MapNeighborhoodAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity1<Iterable<I>, O>, RandomAccessibleInterval<O>>
@@ -104,17 +107,33 @@ class MapNeighborhoodAllRAI<I, O> implements
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in1, final Shape in2,
-		final Computers.Arity1<Iterable<I>, O> centerAwareOp,
+		final Computers.Arity1<Iterable<I>, O> op,
 		final RandomAccessibleInterval<O> out)
 	{
 		// generate a neighborhood image with the bounds of the input
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
+		boolean restoreRecording = true;
+		if (op instanceof RichOp) {
+			OpMetadata metadata = ((RichOp) op).metadata();
+			if (metadata.hints().contains(BaseOpHints.History.SKIP_RECORDING)) {
+				restoreRecording = false;
+			} else {
+				metadata.setHints(metadata.hints().plus(BaseOpHints.History.SKIP_RECORDING));
+			}
+		}
+
 		LoopBuilder.setImages(neighborhoodInput, out).multiThreaded()
 			.forEachPixel((neighborhood, outPixel) -> {
-				centerAwareOp.compute(neighborhood, outPixel);
+				op.compute(neighborhood, outPixel);
 			});
+
+		if (restoreRecording && op instanceof RichOp) {
+			OpMetadata metadata = ((RichOp) op).metadata();
+
+			metadata.setHints(metadata.hints().minus( BaseOpHints.History.SKIP_RECORDING));
+		}
 	}
 
 }

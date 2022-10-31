@@ -551,7 +551,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			try {
 				// TODO: Consider a new Hint implementation
 				Hints hintsCopy = hints.plus(DependencyMatching.IN_PROGRESS,
-					History.SKIP_RECORDING, Simplification.FORBIDDEN);
+					Simplification.FORBIDDEN);
 				if (!dependency.isAdaptable()) {
 					hintsCopy = hintsCopy.plus(Adaptation.FORBIDDEN);
 				}

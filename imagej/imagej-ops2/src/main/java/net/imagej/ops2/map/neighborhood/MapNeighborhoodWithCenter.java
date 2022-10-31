@@ -40,6 +40,9 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpMetadata;
+import org.scijava.ops.api.RichOp;
+import org.scijava.ops.api.features.BaseOpHints;
 
 /**
  * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on
@@ -95,7 +98,7 @@ public class MapNeighborhoodWithCenter<I, O> implements Computers.Arity3<RandomA
  * We also assume that the input and output have identical dimensions.
  * 
  * @author Gabriel Selzer
- *@implNote op names='map.neighborhood', priority='100.'
+ * @implNote op names='map.neighborhood', priority='100.'
  */
 class MapNeighborhoodWithCenterAllRAI<I, O> implements
 	Computers.Arity3<RandomAccessibleInterval<I>, Shape, Computers.Arity2<Iterable<I>, I, O>, RandomAccessibleInterval<O>>
@@ -118,10 +121,25 @@ class MapNeighborhoodWithCenterAllRAI<I, O> implements
 		RandomAccessibleInterval<Neighborhood<I>> neighborhoodInput = Views
 			.interval(in2.neighborhoodsRandomAccessibleSafe(in1), in1);
 
+		boolean restoreRecording = true;
+		if (centerAwareOp instanceof RichOp) {
+			OpMetadata metadata = ((RichOp) centerAwareOp).metadata();
+			if (metadata.hints().contains(BaseOpHints.History.SKIP_RECORDING)) {
+				restoreRecording = false;
+			} else {
+				metadata.hints().plus(BaseOpHints.History.SKIP_RECORDING);
+			}
+		}
+
 		LoopBuilder.setImages(neighborhoodInput, in1, out).multiThreaded()
 			.forEachPixel((neighborhood, inPixel, outPixel) -> {
 				centerAwareOp.compute(neighborhood, inPixel, outPixel);
 			});
+
+		if (restoreRecording && centerAwareOp instanceof RichOp) {
+			((RichOp)centerAwareOp).metadata().hints().minus(
+					BaseOpHints.History.SKIP_RECORDING);
+		}
 	}
 
 }

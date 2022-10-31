@@ -51,7 +51,9 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 	@Override
 	public void postprocess(Object output) {
 		// Log a new execution
-		metadata.history().logOutput(this, output);
+		if (!metadata.hints().contains(History.SKIP_RECORDING)) {
+			metadata.history().logOutput(this, output);
+		}
 		Progress.complete();
 	}
 

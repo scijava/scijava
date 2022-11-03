@@ -182,9 +182,9 @@ public class MTKTTest extends AbstractColocalisationTest {
 	// Lastly, we test a 'real' image.
 	@Test
 	public void testMTKTimage() {
-		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(zeroCorrelationImageCh1,
+		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(getZeroCorrelationImageCh1(),
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
+		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(getZeroCorrelationImageCh2(),
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		double result = (Double) ops.op("coloc.maxTKendallTau").input(cropCh1, cropCh2).apply();
 		assertEquals(2.562373279563565, result, 0.0);
@@ -254,9 +254,9 @@ public class MTKTTest extends AbstractColocalisationTest {
 	@Test
 	public void testMTKTpValueImage() {
 		ExecutorService es = threads.getExecutorService();
-		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(zeroCorrelationImageCh1,
+		RandomAccessibleInterval<UnsignedByteType> cropCh1 = Views.interval(getZeroCorrelationImageCh1(),
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
-		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(zeroCorrelationImageCh2,
+		RandomAccessibleInterval<UnsignedByteType> cropCh2 = Views.interval(getZeroCorrelationImageCh2(),
 				new long[] { 0, 0, 0 }, new long[] { 20, 20, 0 });
 		BiFunction<RandomAccessibleInterval<UnsignedByteType>, RandomAccessibleInterval<UnsignedByteType>, Double> op =
 			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<RandomAccessibleInterval<UnsignedByteType>>() {}, new Nil<Double>() {});

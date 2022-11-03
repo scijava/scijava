@@ -50,7 +50,7 @@ import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link net.imagej.ops2.Ops.Coloc.MaxTKendallTau}.
+ * Tests {@link net.imagej.ops2.coloc.maxTKendallTau}.
  *
  * @author Ellen T Arena
  * @author Curtis Rueden

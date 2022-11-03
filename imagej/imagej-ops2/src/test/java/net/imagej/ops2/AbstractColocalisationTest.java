@@ -61,7 +61,7 @@ import org.scijava.threads.DefaultThreadManager;
 import org.scijava.threads.ThreadManager;
 
 /** Abstract base class for coloc op unit tests. */
-public abstract class AbstractColocalisationTest {
+public abstract class AbstractColocalisationTest extends AbstractOpTest {
 
 	// images and meta data for zero correlation
 	protected Img<UnsignedByteType> zeroCorrelationImageCh1;
@@ -72,15 +72,6 @@ public abstract class AbstractColocalisationTest {
 	protected Img<UnsignedByteType> positiveCorrelationImageCh1;
 	protected Img<UnsignedByteType> positiveCorrelationImageCh2;
 
-	protected static OpEnvironment ops;
-	protected static ThreadManager threads;
-
-	@BeforeAll
-	public static void setUp() {
-		ops = new DefaultOpEnvironment();
-		threads = new DefaultThreadManager();
-	}
-	
 	protected static OpBuilder op(String name) {
 		return ops.op(name);
 	}

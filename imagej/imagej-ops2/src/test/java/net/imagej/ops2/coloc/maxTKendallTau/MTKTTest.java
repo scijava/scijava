@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
-import net.imagej.ops2.coloc.ColocalisationTest;
+import net.imagej.ops2.AbstractColocalisationTest;
 import net.imagej.ops2.coloc.ShuffledView;
 import net.imagej.ops2.coloc.pValue.PValueResult;
 import net.imglib2.RandomAccessibleInterval;
@@ -56,7 +56,7 @@ import org.scijava.types.Nil;
  * @author Curtis Rueden
  * @author Shulei Wang
  */
-public class MTKTTest extends ColocalisationTest {
+public class MTKTTest extends AbstractColocalisationTest {
 
 	// Ranking data, test the rankTransformation() function.
 	//
@@ -171,9 +171,9 @@ public class MTKTTest extends ColocalisationTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x01234567);
-		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		double result = (Double) ops.op("coloc.maxTKendallTau").input(ch1, ch2).apply();
 		assertEquals(2.710687382741972, result, 0.0);
@@ -239,9 +239,9 @@ public class MTKTTest extends ColocalisationTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x01234567);
-		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			OpBuilder.matchFunction(ops, "coloc.maxTKendallTau", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});

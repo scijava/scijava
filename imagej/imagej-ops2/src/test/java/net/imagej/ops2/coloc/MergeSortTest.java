@@ -32,9 +32,10 @@ package net.imagej.ops2.coloc;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import net.imagej.ops2.AbstractColocalisationTest;
 import org.junit.jupiter.api.Test;
 
-public class MergeSortTest extends ColocalisationTest {
+public class MergeSortTest extends AbstractColocalisationTest {
 
 	// Test the class MergeSort... with sort & count example.
 	@Test

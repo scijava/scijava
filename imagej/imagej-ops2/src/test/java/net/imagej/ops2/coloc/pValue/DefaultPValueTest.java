@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
-import net.imagej.ops2.coloc.ColocalisationTest;
+import net.imagej.ops2.AbstractColocalisationTest;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
@@ -49,7 +49,7 @@ import org.scijava.types.Nil;
  *
  * @author Ellen T Arena
  */
-public class DefaultPValueTest extends ColocalisationTest {
+public class DefaultPValueTest extends AbstractColocalisationTest {
 
 	/*
 	 * Tests 

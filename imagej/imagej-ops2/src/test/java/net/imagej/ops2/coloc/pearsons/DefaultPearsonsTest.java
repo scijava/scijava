@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
-import net.imagej.ops2.coloc.ColocalisationTest;
+import net.imagej.ops2.AbstractColocalisationTest;
 import net.imagej.ops2.coloc.pValue.PValueResult;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -48,7 +48,7 @@ import org.scijava.types.Nil;
  *
  * @author Ellen T Arena
  */
-public class DefaultPearsonsTest extends ColocalisationTest {
+public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	
 	/**
 	 * Tests if the fast implementation of Pearson's correlation with two
@@ -101,9 +101,9 @@ public class DefaultPearsonsTest extends ColocalisationTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
 			mean, spread, sigma, 0x01234567);
-		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24,
 			mean, spread, sigma, 0x98765432);
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			OpBuilder.matchFunction(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});

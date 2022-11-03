@@ -27,11 +27,10 @@
  * #L%
  */
 
-package net.imagej.ops2.coloc;
+package net.imagej.ops2;
 
 import io.scif.img.ImgIOException;
 import io.scif.img.ImgOpener;
-import io.scif.services.FormatService;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -54,28 +53,15 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.scijava.Context;
-import org.scijava.discovery.Discoverer;
 import org.scijava.io.location.FileLocation;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpBuilder;
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.ops.engine.DefaultOpHistory;
 import org.scijava.threads.DefaultThreadManager;
 import org.scijava.threads.ThreadManager;
-import org.scijava.types.DefaultTypeReifier;
-import org.scijava.types.TypeReifier;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.ServiceLoader;
 
 /** Abstract base class for coloc op unit tests. */
-public abstract class ColocalisationTest {
+public abstract class AbstractColocalisationTest {
 
 	// images and meta data for zero correlation
 	protected Img<UnsignedByteType> zeroCorrelationImageCh1;

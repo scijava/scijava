@@ -38,7 +38,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.ops2.coloc.ColocalisationTest;
+import net.imagej.ops2.AbstractColocalisationTest;
 import net.imagej.ops2.coloc.pValue.PValueResult;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -120,9 +120,9 @@ public class KendallTauBRankTest extends AbstractOpTest {
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
-		Img<FloatType> ch1 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+		Img<FloatType> ch1 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x01234567);
-		Img<FloatType> ch2 = ColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
+		Img<FloatType> ch2 = AbstractColocalisationTest.produceMeanBasedNoiseImage(new FloatType(), 24, 24, mean, spread, sigma,
 				0x98765432);
 		Nil<Iterable<FloatType>> nilI = new Nil<Iterable<FloatType>>() {};
 		Nil<RandomAccessibleInterval<FloatType>> nilRAI = new Nil<RandomAccessibleInterval<FloatType>>() {};

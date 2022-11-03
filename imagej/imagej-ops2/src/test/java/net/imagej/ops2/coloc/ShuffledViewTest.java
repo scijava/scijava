@@ -29,6 +29,7 @@
 
 package net.imagej.ops2.coloc;
 
+import net.imagej.ops2.AbstractColocalisationTest;
 import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.img.basictypeaccess.array.ByteArray;
@@ -38,7 +39,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 
 import org.junit.jupiter.api.Test;
 
-public class ShuffledViewTest extends ColocalisationTest {
+public class ShuffledViewTest extends AbstractColocalisationTest {
 
 	// for(UnsignedByteType t:Views.iterable(shuffled)) System.out.print(t + ",
 	// "); //for printing off shuffled values

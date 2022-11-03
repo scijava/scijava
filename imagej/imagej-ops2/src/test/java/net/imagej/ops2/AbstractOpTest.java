@@ -75,20 +75,14 @@ import org.scijava.types.TypeReifier;
  */
 public abstract class AbstractOpTest{
 
-	protected static OpEnvironment ops;
+	protected static OpEnvironment ops = new DefaultOpEnvironment();
 	protected static ThreadManager threads;
 
 	@BeforeAll
 	public static void setUp() {
-		ops = new DefaultOpEnvironment();
 		threads = new DefaultThreadManager();
 	}
 
-	@AfterAll
-	public static void tearDown() {
-		ops = null;
-	}
-	
 	private int seed;
 
 	private int pseudoRandom() {

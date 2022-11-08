@@ -70,8 +70,6 @@ public class StatisticsTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void setUpTest() {
-		super.setUp();
-
 		// make a random float array image
 		img = TestImgGeneration.floatArray(true, 100, 100);
 

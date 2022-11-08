@@ -75,13 +75,8 @@ import org.scijava.types.TypeReifier;
  */
 public abstract class AbstractOpTest{
 
-	protected static OpEnvironment ops = new DefaultOpEnvironment();
-	protected static ThreadManager threads;
-
-	@BeforeAll
-	public static void setUp() {
-		threads = new DefaultThreadManager();
-	}
+	protected static final OpEnvironment ops = new DefaultOpEnvironment();
+	protected static final ThreadManager threads = new DefaultThreadManager();
 
 	private int seed;
 

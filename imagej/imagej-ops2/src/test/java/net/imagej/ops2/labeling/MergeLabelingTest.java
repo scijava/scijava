@@ -57,7 +57,6 @@ public class MergeLabelingTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void setUpTest() {
-		super.setUp();
 		in1 = ops.op("create.imgLabeling").input(new FinalInterval(2, 2), new ByteType())
 				.outType(new Nil<ImgLabeling<Integer, ByteType>>() {}).apply();
 		RandomAccess<LabelingType<Integer>> randomAccess = in1.randomAccess();

@@ -67,8 +67,6 @@ public class SliceTest<I extends RealType<I>, O extends RealType<O>> extends Abs
 
 	@BeforeEach
 	public void setUpTest() {
-		super.setUp();
-
 		in = ArrayImgs.bytes(20, 20, 21);
 		out = ArrayImgs.bytes(20, 20, 21);
 

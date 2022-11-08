@@ -56,7 +56,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsZeroCorrTest(){
-		double result = ops.op("coloc.pearsons").input(zeroCorrelationImageCh1, zeroCorrelationImageCh2).outType(Double.class).apply();
+		double result = ops.op("coloc.pearsons").input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).outType(Double.class).apply();
 		assertEquals(0.0, result, 0.05);
 	}
 	
@@ -66,7 +66,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void fastPearsonsPositiveCorrTest() {
-		double result = ops.op("coloc.pearsons").input(positiveCorrelationImageCh1, positiveCorrelationImageCh2).outType(Double.class).apply();
+		double result = ops.op("coloc.pearsons").input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2()).outType(Double.class).apply();
 		assertEquals(0.75, result, 0.01);
 	}
 	

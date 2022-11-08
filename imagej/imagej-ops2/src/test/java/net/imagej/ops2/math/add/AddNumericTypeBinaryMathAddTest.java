@@ -37,7 +37,7 @@ import net.imglib2.type.numeric.ARGBDoubleType;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link net.imagej.ops2.math.NumericTypeBinaryMath.Add}.
+ * Tests {@link net.imagej.ops2.math.BinaryNumericTypeMath#adder}.
  * 
  * @author Johannes Schindelin
  * @author Curtis Rueden

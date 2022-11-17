@@ -214,10 +214,6 @@ public class ReductionUtils {
 		Method m = InterfaceInference.singularAbstractMethod(fIface);
 		Class<?> srcFIface = OpUtils.findFunctionalInterface(Types.raw(info.srcInfo().opType()));
 		Method srcM = InterfaceInference.singularAbstractMethod(srcFIface);
-//		Class<?> srcFIface = OpUtils.findFunctionalInterface(Types.raw(info.srcInfo().opType()));
-//		Method srcM = InterfaceInference.singularAbstractMethod(srcFIface);
-//		Method srcM = OpUtils.findFunctionalMethod(Types.raw(info.opType()));
-//		Method srcM = OpUtils.findFunctionalMethod(Types.raw(info.srcInfo().opType()));
 		// determine the name of the output:
 		String opOutput = "out";
 

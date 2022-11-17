@@ -30,7 +30,7 @@ public class OpResizingMemberParser implements
 	 * 
 	 * @param source the {@link RetypingRequest} from which we create the new
 	 *          {@link List} of {@link Member}s
-	 * @return a new {@link Struct} reflecting the simplified arguments / focused
+	 * @return a new {@link List} reflecting the simplified arguments / focused
 	 *         output of this {@link SimplifiedOpInfo}
 	 */
 	@Override

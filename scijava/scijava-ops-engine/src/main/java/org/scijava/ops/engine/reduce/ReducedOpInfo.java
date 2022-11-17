@@ -27,6 +27,7 @@ public class ReducedOpInfo implements OpInfo {
 	private final Type reducedOpType;
 	private final int paramsReduced;
 
+	private final Hints hints;
 	private final Struct struct;
 	private ValidityException validityException;
 
@@ -34,6 +35,7 @@ public class ReducedOpInfo implements OpInfo {
 		this.srcInfo = src;
 		this.reducedOpType = reducedOpType;
 		this.paramsReduced = paramsReduced;
+		this.hints = srcInfo.declaredHints().plus(BaseOpHints.Reduction.FORBIDDEN);
 		List<ValidityProblem> problems = new ArrayList<>();
 
 		RetypingRequest r = retypingRequest();
@@ -126,7 +128,7 @@ public class ReducedOpInfo implements OpInfo {
 	}
 
 	@Override public Hints declaredHints() {
-		return srcInfo().declaredHints().plus(BaseOpHints.Reduction.FORBIDDEN);
+		return hints;
 	}
 
 	@Override

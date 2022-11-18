@@ -24,7 +24,7 @@ public class MethodParameterMemberParser implements
 		source.setAccessible(true);
 
 		// obtain a parameterData
-		ParameterData paramData = new LazilyGeneratedMethodParameterData(source);
+		ParameterData paramData = new LazilyGeneratedMethodParameterData(source, Types.raw(structType));
 
 		final ArrayList<SynthesizedParameterMember<?>> items = new ArrayList<>();
 		final ArrayList<ValidityProblem> problems = new ArrayList<>();

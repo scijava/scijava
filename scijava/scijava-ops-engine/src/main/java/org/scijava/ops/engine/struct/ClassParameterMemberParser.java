@@ -43,7 +43,7 @@ public class ClassParameterMemberParser implements
 		}
 
 		// obtain a parameterData
-		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod);
+		ParameterData paramData = new LazilyGeneratedMethodParameterData(opMethod, source);
 
 		FunctionalParameters.parseFunctionalParameters(items, problems, source,
 			paramData);

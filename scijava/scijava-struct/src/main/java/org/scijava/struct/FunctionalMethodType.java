@@ -17,7 +17,11 @@ public class FunctionalMethodType {
 		this.type = type;
 		this.itemIO = itemIO;
 	}
-	
+
+	public FunctionalMethodType(final Member<?> member) {
+		this(member.getType(), member.getIOType());
+	}
+
 	public Type type() {
 		return this.type;
 	}

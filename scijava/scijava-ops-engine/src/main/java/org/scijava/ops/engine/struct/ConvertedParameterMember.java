@@ -49,4 +49,8 @@ public class ConvertedParameterMember<T> implements Member<T>{
 		return ioType;
 	}
 
+	@Override
+	public boolean isRequired() {
+		return original.isRequired();
+	}
 }

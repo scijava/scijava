@@ -3,15 +3,20 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
+import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.reduce.ReductionUtils;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
+import org.scijava.struct.Struct;
 
 import com.github.therapi.runtimejavadoc.MethodJavadoc;
 import com.github.therapi.runtimejavadoc.OtherJavadoc;
@@ -32,9 +37,11 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		new HashMap<>();
 
 	private final Method m;
+	private final Class<?> opType;
 
-	public LazilyGeneratedMethodParameterData(Method m) {
+	public LazilyGeneratedMethodParameterData(Method m, Class<?> opType) {
 		this.m = m;
+		this.opType = opType;
 	}
 
 	/**
@@ -62,35 +69,41 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	}
 
 	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
-		Method m)
+		Method m, Class<?> opType)
 	{
-		if (!paramDataMap.containsKey(m)) generateMethodParamInfo(fmts, m);
+		if (!paramDataMap.containsKey(m)) generateMethodParamInfo(fmts, m, opType);
 		MethodParamInfo info = paramDataMap.get(m);
-		if (!info.containsAll(fmts)) updateMethodParamInfo(info, fmts, m);
+		if (!info.containsAll(fmts)) updateMethodParamInfo(info, fmts, m, opType);
 		return info;
 	}
 
 	private static void updateMethodParamInfo(MethodParamInfo info,
-		List<FunctionalMethodType> fmts, Method m)
+		List<FunctionalMethodType> fmts, Method m, Class<?> opType)
 	{
 		Map<FunctionalMethodType, String> fmtNames = info.getFmtNames();
 		Map<FunctionalMethodType, String> fmtDescriptions = info
 			.getFmtDescriptions();
+		Map<FunctionalMethodType, Boolean> fmtOptionality = info
+			.getFmtOptionality();
 		// determine the Op inputs/outputs
 		MethodJavadoc doc = RuntimeJavadoc.getJavadoc(m);
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
+		Boolean[] paramOptionality = getParameterOptionality(m, opType,
+			(int) numOpParams, new ArrayList<>());
 
 		if (hasVanillaJavadoc(doc, numOpParams, numReturns)) {
-			addJavadocMethodParamInfo(fmtNames, fmtDescriptions, fmts, doc, m);
+			addJavadocMethodParamInfo(fmtNames, fmtDescriptions, fmts, fmtOptionality,
+				doc, m, paramOptionality);
 		}
 		else {
-			addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts);
+			addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
+				fmtOptionality, paramOptionality);
 		}
 	}
 
 	public static synchronized void generateMethodParamInfo(
-		List<FunctionalMethodType> fmts, Method m)
+		List<FunctionalMethodType> fmts, Method m, Class<?> opType)
 	{
 		if (paramDataMap.containsKey(m)) return;
 
@@ -99,18 +112,25 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 
+		opType = OpUtils.findFunctionalInterface(opType);
+		Boolean[] paramOptionality = getParameterOptionality(m, opType,
+			(int) numOpParams, new ArrayList<>());
+
 		if (hasVanillaJavadoc(doc, numOpParams, numReturns)) {
-			paramDataMap.put(m, javadocMethodParamInfo(fmts, doc, m));
+			paramDataMap.put(m, javadocMethodParamInfo(fmts, doc, m,
+				paramOptionality));
 		}
 		else {
-			paramDataMap.put(m, synthesizedMethodParamInfo(fmts));
+			paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramOptionality));
 		}
 	}
 
 	private static void addJavadocMethodParamInfo(
 		Map<FunctionalMethodType, String> fmtNames,
 		Map<FunctionalMethodType, String> fmtDescriptions,
-		List<FunctionalMethodType> fmts, MethodJavadoc doc, Method m)
+		List<FunctionalMethodType> fmts,
+		Map<FunctionalMethodType, Boolean> fmtOptionality, MethodJavadoc doc,
+		Method m, Boolean[] paramOptionality)
 	{
 		// Assigns fmt inputs to javadoc params
 		List<FunctionalMethodType> params = fmts.stream().filter(fmt -> fmt
@@ -123,6 +143,7 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 			FunctionalMethodType fmt = params.get(fmtIndex++);
 			fmtNames.put(fmt, doc.getParams().get(i).getName());
 			fmtDescriptions.put(fmt, doc.getParams().get(i).getComment().toString());
+			fmtOptionality.put(fmt, paramOptionality[i]);
 		}
 
 		// Assigns (pure) fmt output to javadoc return
@@ -137,29 +158,37 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	}
 
 	private static MethodParamInfo javadocMethodParamInfo(
-		List<FunctionalMethodType> fmts, MethodJavadoc doc, Method m)
+		List<FunctionalMethodType> fmts, MethodJavadoc doc, Method m,
+		Boolean[] paramOptionality)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
 			.size());
+		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts
+			.size());
 
-		addJavadocMethodParamInfo(fmtNames, fmtDescriptions, fmts, doc, m);
+		addJavadocMethodParamInfo(fmtNames, fmtDescriptions, fmts, fmtOptionality,
+			doc, m, paramOptionality);
 
-		return new MethodParamInfo(fmtNames, fmtDescriptions);
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
 	}
 
 	private static void addSynthesizedMethodParamInfo(
 		Map<FunctionalMethodType, String> fmtNames,
 		Map<FunctionalMethodType, String> fmtDescriptions,
-		List<FunctionalMethodType> fmts)
+		List<FunctionalMethodType> fmts,
+		Map<FunctionalMethodType, Boolean> fmtOptionality,
+		Boolean[] paramOptionality)
 	{
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
+		int optionalIndex = 0;
 		for (FunctionalMethodType fmt : fmts) {
 			fmtDescriptions.put(fmt, "");
 			switch (fmt.itemIO()) {
 				case INPUT:
 					fmtNames.put(fmt, "input" + ins++);
+					fmtOptionality.put(fmt, paramOptionality[optionalIndex++]);
 					break;
 				case OUTPUT:
 					fmtNames.put(fmt, "output" + outs++);
@@ -177,15 +206,18 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	}
 
 	private static MethodParamInfo synthesizedMethodParamInfo(
-		List<FunctionalMethodType> fmts)
+		List<FunctionalMethodType> fmts, Boolean[] paramOptionality)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
 		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
 			.size());
+		Map<FunctionalMethodType, Boolean> fmtOptionality = new HashMap<>(fmts
+			.size());
 
-		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts);
+		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
+			fmtOptionality, paramOptionality);
 
-		return new MethodParamInfo(fmtNames, fmtDescriptions);
+		return new MethodParamInfo(fmtNames, fmtDescriptions, fmtOptionality);
 	}
 
 	@Override
@@ -193,11 +225,76 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		List<FunctionalMethodType> fmts)
 	{
 		Producer<MethodParamInfo> p = //
-			() -> LazilyGeneratedMethodParameterData.getInfo(fmts, m);
+			() -> LazilyGeneratedMethodParameterData.getInfo(fmts, m, opType);
 
 		return fmts.stream() //
 			.map(fmt -> new SynthesizedParameterMember<>(fmt, p)) //
 			.collect(Collectors.toList());
+	}
+
+	private static Boolean[] getParameterOptionality(Method m, Class<?> opType,
+		int opParams, List<ValidityProblem> problems)
+	{
+		boolean opMethodHasOptionals = ReductionUtils.hasOptionalAnnotations(m);
+		List<Method> fMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(
+			opType);
+		// the number of parameters we need to determine
+
+		// Ensure only the Op method OR ONE of its op type's functional methods have
+		// Optionals
+		if (opMethodHasOptionals && !fMethodsWithOptionals.isEmpty()) {
+			problems.add(new ValidityProblem(
+				"Both the OpMethod and its op type have optional parameters!"));
+			return ReductionUtils.generateAllRequiredArray(opParams);
+		}
+		if (fMethodsWithOptionals.size() > 1) {
+			problems.add(new ValidityProblem(
+				"Multiple methods from the op type have optional parameters!"));
+			return ReductionUtils.generateAllRequiredArray(opParams);
+		}
+
+		// return the optionality of each parameter of the Op
+		if (opMethodHasOptionals) return getOpMethodOptionals(m, opParams);
+		if (fMethodsWithOptionals.size() > 0) return ReductionUtils
+			.findParameterOptionality(fMethodsWithOptionals.get(0));
+		return ReductionUtils.generateAllRequiredArray(opParams);
+	}
+
+	private static Boolean[] getOpMethodOptionals(Method m, int opParams) {
+		int[] paramIndex = mapFunctionalParamsToIndices(m.getParameters());
+		Boolean[] arr = ReductionUtils.generateAllRequiredArray(opParams);
+		// check parameters on m
+		Boolean[] mOptionals = ReductionUtils.findParameterOptionality(m);
+		for (int i = 0; i < mOptionals.length; i++) {
+			int index = paramIndex[i];
+			if (index == -1) continue;
+			arr[index] |= mOptionals[i];
+		}
+		return arr;
+	}
+
+	/**
+	 * Since Ops written as methods can have an {@link OpDependency} (or multiple)
+	 * as parameters, we need to determine which parameter indices correspond to
+	 * the inputs of the Op.
+	 *
+	 * @param parameters the list of {@link Parameter}s of the Op
+	 * @return an array of ints where the value at index {@code i} denotes the
+	 *         position of the parameter in the Op's signature. Values of
+	 *         {@code -1} designate an {@link OpDependency} at that position.
+	 */
+	private static int[] mapFunctionalParamsToIndices(Parameter[] parameters) {
+		int[] paramNo = new int[parameters.length];
+		int paramIndex = 0;
+		for (int i = 0; i < parameters.length; i++) {
+			if (parameters[i].isAnnotationPresent(OpDependency.class)) {
+				paramNo[i] = -1;
+			}
+			else {
+				paramNo[i] = paramIndex++;
+			}
+		}
+		return paramNo;
 	}
 
 }

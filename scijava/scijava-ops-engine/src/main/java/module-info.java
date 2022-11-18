@@ -16,24 +16,26 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.create to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.matcher.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.conversionLoss to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.log to therapi.runtime.javadoc;
+	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.conversionLoss.impl to therapi.runtime.javadoc, org.scijava;
+	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.complexLift to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.lift to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.functional to therapi.runtime.javadoc;
+	opens org.scijava.ops.engine.reduce to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.hint to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.stats to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
 
 	requires java.compiler;
+	requires java.desktop;
 
-	requires org.scijava.collections;
 	requires org.scijava.common3;
+	requires org.scijava.collections;
 	requires org.scijava.discovery;
 	requires org.scijava.discovery.therapi;
 	requires org.scijava.function;
@@ -56,6 +58,7 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
 	uses org.scijava.ops.api.features.MatchingRoutine;
+	uses org.scijava.ops.engine.reduce.InfoReducer;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
 	uses org.scijava.parse2.Parser;
@@ -72,7 +75,8 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.api.OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
-			org.scijava.ops.engine.impl.TherapiOpInfoGenerator;
+		org.scijava.ops.engine.impl.TherapiOpInfoGenerator,
+		org.scijava.ops.engine.reduce.ReducedOpInfoGenerator;
 
 	provides org.scijava.ops.api.OpWrapper with
 		org.scijava.ops.engine.matcher.impl.OpWrappers.ProducerOpWrapper,
@@ -508,4 +512,8 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_16ToFunction16,
 
 		org.scijava.ops.engine.stats.Mean.MeanFunction;
+
+    provides org.scijava.ops.engine.reduce.InfoReducer with //
+        org.scijava.ops.engine.reduce.FunctionReducer,
+        org.scijava.ops.engine.reduce.ComputerReducer;
 }

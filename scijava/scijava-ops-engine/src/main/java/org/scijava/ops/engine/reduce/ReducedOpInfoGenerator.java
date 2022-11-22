@@ -3,7 +3,6 @@ package org.scijava.ops.engine.reduce;
 
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.engine.OpUtils;
 import org.scijava.struct.Member;
 
 import java.util.*;
@@ -23,7 +22,7 @@ public class ReducedOpInfoGenerator implements OpInfoGenerator {
 		if (!(o instanceof OpInfo)) return false;
 		OpInfo info = (OpInfo) o;
 		// We only benefit from OpInfos with optional parameters
-		boolean allParamsRequired = OpUtils.inputs(info.struct()).parallelStream() //
+		boolean allParamsRequired = info.inputs().parallelStream() //
 			.allMatch(Member::isRequired); //
 		if (allParamsRequired) return false;
 		// If we have a InfoReducer, then we can reduce

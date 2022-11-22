@@ -37,15 +37,12 @@ import java.util.stream.Collectors;
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
-import org.scijava.ops.api.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
-import org.scijava.struct.ValueAccessible;
 import org.scijava.types.Types;
 
 /**
@@ -114,48 +111,11 @@ public final class OpUtils {
 				.collect(Collectors.toList());
 	}
 
-	public static List<Member<?>> inputs(OpCandidate candidate) {
-		return inputs(candidate.struct());
-	}
-
-	public static List<Member<?>> inputs(final Struct struct) {
-		return struct.members().stream() //
-				.filter(member -> member.isInput()) //
-				.collect(Collectors.toList());
-	}
-	
-	public static Type[] inputTypes(OpCandidate candidate) {
-		return getTypes(inputs(candidate.struct()));
-	}
-
-	public static Type[] inputTypes(Struct struct) {
-		return getTypes(inputs(struct));
-	}
-
-	public static Member<?> output(OpCandidate candidate) {
-		return candidate.opInfo().output();
-	}
-
-	public static Type outputType(OpCandidate candidate) {
-		return output(candidate).getType();
-	}
-
-	public static List<Member<?>> outputs(final Struct struct) {
-		return struct.members().stream() //
-				.filter(member -> member.isOutput()) //
-				.collect(Collectors.toList());
-	}
-
-	public static List<MemberInstance<?>> outputs(StructInstance<?> op) {
-		return op.members().stream() //
-				.filter(memberInstance -> memberInstance.member().isOutput()) //
-				.collect(Collectors.toList());
-	}
-
 	public static void checkHasSingleOutput(Struct struct) throws
 			ValidityException
 	{
-		final int numOutputs = OpUtils.outputs(struct).size();
+		final long numOutputs = struct.members().stream() //
+			.filter(m -> m.isOutput()).count();
 		if (numOutputs != 1) {
 			final String error = numOutputs == 0 //
 				? "No output parameters specified. Must specify exactly one." //
@@ -237,7 +197,7 @@ public final class OpUtils {
 	 * @return the index of the mutable argument.
 	 */
 	public static int ioArgIndex(final OpInfo info) {
-		List<Member<?>> inputs = OpUtils.inputs(info.struct());
+		List<Member<?>> inputs = info.inputs();
 		Optional<Member<?>>
 				ioArg = inputs.stream().filter(m -> m.isInput() && m.isOutput()).findFirst();
 		if(ioArg.isEmpty()) return -1;

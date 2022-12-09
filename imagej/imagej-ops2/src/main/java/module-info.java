@@ -76,6 +76,7 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.geom to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.geom.geom2d to org.scijava, therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.geom.geom3d to therapi.runtime.javadoc, org.scijava.ops.engine;
+	opens net.imagej.ops2.help to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.identity to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.ascii to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.image.cooccurrenceMatrix to therapi.runtime.javadoc, org.scijava.ops.engine;

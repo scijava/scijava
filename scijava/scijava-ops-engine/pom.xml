@@ -88,7 +88,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/scijava/scijava-ops-engine/issues</url>
+		<url>https://github.com/scijava/incubator/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>GitHub Actions</system>

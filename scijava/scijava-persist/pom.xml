@@ -68,7 +68,7 @@
 	
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/scijava/scijava-testutil/issues</url>
+		<url>https://github.com/scijava/scijava/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>GitHub Actions</system>

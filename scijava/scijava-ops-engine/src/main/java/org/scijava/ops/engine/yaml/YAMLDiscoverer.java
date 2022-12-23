@@ -54,16 +54,20 @@ public class YAMLDiscoverer implements Discoverer {
 		Map<String, Object> op : //
 		(List<Map<String, Object>>) yamlData.get("ops")) //
 		{
+			Map<String, Object> opData = subMap(op, "op");
+			String identifier = value(opData, "source");
 			try {
-				Map<String, Object> opData = subMap(op, "op");
-				String identifier = value(opData, "source");
 				Optional<YAMLOpInfoCreator> c = creators.stream() //
 					.filter(f -> f.canCreateFrom(source, identifier)) //
 					.findFirst();
 				if (c.isPresent()) infos.add(c.get().create(opData, version));
 			}
 			catch (Exception e) {
-				System.out.println("Skipping op");
+				// TODO: Use SciJava Log2's Logger to notify the user.
+				// See https://github.com/scijava/scijava/issues/106 for discussion
+				// and progress
+				System.out.println("Could not add op " + identifier + ":");
+				e.printStackTrace();
 			}
 		}
 	}

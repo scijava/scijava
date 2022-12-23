@@ -13,9 +13,16 @@ import java.util.ServiceLoader;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.features.YAMLOpInfoCreator;
 import org.yaml.snakeyaml.Yaml;
 
-public class YAMLDiscoverer implements Discoverer {
+/**
+ * A {@link Discoverer} implementation that can discover {@link OpInfo}s from
+ * YAML.
+ *
+ * @author Gabriel Selzer
+ */
+public class YAMLOpInfoDiscoverer implements Discoverer {
 
 	private final Yaml yaml = new Yaml();
 
@@ -25,20 +32,39 @@ public class YAMLDiscoverer implements Discoverer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <U> List<U> discover(Class<U> c) {
-		// TODO: Consider supertypes
+		// We only discover OpInfos
 		if (!c.equals(OpInfo.class)) return Collections.emptyList();
-
-		try {
-			Enumeration<URL> opFiles = Thread.currentThread().getContextClassLoader()
-				.getResources("ops.yaml");
-			List<OpInfo> infos = new ArrayList<>();
-			while (opFiles.hasMoreElements()) {
-				parse(infos, opFiles.nextElement());
+		// Load all YAML files
+		Enumeration<URL> opFiles = getOpYAML();
+		// Parse each YAML file
+		List<OpInfo> opInfos = new ArrayList<>();
+		opFiles.asIterator().forEachRemaining(opFile -> {
+			try {
+				parse(opInfos, opFiles.nextElement());
 			}
-			return (List<U>) infos;
+			catch (IOException e) {
+				new IllegalArgumentException( //
+					"Could not read Op YAML file " + opFile.toString() + ": ", //
+					e) //
+						.printStackTrace();
+			}
+		});
+		return (List<U>) opInfos;
+	}
+
+	/**
+	 * Convenience method to hide IOException
+	 * 
+	 * @return an {@link Enumeration} of YAML files.
+	 */
+	private Enumeration<URL> getOpYAML() {
+		try {
+			return Thread.currentThread() //
+				.getContextClassLoader() //
+				.getResources("ops.yaml");
 		}
 		catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Could not load Op YAML files!", e);
 		}
 	}
 

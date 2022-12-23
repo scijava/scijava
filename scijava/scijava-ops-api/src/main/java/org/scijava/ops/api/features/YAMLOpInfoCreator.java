@@ -1,4 +1,5 @@
-package org.scijava.ops.engine.yaml;
+
+package org.scijava.ops.api.features;
 
 import java.util.Map;
 
@@ -9,6 +10,6 @@ public interface YAMLOpInfoCreator {
 	boolean canCreateFrom(String source, String identifier);
 
 	OpInfo create(final Map<String, Object> yaml, final String version)
-			throws Exception;
+		throws Exception;
 
 }

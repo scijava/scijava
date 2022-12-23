@@ -59,8 +59,8 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
 	uses org.scijava.ops.api.features.MatchingRoutine;
+	uses org.scijava.ops.api.features.YAMLOpInfoCreator;
 	uses org.scijava.ops.engine.reduce.InfoReducer;
-	uses org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
 	uses org.scijava.parse2.Parser;
@@ -519,9 +519,8 @@ module org.scijava.ops.engine {
         org.scijava.ops.engine.reduce.FunctionReducer,
         org.scijava.ops.engine.reduce.ComputerReducer;
 
-    provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with //
-	 			org.scijava.ops.engine.yaml.YAMLJavaClassInfoCreator,
-				org.scijava.ops.engine.yaml.YAMLJavaFieldInfoCreator,
-				org.scijava.ops.engine.yaml.YAMLJavaMethodInfoCreator;
-				
+    provides org.scijava.ops.api.features.YAMLOpInfoCreator with
+        org.scijava.ops.engine.yaml.JavaClassYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.JavaFieldYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.JavaMethodYAMLInfoCreator;
 }

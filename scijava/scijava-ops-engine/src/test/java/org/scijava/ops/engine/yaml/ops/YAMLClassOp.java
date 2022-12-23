@@ -15,10 +15,13 @@ public class YAMLClassOp implements BiFunction<Double, Double, Double> {
 		return aDouble + aDouble2;
 	}
 
-	public static class YAMLInnerClassOp implements BiFunction<Double, Double, Double> {
+	public static class YAMLInnerClassOp implements
+		BiFunction<Double, Double, Double>
+	{
+
 		@Override
 		public Double apply(Double aDouble, Double aDouble2) {
-			return aDouble - aDouble2;
+			return aDouble / aDouble2;
 		}
 	}
 }

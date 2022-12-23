@@ -13,6 +13,7 @@ import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.engine.DefaultOpEnvironment;
+import org.scijava.ops.engine.yaml.ops.YAMLClassOp;
 
 public class YAMLOpTest {
 
@@ -30,6 +31,22 @@ public class YAMLOpTest {
 		Double sum = env.op("example.add").input(2., 3.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(5., sum, 1e-6);
+	}
+
+	@Test
+	public void testYAMLInnerClass() {
+		Discoverer serviceLoading = Discoverer.using(ServiceLoader::load) //
+				.onlyFor( //
+						OpWrapper.class, //
+						MatchingRoutine.class, //
+						OpInfoGenerator.class, //
+						InfoChainGenerator.class //
+				);
+		OpEnvironment env = new DefaultOpEnvironment(Arrays.asList(
+				new YAMLDiscoverer(), serviceLoading));
+		Double quot = env.op("example.div").input(24., 8.).outType(Double.class)
+				.apply();
+		Assertions.assertEquals(3., quot, 1e-6);
 	}
 
 	@Test

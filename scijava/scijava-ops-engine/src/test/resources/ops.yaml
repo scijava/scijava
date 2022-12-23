@@ -17,6 +17,18 @@ ops:
           description: The sum
 
   - op:
+      name: example.div
+      priority: 0.0
+      source: org.scijava.ops.engine.yaml.ops.YAMLClassOp$YAMLInnerClassOp
+      parameters:
+        - input: in1
+          description: The first input
+        - input: in2
+          description: The second input
+        - output: out
+          description: The quotient
+
+  - op:
       name: example.sub
       priority: 0.0
       source: org.scijava.ops.engine.yaml.ops.YAMLMethodOp.subtract(java.lang.Double, java.lang.Double)

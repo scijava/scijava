@@ -41,7 +41,7 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 		List<OpInfo> opInfos = new ArrayList<>();
 		opFiles.asIterator().forEachRemaining(opFile -> {
 			try {
-				parse(opInfos, opFiles.nextElement());
+				parse(opInfos, opFile);
 			}
 			catch (IOException e) {
 				new IllegalArgumentException( //

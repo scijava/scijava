@@ -67,7 +67,8 @@ module org.scijava.ops.engine {
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
- 		org.scijava.ops.engine.impl.TherapiOpInfoDiscoverer;
+ 		org.scijava.ops.engine.impl.TherapiOpInfoDiscoverer,
+ 		org.scijava.ops.engine.yaml.YAMLOpInfoDiscoverer;
 
 	provides org.scijava.ops.api.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.impl.AdaptationInfoChainGenerator,

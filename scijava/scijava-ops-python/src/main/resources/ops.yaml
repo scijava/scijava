@@ -1,0 +1,21 @@
+info:
+  source: Python
+  package: SciJava Ops Numpy
+  version: 0-SNAPSHOT
+
+ops:
+  - op:
+      name: create.img
+      priority: 0.0
+      source: numpy.zeros
+      type: java.util.function.BiFunction
+      parameters:
+        - input: in1
+          type: java.lang.Integer
+          description: The first input
+        - input: in2
+          type: java.lang.Integer
+          description: The second input
+        - output: out
+          type: jep.NDArray
+          description: The image

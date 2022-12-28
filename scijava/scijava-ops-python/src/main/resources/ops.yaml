@@ -8,14 +8,23 @@ ops:
       name: create.img
       priority: 0.0
       source: numpy.zeros
-      type: java.util.function.BiFunction
+      type: java.util.function.Function
       parameters:
         - input: in1
-          type: java.lang.Integer
-          description: The first input
-        - input: in2
-          type: java.lang.Integer
-          description: The second input
+          type: java.util.List<java.lang.Integer>
+          description: The shape of the output
         - output: out
           type: jep.NDArray
           description: The image
+  - op:
+      name: numpy.linalg.det
+      priority: 0.0
+      source: numpy.linalg.det
+      type: java.util.function.Function
+      parameters:
+        - input: in1
+          type: jep.AbstractNDArray
+          description: The shape of the output
+        - output: out
+          type: java.lang.Float
+          description: The output

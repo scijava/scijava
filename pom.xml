@@ -58,6 +58,7 @@
 		<module>scijava/scijava-meta</module>
 		<module>scijava/scijava-ops-api</module>
 		<module>scijava/scijava-ops-engine</module>
+		<module>scijava/scijava-ops-python</module>
 		<module>scijava/scijava-ops-spi</module>
 		<module>scijava/scijava-parse2</module>
 		<module>scijava/scijava-persist</module>

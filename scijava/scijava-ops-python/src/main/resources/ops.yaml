@@ -1,13 +1,8 @@
-info:
-  source: Python
-  package: SciJava Ops Numpy
-  version: 0-SNAPSHOT
-
 ops:
   - op:
       name: create.img
       priority: 0.0
-      source: numpy.zeros
+      source: pythonFunction:/numpy.zeros/v0.0
       type: java.util.function.Function
       parameters:
         - input: in1
@@ -19,7 +14,7 @@ ops:
   - op:
       name: numpy.linalg.det
       priority: 0.0
-      source: numpy.linalg.det
+      source: pythonFunction:/numpy.linalg.det/v0.0
       type: java.util.function.Function
       parameters:
         - input: in1

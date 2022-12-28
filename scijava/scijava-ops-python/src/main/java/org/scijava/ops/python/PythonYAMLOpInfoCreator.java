@@ -1,5 +1,6 @@
 package org.scijava.ops.python;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +10,11 @@ import org.scijava.ops.api.features.YAMLOpInfoCreator;
 
 public class PythonYAMLOpInfoCreator implements YAMLOpInfoCreator {
 
-	@Override public boolean canCreateFrom(String source, String identifier) {
-		return source.toLowerCase().trim().equals("python");
+	@Override public boolean canCreateFrom(URI identifier) {
+		return identifier.getScheme().equals("pythonFunction");
 	}
 
-	@Override public OpInfo create(Map<String, Object> yaml, String version)
+	@Override public OpInfo create(URI identifier, Map<String, Object> yaml)
 			throws Exception
 	{
 		final String[] names;
@@ -29,11 +30,16 @@ public class PythonYAMLOpInfoCreator implements YAMLOpInfoCreator {
 		Class<?> opType = cl.loadClass(typeString);
 
 		double priority = (double) yaml.get("priority");
-		String source = (String) yaml.get("source");
+		// Parse path - start after the leading slash
+		final String path = identifier.getPath().substring(1);
+		// Parse source
+		final String srcString = path.substring(0, path.indexOf('/'));
+		// Parse version
+		final String version = path.substring(path.indexOf('/') + 1);
 
 		List<Map<String, Object>> params =
 				(List<Map<String, Object>>) yaml.get("parameters");
 
-		return new PythonOpInfo(Arrays.asList(names), opType, priority, version, source, params);
+		return new PythonOpInfo(Arrays.asList(names), opType, priority, version, srcString, params);
 	}
 }

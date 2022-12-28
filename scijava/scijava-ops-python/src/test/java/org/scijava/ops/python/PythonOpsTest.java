@@ -1,11 +1,8 @@
 package org.scijava.ops.python;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.List;
 
-import jep.DirectNDArray;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

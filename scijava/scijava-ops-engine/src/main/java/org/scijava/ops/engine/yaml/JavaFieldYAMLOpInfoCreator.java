@@ -18,7 +18,21 @@ public class JavaFieldYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 
 	@Override
 	public boolean canCreateFrom(String source, String identifier) {
-		return source.equals("Java") && identifier.indexOf('$') != -1;
+		if (!source.equals("Java") || identifier.indexOf('$') == -1) {
+			return false;
+		}
+
+		// If there is a '$' we have to try to load this thing to see if
+		// it's a field or a class. If loading fails, it's a field
+		//
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		try {
+			cl.loadClass(identifier);
+			return false;
+		}
+		catch (ClassNotFoundException e) {
+			return true;
+		}
 	}
 
 	@Override

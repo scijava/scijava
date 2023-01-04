@@ -25,7 +25,11 @@ public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 		if (identifier.indexOf('(') != -1) {
 			return false;
 		}
-		// If we can load this thing, it's a class
+		if (identifier.indexOf('$') == -1) {
+			return true;
+		}
+		// If there is a '$' we have to try to load this thing to see if
+		// it's a field or a class. If loading works, it's a class
 		//
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		try {

@@ -2,6 +2,8 @@
 package org.scijava.ops.engine.yaml;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,12 +71,13 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void parse(List<OpInfo> infos, final URL url) throws IOException {
+	private void parse(List<OpInfo> infos, final URL url)
+			throws IOException
+	{
 		Map<String, Object> yamlData = yaml.load(url.openStream());
 
 		Map<String, Object> yamlInfo = subMap(yamlData, "info");
 		String version = value(yamlInfo, "version");
-		String source = value(yamlInfo, "source");
 
 		for ( //
 		Map<String, Object> op : //
@@ -83,10 +86,11 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 			Map<String, Object> opData = subMap(op, "op");
 			String identifier = value(opData, "source");
 			try {
+				URI uri = new URI(identifier.replaceAll("\\s*", ""));
 				Optional<YAMLOpInfoCreator> c = creators.stream() //
-					.filter(f -> f.canCreateFrom(source, identifier)) //
+					.filter(f -> f.canCreateFrom(uri)) //
 					.findFirst();
-				if (c.isPresent()) infos.add(c.get().create(opData, version));
+				if (c.isPresent()) infos.add(c.get().create(uri, opData));
 			}
 			catch (Exception e) {
 				// TODO: Use SciJava Log2's Logger to notify the user.

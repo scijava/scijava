@@ -7,6 +7,7 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.features.YAMLOpInfoCreator;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
 
+import java.net.URI;
 import java.util.Map;
 
 /**
@@ -17,21 +18,8 @@ import java.util.Map;
 public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 
 	@Override
-	public boolean canCreateFrom(String source, String identifier) {
-		// Ensure Java source
-		if (!source.equals("Java")) {
-			return false;
-		}
-		// Ensure not a Method
-		if (identifier.indexOf('(') != -1) {
-			return false;
-		}
-		if (identifier.indexOf('$') == -1) {
-			return true;
-		}
-		// If there is a '$' we have to try to load this thing to see if
-		// it's a field or a class. If loading works, it's a class
-		return Classes.load(identifier, true) != null;
+	public boolean canCreateFrom(URI identifier) {
+		return identifier.getScheme().startsWith("javaClass");
 	}
 
 	@Override
@@ -40,11 +28,7 @@ public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 		Map<String, Object> yaml) throws Exception
 	{
 		// parse class
-		String cls = identifier;
-		if (identifier.indexOf('%') != -1) {
-			cls = cls.replace('%', '$');
-		}
-		Class<?> src = Classes.load(cls);
+		Class<?> src = Classes.load(identifier);
 		// Create the OpInfo
 		return new OpClassInfo(src, version, null, priority, names);
 	}

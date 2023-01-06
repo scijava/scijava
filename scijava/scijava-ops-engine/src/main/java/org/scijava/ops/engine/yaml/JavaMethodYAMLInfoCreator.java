@@ -2,6 +2,7 @@
 package org.scijava.ops.engine.yaml;
 
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Map;
 
 import org.scijava.common3.Classes;
@@ -18,8 +19,8 @@ import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 
 	@Override
-	public boolean canCreateFrom(String source, String identifier) {
-		return source.equals("Java") && identifier.indexOf('(') != -1;
+	public boolean canCreateFrom(URI identifier) {
+		return identifier.getScheme().startsWith("javaMethod");
 	}
 
 	@Override

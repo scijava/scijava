@@ -2,6 +2,7 @@
 package org.scijava.ops.engine.yaml;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.util.Map;
 
 import org.scijava.common3.Classes;
@@ -18,14 +19,8 @@ import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 public class JavaFieldYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 
 	@Override
-	public boolean canCreateFrom(String source, String identifier) {
-		if (!source.equals("Java") || identifier.indexOf('$') == -1) {
-			return false;
-		}
-
-		// If there is a '$' we have to try to load this thing to see if
-		// it's a field or a class. If loading fails, it's a field
-		return Classes.load(identifier, true) == null;
+	public boolean canCreateFrom(URI identifier) {
+		return identifier.getScheme().startsWith("javaField");
 	}
 
 	@Override

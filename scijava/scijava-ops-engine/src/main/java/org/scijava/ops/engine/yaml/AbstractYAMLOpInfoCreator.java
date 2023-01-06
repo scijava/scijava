@@ -1,5 +1,6 @@
 package org.scijava.ops.engine.yaml;
 
+import java.net.URI;
 import java.util.Map;
 
 import org.scijava.ops.api.Hints;
@@ -14,7 +15,13 @@ import org.scijava.ops.api.features.YAMLOpInfoCreator;
 public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
 
     @Override
-    public OpInfo create(final Map<String, Object> yaml, final String version) {
+    public OpInfo create(final URI identifier, final Map<String, Object> yaml) {
+        // Parse path - start after the leading slash
+        final String path = identifier.getPath().substring(1);
+        // Parse source
+        final String srcString = path.substring(0, path.indexOf('/'));
+        // Parse version
+        final String version = path.substring(path.indexOf('/') + 1);
         // Parse names
         final String[] names;
         if (yaml.containsKey("name")) {
@@ -34,8 +41,6 @@ public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
                 throw new IllegalArgumentException("Op priority not parsable");
             }
         }
-        // parse class
-        String srcString = (String) yaml.get("source");
         // Create the OpInfo
         try {
             return create(srcString, names, priority, null, version, yaml);

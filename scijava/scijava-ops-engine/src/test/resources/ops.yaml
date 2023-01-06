@@ -7,7 +7,7 @@ ops:
   - op:
       name: example.add
       priority: 0.0
-      source: org.scijava.ops.engine.yaml.ops.YAMLClassOp
+      source: javaClass:/org.scijava.ops.engine.yaml.ops.YAMLClassOp/v0.0
       parameters:
         - input: in1
           description: The first input
@@ -19,7 +19,7 @@ ops:
   - op:
       name: example.div
       priority: 0.0
-      source: org.scijava.ops.engine.yaml.ops.YAMLClassOp$YAMLInnerClassOp
+      source: javaClass:/org.scijava.ops.engine.yaml.ops.YAMLClassOp$YAMLInnerClassOp/v0.0
       parameters:
         - input: in1
           description: The first input
@@ -31,7 +31,7 @@ ops:
   - op:
       name: example.sub
       priority: 0.0
-      source: org.scijava.ops.engine.yaml.ops.YAMLMethodOp.subtract(java.lang.Double, java.lang.Double)
+      source: javaMethod:/org.scijava.ops.engine.yaml.ops.YAMLMethodOp.subtract(java.lang.Double, java.lang.Double)/v0.0
       type: java.util.function.BiFunction
       parameters:
         - input: in1
@@ -44,7 +44,7 @@ ops:
   - op:
       name: example.mul
       priority: 0.0
-      source: org.scijava.ops.engine.yaml.ops.YAMLFieldOp$multiply
+      source: javaField:/org.scijava.ops.engine.yaml.ops.YAMLFieldOp$multiply/v0.0
       parameters:
         - input: in1
           description: The first input

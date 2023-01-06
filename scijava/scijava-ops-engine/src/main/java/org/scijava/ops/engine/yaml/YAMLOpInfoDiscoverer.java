@@ -3,7 +3,6 @@ package org.scijava.ops.engine.yaml;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,9 +74,6 @@ public class YAMLOpInfoDiscoverer implements Discoverer {
 			throws IOException
 	{
 		Map<String, Object> yamlData = yaml.load(url.openStream());
-
-		Map<String, Object> yamlInfo = subMap(yamlData, "info");
-		String version = value(yamlInfo, "version");
 
 		for ( //
 		Map<String, Object> op : //

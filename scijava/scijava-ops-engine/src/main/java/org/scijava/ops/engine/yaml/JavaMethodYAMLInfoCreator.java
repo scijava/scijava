@@ -4,6 +4,7 @@ package org.scijava.ops.engine.yaml;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.scijava.common3.Classes;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.features.YAMLOpInfoCreator;
@@ -26,10 +27,9 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 		String version, Map<String, Object> yaml) throws Exception
 	{
 		// parse class
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		int clsIndex = identifier.lastIndexOf('.', identifier.indexOf('('));
 		String clsString = identifier.substring(0, clsIndex);
-		Class<?> src = cl.loadClass(clsString);
+		Class<?> src = Classes.load(clsString);
 		// parse method
 		String methodString = identifier.substring(clsIndex + 1, identifier.indexOf(
 			'('));
@@ -37,12 +37,12 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 			identifier.indexOf(')')).split("\\s*,\\s*");
 		Class<?>[] paramClasses = new Class<?>[paramStrings.length];
 		for (int i = 0; i < paramStrings.length; i++) {
-			paramClasses[i] = cl.loadClass(paramStrings[i]);
+			paramClasses[i] = Classes.load(paramStrings[i]);
 		}
 		Method method = src.getMethod(methodString, paramClasses);
 		// parse op type
 		String typeString = (String) yaml.get("type");
-		Class<?> opType = cl.loadClass(typeString);
+		Class<?> opType = Classes.load(typeString);
 		// create the OpInfo
 		return new OpMethodInfo(method, opType, null, priority, names);
 	}

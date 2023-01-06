@@ -1,6 +1,7 @@
 
 package org.scijava.ops.engine.yaml;
 
+import org.scijava.common3.Classes;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.features.YAMLOpInfoCreator;
@@ -30,15 +31,7 @@ public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 		}
 		// If there is a '$' we have to try to load this thing to see if
 		// it's a field or a class. If loading works, it's a class
-		//
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		try {
-			cl.loadClass(identifier);
-			return true;
-		}
-		catch (ClassNotFoundException e) {
-			return false;
-		}
+		return Classes.load(identifier, true) != null;
 	}
 
 	@Override
@@ -51,8 +44,7 @@ public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 		if (identifier.indexOf('%') != -1) {
 			cls = cls.replace('%', '$');
 		}
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		Class<?> src = cl.loadClass(cls);
+		Class<?> src = Classes.load(cls);
 		// Create the OpInfo
 		return new OpClassInfo(src, version, null, priority, names);
 	}

@@ -4,6 +4,7 @@ package org.scijava.ops.engine.yaml;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import org.scijava.common3.Classes;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.features.YAMLOpInfoCreator;
@@ -24,15 +25,7 @@ public class JavaFieldYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 
 		// If there is a '$' we have to try to load this thing to see if
 		// it's a field or a class. If loading fails, it's a field
-		//
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		try {
-			cl.loadClass(identifier);
-			return false;
-		}
-		catch (ClassNotFoundException e) {
-			return true;
-		}
+		return Classes.load(identifier, true) == null;
 	}
 
 	@Override
@@ -40,10 +33,9 @@ public class JavaFieldYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 		String version, Map<String, Object> yaml) throws Exception
 	{
 		// parse class
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		int clsIndex = identifier.indexOf('$');
 		String clsString = identifier.substring(0, clsIndex);
-		Class<?> cls = cl.loadClass(clsString);
+		Class<?> cls = Classes.load(clsString);
 		Object instance = cls.getConstructor().newInstance();
 		// parse Field
 		String fieldString = identifier.substring(clsIndex + 1);

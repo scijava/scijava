@@ -12,3 +12,6 @@ target/
 # IntelliJ #
 .idea/
 *.iml
+
+# Jupyter #
+.ipynb_checkpoints

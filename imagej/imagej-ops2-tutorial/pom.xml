@@ -259,6 +259,10 @@
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.scif</groupId>
+			<artifactId>scifio</artifactId>
+		</dependency>
 
 		<!-- Test scope dependencies -->
 		<dependency>

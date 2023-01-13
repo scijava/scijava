@@ -229,7 +229,7 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- SciJava dependencies -->
+		<!-- Incubator dependencies -->
 		<dependency>
 			<groupId>org.scijava</groupId>
 			<artifactId>parsington</artifactId>
@@ -259,6 +259,14 @@
 			<artifactId>scijava-types</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!-- SciJava dependencies -->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-io-http</artifactId>
+		</dependency>
+
+		<!-- SCIFIO dependencies -->
 		<dependency>
 			<groupId>io.scif</groupId>
 			<artifactId>scifio</artifactId>

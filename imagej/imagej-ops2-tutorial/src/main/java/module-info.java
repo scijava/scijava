@@ -32,9 +32,10 @@ module net.imagej.ops2.tutorial {
 	// -- Open plugins to scijava-ops, therapi
 	opens net.imagej.ops2.tutorial to therapi.runtime.javadoc, org.scijava.ops.engine;
 
-	requires net.imagej.ops2;
+	requires io.scif;
 	requires java.scripting;
 	requires net.imagej.mesh2;
+	requires net.imagej.ops2;
 	requires net.imglib2;
 	requires net.imglib2.algorithm;
 	requires net.imglib2.algorithm.fft2;
@@ -49,7 +50,8 @@ module net.imagej.ops2.tutorial {
 	requires org.scijava.parsington;
 	requires org.scijava.priority;
 	requires org.scijava.types;
-	
+	requires org.scijava;
+
 	// FIXME: these module names derive from filenames and are thus unstable
 	requires commons.math3;
 	requires ojalgo;

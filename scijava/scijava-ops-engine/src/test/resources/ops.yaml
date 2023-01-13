@@ -1,0 +1,49 @@
+ops:
+  - op:
+      name: example.add
+      priority: 0.0
+      source: javaClass:/org.scijava.ops.engine.yaml.ops.YAMLClassOp/v0.0
+      parameters:
+        - input: in1
+          description: The first input
+        - input: in2
+          description: The second input
+        - output: out
+          description: The sum
+
+  - op:
+      name: example.div
+      priority: 0.0
+      source: javaClass:/org.scijava.ops.engine.yaml.ops.YAMLClassOp$YAMLInnerClassOp/v0.0
+      parameters:
+        - input: in1
+          description: The first input
+        - input: in2
+          description: The second input
+        - output: out
+          description: The quotient
+
+  - op:
+      name: example.sub
+      priority: 0.0
+      source: javaMethod:/org.scijava.ops.engine.yaml.ops.YAMLMethodOp.subtract(java.lang.Double, java.lang.Double)/v0.0
+      type: java.util.function.BiFunction
+      parameters:
+        - input: in1
+          description: The first input
+        - input: in2
+          description: The second input
+        - output: out
+          description: The difference
+
+  - op:
+      name: example.mul
+      priority: 0.0
+      source: javaField:/org.scijava.ops.engine.yaml.ops.YAMLFieldOp$multiply/v0.0
+      parameters:
+        - input: in1
+          description: The first input
+        - input: in2
+          description: The second input
+        - output: out
+          description: The product

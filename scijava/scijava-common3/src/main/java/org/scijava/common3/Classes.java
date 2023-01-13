@@ -175,8 +175,7 @@ public final class Classes {
 
 		// load the class!
 		try {
-			final ClassLoader cl = classLoader == null ? Thread.currentThread()
-				.getContextClassLoader() : classLoader;
+			final ClassLoader cl = classLoader == null ? classLoader() : classLoader;
 			return cl.loadClass(className);
 		}
 		catch (final Throwable t) {

@@ -203,18 +203,23 @@ public class OpMethodInfo implements OpInfo {
 	{
 
 		// Case 1: no dependencies - lambdaMetaFactory is fastest
-//		if (dependencies().size() == 0) {
-//			try {
-//				method.setAccessible(true);
-//				MethodHandle handle = MethodHandles.lookup().unreflect(method);
-//				Object op = Adapt.Methods.lambdaize(Types.raw(opType), handle);
-//				return struct().createInstance(op);
-//			}
-//			catch (Throwable exc) {
-//				throw new IllegalStateException("Failed to invoke Op method: " + method,
-//					exc);
-//			}
-//		}
+		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
+		// can read the Module containing the Op. So we also have to check that.
+		Module methodModule = method.getDeclaringClass().getModule();
+		Module opsEngine = this.getClass().getModule();
+
+		if (opsEngine.canRead(methodModule) && dependencies.isEmpty()) {
+			try {
+				method.setAccessible(true);
+				MethodHandle handle = MethodHandles.lookup().unreflect(method);
+				Object op = Adapt.Methods.lambdaize(Types.raw(opType), handle);
+				return struct().createInstance(op);
+			}
+			catch (Throwable exc) {
+				throw new IllegalStateException("Failed to invoke Op method: " + method,
+					exc);
+			}
+		}
 
 		// Case 2: dependenies - Javassist is best
 		try {
@@ -222,12 +227,12 @@ public class OpMethodInfo implements OpInfo {
 		}
 		catch (Throwable ex) {
 			throw new IllegalStateException("Failed to invoke Op method: " + method +
-				". Provided Op dependencies were: " + Objects.toString(dependencies),
+				". Provided Op dependencies were: " + dependencies,
 				ex);
 		}
 		
 	}
-	
+
 	/**
 	 * Creates a class that knows how to create a partial application of an Op,
 	 * and returns that partial application. Specifically, the class knows how to

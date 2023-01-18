@@ -1757,7 +1757,12 @@ public final class Types {
 					// check for anys
 					if (fromResolved instanceof Any || toResolved instanceof Any)
 						continue;
-					if (fromResolved instanceof ParameterizedType && Types.raw(fromResolved) == Types.raw(toResolved)) {
+					if (fromResolved instanceof ParameterizedType &&
+						toResolved instanceof ParameterizedType)
+					{
+						if (Types.raw(fromResolved) != Types.raw(toResolved)) {
+							return false;
+						}
 						Type[] fromTypes = ((ParameterizedType) fromResolved).getActualTypeArguments();
 						Type[] toTypes = ((ParameterizedType) toResolved).getActualTypeArguments();
 						for(int i = 0; i < fromTypes.length; i++) {

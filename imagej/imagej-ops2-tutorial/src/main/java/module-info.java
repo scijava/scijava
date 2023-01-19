@@ -49,6 +49,7 @@ module net.imagej.ops2.tutorial {
 	requires org.scijava.ops.spi;
 	requires org.scijava.parsington;
 	requires org.scijava.priority;
+	requires org.scijava.progress;
 	requires org.scijava.types;
 	requires org.scijava;
 
@@ -64,5 +65,6 @@ module net.imagej.ops2.tutorial {
 			net.imagej.ops2.tutorial.OpAdaptation,
 			net.imagej.ops2.tutorial.OpReduction,
 			net.imagej.ops2.tutorial.OpSimplification,
+			net.imagej.ops2.tutorial.ReportingProgress,
 			net.imagej.ops2.tutorial.WritingOpCollections;
 }

@@ -1,7 +1,5 @@
 package org.scijava.ops.engine.reduce;
 
-import com.google.common.collect.Streams;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -13,6 +11,9 @@ import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.spi.Optional;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
+import org.scijava.types.inference.InterfaceInference;
+
+import com.google.common.collect.Streams;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -24,7 +25,6 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
-import org.scijava.types.inference.InterfaceInference;
 
 public class ReductionUtils {
 
@@ -49,6 +49,7 @@ public class ReductionUtils {
 		ClassPool pool = ClassPool.getDefault();
 
 		// Create wrapper class
+		Method opMethod = OpUtils.findFunctionalMethod(originalOp.getClass());
 		String className = formClassName(reducedInfo);
 		Class<?> c;
 		try {
@@ -60,8 +61,8 @@ public class ReductionUtils {
 		}
 
 		// Return Op instance
-		return c.getDeclaredConstructor(Types.raw(reducedInfo.srcInfo().opType()))
-			.newInstance(originalOp);
+		return c.getDeclaredConstructor(Types.raw(reducedInfo.srcInfo().opType()), Method.class)
+			.newInstance(originalOp, opMethod);
 	}
 
 	/**
@@ -152,6 +153,9 @@ public class ReductionUtils {
 		CtField opField = createOpField(pool, cc, Types.raw(reducedInfo.srcInfo().opType()), "op");
 		cc.addField(opField);
 
+		CtField methodField = createOpField(pool, cc, Method.class, "opMethod");
+		cc.addField(methodField);
+
 		// Add constructor to take the Simplifiers, as well as the original op.
 		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc,
 			reducedInfo), cc);
@@ -179,10 +183,11 @@ public class ReductionUtils {
 		sb.append("public " + cc.getSimpleName() + "(");
 		// argument - original op
 		Class<?> opClass = Types.raw(reducedInfo.srcInfo().opType());
-		sb.append(" " + opClass.getName() + " op");
+		sb.append(" " + opClass.getName() + " op, " + Method.class.getName() + " opMethod");
 		sb.append(") {");
 
 		sb.append("this.op = op;");
+		sb.append("this.opMethod = opMethod;");
 		sb.append("}");
 		return sb.toString();
 	}
@@ -227,7 +232,11 @@ public class ReductionUtils {
 		if (OpUtils.hasPureOutput(info)) {
 			sb.append(info.output().getType().getTypeName() + " " + opOutput + " = ");
 		}
-		sb.append("op." + srcM.getName() + "(");
+		// NB we cannot call op.compute(), op.apply(), etc. directly here if the Op
+		// is outside of this module. Calling that method will produce an
+		// IllegalAccessException. But we can use good ol' reflection to get around
+		// that!
+		sb.append("opMethod.invoke(op, new Object[] {");
 		int i;
 		List<Member<?>> totalArguments = info.srcInfo().inputs();
 		int totalArgs = totalArguments.size();
@@ -252,8 +261,7 @@ public class ReductionUtils {
 			}
 			if (i + 1 < totalArguments.size()) sb.append(",");
 		}
-
-		sb.append(");");
+		sb.append("});");
 
 		// if pure output, return it
 		if (OpUtils.hasPureOutput(info)) {

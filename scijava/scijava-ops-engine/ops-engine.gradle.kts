@@ -19,6 +19,13 @@ dependencies {
     implementation(projects.scijavaTypes)
     implementation(projects.scijavaFunction)
     implementation(misc.javassist)
+    // missing
+    implementation(misc.snakeyaml)
+    annotationProcessor(libs.therapi.processor)
+    implementation(libs.therapi)
+    implementation(libs.guava)
+    implementation(junit5.junit.jupiter.api)
+    implementation(junit5.junit.jupiter.engine)
 
     testImplementation(junit5.junit.jupiter.api)
     testImplementation(junit5.junit.jupiter.engine)
@@ -33,8 +40,13 @@ sourceSets {
 }
 
 extraJavaModuleInfo {
-    automaticModule("org.javassist:javassist:3.28.0-GA", "javassist")
-//    module("com.github.therapi:therapi-runtime-javadoc", "therapi.runtime.javadoc", "0.13.0") {
-//        exportAllPackages()
-//    }
+    module("org.javassist:javassist", "javassist", "3.28.0-GA") { exportAllPackages() }
+    extraJavaModuleInfo {
+        automaticModule("com.github.therapi:therapi-runtime-javadoc-scribe", "therapi.runtime.javadoc.scribe")
+        automaticModule("com.github.therapi:therapi-runtime-javadoc", "therapi.runtime.javadoc")
+        automaticModule("com.google.code.findbugs:jsr305", "jsr305")
+        automaticModule("com.google.j2objc:j2objc-annotations", "j2objc.annotations")
+    }
+    module("com.google.guava:failureaccess", "failureaccess", "1.0.1") { exportAllPackages() }
+    module("com.google.guava:listenablefuture", "listenablefuture", "9999.0-empty-to-avoid-conflict-with-guava") { exportAllPackages() }
 }

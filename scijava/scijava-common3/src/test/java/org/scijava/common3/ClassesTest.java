@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link Classes}
- * 
+ *
  * @author Curtis Rueden
  * @author Mark Hiner
  * @author Johannes Schindelin
@@ -406,7 +406,7 @@ public class ClassesTest {
 
 	/**
 	 * Copies bytes from an {@link InputStream} to an {@link OutputStream}.
-	 * 
+	 *
 	 * @param in the source
 	 * @param out the sink
 	 */

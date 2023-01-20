@@ -20,6 +20,7 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
+	opens org.scijava.ops.engine.yaml to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.conversionLoss.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.complexLift to therapi.runtime.javadoc;
@@ -32,7 +33,6 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
 
 	requires java.compiler;
-	requires java.desktop;
 
 	requires org.scijava.common3;
 	requires org.scijava.collections;
@@ -49,6 +49,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.types;
 
 	requires javassist;
+	requires org.yaml.snakeyaml;
 
 	requires therapi.runtime.javadoc;
 
@@ -58,6 +59,7 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
 	uses org.scijava.ops.api.features.MatchingRoutine;
+	uses org.scijava.ops.api.features.YAMLOpInfoCreator;
 	uses org.scijava.ops.engine.reduce.InfoReducer;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
@@ -516,4 +518,9 @@ module org.scijava.ops.engine {
     provides org.scijava.ops.engine.reduce.InfoReducer with //
         org.scijava.ops.engine.reduce.FunctionReducer,
         org.scijava.ops.engine.reduce.ComputerReducer;
+
+    provides org.scijava.ops.api.features.YAMLOpInfoCreator with
+        org.scijava.ops.engine.yaml.JavaClassYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.JavaFieldYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.JavaMethodYAMLInfoCreator;
 }

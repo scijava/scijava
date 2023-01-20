@@ -114,7 +114,10 @@ public abstract class TherapiDiscoverer implements Discoverer {
 		List<String> paths = new ArrayList<>(
 				Arrays.asList(System.getProperty("java.class.path").split(File.pathSeparator)));
 		// add modulepath resources
-		paths.addAll(Arrays.asList(System.getProperty("jdk.module.path").split(File.pathSeparator)));
+		String modulePath = System.getProperty("jdk.module.path");
+		if (modulePath != null) {
+			paths.addAll(Arrays.asList(modulePath.split(File.pathSeparator)));
+		}
 		return paths;
 	}
 

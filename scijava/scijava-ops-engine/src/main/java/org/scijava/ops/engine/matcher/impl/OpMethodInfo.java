@@ -203,7 +203,12 @@ public class OpMethodInfo implements OpInfo {
 	{
 
 		// Case 1: no dependencies - lambdaMetaFactory is fastest
-		if (dependencies().size() == 0) {
+		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
+		// can read the Module containing the Op. So we also have to check that.
+		Module methodModule = method.getDeclaringClass().getModule();
+		Module opsEngine = this.getClass().getModule();
+
+		if (opsEngine.canRead(methodModule) && dependencies.isEmpty()) {
 			try {
 				method.setAccessible(true);
 				MethodHandle handle = MethodHandles.lookup().unreflect(method);
@@ -222,12 +227,12 @@ public class OpMethodInfo implements OpInfo {
 		}
 		catch (Throwable ex) {
 			throw new IllegalStateException("Failed to invoke Op method: " + method +
-				". Provided Op dependencies were: " + Objects.toString(dependencies),
+				". Provided Op dependencies were: " + dependencies,
 				ex);
 		}
 		
 	}
-	
+
 	/**
 	 * Creates a class that knows how to create a partial application of an Op,
 	 * and returns that partial application. Specifically, the class knows how to
@@ -235,10 +240,9 @@ public class OpMethodInfo implements OpInfo {
 	 * the primary parameters
 	 * 
 	 * @param m - the {@link OpMethod}
-	 * @param dependencies - the {@OpDependency}s associated with {@code m}
+	 * @param dependencies - the {@link OpDependency}s associated with {@code m}
 	 * @return a partial application of {@code m} with all {@link OpDependency}s
 	 *         injected.
-	 * @throws Throwable
 	 */
 	private Object javassistOp(Method m, List<? extends Object> dependencies)
 		throws Throwable
@@ -255,6 +259,10 @@ public class OpMethodInfo implements OpInfo {
 			// Add implemented interface
 			CtClass jasOpType = pool.get(Types.raw(opType).getName());
 			cc.addInterface(jasOpType);
+
+			// Add Method field
+			CtField methodField = createOpMethodField(pool, cc);
+			cc.addField(methodField);
 
 			// Add OpDependency fields
 			for (int i = 0; i < depMembers.size(); i++) {
@@ -278,10 +286,11 @@ public class OpMethodInfo implements OpInfo {
 		}
 
 		// Return Op instance
-		Class<?>[] depClasses = depMembers.stream().map(dep -> dep.getRawType())
-			.toArray(Class[]::new);
-		return c.getDeclaredConstructor(depClasses).newInstance(dependencies
-			.toArray());
+		Class<?>[] constructorClasses = constructorClasses(depMembers);
+		Object[] constructorObjects = constructorObjects(method, dependencies);
+
+		return c.getDeclaredConstructor(constructorClasses) //
+			.newInstance(constructorObjects);
 	}
 
 	private String formClassName(Method m) {
@@ -296,8 +305,18 @@ public class OpMethodInfo implements OpInfo {
 			nameElements.add(getParameterName(c));
     }
     nameElements.add(m.getReturnType().getSimpleName());
-    String className = packageName + "." + String.join("_", nameElements);
-		return className;
+		// Return the className
+		return packageName + "." + String.join("_", nameElements);
+	}
+
+	private CtField createOpMethodField(ClassPool pool, CtClass cc) throws NotFoundException,
+			CannotCompileException
+	{
+		Class<?> depClass = Method.class;
+		CtClass fType = pool.get(depClass.getName());
+		CtField f = new CtField(fType, "opMethod", cc);
+		f.setModifiers(Modifier.PRIVATE + Modifier.FINAL);
+		return f;
 	}
 
 	private CtField createDependencyField(ClassPool pool, CtClass cc,
@@ -316,17 +335,31 @@ public class OpMethodInfo implements OpInfo {
 	{
 		StringBuilder sb = new StringBuilder();
 		// constructor signature
-		sb.append("public " + cc.getSimpleName() + "(");
+		sb.append("public ") //
+			.append(cc.getSimpleName()) //
+			.append("(")//
+			.append(Method.class.getName()) //
+			.append(" opMethod");
+		if (depMembers.size() > 0) {
+			sb.append(", ");
+		}
 		for (int i = 0; i < depMembers.size(); i++) {
 			Class<?> depClass = depMembers.get(i).getRawType();
-			sb.append(depClass.getName() + " dep" + i);
+			sb.append(depClass.getName()) //
+				.append(" dep") //
+				.append(i);
 			if (i < depMembers.size() - 1) sb.append(",");
 		}
 		sb.append(") {");
 
 		// assign dependencies to field
+		sb.append("this.opMethod = opMethod;");
 		for (int i = 0; i < depMembers.size(); i++) {
-			sb.append("this.dep" + i + " = dep" + i + ";");
+			sb.append("this.dep") //
+				.append(i) //
+				.append(" = dep") //
+				.append(i) //
+				.append(";");
 		}
 		sb.append("}");
 		return sb.toString();
@@ -341,37 +374,64 @@ public class OpMethodInfo implements OpInfo {
 
 		// method modifiers
 		boolean isVoid = m.getReturnType() == void.class;
-		sb.append("public " + (isVoid ? "void" : "Object") + " " + methodName +
-			"(");
+		sb.append("public ") //
+			.append(isVoid ? "void" : "Object") //
+			.append(" ") //
+			.append(methodName) //
+			.append("(");
 
 		// method inputs
 		int applyInputs = inputs().size();
 		for (int i = 0; i < applyInputs; i++) {
-			sb.append(" Object in" + i);
+			sb.append(" Object in") //
+				.append(i);
 			if (i < applyInputs - 1) sb.append(",");
 		}
 
 		// method body
-		sb.append(") { return " + m.getDeclaringClass().getName() + "." + m
-			.getName() + "(");
+		sb.append(") { return opMethod.invoke(null, new Object[] {");
 		int numInputs = 0;
 		int numDependencies = 0;
 		List<Member<?>> members = struct().members().stream() //
 			.filter(member -> !(!member.isInput() && member.isOutput())) //
 			.collect(Collectors.toList());
 		Parameter[] mParams = m.getParameters();
-		for (int i = 0; i < mParams.length; i++) {
-			Class<?> paramRawType = Types.raw(mParams[i].getParameterizedType());
+		for (Parameter mParam : mParams) {
+			Class<?> paramRawType = Types.raw(mParam.getParameterizedType());
 			String castClassName = paramRawType.getName();
 			if (paramRawType.isArray()) castClassName = paramRawType.getSimpleName();
-			sb.append("(" + castClassName + ") ");
-			if (mParams[i].getAnnotation(OpDependency.class) != null) sb.append(
-				"dep" + numDependencies++);
-			else sb.append("in" + numInputs++);
+			sb.append("(") //
+				.append(castClassName) //
+				.append(") ");
+			//
+			if (mParam.getAnnotation(OpDependency.class) != null)
+				sb.append("dep") //
+					.append(numDependencies++);
+			else sb.append("in") //
+				.append(numInputs++);
 			if (numDependencies + numInputs < members.size()) sb.append(", ");
 		}
-		sb.append("); }");
+		sb.append("}); }");
 		return sb.toString();
+	}
+	private Class<?>[] constructorClasses(List<OpDependencyMember<?>> depMembers) {
+		Class<?>[] constructorClasses = new Class<?>[depMembers.size() + 1];
+		constructorClasses[0] = Method.class;
+
+		for (int i = 0; i < depMembers.size(); i++) {
+			constructorClasses[i + 1] = depMembers.get(i).getRawType();
+		}
+		return constructorClasses;
+	}
+
+	private Object[] constructorObjects(final Method opMethod, final List<?> dependencies) {
+		Object[] constructorObjects = new Object[dependencies.size() + 1];
+		constructorObjects[0] = opMethod;
+
+		for (int i = 0; i < dependencies.size(); i++) {
+			constructorObjects[i + 1] = dependencies.get(i);
+		}
+		return constructorObjects;
 	}
 
 	/**

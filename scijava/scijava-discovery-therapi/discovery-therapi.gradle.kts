@@ -18,3 +18,5 @@ extraJavaModuleInfo {
     automaticModule("com.github.therapi:therapi-runtime-javadoc-scribe", "therapi.runtime.javadoc.scribe")
     automaticModule("com.github.therapi:therapi-runtime-javadoc", "therapi.runtime.javadoc")
 }
+
+tasks.test { useJUnitPlatform() }

@@ -14,3 +14,5 @@ dependencies {
     testImplementation(junit5.junit.jupiter.engine)
     testImplementation(projects.scijavaTestutil)
 }
+
+tasks.test { useJUnitPlatform() }

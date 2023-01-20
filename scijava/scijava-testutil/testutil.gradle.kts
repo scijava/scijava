@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    testImplementation(junit5.junit.jupiter.api)
+    implementation(junit5.junit.jupiter.api)
 }

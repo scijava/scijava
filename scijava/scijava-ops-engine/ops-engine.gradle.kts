@@ -24,8 +24,7 @@ dependencies {
     annotationProcessor(libs.therapi.processor)
     implementation(libs.therapi)
     implementation(libs.guava)
-    implementation(junit5.junit.jupiter.api)
-    implementation(junit5.junit.jupiter.engine)
+    implementation(projects.scijavaParse2)
 
     testImplementation(junit5.junit.jupiter.api)
     testImplementation(junit5.junit.jupiter.engine)
@@ -50,3 +49,5 @@ extraJavaModuleInfo {
     module("com.google.guava:failureaccess", "failureaccess", "1.0.1") { exportAllPackages() }
     module("com.google.guava:listenablefuture", "listenablefuture", "9999.0-empty-to-avoid-conflict-with-guava") { exportAllPackages() }
 }
+
+tasks.test { useJUnitPlatform() }

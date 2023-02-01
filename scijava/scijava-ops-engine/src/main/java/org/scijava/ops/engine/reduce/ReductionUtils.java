@@ -230,7 +230,7 @@ public class ReductionUtils {
 		// processing
 		sb.append(" {");
 		if (OpUtils.hasPureOutput(info)) {
-			sb.append(info.output().getType().getTypeName() + " " + opOutput + " = ");
+			sb.append("return ");
 		}
 		// NB we cannot call op.compute(), op.apply(), etc. directly here if the Op
 		// is outside of this module. Calling that method will produce an
@@ -263,10 +263,6 @@ public class ReductionUtils {
 		}
 		sb.append("});");
 
-		// if pure output, return it
-		if (OpUtils.hasPureOutput(info)) {
-			sb.append("return out;");
-		}
 		sb.append("}");
 		return sb.toString();
 	}

@@ -29,7 +29,7 @@
 
 package net.imagej.ops2.threshold.localMedian;
 
-import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
+import net.imagej.ops2.filter.CenterAwareNeighborhoodBasedFilter;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
@@ -51,6 +51,9 @@ public class LocalMedianThreshold<T extends RealType<T>> implements
 	@OpDependency(name = "threshold.localMedian")
 	private Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp;
 
+	@OpDependency(name = "filter.applyCenterAware")
+	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
+
 	/**
 	 * TODO
 	 *
@@ -66,22 +69,10 @@ public class LocalMedianThreshold<T extends RealType<T>> implements
 		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		compute(input, inputNeighborhoodShape, c, outOfBoundsFactory,
-			computeThresholdOp, output);
-	}
-
-	public static <T extends RealType<T>> void compute(
-		final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-		final Double c,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-		final Computers.Arity3<Iterable<T>, T, Double, BitType> computeThresholdOp,
-		final RandomAccessibleInterval<BitType> output)
-	{
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
-			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
-		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
-			inputNeighborhoodShape, outOfBoundsFactory,
-			parametrizedComputeThresholdOp, output);
+				(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, o);
+		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
+				inputNeighborhoodShape, outOfBoundsFactory,
+				output);
 	}
-
 }

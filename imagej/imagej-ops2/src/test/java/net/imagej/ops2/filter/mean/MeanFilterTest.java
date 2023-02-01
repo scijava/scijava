@@ -50,7 +50,9 @@ public class MeanFilterTest extends AbstractOpTest{
 		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
 		Img<ByteType> output = ops.op("create.img").input(img).outType(new Nil<Img<ByteType>>() {}).apply();
 		ops.op("filter.mean").input(img, shape, oobf).output(output).compute();
-		
+
+		// Try with no OutOfBoundsFactory
+		ops.op("filter.mean").input(img, shape).output(output).compute();
 	}
 
 }

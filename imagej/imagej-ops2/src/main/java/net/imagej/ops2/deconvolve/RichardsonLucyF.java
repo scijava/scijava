@@ -37,6 +37,7 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -47,6 +48,7 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Richardson Lucy function op that operates on (@link RandomAccessibleInterval)
@@ -62,7 +64,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
-		Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, Integer, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
+		Functions.Arity10<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, Integer, Boolean, Boolean, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
 
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp = getComputeEstimateOp();
 
@@ -183,21 +185,23 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	 * @param input
 	 * @param kernel
 	 * @param borderSize
-	 * @param obfInput
-	 * @param obfKernel
 	 * @param outType
-	 * @param fftType
+	 * @param complexType
 	 * @param maxIterations max number of iterations
 	 * @param nonCirculant indicates whether to use non-circulant edge handling
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param executorService
+	 * @param obfInput (required = false)
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
-			long[] borderSize, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-			OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel, O outType, C complexType,
-			Integer maxIterations, Boolean nonCirculant, Boolean accelerate, ExecutorService es) {
+			long[] borderSize, O outType, C complexType, Integer maxIterations,
+			Boolean nonCirculant, Boolean accelerate, ExecutorService executorService,
+			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
+	{
+		if (obfInput == null)
+			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
 
 		this.nonCirculant = nonCirculant;
 		this.maxIterations = maxIterations;
@@ -229,7 +233,7 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
-		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize, complexType, accelerate, es);
+		computeFilter(input, kernel, paddedInput, paddedKernel, output, paddedSize, complexType, accelerate, executorService);
 
 		return output;
 	}

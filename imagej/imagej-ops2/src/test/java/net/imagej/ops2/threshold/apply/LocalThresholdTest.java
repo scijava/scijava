@@ -782,18 +782,20 @@ public class LocalThresholdTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testLocalSauvola() {
-		final Computers.Arity5<RandomAccessibleInterval<ByteType>, Shape, Double, Double, //
-				OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>, RandomAccessibleInterval<BitType>> opToTest = OpBuilder
-						.matchComputer(ops, "threshold.localSauvola", //
-								new Nil<RandomAccessibleInterval<ByteType>>() {}, //
-								new Nil<Shape>() {}, //
-								new Nil<Double>() {}, //
-								new Nil<Double>() {}, //
-								new Nil<OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>>>() {}, //
-								new Nil<RandomAccessibleInterval<BitType>>() {}); //
+		Computers.Arity2<RandomAccessibleInterval<ByteType>, Shape, RandomAccessibleInterval<BitType>>
+				opToTest =
+				OpBuilder.matchComputer(ops, "threshold.localSauvola", //
+						new Nil<RandomAccessibleInterval<ByteType>>() {
 
-		opToTest.compute(in, new RectangleShape(2, false), 0.5, 0.5,
-				new OutOfBoundsMirrorFactory<ByteType, RandomAccessibleInterval<ByteType>>(Boundary.SINGLE), out);
+						}, //
+						new Nil<Shape>() {
+
+						}, //
+						new Nil<RandomAccessibleInterval<BitType>>() {
+
+						});//
+
+		opToTest.compute(in, new RectangleShape(2, false), out);
 
 		assertEquals(false, out.firstElement().get());
 	}

@@ -38,6 +38,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
@@ -46,6 +47,7 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * @implNote op names='threshold.localPhansalkar', priority='-100.'
@@ -68,7 +70,7 @@ public class LocalPhansalkarThreshold<T extends RealType<T>> extends
 	 * TODO
 	 *
 	 * @param input
-	 * @param inputneighborhoodshape
+	 * @param inputNeighborhoodShape
 	 * @param k (required = false)
 	 * @Param r (required = false)
 	 * @Param outOfBoundsFactory (required = false)
@@ -76,10 +78,12 @@ public class LocalPhansalkarThreshold<T extends RealType<T>> extends
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		final Shape inputNeighborhoodShape, final Double k, final Double r,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		final Shape inputNeighborhoodShape, @Optional final Double k, @Optional final Double r,
+		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
+		if (outOfBoundsFactory == null) outOfBoundsFactory =
+				new OutOfBoundsBorderFactory<>();
 		// Use integral images for sufficiently large windows.
 		RectangleShape rShape = inputNeighborhoodShape instanceof RectangleShape
 			? (RectangleShape) inputNeighborhoodShape : null;

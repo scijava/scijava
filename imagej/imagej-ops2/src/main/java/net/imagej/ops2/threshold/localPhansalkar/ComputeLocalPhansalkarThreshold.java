@@ -35,6 +35,7 @@ import net.imglib2.type.numeric.real.DoubleType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * <p>
@@ -90,7 +91,7 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, final Double k, final Double r,
+		final T inputCenterPixel, @Optional final Double k, @Optional final Double r,
 		final BitType output)
 	{
 		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,

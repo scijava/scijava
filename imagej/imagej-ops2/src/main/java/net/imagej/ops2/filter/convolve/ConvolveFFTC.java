@@ -63,14 +63,14 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param kernel
 	 * @param fftInput
 	 * @param fftKernel
 	 * @param performInputFFT
 	 * @param performKernelFFT
-	 * @param executorService
-	 * @param output
+	 * @param es
+	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
@@ -93,11 +93,11 @@ class ConvolveFFTCSimple<I extends RealType<I>, O extends RealType<O>, K extends
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param kernel
 	 * @param fftInput
 	 * @param fftKernel
-	 * @param executorService
+	 * @param es
 	 * @param output
 	 */
 	@Override

@@ -117,7 +117,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param kernel
 	 * @param fftInput
 	 * @param fftKernel
@@ -129,8 +129,8 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	 * @param updateOp by default, this should be RichardsonLucyUpdate
 	 * @param raiExtendedEstimate
 	 * @param iterativePostProcessingOps
-	 * @param executorService
-	 * @param output
+	 * @param es
+	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,

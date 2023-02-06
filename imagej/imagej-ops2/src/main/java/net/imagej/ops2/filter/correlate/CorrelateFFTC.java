@@ -74,8 +74,8 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 	 * @param fftKernel
 	 * @param performInputFFT
 	 * @param performKernelFFT
-	 * @param executorService
-	 * @param output
+	 * @param es
+	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,

@@ -35,15 +35,18 @@ import java.util.function.BiFunction;
 import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 
+import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Correlate op for (@link Img)
@@ -57,7 +60,7 @@ import org.scijava.ops.spi.OpDependency;
  */
 public class CorrelateFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 //	extends AbstractFFTFilterF<I, O, K, C>
-implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, O, C, ExecutorService, RandomAccessibleInterval<O>> {
+implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -81,23 +84,25 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 * @param input
 	 * @param kernel
 	 * @param borderSize
-	 * @param obfInput
-	 * @param obfKernel
 	 * @param outType
 	 * @param fftType
-	 * @param executorService
+	 * @param es
+	 * @param obfInput (required = false)
+	 * @param obfKernel (required = false)
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
-			final OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
-			final OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel, final O outType, final C complexType,
-			final ExecutorService es) {
+			final O outType, final C fftType, final ExecutorService es, @Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput, @Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel ) {
 		
 		if(Intervals.numElements(kernel) <= 9) throw new IllegalArgumentException("The kernel is not sufficiently large -- use the naive approach instead");
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
+
+		if (obfInput == null) {
+			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
+		}
 
 		final int numDimensions = input.numDimensions();
 
@@ -124,7 +129,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
-		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType, es);
+		computeFilter(paddedInput, paddedKernel, output, paddedSize, fftType, es);
 
 		return output;
 	}

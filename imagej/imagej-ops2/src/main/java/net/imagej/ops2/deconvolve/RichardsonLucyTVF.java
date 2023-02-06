@@ -65,7 +65,7 @@ import org.scijava.ops.spi.Optional;
  * @implNote op names='deconvolve.richardsonLucyTV', priority='100.'
  */
 public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-	implements Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, Integer, Boolean, Boolean, Float, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
+	implements Functions.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, Integer, Boolean, Boolean, Float, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "deconvolve.richardsonLucyUpdate")
 	private Computers.Arity3<RandomAccessibleInterval<O>, Float, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp;
@@ -175,7 +175,6 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 * @param input
 	 * @param kernel
 	 * @param borderSize
-	 * @param obfInput (required = false)
 	 * @param outType
 	 * @param complexType
 	 * @param maxIterations max number of iterations
@@ -183,13 +182,16 @@ public class RichardsonLucyTVF<I extends RealType<I> & NativeType<I>, O extends 
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param regularizationFactor
 	 * @param executorService
+	 * @param obfInput (required = false)
+	 * @param obfKernel (required = false)
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			long[] borderSize, O outType, C complexType, Integer maxIterations,
 			Boolean nonCirculant, Boolean accelerate, Float regularizationFactor,
 			ExecutorService executorService,
-			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput)
+			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			@Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
 	{
 		if (obfInput == null)
 			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());

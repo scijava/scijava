@@ -34,6 +34,7 @@ import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
@@ -65,8 +66,8 @@ public class DefaultMeanFilter<T, V> implements
 	 * @param input the input image
 	 * @param inputNeighborhoodShape the shape of the {@link Neighborhood} that
 	 *                               each mean will be computed from
-	 * @param outOfBoundsFactory (optional) defines the values used in the
-	 *                           computation at locations outside the image
+	 * @param outOfBoundsFactory defines the values used in the
+	 *                           computation at locations outside the image (required = false)
 	 * @param output buffer image used to store computation output
 	 */
 	@Override
@@ -77,7 +78,8 @@ public class DefaultMeanFilter<T, V> implements
 		final RandomAccessibleInterval<V> output //
 	) {
 		if (outOfBoundsFactory == null)
-			outOfBoundsFactory = new OutOfBoundsBorderFactory<>();
+			outOfBoundsFactory = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
 		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input,
 				outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, statsOp, output);

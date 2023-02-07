@@ -60,7 +60,7 @@ import org.scijava.ops.spi.Optional;
  */
 public class CorrelateFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 //	extends AbstractFFTFilterF<I, O, K, C>
-implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
+implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -83,18 +83,20 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param borderSize
 	 * @param outType
 	 * @param fftType
 	 * @param es
+	 * @param borderSize (required = false)
 	 * @param obfInput (required = false)
 	 * @param obfKernel (required = false)
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
-			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
-			final O outType, final C fftType, final ExecutorService es, @Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput, @Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel ) {
+			final RandomAccessibleInterval<K> kernel, final O outType, final C fftType,
+			final ExecutorService es, @Optional long[] borderSize,
+			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
+			@Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel ) {
 		
 		if(Intervals.numElements(kernel) <= 9) throw new IllegalArgumentException("The kernel is not sufficiently large -- use the naive approach instead");
 

@@ -39,6 +39,7 @@ import net.imglib2.util.Pair;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * This algorithm calculates Li et al.'s ICQ (intensity correlation quotient).
@@ -62,12 +63,12 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 	 *
 	 * @param image1
 	 * @param image2
-	 * @param mean1
-	 * @param mean2
+	 * @param mean1 (required = false)
+	 * @param mean2 (required = false)
 	 * @return the output
 	 */
 	@Override
-	public Double apply(final Iterable<T> image1, final Iterable<U> image2, final DoubleType mean1, final DoubleType mean2) {
+	public Double apply(final Iterable<T> image1, final Iterable<U> image2, @Optional DoubleType mean1, @Optional DoubleType mean2) {
 
 		if (!ColocUtil.sameIterationOrder(image1, image2))
 			throw new IllegalArgumentException(
@@ -115,29 +116,6 @@ public class LiICQ<T extends RealType<T>, U extends RealType<U>, V extends RealT
 		DoubleType mean = new DoubleType();
 		meanUOp.compute(in, mean);
 		return mean.get();
-	}
-
-}
-
-/**
- *@implNote op names='coloc.icq'
- */
-class LiICQSimple<T extends RealType<T>, U extends RealType<U>, V extends RealType<V>>
-		implements BiFunction<Iterable<T>, Iterable<U>, Double> {
-	
-	@OpDependency(name = "coloc.icq")
-	private Functions.Arity4<Iterable<T>, Iterable<U>, DoubleType, DoubleType, Double> colocOp;
-	
-	/**
-	 * TODO
-	 *
-	 * @param image1
-	 * @param image2
-	 * @return the output
-	 */
-	@Override
-	public Double apply(Iterable<T> image1, Iterable<U> image2) {
-		return colocOp.apply(image1, image2, null, null);
 	}
 
 }

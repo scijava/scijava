@@ -80,8 +80,7 @@ public class DefaultSigmaFilter<T extends RealType<T>, V extends RealType<V>> im
 		if (range <= 0)
 			throw new IllegalArgumentException("range must be positive!");
 		Computers.Arity2<Iterable<T>, T, V> mappedOp = (in1, in2, out) -> op.compute(in1, in2, range, minPixelFraction, out);
-		RandomAccessibleInterval<T> extended = outOfBoundsFactory == null ? input
-			: Views.interval((Views.extend(input, outOfBoundsFactory)), input);
+		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input, outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, mappedOp, output);
 	}
 

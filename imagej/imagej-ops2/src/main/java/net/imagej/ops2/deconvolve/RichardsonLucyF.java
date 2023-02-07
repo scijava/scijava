@@ -98,8 +98,8 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, //
 			Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
-			RandomAccessibleInterval<O>, List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
-			ExecutorService, RandomAccessibleInterval<O>> richardsonLucyOp;
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, //
+			ExecutorService, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> richardsonLucyOp;
 
 	private Boolean nonCirculant;
 
@@ -128,14 +128,14 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 
 			return (input, kernel, out) -> {
 				richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerate ? accelerator : null,
-						computeEstimateOp, firstGuess.apply(raiExtendedInput, Util.getTypeFromInterval(out), out), list, es, out);
+						computeEstimateOp, list, es, firstGuess.apply(raiExtendedInput, Util.getTypeFromInterval(out), out), out);
 			};
 		}
 
 		// return a richardson lucy computer
 		return (input, kernel, out) -> {
 			richardsonLucyOp.compute(input, kernel, fftImg, fftKernel, true, true, complexType, maxIterations, accelerate ? accelerator : null,
-					computeEstimateOp, null, null, es, out);
+					computeEstimateOp, null, es, null, out);
 		};
 	}
 

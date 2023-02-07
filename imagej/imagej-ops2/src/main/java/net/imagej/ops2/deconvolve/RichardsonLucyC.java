@@ -45,6 +45,7 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Richardson Lucy algorithm for (@link RandomAccessibleInterval) (Lucy, L. B.
@@ -61,8 +62,8 @@ import org.scijava.ops.spi.OpDependency;
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
 		implements Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
-			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, RandomAccessibleInterval<O>, //
-			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, ExecutorService, RandomAccessibleInterval<O>> {
+			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, ExecutorService, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> {
 
 	// /**
 	// * Op that computes Richardson Lucy update, can be overridden to implement
@@ -127,9 +128,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	 * @param maxIterations
 	 * @param accelerator
 	 * @param updateOp by default, this should be RichardsonLucyUpdate
-	 * @param raiExtendedEstimate
 	 * @param iterativePostProcessingOps
 	 * @param es
+	 * @param raiExtendedEstimate (required = false)
 	 * @param out
 	 */
 	@Override
@@ -138,20 +139,9 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			Boolean performKernelFFT, C complexType, Integer maxIterations,
 			Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator,
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp,
-			RandomAccessibleInterval<O> raiExtendedEstimate,
 			List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps, ExecutorService es,
+			@Optional RandomAccessibleInterval<O> raiExtendedEstimate,
 			RandomAccessibleInterval<O> out) {
-
-		// TODO: can these be deleted?
-		// // create FFT input memory if needed
-		// if (getFFTInput() == null) {
-		// setFFTInput(getCreateOp().calculate(in));
-		// }
-		//
-		// // create FFT kernel memory if needed
-		// if (getFFTKernel() == null) {
-		// setFFTKernel(getCreateOp().calculate(in));
-		// }
 
 		// if a starting point for the estimate was not passed in then create
 		// estimate Img and use the input as the starting point

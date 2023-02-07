@@ -145,14 +145,14 @@ public class DeconvolveTest extends AbstractOpTest {
 		// find a RichardsonLucyC op
 		Computers.Arity13<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<ComplexFloatType>, //
 				RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, ComplexFloatType, Integer, Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, //
-				Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, RandomAccessibleInterval<FloatType>, //
-				List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, ExecutorService, RandomAccessibleInterval<FloatType>> deconvolveOpC = ops.op("deconvolve.richardsonLucy",
+				Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
+				List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, ExecutorService, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>> deconvolveOpC = ops.op("deconvolve.richardsonLucy",
 				new Nil<Computers.Arity13<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
 						RandomAccessibleInterval<ComplexFloatType>, RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, //
 						ComplexFloatType, Integer, //
 						Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
-						RandomAccessibleInterval<FloatType>, List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, //
-						ExecutorService, RandomAccessibleInterval<FloatType>>>() {},
+						List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, //
+						ExecutorService, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>() {},
 				new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
 						new Nil<RandomAccessibleInterval<FloatType>>() {}, //
 						new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}, //
@@ -160,8 +160,8 @@ public class DeconvolveTest extends AbstractOpTest {
 						new Nil<Boolean>() {}, new Nil<Boolean>() {}, new Nil<ComplexFloatType>() {}, //
 						new Nil<Integer> () {}, new Nil<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>() {}, //
 						new Nil<Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>() {}, //
-						new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>>() {}, //
-						new Nil<ExecutorService> () {}, new Nil<RandomAccessibleInterval<FloatType>>() {}
+						new Nil<List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>>() {}, //
+						new Nil<ExecutorService> () {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}
 				}, //
 				new Nil<RandomAccessibleInterval<FloatType>>() {});
 	}

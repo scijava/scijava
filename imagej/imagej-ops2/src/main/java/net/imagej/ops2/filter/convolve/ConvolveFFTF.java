@@ -61,7 +61,7 @@ import org.scijava.ops.spi.Optional;
  */
 public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		/* extends AbstractFFTFilterF<I, O, K, C> */ implements
-		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
+		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -84,18 +84,19 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param borderSize
 	 * @param outType
 	 * @param complexType
 	 * @param executorService
-	 * @param obfInput
+	 * @param borderSize (required = false)
+	 * @param obfInput (required = false)
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
-			final RandomAccessibleInterval<K> kernel, final long[] borderSize,
+			final RandomAccessibleInterval<K> kernel,
 			final O outType, final C complexType,
 			final ExecutorService executorService,
+			@Optional final long[] borderSize,
 			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput) {
 
 		RandomAccessibleInterval<O> output = outputCreator.apply(input, outType);
@@ -171,7 +172,7 @@ class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealTy
 		Functions.Arity3<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<FloatType>> {
 
 		@OpDependency(name = "filter.convolve")
-		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], FloatType, ComplexFloatType, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<FloatType>> convolveOp;
+		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, FloatType, ComplexFloatType, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<FloatType>> convolveOp;
 
 		/**
 	 * TODO
@@ -185,7 +186,7 @@ class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealTy
 		public RandomAccessibleInterval<FloatType> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel, ExecutorService executorService) {
 			OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput = new OutOfBoundsConstantValueFactory<>(Util
 					.getTypeFromInterval(input).createVariable());
-			return convolveOp.apply(input, kernel, null, new FloatType(), new ComplexFloatType(), executorService, obfInput);
+			return convolveOp.apply(input, kernel, new FloatType(), new ComplexFloatType(), executorService, null, obfInput);
 		}
 
 }

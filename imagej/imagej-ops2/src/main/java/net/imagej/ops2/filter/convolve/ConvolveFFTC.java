@@ -55,7 +55,7 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	private Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
 
 	@OpDependency(name = "filter.linearFilter")
-	private Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> linearFilter;
+	private Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> linearFilter;
 
 	/**
 	 * Call the linear filter that is set up to perform convolution
@@ -76,7 +76,7 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {
-		linearFilter.compute(in, kernel, fftInput, fftKernel, performInputFFT, performKernelFFT, es, mul, out);
+		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, es, mul, fftInput, fftKernel, out);
 	}
 }
 

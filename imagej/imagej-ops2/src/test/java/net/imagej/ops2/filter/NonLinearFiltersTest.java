@@ -161,7 +161,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testSigmaFilter() {
-		ops.op("filter.sigma").input(in, shape, oobFactory, 1.0, 0.0).output(out).compute();
+		ops.op("filter.sigma").input(in, shape, 1.0, 0.0, oobFactory).output(out).compute();
 	}
 
 	/**

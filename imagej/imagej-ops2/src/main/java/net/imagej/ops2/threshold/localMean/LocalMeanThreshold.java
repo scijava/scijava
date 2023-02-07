@@ -46,6 +46,7 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Implementation of the local mean threshold method for images. Makes use of
@@ -79,13 +80,13 @@ public class LocalMeanThreshold<T extends RealType<T>> extends
 	 * @param input
 	 * @param inputNeighborhoodShape
 	 * @param c
-	 * @param outOfBoundsFactory
+	 * @param outOfBoundsFactory (required = false)
 	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.

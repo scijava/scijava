@@ -46,6 +46,7 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * @implNote op names='threshold.localNiblack', priority='-100.'
@@ -79,7 +80,7 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c, final Double k,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.

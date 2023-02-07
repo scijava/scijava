@@ -45,6 +45,7 @@ import org.scijava.function.Computers;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Input is a 2- or 3-dimensional grayscales image. Applies the Frangi
@@ -56,7 +57,7 @@ import Jama.Matrix;
  *@implNote op names='filter.frangiVesselness'
  */
 public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
-		implements Computers.Arity3<RandomAccessibleInterval<T>, double[], Integer, RandomAccessibleInterval<U>> {
+		implements Computers.Arity3<RandomAccessibleInterval<T>, Integer, double[], RandomAccessibleInterval<U>> {
 
 	private double[] spacing;
 	private int scale;
@@ -97,13 +98,13 @@ public class DefaultFrangi<T extends RealType<T>, U extends RealType<U>>
 	 * TODO
 	 *
 	 * @param input
-	 * @param spacing physicl distance between data points
 	 * @param scale size of vessels to search for
+	 * @param spacing physical distance between data points (required = false)
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final double[] spacing, final Integer scale,
-			final RandomAccessibleInterval<U> output) {
+	public void compute(final RandomAccessibleInterval<T> input, final Integer scale,
+			@Optional double[] spacing, final RandomAccessibleInterval<U> output) {
 
 		if (input.numDimensions() != 2 && input.numDimensions() != 3)
 			throw new IllegalArgumentException("Currently only 2 or 3 dimensional images are supported");

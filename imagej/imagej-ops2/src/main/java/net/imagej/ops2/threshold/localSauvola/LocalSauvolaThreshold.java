@@ -85,8 +85,6 @@ public class LocalSauvolaThreshold<T extends RealType<T>> extends
 		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
-		if (outOfBoundsFactory == null) outOfBoundsFactory =
-				new OutOfBoundsBorderFactory<>();
 		// Use integral images for sufficiently large windows.
 		if (inputNeighborhoodShape instanceof RectangleShape &&
 			((RectangleShape) inputNeighborhoodShape).getSpan() > 2)

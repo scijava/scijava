@@ -38,6 +38,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * @author Jonathan Hale
@@ -59,13 +60,13 @@ public class LocalContrastThreshold<T extends RealType<T>> implements
 	 *
 	 * @param input
 	 * @param inputNeighborhoodShape
-	 * @param outOfBoundsFactory
+	 * @param outOfBoundsFactory (required = false)
 	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		applyFilterOp.compute(input, computeThresholdOp, inputNeighborhoodShape,

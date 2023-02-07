@@ -64,7 +64,7 @@ import org.scijava.ops.spi.Optional;
  */
 public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
-		Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, long[], O, C, Integer, Boolean, Boolean, ExecutorService, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
+		Functions.Arity11<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, Integer, Boolean, Boolean, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	private Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> computeEstimateOp = getComputeEstimateOp();
 
@@ -184,21 +184,22 @@ public class RichardsonLucyF<I extends RealType<I> & NativeType<I>, O extends Re
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param borderSize
 	 * @param outType
 	 * @param complexType
 	 * @param maxIterations max number of iterations
 	 * @param nonCirculant indicates whether to use non-circulant edge handling
 	 * @param accelerate indicates whether or not to use acceleration
 	 * @param executorService
+	 * @param borderSize (required = false)
 	 * @param obfInput (required = false)
 	 * @param obfKernel (required = false)
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
-			long[] borderSize, O outType, C complexType, Integer maxIterations,
+			O outType, C complexType, Integer maxIterations,
 			Boolean nonCirculant, Boolean accelerate, ExecutorService executorService,
+			@Optional long[] borderSize,
 			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
 			@Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel)
 	{

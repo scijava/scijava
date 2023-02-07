@@ -94,7 +94,7 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 
 	@Test
 	public void marchingCubes() {
-		final Mesh result = (Mesh) ops.op("geom.marchingCubes").input(ROI, null, null).apply();
+		final Mesh result = (Mesh) ops.op("geom.marchingCubes").input(ROI).apply();
 		assertEquals(mesh.triangles().size(), result.triangles().size());
 		final Iterator<Triangle> expectedFacets = mesh.triangles().iterator();
 		final Iterator<Triangle> actualFacets = result.triangles().iterator();

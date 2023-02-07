@@ -44,6 +44,7 @@ import net.imglib2.view.Views;
 import org.apache.commons.math3.util.MathArrays;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * This is a marching cubes implementation. It is inspired by Paul Bourke's
@@ -58,10 +59,7 @@ import org.scijava.ops.spi.OpDependency;
 public class DefaultMarchingCubes<T extends BooleanType<T>>
 		implements Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> {
 
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private double isolevel;
-	//
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
 	private VertexInterpolator interpolatorClass;
 
 	@SuppressWarnings({ "unchecked" })
@@ -69,12 +67,13 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 	 * TODO
 	 *
 	 * @param input
-	 * @param isolevel
-	 * @param interpolatorClass
+	 * @param isolevel (required = false)
+	 * @param interpolatorClass (required = false)
 	 * @return the output
 	 */
 	@Override
-	public Mesh apply(final RandomAccessibleInterval<T> input, Double isolevel, VertexInterpolator interpolatorClass) {
+	public Mesh apply(final RandomAccessibleInterval<T> input,
+			@Optional Double isolevel, @Optional VertexInterpolator interpolatorClass) {
 
 		// ensure validity of inputs
 		if (input.numDimensions() != 3)
@@ -552,26 +551,4 @@ public class DefaultMarchingCubes<T extends BooleanType<T>>
 			{ 0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
 			{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 } };
 
-}
-
-/**
- *@implNote op names='geom.marchingCubes'
- */
-class SimpleMarchingCubes<T extends BooleanType<T>>
-		implements Function<RandomAccessibleInterval<T>, Mesh> {
-	
-	@OpDependency(name = "geom.marchingCubes")
-	private Functions.Arity3<RandomAccessibleInterval<T>, Double, VertexInterpolator, Mesh> marchingOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @return the output
-	 */
-	@Override
-	public Mesh apply(RandomAccessibleInterval<T> t) {
-		return marchingOp.apply(t, null, null);
-	}
-	
 }

@@ -42,6 +42,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Op used to pad the image by extending the borders
@@ -65,11 +66,11 @@ public class PadInput<T extends ComplexType<T>, I extends RandomAccessibleInterv
 	 *
 	 * @param input
 	 * @param paddedDimensions
-	 * @param outOfBoundsFactory The OutOfBoundsFactory used to extend the image
+	 * @param outOfBoundsFactory The OutOfBoundsFactory used to extend the image (required = false)
 	 * @return the output
 	 */
 	public O apply(final I input, final Dimensions paddedDimensions,
-			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
+			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
 
 		if (obf == null) {
 			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());

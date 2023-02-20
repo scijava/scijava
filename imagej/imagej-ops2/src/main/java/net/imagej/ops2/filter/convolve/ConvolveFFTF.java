@@ -122,6 +122,10 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 			}
 		}
 
+		if (obfInput == null) {
+			obfInput = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
+		}
+
 		RandomAccessibleInterval<I> paddedInput = padOp.apply(input, new FinalDimensions(paddedSize), true, obfInput);
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));

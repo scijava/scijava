@@ -100,7 +100,7 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, @Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
-			final @Optional O outType) {
+			final O outType) {
 
 		// conforms only if the kernel is sufficiently small
 		if (Intervals.numElements(kernel) <= 9)

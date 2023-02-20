@@ -36,6 +36,7 @@ import net.imagej.ops2.filter.CenterAwareNeighborhoodBasedFilter;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.histogram.Histogram1d;
+import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
@@ -374,6 +375,8 @@ public final class ApplyThresholdMethodLocal {
 			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 			final RandomAccessibleInterval<BitType> output)
 		{
+			if (outOfBoundsFactory == null) outOfBoundsFactory =
+					new OutOfBoundsBorderFactory<>();
 			if (thresholdOp == null) thresholdOp = getThresholdOp();
 			applyFilterOp.compute(input, thresholdOp,
 				inputNeighborhoodShape, outOfBoundsFactory, output);

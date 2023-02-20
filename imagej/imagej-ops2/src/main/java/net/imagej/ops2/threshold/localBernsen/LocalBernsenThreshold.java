@@ -32,6 +32,7 @@ package net.imagej.ops2.threshold.localBernsen;
 import net.imagej.ops2.filter.CenterAwareNeighborhoodBasedFilter;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.outofbounds.OutOfBoundsBorderFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
@@ -73,6 +74,8 @@ public class LocalBernsenThreshold<T extends RealType<T>> implements
 		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
+		if (outOfBoundsFactory == null) outOfBoundsFactory =
+				new OutOfBoundsBorderFactory<>();
 		compute(input, inputNeighborhoodShape, contrastThreshold, halfMaxValue,
 			outOfBoundsFactory, computeThresholdOp, output);
 	}

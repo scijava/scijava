@@ -106,8 +106,8 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 
 	@OpDependency(name = "filter.convolve")
 	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, //
-			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, //
-			ExecutorService, RandomAccessibleInterval<O>> convolverOp;
+			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, //
+			Boolean, Boolean,RandomAccessibleInterval<O>> convolverOp;
 
 	@OpDependency(name = "copy.rai")
 	private Computers.Arity1<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>> copyOp;
@@ -166,7 +166,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			// NOTE: the FFT of the PSF of the kernel has been passed in as a
 			// parameter. when the op was set up, and computed above, so we can use
 			// compute
-			convolverOp.compute(raiExtendedEstimate, null, fftInput, fftKernel, true, false, es,
+			convolverOp.compute(raiExtendedEstimate, null, fftInput, fftKernel, es, true, false,
 				raiExtendedReblurred);
 
 			// compute correction factor

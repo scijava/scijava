@@ -77,7 +77,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "filter.convolve")
-	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> convolveOp;
+	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, Boolean, Boolean, RandomAccessibleInterval<O>> convolveOp;
 
 	/**
 	 * TODO
@@ -159,7 +159,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
 			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
 			RandomAccessibleInterval<O> output) {
-		return (in1, in2, out) -> convolveOp.compute(in1, in2, fftImg, fftKernel, true, true, es, out);
+		return (in1, in2, out) -> convolveOp.compute(in1, in2, fftImg, fftKernel, es, true, true, out);
 	}
 
 }

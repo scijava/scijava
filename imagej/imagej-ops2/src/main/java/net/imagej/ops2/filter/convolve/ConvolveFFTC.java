@@ -37,6 +37,7 @@ import net.imglib2.type.numeric.RealType;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Convolve op for (@link RandomAccessibleInterval)
@@ -49,7 +50,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.convolve', priority='-100.'
  */
 public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> {
+		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, Boolean, Boolean, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "math.multiply")
 	private Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
@@ -67,43 +68,17 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	 * @param kernel
 	 * @param fftInput
 	 * @param fftKernel
-	 * @param performInputFFT
-	 * @param performKernelFFT
 	 * @param es
+	 * @param performInputFFT (required = false)
+	 * @param performKernelFFT (required = false)
 	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
-			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {
-		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, es, mul, fftInput, fftKernel, out);
-	}
-}
-
-/**
- *@implNote op names='filter.convolve', priority='-100.'
- */
-class ConvolveFFTCSimple<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements
-		Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<O>> {
-
-	@OpDependency(name = "filter.convolve")
-	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> convolveOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param in
-	 * @param kernel
-	 * @param fftInput
-	 * @param fftKernel
-	 * @param es
-	 * @param output
-	 */
-	@Override
-	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
-			RandomAccessibleInterval<O> output) {
-		convolveOp.compute(in, kernel, fftInput, fftKernel, true, true, es, output);
+			@Optional Boolean performInputFFT, @Optional Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
+		if (performInputFFT == null) performInputFFT = true;
+		if (performKernelFFT == null) performKernelFFT = true;
+		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, es, mul, fftInput, fftKernel, out);
 	}
 }

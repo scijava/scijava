@@ -91,17 +91,7 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 	 */
 	@Override
 	public void compute(final Iterable<T> inputNeighborhood,
-		final T inputCenterPixel, @Optional final Double k, @Optional final Double r,
-		final BitType output)
-	{
-		compute(inputNeighborhood, inputCenterPixel, k, r, meanOp, stdDeviationOp,
-			output);
-	}
-
-	public static <T extends RealType<T>> void compute(
-		final Iterable<T> inputNeighborhood, final T inputCenterPixel, Double k,
-		Double r, final Computers.Arity1<Iterable<T>, DoubleType> meanOp,
-		final Computers.Arity1<Iterable<T>, DoubleType> stdDeviationOp,
+		final T inputCenterPixel, @Optional Double k, @Optional Double r,
 		final BitType output)
 	{
 		if (k == null) k = DEFAULT_K;
@@ -114,9 +104,8 @@ public class ComputeLocalPhansalkarThreshold<T extends RealType<T>> implements
 		stdDeviationOp.compute(inputNeighborhood, stdDevValue);
 
 		final double threshold = meanValue.get() * (1.0d + P * Math.exp(-Q *
-			meanValue.get()) + k * ((stdDevValue.get() / r) - 1.0));
+				meanValue.get()) + k * ((stdDevValue.get() / r) - 1.0));
 
 		output.set(inputCenterPixel.getRealDouble() >= threshold);
 	}
-
 }

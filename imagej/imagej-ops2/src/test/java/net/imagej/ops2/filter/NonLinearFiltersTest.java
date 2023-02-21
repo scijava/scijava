@@ -98,6 +98,11 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(out.firstElement().get(), max);
 	}
 
+	@Test
+	public void testMaxFilterOptional() {
+		ops.op("filter.max").input(in, shape).output(out).compute();
+	}
+
 	/**
 	 * @see MeanFilterOp
 	 * @see DefaultMeanFilter
@@ -115,6 +120,11 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		}
 
 		assertEquals(Util.round(sum / 9.0), out.firstElement().get());
+	}
+
+	@Test
+	public void testMeanFilterOptional() {
+		ops.op("filter.mean").input(in, shape).output(out).compute();
 	}
 
 	/**
@@ -137,6 +147,11 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(items.get(5).get(), out.firstElement().get());
 	}
 
+	@Test
+	public void testMedianFilterOptional() {
+		ops.op("filter.median").input(in, shape).output(out).compute();
+	}
+
 	/**
 	 * @see MinFilterOp
 	 * @see DefaultMinFilter
@@ -155,13 +170,23 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(min, out.firstElement().get());
 	}
 
+	@Test
+	public void testMinFilterOptional() {
+		ops.op("filter.min").input(in, shape).output(out).compute();
+	}
+
 	/**
 	 * @see SigmaFilterOp
 	 * @see DefaultSigmaFilter
 	 */
 	@Test
 	public void testSigmaFilter() {
-		ops.op("filter.sigma").input(in, shape, oobFactory, 1.0, 0.0).output(out).compute();
+		ops.op("filter.sigma").input(in, shape, 1.0, 0.0, oobFactory).output(out).compute();
+	}
+
+	@Test
+	public void testSigmaFilterOptional() {
+		ops.op("filter.sigma").input(in, shape, 1.0, 0.0).output(out).compute();
 	}
 
 	/**
@@ -183,6 +208,11 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		}
 
 		assertEquals((byte) Util.round((sumSq - (sum * sum / 9)) / 8), out.firstElement().get());
+	}
+
+	@Test
+	public void testVarianceFilterOptional() {
+		ops.op("filter.variance").input(in, shape).output(out).compute();
 	}
 
 }

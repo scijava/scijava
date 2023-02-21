@@ -57,10 +57,10 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 
 	@OpDependency(name = "filter.linearFilter")
 	private Computers.Arity8<RandomAccessibleInterval<I>, //
-			RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
-			RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, //
+			RandomAccessibleInterval<K>,  Boolean, Boolean, ExecutorService, //
 			Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
-					RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> linearFilter;
+			RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, //
+			RandomAccessibleInterval<C>,RandomAccessibleInterval<O>> linearFilter;
 
 	/**
 	 * Call the linear filter that is set up to perform correlation
@@ -74,15 +74,15 @@ public class CorrelateFFTC<I extends RealType<I>, O extends RealType<O>, K exten
 	 * @param fftKernel
 	 * @param performInputFFT
 	 * @param performKernelFFT
-	 * @param executorService
-	 * @param output
+	 * @param es
+	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel,
 			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, Boolean performInputFFT,
 			Boolean performKernelFFT, ExecutorService es, RandomAccessibleInterval<O> out) {
 		
-		linearFilter.compute(input, kernel, fftInput, fftKernel, performInputFFT, performKernelFFT, es,
-				complexConjugateMul, out);
+		linearFilter.compute(input, kernel, performInputFFT, performKernelFFT, es,
+				complexConjugateMul, fftInput, fftKernel, out);
 	}
 }

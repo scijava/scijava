@@ -32,7 +32,7 @@ package net.imagej.ops2.threshold.localNiblack;
 import java.util.Arrays;
 import java.util.function.Function;
 
-import net.imagej.ops2.filter.ApplyCenterAwareNeighborhoodBasedFilter;
+import net.imagej.ops2.filter.CenterAwareNeighborhoodBasedFilter;
 import net.imagej.ops2.threshold.ApplyLocalThresholdIntegral;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.RectangleNeighborhood;
@@ -46,6 +46,7 @@ import net.imglib2.view.composite.Composite;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * @implNote op names='threshold.localNiblack', priority='-100.'
@@ -64,6 +65,8 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	@OpDependency(name = "threshold.localNiblack")
 	private Computers.Arity4<RectangleNeighborhood<? extends Composite<DoubleType>>, T, Double, Double, BitType> computeThresholdIntegralOp;
 
+	@OpDependency(name = "filter.applyCenterAware")
+	private Computers.Arity4<RandomAccessibleInterval<T>, Computers.Arity2<Iterable<T>, T, BitType>, Shape, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, RandomAccessibleInterval<BitType>> applyFilterOp;
 	/**
 	 * TODO
 	 *
@@ -77,7 +80,7 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
 		final Shape inputNeighborhoodShape, final Double c, final Double k,
-		final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 		final RandomAccessibleInterval<BitType> output)
 	{
 		// Use integral images for sufficiently large windows.
@@ -107,9 +110,9 @@ public class LocalNiblackThreshold<T extends RealType<T>> extends
 	{
 		final Computers.Arity2<Iterable<T>, T, BitType> parametrizedComputeThresholdOp = //
 			(i1, i2, o) -> computeThresholdOp.compute(i1, i2, c, k, o);
-		ApplyCenterAwareNeighborhoodBasedFilter.compute(input,
+		applyFilterOp.compute(input, parametrizedComputeThresholdOp,
 			inputNeighborhoodShape, outOfBoundsFactory,
-			parametrizedComputeThresholdOp, output);
+			output);
 	}
 
 	public void computeIntegral(

@@ -31,6 +31,7 @@ package net.imagej.ops2.deconvolve;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops2.AbstractOpTest;
@@ -49,7 +50,9 @@ import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.function.Inplaces;
 import org.scijava.types.Nil;
 
 /**
@@ -83,37 +86,38 @@ public class DeconvolveTest extends AbstractOpTest {
 				incropped, kernel, es).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// find a RichardsonLucyF op
-		Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+		Functions.Arity10<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+				FloatType, ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
 				long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
-				OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
-				ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
 				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.op("deconvolve.richardsonLucy",
-						new Nil<Functions.Arity11<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+						new Nil<Functions.Arity10<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+								FloatType, ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
 								long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
-								OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, FloatType, //
-								ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
 								RandomAccessibleInterval<FloatType>>>() {},
 						new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
 								new Nil<RandomAccessibleInterval<FloatType>>() {}, //
-								new Nil<long[]>() {},
-								new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {}, //
-								new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {},
 								new Nil<FloatType>() {}, //
 								new Nil<ComplexFloatType>() {}, new Nil<Integer>() {}, new Nil<Boolean>() {},
-								new Nil<Boolean>() {}, new Nil<ExecutorService>() {} }, //
+								new Nil<Boolean>() {}, //
+								new Nil<ExecutorService>() {}, //
+								new Nil<long[]>() {},
+								new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {} //
+								 }, //
 						new Nil<RandomAccessibleInterval<FloatType>>() {});
 
 		// deconvolve with standard Richardson Lucy F
-		final RandomAccessibleInterval<FloatType> deconvolved = deconvolveOp.apply(convolved, kernel, null,
-				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()),
-				null, new FloatType(),
-				new ComplexFloatType(), 10, false, false, es);
+		final RandomAccessibleInterval<FloatType> deconvolved =
+				deconvolveOp.apply(convolved, kernel, new FloatType(),
+						new ComplexFloatType(), 10, false, false, es, null,
+						new OutOfBoundsConstantValueFactory<>(
+								Util.getTypeFromInterval(in).createVariable()));
 
 		// deconvolve with accelerated non-circulant Richardson Lucy F
-		final RandomAccessibleInterval<FloatType> deconvolved2 = deconvolveOp.apply(convolved, kernel, null,
-				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(in).createVariable()),
-				new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(kernel).createVariable()),
-				new FloatType(), new ComplexFloatType(), 10, true, true, es);
+		final RandomAccessibleInterval<FloatType> deconvolved2 =
+				deconvolveOp.apply(convolved, kernel, new FloatType(),
+						new ComplexFloatType(), 10, true, true, es, null,
+						new OutOfBoundsConstantValueFactory<>(
+								Util.getTypeFromInterval(in).createVariable()));
 
 		assertEquals(incropped.dimension(0), deconvolved.dimension(0));
 		assertEquals(incropped.dimension(1), deconvolved.dimension(1));
@@ -137,6 +141,29 @@ public class DeconvolveTest extends AbstractOpTest {
 			assertEquals(deconvolvedValues[i], deconvolvedCursor.next().get(), 0.0f);
 			assertEquals(deconvolvedValues2[i], deconvolvedCursor2.next().get(), 0.0f);
 		}
+
+		// find a RichardsonLucyC op
+		Computers.Arity13<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<ComplexFloatType>, //
+				RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, ComplexFloatType, Integer, Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, //
+				Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
+				List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, ExecutorService, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>> deconvolveOpC = ops.op("deconvolve.richardsonLucy",
+				new Nil<Computers.Arity13<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+						RandomAccessibleInterval<ComplexFloatType>, RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, //
+						ComplexFloatType, Integer, //
+						Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
+						List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, //
+						ExecutorService, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>() {},
+				new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
+						new Nil<RandomAccessibleInterval<FloatType>>() {}, //
+						new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}, //
+						new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}, //
+						new Nil<Boolean>() {}, new Nil<Boolean>() {}, new Nil<ComplexFloatType>() {}, //
+						new Nil<Integer> () {}, new Nil<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>() {}, //
+						new Nil<Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>() {}, //
+						new Nil<List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>>() {}, //
+						new Nil<ExecutorService> () {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}
+				}, //
+				new Nil<RandomAccessibleInterval<FloatType>>() {});
 	}
 
 	// utility to place a small sphere at the center of the image

@@ -38,31 +38,39 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
+import org.scijava.function.Container;
+import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
-public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
+/**
+ *
+ * @author Curtis Rueden
+ * @author Mark Hiner
+ * @param <I> input type
+ * @param <O> output type
+ * @implNote op names='filter.applyCenterAware'
+ */
+public class CenterAwareNeighborhoodBasedFilter<I, O> implements
+		Computers.Arity4<RandomAccessibleInterval<I>, Computers.Arity2<Iterable<I>, I, O>, Shape, OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
 
-	private static final OutOfBoundsFactory<?, ?> DEFAULT_OUT_OF_BOUNDS_FACTORY =
-		new OutOfBoundsBorderFactory<>();
-
-	@SuppressWarnings("unchecked")
-	public static <I> OutOfBoundsFactory<I, RandomAccessibleInterval<I>>
-		defaultOutOfBoundsFactory()
-	{
-		return (OutOfBoundsFactory<I, RandomAccessibleInterval<I>>) DEFAULT_OUT_OF_BOUNDS_FACTORY;
-	}
-
-	private ApplyCenterAwareNeighborhoodBasedFilter() {
-		// Utility class
-	}
-
-	public static <I, O> void compute(final RandomAccessibleInterval<I> input,
-		final Shape inputNeighborhoodShape,
-		OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory,
-		final Computers.Arity2<Iterable<I>, I, O> filterOp,
-		final RandomAccessibleInterval<O> output)
+	/**
+	 * TODO
+	 *
+	 * @param input
+	 * @param filterOp
+	 * @param inputNeighborhoodShape
+	 * @param outOfBoundsFactory (required = false)
+	 * @param output
+	 */
+	@Override
+	public void compute(final RandomAccessibleInterval<I> input, //
+		final Computers.Arity2<Iterable<I>, I, O> filterOp, //
+		final Shape inputNeighborhoodShape, //
+		@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBoundsFactory, //
+		@Container final RandomAccessibleInterval<O> output)
 	{
 		if (outOfBoundsFactory == null) outOfBoundsFactory =
-			defaultOutOfBoundsFactory();
+			new OutOfBoundsBorderFactory<>();
 		final RandomAccessibleInterval<I> inputCenterPixels = Views.interval(Views
 			.extend(input, outOfBoundsFactory), input);
 		final RandomAccessible<? extends Iterable<I>> inputNeighborhoods =
@@ -72,5 +80,4 @@ public final class ApplyCenterAwareNeighborhoodBasedFilter<I, O> {
 			.multiThreaded() //
 			.forEachPixel(filterOp::compute);
 	}
-
 }

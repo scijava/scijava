@@ -46,6 +46,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Implementation of Tamura's Directionality Feature
@@ -75,7 +76,7 @@ public class DefaultDirectionalityFeature<I extends RealType<I>, O extends RealT
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> input,
-		Integer histogramSize, final O output)
+		@Optional Integer histogramSize, final O output)
 	{
 		if (input.numDimensions() != 2)
 			throw new IllegalArgumentException("Only 2 dimensional images allowed!");

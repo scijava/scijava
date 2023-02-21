@@ -30,17 +30,22 @@
 package net.imagej.ops2.filter.mean;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
- * Default implementation of {@link MeanFilterOp}.
+ * Filters an input image, taking the mean of all pixels in a neighborhood
+ * around each sample in the input data.
  * 
  * @author Jonathan Hale (University of Konstanz)
+ * @author Gabriel Selzer
  * @param <T>
  *            type
  *@implNote op names='filter.mean'
@@ -57,17 +62,25 @@ public class DefaultMeanFilter<T, V> implements
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param shape
-	 * @param outOfBoundsFactory
-	 * @param output
+	 * @param input the input image
+	 * @param inputNeighborhoodShape the shape of the {@link Neighborhood} that
+	 *                               each mean will be computed from
+	 * @param outOfBoundsFactory defines the values used in the
+	 *                           computation at locations outside the image (required = false)
+	 * @param output buffer image used to store computation output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
-			final RandomAccessibleInterval<V> output) {
-		RandomAccessibleInterval<T> extended = outOfBoundsFactory == null ? input
-			: Views.interval((Views.extend(input, outOfBoundsFactory)), input);
+	public void compute( //
+		final RandomAccessibleInterval<T> input, //
+		final Shape inputNeighborhoodShape, //
+		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory, //
+		final RandomAccessibleInterval<V> output //
+	) {
+		if (outOfBoundsFactory == null)
+			outOfBoundsFactory = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input,
+				outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, statsOp, output);
 	}
 }

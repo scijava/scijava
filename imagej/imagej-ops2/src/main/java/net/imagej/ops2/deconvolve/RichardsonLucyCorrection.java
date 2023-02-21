@@ -94,12 +94,12 @@ public class RichardsonLucyCorrection<I extends RealType<I>, O extends RealType<
 	/**
 	 * computes the correction factor of the Richardson Lucy Algorithm
 	 *
-	 * @param input
+	 * @param observed
 	 * @param reblurred
 	 * @param fftBuffer
 	 * @param fftKernel
-	 * @param executorService
-	 * @param output
+	 * @param es
+	 * @param correction
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> observed,

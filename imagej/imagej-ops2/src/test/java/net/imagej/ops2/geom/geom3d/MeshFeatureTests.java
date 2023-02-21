@@ -36,12 +36,15 @@ import java.util.Iterator;
 import net.imagej.mesh2.Mesh;
 import net.imagej.mesh2.Triangle;
 import net.imagej.ops2.AbstractFeatureTest;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.roi.labeling.LabelRegion;
+import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.types.Nil;
 
 public class MeshFeatureTests extends AbstractFeatureTest {
 	private static final double EPSILON = 10e-12;
@@ -94,7 +97,7 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 
 	@Test
 	public void marchingCubes() {
-		final Mesh result = (Mesh) ops.op("geom.marchingCubes").input(ROI, null, null).apply();
+		final Mesh result = (Mesh) ops.op("geom.marchingCubes").input(ROI).apply();
 		assertEquals(mesh.triangles().size(), result.triangles().size());
 		final Iterator<Triangle> expectedFacets = mesh.triangles().iterator();
 		final Iterator<Triangle> actualFacets = result.triangles().iterator();
@@ -189,6 +192,10 @@ public class MeshFeatureTests extends AbstractFeatureTest {
 
 	@Test
 	public void voxelization3D() {
+			ops.op("geom.voxelization").input(mesh, 10, 10, 10)
+					.outType(new Nil<RandomAccessibleInterval<BitType>>() {
+
+					}).apply();
 		// https://github.com/imagej/imagej-ops/issues/422
 	}
 }

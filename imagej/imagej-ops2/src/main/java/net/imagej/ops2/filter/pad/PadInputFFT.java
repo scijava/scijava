@@ -44,6 +44,7 @@ import net.imglib2.view.Views;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Abstract Op used to pad the image by extending the borders optionally using
@@ -57,11 +58,6 @@ import org.scijava.ops.spi.OpDependency;
 public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAccessibleInterval<T>, O extends RandomAccessibleInterval<T>>
 		implements Functions.Arity4<I, Dimensions, Boolean, OutOfBoundsFactory<T, RandomAccessibleInterval<T>>, O> {
 
-//	/**
-//	 * The OutOfBoundsFactory used to extend the image
-//	 */
-//	private OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf = null;
-
 	@OpDependency(name = "filter.padIntervalCentered")
 	private BiFunction<I, Dimensions, O> paddingIntervalCentered;
 	
@@ -70,7 +66,7 @@ public abstract class PadInputFFT<T extends ComplexType<T>, I extends RandomAcce
 	@Override
 	@SuppressWarnings("unchecked")
 	public O apply(final I input, final Dimensions paddedDimensions, final Boolean fast,
-			OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
+			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> obf) {
 
 		Dimensions paddedFFTInputDimensions;
 

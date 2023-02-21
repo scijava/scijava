@@ -40,6 +40,7 @@ import net.imglib2.util.Util;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Convolve op for (@link RandomAccessibleInterval)
@@ -52,7 +53,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='filter.linearFilter', priority='-100.'
  */
 public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<O>> {
+		implements Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "filter.fft")
 	private Computers.Arity2<RandomAccessibleInterval<I>, ExecutorService, RandomAccessibleInterval<C>> fftInOp;
@@ -72,21 +73,21 @@ public class FFTMethodsLinearFFTFilterC<I extends RealType<I>, O extends RealTyp
 	/**
 	 * TODO
 	 *
-	 * @param input
+	 * @param in
 	 * @param kernel
-	 * @param fftInput
-	 * @param fftKernel
 	 * @param performInputFFT
 	 * @param performKernelFFT
-	 * @param executorService
+	 * @param es
 	 * @param frequencyOp
-	 * @param output
+	 * @param fftInput (required = false)
+	 * @param fftKernel (required = false)
+	 * @param out
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<I> in, final RandomAccessibleInterval<K> kernel,
-			final RandomAccessibleInterval<C> fftInput, final RandomAccessibleInterval<C> fftKernel,
 			final Boolean performInputFFT, final Boolean performKernelFFT, final ExecutorService es,
 			final Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> frequencyOp,
+			@Optional RandomAccessibleInterval<C> fftInput, @Optional RandomAccessibleInterval<C> fftKernel,
 			final RandomAccessibleInterval<O> out) {
 		final C fftType = Util.getTypeFromInterval(fftInput);
 

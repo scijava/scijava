@@ -45,6 +45,7 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Convolves an image naively (no FFTs).
@@ -92,13 +93,13 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param outOfBoundsFactory
-	 * @param outType
+	 * @param obf (required = false)
+	 * @param outType (required = false)
 	 * @return the output
 	 */
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
-			final RandomAccessibleInterval<K> kernel, OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
+			final RandomAccessibleInterval<K> kernel, @Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obf,
 			final O outType) {
 
 		// conforms only if the kernel is sufficiently small
@@ -107,7 +108,6 @@ public class ConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Nativ
 
 		RandomAccessibleInterval<O> out = createOutput(input, kernel, outType);
 
-		// TODO can we remove this null check?
 		if (obf == null) {
 			obf = new OutOfBoundsConstantValueFactory<>(Util.getTypeFromInterval(input).createVariable());
 		}
@@ -151,7 +151,7 @@ class SimpleConvolveNaiveF<I extends RealType<I>, O extends RealType<O> & Native
 	 * @return the output
 	 */
 	@Override
-	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> t, RandomAccessibleInterval<K> u) {
-		return convolveOp.apply(t, u, null, null);
+	public RandomAccessibleInterval<O> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel) {
+		return convolveOp.apply(input, kernel, null, null);
 	}
 }

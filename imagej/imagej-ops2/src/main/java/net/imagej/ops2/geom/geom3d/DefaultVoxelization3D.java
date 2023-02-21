@@ -45,6 +45,7 @@ import net.imglib2.type.logic.BitType;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.scijava.function.Functions;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * <p>
@@ -62,15 +63,6 @@ import org.scijava.ops.spi.OpDependency;
 public class DefaultVoxelization3D
 		implements Functions.Arity4<Mesh, Integer, Integer, Integer, RandomAccessibleInterval<BitType>> {
 
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
-	// private int width = 10;
-	//
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
-	// private int height = 10;
-	//
-	// @Parameter(itemIO = ItemIO.INPUT, required = false)
-	// private int depth = 10;
-
 	@OpDependency(name = "create.img")
 	private BiFunction<Dimensions, BitType, Img<BitType>> imgCreator;
 
@@ -78,13 +70,13 @@ public class DefaultVoxelization3D
 	 * TODO
 	 *
 	 * @param input
-	 * @param width
-	 * @param height
-	 * @param depth
-	 * @param voxelizedImage
+	 * @param width (required = false)
+	 * @param height (required = false)
+	 * @param depth (required = false)
 	 */
 	@Override
-	public RandomAccessibleInterval<BitType> apply(Mesh input, Integer width, Integer height, Integer depth) {
+	public RandomAccessibleInterval<BitType> apply(final Mesh input,
+			@Optional Integer width, @Optional Integer height, @Optional Integer depth) {
 		if (width == null)
 			width = 10;
 		if (height == null)

@@ -32,10 +32,12 @@ package net.imagej.ops2.filter.median;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.neighborhood.Shape;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
+import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.view.Views;
 
 import org.scijava.function.Computers;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.spi.Optional;
 
 /**
  * Default implementation of {@link MedianFilterOp}.
@@ -58,16 +60,20 @@ public class DefaultMedianFilter<T, V> implements
 	 * TODO
 	 *
 	 * @param input
-	 * @param shape
-	 * @param outOfBoundsFactory
+	 * @param inputNeighborhoodShape
+	 * @param outOfBoundsFactory (required = false)
 	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input, final Shape inputNeighborhoodShape,
-			final OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
+			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBoundsFactory,
 			final RandomAccessibleInterval<V> output) {
-		RandomAccessibleInterval<T> extended = outOfBoundsFactory == null ? input
-			: Views.interval((Views.extend(input, outOfBoundsFactory)), input);
+		if (outOfBoundsFactory == null)
+			outOfBoundsFactory = new OutOfBoundsMirrorFactory<>(
+					OutOfBoundsMirrorFactory.Boundary.SINGLE);
+
+		RandomAccessibleInterval<T> extended = Views.interval((Views.extend(input,
+				outOfBoundsFactory)), input);
 		mapper.compute(extended, inputNeighborhoodShape, statsOp, output);
 	}
 

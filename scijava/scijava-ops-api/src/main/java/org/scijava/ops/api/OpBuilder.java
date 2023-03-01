@@ -68,67 +68,67 @@ public class OpBuilder {
 	/** Specifies the op accepts no inputs&mdash;i.e., a nullary op. */
 	public Arity0 arity0() { return new Arity0(); }
 
-	/** Specifies 1 input. */
+	/** Specifies the op has 1 input. */
 	public Arity1 arity1() { return new Arity1(); }
 
 
-	/** Specifies 2 inputs. */
+	/** Specifies the op has 2 inputs. */
 	public Arity2 arity2() { return new Arity2(); }
 
 
-	/** Specifies 3 inputs. */
+	/** Specifies the op has 3 inputs. */
 	public Arity3 arity3() { return new Arity3(); }
 
 
-	/** Specifies 4 inputs. */
+	/** Specifies the op has 4 inputs. */
 	public Arity4 arity4() { return new Arity4(); }
 
 
-	/** Specifies 5 inputs. */
+	/** Specifies the op has 5 inputs. */
 	public Arity5 arity5() { return new Arity5(); }
 
 
-	/** Specifies 6 inputs. */
+	/** Specifies the op has 6 inputs. */
 	public Arity6 arity6() { return new Arity6(); }
 
 
-	/** Specifies 7 inputs. */
+	/** Specifies the op has 7 inputs. */
 	public Arity7 arity7() { return new Arity7(); }
 
 
-	/** Specifies 8 inputs. */
+	/** Specifies the op has 8 inputs. */
 	public Arity8 arity8() { return new Arity8(); }
 
 
-	/** Specifies 9 inputs. */
+	/** Specifies the op has 9 inputs. */
 	public Arity9 arity9() { return new Arity9(); }
 
 
-	/** Specifies 10 inputs. */
+	/** Specifies the op has 10 inputs. */
 	public Arity10 arity10() { return new Arity10(); }
 
 
-	/** Specifies 11 inputs. */
+	/** Specifies the op has 11 inputs. */
 	public Arity11 arity11() { return new Arity11(); }
 
 
-	/** Specifies 12 inputs. */
+	/** Specifies the op has 12 inputs. */
 	public Arity12 arity12() { return new Arity12(); }
 
 
-	/** Specifies 13 inputs. */
+	/** Specifies the op has 13 inputs. */
 	public Arity13 arity13() { return new Arity13(); }
 
 
-	/** Specifies 14 inputs. */
+	/** Specifies the op has 14 inputs. */
 	public Arity14 arity14() { return new Arity14(); }
 
 
-	/** Specifies 15 inputs. */
+	/** Specifies the op has 15 inputs. */
 	public Arity15 arity15() { return new Arity15(); }
 
 
-	/** Specifies 16 inputs. */
+	/** Specifies the op has 16 inputs. */
 	public Arity16 arity16() { return new Arity16(); }
 
 
@@ -191,18 +191,32 @@ public class OpBuilder {
 	 */
 	public final class Arity0 {
 
+		/**
+		 * Match a {@link org.scijava.function.Computers} op that can use the given pre-allocated output instance.
+		 */
 		public <O> Arity0_OV<O> output(final O out) {
 			return new Arity0_OV<>(out);
 		}
 
+		/**
+		 * Match an op using the indicated output class.
+		 */
 		public <O> Arity0_OT<O> outType(final Class<O> outType) {
 			return outType(Nil.of(outType));
 		}
 
+		/**
+		 * Match an op using the indicated output class, with generic parameter(s) preserved.
+		 */
 		public <O> Arity0_OT<O> outType(final Nil<O> outType) {
 			return new Arity0_OT<>(outType);
 		}
 
+		/**
+		 * Match a type-unsafe {@link org.scijava.function.Producer} op.
+		 *
+		 * @see #outType
+		 */
 		public Producer<?> producer() {
 			final Nil<Producer<Object>> specialType = new Nil<>() {
 
@@ -216,6 +230,11 @@ public class OpBuilder {
 				Object.class));
 		}
 
+		/**
+		 * As {@link #producer} but using the provided {@code Hints}.
+		 *
+		 * @see #outType
+		 */
 		public Producer<?> producer(final Hints hints) {
 			final Nil<Producer<Object>> specialType = new Nil<>() {
 
@@ -229,10 +248,22 @@ public class OpBuilder {
 				Object.class, hints));
 		}
 
+		/**
+		 * Directly run this type-unsafe {@link org.scijava.function.Producer} op and get its output.
+		 *
+		 * @see #producer
+		 * @return The {@code Object} created by this op
+		 */
 		public Object create() {
 			return producer().create();
 		}
 
+		/**
+		 * As {@link #create} but using the provided {@code Hints}.
+		 *
+		 * @see #producer
+		 * @return The {@code Object} created by this op
+		 */
 		public Object create(final Hints hints) {
 			return producer(hints).create();
 		}
@@ -252,6 +283,9 @@ public class OpBuilder {
 			this.outType = outType;
 		}
 
+		/**
+		 * Match a type-safe {@link org.scijava.function.Producer} op.
+		 */
 		public Producer<O> producer() {
 			final Nil<Producer<O>> specialType = new Nil<>() {
 
@@ -264,6 +298,9 @@ public class OpBuilder {
 			return env.op(opName, specialType, new Nil<?>[0], outType);
 		}
 
+		/**
+		 * As {@link #producer} but with the provided {@code Hints}.
+		 */
 		public Producer<O> producer(final Hints hints) {
 			final Nil<Producer<O>> specialType = new Nil<>() {
 
@@ -276,22 +313,38 @@ public class OpBuilder {
 			return env.op(opName, specialType, new Nil<?>[0], outType, hints);
 		}
 
+		/**
+		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, outType);
 		}
 
-		public O create() {
-			return producer().create();
-		}
-
+		/**
+		 * As {@link #computer} but using the provided {@code Hints}.
+		 */
 		public Computers.Arity0<O> computer(Hints hints) {
 			return matchComputer(env, opName, outType, hints);
 		}
 
+		/**
+		 * Directly run this {@link org.scijava.function.Producer} op and get its output.
+		 *
+		 * @see #producer
+		 * @return The {@code O} created by this op
+		 */
+		public O create() {
+			return producer().create();
+		}
+
+		/**
+		 * As {@link #create} but using the provided {@code Hints}.
+		 *
+		 * @return The {@code O} created by this op
+		 */
 		public O create(Hints hints) {
 			return producer(hints).create();
 		}
-
 	}
 
 	/**
@@ -308,18 +361,32 @@ public class OpBuilder {
 			this.out = out;
 		}
 
+		/**
+		 * @return An instance of the matched {@link org.scijava.function.Computers} op, e.g. for reuse.
+		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, type(out));
 		}
 
-		public void compute() {
-			computer().compute(out);
-		}
-
+		/**
+		 * As {@link #computer} but using the provided {@code Hints}.
+		 */
 		public Computers.Arity0<O> computer(final Hints hints) {
 			return matchComputer(env, opName, type(out), hints);
 		}
 
+		/**
+		 * Directly run the matched op on the provided output container.
+		 *
+		 * @see #computer
+		 */
+		public void compute() {
+			computer().compute(out);
+		}
+
+		/**
+		 * As {@link #compute} but using the provided {@code Hints}.
+		 */
 		public void compute(final Hints hints) {
 			computer(hints).compute(out);
 		}

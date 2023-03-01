@@ -65,11 +65,11 @@ public class OpBuilder {
 		this.opName = opName;
 	}
 
-	/** Specifies the op accepts no inputs&mdash;i.e., a nullary op. */
+	/** Specifies an op that accepts no inputs&mdash;i.e., a nullary op. */
 	public Arity0 arity0() { return new Arity0(); }
 
 #foreach($arity in $arities)
-	/** Specifies $arity input#if ( $arity > 1)s#end. */
+	/** Specifies an op with $arity input#if ( $arity > 1)s#end. */
 	public Arity${arity} arity${arity}() { return new Arity${arity}(); }
 
 
@@ -133,18 +133,50 @@ public class OpBuilder {
 	 */
 	public final class Arity0 {
 
+		/**
+		 * Match a {@link org.scijava.function.Computers} op that can use the given pre-allocated output instance.
+		 *
+		 * @see #create
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 * @see #producer
+		 */
 		public <O> Arity0_OV<O> output(final O out) {
 			return new Arity0_OV<>(out);
 		}
 
+		/**
+		 * Match an op using the indicated output class.
+		 *
+		 * @see #create
+		 * @see #output
+		 * @see #[[#outType(Nil)]]#
+		 * @see #producer
+		 */
 		public <O> Arity0_OT<O> outType(final Class<O> outType) {
 			return outType(Nil.of(outType));
 		}
 
+		/**
+		 * Match an op using the indicated output class, with generic parameter(s) preserved.
+		 *
+		 * @see #create
+		 * @see #output
+		 * @see #outType
+		 * @see #producer
+		 */
 		public <O> Arity0_OT<O> outType(final Nil<O> outType) {
 			return new Arity0_OT<>(outType);
 		}
 
+		/**
+		 * Match a type-unsafe {@link org.scijava.function.Producer} op.
+		 *
+		 * @see #create
+		 * @see #output
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 */
 		public Producer<?> producer() {
 			final Nil<Producer<Object>> specialType = new Nil<>() {
 
@@ -158,6 +190,9 @@ public class OpBuilder {
 				Object.class));
 		}
 
+		/**
+		 * As {@link #producer}, but match using the provided {@code Hints}.
+		 */
 		public Producer<?> producer(final Hints hints) {
 			final Nil<Producer<Object>> specialType = new Nil<>() {
 
@@ -171,10 +206,23 @@ public class OpBuilder {
 				Object.class, hints));
 		}
 
+		/**
+		 * Directly run the matched type-unsafe {@link org.scijava.function.Producer} op and get its output.
+		 *
+		 * @see #output
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 * @see #producer
+		 *
+		 * @return The {@code Object} created by this op
+		 */
 		public Object create() {
 			return producer().create();
 		}
 
+		/**
+		 * As {@link #create}, but match using the provided {@code Hints}.
+		 */
 		public Object create(final Hints hints) {
 			return producer(hints).create();
 		}
@@ -194,6 +242,12 @@ public class OpBuilder {
 			this.outType = outType;
 		}
 
+		/**
+		 * Match a type-safe {@link org.scijava.function.Producer} op.
+		 *
+		 * @see #computer
+		 * @see #create
+		 */
 		public Producer<O> producer() {
 			final Nil<Producer<O>> specialType = new Nil<>() {
 
@@ -206,6 +260,9 @@ public class OpBuilder {
 			return env.op(opName, specialType, new Nil<?>[0], outType);
 		}
 
+		/**
+		 * As {@link #producer}, but match with the provided {@code Hints}.
+		 */
 		public Producer<O> producer(final Hints hints) {
 			final Nil<Producer<O>> specialType = new Nil<>() {
 
@@ -218,22 +275,43 @@ public class OpBuilder {
 			return env.op(opName, specialType, new Nil<?>[0], outType, hints);
 		}
 
+		/**
+		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 *
+		 * @see #create
+		 * @see #producer
+		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, outType);
 		}
 
-		public O create() {
-			return producer().create();
-		}
-
+		/**
+		 * As {@link #computer}, but match using the provided {@code Hints}.
+		 */
 		public Computers.Arity0<O> computer(Hints hints) {
 			return matchComputer(env, opName, outType, hints);
 		}
 
+		/**
+		 * Directly run the matched {@link org.scijava.function.Producer} op and get its output.
+		 *
+		 * @see #computer
+		 * @see #producer
+		 *
+		 * @return The {@code O} created by this op
+		 */
+		public O create() {
+			return producer().create();
+		}
+
+		/**
+		 * As {@link #create}, but match using the provided {@code Hints}.
+		 *
+		 * @return The {@code O} created by this op
+		 */
 		public O create(Hints hints) {
 			return producer(hints).create();
 		}
-
 	}
 
 	/**
@@ -250,18 +328,34 @@ public class OpBuilder {
 			this.out = out;
 		}
 
+		/**
+		 * @return An instance of the matched {@link org.scijava.function.Computers} op, e.g. for reuse.
+		 *
+		 * @see #compute
+		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, type(out));
 		}
 
-		public void compute() {
-			computer().compute(out);
-		}
-
+		/**
+		 * As {@link #computer}, but match using the provided {@code Hints}.
+		 */
 		public Computers.Arity0<O> computer(final Hints hints) {
 			return matchComputer(env, opName, type(out), hints);
 		}
 
+		/**
+		 * Directly run the matched op on the provided output container.
+		 *
+		 * @see #computer
+		 */
+		public void compute() {
+			computer().compute(out);
+		}
+
+		/**
+		 * As {@link #compute}, but match using the provided {@code Hints}.
+		 */
 		public void compute(final Hints hints) {
 			computer(hints).compute(out);
 		}

@@ -66,28 +66,12 @@ public class OpBuilder {
 	}
 
 	/** Specifies the op accepts no inputs&mdash;i.e., a nullary op. */
-	public Arity0_OU input() {
-		return new Arity0_OU();
-	}
+	public Arity0 arity0() { return new Arity0(); }
 
 #foreach($arity in $arities)
-	/** Specifies $arity input by value. */
-	public $genericsWithoutOutput.call($arity) Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) input($inputObjectsArgs.call($arity))
-	{
-		return new Arity${arity}_IV_OU<>($inputObjects.call($arity));
-	}
+	/** Specifies $arity input#if ( $arity > 1)s#end. */
+	public Arity${arity} arity${arity}() { return new Arity${arity}(); }
 
-	/** Specifies $arity input by raw type. */
-	public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputClassesArgs.call($arity))
-	{
-		return inType($inputClassesToTypes.call($arity));
-	}
-
-	/** Specifies $arity input by generic type. */
-	public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputTypesArgs.call($arity))
-	{
-		return new Arity${arity}_IT_OU<>($inputTypes.call($arity));
-	}
 
 #end
 	// -- Helper methods --
@@ -147,7 +131,7 @@ public class OpBuilder {
 	 *
 	 * @author Curtis Rueden
 	 */
-	public final class Arity0_OU {
+	public final class Arity0 {
 
 		public <O> Arity0_OV<O> output(final O out) {
 			return new Arity0_OV<>(out);
@@ -283,6 +267,37 @@ public class OpBuilder {
 		}
 
 	}
+
+#foreach($arity in $arities)
+
+	/**
+	 * Builder with arity $arity, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity${arity} {
+
+		/** Specifies $arity input#if ( $arity > 1)s#end by value. */
+		public $genericsWithoutOutput.call($arity) Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) input($inputObjectsArgs.call($arity))
+		{
+			return new Arity${arity}_IV_OU<>($inputObjects.call($arity));
+		}
+
+		/** Specifies $arity input#if ( $arity > 1)s#end by raw type. */
+		public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputClassesArgs.call($arity))
+		{
+			return inType($inputClassesToTypes.call($arity));
+		}
+
+		/** Specifies $arity input#if ( $arity > 1)s#end by generic type. */
+		public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputTypesArgs.call($arity))
+		{
+			return new Arity${arity}_IT_OU<>($inputTypes.call($arity));
+		}
+
+	}
+#end
+
 
 #foreach($arity in $arities)
 	/**

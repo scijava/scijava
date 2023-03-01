@@ -66,297 +66,71 @@ public class OpBuilder {
 	}
 
 	/** Specifies the op accepts no inputs&mdash;i.e., a nullary op. */
-	public Arity0_OU input() {
-		return new Arity0_OU();
-	}
+	public Arity0 arity0() { return new Arity0(); }
 
-	/** Specifies 1 input by value. */
-	public <I1> Arity1_IV_OU<I1> input(final I1 in1)
-	{
-		return new Arity1_IV_OU<>(in1);
-	}
+	/** Specifies 1 input. */
+	public Arity1 arity1() { return new Arity1(); }
 
-	/** Specifies 1 input by raw type. */
-	public <I1> Arity1_IT_OU<I1> inType(final Class<I1> in1Class)
-	{
-		return inType(Nil.of(in1Class));
-	}
 
-	/** Specifies 1 input by generic type. */
-	public <I1> Arity1_IT_OU<I1> inType(final Nil<I1> in1Type)
-	{
-		return new Arity1_IT_OU<>(in1Type);
-	}
+	/** Specifies 2 inputs. */
+	public Arity2 arity2() { return new Arity2(); }
 
-	/** Specifies 2 input by value. */
-	public <I1, I2> Arity2_IV_OU<I1, I2> input(final I1 in1, final I2 in2)
-	{
-		return new Arity2_IV_OU<>(in1, in2);
-	}
 
-	/** Specifies 2 input by raw type. */
-	public <I1, I2> Arity2_IT_OU<I1, I2> inType(final Class<I1> in1Class, final Class<I2> in2Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class));
-	}
+	/** Specifies 3 inputs. */
+	public Arity3 arity3() { return new Arity3(); }
 
-	/** Specifies 2 input by generic type. */
-	public <I1, I2> Arity2_IT_OU<I1, I2> inType(final Nil<I1> in1Type, final Nil<I2> in2Type)
-	{
-		return new Arity2_IT_OU<>(in1Type, in2Type);
-	}
 
-	/** Specifies 3 input by value. */
-	public <I1, I2, I3> Arity3_IV_OU<I1, I2, I3> input(final I1 in1, final I2 in2, final I3 in3)
-	{
-		return new Arity3_IV_OU<>(in1, in2, in3);
-	}
+	/** Specifies 4 inputs. */
+	public Arity4 arity4() { return new Arity4(); }
 
-	/** Specifies 3 input by raw type. */
-	public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class));
-	}
 
-	/** Specifies 3 input by generic type. */
-	public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type)
-	{
-		return new Arity3_IT_OU<>(in1Type, in2Type, in3Type);
-	}
+	/** Specifies 5 inputs. */
+	public Arity5 arity5() { return new Arity5(); }
 
-	/** Specifies 4 input by value. */
-	public <I1, I2, I3, I4> Arity4_IV_OU<I1, I2, I3, I4> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4)
-	{
-		return new Arity4_IV_OU<>(in1, in2, in3, in4);
-	}
 
-	/** Specifies 4 input by raw type. */
-	public <I1, I2, I3, I4> Arity4_IT_OU<I1, I2, I3, I4> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class));
-	}
+	/** Specifies 6 inputs. */
+	public Arity6 arity6() { return new Arity6(); }
 
-	/** Specifies 4 input by generic type. */
-	public <I1, I2, I3, I4> Arity4_IT_OU<I1, I2, I3, I4> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type)
-	{
-		return new Arity4_IT_OU<>(in1Type, in2Type, in3Type, in4Type);
-	}
 
-	/** Specifies 5 input by value. */
-	public <I1, I2, I3, I4, I5> Arity5_IV_OU<I1, I2, I3, I4, I5> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5)
-	{
-		return new Arity5_IV_OU<>(in1, in2, in3, in4, in5);
-	}
+	/** Specifies 7 inputs. */
+	public Arity7 arity7() { return new Arity7(); }
 
-	/** Specifies 5 input by raw type. */
-	public <I1, I2, I3, I4, I5> Arity5_IT_OU<I1, I2, I3, I4, I5> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class));
-	}
 
-	/** Specifies 5 input by generic type. */
-	public <I1, I2, I3, I4, I5> Arity5_IT_OU<I1, I2, I3, I4, I5> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type)
-	{
-		return new Arity5_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type);
-	}
+	/** Specifies 8 inputs. */
+	public Arity8 arity8() { return new Arity8(); }
 
-	/** Specifies 6 input by value. */
-	public <I1, I2, I3, I4, I5, I6> Arity6_IV_OU<I1, I2, I3, I4, I5, I6> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6)
-	{
-		return new Arity6_IV_OU<>(in1, in2, in3, in4, in5, in6);
-	}
 
-	/** Specifies 6 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6> Arity6_IT_OU<I1, I2, I3, I4, I5, I6> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class));
-	}
+	/** Specifies 9 inputs. */
+	public Arity9 arity9() { return new Arity9(); }
 
-	/** Specifies 6 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6> Arity6_IT_OU<I1, I2, I3, I4, I5, I6> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
-	{
-		return new Arity6_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
-	}
 
-	/** Specifies 7 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7> Arity7_IV_OU<I1, I2, I3, I4, I5, I6, I7> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7)
-	{
-		return new Arity7_IV_OU<>(in1, in2, in3, in4, in5, in6, in7);
-	}
+	/** Specifies 10 inputs. */
+	public Arity10 arity10() { return new Arity10(); }
 
-	/** Specifies 7 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7> Arity7_IT_OU<I1, I2, I3, I4, I5, I6, I7> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class));
-	}
 
-	/** Specifies 7 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7> Arity7_IT_OU<I1, I2, I3, I4, I5, I6, I7> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
-	{
-		return new Arity7_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
-	}
+	/** Specifies 11 inputs. */
+	public Arity11 arity11() { return new Arity11(); }
 
-	/** Specifies 8 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8> Arity8_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8)
-	{
-		return new Arity8_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8);
-	}
 
-	/** Specifies 8 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8> Arity8_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class));
-	}
+	/** Specifies 12 inputs. */
+	public Arity12 arity12() { return new Arity12(); }
 
-	/** Specifies 8 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8> Arity8_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
-	{
-		return new Arity8_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
-	}
 
-	/** Specifies 9 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9)
-	{
-		return new Arity9_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9);
-	}
+	/** Specifies 13 inputs. */
+	public Arity13 arity13() { return new Arity13(); }
 
-	/** Specifies 9 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class));
-	}
 
-	/** Specifies 9 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
-	{
-		return new Arity9_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
-	}
+	/** Specifies 14 inputs. */
+	public Arity14 arity14() { return new Arity14(); }
 
-	/** Specifies 10 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10)
-	{
-		return new Arity10_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
-	}
 
-	/** Specifies 10 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class));
-	}
+	/** Specifies 15 inputs. */
+	public Arity15 arity15() { return new Arity15(); }
 
-	/** Specifies 10 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
-	{
-		return new Arity10_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
-	}
 
-	/** Specifies 11 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11)
-	{
-		return new Arity11_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
-	}
+	/** Specifies 16 inputs. */
+	public Arity16 arity16() { return new Arity16(); }
 
-	/** Specifies 11 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class));
-	}
-
-	/** Specifies 11 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
-	{
-		return new Arity11_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
-	}
-
-	/** Specifies 12 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12)
-	{
-		return new Arity12_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
-	}
-
-	/** Specifies 12 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class));
-	}
-
-	/** Specifies 12 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
-	{
-		return new Arity12_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
-	}
-
-	/** Specifies 13 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13)
-	{
-		return new Arity13_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
-	}
-
-	/** Specifies 13 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class));
-	}
-
-	/** Specifies 13 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
-	{
-		return new Arity13_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
-	}
-
-	/** Specifies 14 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14)
-	{
-		return new Arity14_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
-	}
-
-	/** Specifies 14 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class, final Class<I14> in14Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class), Nil.of(in14Class));
-	}
-
-	/** Specifies 14 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
-	{
-		return new Arity14_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
-	}
-
-	/** Specifies 15 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15)
-	{
-		return new Arity15_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
-	}
-
-	/** Specifies 15 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class, final Class<I14> in14Class, final Class<I15> in15Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class), Nil.of(in14Class), Nil.of(in15Class));
-	}
-
-	/** Specifies 15 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
-	{
-		return new Arity15_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
-	}
-
-	/** Specifies 16 input by value. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16)
-	{
-		return new Arity16_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
-	}
-
-	/** Specifies 16 input by raw type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class, final Class<I14> in14Class, final Class<I15> in15Class, final Class<I16> in16Class)
-	{
-		return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class), Nil.of(in14Class), Nil.of(in15Class), Nil.of(in16Class));
-	}
-
-	/** Specifies 16 input by generic type. */
-	public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
-	{
-		return new Arity16_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
-	}
 
 	// -- Helper methods --
 
@@ -415,7 +189,7 @@ public class OpBuilder {
 	 *
 	 * @author Curtis Rueden
 	 */
-	public final class Arity0_OU {
+	public final class Arity0 {
 
 		public <O> Arity0_OV<O> output(final O out) {
 			return new Arity0_OV<>(out);
@@ -551,6 +325,440 @@ public class OpBuilder {
 		}
 
 	}
+
+
+	/**
+	 * Builder with arity 1, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity1 {
+
+		/** Specifies 1 input by value. */
+		public <I1> Arity1_IV_OU<I1> input(final I1 in1)
+		{
+			return new Arity1_IV_OU<>(in1);
+		}
+
+		/** Specifies 1 input by raw type. */
+		public <I1> Arity1_IT_OU<I1> inType(final Class<I1> in1Class)
+		{
+			return inType(Nil.of(in1Class));
+		}
+
+		/** Specifies 1 input by generic type. */
+		public <I1> Arity1_IT_OU<I1> inType(final Nil<I1> in1Type)
+		{
+			return new Arity1_IT_OU<>(in1Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 2, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity2 {
+
+		/** Specifies 2 inputs by value. */
+		public <I1, I2> Arity2_IV_OU<I1, I2> input(final I1 in1, final I2 in2)
+		{
+			return new Arity2_IV_OU<>(in1, in2);
+		}
+
+		/** Specifies 2 inputs by raw type. */
+		public <I1, I2> Arity2_IT_OU<I1, I2> inType(final Class<I1> in1Class, final Class<I2> in2Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class));
+		}
+
+		/** Specifies 2 inputs by generic type. */
+		public <I1, I2> Arity2_IT_OU<I1, I2> inType(final Nil<I1> in1Type, final Nil<I2> in2Type)
+		{
+			return new Arity2_IT_OU<>(in1Type, in2Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 3, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity3 {
+
+		/** Specifies 3 inputs by value. */
+		public <I1, I2, I3> Arity3_IV_OU<I1, I2, I3> input(final I1 in1, final I2 in2, final I3 in3)
+		{
+			return new Arity3_IV_OU<>(in1, in2, in3);
+		}
+
+		/** Specifies 3 inputs by raw type. */
+		public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class));
+		}
+
+		/** Specifies 3 inputs by generic type. */
+		public <I1, I2, I3> Arity3_IT_OU<I1, I2, I3> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type)
+		{
+			return new Arity3_IT_OU<>(in1Type, in2Type, in3Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 4, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity4 {
+
+		/** Specifies 4 inputs by value. */
+		public <I1, I2, I3, I4> Arity4_IV_OU<I1, I2, I3, I4> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4)
+		{
+			return new Arity4_IV_OU<>(in1, in2, in3, in4);
+		}
+
+		/** Specifies 4 inputs by raw type. */
+		public <I1, I2, I3, I4> Arity4_IT_OU<I1, I2, I3, I4> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class));
+		}
+
+		/** Specifies 4 inputs by generic type. */
+		public <I1, I2, I3, I4> Arity4_IT_OU<I1, I2, I3, I4> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type)
+		{
+			return new Arity4_IT_OU<>(in1Type, in2Type, in3Type, in4Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 5, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity5 {
+
+		/** Specifies 5 inputs by value. */
+		public <I1, I2, I3, I4, I5> Arity5_IV_OU<I1, I2, I3, I4, I5> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5)
+		{
+			return new Arity5_IV_OU<>(in1, in2, in3, in4, in5);
+		}
+
+		/** Specifies 5 inputs by raw type. */
+		public <I1, I2, I3, I4, I5> Arity5_IT_OU<I1, I2, I3, I4, I5> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class));
+		}
+
+		/** Specifies 5 inputs by generic type. */
+		public <I1, I2, I3, I4, I5> Arity5_IT_OU<I1, I2, I3, I4, I5> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type)
+		{
+			return new Arity5_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 6, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity6 {
+
+		/** Specifies 6 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6> Arity6_IV_OU<I1, I2, I3, I4, I5, I6> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6)
+		{
+			return new Arity6_IV_OU<>(in1, in2, in3, in4, in5, in6);
+		}
+
+		/** Specifies 6 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6> Arity6_IT_OU<I1, I2, I3, I4, I5, I6> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class));
+		}
+
+		/** Specifies 6 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6> Arity6_IT_OU<I1, I2, I3, I4, I5, I6> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type)
+		{
+			return new Arity6_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 7, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity7 {
+
+		/** Specifies 7 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7> Arity7_IV_OU<I1, I2, I3, I4, I5, I6, I7> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7)
+		{
+			return new Arity7_IV_OU<>(in1, in2, in3, in4, in5, in6, in7);
+		}
+
+		/** Specifies 7 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7> Arity7_IT_OU<I1, I2, I3, I4, I5, I6, I7> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class));
+		}
+
+		/** Specifies 7 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7> Arity7_IT_OU<I1, I2, I3, I4, I5, I6, I7> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type)
+		{
+			return new Arity7_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 8, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity8 {
+
+		/** Specifies 8 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8> Arity8_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8)
+		{
+			return new Arity8_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8);
+		}
+
+		/** Specifies 8 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8> Arity8_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class));
+		}
+
+		/** Specifies 8 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8> Arity8_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type)
+		{
+			return new Arity8_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 9, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity9 {
+
+		/** Specifies 9 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9)
+		{
+			return new Arity9_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9);
+		}
+
+		/** Specifies 9 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class));
+		}
+
+		/** Specifies 9 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9> Arity9_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type)
+		{
+			return new Arity9_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 10, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity10 {
+
+		/** Specifies 10 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10)
+		{
+			return new Arity10_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10);
+		}
+
+		/** Specifies 10 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class));
+		}
+
+		/** Specifies 10 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> Arity10_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type)
+		{
+			return new Arity10_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 11, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity11 {
+
+		/** Specifies 11 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11)
+		{
+			return new Arity11_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11);
+		}
+
+		/** Specifies 11 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class));
+		}
+
+		/** Specifies 11 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> Arity11_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type)
+		{
+			return new Arity11_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 12, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity12 {
+
+		/** Specifies 12 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12)
+		{
+			return new Arity12_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12);
+		}
+
+		/** Specifies 12 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class));
+		}
+
+		/** Specifies 12 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> Arity12_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type)
+		{
+			return new Arity12_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 13, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity13 {
+
+		/** Specifies 13 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13)
+		{
+			return new Arity13_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13);
+		}
+
+		/** Specifies 13 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class));
+		}
+
+		/** Specifies 13 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> Arity13_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type)
+		{
+			return new Arity13_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 14, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity14 {
+
+		/** Specifies 14 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14)
+		{
+			return new Arity14_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14);
+		}
+
+		/** Specifies 14 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class, final Class<I14> in14Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class), Nil.of(in14Class));
+		}
+
+		/** Specifies 14 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> Arity14_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type)
+		{
+			return new Arity14_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 15, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity15 {
+
+		/** Specifies 15 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15)
+		{
+			return new Arity15_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15);
+		}
+
+		/** Specifies 15 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class, final Class<I14> in14Class, final Class<I15> in15Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class), Nil.of(in14Class), Nil.of(in15Class));
+		}
+
+		/** Specifies 15 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> Arity15_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type)
+		{
+			return new Arity15_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type);
+		}
+
+	}
+
+	/**
+	 * Builder with arity 16, no input or output information provided.
+	 *
+	 * @author Mark Hiner
+	 */
+	public final class Arity16 {
+
+		/** Specifies 16 inputs by value. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> input(final I1 in1, final I2 in2, final I3 in3, final I4 in4, final I5 in5, final I6 in6, final I7 in7, final I8 in8, final I9 in9, final I10 in10, final I11 in11, final I12 in12, final I13 in13, final I14 in14, final I15 in15, final I16 in16)
+		{
+			return new Arity16_IV_OU<>(in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15, in16);
+		}
+
+		/** Specifies 16 inputs by raw type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inType(final Class<I1> in1Class, final Class<I2> in2Class, final Class<I3> in3Class, final Class<I4> in4Class, final Class<I5> in5Class, final Class<I6> in6Class, final Class<I7> in7Class, final Class<I8> in8Class, final Class<I9> in9Class, final Class<I10> in10Class, final Class<I11> in11Class, final Class<I12> in12Class, final Class<I13> in13Class, final Class<I14> in14Class, final Class<I15> in15Class, final Class<I16> in16Class)
+		{
+			return inType(Nil.of(in1Class), Nil.of(in2Class), Nil.of(in3Class), Nil.of(in4Class), Nil.of(in5Class), Nil.of(in6Class), Nil.of(in7Class), Nil.of(in8Class), Nil.of(in9Class), Nil.of(in10Class), Nil.of(in11Class), Nil.of(in12Class), Nil.of(in13Class), Nil.of(in14Class), Nil.of(in15Class), Nil.of(in16Class));
+		}
+
+		/** Specifies 16 inputs by generic type. */
+		public <I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> Arity16_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> inType(final Nil<I1> in1Type, final Nil<I2> in2Type, final Nil<I3> in3Type, final Nil<I4> in4Type, final Nil<I5> in5Type, final Nil<I6> in6Type, final Nil<I7> in7Type, final Nil<I8> in8Type, final Nil<I9> in9Type, final Nil<I10> in10Type, final Nil<I11> in11Type, final Nil<I12> in12Type, final Nil<I13> in13Type, final Nil<I14> in14Type, final Nil<I15> in15Type, final Nil<I16> in16Type)
+		{
+			return new Arity16_IT_OU<>(in1Type, in2Type, in3Type, in4Type, in5Type, in6Type, in7Type, in8Type, in9Type, in10Type, in11Type, in12Type, in13Type, in14Type, in15Type, in16Type);
+		}
+
+	}
+
 
 	/**
 	 * Builder with arity 1, input type given, output type given.

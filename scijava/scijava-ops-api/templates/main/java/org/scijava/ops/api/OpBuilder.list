@@ -88,7 +88,7 @@ inplaceClass = ```
 matchName = ```
 { arity, num ->
   arity == 1 ? "matchInplace" :
-  "matchInplace${num}"
+  "matchInplace${arity}_${num}"
 }
 ```
 inplaceTypeVarNums = ```

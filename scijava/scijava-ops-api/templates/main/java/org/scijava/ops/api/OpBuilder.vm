@@ -371,19 +371,34 @@ public class OpBuilder {
 	 */
 	public final class Arity${arity} {
 
-		/** Specifies $arity input#if ( $arity > 1)s#end by value. */
+		/**
+		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input value.
+		 *
+		 * @see #inType
+		 * @see #[[#inType]]#(#foreach( $i in [1..$arity] )Nil#if( $arity > 1 && $i < $arity ), #end#end)
+		 */
 		public $genericsWithoutOutput.call($arity) Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) input($inputObjectsArgs.call($arity))
 		{
 			return new Arity${arity}_IV_OU<>($inputObjects.call($arity));
 		}
 
-		/** Specifies $arity input#if ( $arity > 1)s#end by raw type. */
+		/**
+		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input type.
+		 *
+		 * @see #input
+		 * @see #[[#inType]]#(#foreach( $i in [1..$arity] )Nil#if( $arity > 1 && $i < $arity ), #end#end)
+		 */
 		public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputClassesArgs.call($arity))
 		{
 			return inType($inputClassesToTypes.call($arity));
 		}
 
-		/** Specifies $arity input#if ( $arity > 1)s#end by generic type. */
+		/**
+		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input type with generics preserved.
+		 *
+		 * @see #input
+		 * @see #inType
+		 */
 		public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputTypesArgs.call($arity))
 		{
 			return new Arity${arity}_IT_OU<>($inputTypes.call($arity));

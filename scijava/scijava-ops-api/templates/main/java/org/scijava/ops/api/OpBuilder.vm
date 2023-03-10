@@ -816,18 +816,34 @@ public class OpBuilder {
 			this.out = out;
 		}
 
+		/**
+		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 *
+		 * @see #compute
+		 */
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out));
 		}
 
-		public void compute() {
-			computer().compute($inputObjects.call($arity), out);
-		}
-
+		/**
+		 * As {@link #computer}, but match using the provided {@code Hints}.
+		 */
 		public Computers.Arity${arity}${generics.call($arity)} computer(final Hints hints) {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out), hints);
 		}
 
+		/**
+		 * Directly run the matched {@link org.scijava.function.Computers} op using the provided pre-allocated output.
+		 *
+		 * @see #computer
+		 */
+		public void compute() {
+			computer().compute($inputObjects.call($arity), out);
+		}
+
+		/**
+		 * As {@link #compute}, but match using the provided {@code Hints}.
+		 */
 		public void compute(final Hints hints) {
 			computer(hints).compute($inputObjects.call($arity), out);
 		}

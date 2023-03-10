@@ -576,29 +576,59 @@ public class OpBuilder {
 			this.outType = outType;
 		}
 
+		/**
+		 * Match a {@link org.scijava.function.Functions} op to produce an output of the previously-specified type.
+		 *
+		 * @see #apply
+		 * @see #computer
+		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType);
 		}
 	
+		/**
+		 * As {@link #function}, but match using the provided {@code Hints}.
+		 */
 		public $functionArity.call($arity)$generics.call($arity) function(final Hints hints) {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
 		}
 	
+		/**
+		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 *
+		 * @see #apply
+		 * @see #function
+		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType);
 		}
 
+		/**
+		 * As {@link #computer}, but match using the provided {@code Hints}.
+		 */
 		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
 		}
 	
+		/**
+		 * Directly run the matched {@link org.scijava.function.Functions} op and get its output.
+		 *
+		 * @see #computer
+		 * @see #function
+		 *
+		 * @return The output of this function
+		 */
 		public O apply() {
 			return function().apply($inputObjects.call($arity));
 		}
 
+		/**
+		 * As {@link #apply}, but match using the provided {@code Hints}.
+		 */
 		public O apply(final Hints hints) {
 			return function(hints).apply($inputObjects.call($arity));
 		}
+
 	}
 
 	/**

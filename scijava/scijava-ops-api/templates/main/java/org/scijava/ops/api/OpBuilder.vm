@@ -652,56 +652,140 @@ public class OpBuilder {
 #end
 		}
 
+		/**
+		 * Match a {@link org.scijava.function.Computers} op that can use the given pre-allocated output instance.
+		 *
+		 * @see #apply
+		 * @see #function
+		 * @see #inplace#if ( $arity > 1 )1#end
+		 * @see #mutate#if ( $arity > 1 )1#end
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 */
 		public <O> Arity${arity}_IV_OV$generics.call($arity) output(final O out) {
 			checkComputerRefs($inputObjects.call($arity), out);
 			return new Arity${arity}_IV_OV<>($inputObjects.call($arity), out);
 		}
 
+		/**
+		 * Match an op using the indicated output class.
+		 *
+		 * @see #apply
+		 * @see #function
+		 * @see #inplace#if ( $arity > 1 )1#end
+		 * @see #mutate#if ( $arity > 1 )1#end
+		 * @see #output
+		 * @see #[[#outType(Nil)]]#
+		 */
 		public <O> Arity${arity}_IV_OT$generics.call($arity) outType(final Class<O> outType) {
 			return outType(Nil.of(outType));
 		}
 
+		/**
+		 * Match an op using the indicated output class, with generic parameter(s) preserved.
+		 *
+		 * @see #apply
+		 * @see #function
+		 * @see #inplace#if ( $arity > 1 )1#end
+		 * @see #mutate#if ( $arity > 1 )1#end
+		 * @see #output
+		 * @see #outType
+		 */
 		public <O> Arity${arity}_IV_OT$generics.call($arity) outType(final Nil<O> outType) {
 			return new Arity${arity}_IV_OT<>($inputObjects.call($arity), outType);
 		}
 
+		/**
+		 * Match a {@link org.scijava.function.Functions} op to produce an output of unknown type.
+		 *
+		 * @see #apply
+		 * @see #inplace#if ( $arity > 1 )1#end
+		 * @see #mutate#if ( $arity > 1 )1#end
+		 * @see #output
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
 		}
 
+		/**
+		 * As {@link #function}, but match using the provided {@code Hints}.
+		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function(final Hints hints) {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class), hints);
 		}
 
 #foreach($a in [1..$arity])
+		/**
+		 * Match an {@link org.scijava.function.Inplaces} op to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
+		 *
+		 * @see #apply
+		 * @see #function
+		 * @see #mutate#if ( $arity > 1 )$a#end
+		 * @see #output
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
-			return matchInplace${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity));
+			return $matchName.call($arity, $a)(env, opName, $inputTypesFromArgs.call($arity));
 		}
 
 #end
 #foreach($a in [1..$arity])
+		/**
+		 * As {@link #inplace#if ( $arity > 1 )$a#end}, but match using the provided {@code Hints}.
+		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
 			checkInplaceRefs($a, $inputObjects.call($arity));
-			return matchInplace${inplaceMatchNumber.call($arity, $a)}(env, opName, $inputTypesFromArgs.call($arity), hints);
+			return $matchName.call($arity, $a)(env, opName, $inputTypesFromArgs.call($arity), hints);
 		}
 
 #end
+		/**
+		 * Directly run the matched type-unsafe {@link org.scijava.function.Functions} op and get its output.
+		 *
+		 * @see #function
+		 * @see #inplace#if ( $arity > 1 )1#end
+		 * @see #mutate#if ( $arity > 1 )1#end
+		 * @see #output
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 *
+		 * @return The output of this function
+		 */
 		public Object apply() {
 			return function().apply($inputObjects.call($arity));
 		}
 
+		/**
+		 * As {@link #apply}, but match using the provided {@code Hints}.
+		 */
 		public Object apply(final Hints hints) {
 			return function(hints).apply($inputObjects.call($arity));
 		}
 
 #foreach($a in [1..$arity])
+		/**
+		 * Directly run the matched {@link org.scijava.function.Inplaces} op to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
+		 *
+		 * @see #apply
+		 * @see #function
+		 * @see #inplace#if ( $arity > 1 )$a#end
+		 * @see #output
+		 * @see #outType
+		 * @see #[[#outType(Nil)]]#
+		 */
 		public void mutate${inplaceMatchNumber.call($arity, $a)}() {
 			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputObjects.call($arity));
 		}
 
 #end
 #foreach($a in [1..$arity])
+		/**
+		 * As {@link #mutate#if ( $arity > 1 )$a#end}, but match using the provided {@code Hints}.
+		 */
 		public void mutate${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
 			inplace${inplaceMatchNumber.call($arity, $a)}(hints).mutate($inputObjects.call($arity));
 		}

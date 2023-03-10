@@ -852,6 +852,12 @@ public class OpBuilder {
 #end
 
 #foreach($arity in [0..$maxArity])
+	/**
+	 * Static utility method to match a {@link org.scijava.function.Functions} op with $arity input#if ( $arity != 1 )s#end.
+	 *
+	 * @see OpBuilder#matchComputer
+#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)#end
+	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) matchFunction(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
 	{
@@ -860,6 +866,9 @@ public class OpBuilder {
 
 #end
 #foreach($arity in [0..$maxArity])
+	/**
+	 * As {@link OpBuilder#matchFunction}, but match using the provided {@code Hints}.
+	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) matchFunction(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity), final Hints hints)
 	{
@@ -892,6 +901,12 @@ public class OpBuilder {
 	}
 
 #foreach($arity in [0..$maxArity])
+	/**
+	 * Static utility method to match a {@link org.scijava.function.Computers} op with $arity input#if ( $arity != 1 )s#end to work with pre-allocated output.
+	 *
+	 * @see OpBuilder#matchFunction
+#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)#end
+	 */
 	@SuppressWarnings("unchecked")
 	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) matchComputer(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
 	{
@@ -900,6 +915,9 @@ public class OpBuilder {
 
 #end
 #foreach($arity in [0..$maxArity])
+	/**
+	 * As {@link OpBuilder#matchComputer}, but match using the provided {@code Hints}.
+	 */
 	@SuppressWarnings("unchecked")
 	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) matchComputer(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity), final Hints hints)
 	{
@@ -937,6 +955,12 @@ public class OpBuilder {
 
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
+	/**
+	 * Static utility method to match an {@link org.scijava.function.Inplaces} op with $arity input#if ( $arity != 1 )s#end, modifying the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end input in place.
+	 *
+	 * @see OpBuilder#matchComputer
+	 * @see OpBuilder#matchFunction
+	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $inplaceGenerics.call($arity, $a) $inplaceType.call($arity, $a)$inplaceGenerics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))
 	{
@@ -948,6 +972,9 @@ public class OpBuilder {
 
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
+	/**
+	 * As {@link OpBuilder#$matchName.call($arity, $a)}, but match using the provided {@code Hints}.
+	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $inplaceGenerics.call($arity, $a) $inplaceType.call($arity, $a)$inplaceGenerics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a), final Hints hints)
 	{

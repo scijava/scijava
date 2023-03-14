@@ -446,7 +446,6 @@ public class OpBuilder {
 	}
 #end
 
-
 #foreach($arity in $arities)
 	/**
 	 * Builder with arity $arity, input type given, output type given.
@@ -532,6 +531,7 @@ public class OpBuilder {
 		 *
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #[[#outType(Nil)]]#
 		 */
 		public <O> Arity${arity}_IT_OT$generics.call($arity) outType(final Class<O> outType) {
@@ -543,6 +543,7 @@ public class OpBuilder {
 		 *
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #outType
 		 */
 		public <O> Arity${arity}_IT_OT$generics.call($arity) outType(final Nil<O> outType) {
@@ -555,6 +556,7 @@ public class OpBuilder {
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
@@ -697,7 +699,9 @@ public class OpBuilder {
 		 * @see #apply
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #mutate#if ( $arity > 1 )1#end
+
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
 		 */
@@ -712,7 +716,9 @@ public class OpBuilder {
 		 * @see #apply
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #mutate#if ( $arity > 1 )1#end
+
 		 * @see #output
 		 * @see #[[#outType(Nil)]]#
 		 */
@@ -726,7 +732,9 @@ public class OpBuilder {
 		 * @see #apply
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #mutate#if ( $arity > 1 )1#end
+
 		 * @see #output
 		 * @see #outType
 		 */
@@ -739,7 +747,9 @@ public class OpBuilder {
 		 *
 		 * @see #apply
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #mutate#if ( $arity > 1 )1#end
+
 		 * @see #output
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
@@ -762,6 +772,7 @@ public class OpBuilder {
 		 * @see #apply
 		 * @see #function
 		 * @see #mutate#if ( $arity > 1 )$a#end
+
 		 * @see #output
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
@@ -787,7 +798,9 @@ public class OpBuilder {
 		 *
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
+
 		 * @see #mutate#if ( $arity > 1 )1#end
+
 		 * @see #output
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
@@ -812,6 +825,7 @@ public class OpBuilder {
 		 * @see #apply
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )$a#end
+
 		 * @see #output
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
@@ -895,7 +909,8 @@ public class OpBuilder {
 	 * Static utility method to match a {@link org.scijava.function.Functions} op with $arity input#if ( $arity != 1 )s#end.
 	 *
 	 * @see OpBuilder#matchComputer
-#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)#end
+#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)
+#end
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) matchFunction(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -944,7 +959,8 @@ public class OpBuilder {
 	 * Static utility method to match a {@link org.scijava.function.Computers} op with $arity input#if ( $arity != 1 )s#end to work with pre-allocated output.
 	 *
 	 * @see OpBuilder#matchFunction
-#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)#end
+#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)
+#end
 	 */
 	@SuppressWarnings("unchecked")
 	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) matchComputer(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))

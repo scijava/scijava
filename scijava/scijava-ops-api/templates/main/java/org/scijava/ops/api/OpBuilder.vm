@@ -982,7 +982,7 @@ public class OpBuilder {
 
 #foreach($arity in [0..$maxArity])
 	/**
-	 * Static utility method to match a {@link org.scijava.function.Computers} op with $arity input#if ( $arity != 1 )s#end to work with pre-allocated output.
+	 * Static utility method to match a {@link org.scijava.function.Computers} op with $arity input#if ( $arity != 1 )s#end for operating on pre-allocated output.
 	 *
 	 * @see OpBuilder#matchFunction
 #if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1)

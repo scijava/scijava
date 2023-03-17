@@ -197,7 +197,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the indicated output class, with generic parameter(s) preserved.
+		 * Match an op using the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
 		 * @see #create
 		 * @see #output
@@ -539,7 +539,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the indicated output class, with generic parameter(s) preserved.
+		 * Match an op using the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
@@ -727,7 +727,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the indicated output class, with generic parameter(s) preserved.
+		 * Match an op using the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
 		 * @see #apply
 		 * @see #function

@@ -209,7 +209,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a type-unsafe {@link org.scijava.function.Producer} op.
+		 * Match an {@link org.scijava.function.Producer} op, based on the choices made with this builder, for creating {@code Object} instances.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #create
 		 * @see #output
@@ -282,7 +284,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a type-safe {@link org.scijava.function.Producer} op.
+		 * Match a {@link org.scijava.function.Producer} op, based on the choices made with this builder, for creating {@code O}-typed instances.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #computer
 		 * @see #create
@@ -315,7 +319,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 * Match a {@link org.scijava.function.Computers} op, based on the choices made with this builder, for operating on pre-allocated output.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #create
 		 * @see #producer
@@ -368,7 +374,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * @return An instance of the matched {@link org.scijava.function.Computers} op, e.g. for reuse.
+		 * Match a {@link org.scijava.function.Computers} op, based on the choices made with this builder, for operating on pre-allocated output.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #compute
 		 */
@@ -472,7 +480,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Functions} op to produce an instance of this builder's {@code outType}.
+		 * Match a {@link org.scijava.function.Functions} op, based on the choices made with this builder.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #computer
 		 */
@@ -488,7 +498,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 * Match a {@link org.scijava.function.Computers} op, based on the choices made with this builder, for operating on pre-allocated output.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #function
 		 */
@@ -551,7 +563,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Functions} op to produce an output of unknown type.
+		 * Match a {@link org.scijava.function.Functions} op based on the choices made with this builder.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #outType
 		 * @see #[[#outType(Nil)]]#
@@ -571,7 +585,9 @@ public class OpBuilder {
 
 #foreach($a in [1..$arity])
 		/**
-		 * Match an {@link org.scijava.function.Inplaces} op to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
+		 * Match an {@link org.scijava.function.Inplaces} op, based on the choices made with this builder, to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #function
 		 * @see #outType
@@ -618,7 +634,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Functions} op to produce an output of the previously-specified type.
+		 * Match a {@link org.scijava.function.Functions} op based on the choices made with this builder.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #apply
 		 * @see #computer
@@ -635,7 +653,9 @@ public class OpBuilder {
 		}
 	
 		/**
-		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 * Match a {@link org.scijava.function.Computers} op, based on the choices made with this builder, for operating on pre-allocated output.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #apply
 		 * @see #function
@@ -743,7 +763,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Functions} op to produce an output of unknown type.
+		 * Match a {@link org.scijava.function.Functions} op based on the choices made with this builder.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #apply
 		 * @see #inplace#if ( $arity > 1 )1#end
@@ -767,7 +789,9 @@ public class OpBuilder {
 
 #foreach($a in [1..$arity])
 		/**
-		 * Match an {@link org.scijava.function.Inplaces} op to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
+		 * Match an {@link org.scijava.function.Inplaces} op, based on the choices made with this builder, to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #apply
 		 * @see #function
@@ -870,7 +894,9 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Computers} op to work with pre-allocated output.
+		 * Match a {@link org.scijava.function.Computers} op, based on the choices made with this builder, for operating on pre-allocated output.
+		 *
+		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #compute
 		 */

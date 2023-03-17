@@ -173,7 +173,7 @@ public class OpBuilder {
 	public final class Arity0 {
 
 		/**
-		 * Match a {@link org.scijava.function.Computers} op that can use the given pre-allocated output instance.
+		 * Matches with this builder will use the given pre-allocated output instance.
 		 *
 		 * @see #create
 		 * @see #outType
@@ -185,7 +185,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the indicated output class.
+		 * Matches with this builder will use the indicated output class.
 		 *
 		 * @see #create
 		 * @see #output
@@ -197,7 +197,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
+		 * Matches with this builder will use the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
 		 * @see #create
 		 * @see #output
@@ -209,7 +209,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an {@link org.scijava.function.Producer} op, based on the choices made with this builder, for creating {@code Object} instances.
+		 * Match a {@link org.scijava.function.Producer} op, based on the choices made with this builder, for creating {@code Object} instances.
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
@@ -539,7 +539,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the indicated output class.
+		 * Matches with this builder will use the indicated output class.
 		 *
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
@@ -551,7 +551,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
+		 * Matches with this builder will use the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
 		 * @see #function
 		 * @see #inplace#if ( $arity > 1 )1#end
@@ -714,7 +714,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match a {@link org.scijava.function.Computers} op that can use the given pre-allocated output instance.
+		 * Matches with this builder will use the given pre-allocated output instance.
 		 *
 		 * @see #apply
 		 * @see #function
@@ -731,7 +731,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the indicated output class.
+		 * Matches with this builder will use the indicated output class.
 		 *
 		 * @see #apply
 		 * @see #function
@@ -747,7 +747,7 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Match an op using the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
+		 * Matches with this builder will use the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
 		 * @see #apply
 		 * @see #function

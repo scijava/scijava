@@ -543,7 +543,6 @@ public class OpBuilder {
 		 *
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #[[#outType(Nil)]]#
 		 */
 		public <O> Arity${arity}_IT_OT$generics.call($arity) outType(final Class<O> outType) {
@@ -555,7 +554,6 @@ public class OpBuilder {
 		 *
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 */
 		public <O> Arity${arity}_IT_OT$generics.call($arity) outType(final Nil<O> outType) {
@@ -570,7 +568,6 @@ public class OpBuilder {
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
@@ -719,9 +716,7 @@ public class OpBuilder {
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
 		 */
@@ -736,9 +731,7 @@ public class OpBuilder {
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #[[#outType(Nil)]]# - To specify the output type without providing a concrete instance.
 		 */
@@ -752,9 +745,7 @@ public class OpBuilder {
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 */
@@ -769,9 +760,7 @@ public class OpBuilder {
 		 *
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
@@ -796,7 +785,6 @@ public class OpBuilder {
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #mutate#if ( $arity > 1 )$a#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
@@ -822,9 +810,7 @@ public class OpBuilder {
 		 *
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
@@ -849,7 +835,6 @@ public class OpBuilder {
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )$a#end - For a reusable Op that modifies a provided input parameter "in place."
-
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.

@@ -65,7 +65,7 @@ import org.scijava.types.Types;
  *   <li>No inputs &rarr; <code>Producer</code> or <code>Computer</code></li>
  *   <li>Inputs with an output <i>value</i> &rarr; <code>Computer</code></li>
  *   <li>Inputs with an output <i>type</i> &rarr; <code>Computer</code> or <code>Function</code></li>
- *   <li>Inputs with no output &rarr; <code>Function</code> or <code>Inplace</code></li>
+ *   <li>Inputs with no output &rarr; <code>Inplace</code> or <code>Function</code> with unknown (<code>Object</code>) return</li>
  * </ul>
  * <br/>
  * <p>

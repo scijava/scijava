@@ -922,6 +922,8 @@ public class OpBuilder {
 	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
 #if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) -  For a reusable Op that modifies a provided input parameter "in place."
 #end
+	 *
+	 * @return An instance of the matched op, e.g. for reuse.
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) matchFunction(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -972,6 +974,8 @@ public class OpBuilder {
 	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
 #if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) - For a reusable Op that modifies a provided input parameter "in place."
 #end
+	 *
+	 * @return An instance of the matched op, e.g. for reuse.
 	 */
 	@SuppressWarnings("unchecked")
 	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) matchComputer(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -1026,6 +1030,8 @@ public class OpBuilder {
 	 *
 	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
 	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
+	 *
+	 * @return An instance of the matched op, e.g. for reuse.
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $inplaceGenerics.call($arity, $a) $inplaceType.call($arity, $a)$inplaceGenerics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))

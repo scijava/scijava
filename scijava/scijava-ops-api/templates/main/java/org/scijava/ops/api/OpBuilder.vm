@@ -175,10 +175,10 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the given pre-allocated output instance.
 		 *
-		 * @see #create - To match then immediately run a {@code Producer Op} without specifying its type, creating an Object.
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 * @see #producer - For a reusable Op to create {@code Object}(s) without re-matching.
+		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op without specifying its type, creating an Object.">create</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
+		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create naively-typed Objects without re-matching.">producer</a>
 		 */
 		public <O> Arity0_OV<O> output(final O out) {
 			return new Arity0_OV<>(out);
@@ -187,10 +187,10 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the indicated output class.
 		 *
-		 * @see #create - To match then immediately run a {@code Producer Op} without specifying its type, creating an Object.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 * @see #producer - For a reusable Op to create {@code Object}(s) without re-matching.
+		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op without specifying its type, creating an Object.">create</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
+		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create naively-typed Objects without re-matching.">producer</a>
 		 */
 		public <O> Arity0_OT<O> outType(final Class<O> outType) {
 			return outType(Nil.of(outType));
@@ -199,10 +199,10 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
-		 * @see #create - To match then immediately run a {@code Producer Op} without specifying its type, creating an Object.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #producer - For a reusable Op to create {@code Object}(s) without re-matching.
+		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op without specifying its type, creating an Object.">create</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create naively-typed Objects without re-matching.">producer</a>
 		 */
 		public <O> Arity0_OT<O> outType(final Nil<O> outType) {
 			return new Arity0_OT<>(outType);
@@ -213,12 +213,12 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #create - To match then immediately run a {@code Producer Op} without specifying its type, creating an Object.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op without specifying its type, creating an Object.">create</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Producer<?> producer() {
 			final Nil<Producer<Object>> specialType = new Nil<>() {
@@ -252,14 +252,14 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run a type-unsafe {@link org.scijava.function.Producer} op and get its output.
 		 *
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 * @see #producer - For a reusable Op to create {@code Object}(s) without re-matching.
-		 *
 		 * @return The {@code Object} created by this op
 		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
+		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create naively-typed Objects without re-matching.">producer</a>
 		 */
 		public Object create() {
 			return producer().create();
@@ -292,10 +292,10 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
-		 * @see #create - To match then immediately run a {@code Producer Op}, creating an instance of this builder's output type.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
+		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op, creating an instance of this builder's output type.">create</a>
 		 */
 		public Producer<O> producer() {
 			final Nil<Producer<O>> specialType = new Nil<>() {
@@ -329,10 +329,10 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #create - To match then immediately run a {@code Producer Op} without specifying its type, creating an Object.
-		 * @see #producer - For a reusable Op to create objects of this builder's output type without re-matching.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op, creating an instance of this builder's output type.">create</a>
+		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create objects of this builder's output type without re-matching.">producer</a>
 		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, outType);
@@ -348,12 +348,12 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run a {@link org.scijava.function.Producer} op and get its output.
 		 *
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
-		 * @see #producer - For a reusable Op to create objects of this builder's output type without re-matching.
-		 *
 		 * @return The {@code O} created by this op
 		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
+		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create objects of this builder's output type without re-matching.">producer</a>
 		 */
 		public O create() {
 			return producer().create();
@@ -390,9 +390,9 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #compute - To match then immediately run a {@code Computer} Op using this builder's pre-allocated output.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#compute()]]#" title="To match then immediately run a Computer Op using this builder's pre-allocated output.">compute</a>
 		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, type(out));
@@ -408,7 +408,7 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run a {@link org.scijava.function.Computers} op on the provided output container.
 		 *
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
 		public void compute() {
 			computer().compute(out);
@@ -435,8 +435,8 @@ public class OpBuilder {
 		/**
 		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input value.
 		 *
-		 * @see #inType - To specify the input type(s) without providing concrete instance(s).
-		 * @see #[[#inType]]#(#foreach( $i in [1..$arity] )Nil#if( $arity > 1 && $i < $arity ), #end#end) - If your input type(s) have generic parameters to preserve.
+		 * @see <a href="#inType-#foreach( $i in [1..$arity] )java.lang.Class#if( $i < $arity )-#end#end-" title="To specify the input type(s) without providing concrete instance(s).">inType(#foreach( $i in [1..$arity] )Class#if( $i < $arity ), #end#end)</a>
+		 * @see <a href="#inType-#foreach( $i in [1..$arity] )org.scijava.types.Nil#if( $i < $arity )-#end#end-" title="If your input type(s) have generic parameters to preserve.">inType(#foreach( $i in [1..$arity] )Nil#if( $i < $arity ), #end#end)</a>
 		 */
 		public $genericsWithoutOutput.call($arity) Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) input($inputObjectsArgs.call($arity))
 		{
@@ -446,8 +446,8 @@ public class OpBuilder {
 		/**
 		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input type.
 		 *
-		 * @see #input - To specify concrete input parameter(s). (e.g. to directly run the Op via this builder)
-		 * @see #[[#inType]]#(#foreach( $i in [1..$arity] )Nil#if( $arity > 1 && $i < $arity ), #end#end) - If your input type(s) have generic parameters to preserve.
+		 * @see <a href="#[[#input]]#(#foreach( $i in [1..$arity] )I$i#if( $i < $arity ), #end#end)" title="To specify concrete input parameter(s). (e.g. to directly run the Op via this builder)">input</a>
+		 * @see <a href="#inType-#foreach( $i in [1..$arity] )org.scijava.types.Nil#if( $i < $arity )-#end#end-" title="If your input type(s) have generic parameters to preserve.">inType(#foreach( $i in [1..$arity] )Nil#if( $i < $arity ), #end#end)</a>
 		 */
 		public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputClassesArgs.call($arity))
 		{
@@ -455,10 +455,10 @@ public class OpBuilder {
 		}
 
 		/**
-		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input type with generics preserved.
+		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched using the {@code Nil}'s generic parameter.
 		 *
-		 * @see #input - To specify concrete input parameter(s). (e.g. to directly run the Op via this builder)
-		 * @see #inType - To specify the input type(s) without providing concrete instance(s).
+		 * @see <a href="#[[#input]]#(#foreach( $i in [1..$arity] )I$i#if( $i < $arity ), #end#end)" title="To specify concrete input parameter(s). (e.g. to directly run the Op via this builder)">input</a>
+		 * @see <a href="#inType-#foreach( $i in [1..$arity] )java.lang.Class#if( $i < $arity )-#end#end-" title="To specify the input type(s) without providing concrete instance(s).">inType(#foreach( $i in [1..$arity] )Class#if( $i < $arity ), #end#end)</a>
 		 */
 		public $genericsWithoutOutput.call($arity) Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) inType($inputTypesArgs.call($arity))
 		{
@@ -498,9 +498,9 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesWithOutput.call($arity));
@@ -518,9 +518,9 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return matchComputer(env, opName, $inputTypesWithOutput.call($arity));
@@ -559,9 +559,9 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the indicated output class.
 		 *
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #[[#outType(Nil)]]#
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public <O> Arity${arity}_IT_OT$generics.call($arity) outType(final Class<O> outType) {
 			return outType(Nil.of(outType));
@@ -570,9 +570,9 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #outType - To specify the output type without providing a concrete instance.
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
 		 */
 		public <O> Arity${arity}_IT_OT$generics.call($arity) outType(final Nil<O> outType) {
 			return new Arity${arity}_IT_OT<>($inputTypesWithOutput.call($arity));
@@ -583,11 +583,11 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
@@ -606,11 +606,11 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return $matchName.call($arity, $a)(env, opName, $inputTypes.call($arity));
@@ -657,10 +657,10 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType);
@@ -678,10 +678,10 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType);
@@ -699,10 +699,10 @@ public class OpBuilder {
 		 *
 		 * @return The output of this function
 		 *
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 */
 		public O apply() {
 			return function().apply($inputObjects.call($arity));
@@ -741,12 +741,12 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the given pre-allocated output instance.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#mutate#if ( $arity > 1 )1#end()" title="To match then immediately run an Inplace Op modifying a provided input parameter.">mutate</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public <O> Arity${arity}_IV_OV$generics.call($arity) output(final O out) {
 			checkComputerRefs($inputObjects.call($arity), out);
@@ -756,12 +756,12 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the indicated output class.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #[[#outType(Nil)]]# - To specify the output type without providing a concrete instance.
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#mutate#if ( $arity > 1 )1#end()" title="To match then immediately run an Inplace Op modifying a provided input parameter.">mutate</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public <O> Arity${arity}_IV_OT$generics.call($arity) outType(final Class<O> outType) {
 			return outType(Nil.of(outType));
@@ -770,12 +770,12 @@ public class OpBuilder {
 		/**
 		 * Matches with this builder will use the output type of the indicated {@code org.scijava.types.Nil}'s generic parameter.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#mutate#if ( $arity > 1 )1#end()" title="To match then immediately run an Inplace Op modifying a provided input parameter.">mutate</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
 		 */
 		public <O> Arity${arity}_IV_OT$generics.call($arity) outType(final Nil<O> outType) {
 			return new Arity${arity}_IV_OT<>($inputObjects.call($arity), outType);
@@ -786,14 +786,14 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#mutate#if ( $arity > 1 )1#end()" title="To match then immediately run an Inplace Op modifying a provided input parameter.">mutate</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
@@ -812,14 +812,14 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #mutate#if ( $arity > 1 )$a#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#mutate#if ( $arity > 1 )1#end()" title="To match then immediately run an Inplace Op modifying a provided input parameter.">mutate</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
@@ -842,14 +842,14 @@ public class OpBuilder {
 		 *
 		 * @return The output of this function
 		 *
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#mutate#if ( $arity > 1 )1#end()" title="To match then immediately run an Inplace Op modifying a provided input parameter.">mutate</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public Object apply() {
 			return function().apply($inputObjects.call($arity));
@@ -866,12 +866,12 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run an {@link org.scijava.function.Inplaces} op to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
 		 *
-		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
-		 * @see #function - For a reusable Op that generates output instances based on its inputs.
-		 * @see #inplace#if ( $arity > 1 )$a#end - For a reusable Op that modifies a provided input parameter "in place."
-		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
-		 * @see #outType - To specify the output type without providing a concrete instance.
-		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
+		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
+		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
+		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
+		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
+		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
+		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public void mutate${inplaceMatchNumber.call($arity, $a)}() {
 			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputObjects.call($arity));
@@ -917,9 +917,9 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @see #compute - To match then immediately run a {@code Computer} Op using this builder's pre-allocated output.
-		 *
 		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 *
+		 * @see <a href="#[[#compute()]]#" title="To match then immediately run a Computer Op using this builder's pre-allocated output.">compute</a>
 		 */
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out));
@@ -935,7 +935,7 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run a {@link org.scijava.function.Computers} op using the provided pre-allocated output.
 		 *
-		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
+		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
 		public void compute() {
 			computer().compute($inputObjects.call($arity), out);
@@ -955,13 +955,13 @@ public class OpBuilder {
 	/**
 	 * Static utility method to match a {@link org.scijava.function.Functions} op with $arity input#if ( $arity != 1 )s#end.
 	 *
-	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
-#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) -  For a reusable Op that modifies a provided input parameter "in place."
-#end
-	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+	 *
+	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
+#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) -  For a reusable Op that modifies a provided input parameter "in place."
+#end
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) matchFunction(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -1009,13 +1009,13 @@ public class OpBuilder {
 	/**
 	 * Static utility method to match a {@link org.scijava.function.Computers} op with $arity input#if ( $arity != 1 )s#end for operating on pre-allocated output.
 	 *
-	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
-#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) - For a reusable Op that modifies a provided input parameter "in place."
-#end
-	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+	 *
+	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
+#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) - For a reusable Op that modifies a provided input parameter "in place."
+#end
 	 */
 	@SuppressWarnings("unchecked")
 	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) matchComputer(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -1068,12 +1068,12 @@ public class OpBuilder {
 	/**
 	 * Static utility method to match an {@link org.scijava.function.Inplaces} op with $arity input#if ( $arity != 1 )s#end, modifying the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end input in place.
 	 *
-	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
-	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
-	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+	 *
+	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
+	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $inplaceGenerics.call($arity, $a) $inplaceType.call($arity, $a)$inplaceGenerics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))

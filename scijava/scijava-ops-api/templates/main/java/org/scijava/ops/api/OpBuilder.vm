@@ -217,6 +217,8 @@ public class OpBuilder {
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Producer<?> producer() {
 			final Nil<Producer<Object>> specialType = new Nil<>() {
@@ -256,6 +258,8 @@ public class OpBuilder {
 		 * @see #producer - For a reusable Op to create {@code Object}(s) without re-matching.
 		 *
 		 * @return The {@code Object} created by this op
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Object create() {
 			return producer().create();
@@ -290,6 +294,8 @@ public class OpBuilder {
 		 *
 		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
 		 * @see #create - To match then immediately run a {@code Producer Op}, creating an instance of this builder's output type.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Producer<O> producer() {
 			final Nil<Producer<O>> specialType = new Nil<>() {
@@ -325,6 +331,8 @@ public class OpBuilder {
 		 *
 		 * @see #create - To match then immediately run a {@code Producer Op} without specifying its type, creating an Object.
 		 * @see #producer - For a reusable Op to create objects of this builder's output type without re-matching.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, outType);
@@ -344,6 +352,8 @@ public class OpBuilder {
 		 * @see #producer - For a reusable Op to create objects of this builder's output type without re-matching.
 		 *
 		 * @return The {@code O} created by this op
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public O create() {
 			return producer().create();
@@ -353,6 +363,8 @@ public class OpBuilder {
 		 * As {@link #create}, but match using the provided {@code Hints}.
 		 *
 		 * @return The {@code O} created by this op
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public O create(Hints hints) {
 			return producer(hints).create();
@@ -379,6 +391,8 @@ public class OpBuilder {
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #compute - To match then immediately run a {@code Computer} Op using this builder's pre-allocated output.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Computers.Arity0<O> computer() {
 			return matchComputer(env, opName, type(out));
@@ -485,6 +499,8 @@ public class OpBuilder {
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesWithOutput.call($arity));
@@ -503,6 +519,8 @@ public class OpBuilder {
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return matchComputer(env, opName, $inputTypesWithOutput.call($arity));
@@ -568,6 +586,8 @@ public class OpBuilder {
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
@@ -589,6 +609,8 @@ public class OpBuilder {
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return $matchName.call($arity, $a)(env, opName, $inputTypes.call($arity));
@@ -637,6 +659,8 @@ public class OpBuilder {
 		 *
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType);
@@ -656,6 +680,8 @@ public class OpBuilder {
 		 *
 		 * @see #apply - To match then immediately run a {@code Function} Op using the input values provided to this builder.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType);
@@ -671,10 +697,12 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run a {@link org.scijava.function.Functions} op and get its output.
 		 *
+		 * @return The output of this function
+		 *
 		 * @see #computer - For a reusable Op to process pre-allocated outputs without re-matching.
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 *
-		 * @return The output of this function
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public O apply() {
 			return function().apply($inputObjects.call($arity));
@@ -764,6 +792,8 @@ public class OpBuilder {
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
 			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
@@ -788,6 +818,8 @@ public class OpBuilder {
 		 * @see #output - To specify a concrete output instance. (e.g. pre-allocated for {@link org.scijava.function.Computers})
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			checkInplaceRefs($a, $inputObjects.call($arity));
@@ -808,6 +840,8 @@ public class OpBuilder {
 		/**
 		 * Match then immediately run a type-unsafe {@link org.scijava.function.Functions} op and get its output.
 		 *
+		 * @return The output of this function
+		 *
 		 * @see #function - For a reusable Op that generates output instances based on its inputs.
 		 * @see #inplace#if ( $arity > 1 )1#end - For a reusable Op that modifies a provided input parameter "in place."
 		 * @see #mutate#if ( $arity > 1 )1#end - To match then immediately run an {@code Inplace} Op modifying a provided input parameter.
@@ -815,7 +849,7 @@ public class OpBuilder {
 		 * @see #outType - To specify the output type without providing a concrete instance.
 		 * @see #[[#outType(Nil)]]# - If your output type has generic parameters to preserve.
 		 *
-		 * @return The output of this function
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Object apply() {
 			return function().apply($inputObjects.call($arity));
@@ -884,6 +918,8 @@ public class OpBuilder {
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
 		 * @see #compute - To match then immediately run a {@code Computer} Op using this builder's pre-allocated output.
+		 *
+		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 		 */
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
 			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out));
@@ -924,6 +960,8 @@ public class OpBuilder {
 #end
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
+	 *
+	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $generics.call($arity) $functionArity.call($arity)$generics.call($arity) matchFunction(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -976,6 +1014,8 @@ public class OpBuilder {
 #end
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
+	 *
+	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 	 */
 	@SuppressWarnings("unchecked")
 	public static $generics.call($arity) $computerArity.call($arity)$generics.call($arity) matchComputer(final OpEnvironment env, final String opName, $inputTypesArgsWithOutput.call($arity))
@@ -1032,6 +1072,8 @@ public class OpBuilder {
 	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
+	 *
+	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $inplaceGenerics.call($arity, $a) $inplaceType.call($arity, $a)$inplaceGenerics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))

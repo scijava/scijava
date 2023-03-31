@@ -227,7 +227,6 @@ public interface OpEnvironment {
 	/**
 	 * Creates some {@link OpInfo}s from {@code o}
 	 * @param o the {@link Object} to create {@link OpInfo}s from
-	 * @return a {@link Collection} of {@link OpInfo}s
 	 */
 	default void registerInfosFrom(Object o) {
 		register(infosFrom(o));

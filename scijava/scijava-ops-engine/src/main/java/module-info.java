@@ -48,7 +48,7 @@ module org.scijava.ops.engine {
 	requires org.scijava.ops.spi;
 	requires org.scijava.types;
 
-	requires javassist;
+	requires org.javassist;
 	requires org.yaml.snakeyaml;
 
 	requires therapi.runtime.javadoc;

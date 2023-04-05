@@ -959,8 +959,8 @@ public class OpBuilder {
 	 *
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 	 *
-	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
-#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) -  For a reusable Op that modifies a provided input parameter "in place."
+	 * @see <a href="#[[#matchComputer]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op to process pre-allocated outputs without re-matching.">OpBuilder.matchComputer(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
+#if ( $arity > 0 )	 * @see <a href="#[[#]]#$matchName.call($arity, 1)(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end)" title="For a reusable Op that modifies a provided input parameter in-place.">OpBuilder.$matchName.call($arity, 1)(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end)</a>
 #end
 	 */
 	@SuppressWarnings({ "unchecked" })
@@ -1013,8 +1013,8 @@ public class OpBuilder {
 	 *
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 	 *
-	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
-#if ( $arity > 0 )	 * @see OpBuilder#$matchName.call($arity, 1) - For a reusable Op that modifies a provided input parameter "in place."
+	 * @see <a href="#[[#matchFunction]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op that generates output instances based on its inputs.">OpBuilder.matchFunction(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
+#if ( $arity > 0 )	 * @see <a href="#[[#]]#$matchName.call($arity, 1)(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end)" title="For a reusable Op that modifies a provided input parameter in-place.">OpBuilder.$matchName.call($arity, 1)(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end)</a>
 #end
 	 */
 	@SuppressWarnings("unchecked")
@@ -1066,14 +1066,14 @@ public class OpBuilder {
 #foreach($arity in $arities)
 #foreach($a in [1..$arity])
 	/**
-	 * Static utility method to match an {@link org.scijava.function.Inplaces} op with $arity input#if ( $arity != 1 )s#end, modifying the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end input in place.
+	 * Static utility method to match an {@link org.scijava.function.Inplaces} op with $arity input#if ( $arity != 1 )s#end, modifying the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end input in-place.
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
 	 *
-	 * @see OpBuilder#matchComputer - For a reusable Op to process pre-allocated outputs without re-matching.
-	 * @see OpBuilder#matchFunction - For a reusable Op that generates output instances based on its inputs.
+	 * @see <a href="#[[#matchComputer]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op to process pre-allocated outputs without re-matching.">OpBuilder.matchComputer(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
+	 * @see <a href="#[[#matchFunction]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op that generates output instances based on its inputs.">OpBuilder.matchFunction(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public static $inplaceGenerics.call($arity, $a) $inplaceType.call($arity, $a)$inplaceGenerics.call($arity, $a) $matchName.call($arity, $a)(final OpEnvironment env, final String opName, $matchParams.call($arity, $a))

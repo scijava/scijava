@@ -155,6 +155,25 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<links>
+							<!-- Core Java. -->
+							<link>${scijava.javadoc.url.java}</link>
+							<!-- SciJava and related projects and forks. -->
+							<link>https://javadoc.scijava.org/ImgLib2/</link>
+							<link>https://javadoc.scijava.org/SCIFIO/</link>
+							<!-- Third party projects. -->
+							<link>https://javadoc.scijava.org/Apache-Commons-Math/</link>
+							<link>https://javadoc.scijava.org/Guava/</link>
+							<link>https://javadoc.scijava.org/JAMA/</link>
+							<link>https://javadoc.scijava.org/JOML/</link>
+							<link>https://javadoc.scijava.org/Javassist/</link>
+							<link>https://javadoc.scijava.org/ojAlgo/</link>
+						</links>
+					</configuration>
+				</plugin>
+				<plugin>
 					<groupId>com.alexecollins.maven.plugin</groupId>
 					<artifactId>script-maven-plugin</artifactId>
 					<version>${script-maven-plugin.version}</version>

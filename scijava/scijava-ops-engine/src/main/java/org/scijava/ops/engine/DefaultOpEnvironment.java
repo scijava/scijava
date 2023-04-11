@@ -46,7 +46,6 @@ import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.*;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
-import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.impl.DependencyRichOpInfoChain;

@@ -98,10 +98,16 @@ public class OpBuilder {
 
 	private final OpEnvironment env;
 	private final String opName;
+	private final Hints hints;
 
 	public OpBuilder(final OpEnvironment env, final String opName) {
+        this(env, opName, env.getDefaultHints());
+	}
+
+	public OpBuilder(final OpEnvironment env, final String opName, final Hints hints) {
 		this.env = env;
 		this.opName = opName;
+		this.hints = hints;
 	}
 
 	/** Specifies an op that accepts no inputs&mdash;i.e., a nullary op. */
@@ -234,22 +240,6 @@ public class OpBuilder {
 		}
 
 		/**
-		 * As {@link #producer}, but match using the provided {@code Hints}.
-		 */
-		public Producer<?> producer(final Hints hints) {
-			final Nil<Producer<Object>> specialType = new Nil<>() {
-
-				@Override
-				public Type getType() {
-					return Types.parameterize(Producer.class, new Type[] {
-						Object.class });
-				}
-			};
-			return env.op(opName, specialType, new Nil<?>[0], Nil.of(
-				Object.class, hints));
-		}
-
-		/**
 		 * Match then immediately run a type-unsafe {@link org.scijava.function.Producer} op and get its output.
 		 *
 		 * @return The {@code Object} created by this op
@@ -263,13 +253,6 @@ public class OpBuilder {
 		 */
 		public Object create() {
 			return producer().create();
-		}
-
-		/**
-		 * As {@link #create}, but match using the provided {@code Hints}.
-		 */
-		public Object create(final Hints hints) {
-			return producer(hints).create();
 		}
 	}
 
@@ -310,21 +293,6 @@ public class OpBuilder {
 		}
 
 		/**
-		 * As {@link #producer}, but match with the provided {@code Hints}.
-		 */
-		public Producer<O> producer(final Hints hints) {
-			final Nil<Producer<O>> specialType = new Nil<>() {
-
-				@Override
-				public Type getType() {
-					return Types.parameterize(Producer.class, new Type[] { outType
-						.getType() });
-				}
-			};
-			return env.op(opName, specialType, new Nil<?>[0], outType, hints);
-		}
-
-		/**
 		 * Match a {@link org.scijava.function.Computers} op, based on the choices made with this builder, for operating on pre-allocated output.
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
@@ -335,14 +303,7 @@ public class OpBuilder {
 		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create objects of this builder's output type without re-matching.">producer</a>
 		 */
 		public Computers.Arity0<O> computer() {
-			return matchComputer(env, opName, outType);
-		}
-
-		/**
-		 * As {@link #computer}, but match using the provided {@code Hints}.
-		 */
-		public Computers.Arity0<O> computer(Hints hints) {
-			return matchComputer(env, opName, outType, hints);
+			return matchComputer(env, opName, outType, OpBuilder.this.hints);
 		}
 
 		/**
@@ -357,17 +318,6 @@ public class OpBuilder {
 		 */
 		public O create() {
 			return producer().create();
-		}
-
-		/**
-		 * As {@link #create}, but match using the provided {@code Hints}.
-		 *
-		 * @return The {@code O} created by this op
-		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
-		 */
-		public O create(Hints hints) {
-			return producer(hints).create();
 		}
 	}
 
@@ -395,14 +345,7 @@ public class OpBuilder {
 		 * @see <a href="#[[#compute()]]#" title="To match then immediately run a Computer Op using this builder's pre-allocated output.">compute</a>
 		 */
 		public Computers.Arity0<O> computer() {
-			return matchComputer(env, opName, type(out));
-		}
-
-		/**
-		 * As {@link #computer}, but match using the provided {@code Hints}.
-		 */
-		public Computers.Arity0<O> computer(final Hints hints) {
-			return matchComputer(env, opName, type(out), hints);
+			return matchComputer(env, opName, type(out), OpBuilder.this.hints);
 		}
 
 		/**
@@ -413,14 +356,6 @@ public class OpBuilder {
 		public void compute() {
 			computer().compute(out);
 		}
-
-		/**
-		 * As {@link #compute}, but match using the provided {@code Hints}.
-		 */
-		public void compute(final Hints hints) {
-			computer(hints).compute(out);
-		}
-
 	}
 
 #foreach($arity in $arities)
@@ -503,14 +438,7 @@ public class OpBuilder {
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
-			return matchFunction(env, opName, $inputTypesWithOutput.call($arity));
-		}
-
-		/**
-		 * As {@link #function}, but match using the provided {@code Hints}.
-		 */
-		public $functionArity.call($arity)$generics.call($arity) function(final Hints hints) {
-			return matchFunction(env, opName, $inputTypesWithOutput.call($arity), hints);
+			return matchFunction(env, opName, $inputTypesWithOutput.call($arity), OpBuilder.this.hints);
 		}
 
 		/**
@@ -523,16 +451,8 @@ public class OpBuilder {
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
-			return matchComputer(env, opName, $inputTypesWithOutput.call($arity));
+			return matchComputer(env, opName, $inputTypesWithOutput.call($arity), OpBuilder.this.hints);
 		}
-
-		/**
-		 * As {@link #computer}, but match using the provided {@code Hints}.
-		 */
-		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
-			return matchComputer(env, opName, $inputTypesWithOutput.call($arity), hints);
-		}
-
 	}
 
 	/**
@@ -590,14 +510,7 @@ public class OpBuilder {
 		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
-			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class));
-		}
-
-		/**
-		 * As {@link #function}, but match using the provided {@code Hints}.
-		 */
-		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function(final Hints hints) {
-			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class), hints);
+			return matchFunction(env, opName, $inputTypes.call($arity), Nil.of(Object.class), OpBuilder.this.hints);
 		}
 
 #foreach($a in [1..$arity])
@@ -614,15 +527,6 @@ public class OpBuilder {
 		 */
 		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}() {
 			return $matchName.call($arity, $a)(env, opName, $inputTypes.call($arity));
-		}
-
-#end
-#foreach($a in [1..$arity])
-		/**
-		 * As {@link #inplace#if ( $arity > 1 )$a#end}, but match using the provided {@code Hints}.
-		 */
-		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
-			return $matchName.call($arity, $a)(env, opName, $inputTypes.call($arity), hints);
 		}
 
 #end
@@ -663,14 +567,7 @@ public class OpBuilder {
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
 		public $functionArity.call($arity)$generics.call($arity) function() {
-			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType);
-		}
-	
-		/**
-		 * As {@link #function}, but match using the provided {@code Hints}.
-		 */
-		public $functionArity.call($arity)$generics.call($arity) function(final Hints hints) {
-			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
+			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), outType, OpBuilder.this.hints);
 		}
 	
 		/**
@@ -684,16 +581,9 @@ public class OpBuilder {
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 */
 		public Computers.Arity${arity}$generics.call($arity) computer() {
-			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType);
+			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType, OpBuilder.this.hints);
 		}
 
-		/**
-		 * As {@link #computer}, but match using the provided {@code Hints}.
-		 */
-		public Computers.Arity${arity}$generics.call($arity) computer(final Hints hints) {
-			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), outType, hints);
-		}
-	
 		/**
 		 * Match then immediately run a {@link org.scijava.function.Functions} op and get its output.
 		 *
@@ -707,14 +597,6 @@ public class OpBuilder {
 		public O apply() {
 			return function().apply($inputObjects.call($arity));
 		}
-
-		/**
-		 * As {@link #apply}, but match using the provided {@code Hints}.
-		 */
-		public O apply(final Hints hints) {
-			return function(hints).apply($inputObjects.call($arity));
-		}
-
 	}
 
 	/**
@@ -796,14 +678,7 @@ public class OpBuilder {
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
 		 */
 		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function() {
-			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class));
-		}
-
-		/**
-		 * As {@link #function}, but match using the provided {@code Hints}.
-		 */
-		public $functionArity.call($arity)$genericsWildcardFunction.call($arity) function(final Hints hints) {
-			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class), hints);
+			return matchFunction(env, opName, $inputTypesFromArgs.call($arity), Nil.of(Object.class), OpBuilder.this.hints);
 		}
 
 #foreach($a in [1..$arity])
@@ -827,16 +702,6 @@ public class OpBuilder {
 		}
 
 #end
-#foreach($a in [1..$arity])
-		/**
-		 * As {@link #inplace#if ( $arity > 1 )$a#end}, but match using the provided {@code Hints}.
-		 */
-		public Inplaces.Arity$inplaceSuffix.call($arity, $a)$genericsWithoutOutput.call($arity) inplace${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
-			checkInplaceRefs($a, $inputObjects.call($arity));
-			return $matchName.call($arity, $a)(env, opName, $inputTypesFromArgs.call($arity), hints);
-		}
-
-#end
 		/**
 		 * Match then immediately run a type-unsafe {@link org.scijava.function.Functions} op and get its output.
 		 *
@@ -855,13 +720,6 @@ public class OpBuilder {
 			return function().apply($inputObjects.call($arity));
 		}
 
-		/**
-		 * As {@link #apply}, but match using the provided {@code Hints}.
-		 */
-		public Object apply(final Hints hints) {
-			return function(hints).apply($inputObjects.call($arity));
-		}
-
 #foreach($a in [1..$arity])
 		/**
 		 * Match then immediately run an {@link org.scijava.function.Inplaces} op to mutate the $a#if ( $a == 1 )st#elseif ( $a == 2 )nd#elseif ( $a == 3 )rd#{else}th#end parameter.
@@ -875,15 +733,6 @@ public class OpBuilder {
 		 */
 		public void mutate${inplaceMatchNumber.call($arity, $a)}() {
 			inplace${inplaceMatchNumber.call($arity, $a)}().mutate($inputObjects.call($arity));
-		}
-
-#end
-#foreach($a in [1..$arity])
-		/**
-		 * As {@link #mutate#if ( $arity > 1 )$a#end}, but match using the provided {@code Hints}.
-		 */
-		public void mutate${inplaceMatchNumber.call($arity, $a)}(final Hints hints) {
-			inplace${inplaceMatchNumber.call($arity, $a)}(hints).mutate($inputObjects.call($arity));
 		}
 
 #end
@@ -922,14 +771,7 @@ public class OpBuilder {
 		 * @see <a href="#[[#compute()]]#" title="To match then immediately run a Computer Op using this builder's pre-allocated output.">compute</a>
 		 */
 		public Computers.Arity${arity}${generics.call($arity)} computer() {
-			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out));
-		}
-
-		/**
-		 * As {@link #computer}, but match using the provided {@code Hints}.
-		 */
-		public Computers.Arity${arity}${generics.call($arity)} computer(final Hints hints) {
-			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out), hints);
+			return matchComputer(env, opName, $inputTypesFromArgs.call($arity), type(out), OpBuilder.this.hints);
 		}
 
 		/**
@@ -940,14 +782,6 @@ public class OpBuilder {
 		public void compute() {
 			computer().compute($inputObjects.call($arity), out);
 		}
-
-		/**
-		 * As {@link #compute}, but match using the provided {@code Hints}.
-		 */
-		public void compute(final Hints hints) {
-			computer(hints).compute($inputObjects.call($arity), out);
-		}
-
 	}
 #end
 

@@ -152,6 +152,10 @@ public interface OpEnvironment {
 		return new OpBuilder(this, opName);
 	}
 
+	default OpBuilder op(final String opName, final Hints hints) {
+		return new OpBuilder(this, opName, hints);
+	}
+
 	/** Discerns the generic type of an object instance. */
 	Type genericType(Object obj);
 

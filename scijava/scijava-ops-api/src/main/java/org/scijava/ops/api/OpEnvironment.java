@@ -148,10 +148,64 @@ public interface OpEnvironment {
 
 	InfoChain chainFromInfo(final OpInfo info, final Nil<?> specialType, final Hints hints);
 
+	/**
+	 * Entry point for convenient Op calls, providing a builder-style interface
+	 * to walk through the process step-by-step.
+	 * <br/>
+	 * The general order of specification:
+	 * <ol>
+	 *   <li>The op name (and {@link Hints}, if desired)</li>
+	 *   <li>The number of input(s)</li>
+	 *   <li>The type or value(s) of input(s)</li>
+	 *   <li>One of:
+	 *     <ul>
+	 *       <li>The type or value of the output</li>
+	 *       <li>Which input should be modified in-place</li>
+	 *     </ul>
+	 *   </li>
+	 * </ol>
+	 * The first two steps are required, at a minimum. The choices you make will
+	 * determine the <i>type</i> of Op that is matched:
+	 * <ul>
+	 *   <li>No inputs &rarr; <code>Producer</code> or <code>Computer</code></li>
+	 *   <li>Inputs with an output <i>value</i> &rarr; <code>Computer</code></li>
+	 *   <li>Inputs with an output <i>type</i> &rarr; <code>Computer</code> or <code>Function</code></li>
+	 *   <li>Inputs with no output &rarr; <code>Inplace</code> or <code>Function</code> with unknown (<code>Object</code>) return</li>
+	 * </ul>
+	 * <br/>
+	 * <p>
+	 * Examples:
+	 * {@code OpEnvironment env = new DefaultOpEnvironment();}
+	 * <ul>
+	 *   <li>{@code env.op("create").arity0().outType(DoubleType.class).create();} &#8212; run an Op creating an instance of the ImgLib2 {@code DoubleType}</li>
+	 *   <li>{@code env.op("create").arity0().outType(Img.class).create();} &#8212; run an Op creating a raw instance of an ImgLib2 {@code Img}.</li>
+	 *   <li>{@code env.op("create").arity0().outType(new Nil<Img<DoubleType>>(){}).create();} &#8212; run an Op creating an instance of an ImgLib2 {@code Img<DoubleType>}.</li>
+	 *   <li>{@code env.op("math.add").arity2().inType(Integer.class, Integer.class).function();} &#8212; get an instance of an Op to add two integers together. Return type will be {@code Object}.</li>
+	 *   <li>{@code env.op("math.add").arity2().input(1, 1).outType(Double.class).apply();} &#8212; run an Op combining two integers. Return type will be {@code Double}.</li>
+	 *   <li>{@code env.op("math.add").arity2().input(img1, img2).output(result).compute();} &#8212; run an Op combining two images and storing the result in a pre-allocated image.</li>
+	 *   <li>{@code env.op("filter.addPoissonNoise").arity1().input(img1).mutate();} &#8212; run an Op adding poisson noise to an input image.</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param opName The name of the Op to run
+	 * @return The {@link OpBuilder} instance for builder chaining.
+	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">op(String, Hints)</a>
+	 * @see OpBuilder
+	 */
 	default OpBuilder op(final String opName) {
 		return new OpBuilder(this, opName);
 	}
 
+	/**
+	 * As {@link #op(String)} but using a provided {@link Hints}.
+	 *
+	 * @param opName The name of the Op to run
+	 * @param hints The {@code Hints} instance to use for Op matching
+	 * @return The {@link OpBuilder} instance for builder chaining.
+	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied
+	 * @see <a href="#op-java.lang.String-" title="To use the default Hints for this OpEnvironment">op(String)</a>
+	 */
 	default OpBuilder op(final String opName, final Hints hints) {
 		return new OpBuilder(this, opName, hints);
 	}

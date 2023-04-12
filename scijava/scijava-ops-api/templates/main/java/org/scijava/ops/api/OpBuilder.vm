@@ -47,46 +47,14 @@ import org.scijava.types.Types;
 
 /**
  * Convenience class for looking up and/or executing ops using a builder
- * pattern. The general order of specification:
- * <ol>
- *   <li>The op name</li>
- *   <li>The number of input(s)</li>
- *   <li>The type or value(s) of input(s)</li>
- *   <li>One of:
- *     <ul>
- *       <li>The type or value of the output</li>
- *       <li>Which input should be modified in-place</li>
- *     </ul>
- *   </li>
- * </ol>
- * The first two steps are required, at a minimum. The choices you make will
- * determine the <i>type</i> of Op that is matched:
- * <ul>
- *   <li>No inputs &rarr; <code>Producer</code> or <code>Computer</code></li>
- *   <li>Inputs with an output <i>value</i> &rarr; <code>Computer</code></li>
- *   <li>Inputs with an output <i>type</i> &rarr; <code>Computer</code> or <code>Function</code></li>
- *   <li>Inputs with no output &rarr; <code>Inplace</code> or <code>Function</code> with unknown (<code>Object</code>) return</li>
- * </ul>
+ * pattern. Typical entry point is through {@link OpEnvironment#op(String)}
+ * - which contains full usage information.
  * <br/>
- * <p>
  * Note that the intermediate builder steps use the following acronyms:
  * <ul>
  *   <li><b>IV/OV:</b> Input/Output Value. Indicates instances will be used for matching; ideal if you want to directly run the matched Op, e.g. via <code>apply</code>, <code>compute</code>, <code>mutate</code> or <code>create</code> methods.</li>
  *   <li><b>IT/OT:</b> Input/Output Types. Indicates {@code Classes} will be used for matching; matching will produce an Op instance that can then be (re)used. There are two "Type" options: raw types or {@code Nil}s. If you are matching using a parameterized type use the {@code Nil} option to preserve the type parameter.</li>
  *   <li><b>OU:</b> Output Unknown. Indicates an output type/value has not been specified to the builder yet. The output, if any, will simply be an {@code Object}</li>
- * </ul>
- * </p>
- * <p>
- * Examples:
- * {@code OpEnvironment env = new DefaultOpEnvironment();}
- * <ul>
- *   <li>{@code env.op("create").arity0().outType(DoubleType.class).create();} &#8212; run an Op creating an instance of the ImgLib2 {@code DoubleType}</li>
- *   <li>{@code env.op("create").arity0().outType(Img.class).create();} &#8212; run an Op creating a raw instance of an ImgLib2 {@code Img}.</li>
- *   <li>{@code env.op("create").arity0().outType(new Nil<Img<DoubleType>>(){}).create();} &#8212; run an Op creating an instance of an ImgLib2 {@code Img<DoubleType>}.</li>
- *   <li>{@code env.op("math.add").arity2().inType(Integer.class, Integer.class).function();} &#8212; get an instance of an Op to add two integers together. Return type will be {@code Object}.</li>
- *   <li>{@code env.op("math.add").arity2().input(1, 1).outType(Double.class).apply();} &#8212; run an Op combining two integers. Return type will be {@code Double}.</li>
- *   <li>{@code env.op("math.add").arity2().input(img1, img2).output(result).compute();} &#8212; run an Op combining two images and storing the result in a pre-allocated image.</li>
- *   <li>{@code env.op("filter.addPoissonNoise").arity1().input(img1).mutate();} &#8212; run an Op adding poisson noise to an input image.</li>
  * </ul>
  * </p>
  *

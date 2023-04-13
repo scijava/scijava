@@ -47,7 +47,7 @@ public class OpEnvironmentTest extends AbstractTestEnvironment {
 		OpInfo opifyOpInfo = ops.opify(OpifyOp.class, Priority.HIGH, opName);
 		ops.register(opifyOpInfo);
 
-		String actual = ops.op(opName).input().outType(String.class).create();
+		String actual = ops.op(opName).arity0().outType(String.class).create();
 
 		String expected = new OpifyOp().getString();
 		Assertions.assertEquals(expected, actual);

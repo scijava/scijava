@@ -25,21 +25,21 @@ public class OptionalArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testClassWithTwoOptionals() {
-		Double sum = ops.op("test.optionalAdd").input(2.0, 5.0, 7.0).outType(Double.class).apply();
+		Double sum = ops.op("test.optionalAdd").arity3().input(2.0, 5.0, 7.0).outType(Double.class).apply();
 		Double expected = 14.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
 	public void testClassWithOneOptional() {
-		Double sum = ops.op("test.optionalAdd").input(2.0, 5.0).outType(Double.class).apply();
+		Double sum = ops.op("test.optionalAdd").arity2().input(2.0, 5.0).outType(Double.class).apply();
 		Double expected = 7.0;
 		Assertions.assertEquals(expected, sum);
 	}
 
 	@Test
 	public void testClassWithoutOptionals() {
-		Double sum = ops.op("test.optionalAdd").input(2.0).outType(Double.class).apply();
+		Double sum = ops.op("test.optionalAdd").arity1().input(2.0).outType(Double.class).apply();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, sum);
 	}
@@ -73,7 +73,7 @@ public class OptionalArgumentsTest extends AbstractTestEnvironment //
 		Double[] d2 = {5.0};
 		Double[] d3 = {7.0};
 		Double[] o = {50.0};
-		ops.op("test.optionalMultiply").input(d1, d2, d3).output(o).compute();
+		ops.op("test.optionalMultiply").arity3().input(d1, d2, d3).output(o).compute();
 		Double expected = 70.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
@@ -83,7 +83,7 @@ public class OptionalArgumentsTest extends AbstractTestEnvironment //
 		Double[] d1 = {2.0};
 		Double[] d2 = {5.0};
 		Double[] o = {50.0};
-		ops.op("test.optionalMultiply").input(d1, d2).output(o).compute();
+		ops.op("test.optionalMultiply").arity2().input(d1, d2).output(o).compute();
 		Double expected = 10.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
@@ -92,7 +92,7 @@ public class OptionalArgumentsTest extends AbstractTestEnvironment //
 	public void testFieldWithoutOptionals() {
 		Double[] d1 = {2.0};
 		Double[] o = {50.0};
-		ops.op("test.optionalMultiply").input(d1).output(o).compute();
+		ops.op("test.optionalMultiply").arity1().input(d1).output(o).compute();
 		Double expected = 2.0;
 		Assertions.assertEquals(expected, o[0]);
 	}
@@ -106,21 +106,21 @@ public class OptionalArgumentsTest extends AbstractTestEnvironment //
 
 	@Test
 	public void testMethodWithTwoOptionals() {
-		String out = ops.op("test.optionalConcatenate").input("a", "b", "c").outType(String.class).apply();
+		String out = ops.op("test.optionalConcatenate").arity3().input("a", "b", "c").outType(String.class).apply();
 		String expected = "abc";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
 	public void testMethodWithOneOptional() {
-		String out = ops.op("test.optionalConcatenate").input("a", "b").outType(String.class).apply();
+		String out = ops.op("test.optionalConcatenate").arity2().input("a", "b").outType(String.class).apply();
 		String expected = "ab";
 		Assertions.assertEquals(expected, out);
 	}
 
 	@Test
 	public void testMethodWithoutOptionals() {
-		String out = ops.op("test.optionalConcatenate").input("a").outType(String.class).apply();
+		String out = ops.op("test.optionalConcatenate").arity1().input("a").outType(String.class).apply();
 		String expected = "a";
 		Assertions.assertEquals(expected, out);
 	}

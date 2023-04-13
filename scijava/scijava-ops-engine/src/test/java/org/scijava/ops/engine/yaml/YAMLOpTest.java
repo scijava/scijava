@@ -44,28 +44,28 @@ public class YAMLOpTest {
 
 	@Test
 	public void testYAMLClass() {
-		Double sum = env.op("example.add").input(2., 3.).outType(Double.class)
+		Double sum = env.op("example.add").arity2().input(2., 3.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(5., sum, 1e-6);
 	}
 
 	@Test
 	public void testYAMLInnerClass() {
-		Double quot = env.op("example.div").input(24., 8.).outType(Double.class)
+		Double quot = env.op("example.div").arity2().input(24., 8.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(3., quot, 1e-6);
 	}
 
 	@Test
 	public void testYAMLMethod() {
-		Double sum = env.op("example.sub").input(2., 3.).outType(Double.class)
+		Double sum = env.op("example.sub").arity2().input(2., 3.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(-1., sum, 1e-6);
 	}
 
 	@Test
 	public void testYAMLFunction() {
-		Double sum = env.op("example.mul").input(2., 3.).outType(Double.class)
+		Double sum = env.op("example.mul").arity2().input(2., 3.).outType(Double.class)
 			.apply();
 		Assertions.assertEquals(6., sum, 1e-6);
 	}

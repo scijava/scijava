@@ -113,7 +113,7 @@ public class OpCachingTest implements OpCollection {
 	{
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.basicOp").input().outType(
+		Producer<String> op = defOpEnv.op("test.basicOp").arity0().outType(
 			String.class).producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);
@@ -133,7 +133,7 @@ public class OpCachingTest implements OpCollection {
 		{}.getType());
 		opCache.replace(cachedConditions, invaderInstance);
 
-		Producer<String> invadedOp = defOpEnv.op("test.basicOp").input().outType(
+		Producer<String> invadedOp = defOpEnv.op("test.basicOp").arity0().outType(
 			String.class).producer();
 		Assertions.assertEquals(newProducer.create(), invadedOp.create(),
 			"Op returned did not match the Op inserted into the cache!");
@@ -145,7 +145,7 @@ public class OpCachingTest implements OpCollection {
 	{
 		// put the Op in the cache
 		DefaultOpEnvironment defOpEnv = getDefaultOpEnv();
-		Producer<String> op = defOpEnv.op("test.complicatedOp").input().outType(
+		Producer<String> op = defOpEnv.op("test.complicatedOp").arity0().outType(
 			String.class).producer();
 
 		Map<MatchingConditions, OpInstance<?>> opCache = getOpCache(defOpEnv);

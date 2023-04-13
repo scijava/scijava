@@ -51,7 +51,7 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	public void testSimplify() {
 		Integer number = 2;
 		Integer exponent = 2;
-		Double result = ops.op("test.math.powDouble").input(number, exponent)
+		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
 			.outType(Double.class).apply();
 		assertEquals(4.0, result, 0);
 	}
@@ -60,7 +60,7 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	public void testSimplifySome() {
 		Integer number = 2;
 		Double exponent = 2.;
-		Double result = ops.op("test.math.powDouble").input(number, exponent)
+		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
 			.outType(Double.class).apply();
 		assertEquals(4.0, result, 0);
 	}
@@ -69,7 +69,7 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	public void testSimplifyArray() {
 		Byte[] number = {2};
 		Double exponent = 3.;
-		Double result = ops.op("test.math.powDouble").input(number, exponent)
+		Double result = ops.op("test.math.powDouble").arity2().input(number, exponent)
 			.outType(Double.class).apply();
 		assertEquals(8.0, result, 0);
 	}
@@ -77,7 +77,7 @@ public class SimplifyTest extends AbstractTestEnvironment implements OpCollectio
 	@Test
 	public void testSimplifiedOp() {
 		BiFunction<Number, Number, Double> numFunc = ops.op("test.math.powDouble")
-			.inType(Number.class, Number.class).outType(Double.class).function();
+			.arity2().inType(Number.class, Number.class).outType(Double.class).function();
 		
 		Double result = numFunc.apply(3., 4.);
 		assertEquals(81., result, 0);

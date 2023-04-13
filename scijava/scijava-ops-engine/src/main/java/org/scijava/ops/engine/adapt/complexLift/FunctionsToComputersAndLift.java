@@ -39,9 +39,9 @@ import java.util.function.Function;
 
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
+import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
-import org.scijava.ops.spi.OpDependency;
 import org.scijava.priority.Priority;
 
 /**

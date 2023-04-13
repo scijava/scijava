@@ -42,14 +42,14 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 	@Test
 	public void testDependencyFirstMethodWithOptional() {
 		Double opt = 7.;
-		Double o = ops.op("test.optionalWithDependency").input(opt).outType(Double.class).apply();
+		Double o = ops.op("test.optionalWithDependency").arity1().input(opt).outType(Double.class).apply();
 		Double expected = 12.;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testDependencyFirstMethodWithoutOptional() {
-		Double o = ops.op("test.optionalWithDependency").input().outType(Double.class).create();
+		Double o = ops.op("test.optionalWithDependency").arity0().outType(Double.class).create();
 		Double expected = 5.;
 		Assertions.assertEquals(expected, o);
 	}
@@ -57,14 +57,14 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 	@Test
 	public void testDependencySecondMethodWithOptional() {
 		Double opt = 7.;
-		Double o = ops.op("test.optionalWithDependency2").input(opt).outType(Double.class).apply();
+		Double o = ops.op("test.optionalWithDependency2").arity1().input(opt).outType(Double.class).apply();
 		Double expected = 12.;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testDependencySecondMethodWithoutOptional() {
-		Double o = ops.op("test.optionalWithDependency2").input().outType(Double.class).create();
+		Double o = ops.op("test.optionalWithDependency2").arity0().outType(Double.class).create();
 		Double expected = 5.;
 		Assertions.assertEquals(expected, o);
 	}

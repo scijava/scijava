@@ -54,7 +54,7 @@ public class FunctionToComputerAdaptTest extends AbstractTestEnvironment {
 	public void testFunction${arity}ToComputer${arity}() {
 		double[] in = { 2, 4 };
 		double[] output = { 0, 0 };
-		ops.op("test.FtC").input($inList.call($arity)).output(output).compute();
+		ops.op("test.FtC").arity$arity().input($inList.call($arity)).output(output).compute();
 		Assertions.assertArrayEquals(new double[] $expectedValue.call($arity), output, 0);
 	}
 #end

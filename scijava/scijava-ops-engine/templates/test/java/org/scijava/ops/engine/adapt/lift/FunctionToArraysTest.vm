@@ -87,6 +87,7 @@ public class FunctionToArraysTest extends AbstractTestEnvironment implements OpC
 			new NumericalThing(2) };
 		NumericalThing[] output = ops //
 			.op("test.liftArrayF") //
+			.arity$arity() //
 			.input($inputArgs.call($arity)) //
 			.outType(new Nil<NumericalThing[]>()
 			{}).apply();

@@ -70,7 +70,7 @@ public class InplaceToFunctionAdaptTest extends AbstractTestEnvironment {
 #end
 		double[] expected = $inplaceExpectedArray.call($arity);
 		final double[] output = ops.op("test.mulArrays${arity}_${a}") //
-			.input($args.call($arity)) //
+			.arity$arity().input($args.call($arity)) //
 			.outType(new Nil<double[]>()
 			{}).apply();
 		assertTrue(Arrays.equals(output, expected));

@@ -40,7 +40,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		List<String> in = new ArrayList<>();
 		in.add("1");
 		List<Long> out = new ArrayList<>();
-		ops.op("test.dependencyBeforeOutput").input(in).output(out).compute();
+		ops.op("test.dependencyBeforeOutput").arity1().input(in).output(out).compute();
 		List<Long> expected = Arrays.asList(1l);
 		assertIterationsEqual(expected, out);
 	}
@@ -59,7 +59,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		List<String> in = new ArrayList<>();
 		in.add("1");
 		List<Long> out = new ArrayList<>();
-		ops.op("test.dependencyAfterOutput").input(in).output(out).compute();
+		ops.op("test.dependencyAfterOutput").arity1().input(in).output(out).compute();
 		List<Long> expected = Arrays.asList(1l);
 		assertIterationsEqual(expected, out);
 	}
@@ -91,7 +91,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		List<String> in = new ArrayList<>();
 		in.add("2");
 		List<Long> out = new ArrayList<>();
-		ops.op("test.dependencyBeforeAndAfterOutput").input(in).output(out).compute();
+		ops.op("test.dependencyBeforeAndAfterOutput").arity1().input(in).output(out).compute();
 		List<Long> expected = Arrays.asList(4l);
 		assertIterationsEqual(expected, out);
 	}

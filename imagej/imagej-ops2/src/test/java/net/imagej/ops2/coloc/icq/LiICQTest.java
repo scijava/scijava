@@ -59,7 +59,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 		final Img<ByteType> img1 = TestImgGeneration.byteArray(true, 10, 15, 20);
 		final Img<ByteType> img2 = TestImgGeneration.byteArray(true, 10, 15, 20);
 
-		final Double icqValue = ops.op("coloc.icq").input(img1, img2).outType(Double.class).apply();
+		final Double icqValue = ops.op("coloc.icq").arity2().input(img1, img2).outType(Double.class).apply();
 
 		assertEquals(0.5, icqValue, 0.0);
 	}
@@ -69,7 +69,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void liPositiveCorrTest() {
-		final Double icqValue = ops.op("coloc.icq").input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2())
+		final Double icqValue = ops.op("coloc.icq").arity2().input(getPositiveCorrelationImageCh1(), getPositiveCorrelationImageCh2())
 				.outType(Double.class).apply();
 		assertTrue(icqValue > 0.34 && icqValue < 0.35);
 	}
@@ -80,7 +80,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 	 */
 	@Test
 	public void liZeroCorrTest() {
-		final Object icqValue = ops.op("coloc.icq").input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).apply();
+		final Object icqValue = ops.op("coloc.icq").arity2().input(getZeroCorrelationImageCh1(), getZeroCorrelationImageCh2()).apply();
 
 		assertTrue(icqValue instanceof Double);
 		final double icq = (Double) icqValue;
@@ -103,7 +103,7 @@ public class LiICQTest extends AbstractColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op = OpBuilder.matchFunction(ops, "coloc.icq",
 				new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, es).output(value).compute();
 		assertEquals(0.72, value.getPValue(), 0.0);
 	}
 

@@ -66,6 +66,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 1., 2., 3. });
 		ops.op("test.addArrays") //
+			.arity1() //
 			.input(in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -78,6 +79,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 2., 4., 6. });
 		ops.op("test.addArrays") //
+			.arity2() //
 			.input(in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -90,6 +92,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 3., 6., 9. });
 		ops.op("test.addArrays") //
+			.arity3() //
 			.input(in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -102,6 +105,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 4., 8., 12. });
 		ops.op("test.addArrays") //
+			.arity4() //
 			.input(in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -114,6 +118,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 5., 10., 15. });
 		ops.op("test.addArrays") //
+			.arity5() //
 			.input(in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -126,6 +131,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 6., 12., 18. });
 		ops.op("test.addArrays") //
+			.arity6() //
 			.input(in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -138,6 +144,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 7., 14., 21. });
 		ops.op("test.addArrays") //
+			.arity7() //
 			.input(in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -150,6 +157,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 8., 16., 24. });
 		ops.op("test.addArrays") //
+			.arity8() //
 			.input(in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -162,6 +170,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 9., 18., 27. });
 		ops.op("test.addArrays") //
+			.arity9() //
 			.input(in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -174,6 +183,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 10., 20., 30. });
 		ops.op("test.addArrays") //
+			.arity10() //
 			.input(in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -186,6 +196,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 11., 22., 33. });
 		ops.op("test.addArrays") //
+			.arity11() //
 			.input(in, in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -198,6 +209,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 12., 24., 36. });
 		ops.op("test.addArrays") //
+			.arity12() //
 			.input(in, in, in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -210,6 +222,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 13., 26., 39. });
 		ops.op("test.addArrays") //
+			.arity13() //
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -222,6 +235,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 14., 28., 42. });
 		ops.op("test.addArrays") //
+			.arity14() //
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -234,6 +248,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 15., 30., 45. });
 		ops.op("test.addArrays") //
+			.arity15() //
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());
@@ -246,6 +261,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] { 16., 32., 48. });
 		ops.op("test.addArrays") //
+			.arity16() //
 			.input(in, in, in, in, in, in, in, in, in, in, in, in, in, in, in, in) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());

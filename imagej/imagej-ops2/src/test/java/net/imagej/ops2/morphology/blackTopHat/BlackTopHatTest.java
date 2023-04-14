@@ -66,7 +66,7 @@ public class BlackTopHatTest extends AbstractOpTest {
 	public void testSingleBlackTopHat() {
 		final Shape shape = new DiamondShape(1);
 		final List<Shape> shapes = Arrays.asList(shape);
-		final Img<ByteType> out1 = ops.op("morphology.BlackTopHat").input(in, shapes, 1)
+		final Img<ByteType> out1 = ops.op("morphology.BlackTopHat").arity3().input(in, shapes, 1)
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final Img<ByteType> out2 = BlackTopHat.blackTopHat(in, shape, 1);
 		ImgLib2Assert.assertImageEquals(out2, out1);
@@ -79,7 +79,7 @@ public class BlackTopHatTest extends AbstractOpTest {
 		shapes.add(new DiamondShape(1));
 		shapes.add(new RectangleShape(1, false));
 		shapes.add(new HorizontalLineShape(2, 1, false));
-		final Img<ByteType> out1 = ops.op("morphology.BlackTopHat").input(in, shapes, 1)
+		final Img<ByteType> out1 = ops.op("morphology.BlackTopHat").arity3().input(in, shapes, 1)
 				.outType(new Nil<Img<ByteType>>() {}).apply();
 		final Img<ByteType> out2 = BlackTopHat.blackTopHat(in, shapes, 1);
 		ImgLib2Assert.assertImageEquals(out2, out1);

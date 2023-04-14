@@ -35,13 +35,13 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Computers.Arity1<Double[], Double[]> adaptable = ops.op(
-			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
+			"test.adaptation.hints").arity1().inType(Double[].class).outType(Double[].class)
 			.computer();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Adaptation.FORBIDDEN);
 		ops.setDefaultHints(hints);
 		try {
-			ops.op("test.adaptation.hints").inType(Double[].class).outType(
+			ops.op("test.adaptation.hints").arity1().inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
 		} catch( OpMatchingException e) {
@@ -54,13 +54,13 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 		Hints hints = new DefaultHints();
 		@SuppressWarnings("unused")
 		Computers.Arity1<Double[], Double[]> adaptable = ops.op(
-			"test.adaptation.hints").inType(Double[].class).outType(Double[].class)
-			.computer(hints);
+			"test.adaptation.hints", hints).arity1().inType(Double[].class).outType(Double[].class)
+			.computer();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Adaptation.FORBIDDEN);
 		try {
-			ops.op("test.adaptation.hints").inType(Double[].class).outType(
-				Double[].class).computer(hints);
+			ops.op("test.adaptation.hints", hints).arity1().inType(Double[].class).outType(
+				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
 		} catch( OpMatchingException e) {
 		}
@@ -77,12 +77,12 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
-			"test.adaptation.unadaptable").inType(Double[].class).outType(Double[].class)
+			"test.adaptation.unadaptable").arity1().inType(Double[].class).outType(Double[].class)
 			.function();
 		// make sure that we cannot match the Op via adaptation even when adaptation
 		// is allowed (since it declares itself to be unadaptable)
 		try {
-			ops.op("test.adaptation.unadaptable").inType(Double[].class).outType(
+			ops.op("test.adaptation.unadaptable").arity1().inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
 		} catch( OpMatchingException e) {
@@ -96,13 +96,13 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 		Hints hints = new DefaultHints();
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
-			"test.adaptation.unadaptable").inType(Double[].class).outType(Double[].class)
-			.function(hints);
+			"test.adaptation.unadaptable", hints).arity1().inType(Double[].class).outType(Double[].class)
+			.function();
 		// make sure that we cannot match the Op via adaptation even when adaptation
 		// is allowed (since it declares itself to be unadaptable)
 		try {
-			ops.op("test.adaptation.unadaptable").inType(Double[].class).outType(
-				Double[].class).computer(hints);
+			ops.op("test.adaptation.unadaptable", hints).arity1().inType(Double[].class).outType(
+				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
 		} catch( OpMatchingException e) {
 		}

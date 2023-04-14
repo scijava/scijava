@@ -88,7 +88,7 @@ public class WatershedSeededTest extends AbstractOpTest {
 
 		// compute labeled seeds
 		final ImgLabeling<Integer, IntType> labeledSeeds = ops.op("labeling.cca")
-				.input(bits, es, StructuringElement.EIGHT_CONNECTED)
+				.arity3().input(bits, es, StructuringElement.EIGHT_CONNECTED)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		testWithoutMask(input, labeledSeeds);
@@ -110,13 +110,13 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").input(in, seeds, true, false)
+		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").arity4().input(in, seeds, true, false)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out, seeds, mask, false, false);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").input(in, seeds, true, true)
+		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").arity4().input(in, seeds, true, true)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out2, seeds, mask, true, false);
@@ -125,13 +125,13 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 4-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").input(in, seeds, false, false)
+		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").arity4().input(in, seeds, false, false)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out3, seeds, mask, false, false);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").input(in, seeds, false, true)
+		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").arity4().input(in, seeds, false, true)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out4, seeds, mask, true, false);
@@ -157,13 +157,13 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 8-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").input(in, seeds, true, false, mask)
+		ImgLabeling<Integer, IntType> out = ops.op("image.watershed").arity5().input(in, seeds, true, false, mask)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out, seeds, mask, false, true);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").input(in, seeds, true, true, mask)
+		ImgLabeling<Integer, IntType> out2 = ops.op("image.watershed").arity5().input(in, seeds, true, true, mask)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out2, seeds, mask, true, true);
@@ -172,13 +172,13 @@ public class WatershedSeededTest extends AbstractOpTest {
 		 * use 4-connected neighborhood
 		 */
 		// compute result without watersheds
-		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").input(in, seeds, false, false, mask)
+		ImgLabeling<Integer, IntType> out3 = ops.op("image.watershed").arity5().input(in, seeds, false, false, mask)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out3, seeds, mask, false, true);
 
 		// compute result with watersheds
-		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").input(in, seeds, false, true, mask)
+		ImgLabeling<Integer, IntType> out4 = ops.op("image.watershed").arity5().input(in, seeds, false, true, mask)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		assertResults(in, out4, seeds, mask, true, true);

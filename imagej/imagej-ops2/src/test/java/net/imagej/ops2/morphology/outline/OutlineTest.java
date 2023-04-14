@@ -64,7 +64,7 @@ public class OutlineTest extends AbstractOpTest {
 		final Img<BitType> img = ArrayImgs.bits(inputDims);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY
@@ -81,7 +81,7 @@ public class OutlineTest extends AbstractOpTest {
 		final Img<BitType> img = ArrayImgs.bits(3, 3, 3);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY
@@ -97,7 +97,7 @@ public class OutlineTest extends AbstractOpTest {
 		img.forEach(BitType::setOne);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY
@@ -113,7 +113,7 @@ public class OutlineTest extends AbstractOpTest {
 		square.cursor().forEachRemaining(BitType::setOne);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY
@@ -140,7 +140,7 @@ public class OutlineTest extends AbstractOpTest {
 		access.get().setZero();
 
 		// EXECUTION
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY
@@ -168,7 +168,7 @@ public class OutlineTest extends AbstractOpTest {
 		square.cursor().forEachRemaining(BitType::setOne);
 
 		// EXECUTION
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY
@@ -197,7 +197,7 @@ public class OutlineTest extends AbstractOpTest {
 		final IntervalView<BitType> square = Views.offsetInterval(img, new long[] { 0, 1 }, new long[] { 3, 3 });
 		square.cursor().forEachRemaining(BitType::setOne);
 
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.FALSE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.FALSE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		assertEquals(8, countForeground(result),
@@ -222,7 +222,7 @@ public class OutlineTest extends AbstractOpTest {
 		hyperCube.cursor().forEachRemaining(BitType::setOne);
 
 		// EXECUTE
-		final Img<BitType> result = ops.op("morphology.outline").input(img, Boolean.TRUE)
+		final Img<BitType> result = ops.op("morphology.outline").arity2().input(img, Boolean.TRUE)
 				.outType(new Nil<Img<BitType>>() {}).apply();
 
 		// VERIFY

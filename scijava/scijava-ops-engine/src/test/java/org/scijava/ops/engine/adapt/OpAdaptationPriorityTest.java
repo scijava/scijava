@@ -95,7 +95,7 @@ public class OpAdaptationPriorityTest extends AbstractTestEnvironment implements
 
 	@Test
 	public void testPriority() {
-		PriorityThing pThing = ops.op("test.priorityOp").input(
+		PriorityThing pThing = ops.op("test.priorityOp").arity1().input(
 			new Double(10)).outType(PriorityThing.class).apply();
 		assertEquals(20, pThing.getPriority(), 0.);
 		// This would be the value of pThing if it were created using

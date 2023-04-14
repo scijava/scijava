@@ -38,13 +38,13 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op(
-			"test.simplification.hints").inType(Integer[].class).outType(
+			"test.simplification.hints").arity1().inType(Integer[].class).outType(
 				Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Simplification.FORBIDDEN);
 		ops.setDefaultHints(hints);
 		try {
-			ops.op("test.simplification.hints").inType(Integer[].class).outType(
+			ops.op("test.simplification.hints").arity1().inType(Integer[].class).outType(
 				Integer[].class).function();
 			throw new IllegalStateException(
 				"Simplification is forbidden - this op call should not match!");
@@ -60,13 +60,13 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 		Hints hints = new DefaultHints();
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op(
-			"test.simplification.hints").inType(Integer[].class).outType(
-				Integer[].class).function(hints);
+			"test.simplification.hints", hints).arity1().inType(Integer[].class).outType(
+				Integer[].class).function();
 		// make sure we cannot find the Op when adaptation is not allowed
 		hints = hints.plus(Simplification.FORBIDDEN);
 		try {
-			ops.op("test.simplification.hints").inType(Integer[].class).outType(
-				Integer[].class).function(hints);
+			ops.op("test.simplification.hints", hints).arity1().inType(Integer[].class).outType(
+				Integer[].class).function();
 			throw new IllegalStateException(
 				"Simplification is forbidden - this op call should not match!");
 		}
@@ -87,13 +87,13 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
-			"test.simplification.unsimplifiable").inType(Double[].class).outType(
+			"test.simplification.unsimplifiable").arity1().inType(Double[].class).outType(
 				Double[].class).function();
 		// make sure that we cannot match the Op via adaptation even when
 		// simplification
 		// is allowed (since it declares itself to be unsimplifiable)
 		try {
-			ops.op("test.simplification.unsimplifiable").inType(Integer[].class)
+			ops.op("test.simplification.unsimplifiable").arity1().inType(Integer[].class)
 				.outType(Integer[].class).function();
 			throw new IllegalStateException(
 				"The only relevant Op is not simplifiable - this op call should not match!");
@@ -109,14 +109,14 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 		Hints hints = new DefaultHints();
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
-			"test.simplification.unsimplifiable").inType(Double[].class).outType(
-				Double[].class).function(hints);
+			"test.simplification.unsimplifiable", hints).arity1().inType(Double[].class).outType(
+				Double[].class).function();
 		// make sure that we cannot match the Op via adaptation even when
 		// simplification
 		// is allowed (since it declares itself to be unsimplifiable)
 		try {
-			ops.op("test.simplification.unsimplifiable").inType(Integer[].class)
-				.outType(Integer[].class).function(hints);
+			ops.op("test.simplification.unsimplifiable", hints).arity1().inType(Integer[].class)
+				.outType(Integer[].class).function();
 			throw new IllegalStateException(
 				"The only relevant Op is not simplifiable - this op call should not match!");
 		}

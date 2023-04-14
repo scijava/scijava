@@ -53,7 +53,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
 
         final DoubleType result = new DoubleType();
 				Assertions.assertThrows(IllegalArgumentException.class, () -> {
-					ops.op("topology.eulerCorrection").input(img).output(result).compute();
+					ops.op("topology.eulerCorrection").arity1().input(img).output(result).compute();
 				});
 	    }
 
@@ -81,7 +81,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
         assertEquals(0, voxelEdgeFaceIntersections, "Number intersections is incorrect");
 
         DoubleType result = new DoubleType();
-        ops.op("topology.eulerCorrection").input(cube).output(result).compute();
+        ops.op("topology.eulerCorrection").arity1().input(cube).output(result).compute();
 
         assertEquals(0, result.get(), 1e-12, "Euler correction is incorrect");
     }
@@ -119,7 +119,7 @@ public class EulerCorrectionTest extends AbstractOpTest {
         assertEquals(108, voxelEdgeFaceIntersections, "Number intersections is incorrect");
 
         DoubleType result = new DoubleType();
-        ops.op("topology.eulerCorrection").input(cube).output(result).compute();
+        ops.op("topology.eulerCorrection").arity1().input(cube).output(result).compute();
         assertEquals(1, result.get(), 1e-12, "Euler contribution is incorrect");
     }
 }

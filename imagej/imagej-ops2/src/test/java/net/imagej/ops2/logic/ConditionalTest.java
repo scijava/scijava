@@ -49,9 +49,9 @@ public class ConditionalTest extends AbstractOpTest {
 		final ByteType ifTrueVal = new ByteType((byte) 10);
 		final ByteType ifFalseVal = new ByteType((byte) 100);
 		final ByteType outVal = new ByteType();
-		ops.op("logic.match").input(new BoolType(true), ifTrueVal, ifFalseVal).output(outVal).compute();
+		ops.op("logic.match").arity3().input(new BoolType(true), ifTrueVal, ifFalseVal).output(outVal).compute();
 		assertEquals(10, outVal.get());
-		ops.op("logic.match").input(new BoolType(false), ifTrueVal, ifFalseVal).output(outVal).compute();
+		ops.op("logic.match").arity3().input(new BoolType(false), ifTrueVal, ifFalseVal).output(outVal).compute();
 		assertEquals(100, outVal.get());
 	}
 
@@ -59,9 +59,9 @@ public class ConditionalTest extends AbstractOpTest {
 	public void testDefault() {
 		final ByteType out = new ByteType((byte) 10);
 		final ByteType defaultVal = new ByteType((byte) 100);
-		ops.op("logic.default").input(new BoolType(true), defaultVal).output(out).compute();
+		ops.op("logic.default").arity2().input(new BoolType(true), defaultVal).output(out).compute();
 		assertEquals(10, out.get());
-		ops.op("logic.default").input(new BoolType(false), defaultVal).output(out).compute();
+		ops.op("logic.default").arity2().input(new BoolType(false), defaultVal).output(out).compute();
 		assertEquals(100, out.get());
 	}
 

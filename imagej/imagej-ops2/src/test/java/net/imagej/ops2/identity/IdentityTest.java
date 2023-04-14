@@ -46,17 +46,17 @@ public class IdentityTest extends AbstractOpTest {
 	public void testIdentity() {
 		Byte b = 35;
 		final Object ib = b;
-		ops.op("identity").input(b).mutate();
+		ops.op("identity").arity1().input(b).mutate();
 		assertSame(b, ib);
 
 		int i = 23;
 		final Object ii = i; 
-		ops.op("identity").input(i).mutate();
+		ops.op("identity").arity1().input(i).mutate();
 		assertSame(i, ii);
 
 		String s = "hello";
 		final Object is = s;
-		ops.op("identity").input(s).mutate();
+		ops.op("identity").arity1().input(s).mutate();
 		assertSame(s, is);
 	}
 

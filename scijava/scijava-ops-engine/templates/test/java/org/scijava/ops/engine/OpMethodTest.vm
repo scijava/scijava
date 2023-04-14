@@ -57,7 +57,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 
 	@Test
 	public void testOpMethodProducer() {
-		final Integer out = ops.op("test.multiplyNumericStrings").input()
+		final Integer out = ops.op("test.multiplyNumericStrings").arity0()
 			.outType(Integer.class).create();
 		final Integer expected = Integer.valueOf(1);
 		assertEquals(expected, out);
@@ -67,7 +67,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 	@Test
 	public void testOpMethodFunction$arity() {
 		final String in = "2";
-		final Integer out = ops.op("test.multiplyNumericStrings").input($computerInputs.call($arity))
+		final Integer out = ops.op("test.multiplyNumericStrings").arity$arity().input($computerInputs.call($arity))
 			.outType(Integer.class).apply();
 		assertEquals(Math.pow(2, $arity), out, 0);
 	}
@@ -88,7 +88,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 	public void testOpMethodComputer$arity() {
 		String in = "$arity";
 		List<Double> out = new ArrayList<>();
-		ops.op("test.doubleList").input($computerInputs.call($arity))
+		ops.op("test.doubleList").arity$arity()#if ( $arity > 0 ).input($computerInputs.call($arity))#end
 			.output(out).compute();
 		assertEquals(expected($arity, $arity), out);
 	}
@@ -109,7 +109,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 	public void testOpMethodInplace${inplaceSuffix.call($arity, $a)}() {
 		final double[] io = { 1., 2., 3. };
 		final double[] in = { 1., 2., 3. };
-		ops.op("test.addDoubles${inplaceSuffix.call($arity, $a)}").input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
+		ops.op("test.addDoubles${inplaceSuffix.call($arity, $a)}").arity$arity().input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
 		assertTrue(outputExpected(io, $arity));
 	}
 #end
@@ -121,7 +121,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 	@Test
 	public void testDependentMethodFunction$arity() {
 		final String in = "2";
-		final Integer out = ops.op("test.dependentMultiplyStrings").input($computerInputs.call($arity))
+		final Integer out = ops.op("test.dependentMultiplyStrings").arity$arity().input($computerInputs.call($arity))
 			.outType(Integer.class).apply();
 		assertEquals(Math.pow(2, $arity), out, 0);
 	}
@@ -134,7 +134,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 	public void testDependentMethodComputer$arity() {
 		String in = "$arity";
 		List<Double> out = new ArrayList<>();
-		ops.op("test.dependentDoubleList").input($computerInputs.call($arity))
+		ops.op("test.dependentDoubleList").arity$arity().input($computerInputs.call($arity))
 			.output(out).compute();
 		assertEquals(expected($arity, $arity), out);
 	}
@@ -148,7 +148,7 @@ public class OpMethodTest extends AbstractTestEnvironment implements OpCollectio
 	public void testDependentMethodInplace${inplaceSuffix.call($arity, $a)}() {
 		final double[] io = { 1., 2., 3. };
 		final double[] in = { 1., 2., 3. };
-		ops.op("test.dependentAddDoubles${inplaceSuffix.call($arity, $a)}").input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
+		ops.op("test.dependentAddDoubles${inplaceSuffix.call($arity, $a)}").arity$arity().input($inplaceArgs.call($arity, $a)).mutate#if($arity == 1)#{else}$a#end();
 		assertTrue(outputExpected(io, $arity));
 	}
 #end

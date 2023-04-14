@@ -97,6 +97,7 @@ public class InplaceToArraysTest extends AbstractTestEnvironment implements OpCo
 		NumericalThing[] io = { new NumericalThing(0), new NumericalThing(1),
 			new NumericalThing(2) };
 			ops.op("test.liftArrayI$a") //
+			.arity$arity() //
 			.input($inputList.call($arity, $a)) //
 			.${mutateMethod.call($arity, $a)}();
 

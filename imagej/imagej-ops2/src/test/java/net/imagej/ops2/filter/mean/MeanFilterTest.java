@@ -45,14 +45,14 @@ public class MeanFilterTest extends AbstractOpTest{
 	@Test
 	public void meanFilterTest() {
 		
-		Img<ByteType> img = ops.op("create.img").input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
+		Img<ByteType> img = ops.op("create.img").arity2().input(new FinalInterval(5, 5), new ByteType()).outType(new Nil<Img<ByteType>>() {}).apply();
 		RectangleShape shape = new RectangleShape(1, false);
 		OutOfBoundsFactory<ByteType, RandomAccessibleInterval<ByteType>> oobf = new OutOfBoundsBorderFactory<>();
-		Img<ByteType> output = ops.op("create.img").input(img).outType(new Nil<Img<ByteType>>() {}).apply();
-		ops.op("filter.mean").input(img, shape, oobf).output(output).compute();
+		Img<ByteType> output = ops.op("create.img").arity1().input(img).outType(new Nil<Img<ByteType>>() {}).apply();
+		ops.op("filter.mean").arity3().input(img, shape, oobf).output(output).compute();
 
 		// Try with no OutOfBoundsFactory
-		ops.op("filter.mean").input(img, shape).output(output).compute();
+		ops.op("filter.mean").arity2().input(img, shape).output(output).compute();
 	}
 
 }

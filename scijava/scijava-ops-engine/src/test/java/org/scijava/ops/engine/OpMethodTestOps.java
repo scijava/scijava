@@ -37,10 +37,10 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
-import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
 import org.scijava.ops.spi.OpMethod;
+import org.scijava.ops.spi.OpCollection;
 
 public class OpMethodTestOps implements OpCollection {
 

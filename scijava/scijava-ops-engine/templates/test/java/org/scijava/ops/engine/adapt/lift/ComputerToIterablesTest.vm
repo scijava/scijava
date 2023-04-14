@@ -67,6 +67,7 @@ public class ComputerToIterablesTest extends AbstractTestEnvironment {
 		final List<double[]> expected = //
 			Arrays.asList(new double[] $expectedList.call($arity));
 		ops.op("test.addArrays") //
+			.arity$arity() //
 			.input($inputList.call($arity)) //
 			.output(out).compute();
 		assertArrayEquals(out.toArray(), expected.toArray());

@@ -54,7 +54,7 @@ public class FillTest extends AbstractOpTest {
 	@Test
 	public void testFillRAI() {
 		out = ArrayImgs.bytes(10, 10);
-		ops.op("image.fill").input(new ByteType((byte) 10)).output(out).compute();
+		ops.op("image.fill").arity1().input(new ByteType((byte) 10)).output(out).compute();
 
 		for (ByteType px : out)
 			assertEquals(px.get(), 10);
@@ -67,7 +67,7 @@ public class FillTest extends AbstractOpTest {
 			list.add(new ByteType((byte) 5));
 		}
 
-		ops.op("image.fill").input(new ByteType((byte) 20)).output(list).compute();
+		ops.op("image.fill").arity1().input(new ByteType((byte) 20)).output(list).compute();
 
 		for (ByteType px : list)
 			assertEquals(px.get(), 20);

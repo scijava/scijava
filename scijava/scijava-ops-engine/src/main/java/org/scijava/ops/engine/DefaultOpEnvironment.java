@@ -46,7 +46,6 @@ import org.scijava.ops.api.*;
 import org.scijava.ops.api.features.*;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
-import org.scijava.ops.api.features.BaseOpHints.History;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.impl.DependencyRichOpInfoChain;
@@ -411,7 +410,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * Finds an Op instance matching the request described by {@link OpRef}
 	 * {@code ref} and stores this Op in {@link #opCache}. NB the return must be an
 	 * {@link Object} here (instead of some type variable T where T is the Op
-	 * type} since there is no way to ensure that the {@code OpRef} can provide
+	 * type) since there is no way to ensure that the {@code OpRef} can provide
 	 * that T (since the OpRef could require that the Op returned is of multiple
 	 * types).
 	 * 

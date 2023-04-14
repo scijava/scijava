@@ -59,7 +59,7 @@ public class InplacesTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testBinaryInplaces() {
-		final Inplaces.Arity2_1<double[], double[]> inplaceAdd = OpBuilder.matchInplace1(ops, "math.add", nilDoubleArray,
+		final Inplaces.Arity2_1<double[], double[]> inplaceAdd = OpBuilder.matchInplace2_1(ops, "math.add", nilDoubleArray,
 				nilDoubleArray);
 		final double[] a1 = { 3, 5, 7 };
 		final double[] a2 = { 2, 4, 9 };

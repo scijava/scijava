@@ -47,7 +47,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		list.add(4.0d);
 
 		assertThrows(OpMatchingException.class, //
-				() -> ops.op("test.parameter.op").input(list, func).outType(new Nil<List<Double>>() {
+				() -> ops.op("test.parameter.op").arity2().input(list, func).outType(new Nil<List<Double>>() {
 				}).apply() //
 		);
 	}
@@ -83,7 +83,7 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 		});
 
 		@SuppressWarnings("unused")
-		List<Double> output = ops.op("test.parameter.op").input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
+		List<Double> output = ops.op("test.parameter.op").arity2().input(list, funcClass).outType(new Nil<List<Double>>() {}).apply();
 	}
 
 }

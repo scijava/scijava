@@ -38,8 +38,8 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 import org.scijava.function.Computers;
-import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
+import org.scijava.ops.spi.OpCollection;
 
 /**
  * Converts {@link Computers} operating on single types to {@link Computers}

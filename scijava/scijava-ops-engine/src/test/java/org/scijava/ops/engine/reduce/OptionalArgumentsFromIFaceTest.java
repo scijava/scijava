@@ -26,14 +26,14 @@ public class OptionalArgumentsFromIFaceTest extends AbstractTestEnvironment
 
 	@Test
 	public void testMethodWithOneOptional() {
-		Double o = ops.op("test.optionalSubtract").input(2., 5., 7.).outType(Double.class).apply();
+		Double o = ops.op("test.optionalSubtract").arity3().input(2., 5., 7.).outType(Double.class).apply();
 		Double expected = -10.0;
 		Assertions.assertEquals(expected, o);
 	}
 
 	@Test
 	public void testMethodWithoutOptionals() {
-		Double o = ops.op("test.optionalSubtract").input(2., 5.).outType(Double.class).apply();
+		Double o = ops.op("test.optionalSubtract").arity2().input(2., 5.).outType(Double.class).apply();
 		Double expected = -3.0;
 		Assertions.assertEquals(expected, o);
 	}
@@ -50,7 +50,7 @@ public class OptionalArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean in1 = true;
 		Boolean in2 = true;
 		Boolean in3 = false;
-		Boolean o = ops.op("test.optionalAnd").input(in1, in2, in3).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.optionalAnd").arity3().input(in1, in2, in3).outType(Boolean.class).apply();
 		Boolean expected = false;
 		Assertions.assertEquals(expected, o);
 	}
@@ -59,7 +59,7 @@ public class OptionalArgumentsFromIFaceTest extends AbstractTestEnvironment
 	public void testFieldWithoutOptionals() {
 		Boolean in1 = true;
 		Boolean in2 = true;
-		Boolean o = ops.op("test.optionalAnd").input(in1, in2).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.optionalAnd").arity2().input(in1, in2).outType(Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}
@@ -69,7 +69,7 @@ public class OptionalArgumentsFromIFaceTest extends AbstractTestEnvironment
 		Boolean in1 = true;
 		Boolean in2 = false;
 		Boolean in3 = false;
-		Boolean o = ops.op("test.optionalOr").input(in1, in2, in3).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.optionalOr").arity3().input(in1, in2, in3).outType(Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}
@@ -78,7 +78,7 @@ public class OptionalArgumentsFromIFaceTest extends AbstractTestEnvironment
 	public void testClassWithoutOptionals() {
 		Boolean in1 = true;
 		Boolean in2 = false;
-		Boolean o = ops.op("test.optionalOr").input(in1, in2).outType(Boolean.class).apply();
+		Boolean o = ops.op("test.optionalOr").arity2().input(in1, in2).outType(Boolean.class).apply();
 		Boolean expected = true;
 		Assertions.assertEquals(expected, o);
 	}

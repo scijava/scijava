@@ -57,25 +57,25 @@ public class DistanceTransform3DTest extends AbstractOpTest {
 
 		// create 3D image
 		final RandomAccessibleInterval<BitType> in = ops.op("create.img")
-				.input(new FinalInterval(20, 20, 5), new BitType())
+				.arity2().input(new FinalInterval(20, 20, 5), new BitType())
 				.outType(new Nil<RandomAccessibleInterval<BitType>>() {}).apply();
 		generate3DImg(in);
 
 		// create output image
-		RandomAccessibleInterval<FloatType> out = ops.op("create.img").input(in, new FloatType())
+		RandomAccessibleInterval<FloatType> out = ops.op("create.img").arity2().input(in, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		/*
 		 * test normal DT
 		 */
-		ops.op("image.distanceTransform").input(in, es).output(out).compute();
+		ops.op("image.distanceTransform").arity2().input(in, es).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21 };
-		ops.op("image.distanceTransform").input(in, calibration, es).output(out)
+		ops.op("image.distanceTransform").arity3().input(in, calibration, es).output(out)
 				.compute();
 		compareResults(out, in, calibration);
 	}

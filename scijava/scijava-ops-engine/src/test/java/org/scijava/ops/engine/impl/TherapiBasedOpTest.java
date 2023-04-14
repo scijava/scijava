@@ -72,21 +72,21 @@ public class TherapiBasedOpTest {
 
 	@Test
 	public void therapiOpFieldTest() throws NoSuchFieldException {
-		String actual = ops.op("test.therapiOpField").input().outType(String.class).create();
+		String actual = ops.op("test.therapiOpField").arity0().outType(String.class).create();
 		String expected = FIELD_STRING;
 		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void therapiOpClassTest() {
-		String actual = ops.op("test.therapiOpClass").input().outType(String.class).create();
+		String actual = ops.op("test.therapiOpClass").arity0().outType(String.class).create();
 		String expected = CLASS_STRING;
 		Assertions.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void therapiOpMethodTest() {
-		String actual = ops.op("test.therapiOpMethod").input().outType(String.class).create();
+		String actual = ops.op("test.therapiOpMethod").arity0().outType(String.class).create();
 		String expected = METHOD_STRING;
 		Assertions.assertEquals(expected, actual);
 	}
@@ -115,7 +115,7 @@ public class TherapiBasedOpTest {
 
 	@Test
 	public void therapiOpFieldPriorityTest() {
-		String actual = ops.op("test.therapiPriority").input().outType(String.class).create();
+		String actual = ops.op("test.therapiPriority").arity0().outType(String.class).create();
 		String expected = HIGH_PRIORITY_STRING;
 		Assertions.assertEquals(expected, actual);
 	}

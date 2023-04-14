@@ -78,11 +78,11 @@ public class DeconvolveTest extends AbstractOpTest {
 		incropped = Views.zeroMin(incropped);
 
 		RandomAccessibleInterval<FloatType> kernel = ops.op("create.kernelGauss")
-				.input(new double[] { 4.0, 4.0 }, new FloatType())
+				.arity2().input(new double[] { 4.0, 4.0 }, new FloatType())
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// convolve FFTF
-		final RandomAccessibleInterval<FloatType> convolved = ops.op("filter.convolve").input(//
+		final RandomAccessibleInterval<FloatType> convolved = ops.op("filter.convolve").arity3().input(//
 				incropped, kernel, es).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// find a RichardsonLucyF op

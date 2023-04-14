@@ -61,7 +61,7 @@ public class QuadricTest extends AbstractOpTest {
 
 	@Test
 	public void testEquation() {
-		final Matrix4dc solution = ops.op("stats.leastSquares").input(unitSpherePoints).outType(Matrix4dc.class).apply();
+		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(unitSpherePoints).outType(Matrix4dc.class).apply();
 		final double a = solution.m00();
 		final double b = solution.m11();
 		final double c = solution.m22();
@@ -86,13 +86,13 @@ public class QuadricTest extends AbstractOpTest {
 		final List<Vector3d> points = Stream.generate(Vector3d::new).limit(nPoints).collect(toList());
 
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			ops.op("stats.leastSquares").input(points).outType(Matrix4d.class).apply();
+			ops.op("stats.leastSquares").arity1().input(points).outType(Matrix4d.class).apply();
 		});
 	}
 
 	@Test
 	public void testMatrixElements() {
-		final Matrix4dc solution = ops.op("stats.leastSquares").input(unitSpherePoints).outType(Matrix4d.class).apply();
+		final Matrix4dc solution = ops.op("stats.leastSquares").arity1().input(unitSpherePoints).outType(Matrix4d.class).apply();
 
 		assertEquals(1.0, solution.m00(), 1e-12, "The matrix element is incorrect");
 		assertEquals(1.0, solution.m11(), 1e-12, "The matrix element is incorrect");

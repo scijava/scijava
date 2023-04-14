@@ -69,7 +69,7 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Test
 	public void copyRAINoOutputTest() {
-		IterableInterval<DoubleType> output = ops.op("copy.iterableInterval").input(input)
+		IterableInterval<DoubleType> output = ops.op("copy.iterableInterval").arity1().input(input)
 				.outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
 
 		Cursor<DoubleType> inc = input.localizingCursor();
@@ -86,7 +86,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyTypeTest() {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(new int[] { 120, 100 });
 
-		Img<FloatType> output = ops.op("copy.iterableInterval").input(inputFloat)
+		Img<FloatType> output = ops.op("copy.iterableInterval").arity1().input(inputFloat)
 				.outType(new Nil<Img<FloatType>>() {}).apply();
 
 		assertTrue(output.firstElement() instanceof FloatType,
@@ -97,7 +97,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyRAIWithOutputTest() {
 		Img<DoubleType> output = input.factory().create(input, input.firstElement());
 
-		ops.op("copy.iterableInterval").input(input).output(output).compute();
+		ops.op("copy.iterableInterval").arity1().input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> outc = output.cursor();

@@ -80,12 +80,13 @@ public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 
 	@Test
 	public void testLiftFunction1ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2().input(
 			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").input(
+		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").arity1()
+				.input(
 			input).outType(new Nil<RandomAccessibleInterval<DoubleType>>()
 		{}).apply();
 
@@ -98,12 +99,12 @@ public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 
 	@Test
 	public void testLiftFunction2ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2().input(
 			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").input(
+		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").arity2().input(
 			input, input).outType(new Nil<RandomAccessibleInterval<DoubleType>>()
 		{}).apply();
 
@@ -116,12 +117,12 @@ public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 
 	@Test
 	public void testLiftFunction3ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2().input(
 			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").input(
+		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").arity3().input(
 			input, input, input).outType(
 				new Nil<RandomAccessibleInterval<DoubleType>>()
 				{}).apply();
@@ -135,12 +136,12 @@ public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 
 	@Test
 	public void testLiftFunction4ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2().input(
 			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").input(
+		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").arity4().input(
 			input, input, input, input).outType(
 				new Nil<RandomAccessibleInterval<DoubleType>>()
 				{}).apply();
@@ -154,12 +155,12 @@ public class LiftFunctionsToRAITest<I extends RealType<I>> extends
 
 	@Test
 	public void testLiftFunction5ToRAI() {
-		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").input(
+		RandomAccessibleInterval<DoubleType> input = ops.op("create.img").arity2().input(
 			new FinalDimensions(3, 3), new DoubleType()).outType(
 				new Nil<Img<DoubleType>>()
 				{}).apply();
 
-		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").input(
+		RandomAccessibleInterval<DoubleType> output = ops.op("test.liftImg").arity5().input(
 			input, input, input, input, input).outType(
 				new Nil<RandomAccessibleInterval<DoubleType>>()
 				{}).apply();

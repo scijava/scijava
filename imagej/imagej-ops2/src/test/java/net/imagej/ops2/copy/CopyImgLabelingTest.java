@@ -54,9 +54,9 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@BeforeEach
 	public void createData() {
-		input = ops.op("create.imgLabeling").input(new FinalDimensions(10, 10), new IntType())
+		input = ops.op("create.imgLabeling").arity2().input(new FinalDimensions(10, 10), new IntType())
 				.outType(new Nil<ImgLabeling<String, IntType>>() {}).apply();
-		copy = ops.op("create.imgLabeling").input(new FinalDimensions(10, 10), new IntType())
+		copy = ops.op("create.imgLabeling").arity2().input(new FinalDimensions(10, 10), new IntType())
 				.outType(new Nil<ImgLabeling<String, IntType>>() {}).apply();
 
 		final Cursor<LabelingType<String>> inc = input.cursor();
@@ -74,7 +74,7 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void copyImgLabeling() {
-		ops.op("copy.imgLabeling").input(input).output(copy).compute();
+		ops.op("copy.imgLabeling").arity1().input(input).output(copy).compute();
 		assertNotNull(copy);
 
 		Cursor<LabelingType<String>> inCursor = input.cursor();

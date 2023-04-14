@@ -70,7 +70,7 @@ public class CollapseNumericViewTest extends AbstractOpTest {
 		Img<NativeARGBDoubleType> img = new ArrayImgFactory<>(new NativeARGBDoubleType()).create(new int[] { 10, 10 });
 		
 		Function<Img<NativeARGBDoubleType>, CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>> collapseFunc = 
-				ops.op("transform.collapseNumericView").input(img).outType(new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {}).function();
+				ops.op("transform.collapseNumericView").arity1().input(img).outType(new Nil<CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>>>() {}).function();
 
 		CompositeIntervalView<NativeARGBDoubleType, NumericComposite<NativeARGBDoubleType>> il2 = Views
 				.collapseNumeric((RandomAccessibleInterval<NativeARGBDoubleType>) img);

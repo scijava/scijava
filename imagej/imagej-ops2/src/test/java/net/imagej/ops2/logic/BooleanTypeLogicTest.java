@@ -46,84 +46,84 @@ public class BooleanTypeLogicTest extends AbstractOpTest {
 
 	@Test
 	public void testAnd() {
-		assertTrue(ops.op("logic.and").input(new BitType(true), new BitType(true)).outType(BitType.class)
+		assertTrue(ops.op("logic.and").arity2().input(new BitType(true), new BitType(true)).outType(BitType.class)
 				.apply().get());
-		assertFalse(ops.op("logic.and").input(new BitType(true), new BitType(false)).outType(BitType.class)
+		assertFalse(ops.op("logic.and").arity2().input(new BitType(true), new BitType(false)).outType(BitType.class)
 				.apply().get());
-		assertFalse(ops.op("logic.and").input(new BitType(false), new BitType(true)).outType(BitType.class)
+		assertFalse(ops.op("logic.and").arity2().input(new BitType(false), new BitType(true)).outType(BitType.class)
 				.apply().get());
-		assertFalse(ops.op("logic.and").input(new BitType(false), new BitType(false)).outType(BitType.class)
+		assertFalse(ops.op("logic.and").arity2().input(new BitType(false), new BitType(false)).outType(BitType.class)
 				.apply().get());
 	}
 
 	@Test
 	public void testComparableGreaterThan() {
-		assertTrue(ops.op("logic.greaterThan").input(5.0, 3.0).outType(BitType.class).apply().get());
-		assertFalse(ops.op("logic.greaterThan").input(5.0, 6.0).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.greaterThan").arity2().input(5.0, 3.0).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.greaterThan").arity2().input(5.0, 6.0).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testComparableGreaterThanOrEqual() {
-		assertTrue(ops.op("logic.greaterThanOrEqual").input(5.0, 3.0).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.greaterThanOrEqual").input(5.0, 5.0).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.greaterThanOrEqual").arity2().input(5.0, 3.0).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.greaterThanOrEqual").arity2().input(5.0, 5.0).outType(BitType.class).apply().get());
 		assertFalse(
-				ops.op("logic.greaterThanOrEqual").input(5.0, 6.0).outType(BitType.class).apply().get());
+				ops.op("logic.greaterThanOrEqual").arity2().input(5.0, 6.0).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testComparableLessThan() {
-		assertFalse(ops.op("logic.lessThan").input(5.0, 3.0).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.lessThan").input(5.0, 6.0).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.lessThan").arity2().input(5.0, 3.0).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.lessThan").arity2().input(5.0, 6.0).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testComparableLessThanOrEqual() {
-		assertFalse(ops.op("logic.lessThanOrEqual").input(5.0, 3.0).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.lessThanOrEqual").input(5.0, 6.0).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.lessThanOrEqual").input(5.0, 5.0).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.lessThanOrEqual").arity2().input(5.0, 3.0).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.lessThanOrEqual").arity2().input(5.0, 6.0).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.lessThanOrEqual").arity2().input(5.0, 5.0).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testObjectsEqual() {
-		assertFalse(ops.op("logic.equal").input(2, 1).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.equal").input(2, 2).outType(BitType.class).apply().get());
-		assertFalse(ops.op("logic.equal").input(2, 3).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.equal").arity2().input(2, 1).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.equal").arity2().input(2, 2).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.equal").arity2().input(2, 3).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testObjectsNotEqual() {
-		assertTrue(ops.op("logic.notEqual").input(2, 1).outType(BitType.class).apply().get());
-		assertFalse(ops.op("logic.notEqual").input(2, 2).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.notEqual").input(2, 3).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.notEqual").arity2().input(2, 1).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.notEqual").arity2().input(2, 2).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.notEqual").arity2().input(2, 3).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testNot() {
-		assertFalse(ops.op("logic.not").input(new BitType(true)).outType(BitType.class).apply().get());
-		assertTrue(ops.op("logic.not").input(new BitType(false)).outType(BitType.class).apply().get());
+		assertFalse(ops.op("logic.not").arity1().input(new BitType(true)).outType(BitType.class).apply().get());
+		assertTrue(ops.op("logic.not").arity1().input(new BitType(false)).outType(BitType.class).apply().get());
 	}
 
 	@Test
 	public void testOr() {
-		assertTrue(ops.op("logic.or").input(new BitType(true), new BitType(true)).outType(BitType.class)
+		assertTrue(ops.op("logic.or").arity2().input(new BitType(true), new BitType(true)).outType(BitType.class)
 				.apply().get());
-		assertTrue(ops.op("logic.or").input(new BitType(true), new BitType(false)).outType(BitType.class)
+		assertTrue(ops.op("logic.or").arity2().input(new BitType(true), new BitType(false)).outType(BitType.class)
 				.apply().get());
-		assertTrue(ops.op("logic.or").input(new BitType(false), new BitType(true)).outType(BitType.class)
+		assertTrue(ops.op("logic.or").arity2().input(new BitType(false), new BitType(true)).outType(BitType.class)
 				.apply().get());
-		assertFalse(ops.op("logic.or").input(new BitType(false), new BitType(false)).outType(BitType.class)
+		assertFalse(ops.op("logic.or").arity2().input(new BitType(false), new BitType(false)).outType(BitType.class)
 				.apply().get());
 	}
 
 	@Test
 	public void testXor() {
-		assertFalse(ops.op("logic.xor").input(new BitType(true), new BitType(true)).outType(BitType.class)
+		assertFalse(ops.op("logic.xor").arity2().input(new BitType(true), new BitType(true)).outType(BitType.class)
 				.apply().get());
-		assertTrue(ops.op("logic.xor").input(new BitType(true), new BitType(false)).outType(BitType.class)
+		assertTrue(ops.op("logic.xor").arity2().input(new BitType(true), new BitType(false)).outType(BitType.class)
 				.apply().get());
-		assertTrue(ops.op("logic.xor").input(new BitType(false), new BitType(true)).outType(BitType.class)
+		assertTrue(ops.op("logic.xor").arity2().input(new BitType(false), new BitType(true)).outType(BitType.class)
 				.apply().get());
-		assertFalse(ops.op("logic.xor").input(new BitType(false), new BitType(false)).outType(BitType.class)
+		assertFalse(ops.op("logic.xor").arity2().input(new BitType(false), new BitType(false)).outType(BitType.class)
 				.apply().get());
 	}
 }

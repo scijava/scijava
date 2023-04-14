@@ -57,11 +57,11 @@ public class NormalizeTest extends AbstractOpTest {
 		Img<ByteType> in = TestImgGeneration.byteArray(true, 5, 5);
 		Img<ByteType> out = in.factory().create(in, new ByteType());
 
-		ops.op("image.normalize").input(in).output(out).compute();
+		ops.op("image.normalize").arity1().input(in).output(out).compute();
 
-		final Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").input(in)
+		final Pair<ByteType, ByteType> minMax = ops.op("stats.minMax").arity1().input(in)
 				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
-		final Pair<ByteType, ByteType> minMax2 = ops.op("stats.minMax").input(out)
+		final Pair<ByteType, ByteType> minMax2 = ops.op("stats.minMax").arity1().input(out)
 				.outType(new Nil<Pair<ByteType, ByteType>>() {}).apply();
 
 		assertEquals(minMax2.getA().get(), Byte.MIN_VALUE);
@@ -70,10 +70,10 @@ public class NormalizeTest extends AbstractOpTest {
 		final ByteType min = new ByteType((byte) in.firstElement().getMinValue());
 		final ByteType max = new ByteType((byte) in.firstElement().getMaxValue());
 
-		final RandomAccessibleInterval<ByteType> lazyOut = ops.op("image.normalize").input(in)
+		final RandomAccessibleInterval<ByteType> lazyOut = ops.op("image.normalize").arity1().input(in)
 				.outType(new Nil<RandomAccessibleInterval<ByteType>>() {}).apply();
 		final RandomAccessibleInterval<ByteType> notLazyOut = ops.op("image.normalize")
-				.input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<RandomAccessibleInterval<ByteType>>() {})
+				.arity5().input(in, minMax.getA(), minMax.getB(), min, max).outType(new Nil<RandomAccessibleInterval<ByteType>>() {})
 				.apply();
 
 		final Cursor<ByteType> outCursor = out.cursor();

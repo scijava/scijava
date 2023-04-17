@@ -45,6 +45,7 @@
 	</mailingLists>
 
 	<modules>
+		<module>imagej/imagej-ops2-tutorial</module>
 		<module>imagej/imagej-mesh2</module>
 		<module>imagej/imagej-ops2</module>
 		<module>imagej/imagej-testutil</module>

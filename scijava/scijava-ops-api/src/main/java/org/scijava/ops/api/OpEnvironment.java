@@ -265,9 +265,9 @@ public interface OpEnvironment {
 	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity3} instance for builder chaining.
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied
 	 * @see <a href="#op-java.lang.String-" title="For a Builder instance without the arity choice made">op(String)</a>
-	 * @see <a href="#trinary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">trinary(String, Hints)</a>
+	 * @see <a href="#ternary-java.lang.String-org.scijava.ops.api.Hints-" title="To specify a Hints instance to use">ternary(String, Hints)</a>
 	 */
-	default OpBuilder.Arity3 trinary(final String opName) {
+	default OpBuilder.Arity3 ternary(final String opName) {
 		return new OpBuilder(this, opName).arity3();
 	}
 
@@ -483,16 +483,16 @@ public interface OpEnvironment {
 	}
 
 	/**
-	 * As {@link #trinary(String)} but using a provided {@link Hints}.
+	 * As {@link #ternary(String)} but using a provided {@link Hints}.
 	 *
 	 * @param opName The name of the Op to run
 	 * @param hints The {@code Hints} instance to use for Op matching
 	 * @return A {@link org.scijava.ops.api.OpBuilder.Arity3} instance for builder chaining.
 	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied
 	 * @see <a href="#op-java.lang.String-org.scijava.ops.api.Hints-" title="For a Builder instance without the arity choice made">op(String, Hints)</a>
-	 * @see <a href="#trinary-java.lang.String-" title="To use the default Hints for this OpEnvironment">trinary(String)</a>
+	 * @see <a href="#ternary-java.lang.String-" title="To use the default Hints for this OpEnvironment">ternary(String)</a>
 	 */
-	default OpBuilder.Arity3 trinary(final String opName, final Hints hints) {
+	default OpBuilder.Arity3 ternary(final String opName, final Hints hints) {
 		return new OpBuilder(this, opName, hints).arity3();
 	}
 

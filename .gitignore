@@ -1,3 +1,6 @@
+# compiled python
+*__pycache__/
+
 # Maven #
 target/
 

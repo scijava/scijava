@@ -29,11 +29,24 @@ public class WritingOpCollections implements OpCollection {
 	 *   <li>public</li>
 	 *   <li>final</li>
 	 * </ul>
+	 * One major benefit of {@link OpField}s is that they can use Java's lambda
+	 * syntax, maximizing expressiveness.
 	 */
 	@OpField(names="test.opField.power")
 	public final BiFunction<Double, Double, Double> opFieldPower =
 			(b, e) -> Math.pow(b, e);
 
+	/**
+	 * {@link OpMethod}s are Ops written as {@link Method}s. They <b>must</b> be:
+	 * <ul>
+	 *   <li>public</li>
+	 *   <li>static</li>
+	 * </ul>
+	 *<p>
+	 *<b>In addition, Ops written as methods must specify their Op type.</b>
+	 * This tells SciJava Ops whether this function should become a Computer,
+	 * an Inplace, or something else entirely.
+	 */
 	@OpMethod(names = "test.opMethod.power", type=BiFunction.class)
 	public static Double opMethodPower(Double b, Double e) {
 		return Math.pow(b, e);
@@ -42,14 +55,14 @@ public class WritingOpCollections implements OpCollection {
 	public static void main(String... args){
 		OpEnvironment ops = new DefaultOpEnvironment();
 
-		Double result = ops.op("test.opField.power") //
+		Double result = ops.binary("test.opField.power") //
 				.input(2.0, 10.0) //
 				.outType(Double.class) //
 				.apply();
 
 		System.out.println("2.0 to the power of 10.0 is " + result);
 
-		result = ops.op("test.opMethod.power") //
+		result = ops.binary("test.opMethod.power") //
 				.input(2.0, 20.0) //
 				.outType(Double.class) //
 				.apply();

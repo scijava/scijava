@@ -47,7 +47,7 @@ import org.scijava.types.Types;
 
 /**
  * Convenience class for looking up and/or executing ops using a builder
- * pattern. Typical entry point is through {@link OpEnvironment#op(String)}
+ * pattern. Typical entry point is through {@code OpEnvironment.op(String)}
  * - which contains full usage information.
  * <br/>
  * Note that the intermediate builder steps use the following acronyms:

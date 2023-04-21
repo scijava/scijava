@@ -1,0 +1,27 @@
+.include templates/main/java/net/imagej/ops2/adapt/Globals.list
+
+[LiftFunctionsToImg.java]
+
+functionNames = ```
+{ arity ->
+  switch (arity) {
+    case 1: 'Function'; break;
+    case 2: 'BiFunction'; break;
+    case 3: 'Functions.Arity3'; break;
+    case 4: 'Functions.Arity4'; break;
+    case 5: 'Functions.Arity5'; break;
+    case 6: 'Functions.Arity6'; break;
+    case 7: 'Functions.Arity7'; break;
+    case 8: 'Functions.Arity8'; break;
+    case 9: 'Functions.Arity9'; break;
+    case 10: 'Functions.Arity10'; break;
+    case 11: 'Functions.Arity11'; break;
+    case 12: 'Functions.Arity12'; break;
+    case 13: 'Functions.Arity13'; break;
+    case 14: 'Functions.Arity14'; break;
+    case 15: 'Functions.Arity15'; break;
+    case 16: 'Functions.Arity16'; break;
+    default: 'Error';
+  }
+}
+```

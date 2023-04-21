@@ -30,6 +30,7 @@ module net.imagej.ops2 {
 	exports net.imagej.ops2;
 	
 	// -- Open plugins to scijava-ops, therapi
+	opens net.imagej.ops2.adapt to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc.icq to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc.kendallTau to therapi.runtime.javadoc, org.scijava.ops.engine;
@@ -142,7 +143,7 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.types.adapt to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.types.maxValue to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.types.minValue to therapi.runtime.javadoc, org.scijava.ops.engine;
-	
+
 	requires java.scripting;
 	requires net.imagej.mesh2;
 	requires net.imglib2;

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpCandidate.StatusCode;
+import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpRef;
 
 /**
@@ -117,7 +118,7 @@ public class MatchingResult {
 		int count = 0;
 		for (final OpCandidate candidate : candidates) {
 			sb.append(++count + ". ");
-			sb.append("\t" + candidate.opInfo().opString(candidate.getStatusItem()) + "\n");
+			sb.append("\t" + OpDescription.basic(candidate.opInfo(), candidate.getStatusItem()) + "\n");
 			final String status = candidate.getStatus();
 			if (status != null)
 				sb.append("\t" + status + "\n");

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.function.Inplaces;
+import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
@@ -413,7 +414,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 	}
 
 	@Test
-	public void opStringRegressionTest() {
+	public void opDescriptionRegressionTest() {
 		Iterator<OpInfo> infos = ops.infos("test.javadoc.methodPR").iterator();
 
 		OpInfo info = infos.next();
@@ -442,7 +443,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 				"==> 	java.util.List<java.lang.String> bar -> the second input\n" +
 				"	 Outputs:\n" +
 				"		java.util.List<java.lang.Long> output -> foo + bar\n" + ")\n";
-		actual = info.opString(info.inputs().get(1));
+		actual = OpDescription.basic(info, info.inputs().get(1));
 		Assertions.assertEquals(expected, actual);
 	}
 

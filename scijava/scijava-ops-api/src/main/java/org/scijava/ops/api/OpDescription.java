@@ -2,6 +2,9 @@ package org.scijava.ops.api;
 
 import org.scijava.struct.Member;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Static utility class for formatting descriptions of Ops
  */
@@ -28,11 +31,18 @@ public final class OpDescription {
     public static String basic(final OpInfo info, final Member<?> special) {
         final StringBuilder sb = new StringBuilder();
         sb.append(info.implementationName()).append("(\n\t Inputs:\n");
+        List<Member<?>> containers = new ArrayList<>();
         for (final Member<?> arg : info.inputs()) {
-            appendParam(sb, arg, special);
+            if (arg.getKey().contains("container")) containers.add(arg);
+            else appendParam(sb, arg, special);
         }
-        sb.append("\t Outputs:\n");
-        appendParam(sb, info.output(), special);
+        if (containers.isEmpty()) {
+            sb.append("\t Outputs:\n");
+            appendParam(sb, info.output(), special);
+        } else {
+            sb.append("\t Containers (I/O):\n");
+            containers.stream().forEach(c -> appendParam(sb, c, special));
+        }
         sb.append(")\n");
         return sb.toString();
     }

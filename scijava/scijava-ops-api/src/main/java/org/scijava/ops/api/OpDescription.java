@@ -52,6 +52,7 @@ public final class OpDescription {
         sb.append(arg.getType().getTypeName());
         sb.append(" ");
         sb.append(arg.getKey());
+        if (!arg.isRequired()) sb.append("?");
         if (!arg.getDescription().isEmpty()) {
             sb.append(" -> ");
             sb.append(arg.getDescription());

@@ -31,6 +31,7 @@ module net.imagej.ops2 {
 	
 	// -- Open plugins to scijava-ops, therapi
 	opens net.imagej.ops2.adapt to therapi.runtime.javadoc, org.scijava.ops.engine;
+	opens net.imagej.ops2.adapt.complexLift to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc.icq to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.coloc.kendallTau to therapi.runtime.javadoc, org.scijava.ops.engine;

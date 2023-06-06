@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.scijava.common3.Classes;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
@@ -399,7 +400,7 @@ public class OpMethodInfo implements OpInfo {
 		Parameter[] mParams = m.getParameters();
 		for (Parameter mParam : mParams) {
 			Class<?> paramRawType = Types.raw(mParam.getParameterizedType());
-			String castClassName = paramRawType.getName();
+			String castClassName = Classes.box(paramRawType).getName();
 			if (paramRawType.isArray()) castClassName = paramRawType.getSimpleName();
 			sb.append("(") //
 				.append(castClassName) //

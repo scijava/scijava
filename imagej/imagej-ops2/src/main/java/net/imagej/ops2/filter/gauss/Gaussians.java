@@ -114,7 +114,7 @@ public class Gaussians {
 		gaussRAISingleSigma( //
 			final RandomAccessibleInterval<T> input, //
 			final ExecutorService es, //
-			final Double sigma, //
+			final double sigma, //
 			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
 			final RandomAccessibleInterval<T> output //
 	) {

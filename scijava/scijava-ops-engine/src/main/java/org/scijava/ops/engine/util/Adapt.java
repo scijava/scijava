@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.common3.Classes;
 import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.function.Inplaces;
@@ -228,12 +229,19 @@ public class Adapt {
 					.toArray(String[]::new);
 			if (invokedNames.length != 1)
 				throw new IllegalArgumentException("The passed class is not a functional interface");
-			
 			// see the LambdaMetafactory javadocs for explanations on these MethodTypes.
 			MethodType invokedType = MethodType.methodType(functionalInterface);
 			MethodType methodType = methodHandle.type();
+			// Box primitive parameter types
+			for(int i = 0; i < methodType.parameterCount(); i++) {
+				Class<?> paramType = methodType.parameterType(i);
+				if (paramType.isPrimitive())
+					methodType = methodType.changeParameterType(i, Classes.box(paramType));
+			}
 			Class<?> rType = methodType.returnType();
-			MethodType samMethodType = methodType.generic()
+			if (rType.isPrimitive() && rType != void.class)
+				rType = Classes.box(rType);
+			MethodType samMethodType = methodType.generic() //
 					.changeReturnType(rType == void.class ? rType : Object.class);
 			MethodHandle callSite = LambdaMetafactory.metafactory(caller, invokedNames[0], //
 					invokedType, samMethodType, methodHandle, methodType).getTarget();

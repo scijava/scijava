@@ -92,17 +92,28 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 
 			try {
 				// resolve adaptor dependencies
-//				Type reifiedAdaptTo = Types.substituteTypeVariables(adaptor.output().getType(), map);
-//				Type reifiedAdaptFrom = Types.substituteTypeVariables(adaptor.inputs().get(0).getType(), map);
-//				Type reifiedAdaptorType = Types.parameterize(Function.class, new Type[] {reifiedAdaptFrom, reifiedAdaptTo});
-//				
-//				InfoChain adaptorChain = env.chainFromInfo(adaptor, Nil.of(
-//					reifiedAdaptorType, conditions.hints()));
-				List<InfoChain> depChains = adaptor.dependencies().stream().map(d -> inferOpRef(d, map)).map(ref -> {
+				final Map<TypeVariable<?>, Type> depBounds = new HashMap<>();
+				final Map<TypeVariable<?>, Type> depBounds2 = new HashMap<>();
+				List<InfoChain> depChains = adaptor.dependencies().stream().map(d -> {
+					OpRef ref = inferOpRef(d, map);
 					Nil<?> type = Nil.of(ref.getType());
-					Nil<?>[] args = Arrays.stream(ref.getArgs()).map(t -> Nil.of(t)).toArray(Nil[]::new);
+					Nil<?>[] args = Arrays.stream(ref.getArgs()).map(Nil::of).toArray(Nil[]::new);
 					Nil<?> outType = Nil.of(ref.getOutType());
-					return env.infoChain(ref.getName(), type, args, outType, adaptationHints);
+					InfoChain chain = env.infoChain(ref.getName(), type, args, outType, adaptationHints);
+					final Type depType = chain.info().opType();
+					// Check if the bounds of the dependency can inform the type of the adapted Op
+					GenericAssignability.inferTypeVariables(new Type[] { ref.getType()}, new Type[] {depType}, depBounds);
+					GenericAssignability.inferTypeVariables(new Type[] { d.getType()}, new Type[] {depType}, depBounds2);
+					for(TypeVariable<?> typeVar: map.keySet()) {
+						if (!depBounds2.containsKey(typeVar)) continue;
+						Type foo = depBounds2.get(typeVar);
+						Type mapped = Types.mapVarToTypes(foo, depBounds);
+						if (Types.isAssignable(mapped, map.get(typeVar))){
+							map.put(typeVar, mapped);
+						}
+					}
+					depBounds.clear();
+					return chain;
 				}).collect(Collectors.toList());
 				InfoChain adaptorChain = new InfoChain(adaptor,
 					depChains);

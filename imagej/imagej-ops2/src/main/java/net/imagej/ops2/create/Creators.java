@@ -40,11 +40,14 @@ import net.imglib2.IterableInterval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
+import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.img.basictypeaccess.array.ArrayDataAccess;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.roi.labeling.LabelingMapping;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.NativeType;
+import net.imglib2.type.NativeTypeFactory;
 import net.imglib2.type.Type;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.ComplexType;
@@ -68,7 +71,7 @@ import org.joml.Vector3f;
 import org.scijava.function.Functions;
 import org.scijava.function.Producer;
 
-public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T extends Type<T>, C extends ComplexType<C>, W extends ComplexType<W> & NativeType<W>, B extends BooleanType<B>> {
+public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T extends Type<T>, C extends ComplexType<C>, W extends ComplexType<W> & NativeType<W>, B extends BooleanType<B>, A extends ArrayDataAccess<A>> {
 
 	/* ImgFactories */
 
@@ -199,6 +202,17 @@ public class Creators<N extends NativeType<N>, L, I extends IntegerType<I>, T ex
 	 */
 	public final Function<RandomAccessibleInterval<T>, Img<T>> imgFromRAI = (rai) -> imgFromDimsAndType.apply(rai,
 			Util.getTypeFromInterval(rai));
+
+	/**
+	 * @input arrayImg
+	 * @output img
+	 * @implNote op names='create, create.img', priority='1000.'
+	 */
+	@SuppressWarnings("unchecked")
+	public final Function<ArrayImg<N, A>, ArrayImg<N, A>> arrayImgFromArrayImg //
+			= input -> (ArrayImg<N, A>) input //
+			.factory() //
+			.create(input.dimensionsAsLongArray());
 
 	/* IntegerType */
 

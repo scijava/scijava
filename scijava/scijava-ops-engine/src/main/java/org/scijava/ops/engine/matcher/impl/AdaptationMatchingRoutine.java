@@ -92,20 +92,45 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 
 			try {
 				// resolve adaptor dependencies
-//				Type reifiedAdaptTo = Types.substituteTypeVariables(adaptor.output().getType(), map);
-//				Type reifiedAdaptFrom = Types.substituteTypeVariables(adaptor.inputs().get(0).getType(), map);
-//				Type reifiedAdaptorType = Types.parameterize(Function.class, new Type[] {reifiedAdaptFrom, reifiedAdaptTo});
-//				
-//				InfoChain adaptorChain = env.chainFromInfo(adaptor, Nil.of(
-//					reifiedAdaptorType, conditions.hints()));
-				List<InfoChain> depChains = adaptor.dependencies().stream().map(d -> inferOpRef(d, map)).map(ref -> {
+				final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
+				final Map<TypeVariable<?>, Type> dependencyBounds = new HashMap<>();
+				List<InfoChain> depChains = adaptor.dependencies().stream().map(d -> {
+					OpRef ref = inferOpRef(d, map);
 					Nil<?> type = Nil.of(ref.getType());
-					Nil<?>[] args = Arrays.stream(ref.getArgs()).map(t -> Nil.of(t)).toArray(Nil[]::new);
+					Nil<?>[] args = Arrays.stream(ref.getArgs()).map(Nil::of).toArray(
+						Nil[]::new);
 					Nil<?> outType = Nil.of(ref.getOutType());
-					return env.infoChain(ref.getName(), type, args, outType, adaptationHints);
+					InfoChain chain = env.infoChain(ref.getName(), type, args, outType,
+						adaptationHints);
+					// Check if the bounds of the dependency can inform the type of the
+					// adapted Op
+					final Type matchedOpType = chain.info().opType();
+					// Find adaptor type variable bounds fulfilled by matched Op
+					GenericAssignability.inferTypeVariables( //
+						new Type[] { d.getType() }, //
+						new Type[] { matchedOpType }, //
+						dependencyBounds //
+					);
+					for (TypeVariable<?> typeVar : map.keySet()) {
+						// Ignore TypeVariables not present in this particular dependency
+						if (!dependencyBounds.containsKey(typeVar)) continue;
+						Type matchedType = dependencyBounds.get(typeVar);
+						// Resolve any type variables from the dependency ref that we can
+						GenericAssignability.inferTypeVariables( //
+							new Type[] { ref.getType() }, //
+							new Type[] { matchedOpType }, //
+							adaptorBounds //
+						);
+						Type mapped = Types.mapVarToTypes(matchedType, adaptorBounds);
+						// If the type variable is more specific now, update it
+						if (Types.isAssignable(mapped, map.get(typeVar))) {
+							map.put(typeVar, mapped);
+						}
+					}
+					dependencyBounds.clear();
+					return chain;
 				}).collect(Collectors.toList());
-				InfoChain adaptorChain = new InfoChain(adaptor,
-					depChains);
+				InfoChain adaptorChain = new InfoChain(adaptor, depChains);
 
 				// grab the first type parameter from the OpInfo and search for
 				// an Op that will then be adapted (this will be the only input of the

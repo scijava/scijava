@@ -35,8 +35,11 @@ import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.img.basictypeaccess.array.ArrayDataAccess;
 import net.imglib2.img.planar.PlanarImgFactory;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
@@ -68,7 +71,7 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAINoOutputTest() {
+	public void copyIINoOutputTest() {
 		IterableInterval<DoubleType> output = ops.op("copy.iterableInterval").arity1().input(input)
 				.outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
 
@@ -94,7 +97,7 @@ public class CopyIITest extends AbstractOpTest {
 	}
 
 	@Test
-	public void copyRAIWithOutputTest() {
+	public void copyIIWithOutputTest() {
 		Img<DoubleType> output = input.factory().create(input, input.firstElement());
 
 		ops.op("copy.iterableInterval").arity1().input(input).output(output).compute();
@@ -105,5 +108,10 @@ public class CopyIITest extends AbstractOpTest {
 		while (inc.hasNext()) {
 			assertEquals(inc.next().get(), outc.next().get(), 0.0);
 		}
+		Img<FloatType> bar = foo();
+	}
+
+	private static <N extends NativeType<N>, A extends ArrayDataAccess<A>> ArrayImg<N, A> foo() {
+		return null;
 	}
 }

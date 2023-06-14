@@ -67,28 +67,3 @@ public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, Iterable
 		mapped.compute(input, output);
 	}
 }
-
-/**
- *@implNote op names='copy, copy.iterableInterval', priority='1.0'
- */
-class CopyIIFunction<T> implements Function<IterableInterval<T>, IterableInterval<T>> {
-
-	@OpDependency(name = "create.img")
-	private BiFunction<Dimensions, T, IterableInterval<T>> imgCreator;
-	@OpDependency(name = "copy.iterableInterval")
-	private Computers.Arity1<IterableInterval<T>, IterableInterval<T>> copyOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @return the output
-	 */
-	@Override
-	public IterableInterval<T> apply(IterableInterval<T> input) {
-		IterableInterval<T> output = imgCreator.apply(input, input.firstElement());
-		copyOp.compute(input, output);
-		return output;
-	}
-
-}

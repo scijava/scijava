@@ -66,35 +66,3 @@ public class CopyArrayImg<T extends NativeType<T>, A extends ArrayDataAccess<A>>
 
 	}
 }
-
-/**
- *@implNote op names='copy, copy.img', priority='10000.'
- */
-class CopyArrayImgFunction<T extends NativeType<T>, A extends ArrayDataAccess<A>>
-		implements Function<ArrayImg<T, A>, ArrayImg<T, A>> {
-
-	@OpDependency(name = "copy.img")
-	private Computers.Arity1<ArrayImg<T, A>, ArrayImg<T, A>> copyOp;
-
-	/**
-	 * TODO
-	 *
-	 * @param input
-	 * @param copy
-	 */
-	@Override
-	public ArrayImg<T, A> apply(ArrayImg<T, A> input) {
-		// NB: Workaround for ArrayImgFactory not overriding create(Dimensions, T).
-		final long[] dims = new long[input.numDimensions()];
-		input.dimensions(dims);
-		final ArrayImg<T, ?> copy = input.factory().create(dims, input.firstElement().createVariable());
-
-		// TODO: Find a way to guarantee the type.
-		@SuppressWarnings("unchecked")
-		final ArrayImg<T, A> typedCopy = (ArrayImg<T, A>) copy;
-		copyOp.compute(input, typedCopy);
-		
-		return typedCopy;
-	}
-
-}

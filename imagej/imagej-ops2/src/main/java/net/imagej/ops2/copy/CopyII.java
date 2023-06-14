@@ -44,7 +44,7 @@ import org.scijava.ops.spi.OpDependency;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
- * @implNote op names='copy, copy.iterableInterval', priority='1.0'
+ * @implNote op names='copy, copy.iterableInterval, copy.img', priority='1.0'
  */
 public class CopyII<T> implements Computers.Arity1<IterableInterval<T>, IterableInterval<T>> {
 

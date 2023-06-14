@@ -42,7 +42,7 @@ import org.scijava.ops.spi.OpDependency;
  * 
  * @author Christian Dietz (University of Konstanz)
  * @param <T>
- * @implNote op names='copy, copy.rai', priority='1.0'
+ * @implNote op names='copy, copy.rai, copy.img', priority='10.0'
  */
 public class CopyRAI<T> implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<T>> {
 

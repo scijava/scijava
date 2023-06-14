@@ -1,23 +1,22 @@
 package org.scijava.ops.engine.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpField;
 import org.scijava.types.Nil;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCollection {
 
@@ -40,16 +39,13 @@ public class OpsAsParametersTest extends AbstractTestEnvironment implements OpCo
 
 	@Test
 	public void TestOpWithNonReifiableFunction() {
-
-		List<Number> list = new ArrayList<>();
-		list.add(40l);
-		list.add(20.5);
-		list.add(4.0d);
-
-		assertThrows(OpMatchingException.class, //
-				() -> ops.op("test.parameter.op").arity2().input(list, func).outType(new Nil<List<Double>>() {
-				}).apply() //
-		);
+		var list = Arrays.asList(40L, 20.5, 4.0d);
+		var actual = ops//
+			.op("test.parameter.op") //
+			.arity2().input(list, func) //
+			.outType(List.class) //
+			.apply();
+		assertEquals(Arrays.asList(40.0, 20.5, 4.0), actual);
 	}
 
 	@Test

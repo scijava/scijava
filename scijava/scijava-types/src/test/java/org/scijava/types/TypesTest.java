@@ -218,6 +218,7 @@ public class TypesTest {
 	@Test
 	public <T extends Number> void testIsAssignableT() {
 		final Type t = new Nil<T>() {}.getType();
+		final Type listRaw = List.class;
 		final Type listT = new Nil<List<T>>() {}.getType();
 		final Type listNumber = new Nil<List<Number>>() {}.getType();
 		final Type listInteger = new Nil<List<Integer>>() {}.getType();
@@ -227,19 +228,29 @@ public class TypesTest {
 		final Type listListInteger = new Nil<List<List<Integer>>>(){}.getType();
 
 		assertTrue(Types.isAssignable(t, t));
+		assertTrue(Types.isAssignable(listRaw, listRaw));
 		assertTrue(Types.isAssignable(listT, listT));
 		assertTrue(Types.isAssignable(listNumber, listNumber));
 		assertTrue(Types.isAssignable(listInteger, listInteger));
 		assertTrue(Types.isAssignable(listExtendsNumber, listExtendsNumber));
 
+		assertTrue(Types.isAssignable(listRaw, listExtendsNumber));
 		assertTrue(Types.isAssignable(listT, listExtendsNumber));
 		assertTrue(Types.isAssignable(listNumber, listExtendsNumber));
 		assertTrue(Types.isAssignable(listInteger, listExtendsNumber));
 
+		assertTrue(Types.isAssignable(listRaw, listT));
 		assertTrue(Types.isAssignable(listNumber, listT));
 		assertTrue(Types.isAssignable(listInteger, listT));
 		assertTrue(Types.isAssignable(listExtendsNumber, listT));
 		assertFalse(Types.isAssignable(listExtendsNumber, listNumber));
+
+		assertTrue(Types.isAssignable(listT, listRaw));
+		assertTrue(Types.isAssignable(listNumber, listRaw));
+		assertTrue(Types.isAssignable(listInteger, listRaw));
+		assertTrue(Types.isAssignable(listExtendsNumber, listRaw));
+		assertTrue(Types.isAssignable(listListRaw, listRaw));
+		assertTrue(Types.isAssignable(listListInteger, listRaw));
 
 		// Nested Type Variables must be EXACTLY the same to be assignable
 		assertFalse(Types.isAssignable(listListInteger, listListRaw));

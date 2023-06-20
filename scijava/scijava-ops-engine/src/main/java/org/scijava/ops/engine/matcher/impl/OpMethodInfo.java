@@ -161,6 +161,17 @@ public class OpMethodInfo implements OpInfo {
 			problems.add(new ValidityProblem("Method to parse: " + method +
 				" must be static."));
 		}
+
+		// If the Op is not in the SciJava Ops Engine module, check visibility
+		Module methodModule = method.getDeclaringClass().getModule();
+		if (methodModule != this.getClass().getModule()) {
+			String packageName = method.getDeclaringClass().getPackageName();
+			if (!methodModule.isOpen(packageName, methodModule)) {
+				problems.add(new ValidityProblem("Package " + packageName +
+					" is not opened to SciJava Ops Engine. Please ensure that " +
+					packageName + " is opened or exported to SciJava Ops Engine"));
+			}
+		}
 	}
 
 	// -- OpInfo methods --
@@ -207,9 +218,7 @@ public class OpMethodInfo implements OpInfo {
 		// can read the Module containing the Op. So we also have to check that.
 		Module methodModule = method.getDeclaringClass().getModule();
 		Module opsEngine = this.getClass().getModule();
-		if (!opsEngine.canRead(methodModule)) {
-			opsEngine.addReads(methodModule);
-		}
+		opsEngine.addReads(methodModule);
 		try {
 			method.setAccessible(true);
 			MethodHandle handle = MethodHandles.lookup().unreflect(method);

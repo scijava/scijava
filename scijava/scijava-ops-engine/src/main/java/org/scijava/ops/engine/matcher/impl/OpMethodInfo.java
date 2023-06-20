@@ -203,41 +203,28 @@ public class OpMethodInfo implements OpInfo {
 	public StructInstance<?> createOpInstance(
 		final List<? extends Object> dependencies)
 	{
-
-		// Case 1: no dependencies - lambdaMetaFactory is fastest
 		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
 		// can read the Module containing the Op. So we also have to check that.
 		Module methodModule = method.getDeclaringClass().getModule();
 		Module opsEngine = this.getClass().getModule();
-
-		if (opsEngine.canRead(methodModule)) {
-			try {
-				method.setAccessible(true);
-				MethodHandle handle = MethodHandles.lookup().unreflect(method);
-				Object op = Adapt.Methods.lambdaize( //
-						Types.raw(opType), //
-						handle, //
-						dependencies().stream().map(Member::getRawType).toArray(Class[]::new),
-						dependencies.toArray() //
-				);
-				return struct().createInstance(op);
-			}
-			catch (Throwable exc) {
-				throw new IllegalStateException("Failed to invoke Op method: " + method,
-						exc);
-			}
+		if (!opsEngine.canRead(methodModule)) {
+			opsEngine.addReads(methodModule);
 		}
-
-		// Case 2: dependenies - Javassist is best
 		try {
-			return struct().createInstance(javassistOp(method, dependencies));
+			method.setAccessible(true);
+			MethodHandle handle = MethodHandles.lookup().unreflect(method);
+			Object op = Adapt.Methods.lambdaize( //
+					Types.raw(opType), //
+					handle, //
+					dependencies().stream().map(Member::getRawType).toArray(Class[]::new),
+					dependencies.toArray() //
+			);
+			return struct().createInstance(op);
 		}
-		catch (Throwable ex) {
-			throw new IllegalStateException("Failed to invoke Op method: " + method +
-				". Provided Op dependencies were: " + dependencies,
-				ex);
+		catch (Throwable exc) {
+			throw new IllegalStateException("Failed to invoke Op method: " + method,
+					exc);
 		}
-
 	}
 
 	/**

@@ -48,8 +48,13 @@ public class ReductionUtils {
 	protected static Object javassistOp(Object originalOp, ReducedOpInfo reducedInfo) throws Throwable {
 		ClassPool pool = ClassPool.getDefault();
 
+		// NB LambdaMetaFactory only works if this Module (org.scijava.ops.engine)
+		// can read the Module containing the Op. So we also have to check that.
+		Module methodModule = originalOp.getClass().getModule();
+		Module opsEngine = ReductionUtils.class.getModule();
+		opsEngine.addReads(methodModule);
+
 		// Create wrapper class
-		Method opMethod = OpUtils.findFunctionalMethod(originalOp.getClass());
 		String className = formClassName(reducedInfo);
 		Class<?> c;
 		try {
@@ -61,8 +66,8 @@ public class ReductionUtils {
 		}
 
 		// Return Op instance
-		return c.getDeclaredConstructor(Types.raw(reducedInfo.srcInfo().opType()), Method.class)
-			.newInstance(originalOp, opMethod);
+		return c.getDeclaredConstructor(Types.raw(reducedInfo.srcInfo().opType()))
+			.newInstance(originalOp);
 	}
 
 	/**
@@ -153,9 +158,6 @@ public class ReductionUtils {
 		CtField opField = createOpField(pool, cc, Types.raw(reducedInfo.srcInfo().opType()), "op");
 		cc.addField(opField);
 
-		CtField methodField = createOpField(pool, cc, Method.class, "opMethod");
-		cc.addField(methodField);
-
 		// Add constructor to take the Simplifiers, as well as the original op.
 		CtConstructor constructor = CtNewConstructor.make(createConstructor(cc,
 			reducedInfo), cc);
@@ -183,11 +185,10 @@ public class ReductionUtils {
 		sb.append("public " + cc.getSimpleName() + "(");
 		// argument - original op
 		Class<?> opClass = Types.raw(reducedInfo.srcInfo().opType());
-		sb.append(" " + opClass.getName() + " op, " + Method.class.getName() + " opMethod");
+		sb.append(" " + opClass.getName() + " op");
 		sb.append(") {");
 
 		sb.append("this.op = op;");
-		sb.append("this.opMethod = opMethod;");
 		sb.append("}");
 		return sb.toString();
 	}
@@ -232,11 +233,7 @@ public class ReductionUtils {
 		if (OpUtils.hasPureOutput(info)) {
 			sb.append("return ");
 		}
-		// NB we cannot call op.compute(), op.apply(), etc. directly here if the Op
-		// is outside of this module. Calling that method will produce an
-		// IllegalAccessException. But we can use good ol' reflection to get around
-		// that!
-		sb.append("opMethod.invoke(op, new Object[] {");
+		sb.append("op." + srcM.getName() + "(");
 		int i;
 		List<Member<?>> totalArguments = info.srcInfo().inputs();
 		int totalArgs = totalArguments.size();
@@ -261,7 +258,7 @@ public class ReductionUtils {
 			}
 			if (i + 1 < totalArguments.size()) sb.append(",");
 		}
-		sb.append("});");
+		sb.append(");");
 
 		sb.append("}");
 		return sb.toString();

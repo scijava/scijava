@@ -33,12 +33,6 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 		return bar.create() + opt;
 	}
 
-	@OpMethod(names = "test.optionalWithDependency2", type = Function.class)
-	public static Double foo(@Optional Double opt, @OpDependency(name = "test.fooDependency") Producer<Double> bar) {
-		if (opt == null) opt = 0.;
-		return bar.create() + opt;
-	}
-
 	@Test
 	public void testDependencyFirstMethodWithOptional() {
 		Double opt = 7.;
@@ -50,21 +44,6 @@ public class ReductionWithDependenciesTest extends AbstractTestEnvironment
 	@Test
 	public void testDependencyFirstMethodWithoutOptional() {
 		Double o = ops.op("test.optionalWithDependency").arity0().outType(Double.class).create();
-		Double expected = 5.;
-		Assertions.assertEquals(expected, o);
-	}
-
-	@Test
-	public void testDependencySecondMethodWithOptional() {
-		Double opt = 7.;
-		Double o = ops.op("test.optionalWithDependency2").arity1().input(opt).outType(Double.class).apply();
-		Double expected = 12.;
-		Assertions.assertEquals(expected, o);
-	}
-
-	@Test
-	public void testDependencySecondMethodWithoutOptional() {
-		Double o = ops.op("test.optionalWithDependency2").arity0().outType(Double.class).create();
 		Double expected = 5.;
 		Assertions.assertEquals(expected, o);
 	}

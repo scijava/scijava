@@ -67,11 +67,14 @@ public class MethodOpDependencyMemberParser implements
 		final List<MethodParameterOpDependencyMember<?>> items,
 		final Method annotatedMethod)
 	{
-		// If the Op method has no dependencies, return false without looping
-		// through parameters
-		boolean hasOpDependencies = Arrays.stream(annotatedMethod.getParameters()) //
-			.anyMatch(param -> param.isAnnotationPresent(OpDependency.class));
-		if (!hasOpDependencies) return;
+		Boolean[] isDependency = Arrays.stream(annotatedMethod.getParameters()) //
+			.map(param -> param.isAnnotationPresent(OpDependency.class)).toArray(Boolean[]::new);
+		for (int i = 0; i < isDependency.length - 1; i++) {
+			if (!isDependency[i] && isDependency[i + 1]) {
+				throw new IllegalArgumentException(
+					"Op Dependencies in static methods must come before any other parameters!");
+			}
+		}
 
 		final java.lang.reflect.Parameter[] methodParams = annotatedMethod
 			.getParameters();

@@ -210,16 +210,21 @@ public class OpMethodInfo implements OpInfo {
 		Module methodModule = method.getDeclaringClass().getModule();
 		Module opsEngine = this.getClass().getModule();
 
-		if (opsEngine.canRead(methodModule) && dependencies.isEmpty()) {
+		if (opsEngine.canRead(methodModule)) {
 			try {
 				method.setAccessible(true);
 				MethodHandle handle = MethodHandles.lookup().unreflect(method);
-				Object op = Adapt.Methods.lambdaize(Types.raw(opType), handle);
+				Object op = Adapt.Methods.lambdaize( //
+						Types.raw(opType), //
+						handle, //
+						dependencies().stream().map(Member::getRawType).toArray(Class[]::new),
+						dependencies.toArray() //
+				);
 				return struct().createInstance(op);
 			}
 			catch (Throwable exc) {
 				throw new IllegalStateException("Failed to invoke Op method: " + method,
-					exc);
+						exc);
 			}
 		}
 
@@ -232,7 +237,7 @@ public class OpMethodInfo implements OpInfo {
 				". Provided Op dependencies were: " + dependencies,
 				ex);
 		}
-		
+
 	}
 
 	/**

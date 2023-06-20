@@ -54,7 +54,7 @@ public class OpMethodTestOps implements OpCollection {
 	@OpMethod(names = "test.multiplyNumericStrings", type = ${functionArity.call($arity)}.class)
 	public static Integer multiplyNumericStringsFunction$arity($stringInputs.call($arity))
 	{
-		return multiplyNumericStringsFunction${arity}($applyArgs.call($arity), parseInt);
+		return multiplyNumericStringsFunction${arity}(parseInt, $applyArgs.call($arity));
 	}
 #end
 
@@ -68,7 +68,7 @@ public class OpMethodTestOps implements OpCollection {
 
 	@OpMethod(names = "test.doubleList", type = ${computerArity.call($arity)}.class)
 	public static void doublesToList$arity($stringInputs.call($arity)#if($arity > 0),#{else}#end List<Double> output) {
-		doublesToListWithOp${arity}($applyArgs.call($arity), output, appendDouble);
+		doublesToListWithOp${arity}(appendDouble, $applyArgs.call($arity), output);
 	}
 #end
 
@@ -79,7 +79,7 @@ public class OpMethodTestOps implements OpCollection {
 
 	@OpMethod(names = "test.addDoubles$inplaceSuffix.call($arity, $a)", type = ${inplaceType.call($arity, $a)}.class)
 	public static void addDoubles$inplaceSuffix.call($arity, $a)($doubleInputs.call($arity, $a)) {
-		dependentAddDoubles$inplaceSuffix.call($arity, $a)($inplaceArgsString.call($arity, $a), addArrays);
+		dependentAddDoubles$inplaceSuffix.call($arity, $a)(addArrays, $inplaceArgsString.call($arity, $a));
 	}
 #end
 #end
@@ -105,8 +105,10 @@ public class OpMethodTestOps implements OpCollection {
 #foreach($arity in [1..$maxArity])
 
 	@OpMethod(names = "test.dependentMultiplyStrings", type = ${functionArity.call($arity)}.class)
-	public static Integer multiplyNumericStringsFunction$arity($stringInputs.call($arity),
-		@OpDependency(name = "test.parseInt") Function<String, Integer> op)
+	public static Integer multiplyNumericStringsFunction$arity(
+		@OpDependency(name = "test.parseInt") Function<String, Integer> op,
+		$stringInputs.call($arity)
+		)
 	{
 		Integer out = Integer.valueOf(1);
 
@@ -122,9 +124,11 @@ public class OpMethodTestOps implements OpCollection {
 #foreach($arity in [1..$maxArity])
 
 	@OpMethod(names = "test.dependentDoubleList", type = ${computerArity.call($arity)}.class)
-	public static void doublesToListWithOp${arity}($stringInputs.call($arity),
-		List<Double> output,
-		@OpDependency(name = "test.appendDouble") Inplaces.Arity2_1<List<Double>, String> op)
+	public static void doublesToListWithOp${arity}(
+		@OpDependency(name = "test.appendDouble") Inplaces.Arity2_1<List<Double>, String> op,
+		$stringInputs.call($arity),
+		List<Double> output
+		)
 	{
 		output.clear();
 #foreach($a in $opArgs.call($arity))
@@ -139,7 +143,7 @@ public class OpMethodTestOps implements OpCollection {
 #foreach($a in [1..$arity])
 
 	@OpMethod(names = "test.dependentAddDoubles$inplaceSuffix.call($arity, $a)", type = ${inplaceType.call($arity, $a)}.class)
-	public static void dependentAddDoubles$inplaceSuffix.call($arity, $a)($doubleInputs.call($arity, $a), @OpDependency(name = "test.addArrays") Inplaces.Arity2_1<double[], double[]> op) {
+	public static void dependentAddDoubles$inplaceSuffix.call($arity, $a)(@OpDependency(name = "test.addArrays") Inplaces.Arity2_1<double[], double[]> op, $doubleInputs.call($arity, $a)) {
 #foreach($input in $inputOnlyInplaceArgs.call($arity, $a))
 			op.mutate(io, $input);
 #end

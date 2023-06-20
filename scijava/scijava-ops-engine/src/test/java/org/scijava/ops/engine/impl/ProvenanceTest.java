@@ -7,6 +7,8 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.priority.Priority;
 import org.scijava.function.Computers;
 import org.scijava.function.Producer;
@@ -33,6 +35,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@BeforeAll
 	public static void AddNeededOps() {
 		ops.register(new ProvenanceTest());
+		ops.register(new MapperFunc());
 		ops.register(new FunctionToArrays());
 		ops.register(new PrimitiveSimplifiers());
 		ops.register(new PrimitiveArraySimplifiers());
@@ -71,12 +74,17 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@OpField(names = "test.provenanceMapped")
 	public final Function<Double, Thing> mappedFunc = Thing::new;
 
-	@OpMethod(names = "test.provenanceMapper", type = Function.class)
-	public static Thing mapperFunc(@OpDependency(
-		name = "test.provenanceMapped") Function<Double, Thing> func, Double[] arr)
-	{
-		return Arrays.stream(arr).map(func).reduce(Thing::append)
-			.orElse(null);
+	@OpClass(names="test.provenanceMapper")
+	public static class MapperFunc implements Function<Double[], Thing>, Op {
+
+		@OpDependency(name="test.provenanceMapped")
+		public Function<Double, Thing> func;
+
+		@Override public Thing apply(Double[] doubles) {
+			return Arrays.stream(doubles).map(func).reduce(Thing::append)
+					.orElse(null);
+
+		}
 	}
 
 	static class Thing {

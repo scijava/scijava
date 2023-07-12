@@ -178,4 +178,42 @@ public class DefaultProgressTest {
 		Progress.complete();
 	}
 
+	@Test
+	public void testGlobalProgressListener() {
+		BiFunction<Integer, Integer, Integer> progressible = doubleIterator;
+
+		int numIterations = 4;
+		int numStages = 2;
+
+
+		ProgressListener global = new ProgressListener() {
+
+			double currentIterations = 1;
+			final double maxIterations = numStages * numIterations;
+			boolean alreadyCompleted = false;
+
+			@Override
+			public void acknowledgeUpdate(final Task task) {
+				if (!task.isComplete()) {
+					var expected = currentIterations / maxIterations;
+					var actual = task.progress();
+					Assertions.assertEquals(expected, actual, 1e-6);
+					currentIterations++;
+				}
+				else {
+					// Assert complete listen only happens once, when iterations = max
+					Assertions.assertFalse(alreadyCompleted);
+					Assertions.assertEquals(currentIterations, maxIterations);
+					alreadyCompleted = true;
+				}
+			}
+		};
+		Progress.addGlobalListener(global);
+
+		Progress.register(progressible);
+		progressible.apply(numStages, numIterations);
+		Progress.complete();
+	}
+
+
 }

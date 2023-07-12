@@ -45,6 +45,12 @@ import java.util.WeakHashMap;
 public final class Progress {
 
 	/**
+	 * A record of all listeners interested in the progress of all Object
+	 * executions
+	 */
+	private static final List<ProgressListener> globalListeners = new ArrayList<>();
+
+	/**
 	 * A record of all listeners interested in the progress of a given Object's
 	 * executions
 	 */
@@ -74,6 +80,19 @@ public final class Progress {
 				return new ArrayDeque<>();
 			}
 		};
+
+	/**
+	 * Records {@link ProgressListener} {@code l} as a callback for all
+	 * progressible {@link Object}s
+	 *
+	 * @param l a {@link ProgressListener} that would like to know about the
+	 *          progress of {@code progressible} {@link Object}s
+	 */
+	public static void addGlobalListener(ProgressListener l) {
+		if (!globalListeners.contains(l)) {
+			globalListeners.add(l);
+		}
+	}
 
 	/**
 	 * Records {@link ProgressListener} {@code l} as a callback for progressible
@@ -150,10 +169,15 @@ public final class Progress {
 	 * @param o an {@link Object} reporting its progress.
 	 */
 	private static void pingListeners(ProgressibleObject o) {
+		// Ping object-specific listeners
 		List<ProgressListener> list = progressibleListeners.getOrDefault(o.object(),
 			Collections.emptyList());
 		synchronized (list) {
 			list.forEach(l -> l.acknowledgeUpdate(o.task()));
+		}
+		// Ping global listeners
+		synchronized (globalListeners) {
+			globalListeners.forEach(l -> l.acknowledgeUpdate(o.task()));
 		}
 	}
 

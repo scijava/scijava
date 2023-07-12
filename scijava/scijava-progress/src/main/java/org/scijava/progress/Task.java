@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Keeps track of progress associated with an execution of progressable code.
- * {@Link Task}s should <b>not</b> be updated by the code itself; it should be
+ * {@link Task}s should <b>not</b> be updated by the code itself; it should be
  * update via {@link Progress#update()}.
  *
  * @author Gabriel Selzer
@@ -48,7 +48,7 @@ public class Task {
 	private final Task parent;
 
 	/** Subtasks created by this task */
-	private Set<Task> subTasks = new HashSet<>();
+	private final Set<Task> subTasks = new HashSet<>();
 
 	/** Designates task completion */
 	private boolean completed = false;
@@ -60,19 +60,19 @@ public class Task {
 	private long numSubTasks = 0;
 
 	/** Progress in current stage */
-	private AtomicLong current = new AtomicLong(0);
+	private final AtomicLong current = new AtomicLong(0);
 
 	/** Maximum of current stage */
-	private AtomicLong max = new AtomicLong(1);
+	private final AtomicLong max = new AtomicLong(1);
 
 	/** Number of within-task stages completed */
-	private AtomicLong stagesCompleted = new AtomicLong(0);
+	private final AtomicLong stagesCompleted = new AtomicLong(0);
 
 	/** Number of subtasks completed */
-	private AtomicLong subTasksCompleted = new AtomicLong(0);
+	private final AtomicLong subTasksCompleted = new AtomicLong(0);
 
 	/**
-	 * True iff a call to {@link Task#defineTotalProgress(int, int)} has been made
+	 * True iff a call to {@link Task#defineTotalProgress(long, long)} has been made
 	 */
 	private boolean tasksDefined = false;
 
@@ -80,14 +80,19 @@ public class Task {
 	private boolean updateDefined = false;
 
 	/** Computation status as defined by the task */
+	private final String id;
+
+	/** Computation status as defined by the task */
 	private String status = "Executing...";
 
-	public Task() {
+	public Task(final String id) {
 		this.parent = null;
+		this.id = id;
 	}
 
-	public Task(final Task parent) {
+	public Task(final Task parent, final String id) {
 		this.parent = parent;
+		this.id = id;
 	}
 
 	/**
@@ -112,7 +117,7 @@ public class Task {
 	 * @return the subtask.
 	 */
 	public synchronized Task createSubtask() {
-		final Task sub = new Task(this);
+		final Task sub = new Task(this, "Subtask " + subTasks.size() + 1 + " of Task \"" + id + "\"");
 		subTasks.add(sub);
 		return sub;
 	}
@@ -124,11 +129,11 @@ public class Task {
 	 * {@link Task#progress()} are called, as otherwise total progress cannot be
 	 * defined.
 	 * <p>
-	 * Under the hood, this method calls {@link #defineTotalProgress(int, int)}
+	 * Under the hood, this method calls {@link #defineTotalProgress(long, long)}
 	 *
 	 * @param totalStages the number of computation stages within the task
 	 */
-	public void defineTotalProgress(final int totalStages) {
+	public void defineTotalProgress(final long totalStages) {
 		defineTotalProgress(totalStages, 0);
 	}
 
@@ -144,8 +149,8 @@ public class Task {
 	 *          within the task. This <b>is not</b> the same as the number of
 	 *          subtasks used (as one subtask may run multiple times).
 	 */
-	public void defineTotalProgress(final int totalStages,
-		final int totalSubTasks)
+	public void defineTotalProgress(final long totalStages,
+		final long totalSubTasks)
 	{
 		this.numStages = totalStages;
 		this.numSubTasks = totalSubTasks;
@@ -164,7 +169,7 @@ public class Task {
 	/**
 	 * Calculates and returns the progress of the associated progressible
 	 * {@link Object}. If the total progress is defined using
-	 * {@link Task#defineTotalProgress(int, int)}, then this method will return a
+	 * {@link Task#defineTotalProgress(long, long)}, then this method will return a
 	 * {@code double} within the range [0, 1]. If the progress is <b>not</b>
 	 * defined, then this task will return {@code 0} until {@link #complete()} is
 	 * called; after that call this method will return {@code 1.}.
@@ -178,15 +183,6 @@ public class Task {
 		totalCompletion += current.doubleValue() / max.doubleValue();
 		totalCompletion += subTasksCompleted.get();
 		return totalCompletion / (numStages + numSubTasks);
-	}
-
-	/**
-	 * Returns {@code true} iff progress has been defined
-	 *
-	 * @return {@code true} iff progress has been defined
-	 */
-	public boolean progressDefined() {
-		return tasksDefined;
 	}
 
 	/**
@@ -206,8 +202,6 @@ public class Task {
 		current.set(0);
 		stagesCompleted.incrementAndGet();
 		this.updateDefined = false;
-		if (stagesCompleted.longValue() == numStages && subTasksCompleted
-			.longValue() == numSubTasks) completed = true;
 	}
 
 	/**
@@ -239,6 +233,15 @@ public class Task {
 	 */
 	public String status() {
 		return status;
+	}
+
+	/**
+	 * The id of the progressible {@link Object}
+	 *
+	 * @return the id
+	 */
+	public String id() {
+		return id;
 	}
 
 	/**

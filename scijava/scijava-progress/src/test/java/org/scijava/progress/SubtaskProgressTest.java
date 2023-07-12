@@ -134,7 +134,7 @@ public class SubtaskProgressTest {
  * <b>and</b> and does processing on its own.
  *
  * @author Gabriel Selzer
- * @see DefaultProgressTest#iterator
+ * @see DefaultProgressTest#singleStageProgressible
  */
 class DependentComplexProgressReportingTask implements
 	Function<Integer, Integer>
@@ -175,7 +175,7 @@ class DependentComplexProgressReportingTask implements
  * dependency, and does no processing on its own.
  *
  * @author Gabriel Selzer
- * @see DefaultProgressTest#iterator
+ * @see DefaultProgressTest#singleStageProgressible
  */
 class DependentProgressReportingTask implements Function<Integer, Integer> {
 

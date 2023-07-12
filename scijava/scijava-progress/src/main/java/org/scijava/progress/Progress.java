@@ -108,7 +108,7 @@ public final class Progress {
 		}
 		addListenerToList(progressible, l);
 	}
-
+	
 	private static void addListenerToList(Object progressible,
 		ProgressListener l)
 	{
@@ -132,12 +132,26 @@ public final class Progress {
 	public static void complete() {
 		// update completed task
 		ProgressibleObject completed = progressibleStack.get().pop();
-		completed.task().complete();
-		// ping relevant listeners
-		pingListeners(completed);
-		if (progressibleStack.get().peek() != null) {
-			pingListeners(progressibleStack.get().peek());
+		if (!completed.task().isComplete()) {
+			completed.task().complete();
+			// ping relevant listeners
+			pingListeners(completed);
+			if (progressibleStack.get().peek() != null) {
+				pingListeners(progressibleStack.get().peek());
+			}
 		}
+	}
+
+	/**
+	 * Creates a new {@link Task} for {@code progressible}. This method makes the
+	 * assumption that {@code progressible} is responsible for any calls to
+	 * {@link Progress}' progress-reporting API between the time this method is
+	 * called and the time when {@link Progress#complete()} is called.
+	 *
+	 * @param progressible an {@link Object} that would like to report its progress.
+	 */
+	public static void register(final Object progressible) {
+		register(progressible, progressible.toString());
 	}
 
 	/**
@@ -147,12 +161,13 @@ public final class Progress {
 	 * called and the time when {@link Progress#complete()} is called.
 	 * 
 	 * @param progressible an {@link Object} that would like to report its progress.
+	 * @param description a {@link String} describing {@code progressible}
 	 */
-	public static void register(Object progressible) {
+	public static void register(final Object progressible, final String description) {
 		Task t;
 		if (progressibleStack.get().size() == 0) {
 			// completely new execution hierarchy
-			t = new Task();
+			t = new Task(description);
 		}
 		else {
 			// part of an existing execution hierarchy
@@ -228,7 +243,7 @@ public final class Progress {
 	 * 
 	 * @see Task#defineTotalProgress(int)
 	 */
-	public static void defineTotalProgress(int numStages) {
+	public static void defineTotalProgress(long numStages) {
 		currentTask().defineTotalProgress(numStages);
 	}
 
@@ -237,7 +252,7 @@ public final class Progress {
 	 * 
 	 * @see Task#defineTotalProgress(int, int)
 	 */
-	public static void defineTotalProgress(int numStages, int numSubTasks) {
+	public static void defineTotalProgress(long numStages, long numSubTasks) {
 		currentTask().defineTotalProgress(numStages, numSubTasks);
 	}
 

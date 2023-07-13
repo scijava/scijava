@@ -44,7 +44,6 @@ public class DefaultProgressTest {
 	private static final long NUM_ITERATIONS = 100;
 	private static final long NUM_STAGES = 10;
 
-
 	/**
 	 * Tests progress listening when an progressible {@link Object} never
 	 * explicitly updates its own progress. We thus expect to be notified
@@ -172,8 +171,8 @@ public class DefaultProgressTest {
 	}
 
 	/**
-	 * Test that {@link ProgressListener}s added at a global level can listen to
-	 * a progressible object without being explicitly linked
+	 * Test that {@link ProgressListener}s added at a global level can listen to a
+	 * progressible object without being explicitly linked
 	 */
 	@Test
 	public void testGlobalProgressListener() {
@@ -190,7 +189,7 @@ public class DefaultProgressTest {
 		};
 		// Add the ProgressListener
 		var id = "This is a global listener";
-		var listener = new TestSuiteProgressListener(NUM_ITERATIONS,  id);
+		var listener = new TestSuiteProgressListener(NUM_ITERATIONS, id);
 		Progress.addGlobalListener(listener);
 		// Register the Task
 		Progress.register(progressible, id);
@@ -202,8 +201,8 @@ public class DefaultProgressTest {
 	}
 
 	/**
-	 * Test that {@link ProgressListener}s added at a global level can listen to
-	 * a progressible object without being explicitly linked
+	 * Test that {@link ProgressListener}s added at a global level can listen to a
+	 * progressible object without being explicitly linked
 	 */
 	@Test
 	public void testProgressListenerIdentifiers() {
@@ -220,13 +219,13 @@ public class DefaultProgressTest {
 		};
 		// Add a ProgressListener that should acknowledge this task
 		var goodId = "This one should be listened to";
-		var goodListener = new TestSuiteProgressListener(NUM_ITERATIONS,  goodId);
+		var goodListener = new TestSuiteProgressListener(NUM_ITERATIONS, goodId);
 		Progress.addGlobalListener(goodListener);
 		// Register the Task with goodId
 		Progress.register(progressible, goodId);
 		// Create a second global listener that will not acknowledge this task
 		var badId = "This one should not be listened to";
-		var badListener = new TestSuiteProgressListener(NUM_ITERATIONS,  badId);
+		var badListener = new TestSuiteProgressListener(NUM_ITERATIONS, badId);
 		Progress.addGlobalListener(badListener);
 		// Run the Task
 		progressible.get();

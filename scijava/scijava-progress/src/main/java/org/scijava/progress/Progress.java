@@ -48,7 +48,8 @@ public final class Progress {
 	 * A record of all listeners interested in the progress of all Object
 	 * executions
 	 */
-	private static final List<ProgressListener> globalListeners = new ArrayList<>();
+	private static final List<ProgressListener> globalListeners =
+		new ArrayList<>();
 
 	/**
 	 * A record of all listeners interested in the progress of a given Object's
@@ -108,7 +109,7 @@ public final class Progress {
 		}
 		addListenerToList(progressible, l);
 	}
-	
+
 	private static void addListenerToList(Object progressible,
 		ProgressListener l)
 	{
@@ -125,7 +126,8 @@ public final class Progress {
 
 	/**
 	 * Completes the current task on this {@link Thread}'s execution hierarchy,
-	 * removing it in the process. This method also takaes care to ping relevant {@link ProgressListener}s.
+	 * removing it in the process. This method also takaes care to ping relevant
+	 * {@link ProgressListener}s.
 	 * 
 	 * @see Task#complete()
 	 */
@@ -148,7 +150,8 @@ public final class Progress {
 	 * {@link Progress}' progress-reporting API between the time this method is
 	 * called and the time when {@link Progress#complete()} is called.
 	 *
-	 * @param progressible an {@link Object} that would like to report its progress.
+	 * @param progressible an {@link Object} that would like to report its
+	 *          progress.
 	 */
 	public static void register(final Object progressible) {
 		register(progressible, progressible.toString());
@@ -160,10 +163,13 @@ public final class Progress {
 	 * {@link Progress}' progress-reporting API between the time this method is
 	 * called and the time when {@link Progress#complete()} is called.
 	 * 
-	 * @param progressible an {@link Object} that would like to report its progress.
+	 * @param progressible an {@link Object} that would like to report its
+	 *          progress.
 	 * @param description a {@link String} describing {@code progressible}
 	 */
-	public static void register(final Object progressible, final String description) {
+	public static void register(final Object progressible,
+		final String description)
+	{
 		Task t;
 		if (progressibleStack.get().size() == 0) {
 			// completely new execution hierarchy

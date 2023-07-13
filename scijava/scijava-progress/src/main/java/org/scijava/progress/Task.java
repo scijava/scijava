@@ -72,7 +72,8 @@ public class Task {
 	private final AtomicLong subTasksCompleted = new AtomicLong(0);
 
 	/**
-	 * True iff a call to {@link Task#defineTotalProgress(long, long)} has been made
+	 * True iff a call to {@link Task#defineTotalProgress(long, long)} has been
+	 * made
 	 */
 	private boolean tasksDefined = false;
 
@@ -117,7 +118,8 @@ public class Task {
 	 * @return the subtask.
 	 */
 	public synchronized Task createSubtask() {
-		final Task sub = new Task(this, "Subtask " + subTasks.size() + 1 + " of Task \"" + id + "\"");
+		final Task sub = new Task(this, "Subtask " + subTasks.size() + 1 +
+			" of Task \"" + id + "\"");
 		subTasks.add(sub);
 		return sub;
 	}
@@ -169,8 +171,8 @@ public class Task {
 	/**
 	 * Calculates and returns the progress of the associated progressible
 	 * {@link Object}. If the total progress is defined using
-	 * {@link Task#defineTotalProgress(long, long)}, then this method will return a
-	 * {@code double} within the range [0, 1]. If the progress is <b>not</b>
+	 * {@link Task#defineTotalProgress(long, long)}, then this method will return
+	 * a {@code double} within the range [0, 1]. If the progress is <b>not</b>
 	 * defined, then this task will return {@code 0} until {@link #complete()} is
 	 * called; after that call this method will return {@code 1.}.
 	 *

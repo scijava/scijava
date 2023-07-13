@@ -70,6 +70,7 @@ public class SubtaskProgressTest {
 			new DependentComplexProgressReportingTask(iterator);
 
 		int numIterations = 100;
+		String id = "Running a complex Task with subtasks";
 		Progress.addListener(progressible, new ProgressListener() {
 
 			int subtasksCompleted = 0;
@@ -90,10 +91,12 @@ public class SubtaskProgressTest {
 					Assertions.assertEquals(1., task.progress(), 1e-6);
 				}
 
+				Assertions.assertEquals(id, task.description());
+
 			}
 
 		});
-		Progress.register(progressible);
+		Progress.register(progressible, id);
 		progressible.apply(numIterations);
 		Progress.complete();
 	}
@@ -109,6 +112,7 @@ public class SubtaskProgressTest {
 			new DependentProgressReportingTask(iterator);
 
 		int numIterations = 100;
+		String id = "Running a task with subtasks";
 		Progress.addListener(progressible, new ProgressListener() {
 
 			double currentIterations = 1;
@@ -116,12 +120,15 @@ public class SubtaskProgressTest {
 
 			@Override
 			public void acknowledgeUpdate(Task task) {
-				Assertions.assertEquals(Math.min(1., currentIterations++ /
+				Assertions.assertEquals(Math.min(1., currentIterations /
 					maxIterations), task.progress(), 1e-6);
+				Assertions.assertEquals(id, task.description());
+				currentIterations++;
+
 			}
 
 		});
-		Progress.register(progressible);
+		Progress.register(progressible, id);
 		progressible.apply(numIterations);
 		Progress.complete();
 
@@ -134,7 +141,6 @@ public class SubtaskProgressTest {
  * <b>and</b> and does processing on its own.
  *
  * @author Gabriel Selzer
- * @see DefaultProgressTest#singleStageProgressible
  */
 class DependentComplexProgressReportingTask implements
 	Function<Integer, Integer>
@@ -151,19 +157,19 @@ class DependentComplexProgressReportingTask implements
 	@Override
 	public Integer apply(Integer t) {
 		Progress.defineTotalProgress(1, 2);
-		callDep(t);
+		callDep(t, 1);
 
 		Progress.setStageMax(t);
 		for (int i = 0; i < t; i++) {
 			Progress.update();
 		}
 
-		callDep(t);
+		callDep(t, 2);
 		return 3 * t;
 	}
 
-	private void callDep(Integer t) {
-		Progress.register(dependency);
+	private void callDep(Integer t, Integer i) {
+		Progress.register(dependency, "Pass " + i + " on dependency");
 		dependency.apply(t);
 		Progress.complete();
 	}
@@ -175,7 +181,6 @@ class DependentComplexProgressReportingTask implements
  * dependency, and does no processing on its own.
  *
  * @author Gabriel Selzer
- * @see DefaultProgressTest#singleStageProgressible
  */
 class DependentProgressReportingTask implements Function<Integer, Integer> {
 
@@ -189,7 +194,7 @@ class DependentProgressReportingTask implements Function<Integer, Integer> {
 	public Integer apply(Integer t) {
 		Progress.defineTotalProgress(0, 3);
 		for (int i = 0; i < 3; i++) {
-			Progress.register(dependency);
+			Progress.register(dependency, "Pass " + i + " of dependency");
 			dependency.apply(t);
 			Progress.complete();
 		}

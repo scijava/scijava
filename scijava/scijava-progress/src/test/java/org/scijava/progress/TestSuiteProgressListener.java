@@ -25,7 +25,7 @@ public class TestSuiteProgressListener implements ProgressListener {
 
 	@Override
 	public void acknowledgeUpdate(Task task) {
-		if (id != null && !task.id().equals(id)) return;
+		if (id != null && !task.description().equals(id)) return;
 		if (!task.isComplete()) {
 			Assertions.assertEquals(++currentIterations / expectedIterations, task
 				.progress(), 1e-6);

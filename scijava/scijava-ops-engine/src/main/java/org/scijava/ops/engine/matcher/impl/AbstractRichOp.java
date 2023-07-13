@@ -100,4 +100,9 @@ public abstract class AbstractRichOp<T> implements RichOp<T> {
 		this.record = record;
 	}
 
+	@Override
+	public String toString() {
+		return instance().toString();
+	}
+
 }

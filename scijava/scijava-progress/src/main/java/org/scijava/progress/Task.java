@@ -80,20 +80,20 @@ public class Task {
 	/** True iff {@link Task#max} has been defined for the current stage */
 	private boolean updateDefined = false;
 
-	/** Computation status as defined by the task */
-	private final String id;
+	/** String identifying the task */
+	private final String description;
 
 	/** Computation status as defined by the task */
 	private String status = "Executing...";
 
-	public Task(final String id) {
+	public Task(final String description) {
 		this.parent = null;
-		this.id = id;
+		this.description = description;
 	}
 
-	public Task(final Task parent, final String id) {
+	public Task(final Task parent, final String description) {
 		this.parent = parent;
-		this.id = id;
+		this.description = description;
 	}
 
 	/**
@@ -117,9 +117,8 @@ public class Task {
 	 *
 	 * @return the subtask.
 	 */
-	public synchronized Task createSubtask() {
-		final Task sub = new Task(this, "Subtask " + subTasks.size() + 1 +
-			" of Task \"" + id + "\"");
+	public synchronized Task createSubtask(String description) {
+		final Task sub = new Task(this, description);
 		subTasks.add(sub);
 		return sub;
 	}
@@ -242,8 +241,8 @@ public class Task {
 	 *
 	 * @return the id
 	 */
-	public String id() {
-		return id;
+	public String description() {
+		return description;
 	}
 
 	/**

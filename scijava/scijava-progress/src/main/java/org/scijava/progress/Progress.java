@@ -171,16 +171,17 @@ public final class Progress {
 		final String description)
 	{
 		Task t;
-		if (progressibleStack.get().size() == 0) {
+		var deque = progressibleStack.get();
+		var parent = deque.peek();
+		if (parent == null) {
 			// completely new execution hierarchy
 			t = new Task(description);
 		}
 		else {
 			// part of an existing execution hierarchy
-			ProgressibleObject parent = progressibleStack.get().peek();
-			t = parent.task().createSubtask();
+			t = parent.task().createSubtask(description);
 		}
-		progressibleStack.get().push(new ProgressibleObject(progressible, t));
+		deque.push(new ProgressibleObject(progressible, t));
 	}
 
 	/**
@@ -247,7 +248,7 @@ public final class Progress {
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 * 
-	 * @see Task#defineTotalProgress(int)
+	 * @see Task#defineTotalProgress(long)
 	 */
 	public static void defineTotalProgress(long numStages) {
 		currentTask().defineTotalProgress(numStages);
@@ -256,7 +257,7 @@ public final class Progress {
 	/**
 	 * Defines the total progress of the current {@link Task}
 	 * 
-	 * @see Task#defineTotalProgress(int, int)
+	 * @see Task#defineTotalProgress(long, long)
 	 */
 	public static void defineTotalProgress(long numStages, long numSubTasks) {
 		currentTask().defineTotalProgress(numStages, numSubTasks);

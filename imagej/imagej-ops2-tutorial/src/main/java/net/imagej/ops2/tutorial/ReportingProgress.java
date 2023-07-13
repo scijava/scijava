@@ -119,18 +119,22 @@ public class ReportingProgress implements OpCollection {
 		// This ProgressListener simply prints out the status of the Op
 		// to the console, but we could print out something else,
 		// or pass this information somewhere else.
-		ProgressListener l = //
-			task -> System.out.printf("Op progress: %.2f\n", task.progress());
+		ProgressListener l = task -> //
+			 System.out.printf("Progress of %s: %.2f\n", task.description(), task.progress());
+		// To listen to Op progress updates, the ProgressListener must be registered
+		// through the Progress API. To listen to all Op executions, use the
+		// following call:
+		Progress.addGlobalListener(l);
+		// If listening to every Op would be overwhelming, the Progress API also
+		// allows ProgressListeners to be registered for a specific Op, using the
+		// following call:
+		// Progress.addListener(op, l);
 
 		// Get the function.
 		var op = ops.unary("tutorial.long.op") //
 			.inType(Integer.class) //
 			.outType(new Nil<List<Long>>() {}) //
 			.function();
-		// Listening to every Op would be overwhelming.
-		// Ops must be deliberately linked to a ProgressListener through the
-		// Progress API.
-		Progress.addListener(op, l);
 
 		// When we apply the Op, we will automatically print the progress out to
 		// the console, thanks to our ProgressListener above.

@@ -167,6 +167,7 @@ module net.imagej.ops2 {
 	requires ojalgo;
 	requires jama;
 	requires mines.jtk;
+	requires net.imglib2.realtransform;
 
 	provides org.scijava.types.TypeExtractor with
 			net.imagej.ops2.types.ImgFactoryTypeExtractor,

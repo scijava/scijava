@@ -27,56 +27,43 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package net.imagej.ops2.transform.realTransform;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
-import net.imglib2.Interval;
 import net.imglib2.RandomAccess;
-import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.interpolation.InterpolatorFactory;
 import net.imglib2.realtransform.AffineTransform2D;
-import net.imglib2.realtransform.InvertibleRealTransform;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.view.Views;
-
-import org.junit.jupiter.api.Test;
-
-import org.scijava.ops.function.Functions;
-import org.scijava.types.Nil;
 
 public class RealTransformTest extends AbstractOpTest {
 
 	@Test
-	public void regressionTest() throws Exception {
+	public void regressionTest() {
 
-		final Img<UnsignedByteType> image = openUnsignedByteType(getClass(),
+		final Img<UnsignedByteType> image = openRelativeUnsignedByteImg(getClass(),
 			"lowresbridge.tif");
-		final Img<UnsignedByteType> expectedOutput = openUnsignedByteType(
+		final Img<UnsignedByteType> expectedOutput = openRelativeUnsignedByteImg(
 			getClass(), "rotatedscaledcenter.tif");
 
 		final AffineTransform2D transform = new AffineTransform2D();
 
-		transform.translate(-image.dimension(0) / 2, -image.dimension(0) / 2);
+		double translation = ((double) image.dimension(0) / 2);
+		transform.translate(-translation, -translation);
 		transform.rotate(1);
 		transform.scale(0.5);
-		transform.translate(image.dimension(0) / 2, image.dimension(0) / 2);
+		transform.translate(translation, translation);
 
-		// TODO: make the op call simpler once incubator PR 32 has been merged
-		Nil<RandomAccessibleInterval<UnsignedByteType>> imgNil = new Nil<>() {};
-		Nil<InvertibleRealTransform> transformNil = Nil.of(
-			InvertibleRealTransform.class);
-		Nil<Interval> intervalNil = Nil.of(Interval.class);
-		Nil<InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>>> factoryNil =
-			new Nil<>()
-			{};
-		final Functions.Arity4<RandomAccessibleInterval<UnsignedByteType>, InvertibleRealTransform, Interval, InterpolatorFactory<UnsignedByteType, RandomAccessible<UnsignedByteType>>, RandomAccessibleInterval<UnsignedByteType>> f =
-			ops.op("transform.realTransform").inType(imgNil, transformNil,
-				intervalNil, factoryNil).outType(imgNil).function();
-		final RandomAccessibleInterval<UnsignedByteType> actualOutput = f.apply(
-			image, transform, null, null);
+		var outType = new Nil<RandomAccessibleInterval<UnsignedByteType>>() {};
+		var actualOutput = ops.op("transform.realTransform").arity2() //
+			.input(image, transform) //
+			.outType(outType) //
+			.apply();
 
 		// compare the output image data to that stored in the file.
 		final Cursor<UnsignedByteType> cursor = Views.iterable(actualOutput)

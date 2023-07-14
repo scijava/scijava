@@ -27,7 +27,10 @@
  * #L%
  */
 
-package net.imagej.ops2.transform.realTransform;
+package net.imagej.ops2.transform;
+
+import org.scijava.function.Functions;
+import org.scijava.ops.spi.Optional;
 
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
@@ -39,15 +42,7 @@ import net.imglib2.realtransform.InvertibleRealTransform;
 import net.imglib2.realtransform.RealViews;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
-
-import org.scijava.Priority;
-import org.scijava.ops.core.Op;
-import org.scijava.ops.function.Functions;
-import org.scijava.param.Parameter;
-import org.scijava.plugin.Plugin;
-import org.scijava.struct.ItemIO;
 
 /**
  * Applies an Affine transform to a {@link RandomAccessibleInterval}
@@ -55,14 +50,8 @@ import org.scijava.struct.ItemIO;
  * @author Brian Northan (True North Intelligent Algorithms)
  * @author Martin Horn (University of Konstanz)
  * @author Stefan Helfrich (University of Konstanz)
+ * @implNote op names="transform.realTransform", priority="101.0"
  */
-@Plugin(type = Op.class, name = "transform.realTransform",
-	priority = Priority.HIGH + 1)
-@Parameter(key = "input")
-@Parameter(key = "transform")
-@Parameter(key = "outputInterval")
-@Parameter(key = "interpolator")
-@Parameter(key = "output", itemIO = ItemIO.OUTPUT)
 public class DefaultTransformView<T extends NumericType<T> & RealType<T>>
 	implements
 	Functions.Arity4<RandomAccessibleInterval<T>, InvertibleRealTransform, Interval, InterpolatorFactory<T, RandomAccessible<T>>, RandomAccessibleInterval<T>>
@@ -72,7 +61,7 @@ public class DefaultTransformView<T extends NumericType<T> & RealType<T>>
 	 * TODO: declare {@code outputInterval}, {@code interpolator} as optional once
 	 * <a href=https://github.com/scijava/incubator/pull/32>this issue</a> has
 	 * been resolved. Until then, this op <b>must</b> be called as a
-	 * {@link org.scijava.ops.function.Functions.Arity4}
+	 * {@link Functions.Arity4}
 	 * 
 	 * @param input the input
 	 * @param transform the transform to apply
@@ -82,10 +71,12 @@ public class DefaultTransformView<T extends NumericType<T> & RealType<T>>
 	 * @return the output
 	 */
 	@Override
-	public RandomAccessibleInterval<T> apply(RandomAccessibleInterval<T> input,
-		InvertibleRealTransform transform, Interval outputInterval,
-		InterpolatorFactory<T, RandomAccessible<T>> interpolator)
-	{
+	public RandomAccessibleInterval<T> apply( //
+		RandomAccessibleInterval<T> input, //
+		InvertibleRealTransform transform, //
+		@Optional Interval outputInterval, //
+		@Optional InterpolatorFactory<T, RandomAccessible<T>> interpolator //
+	) {
 		if (outputInterval == null) {
 			outputInterval = new FinalInterval(input);
 		}
@@ -94,11 +85,11 @@ public class DefaultTransformView<T extends NumericType<T> & RealType<T>>
 			interpolator = new LanczosInterpolatorFactory<>();
 		}
 
-		final IntervalView<T> interval = Views.interval(Views.raster(RealViews
-			.transformReal(Views.interpolate(Views.extendZero(input), interpolator),
-				transform)), outputInterval);
-
-		return interval;
+		var extended = Views.extendZero(input);
+		var interpolated = Views.interpolate(extended, interpolator);
+		var transformed = RealViews.transformReal(interpolated, transform);
+		var rasterized = Views.raster(transformed);
+		return Views.interval(rasterized, outputInterval);
 	}
 
 }

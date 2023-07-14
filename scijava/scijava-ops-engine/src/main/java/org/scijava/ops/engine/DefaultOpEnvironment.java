@@ -318,7 +318,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 	
 	@Override
-	public Collection<OpInfo> infosFrom(Object o) {
+	public Set<OpInfo> infosFrom(Object o) {
 		return infoGenerators().parallelStream() //
 				.filter(g -> g.canGenerateFrom(o)) //
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //
@@ -326,12 +326,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public Collection<String> descriptions() {
+	public Set<String> descriptions() {
 		return descriptions(infos());
 	}
 
 	@Override
-	public Collection<String> descriptions(String name) {
+	public Set<String> descriptions(String name) {
 		return descriptions(infos(name));
 	}
 
@@ -344,14 +344,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * returning multiple instances of the same {@link OpInfo}. The duplicate
 	 * {@link OpInfo}s are created when Ops have multiple names.
 	 *
-	 * @param infos
-	 * @return a set of {@link String}s, one describing each {@link OpInfo} in
-	 *         {@code infos}.
+	 * @param infos an {@link Iterable} of {@link OpInfo}s
+	 * @return a {@link Set} of {@link String}s, one describing each
+	 *         {@link OpInfo} in {@code infos}.
 	 */
-	private List<String> descriptions(Iterable<OpInfo> infos) {
+	private Set<String> descriptions(Iterable<OpInfo> infos) {
 		return StreamSupport.stream(infos.spliterator(), true) //
 				.map(OpInfo::toString) //
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -697,7 +697,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param generators the {@link List} of {@link OpInfoGenerator}s
 	 * @return a {@link List} of {@link OpInfo}s
 	 */
-	private Collection<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
+	private List<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
 		return generators.stream() //
 				.filter(g -> g.canGenerateFrom(o)) //
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //

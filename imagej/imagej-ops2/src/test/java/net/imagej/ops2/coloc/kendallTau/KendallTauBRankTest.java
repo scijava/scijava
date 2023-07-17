@@ -34,11 +34,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Iterator;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
-import net.imagej.ops2.AbstractOpTest;
+import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.OpBuilder;
+import org.scijava.types.Nil;
+
 import net.imagej.ops2.AbstractColocalisationTest;
+import net.imagej.ops2.AbstractOpTest;
 import net.imagej.ops2.coloc.pValue.PValueResult;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -49,12 +52,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.IterablePair;
 import net.imglib2.util.Pair;
 
-import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpBuilder;
-import org.scijava.types.Nil;
-
 /**
- * Tests {@link net.imagej.ops2.Ops.Coloc.KendallTau}.
+ * Tests {@link net.imagej.ops2.coloc.kendallTau.KendallTauBRank}.
  *
  * @author Ellen T Arena
  */
@@ -116,7 +115,6 @@ public class KendallTauBRankTest extends AbstractOpTest {
 	
 	@Test
 	public void testPValue() {
-		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -133,7 +131,7 @@ public class KendallTauBRankTest extends AbstractOpTest {
 //						new Nil<BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double>>() {})
 //						.apply();
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").arity3().input(ch1, ch2, op).output(value).compute();
 		assertEquals(0.75, value.getPValue(), 0.0);
 	}
 

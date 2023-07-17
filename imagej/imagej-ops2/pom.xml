@@ -255,6 +255,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scijava</groupId>
+			<artifactId>scijava-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

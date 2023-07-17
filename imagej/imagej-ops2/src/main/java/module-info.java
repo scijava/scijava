@@ -153,6 +153,7 @@ module net.imagej.ops2 {
 	requires net.imglib2.roi;
 	requires org.joml;
 	requires org.scijava.collections;
+	requires org.scijava.concurrent;
 	requires org.scijava.function;
 	requires org.scijava.meta;
 	requires org.scijava.ops.api;

@@ -89,7 +89,7 @@ public final class Parallelization {
 	}
 
 	private static final ThreadLocal<TaskExecutor> executor = ThreadLocal
-		.withInitial(() -> TaskExecutors.multiThreaded());
+		.withInitial(TaskExecutors::multiThreaded);
 
 	// Methods to support the implementation of an multi-threaded algorithm
 

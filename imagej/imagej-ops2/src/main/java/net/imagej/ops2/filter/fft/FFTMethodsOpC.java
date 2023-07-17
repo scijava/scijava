@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.filter.fft;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
@@ -50,7 +48,7 @@ import org.scijava.function.Computers;
  * @implNote op names='filter.fft', priority='0.'
  */
 public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
-	implements Computers.Arity2<RandomAccessibleInterval<T>, ExecutorService, RandomAccessibleInterval<C>>
+	implements Computers.Arity1<RandomAccessibleInterval<T>, RandomAccessibleInterval<C>>
 {
 
 	/**
@@ -60,20 +58,19 @@ public class FFTMethodsOpC<T extends RealType<T>, C extends ComplexType<C>>
 	 * TODO
 	 *
 	 * @param input
-	 * @param executorService
 	 * @param output
 	 */
 	@Override
 	public void compute(final RandomAccessibleInterval<T> input,
-		final ExecutorService es, final RandomAccessibleInterval<C> output)
+		final RandomAccessibleInterval<C> output)
 	{
 
 		// perform a real to complex FFT in the first dimension
-		FFTMethods.realToComplex(input, output, 0, false, es);
+		FFTMethods.realToComplex(input, output, 0, false);
 
 		// loop and perform complex to complex FFT in the remaining dimensions
 		for (int d = 1; d < input.numDimensions(); d++)
-			FFTMethods.complexToComplex(output, d, true, false, es);
+			FFTMethods.complexToComplex(output, d, true, false);
 	}
 
 }

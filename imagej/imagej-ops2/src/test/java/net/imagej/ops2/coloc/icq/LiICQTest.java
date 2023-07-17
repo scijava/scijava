@@ -32,7 +32,6 @@ package net.imagej.ops2.coloc.icq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractColocalisationTest;

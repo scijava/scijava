@@ -30,8 +30,8 @@ package net.imagej.ops2.image.distancetransform;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
+
+import org.scijava.concurrent.Parallelization;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
@@ -51,24 +51,20 @@ public class DistanceTransform2DCalibration {
 	 * http://fab.cba.mit.edu/classes/S62.12/docs/Meijster_distance.pdf
 	 */
 	public static <B extends BooleanType<B>, T extends RealType<T>> void compute(final RandomAccessibleInterval<B> in,
-			final double[] calibration, final ExecutorService es, final RandomAccessibleInterval<T> out) {
+			final double[] calibration, final RandomAccessibleInterval<T> out) {
 
 		// tempValues stores the integer values of the first phase, i.e. the
 		// first two scans
 		final double[][] tempValues = new double[(int) in.dimension(0)][(int) out.dimension(1)];
 
 		// first phase
-		final List<Callable<Void>> list = new ArrayList<>();
+		final List<Runnable> list = new ArrayList<>();
 
 		for (int y = 0; y < in.dimension(1); y++) {
 			list.add(new Phase1Runnable2DCal<>(tempValues, in, y, calibration));
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 
 		list.clear();
 
@@ -77,15 +73,11 @@ public class DistanceTransform2DCalibration {
 			list.add(new Phase2Runnable2DCal<>(tempValues, out, x, calibration));
 		}
 
-		try {
-			es.invokeAll(list);
-		} catch (final InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 	}
 }
 
-class Phase1Runnable2DCal<B extends BooleanType<B>> implements Callable<Void> {
+class Phase1Runnable2DCal<B extends BooleanType<B>> implements Runnable {
 
 	private final double[][] tempValues;
 	private final RandomAccess<B> raIn;
@@ -105,7 +97,7 @@ class Phase1Runnable2DCal<B extends BooleanType<B>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run(){
 		// scan1
 		raIn.setPosition(0, 0);
 		raIn.setPosition(y, 1);
@@ -129,12 +121,11 @@ class Phase1Runnable2DCal<B extends BooleanType<B>> implements Callable<Void> {
 			}
 
 		}
-		return null;
 	}
 
 }
 
-class Phase2Runnable2DCal<T extends RealType<T>> implements Callable<Void> {
+class Phase2Runnable2DCal<T extends RealType<T>> implements Runnable {
 
 	private final RandomAccessibleInterval<T> raOut;
 	private final double[][] tempValues;
@@ -164,7 +155,7 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 		final int[] s = new int[height];
 		final int[] t = new int[height];
 		int q = 0;
@@ -200,7 +191,6 @@ class Phase2Runnable2DCal<T extends RealType<T>> implements Callable<Void> {
 				q--;
 			}
 		}
-		return null;
 	}
 
 }

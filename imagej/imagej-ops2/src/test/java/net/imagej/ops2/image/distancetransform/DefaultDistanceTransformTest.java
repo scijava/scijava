@@ -41,8 +41,6 @@ import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
-import java.util.concurrent.ExecutorService;
-
 /**
  * @author Simon Schmid (University of Konstanz)
  */
@@ -53,8 +51,6 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		ExecutorService es = threads.getExecutorService();
-
 		// create 4D image
 		final RandomAccessibleInterval<BitType> in = ops.op("create.img")
 				.arity2().input(new FinalInterval(20, 20, 5, 3), new BitType())
@@ -68,14 +64,14 @@ public class DefaultDistanceTransformTest extends AbstractOpTest {
 		/*
 		 * test normal DT
 		 */
-		ops.op("image.distanceTransform").arity2().input(in, es).output(out).compute();
+		ops.op("image.distanceTransform").arity1().input(in).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1, 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 3.74, 5.19, 1.21, 2.21 };
-		ops.op("image.distanceTransform").arity3().input(in, calibration, es).output(out)
+		ops.op("image.distanceTransform").arity2().input(in, calibration).output(out)
 				.compute();
 		compareResults(out, in, calibration);
 	}

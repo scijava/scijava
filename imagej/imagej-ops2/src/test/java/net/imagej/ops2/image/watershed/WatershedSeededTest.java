@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.types.Nil;
@@ -73,9 +72,6 @@ public class WatershedSeededTest extends AbstractOpTest {
 			b.setReal(random.nextDouble());
 		}
 
-		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = threads.getExecutorService();
-
 		// create 3 seeds
 		Img<BitType> bits = ArrayImgs.bits(dims);
 		RandomAccess<BitType> ra = bits.randomAccess();
@@ -88,7 +84,7 @@ public class WatershedSeededTest extends AbstractOpTest {
 
 		// compute labeled seeds
 		final ImgLabeling<Integer, IntType> labeledSeeds = ops.op("labeling.cca")
-				.arity3().input(bits, es, StructuringElement.EIGHT_CONNECTED)
+				.arity2().input(bits, StructuringElement.EIGHT_CONNECTED)
 				.outType(new Nil<ImgLabeling<Integer, IntType>>() {}).apply();
 
 		testWithoutMask(input, labeledSeeds);

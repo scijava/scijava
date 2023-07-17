@@ -32,7 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
+
+import org.junit.jupiter.api.Test;
+import org.scijava.types.Nil;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
@@ -50,9 +52,6 @@ import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-
 /**
  * Test for the watershed op.
  * 
@@ -64,9 +63,6 @@ public class WatershedTest extends AbstractOpTest {
 	public void test() {
 		// load test image
 		Img<FloatType> watershedTestImg = openRelativeFloatImg(WatershedTest.class, "watershed_test_image.png");
-
-		// retrieve an ExecutorService TODO is there a better way to do this?
-		ExecutorService es = threads.getExecutorService();
 
 		// threshold it
 		RandomAccessibleInterval<BitType> thresholdedImg = ops.op("create.img")
@@ -82,7 +78,7 @@ public class WatershedTest extends AbstractOpTest {
 				.arity2().input(thresholdedImg, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()
 				{}).apply();
-		ops.op("image.distanceTransform").arity2().input(thresholdedImg, es).output(distMap)
+		ops.op("image.distanceTransform").arity1().input(thresholdedImg).output(distMap)
 			.compute();
 		final RandomAccessibleInterval<FloatType> invertedDistMap = ops.op(
 			"create.img").arity2().input(distMap, new FloatType()).outType(
@@ -93,7 +89,7 @@ public class WatershedTest extends AbstractOpTest {
 				.arity2().input(invertedDistMap, new FloatType()).outType(
 				new Nil<RandomAccessibleInterval<FloatType>>()
 				{}).apply();
-		ops.op("filter.gauss").arity3().input(invertedDistMap, es, new double[] { 3, 3 })
+		ops.op("filter.gauss").arity2().input(invertedDistMap, new double[] { 3, 3 })
 			.output(gauss).compute();
 
 		testWithoutMask(gauss);

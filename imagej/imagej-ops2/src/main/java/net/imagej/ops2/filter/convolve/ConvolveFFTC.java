@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.filter.convolve;
 
-import java.util.concurrent.ExecutorService;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
@@ -50,13 +49,13 @@ import org.scijava.ops.spi.Optional;
  * @implNote op names='filter.convolve', priority='-100.'
  */
 public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, Boolean, Boolean, RandomAccessibleInterval<O>> {
+		implements Computers.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> {
 
 	@OpDependency(name = "math.multiply")
 	private Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> mul;
 
 	@OpDependency(name = "filter.linearFilter")
-	private Computers.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, ExecutorService, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> linearFilter;
+	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, Boolean, Boolean, Computers.Arity2<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, RandomAccessibleInterval<O>> linearFilter;
 
 	/**
 	 * Call the linear filter that is set up to perform convolution
@@ -68,17 +67,16 @@ public class ConvolveFFTC<I extends RealType<I>, O extends RealType<O>, K extend
 	 * @param kernel
 	 * @param fftInput
 	 * @param fftKernel
-	 * @param es
 	 * @param performInputFFT (required = false)
 	 * @param performKernelFFT (required = false)
 	 * @param out
 	 */
 	@Override
 	public void compute(RandomAccessibleInterval<I> in, RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
+			RandomAccessibleInterval<C> fftInput, RandomAccessibleInterval<C> fftKernel,
 			@Optional Boolean performInputFFT, @Optional Boolean performKernelFFT, RandomAccessibleInterval<O> out) {
 		if (performInputFFT == null) performInputFFT = true;
 		if (performKernelFFT == null) performKernelFFT = true;
-		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, es, mul, fftInput, fftKernel, out);
+		linearFilter.compute(in, kernel, performInputFFT, performKernelFFT, mul, fftInput, fftKernel, out);
 	}
 }

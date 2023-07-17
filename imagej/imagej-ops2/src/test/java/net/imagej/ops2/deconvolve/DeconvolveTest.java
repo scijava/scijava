@@ -32,7 +32,6 @@ package net.imagej.ops2.deconvolve;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
@@ -63,7 +62,6 @@ public class DeconvolveTest extends AbstractOpTest {
 	@Test
 	public void testDeconvolve() {
 
-		ExecutorService es = threads.getExecutorService();
 		int[] size = new int[] { 225, 167 };
 
 		// create an input with a small sphere at the center
@@ -82,24 +80,31 @@ public class DeconvolveTest extends AbstractOpTest {
 				.outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
 
 		// convolve FFTF
-		final RandomAccessibleInterval<FloatType> convolved = ops.op("filter.convolve").arity3().input(//
-				incropped, kernel, es).outType(new Nil<RandomAccessibleInterval<FloatType>>() {}).apply();
+		final RandomAccessibleInterval<FloatType> convolved = //
+			ops.op("filter.convolve").arity6().input(//
+				incropped, //
+				kernel, //
+				new FloatType(), //
+				new ComplexFloatType(), //
+				null, //
+				new OutOfBoundsConstantValueFactory<>(new FloatType(0f)) //
+			) //
+				.outType(new Nil<RandomAccessibleInterval<FloatType>>()
+				{}).apply();
 
 		// find a RichardsonLucyF op
-		Functions.Arity10<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
-				FloatType, ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
+		Functions.Arity9<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
+				FloatType, ComplexFloatType, Integer, Boolean, Boolean,
 				long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
 				RandomAccessibleInterval<FloatType>> deconvolveOp = ops.op("deconvolve.richardsonLucy",
-						new Nil<Functions.Arity10<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
-								FloatType, ComplexFloatType, Integer, Boolean, Boolean, ExecutorService, //
-								long[], OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>, //
-								RandomAccessibleInterval<FloatType>>>() {},
+				new Nil<>() {
+
+				},
 						new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
 								new Nil<RandomAccessibleInterval<FloatType>>() {}, //
 								new Nil<FloatType>() {}, //
 								new Nil<ComplexFloatType>() {}, new Nil<Integer>() {}, new Nil<Boolean>() {},
 								new Nil<Boolean>() {}, //
-								new Nil<ExecutorService>() {}, //
 								new Nil<long[]>() {},
 								new Nil<OutOfBoundsFactory<FloatType, RandomAccessibleInterval<FloatType>>>() {} //
 								 }, //
@@ -108,14 +113,14 @@ public class DeconvolveTest extends AbstractOpTest {
 		// deconvolve with standard Richardson Lucy F
 		final RandomAccessibleInterval<FloatType> deconvolved =
 				deconvolveOp.apply(convolved, kernel, new FloatType(),
-						new ComplexFloatType(), 10, false, false, es, null,
+						new ComplexFloatType(), 10, false, false, null,
 						new OutOfBoundsConstantValueFactory<>(
 								Util.getTypeFromInterval(in).createVariable()));
 
 		// deconvolve with accelerated non-circulant Richardson Lucy F
 		final RandomAccessibleInterval<FloatType> deconvolved2 =
 				deconvolveOp.apply(convolved, kernel, new FloatType(),
-						new ComplexFloatType(), 10, true, true, es, null,
+						new ComplexFloatType(), 10, true, true, null,
 						new OutOfBoundsConstantValueFactory<>(
 								Util.getTypeFromInterval(in).createVariable()));
 
@@ -143,16 +148,13 @@ public class DeconvolveTest extends AbstractOpTest {
 		}
 
 		// find a RichardsonLucyC op
-		Computers.Arity13<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<ComplexFloatType>, //
+		Computers.Arity12<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<ComplexFloatType>, //
 				RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, ComplexFloatType, Integer, Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, //
 				Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
-				List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, ExecutorService, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>> deconvolveOpC = ops.op("deconvolve.richardsonLucy",
-				new Nil<Computers.Arity13<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, //
-						RandomAccessibleInterval<ComplexFloatType>, RandomAccessibleInterval<ComplexFloatType>, Boolean, Boolean, //
-						ComplexFloatType, Integer, //
-						Inplaces.Arity1<RandomAccessibleInterval<FloatType>>, Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>, //
-						List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, //
-						ExecutorService, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>() {},
+				List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>, RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>> deconvolveOpC = ops.op("deconvolve.richardsonLucy",
+				new Nil<>() {
+
+				},
 				new Nil[] { new Nil<RandomAccessibleInterval<FloatType>>() {},
 						new Nil<RandomAccessibleInterval<FloatType>>() {}, //
 						new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}, //
@@ -161,7 +163,7 @@ public class DeconvolveTest extends AbstractOpTest {
 						new Nil<Integer> () {}, new Nil<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>() {}, //
 						new Nil<Computers.Arity1<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>>>() {}, //
 						new Nil<List<Inplaces.Arity1<RandomAccessibleInterval<FloatType>>>>() {}, //
-						new Nil<ExecutorService> () {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}
+						new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}
 				}, //
 				new Nil<RandomAccessibleInterval<FloatType>>() {});
 	}

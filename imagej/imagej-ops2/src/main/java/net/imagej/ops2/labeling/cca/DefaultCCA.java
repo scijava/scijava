@@ -33,6 +33,10 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
+import org.scijava.concurrent.Parallelization;
+import org.scijava.function.Functions;
+import org.scijava.ops.spi.OpDependency;
+
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.labeling.ConnectedComponents;
@@ -40,9 +44,6 @@ import net.imglib2.algorithm.labeling.ConnectedComponents.StructuringElement;
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.integer.IntType;
-
-import org.scijava.function.Functions;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Default Implementation wrapping {@link ConnectedComponents} of
@@ -52,7 +53,7 @@ import org.scijava.ops.spi.OpDependency;
  * @implNote op names='labeling.cca', priority='1.0'
  */
 public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
-		Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
+		Functions.Arity3<RandomAccessibleInterval<T>, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> {
 
 	@OpDependency(name = "create.imgLabeling")
 	private BiFunction<Dimensions, IntType, ImgLabeling<L, IntType>> imgLabelingCreator;
@@ -68,10 +69,11 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
 	 * @param labeling
 	 */
 	@Override
-	public ImgLabeling<Integer, IntType> apply(final RandomAccessibleInterval<T> input, ExecutorService es,
+	public ImgLabeling<Integer, IntType> apply(final RandomAccessibleInterval<T> input,
 			StructuringElement se, Iterator<Integer> labelGenerator) {
 		ImgLabeling<Integer, IntType> output = (ImgLabeling<Integer, IntType>) imgLabelingCreator.apply(input,
 				new IntType());
+		ExecutorService es = Parallelization.getExecutorService();
 		ConnectedComponents.labelAllConnectedComponents(input, output, labelGenerator, se, es);
 		return output;
 	}
@@ -82,9 +84,9 @@ public class DefaultCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> i
  *@implNote op names='labeling.cca', priority='1.0'
  */
 class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implements
-		Functions.Arity3<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, ImgLabeling<Integer, IntType>> {
+		BiFunction<RandomAccessibleInterval<T>, StructuringElement, ImgLabeling<Integer, IntType>> {
 	@OpDependency(name = "labeling.cca")
-	private Functions.Arity4<RandomAccessibleInterval<T>, ExecutorService, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
+	private Functions.Arity3<RandomAccessibleInterval<T>, StructuringElement, Iterator<Integer>, ImgLabeling<Integer, IntType>> labeler;
 
 	@SuppressWarnings("unchecked")
 	/**
@@ -96,12 +98,12 @@ class SimpleCCA<T extends IntegerType<T>, L, I extends IntegerType<I>> implement
 	 * @param labeling
 	 */
 	@Override
-	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> input, ExecutorService es,
+	public ImgLabeling<Integer, IntType> apply(RandomAccessibleInterval<T> input,
 			StructuringElement structuringElement) {
 		DefaultLabelIterator defaultLabelIterator = new DefaultLabelIterator();
 		// note the case to Iterator<L> is okay because L is a vacuous type parameter,
 		// meaning that any Object can go there.
-		return labeler.apply(input, es, structuringElement, defaultLabelIterator);
+		return labeler.apply(input, structuringElement, defaultLabelIterator);
 	}
 
 }

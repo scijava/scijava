@@ -41,8 +41,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.real.FloatType;
 
-import java.util.concurrent.ExecutorService;
-
 /**
  * @author Simon Schmid (University of Konstanz)
  */
@@ -53,8 +51,6 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 
 	@Test
 	public void test() {
-		ExecutorService es = threads.getExecutorService();
-
 		// create 2D image
 		final RandomAccessibleInterval<BitType> in = ops.op("create.img")
 				.arity2().input(new FinalInterval(20, 20), new BitType())
@@ -68,14 +64,14 @@ public class DistanceTransform2DTest extends AbstractOpTest {
 		/*
 		 * test normal DT
 		 */
-		ops.op("image.distanceTransform").arity2().input(in, es).output(out).compute();
+		ops.op("image.distanceTransform").arity1().input(in).output(out).compute();
 		compareResults(out, in, new double[] { 1, 1 });
 
 		/*
 		 * test calibrated DT
 		 */
 		final double[] calibration = new double[] { 2.54, 1.77 };
-		ops.op("image.distanceTransform").arity3().input(in, calibration, es).output(out)
+		ops.op("image.distanceTransform").arity2().input(in, calibration).output(out)
 				.compute();
 		compareResults(out, in, calibration);
 	}

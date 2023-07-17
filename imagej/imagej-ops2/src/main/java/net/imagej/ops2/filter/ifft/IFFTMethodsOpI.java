@@ -29,8 +29,6 @@
 
 package net.imagej.ops2.filter.ifft;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
@@ -47,7 +45,7 @@ import org.scijava.function.Inplaces;
  *@implNote op names='filter.ifft'
  */
 public class IFFTMethodsOpI<C extends ComplexType<C>>
-		implements Inplaces.Arity2_1<RandomAccessibleInterval<C>, ExecutorService> {
+		implements Inplaces.Arity1<RandomAccessibleInterval<C>> {
 
 	/**
 	 * Compute an ND inverse FFT
@@ -55,15 +53,14 @@ public class IFFTMethodsOpI<C extends ComplexType<C>>
 	/**
 	 * TODO
 	 *
-	 * @param input
-	 * @param executorService
+	 * @param inout
 	 */
 	@Override
-	public void mutate(final RandomAccessibleInterval<C> inout, final ExecutorService es) {
+	public void mutate(final RandomAccessibleInterval<C> inout) {
 		if (!conforms(inout))
 			throw new IllegalArgumentException("The input size does not conform to a supported FFT size!");
 		for (int d = inout.numDimensions() - 1; d >= 0; d--)
-			FFTMethods.complexToComplex(inout, d, false, true, es);
+			FFTMethods.complexToComplex(inout, d, false, true);
 	}
 
 	/**

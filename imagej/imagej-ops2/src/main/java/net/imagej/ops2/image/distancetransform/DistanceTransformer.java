@@ -28,8 +28,6 @@
  */
 package net.imagej.ops2.image.distancetransform;
 
-import java.util.concurrent.ExecutorService;
-
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.BooleanType;
 import net.imglib2.type.numeric.RealType;
@@ -50,36 +48,35 @@ import org.scijava.function.Computers;
  *@implNote op names='image.distanceTransform'
  */
 public class DistanceTransformer<B extends BooleanType<B>, T extends RealType<T>>
-		implements Computers.Arity2<RandomAccessibleInterval<B>, ExecutorService, RandomAccessibleInterval<T>> {
+		implements Computers.Arity1<RandomAccessibleInterval<B>, RandomAccessibleInterval<T>> {
 
 	/**
 	 * TODO
 	 *
 	 * @param binaryInput
-	 * @param executorService
 	 * @param output
 	 */
 	@Override
-	public void compute(RandomAccessibleInterval<B> in, ExecutorService es, RandomAccessibleInterval<T> out) {
+	public void compute(RandomAccessibleInterval<B> binaryInput, RandomAccessibleInterval<T> output) {
 		// make sure that the output type is suitable to be able to hold the maximum
 		// possible distance (replaces Conforms)
 		long max_dist = 0;
-		for (int i = 0; i < in.numDimensions(); i++)
-			max_dist += in.dimension(i) * in.dimension(i);
-		if (max_dist > Views.iterable(out).firstElement().getMaxValue())
+		for (int i = 0; i < binaryInput.numDimensions(); i++)
+			max_dist += binaryInput.dimension(i) * binaryInput.dimension(i);
+		if (max_dist > Views.iterable(output).firstElement().getMaxValue())
 			throw new IllegalArgumentException(
 					"The type of the output image is too small to calculate the Distance Transform on this image!");
-		switch (in.numDimensions()) {
+		switch (binaryInput.numDimensions()) {
 		case 2: {
-			DistanceTransform2D.compute(in, es, out);
+			DistanceTransform2D.compute(binaryInput, output);
 			break;
 		}
 		case 3: {
-			DistanceTransform3D.compute(in, es, out);
+			DistanceTransform3D.compute(binaryInput, output);
 			break;
 		}
 		default: {
-			DefaultDistanceTransform.compute(in, es, out);
+			DefaultDistanceTransform.compute(binaryInput, output);
 			break;
 		}
 		}

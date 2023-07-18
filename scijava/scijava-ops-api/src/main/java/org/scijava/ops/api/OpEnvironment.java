@@ -30,6 +30,7 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Set;
 
 import org.scijava.types.Nil;
@@ -59,13 +60,13 @@ import org.scijava.types.Nil;
 public interface OpEnvironment {
 
 	/** The available ops for this environment. */
-	Iterable<OpInfo> infos();
+	List<OpInfo> infos();
 	
-	Iterable<OpInfo> infos(String name);
+	List<OpInfo> infos(String name);
 
-	Iterable<OpInfo> infos(Hints hints);
+	List<OpInfo> infos(Hints hints);
 
-	Iterable<OpInfo> infos(String name, Hints hints);
+	List<OpInfo> infos(String name, Hints hints);
 
 	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
@@ -799,7 +800,7 @@ public interface OpEnvironment {
 	 *
 	 * @return a {@link Set} of descriptions
 	 */
-	Set<String> descriptions();
+	List<String> descriptions();
 
 	/**
 	 * Returns the descriptions for all Ops identifiable by a given name within
@@ -807,6 +808,6 @@ public interface OpEnvironment {
 	 *
 	 * @return a {@link Set} of descriptions
 	 */
-	Set<String> descriptions(String name);
+	List<String> descriptions(String name);
 
 }

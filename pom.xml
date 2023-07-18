@@ -68,7 +68,6 @@
 		<module>scijava/scijava-progress</module>
 		<module>scijava/scijava-struct</module>
 		<module>scijava/scijava-taglets</module>
-		<module>scijava/scijava-threads</module>
 		<module>scijava/scijava-testutil</module>
 		<module>scijava/scijava-types</module>
 	</modules>

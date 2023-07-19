@@ -754,13 +754,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				.forEach(info -> idDirectory.put(info.id(), info));
 	}
 
-	/**
-	 * Function for populating opDirectory with new ArrayList.
-	 * Declared only once, right here
-	 */
-	private final Function<String, List<OpInfo>> nameListCreator = //
-		(name) -> new ArrayList<>();
-
 	private final BiConsumer<OpInfo, Logger> addToOpIndex = (final OpInfo opInfo, final Logger log) -> {
 		if (opInfo.names() == null || opInfo.names().size() == 0) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" +
@@ -773,7 +766,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			return;
 		}
 		for (String opName : opInfo.names()) {
-			opDirectory.computeIfAbsent(opName, nameListCreator).add(opInfo);
+			opDirectory.computeIfAbsent(opName, name -> new ArrayList<>()).add(opInfo);
 		}
 	};
 

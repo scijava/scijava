@@ -199,7 +199,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		// NB distinct() prevents aliased Ops from appearing multiple times.
 		return opDirectory.values().stream() //
 				.flatMap(Collection::stream).distinct().sorted()
-				.collect(Collectors.toList());
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	@Override
@@ -381,7 +381,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	private List<String> descriptions(Iterable<OpInfo> infos) {
 		return StreamSupport.stream(infos.spliterator(), true) //
 				.map(OpInfo::toString) //
-				.collect(Collectors.toList());
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	@SuppressWarnings("unchecked")

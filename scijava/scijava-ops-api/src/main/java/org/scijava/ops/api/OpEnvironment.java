@@ -30,7 +30,8 @@
 package org.scijava.ops.api;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import org.scijava.types.Nil;
 
@@ -59,13 +60,13 @@ import org.scijava.types.Nil;
 public interface OpEnvironment {
 
 	/** The available ops for this environment. */
-	Iterable<OpInfo> infos();
+	List<OpInfo> infos();
 	
-	Iterable<OpInfo> infos(String name);
+	List<OpInfo> infos(String name);
 
-	Iterable<OpInfo> infos(Hints hints);
+	List<OpInfo> infos(Hints hints);
 
-	Iterable<OpInfo> infos(String name, Hints hints);
+	List<OpInfo> infos(String name, Hints hints);
 
 	// TODO: Add interface method: OpInfo info(final String opName, final Nil<T> specialType, final Nil<?>[] inTypes, final Nil<?> outType);
 
@@ -721,7 +722,7 @@ public interface OpEnvironment {
 	/**
 	 * Creates an {@link OpInfo} from an {@link Class}.
 	 *
-	 * @param opClass
+	 * @param opClass the {@link Class} to derive the Op from
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
 	 */
 	OpInfo opify(Class<?> opClass);
@@ -729,7 +730,7 @@ public interface OpEnvironment {
 	/**
 	 * Creates an {@link OpInfo} from an {@link Class} with the given priority.
 	 *
-	 * @param opClass
+	 * @param opClass the {@link Class} to derive the Op from
 	 * @param priority - the assigned priority of the Op.
 	 * @param names - the name(s) of the Op
 	 * @return an {@link OpInfo} which can make instances of {@code opClass}
@@ -746,9 +747,9 @@ public interface OpEnvironment {
 	/**
 	 * Creates some {@link OpInfo}s from {@code o}
 	 * @param o the {@link Object} to create {@link OpInfo}s from
-	 * @return a {@link Collection} of {@link OpInfo}s
+	 * @return a {@link Set} of {@link OpInfo}s
 	 */
-	Collection<OpInfo> infosFrom(Object o);
+	Set<OpInfo> infosFrom(Object o);
 
 	/**
 	 * Creates some {@link OpInfo}s from {@code o}
@@ -769,10 +770,10 @@ public interface OpEnvironment {
 	 * Note that this method does not inherently provide <b>any</b> guarantees
 	 * pertaining to thread-safety; this API is provided purely for convenience.
 	 * Any calls to {@link OpEnvironment#op(String, Nil, Nil[], Nil)} that require
-	 * a specific {@Hints} should <b>not</b> use this method, instead opting for
+	 * a specific {@link Hints} should <b>not</b> use this method, instead opting for
 	 * {@link OpEnvironment#op(String, Nil, Nil[], Nil, Hints)}.
 	 * 
-	 * @param hints
+	 * @param hints the {@link Hints} to be set as default
 	 */
 	void setDefaultHints(Hints hints);
 
@@ -797,16 +798,16 @@ public interface OpEnvironment {
 	 * Returns the descriptions for all Ops contained within this
 	 * {@link OpEnvironment}
 	 *
-	 * @return a {@link Collection} of descriptions
+	 * @return a {@link Set} of descriptions
 	 */
-	Collection<String> descriptions();
+	List<String> descriptions();
 
 	/**
 	 * Returns the descriptions for all Ops identifiable by a given name within
 	 * this {@link OpEnvironment}
 	 *
-	 * @return a {@link Collection} of descriptions
+	 * @return a {@link Set} of descriptions
 	 */
-	Collection<String> descriptions(String name);
+	List<String> descriptions(String name);
 
 }

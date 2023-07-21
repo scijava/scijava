@@ -32,8 +32,19 @@ package org.scijava.ops.engine;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -42,11 +53,28 @@ import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.meta.Versions;
-import org.scijava.ops.api.*;
-import org.scijava.ops.api.features.*;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.InfoChainGenerator;
+import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.api.OpInstance;
+import org.scijava.ops.api.OpMetadata;
+import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.api.features.MatchingRoutine;
+import org.scijava.ops.api.features.OpMatcher;
+import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.impl.DependencyRichOpInfoChain;
 import org.scijava.ops.engine.impl.LambdaTypeBaker;
@@ -91,7 +119,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * search size for any Op request to the number of known Ops with the name
 	 * given in the request.
 	 */
-	private Map<String, Set<OpInfo>> opDirectory;
+	private Map<String, List<OpInfo>> opDirectory;
 
 	/**
 	 * Data structure storing all known Ops, discoverable using their id.
@@ -166,30 +194,32 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public Set<OpInfo> infos() {
+	public List<OpInfo> infos() {
 		if (opDirectory == null) initOpDirectory();
-		return opDirectory.values().stream().flatMap(Collection::stream).collect(
-			Collectors.toSet());
+		// NB distinct() prevents aliased Ops from appearing multiple times.
+		return opDirectory.values().stream() //
+				.flatMap(Collection::stream).distinct().sorted()
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	@Override
-	public Set<OpInfo> infos(String name) {
+	public List<OpInfo> infos(String name) {
 		if (opDirectory == null) initOpDirectory();
 		if (name == null || name.isEmpty()) return infos();
 		return opsOfName(name);
 	}
 
 	@Override
-	public Set<OpInfo> infos(Hints hints) {
+	public List<OpInfo> infos(Hints hints) {
 		return filterInfos(infos(), hints);
 	}
 
 	@Override
-	public Set<OpInfo> infos(String name, Hints hints) {
+	public List<OpInfo> infos(String name, Hints hints) {
 		return filterInfos(infos(name), hints);
 	}
 
-	private Set<OpInfo> filterInfos(Set<OpInfo> infos, Hints hints) {
+	private List<OpInfo> filterInfos(List<OpInfo> infos, Hints hints) {
 		boolean adapting = hints.contains(Adaptation.IN_PROGRESS);
 		boolean simplifying = hints.contains(Simplification.IN_PROGRESS);
 		// if we aren't doing any
@@ -201,7 +231,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			// filter out unadaptable ops
 			.filter(info -> !simplifying || !info.declaredHints().contains(
 				Simplification.FORBIDDEN)) //
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -318,7 +348,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 	
 	@Override
-	public Collection<OpInfo> infosFrom(Object o) {
+	public Set<OpInfo> infosFrom(Object o) {
 		return infoGenerators().parallelStream() //
 				.filter(g -> g.canGenerateFrom(o)) //
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //
@@ -326,12 +356,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	@Override
-	public Collection<String> descriptions() {
+	public List<String> descriptions() {
 		return descriptions(infos());
 	}
 
 	@Override
-	public Collection<String> descriptions(String name) {
+	public List<String> descriptions(String name) {
 		return descriptions(infos(name));
 	}
 
@@ -344,14 +374,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * returning multiple instances of the same {@link OpInfo}. The duplicate
 	 * {@link OpInfo}s are created when Ops have multiple names.
 	 *
-	 * @param infos
-	 * @return a set of {@link String}s, one describing each {@link OpInfo} in
-	 *         {@code infos}.
+	 * @param infos an {@link Iterable} of {@link OpInfo}s
+	 * @return a {@link Set} of {@link String}s, one describing each
+	 *         {@link OpInfo} in {@code infos}.
 	 */
 	private List<String> descriptions(Iterable<OpInfo> infos) {
 		return StreamSupport.stream(infos.spliterator(), true) //
 				.map(OpInfo::toString) //
-				.collect(Collectors.toList());
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -697,7 +727,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 * @param generators the {@link List} of {@link OpInfoGenerator}s
 	 * @return a {@link List} of {@link OpInfo}s
 	 */
-	private Collection<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
+	private List<OpInfo> opsFromObject(Object o, List<OpInfoGenerator> generators) {
 		return generators.stream() //
 				.filter(g -> g.canGenerateFrom(o)) //
 				.flatMap(g -> g.generateInfosFrom(o).stream()) //
@@ -736,16 +766,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 			return;
 		}
 		for (String opName : opInfo.names()) {
-			opDirectory.putIfAbsent(opName, new TreeSet<>());
-			boolean success = opDirectory.get(opName).add(opInfo);
-			if (!success) System.out.println("Did not add OpInfo " + opInfo);
+			opDirectory.computeIfAbsent(opName, name -> new ArrayList<>()).add(opInfo);
 		}
 	};
 
-	private Set<OpInfo> opsOfName(final String name) {
-		final Set<OpInfo> ops = opDirectory.getOrDefault(name, Collections
-			.emptySet());
-		return Collections.unmodifiableSet(ops);
+	private List<OpInfo> opsOfName(final String name) {
+		// NB distinct() prevents aliased Ops from appearing multiple times.
+		return opDirectory.getOrDefault(name, Collections.emptyList()).stream() //
+				.distinct() //
+				.sorted() //
+				.collect(Collectors.toUnmodifiableList());
 	}
 
 	/**

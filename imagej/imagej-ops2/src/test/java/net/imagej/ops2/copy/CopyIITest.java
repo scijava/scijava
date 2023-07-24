@@ -31,6 +31,12 @@ package net.imagej.ops2.copy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
+import org.scijava.types.Nil;
+import org.scijava.util.MersenneTwisterFast;
+
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
@@ -43,13 +49,9 @@ import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.scijava.types.Nil;
-import org.scijava.util.MersenneTwisterFast;
 
 /**
- * Test {@link CopyII}
+ * Test {@link Copiers#copyIterableInterval(Computers.Arity1, IterableInterval, IterableInterval)}
  * 
  * @author Christian Dietz (University of Konstanz)
  */
@@ -72,7 +74,7 @@ public class CopyIITest extends AbstractOpTest {
 
 	@Test
 	public void copyIINoOutputTest() {
-		IterableInterval<DoubleType> output = ops.op("copy.iterableInterval").arity1().input(input)
+		IterableInterval<DoubleType> output = ops.op("copy").arity1().input(input)
 				.outType(new Nil<IterableInterval<DoubleType>>() {}).apply();
 
 		Cursor<DoubleType> inc = input.localizingCursor();
@@ -89,7 +91,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyTypeTest() {
 		Img<FloatType> inputFloat = new ArrayImgFactory<>(new FloatType()).create(new int[] { 120, 100 });
 
-		Img<FloatType> output = ops.op("copy.iterableInterval").arity1().input(inputFloat)
+		Img<FloatType> output = ops.op("copy").arity1().input(inputFloat)
 				.outType(new Nil<Img<FloatType>>() {}).apply();
 
 		assertTrue(output.firstElement() instanceof FloatType,
@@ -100,7 +102,7 @@ public class CopyIITest extends AbstractOpTest {
 	public void copyIIWithOutputTest() {
 		Img<DoubleType> output = input.factory().create(input, input.firstElement());
 
-		ops.op("copy.iterableInterval").arity1().input(input).output(output).compute();
+		ops.op("copy").arity1().input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> outc = output.cursor();

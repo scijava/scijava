@@ -43,8 +43,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.discovery.Discoverer;
-import org.scijava.log2.Logger;
-import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.types.ExampleTypes.Bag;
 import org.scijava.types.ExampleTypes.BlueThing;
 import org.scijava.types.ExampleTypes.RedThing;
@@ -61,9 +59,8 @@ public class DefaultTypeReifierTest {
 
 	@BeforeEach
 	public void setUp() {
-		Logger log = new StderrLoggerFactory().create();
 		Discoverer serviceLoaderDiscoverer = Discoverer.using(ServiceLoader::load);
-		types = new DefaultTypeReifier(log, serviceLoaderDiscoverer);
+		types = new DefaultTypeReifier(serviceLoaderDiscoverer);
 	}
 
 	@AfterEach

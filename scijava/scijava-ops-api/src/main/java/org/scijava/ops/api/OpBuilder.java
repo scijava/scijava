@@ -66,7 +66,7 @@ public class OpBuilder {
 
 	private final OpEnvironment env;
 	private final String opName;
-	private final Hints hints;
+	private Hints hints;
 
 	public OpBuilder(final OpEnvironment env, final String opName) {
         this(env, opName, env.getDefaultHints());
@@ -80,6 +80,12 @@ public class OpBuilder {
 
 	/** Specifies an op that accepts no inputs&mdash;i.e., a nullary op. */
 	public Arity0 arity0() { return new Arity0(); }
+
+	/** Set the Hints instance for this builder */
+	public void setHints(Hints hints) { this.hints = hints; }
+
+	/** Get the Hints instance for this builder */
+	public Hints hints() { return hints; }
 
 	/** Specifies an op with 1 input. */
 	public Arity1 arity1() { return new Arity1(); }
@@ -197,12 +203,24 @@ public class OpBuilder {
 	 */
 	// @formatter:on
 
+
+	/**
+	 * Abstract superclasses for all Arities.
+	 */
+	private abstract class Arity {
+	    /** Get the Hints instance for this builder */
+		public void setHints(Hints hints) { OpBuilder.this.setHints(hints); }
+
+		/** Get the Hints instance for this builder */
+		public Hints hints() { return OpBuilder.this.hints(); }
+	}
+
 	/**
 	 * Builder with arity 0, output unspecified.
 	 *
 	 * @author Curtis Rueden
 	 */
-	public final class Arity0 {
+	public final class Arity0 extends Arity {
 
 		/**
 		 * Matches with this builder will use the given pre-allocated output instance.
@@ -288,7 +306,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity0_OT<O> {
+	public final class Arity0_OT<O> extends Arity {
 
 		private final Nil<O> outType;
 
@@ -353,7 +371,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity0_OV<O> {
+	public final class Arity0_OV<O> extends Arity {
 
 		private final O out;
 
@@ -390,7 +408,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity1 {
+	public final class Arity1 extends Arity {
 
 		/**
 		 * Specifies an op with 1 input, matched by input value.
@@ -432,7 +450,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity2 {
+	public final class Arity2 extends Arity {
 
 		/**
 		 * Specifies an op with 2 inputs, matched by input value.
@@ -474,7 +492,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity3 {
+	public final class Arity3 extends Arity {
 
 		/**
 		 * Specifies an op with 3 inputs, matched by input value.
@@ -516,7 +534,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity4 {
+	public final class Arity4 extends Arity {
 
 		/**
 		 * Specifies an op with 4 inputs, matched by input value.
@@ -558,7 +576,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity5 {
+	public final class Arity5 extends Arity {
 
 		/**
 		 * Specifies an op with 5 inputs, matched by input value.
@@ -600,7 +618,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity6 {
+	public final class Arity6 extends Arity {
 
 		/**
 		 * Specifies an op with 6 inputs, matched by input value.
@@ -642,7 +660,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity7 {
+	public final class Arity7 extends Arity {
 
 		/**
 		 * Specifies an op with 7 inputs, matched by input value.
@@ -684,7 +702,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity8 {
+	public final class Arity8 extends Arity {
 
 		/**
 		 * Specifies an op with 8 inputs, matched by input value.
@@ -726,7 +744,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity9 {
+	public final class Arity9 extends Arity {
 
 		/**
 		 * Specifies an op with 9 inputs, matched by input value.
@@ -768,7 +786,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity10 {
+	public final class Arity10 extends Arity {
 
 		/**
 		 * Specifies an op with 10 inputs, matched by input value.
@@ -810,7 +828,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity11 {
+	public final class Arity11 extends Arity {
 
 		/**
 		 * Specifies an op with 11 inputs, matched by input value.
@@ -852,7 +870,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity12 {
+	public final class Arity12 extends Arity {
 
 		/**
 		 * Specifies an op with 12 inputs, matched by input value.
@@ -894,7 +912,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity13 {
+	public final class Arity13 extends Arity {
 
 		/**
 		 * Specifies an op with 13 inputs, matched by input value.
@@ -936,7 +954,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity14 {
+	public final class Arity14 extends Arity {
 
 		/**
 		 * Specifies an op with 14 inputs, matched by input value.
@@ -978,7 +996,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity15 {
+	public final class Arity15 extends Arity {
 
 		/**
 		 * Specifies an op with 15 inputs, matched by input value.
@@ -1020,7 +1038,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity16 {
+	public final class Arity16 extends Arity {
 
 		/**
 		 * Specifies an op with 16 inputs, matched by input value.
@@ -1064,7 +1082,7 @@ public class OpBuilder {
 	 * @param <I1> The type of input 1.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity1_IT_OT<I1, O> {
+	public final class Arity1_IT_OT<I1, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<O> outType;
@@ -1108,7 +1126,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <I1> The type of input 1.
 	 */
-	public final class Arity1_IT_OU<I1> {
+	public final class Arity1_IT_OU<I1> extends Arity {
 
 		private final Nil<I1> in1Type;
 
@@ -1178,7 +1196,7 @@ public class OpBuilder {
 	 * @param <I1> The type of input 1.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity1_IV_OT<I1, O> {
+	public final class Arity1_IV_OT<I1, O> extends Arity {
 
 		private final I1 in1;
 		private final Nil<O> outType;
@@ -1238,7 +1256,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <I1> The type of input 1.
 	 */
-	public final class Arity1_IV_OU<I1> {
+	public final class Arity1_IV_OU<I1> extends Arity {
 
 		private final I1 in1;
 
@@ -1367,7 +1385,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <I1> The type of input 1.
 	 */
-	public final class Arity1_IV_OV<I1, O> {
+	public final class Arity1_IV_OV<I1, O> extends Arity {
 
 		private final I1 in1;
 		private final O out;
@@ -1408,7 +1426,7 @@ public class OpBuilder {
 	 * @param <I2> The type of input 2.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity2_IT_OT<I1, I2, O> {
+	public final class Arity2_IT_OT<I1, I2, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -1455,7 +1473,7 @@ public class OpBuilder {
 	 * @param <I1> The type of input 1.
 	 * @param <I2> The type of input 2.
 	 */
-	public final class Arity2_IT_OU<I1, I2> {
+	public final class Arity2_IT_OU<I1, I2> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -1543,7 +1561,7 @@ public class OpBuilder {
 	 * @param <I2> The type of input 2.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity2_IV_OT<I1, I2, O> {
+	public final class Arity2_IV_OT<I1, I2, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -1606,7 +1624,7 @@ public class OpBuilder {
 	 * @param <I1> The type of input 1.
 	 * @param <I2> The type of input 2.
 	 */
-	public final class Arity2_IV_OU<I1, I2> {
+	public final class Arity2_IV_OU<I1, I2> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -1771,7 +1789,7 @@ public class OpBuilder {
 	 * @param <I1> The type of input 1.
 	 * @param <I2> The type of input 2.
 	 */
-	public final class Arity2_IV_OV<I1, I2, O> {
+	public final class Arity2_IV_OV<I1, I2, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -1815,7 +1833,7 @@ public class OpBuilder {
 	 * @param <I3> The type of input 3.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity3_IT_OT<I1, I2, I3, O> {
+	public final class Arity3_IT_OT<I1, I2, I3, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -1865,7 +1883,7 @@ public class OpBuilder {
 	 * @param <I2> The type of input 2.
 	 * @param <I3> The type of input 3.
 	 */
-	public final class Arity3_IT_OU<I1, I2, I3> {
+	public final class Arity3_IT_OU<I1, I2, I3> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -1971,7 +1989,7 @@ public class OpBuilder {
 	 * @param <I3> The type of input 3.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity3_IV_OT<I1, I2, I3, O> {
+	public final class Arity3_IV_OT<I1, I2, I3, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -2037,7 +2055,7 @@ public class OpBuilder {
 	 * @param <I2> The type of input 2.
 	 * @param <I3> The type of input 3.
 	 */
-	public final class Arity3_IV_OU<I1, I2, I3> {
+	public final class Arity3_IV_OU<I1, I2, I3> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -2238,7 +2256,7 @@ public class OpBuilder {
 	 * @param <I2> The type of input 2.
 	 * @param <I3> The type of input 3.
 	 */
-	public final class Arity3_IV_OV<I1, I2, I3, O> {
+	public final class Arity3_IV_OV<I1, I2, I3, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -2285,7 +2303,7 @@ public class OpBuilder {
 	 * @param <I4> The type of input 4.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity4_IT_OT<I1, I2, I3, I4, O> {
+	public final class Arity4_IT_OT<I1, I2, I3, I4, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -2338,7 +2356,7 @@ public class OpBuilder {
 	 * @param <I3> The type of input 3.
 	 * @param <I4> The type of input 4.
 	 */
-	public final class Arity4_IT_OU<I1, I2, I3, I4> {
+	public final class Arity4_IT_OU<I1, I2, I3, I4> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -2462,7 +2480,7 @@ public class OpBuilder {
 	 * @param <I4> The type of input 4.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity4_IV_OT<I1, I2, I3, I4, O> {
+	public final class Arity4_IV_OT<I1, I2, I3, I4, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -2531,7 +2549,7 @@ public class OpBuilder {
 	 * @param <I3> The type of input 3.
 	 * @param <I4> The type of input 4.
 	 */
-	public final class Arity4_IV_OU<I1, I2, I3, I4> {
+	public final class Arity4_IV_OU<I1, I2, I3, I4> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -2768,7 +2786,7 @@ public class OpBuilder {
 	 * @param <I3> The type of input 3.
 	 * @param <I4> The type of input 4.
 	 */
-	public final class Arity4_IV_OV<I1, I2, I3, I4, O> {
+	public final class Arity4_IV_OV<I1, I2, I3, I4, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -2818,7 +2836,7 @@ public class OpBuilder {
 	 * @param <I5> The type of input 5.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity5_IT_OT<I1, I2, I3, I4, I5, O> {
+	public final class Arity5_IT_OT<I1, I2, I3, I4, I5, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -2874,7 +2892,7 @@ public class OpBuilder {
 	 * @param <I4> The type of input 4.
 	 * @param <I5> The type of input 5.
 	 */
-	public final class Arity5_IT_OU<I1, I2, I3, I4, I5> {
+	public final class Arity5_IT_OU<I1, I2, I3, I4, I5> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -3016,7 +3034,7 @@ public class OpBuilder {
 	 * @param <I5> The type of input 5.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity5_IV_OT<I1, I2, I3, I4, I5, O> {
+	public final class Arity5_IV_OT<I1, I2, I3, I4, I5, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -3088,7 +3106,7 @@ public class OpBuilder {
 	 * @param <I4> The type of input 4.
 	 * @param <I5> The type of input 5.
 	 */
-	public final class Arity5_IV_OU<I1, I2, I3, I4, I5> {
+	public final class Arity5_IV_OU<I1, I2, I3, I4, I5> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -3361,7 +3379,7 @@ public class OpBuilder {
 	 * @param <I4> The type of input 4.
 	 * @param <I5> The type of input 5.
 	 */
-	public final class Arity5_IV_OV<I1, I2, I3, I4, I5, O> {
+	public final class Arity5_IV_OV<I1, I2, I3, I4, I5, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -3414,7 +3432,7 @@ public class OpBuilder {
 	 * @param <I6> The type of input 6.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity6_IT_OT<I1, I2, I3, I4, I5, I6, O> {
+	public final class Arity6_IT_OT<I1, I2, I3, I4, I5, I6, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -3473,7 +3491,7 @@ public class OpBuilder {
 	 * @param <I5> The type of input 5.
 	 * @param <I6> The type of input 6.
 	 */
-	public final class Arity6_IT_OU<I1, I2, I3, I4, I5, I6> {
+	public final class Arity6_IT_OU<I1, I2, I3, I4, I5, I6> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -3633,7 +3651,7 @@ public class OpBuilder {
 	 * @param <I6> The type of input 6.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity6_IV_OT<I1, I2, I3, I4, I5, I6, O> {
+	public final class Arity6_IV_OT<I1, I2, I3, I4, I5, I6, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -3708,7 +3726,7 @@ public class OpBuilder {
 	 * @param <I5> The type of input 5.
 	 * @param <I6> The type of input 6.
 	 */
-	public final class Arity6_IV_OU<I1, I2, I3, I4, I5, I6> {
+	public final class Arity6_IV_OU<I1, I2, I3, I4, I5, I6> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -4017,7 +4035,7 @@ public class OpBuilder {
 	 * @param <I5> The type of input 5.
 	 * @param <I6> The type of input 6.
 	 */
-	public final class Arity6_IV_OV<I1, I2, I3, I4, I5, I6, O> {
+	public final class Arity6_IV_OV<I1, I2, I3, I4, I5, I6, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -4073,7 +4091,7 @@ public class OpBuilder {
 	 * @param <I7> The type of input 7.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity7_IT_OT<I1, I2, I3, I4, I5, I6, I7, O> {
+	public final class Arity7_IT_OT<I1, I2, I3, I4, I5, I6, I7, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -4135,7 +4153,7 @@ public class OpBuilder {
 	 * @param <I6> The type of input 6.
 	 * @param <I7> The type of input 7.
 	 */
-	public final class Arity7_IT_OU<I1, I2, I3, I4, I5, I6, I7> {
+	public final class Arity7_IT_OU<I1, I2, I3, I4, I5, I6, I7> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -4313,7 +4331,7 @@ public class OpBuilder {
 	 * @param <I7> The type of input 7.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity7_IV_OT<I1, I2, I3, I4, I5, I6, I7, O> {
+	public final class Arity7_IV_OT<I1, I2, I3, I4, I5, I6, I7, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -4391,7 +4409,7 @@ public class OpBuilder {
 	 * @param <I6> The type of input 6.
 	 * @param <I7> The type of input 7.
 	 */
-	public final class Arity7_IV_OU<I1, I2, I3, I4, I5, I6, I7> {
+	public final class Arity7_IV_OU<I1, I2, I3, I4, I5, I6, I7> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -4736,7 +4754,7 @@ public class OpBuilder {
 	 * @param <I6> The type of input 6.
 	 * @param <I7> The type of input 7.
 	 */
-	public final class Arity7_IV_OV<I1, I2, I3, I4, I5, I6, I7, O> {
+	public final class Arity7_IV_OV<I1, I2, I3, I4, I5, I6, I7, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -4795,7 +4813,7 @@ public class OpBuilder {
 	 * @param <I8> The type of input 8.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity8_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> {
+	public final class Arity8_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -4860,7 +4878,7 @@ public class OpBuilder {
 	 * @param <I7> The type of input 7.
 	 * @param <I8> The type of input 8.
 	 */
-	public final class Arity8_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8> {
+	public final class Arity8_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -5056,7 +5074,7 @@ public class OpBuilder {
 	 * @param <I8> The type of input 8.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity8_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> {
+	public final class Arity8_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -5137,7 +5155,7 @@ public class OpBuilder {
 	 * @param <I7> The type of input 7.
 	 * @param <I8> The type of input 8.
 	 */
-	public final class Arity8_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8> {
+	public final class Arity8_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -5518,7 +5536,7 @@ public class OpBuilder {
 	 * @param <I7> The type of input 7.
 	 * @param <I8> The type of input 8.
 	 */
-	public final class Arity8_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, O> {
+	public final class Arity8_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -5580,7 +5598,7 @@ public class OpBuilder {
 	 * @param <I9> The type of input 9.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity9_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
+	public final class Arity9_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -5648,7 +5666,7 @@ public class OpBuilder {
 	 * @param <I8> The type of input 8.
 	 * @param <I9> The type of input 9.
 	 */
-	public final class Arity9_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> {
+	public final class Arity9_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -5862,7 +5880,7 @@ public class OpBuilder {
 	 * @param <I9> The type of input 9.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity9_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
+	public final class Arity9_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -5946,7 +5964,7 @@ public class OpBuilder {
 	 * @param <I8> The type of input 8.
 	 * @param <I9> The type of input 9.
 	 */
-	public final class Arity9_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> {
+	public final class Arity9_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -6363,7 +6381,7 @@ public class OpBuilder {
 	 * @param <I8> The type of input 8.
 	 * @param <I9> The type of input 9.
 	 */
-	public final class Arity9_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> {
+	public final class Arity9_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -6428,7 +6446,7 @@ public class OpBuilder {
 	 * @param <I10> The type of input 10.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity10_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
+	public final class Arity10_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -6499,7 +6517,7 @@ public class OpBuilder {
 	 * @param <I9> The type of input 9.
 	 * @param <I10> The type of input 10.
 	 */
-	public final class Arity10_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> {
+	public final class Arity10_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -6731,7 +6749,7 @@ public class OpBuilder {
 	 * @param <I10> The type of input 10.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity10_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
+	public final class Arity10_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -6818,7 +6836,7 @@ public class OpBuilder {
 	 * @param <I9> The type of input 9.
 	 * @param <I10> The type of input 10.
 	 */
-	public final class Arity10_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> {
+	public final class Arity10_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -7271,7 +7289,7 @@ public class OpBuilder {
 	 * @param <I9> The type of input 9.
 	 * @param <I10> The type of input 10.
 	 */
-	public final class Arity10_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> {
+	public final class Arity10_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -7339,7 +7357,7 @@ public class OpBuilder {
 	 * @param <I11> The type of input 11.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity11_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
+	public final class Arity11_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -7413,7 +7431,7 @@ public class OpBuilder {
 	 * @param <I10> The type of input 10.
 	 * @param <I11> The type of input 11.
 	 */
-	public final class Arity11_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> {
+	public final class Arity11_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -7663,7 +7681,7 @@ public class OpBuilder {
 	 * @param <I11> The type of input 11.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity11_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
+	public final class Arity11_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -7753,7 +7771,7 @@ public class OpBuilder {
 	 * @param <I10> The type of input 10.
 	 * @param <I11> The type of input 11.
 	 */
-	public final class Arity11_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> {
+	public final class Arity11_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -8242,7 +8260,7 @@ public class OpBuilder {
 	 * @param <I10> The type of input 10.
 	 * @param <I11> The type of input 11.
 	 */
-	public final class Arity11_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> {
+	public final class Arity11_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -8313,7 +8331,7 @@ public class OpBuilder {
 	 * @param <I12> The type of input 12.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity12_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
+	public final class Arity12_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -8390,7 +8408,7 @@ public class OpBuilder {
 	 * @param <I11> The type of input 11.
 	 * @param <I12> The type of input 12.
 	 */
-	public final class Arity12_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> {
+	public final class Arity12_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -8658,7 +8676,7 @@ public class OpBuilder {
 	 * @param <I12> The type of input 12.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity12_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
+	public final class Arity12_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -8751,7 +8769,7 @@ public class OpBuilder {
 	 * @param <I11> The type of input 11.
 	 * @param <I12> The type of input 12.
 	 */
-	public final class Arity12_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> {
+	public final class Arity12_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -9276,7 +9294,7 @@ public class OpBuilder {
 	 * @param <I11> The type of input 11.
 	 * @param <I12> The type of input 12.
 	 */
-	public final class Arity12_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> {
+	public final class Arity12_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -9350,7 +9368,7 @@ public class OpBuilder {
 	 * @param <I13> The type of input 13.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity13_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
+	public final class Arity13_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -9430,7 +9448,7 @@ public class OpBuilder {
 	 * @param <I12> The type of input 12.
 	 * @param <I13> The type of input 13.
 	 */
-	public final class Arity13_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> {
+	public final class Arity13_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -9716,7 +9734,7 @@ public class OpBuilder {
 	 * @param <I13> The type of input 13.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity13_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
+	public final class Arity13_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -9812,7 +9830,7 @@ public class OpBuilder {
 	 * @param <I12> The type of input 12.
 	 * @param <I13> The type of input 13.
 	 */
-	public final class Arity13_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> {
+	public final class Arity13_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -10373,7 +10391,7 @@ public class OpBuilder {
 	 * @param <I12> The type of input 12.
 	 * @param <I13> The type of input 13.
 	 */
-	public final class Arity13_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> {
+	public final class Arity13_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -10450,7 +10468,7 @@ public class OpBuilder {
 	 * @param <I14> The type of input 14.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity14_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
+	public final class Arity14_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -10533,7 +10551,7 @@ public class OpBuilder {
 	 * @param <I13> The type of input 13.
 	 * @param <I14> The type of input 14.
 	 */
-	public final class Arity14_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> {
+	public final class Arity14_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -10837,7 +10855,7 @@ public class OpBuilder {
 	 * @param <I14> The type of input 14.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity14_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
+	public final class Arity14_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -10936,7 +10954,7 @@ public class OpBuilder {
 	 * @param <I13> The type of input 13.
 	 * @param <I14> The type of input 14.
 	 */
-	public final class Arity14_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> {
+	public final class Arity14_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -11533,7 +11551,7 @@ public class OpBuilder {
 	 * @param <I13> The type of input 13.
 	 * @param <I14> The type of input 14.
 	 */
-	public final class Arity14_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> {
+	public final class Arity14_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -11613,7 +11631,7 @@ public class OpBuilder {
 	 * @param <I15> The type of input 15.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity15_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
+	public final class Arity15_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -11699,7 +11717,7 @@ public class OpBuilder {
 	 * @param <I14> The type of input 14.
 	 * @param <I15> The type of input 15.
 	 */
-	public final class Arity15_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> {
+	public final class Arity15_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -12021,7 +12039,7 @@ public class OpBuilder {
 	 * @param <I15> The type of input 15.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity15_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
+	public final class Arity15_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -12123,7 +12141,7 @@ public class OpBuilder {
 	 * @param <I14> The type of input 14.
 	 * @param <I15> The type of input 15.
 	 */
-	public final class Arity15_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> {
+	public final class Arity15_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -12756,7 +12774,7 @@ public class OpBuilder {
 	 * @param <I14> The type of input 14.
 	 * @param <I15> The type of input 15.
 	 */
-	public final class Arity15_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> {
+	public final class Arity15_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -12839,7 +12857,7 @@ public class OpBuilder {
 	 * @param <I16> The type of input 16.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity16_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+	public final class Arity16_IT_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -12928,7 +12946,7 @@ public class OpBuilder {
 	 * @param <I15> The type of input 15.
 	 * @param <I16> The type of input 16.
 	 */
-	public final class Arity16_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> {
+	public final class Arity16_IT_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> extends Arity {
 
 		private final Nil<I1> in1Type;
 		private final Nil<I2> in2Type;
@@ -13268,7 +13286,7 @@ public class OpBuilder {
 	 * @param <I16> The type of input 16.
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity16_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+	public final class Arity16_IV_OT<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -13373,7 +13391,7 @@ public class OpBuilder {
 	 * @param <I15> The type of input 15.
 	 * @param <I16> The type of input 16.
 	 */
-	public final class Arity16_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> {
+	public final class Arity16_IV_OU<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;
@@ -14042,7 +14060,7 @@ public class OpBuilder {
 	 * @param <I15> The type of input 15.
 	 * @param <I16> The type of input 16.
 	 */
-	public final class Arity16_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> {
+	public final class Arity16_IV_OV<I1, I2, I3, I4, I5, I6, I7, I8, I9, I10, I11, I12, I13, I14, I15, I16, O> extends Arity {
 
 		private final I1 in1;
 		private final I2 in2;

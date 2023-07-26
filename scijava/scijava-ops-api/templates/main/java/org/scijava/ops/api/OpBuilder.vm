@@ -66,7 +66,7 @@ public class OpBuilder {
 
 	private final OpEnvironment env;
 	private final String opName;
-	private final Hints hints;
+	private Hints hints;
 
 	public OpBuilder(final OpEnvironment env, final String opName) {
         this(env, opName, env.getDefaultHints());
@@ -80,6 +80,12 @@ public class OpBuilder {
 
 	/** Specifies an op that accepts no inputs&mdash;i.e., a nullary op. */
 	public Arity0 arity0() { return new Arity0(); }
+
+	/** Set the Hints instance for this builder */
+	public void setHints(Hints hints) { this.hints = hints; }
+
+	/** Get the Hints instance for this builder */
+	public Hints hints() { return hints; }
 
 #foreach($arity in $arities)
 	/** Specifies an op with $arity input#if ( $arity > 1)s#end. */
@@ -139,12 +145,24 @@ public class OpBuilder {
 	 */
 	// @formatter:on
 
+
+	/**
+	 * Abstract superclasses for all Arities.
+	 */
+	private abstract class Arity {
+	    /** Get the Hints instance for this builder */
+		public void setHints(Hints hints) { OpBuilder.this.setHints(hints); }
+
+		/** Get the Hints instance for this builder */
+		public Hints hints() { return OpBuilder.this.hints(); }
+	}
+
 	/**
 	 * Builder with arity 0, output unspecified.
 	 *
 	 * @author Curtis Rueden
 	 */
-	public final class Arity0 {
+	public final class Arity0 extends Arity {
 
 		/**
 		 * Matches with this builder will use the given pre-allocated output instance.
@@ -230,7 +248,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity0_OT<O> {
+	public final class Arity0_OT<O> extends Arity {
 
 		private final Nil<O> outType;
 
@@ -295,7 +313,7 @@ public class OpBuilder {
 	 * @author Curtis Rueden
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity0_OV<O> {
+	public final class Arity0_OV<O> extends Arity {
 
 		private final O out;
 
@@ -333,7 +351,7 @@ public class OpBuilder {
 	 *
 	 * @author Mark Hiner
 	 */
-	public final class Arity${arity} {
+	public final class Arity${arity} extends Arity {
 
 		/**
 		 * Specifies an op with $arity input#if ( $arity > 1)s#end, matched by input value.
@@ -381,7 +399,7 @@ public class OpBuilder {
 #end
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity${arity}_IT_OT$generics.call($arity) {
+	public final class Arity${arity}_IT_OT$generics.call($arity) extends Arity {
 
 #foreach($a in [1..$arity])
 		private final Nil<I$a> in${a}Type;
@@ -431,7 +449,7 @@ public class OpBuilder {
 	 * @param <I$a> The type of input $a.
 #end
 	 */
-	public final class Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) {
+	public final class Arity${arity}_IT_OU$genericsWithoutOutput.call($arity) extends Arity {
 
 #foreach($a in [1..$arity])
 		private final Nil<I$a> in${a}Type;
@@ -509,7 +527,7 @@ public class OpBuilder {
 #end
 	 * @param <O> The type of the output.
 	 */
-	public final class Arity${arity}_IV_OT$generics.call($arity) {
+	public final class Arity${arity}_IV_OT$generics.call($arity) extends Arity {
 
 #foreach($a in [1..$arity])
 		private final I$a in${a};
@@ -575,7 +593,7 @@ public class OpBuilder {
 	 * @param <I$a> The type of input $a.
 #end
 	 */
-	public final class Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) {
+	public final class Arity${arity}_IV_OU$genericsWithoutOutput.call($arity) extends Arity {
 
 #foreach($a in [1..$arity])
 		private final I$a in$a;
@@ -714,7 +732,7 @@ public class OpBuilder {
 	 * @param <I$a> The type of input $a.
 #end
 	 */
-	public final class Arity${arity}_IV_OV${generics.call($arity)} {
+	public final class Arity${arity}_IV_OV${generics.call($arity)} extends Arity {
 
 #foreach($a in [1..$arity])
 		private final I$a in$a;

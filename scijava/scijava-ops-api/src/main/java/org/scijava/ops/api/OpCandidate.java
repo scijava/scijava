@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -53,7 +52,6 @@ public class OpCandidate {
 
 	public static enum StatusCode {
 		MATCH, //
-		INVALID_STRUCT, //
 		OUTPUT_TYPES_DO_NOT_MATCH, //
 		TOO_MANY_ARGS, //
 		TOO_FEW_ARGS, //
@@ -182,13 +180,6 @@ public class OpCandidate {
 		switch (statusCode) {
 		case MATCH:
 			sb.append("MATCH");
-			break;
-		case INVALID_STRUCT:
-			sb.append("Invalid struct:");
-			for (ValidityProblem vp : opInfo().getValidityException().problems()) {
-				sb.append("\n\t");
-				sb.append(vp.getMessage());
-			}
 			break;
 		case OUTPUT_TYPES_DO_NOT_MATCH:
 			sb.append("Output types do not match");

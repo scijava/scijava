@@ -65,7 +65,6 @@ public class OpClassInfo implements OpInfo {
 	private final Class<?> opClass;
 	private final String version;
 	private Struct struct;
-	private ValidityException validityException;
 	private final double priority;
 	private final Hints hints;
 
@@ -81,16 +80,15 @@ public class OpClassInfo implements OpInfo {
 		this.opClass = opClass;
 		this.version = version;
 		this.names = Arrays.asList(names);
-		List<ValidityProblem> problems = new ArrayList<>();
-		try {
-			struct = Structs.from(opClass, opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
-			OpUtils.checkHasSingleOutput(struct);
-		} catch (ValidityException e) {
-			validityException = e;
-		} 
 		this.priority = priority;
-
 		this.hints = hints;
+
+		List<ValidityProblem> problems = new ArrayList<>();
+		struct = Structs.from(opClass, opClass, problems, new ClassParameterMemberParser(), new ClassOpDependencyMemberParser());
+		OpUtils.ensureHasSingleOutput(struct, problems);
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
+		}
 	}
 
 	// -- OpInfo methods --
@@ -167,16 +165,6 @@ public class OpClassInfo implements OpInfo {
 		return struct().createInstance(op);
 	}
 
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
-	}
-	
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-	
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return opClass;

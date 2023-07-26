@@ -1,6 +1,7 @@
 
 package org.scijava.ops.engine.reduce;
 
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.struct.Member;
@@ -52,7 +53,15 @@ public class ReducedOpInfoGenerator implements OpInfoGenerator {
 		InfoReducer reducer = optionalReducer.get();
 		LongFunction<OpInfo> func = l -> reducer.reduce(info, (int) l);
 		return LongStream.range(1, numReductions + 1) //
-			.mapToObj(func) //
+			.mapToObj(i -> {
+				try {
+					return func.apply(i);
+				} catch(ValidityException e) {
+					// TODO: Log exception
+					return null;
+				}
+			}) //
+			.filter(Objects::nonNull) //
 			.collect(Collectors.toList());
 	}
 	

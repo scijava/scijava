@@ -6,9 +6,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.common3.Annotations;
 import org.scijava.meta.Versions;
@@ -41,14 +43,30 @@ public class OpCollectionInfoGenerator implements OpInfoGenerator {
 		if (instance.isPresent()) {
 			final List<OpFieldInfo> fieldInfos = //
 				fields.parallelStream() //
-					.map(f -> generateFieldInfo(f, instance.get(), version)) //
+					.map(f -> {
+						try {
+							return generateFieldInfo(f, instance.get(), version);
+						} catch(ValidityException e) {
+							// TODO: Log exception
+							return null;
+						}
+					}) //
+					.filter(Objects::nonNull) //
 					.collect(Collectors.toList());
 			collectionInfos.addAll(fieldInfos);
 		}
 		// add OpMethodInfos
 		final List<OpMethodInfo> methodInfos = //
 			Annotations.getAnnotatedMethods(cls, OpMethod.class).parallelStream() //
-				.map(m -> generateMethodInfo(m, version)) //
+				.map(m -> {
+					try {
+						return generateMethodInfo(m, version);
+					} catch(ValidityException e) {
+						// TODO: Log exception
+						return null;
+					}
+				}) //
+				.filter(Objects::nonNull) //
 				.collect(Collectors.toList());
 		collectionInfos.addAll(methodInfos);
 		return collectionInfos;

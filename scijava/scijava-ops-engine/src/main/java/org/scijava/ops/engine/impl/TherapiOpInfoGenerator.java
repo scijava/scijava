@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.discovery.therapi.TaggedElement;
 import org.scijava.discovery.therapi.TherapiDiscoveryUtils;
 import org.scijava.meta.Versions;
@@ -85,7 +86,12 @@ public class TherapiOpInfoGenerator implements OpInfoGenerator {
 
 	private static OpInfo opClassGenerator(Class<?> cls, double priority, String[] names) {
 		String version = Versions.getVersion(cls);
-		return new OpClassInfo(cls, version, new DefaultHints(), priority, names);
+		try {
+			return new OpClassInfo(cls, version, new DefaultHints(), priority, names);
+		} catch (ValidityException e) {
+			// TODO: Log exception
+			return null;
+		}
 	}
 
 	private static OpInfo opMethodGenerator(Method m, String opType, double priority, String[] names) {
@@ -96,7 +102,12 @@ public class TherapiOpInfoGenerator implements OpInfoGenerator {
 			return null;
 		}
 		String version = Versions.getVersion(m.getDeclaringClass());
-		return new OpMethodInfo(m, cls, version, new DefaultHints(), priority, names);
+		try {
+			return new OpMethodInfo(m, cls, version, new DefaultHints(), priority, names);
+		} catch (ValidityException e) {
+			// TODO: Log exception
+			return null;
+		}
 	}
 
 	private static OpInfo opFieldGenerator(Field f, double priority, String[] names) {
@@ -108,6 +119,11 @@ public class TherapiOpInfoGenerator implements OpInfoGenerator {
 				| NoSuchMethodException | SecurityException exc) {
 			return null;
 		}
-		return new OpFieldInfo(instance, f, version, new DefaultHints(), priority, names);
+		try {
+			return new OpFieldInfo(instance, f, version, new DefaultHints(), priority, names);
+		} catch (ValidityException e) {
+			// TODO: Log exception
+			return null;
+		}
 	}
 }

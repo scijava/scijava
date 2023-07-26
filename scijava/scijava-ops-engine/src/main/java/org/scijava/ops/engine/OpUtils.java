@@ -111,16 +111,14 @@ public final class OpUtils {
 				.collect(Collectors.toList());
 	}
 
-	public static void checkHasSingleOutput(Struct struct) throws
+	public static void ensureHasSingleOutput(Struct struct, List<ValidityProblem> problems) throws
 			ValidityException
 	{
 		final long numOutputs = struct.members().stream() //
-			.filter(m -> m.isOutput()).count();
-		if (numOutputs != 1) {
-			final String error = numOutputs == 0 //
-				? "No output parameters specified. Must specify exactly one." //
-				: "Multiple output parameters specified. Only a single output is allowed.";
-			throw new ValidityException(Collections.singletonList(new ValidityProblem(error)));
+			.filter(Member::isOutput).count();
+		if (numOutputs > 1) {
+			problems.add(new ValidityProblem(
+				"Multiple output parameters specified. Only a single output is allowed."));
 		}
 	}
 

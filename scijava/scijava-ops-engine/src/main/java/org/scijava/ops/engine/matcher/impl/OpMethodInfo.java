@@ -69,7 +69,6 @@ public class OpMethodInfo implements OpInfo {
 	private final List<String> names;
 	private final Type opType;
 	private final Struct struct;
-	private final ValidityException validityException;
 	private final double priority;
 
 	private final Hints hints;
@@ -100,8 +99,9 @@ public class OpMethodInfo implements OpInfo {
 		this.opType = findOpType(opType, problems);
 		this.struct = generateStruct(method, opType, problems, new MethodParameterMemberParser(), new MethodOpDependencyMemberParser());
 
-		validityException = problems.isEmpty() ? null : new ValidityException(
-			problems);
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
+		}
 	}
 
 	@SafeVarargs
@@ -216,16 +216,6 @@ public class OpMethodInfo implements OpInfo {
 			throw new IllegalStateException("Failed to invoke Op method: " + method,
 					exc);
 		}
-	}
-
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
 	}
 
 	@Override

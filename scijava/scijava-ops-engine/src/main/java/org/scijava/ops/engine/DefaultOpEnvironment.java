@@ -44,7 +44,6 @@ import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -758,11 +757,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		if (opInfo.names() == null || opInfo.names().size() == 0) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" +
 				"Op implementation must provide name.");
-			return;
-		}
-		if (!opInfo.isValid()) {
-			log.error("Skipping invalid Op " + opInfo.implementationName() + ":\n" +
-				opInfo.getValidityException().getMessage());
 			return;
 		}
 		for (String opName : opInfo.names()) {

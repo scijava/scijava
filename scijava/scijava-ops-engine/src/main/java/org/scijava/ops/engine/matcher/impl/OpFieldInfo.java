@@ -73,7 +73,7 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final double priority, final String... names) {
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, Priority.NORMAL, names);
+		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, priority, names);
 	}
 
 	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final String... names) {

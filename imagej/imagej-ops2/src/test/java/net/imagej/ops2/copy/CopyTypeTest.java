@@ -37,7 +37,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test {@link CopyType}.
+ * Test {@link Copiers#copyType}.
  * 
  * @author Tim-Oliver Buchholz (University of Konstanz)
  *

@@ -29,15 +29,8 @@
 
 package net.imagej.ops2.copy;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import net.imagej.ops2.AbstractOpTest;
-import net.imglib2.Cursor;
-import net.imglib2.FinalDimensions;
-import net.imglib2.FinalInterval;
-import net.imglib2.RandomAccess;
-import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.*;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.planar.PlanarImgFactory;
@@ -45,7 +38,6 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
@@ -53,8 +45,11 @@ import org.scijava.ops.api.OpBuilder;
 import org.scijava.types.Nil;
 import org.scijava.util.MersenneTwisterFast;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
- * Test {@link CopyRAI}.
+ * Test {@link Copiers#copyRAI(Computers.Arity1, RandomAccessibleInterval, RandomAccessibleInterval)}
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */
@@ -116,7 +111,6 @@ public class CopyRAITest extends AbstractOpTest {
 
 	@Test
 	public void copyRAINoOutputTest() {
-		@SuppressWarnings("unchecked")
 		final RandomAccessibleInterval<UnsignedByteType> output = ops.op("copy.rai")
 			.arity1().input(input).outType(
 				new Nil<RandomAccessibleInterval<UnsignedByteType>>()

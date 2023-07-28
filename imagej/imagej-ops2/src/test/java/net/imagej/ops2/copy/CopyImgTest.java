@@ -73,7 +73,7 @@ public class CopyImgTest extends AbstractOpTest {
 		copy(input, inputCopy);
 
 		final RandomAccessibleInterval<DoubleType> output =
-			ops.op("copy.img").arity1().input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
+			ops.op("copy").arity1().input(input).outType(new Nil<RandomAccessibleInterval<DoubleType>>() {}).apply();
 
 		final Cursor<DoubleType> inc = input.localizingCursor();
 		final RandomAccess<DoubleType> inCopyRA = inputCopy.randomAccess();
@@ -97,7 +97,7 @@ public class CopyImgTest extends AbstractOpTest {
 		final Img<DoubleType> output = input.factory().create(input, input
 			.firstElement());
 
-		ops.op("copy.img").arity1().input(input).output(output).compute();
+		ops.op("copy").arity1().input(input).output(output).compute();
 
 		final Cursor<DoubleType> inc = input.cursor();
 		final Cursor<DoubleType> inCopyc = inputCopy.cursor();

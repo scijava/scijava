@@ -40,10 +40,11 @@ import net.imglib2.type.numeric.integer.IntType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
 import org.scijava.types.Nil;
 
 /**
- * Test {@link CopyImgLabeling}
+ * Test {@link Copiers#copyImgLabeling(Computers.Arity1, Computers.Arity1, ImgLabeling, ImgLabeling)}
  * 
  * @author Christian Dietz (University of Konstanz)
  */
@@ -74,7 +75,7 @@ public class CopyImgLabelingTest extends AbstractOpTest {
 
 	@Test
 	public void copyImgLabeling() {
-		ops.op("copy.imgLabeling").arity1().input(input).output(copy).compute();
+		ops.op("copy").arity1().input(input).output(copy).compute();
 		assertNotNull(copy);
 
 		Cursor<LabelingType<String>> inCursor = input.cursor();

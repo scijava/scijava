@@ -6,9 +6,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.function.Computers;
+import org.scijava.ops.engine.hint.DefaultHints;
+import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
@@ -17,82 +21,93 @@ import org.scijava.ops.spi.OpMethod;
 public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		implements OpCollection {
 
-	@BeforeAll
-	public static void addNeededOps() {
-		ops.register(new OpMethodDependencyPositionTest());
-	}
-
-	@OpField(names = "test.stringToLong")
-	public final Function<String, Long> parser = in -> Long.parseLong(in);
-
-	@OpMethod(names = "test.dependencyBeforeOutput",
-		type = Computers.Arity1.class)
-	public static void OpMethodFoo(List<String> in, @OpDependency(
-		name = "test.stringToLong") Function<String, Long> op, List<Long> out)
-	{
+	public static void goodDep( //
+		@OpDependency(name = "someDep") Function<String, Long> op, //
+		List<String> in, //
+		List<Long> out //
+	) {
 		out.clear();
 		for (String s : in)
 			out.add(op.apply(s));
 	}
 
 	@Test
-	public void testOpDependencyBeforeOutput() {
-		List<String> in = new ArrayList<>();
-		in.add("1");
-		List<Long> out = new ArrayList<>();
-		ops.op("test.dependencyBeforeOutput").arity1().input(in).output(out).compute();
-		List<Long> expected = Arrays.asList(1l);
-		assertIterationsEqual(expected, out);
+	public void testOpDependencyBefore() throws NoSuchMethodException {
+		var m = this.getClass().getDeclaredMethod(//
+			"goodDep", //
+			Function.class, //
+			List.class, //
+			List.class //
+		);
+		var info = new OpMethodInfo( //
+			m, //
+			Computers.Arity1.class, //
+			new DefaultHints(), //
+			"test.dependencyBeforeInput" //
+		);
+		Assertions.assertEquals(null, info.getValidityException());
 	}
 
-	@OpMethod(names = "test.dependencyAfterOutput", type = Computers.Arity1.class)
-	public static void OpMethodFoo(List<String> in, List<Long> out, @OpDependency(
-		name = "test.stringToLong") Function<String, Long> op)
-	{
+	public static void badDep( //
+			List<String> in, //
+			@OpDependency(name = "someDep") Function<String, Long> op, //
+			List<Long> out //
+	) {
 		out.clear();
 		for (String s : in)
 			out.add(op.apply(s));
 	}
 
 	@Test
-	public void testOpDependencyAfterOutput() {
-		List<String> in = new ArrayList<>();
-		in.add("1");
-		List<Long> out = new ArrayList<>();
-		ops.op("test.dependencyAfterOutput").arity1().input(in).output(out).compute();
-		List<Long> expected = Arrays.asList(1l);
-		assertIterationsEqual(expected, out);
+	public void testOpDependencyAfter() throws NoSuchMethodException {
+		var m = this.getClass().getDeclaredMethod(//
+				"badDep", //
+				List.class, //
+				Function.class, //
+				List.class //
+		);
+		var info = new OpMethodInfo( //
+					m, //
+					Computers.Arity1.class, //
+					new DefaultHints(), //
+					"test.dependencyAfterInput" //
+		);
+		ValidityException exc = info.getValidityException();
+		String expMsg = "java.lang.IllegalArgumentException: Op Dependencies in " +
+			"static methods must come before any other parameters!";
+		Assertions.assertEquals(expMsg, exc.problems().get(0).getMessage());
 	}
 
-	@OpField(names = "test.squareList")
-	public final Computers.Arity1<List<Long>, List<Long>> squareOp = (in,
-		out) -> {
+	public static void goodThenBadDep( //
+			@OpDependency(name = "someDep") Function<String, Long> op, //
+			List<String> in, //
+			@OpDependency(name = "someOtherDep") Function<String, Long> op2, //
+			List<Long> out //
+	) {
 		out.clear();
-		for (Long l : in)
-			out.add(l * l);
-	};
-
-	@OpMethod(names = "test.dependencyBeforeAndAfterOutput",
-		type = Computers.Arity1.class)
-	public static void OpMethodBar(List<String> in, @OpDependency(
-		name = "test.stringToLong") Function<String, Long> op1, List<Long> out,
-		@OpDependency(
-			name = "test.squareList") Computers.Arity1<List<Long>, List<Long>> op2)
-	{
-		List<Long> temp = new ArrayList<>();
 		for (String s : in)
-			temp.add(op1.apply(s));
-		out.clear();
-		op2.compute(temp, out);
+			out.add(op.apply(s));
 	}
 
 	@Test
-	public void testOpDependencyBeforeAndAfterOutput() {
-		List<String> in = new ArrayList<>();
-		in.add("2");
-		List<Long> out = new ArrayList<>();
-		ops.op("test.dependencyBeforeAndAfterOutput").arity1().input(in).output(out).compute();
-		List<Long> expected = Arrays.asList(4l);
-		assertIterationsEqual(expected, out);
+	public void testOpDependencyBeforeAndAfter() throws NoSuchMethodException {
+		var m = this.getClass().getDeclaredMethod(//
+				"goodThenBadDep", //
+				Function.class, //
+				List.class, //
+				Function.class, //
+				List.class //
+		);
+		var info = new OpMethodInfo( //
+				m, //
+				Computers.Arity1.class, //
+				new DefaultHints(), //
+				"test.dependencyBeforeAndAfterInput" //
+		);
+		ValidityException exc = info.getValidityException();
+		String expMsg = "java.lang.IllegalArgumentException: Op Dependencies in " +
+				"static methods must come before any other parameters!";
+		Assertions.assertEquals(expMsg, exc.problems().get(0).getMessage());
 	}
+
 }

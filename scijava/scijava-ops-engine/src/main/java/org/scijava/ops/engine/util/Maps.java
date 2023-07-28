@@ -1,5 +1,6 @@
 package org.scijava.ops.engine.util;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Streams;
 
 import java.lang.reflect.Array;

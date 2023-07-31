@@ -26,28 +26,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package net.imagej.ops2;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Objects;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.scijava.ops.api.OpInfo;
 
 public class OpRegressionTest extends AbstractOpTest {
 
 	@Test
 	public void opDiscoveryRegressionIT() {
-		long expected = 1461;
-		long actual = StreamSupport.stream(ops.infos().spliterator(), false).count();
+		long expected = 1465;
+		long actual = ops.infos().size();
 		assertEquals(expected, actual);
 	}
-
 
 	@Test
 	public void opDescriptionRegressionIT() {
 		// Ensure no ops have a null description
-		StreamSupport.stream(ops.infos().spliterator(), false).map(Object::toString).collect(Collectors.toSet());
+		for (OpInfo info: ops.infos())
+			Assertions.assertNotNull(info.toString(),
+					() -> "Info from " + info.id() + " has a null description");
 	}
 }

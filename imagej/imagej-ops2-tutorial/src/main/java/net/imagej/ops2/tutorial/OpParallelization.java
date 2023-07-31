@@ -1,26 +1,16 @@
 
 package net.imagej.ops2.tutorial;
 
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpMethod;
 
-import net.imglib2.Interval;
 import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
-import net.imglib2.algorithm.neighborhood.Shape;
-import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
-import net.imglib2.loops.IntervalChunks;
-import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
-import net.imglib2.parallel.Parallelization;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.view.Views;
 
 /**
  * SciJava Ops includes a mechanism for automatically introducing concurrency to

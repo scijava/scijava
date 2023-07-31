@@ -35,13 +35,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imagej.ops2.filter.max.DefaultMaxFilter;
-import net.imagej.ops2.filter.mean.DefaultMeanFilter;
-import net.imagej.ops2.filter.median.DefaultMedianFilter;
-import net.imagej.ops2.filter.min.DefaultMinFilter;
 import net.imagej.ops2.filter.sigma.DefaultSigmaFilter;
-import net.imagej.ops2.filter.variance.DefaultVarianceFilter;
 import net.imagej.testutil.TestImgGeneration;
+import net.imglib2.algorithm.neighborhood.Neighborhood;
 import net.imglib2.algorithm.neighborhood.RectangleShape;
 import net.imglib2.algorithm.neighborhood.RectangleShape.NeighborhoodsIterableInterval;
 import net.imglib2.img.Img;
@@ -53,6 +49,7 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
 
 /**
  * Tests implementations of {@code MaxFilterOp}, {@code MeanFilterOp},
@@ -81,8 +78,7 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 	}
 
 	/**
-	 * @see MaxFilterOp
-	 * @see DefaultMaxFilter
+	 * @see NeighborhoodFilters#defaultMax(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
 	public void testMaxFilter() {
@@ -98,14 +94,16 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(out.firstElement().get(), max);
 	}
 
+	/**
+	 * @see NeighborhoodFilters#defaultMax(Computers.Arity1, Neighborhood, Object)
+	 */
 	@Test
 	public void testMaxFilterOptional() {
 		ops.op("filter.max").arity2().input(in, shape).output(out).compute();
 	}
 
 	/**
-	 * @see MeanFilterOp
-	 * @see DefaultMeanFilter
+	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
 	public void testMeanFilter() {
@@ -122,14 +120,16 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(Util.round(sum / 9.0), out.firstElement().get());
 	}
 
+	/**
+	 * @see NeighborhoodFilters#defaultMean(Computers.Arity1, Neighborhood, Object)
+	 */
 	@Test
 	public void testMeanFilterOptional() {
 		ops.op("filter.mean").arity2().input(in, shape).output(out).compute();
 	}
 
 	/**
-	 * @see MedianFilterOp
-	 * @see DefaultMedianFilter
+	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
 	public void testMedianFilter() {
@@ -147,14 +147,16 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(items.get(5).get(), out.firstElement().get());
 	}
 
+	/**
+	 * @see NeighborhoodFilters#defaultMedian(Computers.Arity1, Neighborhood, Object)
+	 */
 	@Test
 	public void testMedianFilterOptional() {
 		ops.op("filter.median").arity2().input(in, shape).output(out).compute();
 	}
 
 	/**
-	 * @see MinFilterOp
-	 * @see DefaultMinFilter
+	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood, Object)
 	 */
 	@Test
 	public void testMinFilter() {
@@ -170,6 +172,9 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		assertEquals(min, out.firstElement().get());
 	}
 
+	/**
+	 * @see NeighborhoodFilters#defaultMinimum(Computers.Arity1, Neighborhood, Object)
+	 */
 	@Test
 	public void testMinFilterOptional() {
 		ops.op("filter.min").arity2().input(in, shape).output(out).compute();
@@ -189,10 +194,6 @@ public class NonLinearFiltersTest extends AbstractOpTest {
 		ops.op("filter.sigma").arity4().input(in, shape, 1.0, 0.0).output(out).compute();
 	}
 
-	/**
-	 * @see VarianceFilterOp
-	 * @see DefaultVarianceFilter
-	 */
 	@Test
 	public void testVarianceFilter() {
 		ops.op("filter.variance").arity3().input(in, shape, oobFactory).output(out).compute();

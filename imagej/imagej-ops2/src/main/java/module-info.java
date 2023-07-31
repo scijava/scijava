@@ -65,15 +65,10 @@ module net.imagej.ops2 {
 	opens net.imagej.ops2.filter.gauss to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.hessian to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.ifft to therapi.runtime.javadoc, org.scijava.ops.engine;
-	opens net.imagej.ops2.filter.max to therapi.runtime.javadoc, org.scijava.ops.engine;
-	opens net.imagej.ops2.filter.mean to therapi.runtime.javadoc, org.scijava.ops.engine;
-	opens net.imagej.ops2.filter.median to therapi.runtime.javadoc, org.scijava.ops.engine;
-	opens net.imagej.ops2.filter.min to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.pad to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.sigma to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.sobel to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.tubeness to therapi.runtime.javadoc, org.scijava.ops.engine;
-	opens net.imagej.ops2.filter.variance to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.filter.vesselness to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.geom to therapi.runtime.javadoc, org.scijava.ops.engine;
 	opens net.imagej.ops2.geom.geom2d to org.scijava, therapi.runtime.javadoc, org.scijava.ops.engine;

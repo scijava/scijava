@@ -38,6 +38,7 @@ import net.imglib2.view.Views;
 import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -49,34 +50,38 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-public class ImgLabelingTypeExtractor implements TypeExtractor<ImgLabeling<?, ?>> {
+public class ImgLabelingTypeExtractor implements TypeExtractor {
+
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return ImgLabeling.class.isAssignableFrom(object);
+	}
 
 	@Override
-	public Type reify(final TypeReifier t, final ImgLabeling<?, ?> o, final int n) {
-		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
-		
-		if(n == 0) {
-			// o.firstElement will return a LabelingType
-			Type labelingType = t.reify(o.firstElement());
-			// sanity check
-			if(!(labelingType instanceof ParameterizedType)) throw new IllegalArgumentException("ImgLabeling is not of a LabelingType");
-			// get type arg of labelingType
-			ParameterizedType pType = (ParameterizedType) labelingType;
-			return pType.getActualTypeArguments()[0];
-		}
+	public Type reify(final TypeReifier t, final Object object) {
+		if (!(object instanceof ImgLabeling))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+
+		ImgLabeling<?, ?> labeling = (ImgLabeling<?, ?>) object;
+
+		// o.firstElement will return a LabelingType
+		Type labelingType = t.reify(labeling.firstElement());
+		// sanity check
+		if (!(labelingType instanceof ParameterizedType))
+			throw new IllegalArgumentException(
+				"ImgLabeling is not of a LabelingType");
+		// get type arg of labelingType
+		ParameterizedType pType = (ParameterizedType) labelingType;
+		Type mappingType = pType.getActualTypeArguments()[0];
 		// otherwise n == 1
-		return t.reify(Views.iterable(o.getSource()).firstElement());
+		Type elementType = t.reify(Views.iterable(labeling.getSource())
+			.firstElement());
+		return TypeTools.raiseParametersToClass(object.getClass(),
+			ImgLabeling.class, new Type[] { mappingType, elementType });
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<ImgLabeling<?, ?>> getRawType() {
-		return (Class) ImgLabeling.class;
-	}
-
-	@Override
-	public double priority() {
-		return Priority.LOW;
+	public double getPriority() {
+		return Priority.NORMAL;
 	}
 
 }

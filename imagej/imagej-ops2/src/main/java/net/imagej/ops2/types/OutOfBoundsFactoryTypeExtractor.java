@@ -31,12 +31,14 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
+import net.imglib2.img.ImgFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory} objects.
@@ -48,26 +50,20 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBoundsFactory<?, ?>> {
+public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor {
 
-	@Override
-	public Type reify(final TypeReifier t, final OutOfBoundsFactory<?, ?> o, final int n) {
-		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
-		
-		return new Any();
-
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<OutOfBoundsFactory<?, ?>> getRawType() {
-		return (Class) OutOfBoundsFactory.class;
-	}
-
-	@Override
-	public double priority() {
+	@Override public double getPriority() {
 		return Priority.LOW;
 	}
 
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return OutOfBoundsFactory.class.isAssignableFrom(object);
+	}
+
+	@Override public Type reify(TypeReifier r, Object object) {
+		if (!(object instanceof OutOfBoundsFactory))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+		return TypeTools.raiseParametersToClass(object.getClass(), OutOfBoundsFactory.class, new Type[] {new Any(), new Any()});
+	}
 
 }

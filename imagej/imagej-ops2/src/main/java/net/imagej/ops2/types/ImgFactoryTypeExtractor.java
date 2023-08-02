@@ -37,6 +37,7 @@ import net.imglib2.img.array.ArrayImg;
 import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link ArrayImg} objects.
@@ -48,25 +49,21 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-public class ImgFactoryTypeExtractor implements TypeExtractor<ImgFactory<?>> {
+public class ImgFactoryTypeExtractor implements TypeExtractor {
 
-	@Override
-	public Type reify(final TypeReifier t, final ImgFactory<?> o, final int n) {
-		if (n != 0)
-			throw new IndexOutOfBoundsException();
-
-		return t.reify(o.type());
+	@Override public double getPriority() {
+		return Priority.NORMAL;
 	}
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<ImgFactory<?>> getRawType() {
-		return (Class) ImgFactory.class;
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return ImgFactory.class.isAssignableFrom(object);
 	}
 
-	@Override
-	public double priority() {
-		return Priority.LOW;
+	@Override public Type reify(TypeReifier r, Object object) {
+		if (!(object instanceof ImgFactory))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+		ImgFactory<?> imgFactory = (ImgFactory<?>) object;
+		Type componentType = r.reify(imgFactory.type());
+		return TypeTools.raiseParametersToClass(object.getClass(), ImgFactory.class, new Type[] {componentType});
 	}
-
 }

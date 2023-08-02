@@ -43,6 +43,7 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.scijava.Context;
 import org.scijava.types.Nil;
 
 /**
@@ -82,6 +83,7 @@ public class GaussTest extends AbstractOpTest {
 			Assertions.assertEquals(c1.next().getRealDouble(), c2.next().getRealDouble(), 0);
 		}
 	}
+
 	//
 	// /** Tests the Gaussian matching. */
 	// @Test

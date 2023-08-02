@@ -34,9 +34,12 @@ import java.lang.reflect.Type;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import org.scijava.priority.Priority;
+import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 import org.scijava.types.Types;
 
 /**
@@ -46,32 +49,23 @@ import org.scijava.types.Types;
  * @author Gabriel Selzer
  */
 public class OutOfBoundsConstantValueFactoryTypeExtractor
-		implements TypeExtractor<OutOfBoundsConstantValueFactory<?, ?>> {
+		implements TypeExtractor {
 
-	@Override
-	public Type reify(final TypeReifier t, final OutOfBoundsConstantValueFactory<?, ?> o, final int n) {
-		if (n < 0 || n > 1)
-			throw new IndexOutOfBoundsException();
-
-		Type elementType = t.reify(o.getValue());
-		if (n == 0)
-			return elementType;
-		// if we need the second type parameter, it can just be a
-		// randomAccessibleInterval of elementType.
-		Type elementRAI = Types.parameterize(RandomAccessibleInterval.class, new Type[] {elementType});
-		return elementRAI;
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<OutOfBoundsConstantValueFactory<?, ?>> getRawType() {
-		return (Class) OutOfBoundsConstantValueFactory.class;
-	}
-
-	@Override
-	public double priority() {
+	@Override public double getPriority() {
 		return Priority.NORMAL;
 	}
 
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return OutOfBoundsConstantValueFactory.class.isAssignableFrom(object);
+	}
+
+	@Override public Type reify(TypeReifier r, Object object) {
+		if (!(object instanceof OutOfBoundsConstantValueFactory))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+		OutOfBoundsConstantValueFactory<?, ?> oobcvf = (OutOfBoundsConstantValueFactory<?, ?>) object;
+		Type elementType = r.reify(oobcvf.getValue());
+		Type raiType = Types.parameterize(RandomAccessibleInterval.class, new Type[] {elementType});
+		return TypeTools.raiseParametersToClass(object.getClass(), OutOfBoundsFactory.class, new Type[] {elementType, raiType});
+	}
 
 }

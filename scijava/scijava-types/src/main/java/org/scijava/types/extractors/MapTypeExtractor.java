@@ -30,12 +30,15 @@
 package org.scijava.types.extractors;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
+import org.scijava.types.Types;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Map} objects.
@@ -47,30 +50,35 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-public class MapTypeExtractor implements TypeExtractor<Map<?, ?>> {
+public class MapTypeExtractor extends ParameterizedTypeExtractor {
 
 	@Override
-	public Type reify(final TypeReifier t, final Map<?, ?> o, final int n) {
-		if (n < 0 || n > 1) throw new IndexOutOfBoundsException("" + n);
+	public Type reify(final TypeReifier t, final Object object) {
+		if (!(object instanceof Map)) throw new IllegalArgumentException(this + " is only capable of reifying Iterables!");
 
-		if (o.isEmpty()) return null;
+		// Obtain the element type using the TypeService.
+		int typesToCheck = 100;
+		// can we make this more efficient (possibly a parallel stream)?
+		List<Entry<?, ?>> entries = new ArrayList<>(((Map<?, ?>) object).entrySet());
+		entries = entries.subList(0, Math.min(typesToCheck, entries.size()));
 
-		final Entry<?, ?> entry = o.entrySet().iterator().next();
-		if (n == 0) return t.reify(entry.getKey());
-		return t.reify(entry.getValue());
+		Type[] keyTypes = new Type[entries.size()];
+		Type[] valueTypes = new Type[entries.size()];
+		for (int i = 0; i < entries.size(); i++) {
+			keyTypes[i] = t.reify(entries.get(i).getKey());
+			valueTypes[i] = t.reify(entries.get(i).getValue());
+		}
 
-		// TODO: Avoid infinite recursion when the map references itself.
+		Type keyType = Types.greatestCommonSuperType(keyTypes, true);
+		Type valueType = Types.greatestCommonSuperType(valueTypes, true);
+		return TypeTools.raiseParametersToClass(object.getClass(), Map.class, new Type[] {keyType, valueType});
 	}
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<Map<?, ?>> getRawType() {
-		return (Class) Map.class;
+	@Override public double getPriority() {
+		return super.getPriority() + 1;
 	}
 
-	@Override
-	public double priority() {
-		return Priority.LOW;
+	@Override public boolean canReify(TypeReifier r, Class<?> cls) {
+		return Map.class.isAssignableFrom(cls);
 	}
-
 }

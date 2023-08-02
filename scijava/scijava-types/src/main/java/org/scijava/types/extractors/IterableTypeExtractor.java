@@ -30,13 +30,19 @@
 package org.scijava.types.extractors;
 
 import java.lang.reflect.Type;
-import java.util.Iterator;
+import java.lang.reflect.TypeVariable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.StreamSupport;
 
 import org.scijava.priority.Priority;
+import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 import org.scijava.types.Types;
+import org.scijava.types.inference.GenericAssignability;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -48,36 +54,32 @@ import org.scijava.types.Types;
  *
  * @author Curtis Rueden
  */
-public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
+public class IterableTypeExtractor implements TypeExtractor {
 
 	@Override
-	public Type reify(final TypeReifier t, final Iterable<?> o, final int n) {
-		if (n != 0) throw new IndexOutOfBoundsException();
-
-		final Iterator<?> iterator = o.iterator();
-		if (!iterator.hasNext()) return null;
+	public Type reify(final TypeReifier t, Object object) {
+		if (!(object instanceof Iterable)) throw new IllegalArgumentException(this + " is only capable of reifying Iterables!");
 
 		// Obtain the element type using the TypeService.
 		int typesToCheck = 100;
 		// can we make this more efficient (possibly a parallel stream)?
-		Type[] types = StreamSupport.stream(o.spliterator(), false) //
+		Type[] types = StreamSupport.stream(((Iterable<?>) object).spliterator(), false) //
 			.limit(typesToCheck) //
 			.map(t::reify) //
 			.toArray(Type[]::new);
 
-		return Types.greatestCommonSuperType(types, true);
-		// TODO: Avoid infinite recursion when the list references itself.
+		Type actual = Types.greatestCommonSuperType(types, true);
+		if (actual == null) actual = new Any();
+		return TypeTools.raiseParametersToClass(object.getClass(), Iterable.class, new Type[] {actual});
 	}
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<Iterable<?>> getRawType() {
-		return (Class) Iterable.class;
-	}
-
-	@Override
-	public double priority() {
+	@Override public double getPriority() {
 		return Priority.LOW;
+	}
+
+
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return Iterable.class.isAssignableFrom(object);
 	}
 
 }

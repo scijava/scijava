@@ -1,6 +1,4 @@
-package org.scijava.types;
-
-import com.google.common.reflect.TypeToken;
+package org.scijava.types.extractors;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -10,17 +8,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.log2.Logger;
-import org.scijava.types.extractors.IterableTypeExtractor;
+import org.scijava.priority.Priority;
 
-public interface TypeReifier {
+import com.google.common.reflect.TypeToken;
+import org.scijava.types.Any;
+import org.scijava.types.GenericTyped;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
+import org.scijava.types.Types;
 
-	/**
-	 * Gets the type extractor which handles the given class, or null if none.
-	 */
-	Optional<TypeExtractor> getExtractor(Class<?> c);
+public class ParameterizedTypeExtractor implements TypeExtractor {
 
-	Logger log();
+	@Override public double getPriority() {
+		return Priority.VERY_LOW;
+	}
+
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return object.getTypeParameters().length > 0;
+	}
 
 	/**
 	 * Extracts the generic {@link Type} of the given {@link Object}.
@@ -37,21 +42,21 @@ public interface TypeReifier {
 	 * <p>
 	 * For objects whose concrete type has no parameters, this method simply
 	 * returns {@code o.getClass()}. For example:
-	 * 
+	 *
 	 * <pre>
 	 *      StringList implements List&lt;String&gt;
 	 * </pre>
-	 * 
+	 *
 	 * will return {@code StringList.class}.
 	 * <p>
 	 * The interesting case is for objects whose concrete class <em>does</em> have
 	 * type parameters. E.g.:
-	 * 
+	 *
 	 * <pre>
 	 *      NumberList&lt;N extends Number&gt; implements List&lt;N&gt;
 	 *      ListMap&lt;K, V, T&gt; implements Map&lt;K, V&gt;, List&lt;T&gt;
 	 * </pre>
-	 * 
+	 *
 	 * For such types, we try to fill the type parameters recursively, using
 	 * {@link TypeExtractor} plugins that know how to glean types at runtime from
 	 * specific sorts of objects.
@@ -70,9 +75,9 @@ public interface TypeReifier {
 	 * <em>a priori</em> knowledge about that type is available at runtime.
 	 * </p>
 	 */
-	default Type reify(final Object o) {
+	public Type reify(final TypeReifier r, final Object o) {
 		if (o == null) return new Any();
-		
+
 		if (o instanceof GenericTyped) {
 			// Object implements the GenericTyped interface; it explicitly declares
 			// the generic type by which it wants to be known. This makes life easy!
@@ -87,7 +92,7 @@ public interface TypeReifier {
 			// if the class is synthetic, we are probably missing something due to
 			// type erasure.
 			if (c.isSynthetic()) {
-				log().warn("Object " + o + " is synthetic. " +
+				r.log().warn("Object " + o + " is synthetic. " +
 					"Its type parameters are not reifiable and thus will likely cause unintended behavior!");
 			}
 			// Object has no generic parameters; we are done!
@@ -110,7 +115,7 @@ public interface TypeReifier {
 
 			// Populate relevant type variables from the reified supertype!
 			final Map<TypeVariable<?>, Type> vars = //
-				args(o, token.getRawType());
+				args(r, o, token.getRawType());
 
 			if (vars != null) {
 				// Remember any resolved type variables.
@@ -139,7 +144,7 @@ public interface TypeReifier {
 	 * <p>
 	 * For example, if you call:
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * args(Collections.singleton("Hi"), Iterable.class)
 	 * </pre>
@@ -152,31 +157,42 @@ public interface TypeReifier {
 	 * {@link TypeExtractor} plugin which handles <em>exactly</em> the given
 	 * supertype.
 	 * </p>
-	 * 
+	 *
 	 * @see #reify(Object)
 	 */
-	default <T> Map<TypeVariable<?>, Type> args(final Object o,
-		final Class<T> superType)
+	private Map<TypeVariable<?>, Type> args(TypeReifier t, final Object o,
+		final Class<?> superType)
 	{
 		final Class<?> c = o.getClass();
 
-		final Optional<TypeExtractor> extractor = getExtractor(superType);
+		final Optional<TypeExtractor> extractor = t.getExtractor(superType);
 		if (extractor.isEmpty()) return null; // No plugin for this specific class.
 
 		if (!superType.isInstance(o)) {
 			throw new IllegalStateException("'" + o.getClass() +
 				"' is not an instance of '" + superType.getName() + "'");
 		}
-		@SuppressWarnings("unchecked")
-		final T t = (T) o;
 
-		final Type extractedType = extractor.get().reify(this, t);
-		if (extractedType instanceof ParameterizedType) {
-			return Types.args(c, (ParameterizedType) extractedType);
-		}
-		else {
+		try {
+			final Type extractedType = extractor.get().reify(t, o);
+			// Populate type variables to fully populate the supertype.
+			if (extractedType instanceof ParameterizedType) {
+				Map<TypeVariable<?>, Type> typeVars = Types.args(c, (ParameterizedType) extractedType);
+				for (TypeVariable<?> typeVar : c.getTypeParameters()) {
+					typeVars.putIfAbsent(typeVar, new Any());
+				}
+				return typeVars;
+			}
 			return Collections.emptyMap();
+		} catch (StackOverflowError e) {
+			Map<TypeVariable<?>, Type> typeVars = new HashMap<>();
+			for (TypeVariable<?> typeVar : c.getTypeParameters()) {
+				typeVars.putIfAbsent(typeVar, new Any());
+			}
+			return typeVars;
 		}
+
 	}
+
 
 }

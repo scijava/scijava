@@ -33,6 +33,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.ImgFactory;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 
@@ -40,6 +41,7 @@ import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 import org.scijava.types.Types;
 
 /**
@@ -48,40 +50,34 @@ import org.scijava.types.Types;
  *
  * @author Gabriel Selzer
  */
-public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor<OutOfBoundsRandomValueFactory<?, ?>> {
+public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor {
 
 	@Override
-	public Type reify(final TypeReifier t, final OutOfBoundsRandomValueFactory<?, ?> o, final int n) {
-		if (n < 0 || n > 1)
-			throw new IndexOutOfBoundsException();
-
-		Object elementObject = new Any();
+	public Type reify(final TypeReifier t, final Object object) {
+		if (!(object instanceof OutOfBoundsRandomValueFactory))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+		OutOfBoundsRandomValueFactory<?, ?> oobrvf = (OutOfBoundsRandomValueFactory<?, ?>) object;
+		Object elementObject;
 		try {
-			Field elementField = o.getClass().getDeclaredField("value");
+			Field elementField = oobrvf.getClass().getDeclaredField("value");
 			elementField.setAccessible(true);
-			elementObject = elementField.get(o);
+			elementObject = elementField.get(oobrvf);
 		} catch (Exception e) {
-
+			elementObject = new Any();
 		}
 		Type elementType = t.reify(elementObject);
-		if (n == 0)
-			return elementType;
 		// if we need the second type parameter, it can just be a
 		// randomAccessibleInterval of elementType.
-		Type elementRAI = Types.parameterize(RandomAccessibleInterval.class, new Type[] { elementType });
-		return elementRAI;
+		Type raiType = Types.parameterize(RandomAccessibleInterval.class, new Type[] { elementType });
+		return TypeTools.raiseParametersToClass(object.getClass(), OutOfBoundsRandomValueFactory.class, new Type[] {elementType, raiType});
 	}
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<OutOfBoundsRandomValueFactory<?, ?>> getRawType() {
-		return (Class) OutOfBoundsRandomValueFactory.class;
-	}
-
-	@Override
-	public double priority() {
+	@Override public double getPriority() {
 		return Priority.NORMAL;
 	}
 
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return OutOfBoundsRandomValueFactory.class.isAssignableFrom(object);
+	}
 
 }

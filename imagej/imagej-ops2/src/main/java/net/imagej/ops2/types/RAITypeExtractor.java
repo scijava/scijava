@@ -37,6 +37,7 @@ import net.imglib2.util.Util;
 import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 
 /**
  * {@link TypeExtractor} plugin which operates on
@@ -48,28 +49,23 @@ import org.scijava.types.TypeReifier;
  *
  * @author Gabriel Selzer
  */
-public class RAITypeExtractor implements
-	TypeExtractor<RandomAccessibleInterval<?>>
-{
+public class RAITypeExtractor implements TypeExtractor {
 
 	@Override
-	public Type reify(final TypeReifier t, final RandomAccessibleInterval<?> o, final int n) {
-		if (n != 0) throw new IndexOutOfBoundsException();
-
-		// type of the image
-		Type raiType = t.reify(Util.getTypeFromInterval(o));
-		return raiType;
+	public Type reify(final TypeReifier t, final Object object) {
+		if (!(object instanceof RandomAccessibleInterval))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+		RandomAccessibleInterval<?> rai = (RandomAccessibleInterval<?>) object;
+		Type componentType = t.reify(Util.getTypeFromInterval(rai));
+		return TypeTools.raiseParametersToClass(object.getClass(), RandomAccessibleInterval.class, new Type[] {componentType});
 	}
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<RandomAccessibleInterval<?>> getRawType() {
-		return (Class) RandomAccessibleInterval.class;
+	@Override public double getPriority() {
+		return Priority.NORMAL;
 	}
 
-	@Override
-	public double priority() {
-		return Priority.LOW;
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return RandomAccessibleInterval.class.isAssignableFrom(object);
 	}
 
 }

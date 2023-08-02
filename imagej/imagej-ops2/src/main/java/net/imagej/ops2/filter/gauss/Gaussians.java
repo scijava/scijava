@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.Optional;
 
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -42,11 +43,9 @@ import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
-import org.scijava.ops.spi.Optional;
 
 /**
  * {@link OpCollection} containing various wrappings of Gaussian operations.
@@ -71,11 +70,11 @@ public class Gaussians {
 	 *           type='org.scijava.function.Computers$Arity4'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends NumericType<T> & NativeType<T>> void defaultGaussRAI(
-		final RandomAccessibleInterval<T> input, //
+	public static <S extends NumericType<S>, T extends NumericType<T>> void defaultGaussRAI(
+		final RandomAccessibleInterval<S> input, //
 		final ExecutorService es, //
 		final double[] sigmas, //
-		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
+		@Optional OutOfBoundsFactory<S, RandomAccessibleInterval<S>> outOfBounds, //
 		final RandomAccessibleInterval<T> output //
 	) {
 		if (outOfBounds == null)
@@ -110,12 +109,12 @@ public class Gaussians {
 	 * @implNote op names='filter.gauss',
 	 *           type='org.scijava.function.Computers$Arity4'
 	 */
-	public static <T extends NumericType<T> & NativeType<T>> void
+	public static <S extends NumericType<S>, T extends NumericType<T>> void
 		gaussRAISingleSigma( //
-			final RandomAccessibleInterval<T> input, //
+			final RandomAccessibleInterval<S> input, //
 			final ExecutorService es, //
 			final double sigma, //
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
+			@Optional OutOfBoundsFactory<S, RandomAccessibleInterval<S>> outOfBounds, //
 			final RandomAccessibleInterval<T> output //
 	) {
 		final double[] sigmas = new double[input.numDimensions()];

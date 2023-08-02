@@ -32,11 +32,14 @@ package net.imagej.ops2.types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.roi.labeling.LabelingMapping;
 
 import org.scijava.priority.Priority;
+import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
+import org.scijava.types.TypeTools;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -48,34 +51,31 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-public class LabelingMappingTypeExtractor implements TypeExtractor<LabelingMapping<?>> {
+public class LabelingMappingTypeExtractor implements TypeExtractor {
 
-	@Override
-	public Type reify(final TypeReifier t, final LabelingMapping<?> o, final int n) {
-		if (n != 0)
-			throw new IndexOutOfBoundsException();
+	@Override public double getPriority() {
+		return Priority.LOW;
+	}
 
+	@Override public boolean canReify(TypeReifier r, Class<?> object) {
+		return LabelingMapping.class.isAssignableFrom(object);
+	}
+
+	@Override public Type reify(TypeReifier r, Object object) {
+		if (!(object instanceof LabelingMapping))
+			throw new IllegalArgumentException(this + " cannot reify " + object);
+		LabelingMapping<?> mapping = (LabelingMapping<?>) object;
 		// determine the type arg of the mapping through looking at the Set of Labels
 		// (o.getLabels() returns a Set<T>, which can be reified by another TypeService
 		// plugin).
-		Type labelingMappingSet = t.reify(o.getLabels());
+		Type labelingMappingSet = r.reify(mapping.getLabels());
 		// sanity check, argType will always be a set so argType should always be a
 		// ParameterizedType
 		if (!(labelingMappingSet instanceof ParameterizedType))
 			throw new IllegalArgumentException("Impossible LabelingMapping provided as input");
 		// The type arg of argType is the same type arg of o.
-		return ((ParameterizedType) labelingMappingSet).getActualTypeArguments()[0];
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<LabelingMapping<?>> getRawType() {
-		return (Class) LabelingMapping.class;
-	}
-
-	@Override
-	public double priority() {
-		return Priority.LOW;
+		Type elementType = ((ParameterizedType) labelingMappingSet).getActualTypeArguments()[0];
+		return TypeTools.raiseParametersToClass(object.getClass(), LabelingMapping.class, new Type[] {elementType});
 	}
 
 

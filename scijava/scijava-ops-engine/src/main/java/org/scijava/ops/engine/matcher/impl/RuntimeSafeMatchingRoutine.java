@@ -68,7 +68,6 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	/**
 	 * Performs several checks, whether the specified candidate:</br>
 	 * </br>
-	 * * {@link #isValid(OpCandidate)}</br>
 	 * * {@link #outputsMatch(OpCandidate, HashMap)}</br>
 	 * * has a matching number of args</br>
 	 * * {@link #missArgs(OpCandidate, Type[])}</br>
@@ -83,7 +82,6 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 	{
 		final ArrayList<OpCandidate> validCandidates = new ArrayList<>();
 		for (final OpCandidate candidate : candidates) {
-			if (!isValid(candidate)) continue;
 			final Type[] args = candidate.paddedArgs();
 			if (args == null) continue;
 			if (missArgs(candidate, args)) continue;
@@ -200,20 +198,6 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Determines if the specified candidate is valid and sets status code if not.
-	 *
-	 * @param candidate the candidate to check
-	 * @return whether the candidate is valid
-	 */
-	private boolean isValid(final OpCandidate candidate) {
-		if (candidate.opInfo().isValid()) {
-			return true;
-		}
-		candidate.setStatus(StatusCode.INVALID_STRUCT);
-		return false;
 	}
 
 	/**

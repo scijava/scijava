@@ -1,6 +1,7 @@
 
 package org.scijava.ops.engine;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,9 +23,9 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		implements OpCollection {
 
 	public static void goodDep( //
-		@OpDependency(name = "someDep") Function<String, Long> op, //
-		List<String> in, //
-		List<Long> out //
+			@OpDependency(name = "someDep") Function<String, Long> op, //
+			List<String> in, //
+			List<Long> out //
 	) {
 		out.clear();
 		for (String s : in)
@@ -34,18 +35,17 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	@Test
 	public void testOpDependencyBefore() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod(//
-			"goodDep", //
-			Function.class, //
-			List.class, //
-			List.class //
+				"goodDep", //
+				Function.class, //
+				List.class, //
+				List.class //
 		);
 		var info = new OpMethodInfo( //
-			m, //
-			Computers.Arity1.class, //
-			new DefaultHints(), //
-			"test.dependencyBeforeInput" //
+				m, //
+				Computers.Arity1.class, //
+				new DefaultHints(), //
+				"test.dependencyBeforeInput" //
 		);
-		Assertions.assertEquals(null, info.getValidityException());
 	}
 
 	public static void badDep( //
@@ -66,16 +66,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 				Function.class, //
 				List.class //
 		);
-		var info = new OpMethodInfo( //
-					m, //
-					Computers.Arity1.class, //
-					new DefaultHints(), //
-					"test.dependencyAfterInput" //
-		);
-		ValidityException exc = info.getValidityException();
-		String expMsg = "java.lang.IllegalArgumentException: Op Dependencies in " +
-			"static methods must come before any other parameters!";
-		Assertions.assertEquals(expMsg, exc.problems().get(0).getMessage());
+		createInvalidInfo(m, Computers.Arity1.class, "test.dependencyAfterInput");
 	}
 
 	public static void goodThenBadDep( //
@@ -98,16 +89,24 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 				Function.class, //
 				List.class //
 		);
-		var info = new OpMethodInfo( //
-				m, //
-				Computers.Arity1.class, //
-				new DefaultHints(), //
-				"test.dependencyBeforeAndAfterInput" //
-		);
-		ValidityException exc = info.getValidityException();
-		String expMsg = "java.lang.IllegalArgumentException: Op Dependencies in " +
-				"static methods must come before any other parameters!";
-		Assertions.assertEquals(expMsg, exc.problems().get(0).getMessage());
+		createInvalidInfo(m, Computers.Arity1.class, "test.dependencyBeforeAndAfterInput");
 	}
 
+	/**
+	 * Helper method for testing ops with dependencies before other params
+	 */
+	private void createInvalidInfo(Method m, Class<?> arity, String... names) {
+		try {
+			new OpMethodInfo( //
+					m, //
+					arity, //
+					new DefaultHints(), //
+					names
+			);
+		} catch (ValidityException exc) {
+			String expMsg = "java.lang.IllegalArgumentException: Op Dependencies in " +
+					"static methods must come before any other parameters!";
+			Assertions.assertEquals(expMsg, exc.problems().get(0).getMessage());
+		}
+	}
 }

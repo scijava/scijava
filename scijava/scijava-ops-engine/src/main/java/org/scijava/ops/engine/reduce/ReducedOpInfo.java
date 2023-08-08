@@ -29,8 +29,6 @@ public class ReducedOpInfo implements OpInfo {
 
 	private final Hints hints;
 	private final Struct struct;
-	private ValidityException validityException;
-
 	public ReducedOpInfo(OpInfo src, Type reducedOpType, int paramsReduced) {
 		this.srcInfo = src;
 		this.reducedOpType = reducedOpType;
@@ -41,8 +39,8 @@ public class ReducedOpInfo implements OpInfo {
 		RetypingRequest r = retypingRequest();
 		this.struct = Structs.from(r, reducedOpType, problems, new OpResizingMemberParser());
 
-		if (problems.size() > 0) {
-			validityException = new ValidityException(problems);
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
 		}
 	}
 
@@ -170,16 +168,6 @@ public class ReducedOpInfo implements OpInfo {
 					"\nProvided Op dependencies were: " + Objects.toString(dependencies),
 				ex);
 		}
-	}
-
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
 	}
 
 	@Override

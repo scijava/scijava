@@ -95,10 +95,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 	/** Create a StructInstance using the Struct metadata backed by an object of the op itself. */
 	StructInstance<?> createOpInstance(List<?> dependencies);
 
-	// TODO Consider if we really want to keep the following methods.
-	boolean isValid();
-	ValidityException getValidityException();
-	
 	AnnotatedElement getAnnotationBearer();
 
 	@Override

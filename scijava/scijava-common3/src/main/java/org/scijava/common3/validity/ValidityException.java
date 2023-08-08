@@ -10,7 +10,7 @@ import java.util.List;
  * @author Curtis Rueden
  * @author Gabriel Selzer
  */
-public final class ValidityException extends Exception {
+public final class ValidityException extends RuntimeException {
 
 	private final List<ValidityProblem> problems;
 

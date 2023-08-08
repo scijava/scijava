@@ -44,7 +44,6 @@ public class OpAdaptationInfo implements OpInfo {
 	private final Hints hints;
 
 	private Struct struct;
-	private ValidityException validityException;
 
 	public OpAdaptationInfo(OpInfo srcInfo, Type type,
 		InfoChain adaptorChain)
@@ -52,25 +51,19 @@ public class OpAdaptationInfo implements OpInfo {
 		this.srcInfo = srcInfo;
 		this.adaptorChain = adaptorChain;
 		this.type = type;
+		this.hints = srcInfo.declaredHints().plus(Adaptation.FORBIDDEN);
 
 		// NOTE: since the source Op has already been shown to be valid, there is
-		// not
-		// much for us to do here.
+		// not much for us to do here.
 		List<ValidityProblem> problems = new ArrayList<>();
 		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
 		
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
 		struct = Structs.from(r, type, problems, new OpRetypingMemberParser());
-		try {
-			OpUtils.checkHasSingleOutput(struct);
+		OpUtils.ensureHasSingleOutput(struct, problems);
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
 		}
-		catch (ValidityException exc) {
-			problems.addAll(exc.problems());
-		}
-		if (!problems.isEmpty()) validityException = new ValidityException(
-			problems);
-
-		this.hints = srcInfo.declaredHints().plus(Adaptation.FORBIDDEN);
 	}
 
 	@Override
@@ -122,16 +115,6 @@ public class OpAdaptationInfo implements OpInfo {
 		final Object op = srcInfo.createOpInstance(dependencies).object();
 		final Object adaptedOp = adaptorInstance.op().apply(op);
 		return struct().createInstance(adaptedOp);
-	}
-
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
 	}
 
 	@Override

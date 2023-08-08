@@ -64,8 +64,6 @@ public class OpFieldInfo implements OpInfo {
 	private final double priority;
 
 	private Struct struct;
-	private ValidityException validityException;
-
 	private final Hints hints;
 
 	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final String... names) {
@@ -73,7 +71,7 @@ public class OpFieldInfo implements OpInfo {
 	}
 
 	public OpFieldInfo(final Object instance, final Field field, final Hints hints, final double priority, final String... names) {
-		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, Priority.NORMAL, names);
+		this(instance, field, Versions.getVersion(field.getDeclaringClass()), hints, priority, names);
 	}
 
 	public OpFieldInfo(final Object instance, final Field field, final String version, final Hints hints, final String... names) {
@@ -86,6 +84,7 @@ public class OpFieldInfo implements OpInfo {
 		this.field = field;
 		this.names = Arrays.asList(names);
 		this.priority = priority;
+		this.hints = hints;
 
 		if (Modifier.isStatic(field.getModifiers())) {
 			// Field is static; instance must be null.
@@ -108,20 +107,14 @@ public class OpFieldInfo implements OpInfo {
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
-		try {
-			Type structType = Types.fieldType(field, field.getDeclaringClass());
-			FieldInstance fieldInstance = new FieldInstance(field, instance);
-			struct = Structs.from(fieldInstance, structType, problems, new FieldParameterMemberParser());
-			OpUtils.checkHasSingleOutput(struct);
-			// NB: Contextual parameters not supported for now.
-		} catch (ValidityException e) {
-			problems.addAll(e.problems());
-		}
-		if (!problems.isEmpty()) {
-			validityException = new ValidityException(problems);
-		}
+		Type structType = Types.fieldType(field, field.getDeclaringClass());
+		FieldInstance fieldInstance = new FieldInstance(field, instance);
+		struct = Structs.from(fieldInstance, structType, problems, new FieldParameterMemberParser());
+		OpUtils.ensureHasSingleOutput(struct, problems);
 
-		this.hints = hints;
+		if (!problems.isEmpty()) {
+			throw new ValidityException(problems);
+		}
 	}
 
 	// -- OpInfo methods --
@@ -181,16 +174,6 @@ public class OpFieldInfo implements OpInfo {
 		}
 	}
 
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
-	}
-
-	@Override
-	public boolean isValid() {
-		return validityException == null;
-	}
-	
 	@Override
 	public AnnotatedElement getAnnotationBearer() {
 		return field;

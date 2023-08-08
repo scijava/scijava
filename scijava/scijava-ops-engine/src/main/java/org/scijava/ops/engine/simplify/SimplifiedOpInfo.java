@@ -44,7 +44,6 @@ public class SimplifiedOpInfo implements OpInfo {
 	private final Hints hints;
 
 	private Struct struct;
-	private ValidityException validityException;
 
 	public SimplifiedOpInfo(OpInfo info, OpEnvironment env, SimplificationMetadata metadata) {
 		this(info, metadata, calculatePriority(info, metadata, env));
@@ -76,7 +75,7 @@ public class SimplifiedOpInfo implements OpInfo {
 		this.hints = srcInfo.declaredHints().plus(Simplification.FORBIDDEN);
 
 		if(!problems.isEmpty()) {
-			validityException = new ValidityException(problems);
+			throw new ValidityException(problems);
 		}
 	}
 
@@ -187,16 +186,6 @@ public class SimplifiedOpInfo implements OpInfo {
 	@Override
 	public String implementationName() {
 		return srcInfo.implementationName() + " simplified to a " + opType();
-	}
-
-	@Override
-	public boolean isValid() {
-		return srcInfo.isValid();
-	}
-
-	@Override
-	public ValidityException getValidityException() {
-		return validityException;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ package org.scijava.ops.engine.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.scijava.common3.validity.ValidityException;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.*;
 import org.scijava.ops.engine.OpUtils;
@@ -28,8 +29,13 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator
 		String version = Versions.getVersion(c);
 		Hints hints = formHints(c.getAnnotation(OpHints.class));
 		double priority = p.priority();
-		return Collections.singletonList(new OpClassInfo(c, version, hints,
-			priority, parsedOpNames));
+		try {
+			return Collections.singletonList(
+					new OpClassInfo(c, version, hints, priority, parsedOpNames));
+		} catch (ValidityException e) {
+			// TODO: Log exception
+			return Collections.emptyList();
+		}
 	}
 
 	@Override public boolean canGenerateFrom(Object o) {

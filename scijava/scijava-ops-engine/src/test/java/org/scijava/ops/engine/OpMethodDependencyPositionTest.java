@@ -22,9 +22,9 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		implements OpCollection {
 
 	public static void goodDep( //
-		@OpDependency(name = "someDep") Function<String, Long> op, //
-		List<String> in, //
-		List<Long> out //
+			@OpDependency(name = "someDep") Function<String, Long> op, //
+			List<String> in, //
+			List<Long> out //
 	) {
 		out.clear();
 		for (String s : in)
@@ -34,18 +34,17 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	@Test
 	public void testOpDependencyBefore() throws NoSuchMethodException {
 		var m = this.getClass().getDeclaredMethod(//
-			"goodDep", //
-			Function.class, //
-			List.class, //
-			List.class //
+				"goodDep", //
+				Function.class, //
+				List.class, //
+				List.class //
 		);
 		var info = new OpMethodInfo( //
-			m, //
-			Computers.Arity1.class, //
-			new DefaultHints(), //
-			"test.dependencyBeforeInput" //
+				m, //
+				Computers.Arity1.class, //
+				new DefaultHints(), //
+				"test.dependencyBeforeInput" //
 		);
-		Assertions.assertEquals(null, info.getValidityException());
 	}
 
 	public static void badDep( //

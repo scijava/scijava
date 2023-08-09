@@ -43,7 +43,7 @@ public abstract class SubTypeExtractor<T> implements TypeExtractor {
 				.getSimpleName() + "!");
 		@SuppressWarnings("unchecked")
 		final Type[] typeVars = getTypeParameters(r, (T) object);
-		return TypeTools.raiseParametersToClass(object.getClass(), getRawType(),
+		return TypeTools.parameterizeViaSuperType(object.getClass(), getRawType(),
 			typeVars);
 	}
 

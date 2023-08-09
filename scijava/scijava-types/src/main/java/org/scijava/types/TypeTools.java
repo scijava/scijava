@@ -304,7 +304,20 @@ public final class TypeTools {
 		return true;
 	}
 
-	public static Type raiseParametersToClass(Class<?> cls, final Class<?> superCls, final Type... superClsTypeVars) {
+	/**
+	 * Returns {@code cls}, parameterized with {@link TypeVariable} bounds defined
+	 * by a set of type parameters <b>on some superclass </b> of {@code cls}
+	 * 
+	 * @param cls the {@link Class} to be parameterized
+	 * @param superCls a super{@link Class} of {@code cls}
+	 * @param superClsTypeVars the type parameters of {@code supercls}, to be
+	 *          raised to the {@link Class} {@code cls}
+	 * @return {@code cls}, but parameterized with the type variables in
+	 *         {@code superClsTypeVars} against superclass {@code superCls}
+	 */
+	public static Type parameterizeViaSuperType(Class<?> cls, final Class<?> superCls,
+		final Type... superClsTypeVars)
+	{
 		Type t = Types.parameterizeRaw(cls);
 		Type[] typeVars = GenericAssignability.typeParamsAgainstClass(t, superCls);
 		if (typeVars.length != superClsTypeVars.length) {
@@ -315,8 +328,8 @@ public final class TypeTools {
 		}
 		Map<TypeVariable<?>, Type> map = new HashMap<>();
 		for (int i = 0; i < typeVars.length; i++) {
-			if (typeVars[i] instanceof TypeVariable)
-				map.put((TypeVariable<?>) typeVars[i], superClsTypeVars[i]);
+			if (typeVars[i] instanceof TypeVariable) map.put(
+				(TypeVariable<?>) typeVars[i], superClsTypeVars[i]);
 		}
 		return Types.mapVarToTypes(t, map);
 	}

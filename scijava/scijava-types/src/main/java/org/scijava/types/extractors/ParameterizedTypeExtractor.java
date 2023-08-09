@@ -129,7 +129,7 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 			}
 		}
 
-		// fill in any remaining unresolved type parameters with wildcards
+		// If there are any unresolved type parameters, fill them in with wildcards
 		for (final TypeVariable<?> typeVar : typeVars) {
 			resolved.putIfAbsent(typeVar, new Any());
 		}

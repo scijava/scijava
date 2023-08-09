@@ -31,16 +31,13 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
-
-import net.imglib2.outofbounds.OutOfBoundsFactory;
-import org.scijava.priority.Priority;
-import org.scijava.types.Any;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
 import org.scijava.types.Types;
+
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 
 /**
  * {@link TypeExtractor} plugin which operates on
@@ -48,20 +45,23 @@ import org.scijava.types.Types;
  *
  * @author Gabriel Selzer
  */
-public class OutOfBoundsConstantValueFactoryTypeExtractor
-		implements TypeExtractor {
+public class OutOfBoundsConstantValueFactoryTypeExtractor extends
+	SubTypeExtractor<OutOfBoundsConstantValueFactory<?, ?>>
+{
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return OutOfBoundsConstantValueFactory.class.isAssignableFrom(object);
+	@Override
+	protected Class<?> getRawType() {
+		return OutOfBoundsConstantValueFactory.class;
 	}
 
-	@Override public Type reify(TypeReifier r, Object object) {
-		if (!(object instanceof OutOfBoundsConstantValueFactory))
-			throw new IllegalArgumentException(this + " cannot reify " + object);
-		OutOfBoundsConstantValueFactory<?, ?> oobcvf = (OutOfBoundsConstantValueFactory<?, ?>) object;
-		Type elementType = r.reify(oobcvf.getValue());
-		Type raiType = Types.parameterize(RandomAccessibleInterval.class, new Type[] {elementType});
-		return TypeTools.raiseParametersToClass(object.getClass(), OutOfBoundsFactory.class, new Type[] {elementType, raiType});
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r,
+		OutOfBoundsConstantValueFactory<?, ?> object)
+	{
+		Type elementType = r.reify(object.getValue());
+		Type raiType = Types.parameterize(RandomAccessibleInterval.class,
+			new Type[] { elementType });
+		return new Type[] { elementType, raiType };
 	}
 
 }

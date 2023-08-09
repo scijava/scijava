@@ -31,13 +31,13 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.util.Util;
-
 import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
+
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.util.Util;
 
 /**
  * {@link TypeExtractor} plugin which operates on
@@ -49,23 +49,25 @@ import org.scijava.types.TypeTools;
  *
  * @author Gabriel Selzer
  */
-public class RAITypeExtractor implements TypeExtractor {
+public class RAITypeExtractor extends
+	SubTypeExtractor<RandomAccessibleInterval<?>>
+{
 
 	@Override
-	public Type reify(final TypeReifier t, final Object object) {
-		if (!(object instanceof RandomAccessibleInterval))
-			throw new IllegalArgumentException(this + " cannot reify " + object);
-		RandomAccessibleInterval<?> rai = (RandomAccessibleInterval<?>) object;
-		Type componentType = t.reify(Util.getTypeFromInterval(rai));
-		return TypeTools.raiseParametersToClass(object.getClass(), RandomAccessibleInterval.class, new Type[] {componentType});
-	}
-
-	@Override public double getPriority() {
+	public double getPriority() {
 		return Priority.LOW;
 	}
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return RandomAccessibleInterval.class.isAssignableFrom(object);
+	@Override
+	protected Class<?> getRawType() {
+		return RandomAccessibleInterval.class;
+	}
+
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r,
+		RandomAccessibleInterval<?> object)
+	{
+		return new Type[] { r.reify(Util.getTypeFromInterval(object)) };
 	}
 
 }

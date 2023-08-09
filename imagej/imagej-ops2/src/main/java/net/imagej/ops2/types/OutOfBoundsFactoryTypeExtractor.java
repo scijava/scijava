@@ -33,14 +33,15 @@ import java.lang.reflect.Type;
 
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
 
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 
 /**
- * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory} objects.
+ * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory}
+ * objects.
  * <p>
  * For performance reasons, we examine only the first element of the iteration,
  * which may be a more specific type than later elements. Hence the generic type
@@ -49,20 +50,25 @@ import net.imglib2.outofbounds.OutOfBoundsFactory;
  *
  * @author Curtis Rueden
  */
-public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor {
+public class OutOfBoundsFactoryTypeExtractor extends
+	SubTypeExtractor<OutOfBoundsFactory<?, ?>>
+{
 
-	@Override public double getPriority() {
+	@Override
+	public double getPriority() {
 		return Priority.LOW;
 	}
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return OutOfBoundsFactory.class.isAssignableFrom(object);
+	@Override
+	protected Class<?> getRawType() {
+		return OutOfBoundsFactory.class;
 	}
 
-	@Override public Type reify(TypeReifier r, Object object) {
-		if (!(object instanceof OutOfBoundsFactory))
-			throw new IllegalArgumentException(this + " cannot reify " + object);
-		return TypeTools.raiseParametersToClass(object.getClass(), OutOfBoundsFactory.class, new Type[] {new Any(), new Any()});
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r,
+		OutOfBoundsFactory<?, ?> object)
+	{
+		return new Type[] { new Any(), new Any() };
 	}
 
 }

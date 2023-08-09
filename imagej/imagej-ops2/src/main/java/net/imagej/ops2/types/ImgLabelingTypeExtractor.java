@@ -32,39 +32,32 @@ package net.imagej.ops2.types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import org.scijava.types.SubTypeExtractor;
+import org.scijava.types.TypeExtractor;
+import org.scijava.types.TypeReifier;
+
 import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.view.Views;
 
-import org.scijava.priority.Priority;
-import org.scijava.types.TypeExtractor;
-import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
-
 /**
- * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
- * <p>
- * For performance reasons, we examine only the first element of the iteration,
- * which may be a more specific type than later elements. Hence the generic type
- * given by this extraction may be overly constrained.
- * </p>
+ * {@link TypeExtractor} plugin which operates on {@link ImgLabeling} objects.
  *
  * @author Curtis Rueden
+ * @author Gabriel Selzer
  */
-public class ImgLabelingTypeExtractor implements TypeExtractor {
+public class ImgLabelingTypeExtractor extends
+	SubTypeExtractor<ImgLabeling<?, ?>>
+{
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return ImgLabeling.class.isAssignableFrom(object);
+	@Override
+	protected Class<?> getRawType() {
+		return ImgLabeling.class;
 	}
 
 	@Override
-	public Type reify(final TypeReifier t, final Object object) {
-		if (!(object instanceof ImgLabeling))
-			throw new IllegalArgumentException(this + " cannot reify " + object);
-
-		ImgLabeling<?, ?> labeling = (ImgLabeling<?, ?>) object;
-
+	protected Type[] getTypeParameters(TypeReifier r, ImgLabeling<?, ?> object) {
 		// o.firstElement will return a LabelingType
-		Type labelingType = t.reify(labeling.firstElement());
+		Type labelingType = r.reify(object.firstElement());
 		// sanity check
 		if (!(labelingType instanceof ParameterizedType))
 			throw new IllegalArgumentException(
@@ -73,10 +66,9 @@ public class ImgLabelingTypeExtractor implements TypeExtractor {
 		ParameterizedType pType = (ParameterizedType) labelingType;
 		Type mappingType = pType.getActualTypeArguments()[0];
 		// otherwise n == 1
-		Type elementType = t.reify(Views.iterable(labeling.getSource())
+		Type elementType = r.reify(Views.iterable(object.getSource())
 			.firstElement());
-		return TypeTools.raiseParametersToClass(object.getClass(),
-			ImgLabeling.class, new Type[] { mappingType, elementType });
+		return new Type[] { mappingType, elementType };
 	}
 
 }

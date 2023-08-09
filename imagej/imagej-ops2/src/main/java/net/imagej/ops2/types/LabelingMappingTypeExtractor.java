@@ -32,9 +32,9 @@ package net.imagej.ops2.types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
 
 import net.imglib2.roi.labeling.LabelingMapping;
 
@@ -48,28 +48,30 @@ import net.imglib2.roi.labeling.LabelingMapping;
  *
  * @author Curtis Rueden
  */
-public class LabelingMappingTypeExtractor implements TypeExtractor {
+public class LabelingMappingTypeExtractor extends
+	SubTypeExtractor<LabelingMapping<?>>
+{
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return LabelingMapping.class.isAssignableFrom(object);
+	@Override
+	protected Class<?> getRawType() {
+		return LabelingMapping.class;
 	}
 
-	@Override public Type reify(TypeReifier r, Object object) {
-		if (!(object instanceof LabelingMapping))
-			throw new IllegalArgumentException(this + " cannot reify " + object);
-		LabelingMapping<?> mapping = (LabelingMapping<?>) object;
-		// determine the type arg of the mapping through looking at the Set of Labels
-		// (o.getLabels() returns a Set<T>, which can be reified by another TypeService
-		// plugin).
-		Type labelingMappingSet = r.reify(mapping.getLabels());
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, LabelingMapping<?> object) {
+		// determine the type arg of the mapping through looking at the Set of
+		// Labels (object.getLabels() returns a Set<T>, which can be reified by
+		// another TypeService plugin).
+		Type labelingMappingSet = r.reify(object.getLabels());
 		// sanity check, argType will always be a set so argType should always be a
 		// ParameterizedType
 		if (!(labelingMappingSet instanceof ParameterizedType))
-			throw new IllegalArgumentException("Impossible LabelingMapping provided as input");
+			throw new IllegalArgumentException(
+				"Impossible LabelingMapping provided as input");
 		// The type arg of argType is the same type arg of o.
-		Type elementType = ((ParameterizedType) labelingMappingSet).getActualTypeArguments()[0];
-		return TypeTools.raiseParametersToClass(object.getClass(), LabelingMapping.class, new Type[] {elementType});
+		Type elementType = ((ParameterizedType) labelingMappingSet)
+			.getActualTypeArguments()[0];
+		return new Type[] { elementType };
 	}
-
 
 }

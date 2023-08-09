@@ -34,9 +34,9 @@ import java.util.stream.StreamSupport;
 
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
 import org.scijava.types.Types;
 
 /**
@@ -49,32 +49,33 @@ import org.scijava.types.Types;
  *
  * @author Curtis Rueden
  */
-public class IterableTypeExtractor implements TypeExtractor {
+public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 
 	@Override
-	public Type reify(final TypeReifier t, Object object) {
-		if (!(object instanceof Iterable)) throw new IllegalArgumentException(this + " is only capable of reifying Iterables!");
-
-		// Obtain the element type using the TypeService.
-		int typesToCheck = 100;
-		// can we make this more efficient (possibly a parallel stream)?
-		Type[] types = StreamSupport.stream(((Iterable<?>) object).spliterator(), false) //
-			.limit(typesToCheck) //
-			.map(t::reify) //
-			.toArray(Type[]::new);
-
-		Type actual = Types.greatestCommonSuperType(types, true);
-		if (actual == null) actual = new Any();
-		return TypeTools.raiseParametersToClass(object.getClass(), Iterable.class, new Type[] {actual});
-	}
-
-	@Override public double getPriority() {
+	public double getPriority() {
 		return Priority.VERY_LOW;
 	}
 
+	@Override
+	protected Class<?> getRawType() {
+		return Iterable.class;
+	}
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return Iterable.class.isAssignableFrom(object);
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, Iterable<?> object) {
+		// Obtain the element type using the TypeService.
+		int typesToCheck = 100;
+		// can we make this more efficient (possibly a parallel stream)?
+		Type[] types = StreamSupport.stream(object.spliterator(), false) //
+			.limit(typesToCheck) //
+			.map(r::reify) //
+			.toArray(Type[]::new);
+
+		Type actual = Types.greatestCommonSuperType(types, true);
+		if (actual == null) {
+			actual = new Any();
+		}
+		return new Type[] { actual };
 	}
 
 }

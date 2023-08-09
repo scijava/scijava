@@ -304,7 +304,7 @@ public final class TypeTools {
 		return true;
 	}
 
-	public static Type raiseParametersToClass(Class<?> cls, final Class<?> superCls, final Type[] superClsTypeVars) {
+	public static Type raiseParametersToClass(Class<?> cls, final Class<?> superCls, final Type... superClsTypeVars) {
 		Type t = Types.parameterizeRaw(cls);
 		Type[] typeVars = GenericAssignability.typeParamsAgainstClass(t, superCls);
 		if (typeVars.length != superClsTypeVars.length) {

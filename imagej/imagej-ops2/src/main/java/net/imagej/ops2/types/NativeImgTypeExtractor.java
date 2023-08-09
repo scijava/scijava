@@ -32,9 +32,9 @@ package net.imagej.ops2.types;
 import java.lang.reflect.Type;
 
 import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
 
 import net.imglib2.img.NativeImg;
 
@@ -50,7 +50,7 @@ import net.imglib2.img.NativeImg;
  *
  * @author Gabriel Selzer
  */
-public class NativeImgTypeExtractor implements TypeExtractor {
+public class NativeImgTypeExtractor extends SubTypeExtractor<NativeImg<?, ?>> {
 
 	@Override
 	public double getPriority() {
@@ -58,19 +58,15 @@ public class NativeImgTypeExtractor implements TypeExtractor {
 	}
 
 	@Override
-	public boolean canReify(TypeReifier r, Class<?> object) {
-		return NativeImg.class.isAssignableFrom(object);
+	protected Class<?> getRawType() {
+		return NativeImg.class;
 	}
 
 	@Override
-	public Type reify(TypeReifier r, Object object) {
-		if (!(object instanceof NativeImg)) throw new IllegalArgumentException(
-			this + " cannot reify " + object);
-		NativeImg<?, ?> img = (NativeImg<?, ?>) object;
-		Type componentType = r.reify(img.firstElement());
-		Type backingType = r.reify(img.update(img.cursor()));
-		return TypeTools.raiseParametersToClass(object.getClass(), NativeImg.class,
-			new Type[] { componentType, backingType });
+	protected Type[] getTypeParameters(TypeReifier r, NativeImg<?, ?> object) {
+		Type componentType = r.reify(object.firstElement());
+		Type backingType = r.reify(object.update(object.cursor()));
+		return new Type[] { componentType, backingType };
 	}
 
 }

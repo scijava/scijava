@@ -31,35 +31,27 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.img.ImgFactory;
-import net.imglib2.img.array.ArrayImg;
-
-import org.scijava.priority.Priority;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
-import org.scijava.types.TypeTools;
+
+import net.imglib2.img.ImgFactory;
 
 /**
- * {@link TypeExtractor} plugin which operates on {@link ArrayImg} objects.
- * <p>
- * For performance reasons, we examine only the first element of the iteration,
- * which may be a more specific type than later elements. Hence the generic type
- * given by this extraction may be overly constrained.
- * </p>
+ * {@link TypeExtractor} plugin which operates on {@link ImgFactory} objects.
  *
  * @author Gabriel Selzer
  */
-public class ImgFactoryTypeExtractor implements TypeExtractor {
+public class ImgFactoryTypeExtractor extends SubTypeExtractor<ImgFactory<?>> {
 
-	@Override public boolean canReify(TypeReifier r, Class<?> object) {
-		return ImgFactory.class.isAssignableFrom(object);
+	@Override
+	protected Class<?> getRawType() {
+		return ImgFactory.class;
 	}
 
-	@Override public Type reify(TypeReifier r, Object object) {
-		if (!(object instanceof ImgFactory))
-			throw new IllegalArgumentException(this + " cannot reify " + object);
-		ImgFactory<?> imgFactory = (ImgFactory<?>) object;
-		Type componentType = r.reify(imgFactory.type());
-		return TypeTools.raiseParametersToClass(object.getClass(), ImgFactory.class, new Type[] {componentType});
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, ImgFactory<?> object) {
+		return new Type[] { r.reify(object.type()) };
 	}
+
 }

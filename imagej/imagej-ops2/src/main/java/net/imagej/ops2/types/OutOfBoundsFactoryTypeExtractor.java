@@ -31,14 +31,13 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.img.ImgFactory;
-import net.imglib2.outofbounds.OutOfBoundsFactory;
-
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.TypeTools;
+
+import net.imglib2.outofbounds.OutOfBoundsFactory;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory} objects.

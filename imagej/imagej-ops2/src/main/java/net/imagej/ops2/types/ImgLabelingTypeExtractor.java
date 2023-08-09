@@ -79,9 +79,4 @@ public class ImgLabelingTypeExtractor implements TypeExtractor {
 			ImgLabeling.class, new Type[] { mappingType, elementType });
 	}
 
-	@Override
-	public double getPriority() {
-		return Priority.NORMAL;
-	}
-
 }

@@ -20,7 +20,7 @@ import org.scijava.types.Types;
 public class ParameterizedTypeExtractor implements TypeExtractor {
 
 	@Override public double getPriority() {
-		return Priority.VERY_LOW;
+		return Priority.EXTREMELY_LOW;
 	}
 
 	@Override public boolean canReify(TypeReifier r, Class<?> object) {
@@ -158,7 +158,6 @@ public class ParameterizedTypeExtractor implements TypeExtractor {
 	 * supertype.
 	 * </p>
 	 *
-	 * @see #reify(Object)
 	 */
 	private Map<TypeVariable<?>, Type> args(TypeReifier t, final Object o,
 		final Class<?> superType)

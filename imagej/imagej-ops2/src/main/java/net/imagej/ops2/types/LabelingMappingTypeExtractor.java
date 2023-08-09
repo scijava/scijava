@@ -32,14 +32,11 @@ package net.imagej.ops2.types;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import net.imglib2.outofbounds.OutOfBoundsFactory;
-import net.imglib2.roi.labeling.LabelingMapping;
-
-import org.scijava.priority.Priority;
-import org.scijava.types.Any;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.TypeTools;
+
+import net.imglib2.roi.labeling.LabelingMapping;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -52,10 +49,6 @@ import org.scijava.types.TypeTools;
  * @author Curtis Rueden
  */
 public class LabelingMappingTypeExtractor implements TypeExtractor {
-
-	@Override public double getPriority() {
-		return Priority.LOW;
-	}
 
 	@Override public boolean canReify(TypeReifier r, Class<?> object) {
 		return LabelingMapping.class.isAssignableFrom(object);

@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.scijava.priority.Priority;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.TypeTools;
@@ -75,7 +76,7 @@ public class MapTypeExtractor extends ParameterizedTypeExtractor {
 	}
 
 	@Override public double getPriority() {
-		return super.getPriority() + 1;
+		return Priority.VERY_LOW;
 	}
 
 	@Override public boolean canReify(TypeReifier r, Class<?> cls) {

@@ -51,10 +51,6 @@ import org.scijava.types.TypeTools;
  */
 public class ImgFactoryTypeExtractor implements TypeExtractor {
 
-	@Override public double getPriority() {
-		return Priority.NORMAL;
-	}
-
 	@Override public boolean canReify(TypeReifier r, Class<?> object) {
 		return ImgFactory.class.isAssignableFrom(object);
 	}

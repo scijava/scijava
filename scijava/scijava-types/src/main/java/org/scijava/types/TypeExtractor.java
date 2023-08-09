@@ -32,6 +32,7 @@ package org.scijava.types;
 import java.lang.reflect.Type;
 
 import org.scijava.priority.Prioritized;
+import org.scijava.priority.Priority;
 
 /**
  * A plugin for extracting generic {@link Type} from instances at runtime.
@@ -45,55 +46,14 @@ import org.scijava.priority.Prioritized;
  */
 public interface TypeExtractor extends Prioritized {
 
-//	/**
-//	 * Extracts the generic type of the given object.
-//	 *
-//	 * @param r a {@link TypeReifier}
-//	 * @param o Object for which the type should be reified.
-//	 * @return The object's generic {@link Type}, or {@code null} if the object is
-//	 *         not supported by this extractor.
-//	 */
-//	default ParameterizedType reify(final TypeReifier r, final T o) {
-//		final TypeVariable<Class<T>>[] typeVars = getRawType().getTypeParameters();
-//		if (typeVars.length == 0) {
-//			throw new IllegalStateException("Class " + getRawType().getName() + " is not a parameterized type");
-//		}
-//		final Type[] types = new Type[typeVars.length];
-//		for (int i = 0; i < types.length; i++) {
-//			types[i] = reify(r, o, i);
-//			if (types[i] == null)
-//				types[i] = new Any();
-//		}
-//		return Types.parameterize(getRawType(), types);
-//	}
-//
-//	/**
-//	 * Extracts the generic type of the given object's Nth type parameter, with
-//	 * respect to the class handled by this type extractor.
-//	 *
-//	 * @param r a {@link TypeReifier}
-//	 * @param o Object for which the type should be reified.
-//	 * @param n Index of the type parameter whose type should be extracted.
-//	 * @return The reified Nth type parameter, or {@code null} if the extractor
-//	 *         cannot process the object.
-//	 * @throws IndexOutOfBoundsException     if {@code n} is less than 0, or greater
-//	 *                                       than
-//	 *                                       {@code getType().getTypeParameters().length}.
-//	 * @throws UnsupportedOperationException if the supported class does not have
-//	 *                                       any type parameters.
-//	 */
-//	default Type reify(final TypeReifier r, final T o, final int n) {
-//		final Type type = reify(r, o);
-//		if (!(type instanceof ParameterizedType)) {
-//			throw new UnsupportedOperationException("Not a parameterized type");
-//		}
-//		final ParameterizedType pType = (ParameterizedType) type;
-//		return pType.getActualTypeArguments()[n];
-//	}
-
 	boolean canReify(final TypeReifier r, final Class<?> object);
 
 	Type reify(final TypeReifier r, final Object object);
+
+	@Override
+	default double getPriority() {
+		return Priority.NORMAL;
+	}
 
 	@Override
 	default void setPriority(final double priority) {

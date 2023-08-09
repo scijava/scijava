@@ -30,10 +30,6 @@
 package org.scijava.types.extractors;
 
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.StreamSupport;
 
 import org.scijava.priority.Priority;
@@ -42,7 +38,6 @@ import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.TypeTools;
 import org.scijava.types.Types;
-import org.scijava.types.inference.GenericAssignability;
 
 /**
  * {@link TypeExtractor} plugin which operates on {@link Iterable} objects.
@@ -74,7 +69,7 @@ public class IterableTypeExtractor implements TypeExtractor {
 	}
 
 	@Override public double getPriority() {
-		return Priority.LOW;
+		return Priority.VERY_LOW;
 	}
 
 

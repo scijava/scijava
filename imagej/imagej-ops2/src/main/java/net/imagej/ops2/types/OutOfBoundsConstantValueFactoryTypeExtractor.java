@@ -51,10 +51,6 @@ import org.scijava.types.Types;
 public class OutOfBoundsConstantValueFactoryTypeExtractor
 		implements TypeExtractor {
 
-	@Override public double getPriority() {
-		return Priority.NORMAL;
-	}
-
 	@Override public boolean canReify(TypeReifier r, Class<?> object) {
 		return OutOfBoundsConstantValueFactory.class.isAssignableFrom(object);
 	}

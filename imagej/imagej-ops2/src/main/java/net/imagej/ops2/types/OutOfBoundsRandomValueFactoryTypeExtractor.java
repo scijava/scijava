@@ -72,10 +72,6 @@ public class OutOfBoundsRandomValueFactoryTypeExtractor implements TypeExtractor
 		return TypeTools.raiseParametersToClass(object.getClass(), OutOfBoundsRandomValueFactory.class, new Type[] {elementType, raiType});
 	}
 
-	@Override public double getPriority() {
-		return Priority.NORMAL;
-	}
-
 	@Override public boolean canReify(TypeReifier r, Class<?> object) {
 		return OutOfBoundsRandomValueFactory.class.isAssignableFrom(object);
 	}

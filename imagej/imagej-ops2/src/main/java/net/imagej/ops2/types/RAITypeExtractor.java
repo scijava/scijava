@@ -61,7 +61,7 @@ public class RAITypeExtractor implements TypeExtractor {
 	}
 
 	@Override public double getPriority() {
-		return Priority.NORMAL;
+		return Priority.LOW;
 	}
 
 	@Override public boolean canReify(TypeReifier r, Class<?> object) {

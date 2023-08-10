@@ -16,3 +16,4 @@ org.scijava.ops.engine.math.Sqrt
 org.scijava.ops.engine.math.Zero
 org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers
 org.scijava.ops.engine.simplify.PrimitiveSimplifiers
+org.scijava.ops.engine.stats.Size

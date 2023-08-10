@@ -62,8 +62,6 @@ public class SimplificationUtils {
 	 */
 	public static ParameterizedType retypeOpType(Type originalOpType, Type[] newArgs, Type newOutType) {
 			// only retype types that we know how to retype
-			if (!(originalOpType instanceof ParameterizedType))
-				throw new IllegalStateException("We hadn't thought about this yet.");
 			Class<?> opType = Types.raw(originalOpType);
 			Method fMethod = OpUtils.findFunctionalMethod(opType);
 

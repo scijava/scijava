@@ -66,6 +66,7 @@ public class SimplifiedOpInfo implements OpInfo {
 			fmts.add(new FunctionalMethodType(newType, m.getIOType()));
 		}
 		// generate new output fmt
+
 		this.opType = SimplificationUtils.retypeOpType(info.opType(), inputTypes,
 			outputType);
 		RetypingRequest r = new RetypingRequest(info.struct(), fmts);

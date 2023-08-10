@@ -134,7 +134,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	 *
 	 * @see MatchingConditions#equals(Object)
 	 */
-	private Map<MatchingConditions, OpInstance<?>> opCache;
+	private final Map<MatchingConditions, OpInstance<?>> opCache = new HashMap<>();
 
 	/**
 	 * Data structure storing all known {@link OpWrapper}s. Each {@link OpWrapper}
@@ -474,9 +474,6 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	}
 
 	private OpInstance<?> getInstance(MatchingConditions conditions) {
-		if (opCache == null) {
-			opCache = new HashMap<>();
-		}
 		return opCache.get(conditions);
 	}
 

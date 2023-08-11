@@ -44,12 +44,12 @@ public class InfoSimplificationGenerator {
 		return info;
 	}
 
-	public OpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) {
+	public SimplifiedOpInfo generateSuitableInfo(OpEnvironment env, OpRef originalRef, Hints hints) {
 		SimplifiedOpRef simpleRef = SimplifiedOpRef.simplificationOf(env, originalRef, hints);
 		return generateSuitableInfo(simpleRef);
 	}
 
-	public OpInfo generateSuitableInfo(SimplifiedOpRef ref) {
+	public SimplifiedOpInfo generateSuitableInfo(SimplifiedOpRef ref) {
 		if(!Types.isAssignable(Types.raw(info.opType()), ref.rawType()))
 				throw new IllegalArgumentException("OpInfo and OpRef do not share an Op type");
 		TypePair[] argPairings = generatePairings(ref);

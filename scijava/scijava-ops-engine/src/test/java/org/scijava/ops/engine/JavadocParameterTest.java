@@ -424,8 +424,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		// test standard op string
 		String expected =
-			"org.scijava.ops.engine.JavadocParameterTest." +
-				"OpMethodPR(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+			"test.javadoc.methodPR(\n" +
 				"	 Inputs:\n" +
 				"		java.util.List<java.lang.String> foo -> the first input\n" +
 				"		java.util.List<java.lang.String> bar -> the second input\n" +
@@ -436,8 +435,7 @@ public class JavadocParameterTest extends AbstractTestEnvironment implements OpC
 
 		// test special op string
 		expected =
-			"org.scijava.ops.engine.JavadocParameterTest." +
-				"OpMethodPR(java.util.List<java.lang.String>,java.util.List<java.lang.String>)(\n" +
+			"test.javadoc.methodPR(\n" +
 				"	 Inputs:\n" +
 				"		java.util.List<java.lang.String> foo -> the first input\n" +
 				"==> 	java.util.List<java.lang.String> bar -> the second input\n" +

@@ -12,6 +12,7 @@ import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.OpUtils;
@@ -155,4 +156,8 @@ public class OpAdaptationInfo implements OpInfo {
 		return IMPL_DECLARATION + ADAPTOR + adaptorChain.signature() + ORIGINAL + srcInfo.id();
 	}
 
+	@Override
+	public String toString() {
+		return OpDescription.basic(this);
+	}
 }

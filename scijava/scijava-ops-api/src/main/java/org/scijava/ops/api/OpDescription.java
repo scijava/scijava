@@ -1,5 +1,6 @@
 package org.scijava.ops.api;
 
+import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 
 import java.util.ArrayList;
@@ -30,20 +31,26 @@ public final class OpDescription {
      */
     public static String basic(final OpInfo info, final Member<?> special) {
         final StringBuilder sb = new StringBuilder();
-        sb.append(info.implementationName()).append("(\n\t Inputs:\n");
+        final List<String> names = info.names();
+        sb.append(names.get(0)).append("(\n\t Inputs:\n");
         List<Member<?>> containers = new ArrayList<>();
         for (final Member<?> arg : info.inputs()) {
-            if (arg.getKey().contains("container")) containers.add(arg);
-            else appendParam(sb, arg, special);
+            if (arg.getIOType() == ItemIO.INPUT) appendParam(sb, arg, special);
+            else containers.add(arg);
         }
         if (containers.isEmpty()) {
             sb.append("\t Outputs:\n");
             appendParam(sb, info.output(), special);
         } else {
             sb.append("\t Containers (I/O):\n");
-            containers.stream().forEach(c -> appendParam(sb, c, special));
+            containers.forEach(c -> appendParam(sb, c, special));
         }
         sb.append(")\n");
+        if (names.size() > 1) {
+            sb.append("Aliases: [");
+            sb.append(String.join(", ", names.subList(1, names.size())));
+            sb.append("]\n");
+        }
         return sb.toString();
     }
 

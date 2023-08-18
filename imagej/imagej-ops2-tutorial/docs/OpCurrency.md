@@ -4,7 +4,7 @@ SciJava Ops is designed for modularity, extensibility, and granularity - by writ
 
 ## Element-wise Ops
 
-Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, ImageJ Ops2 takes care to automagically adapt pixel-wise Ops across a wide variety of image types. Therefore, if you would like to write a pixel-wise Op, we recommend the following structure.
+Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, ImageJ Ops2 takes care to automagically adapt pixel-wise Ops across a wide variety of image types. If you would like to write a pixel-wise Op, we recommend the following structure.
 
 ```java
 

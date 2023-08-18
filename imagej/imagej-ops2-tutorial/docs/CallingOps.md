@@ -1,6 +1,6 @@
 # Calling Ops
 
-Ops are designed to be called from the Op matcher, using the `OpBuilder` syntax - this page describes that syntax in detail.
+Ops are designed to be called from the Op matcher, using the `OpBuilder` syntax. OpBuilder chains follow the [builder pattern](https://refactoring.guru/design-patterns/builder), allowing users to create complex Op calls by "chaining" or appending consecutive, simpler method calls.
 
 On this page, we will be constructing an `OpBuilder` call on an `OpEnvironment ops` to execute a Gaussian Blur on an input image `inImage`, with our output buffer `outImage`.
 

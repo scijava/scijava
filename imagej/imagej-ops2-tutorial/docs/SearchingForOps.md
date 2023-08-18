@@ -48,3 +48,5 @@ This script yields the following printout:
 )
 ]
 ```
+
+**Note**: The no-argument call to `OpEnvironment.descriptions()` will print out *all Ops in the `OpEnvironment`*.

@@ -4,7 +4,7 @@ Ops are designed to be called from the Op matcher, using the `OpBuilder` syntax.
 
 On this page, we will be constructing an `OpBuilder` call on an `OpEnvironment ops` to execute a Gaussian Blur on an input image `inImage`, with our output buffer `outImage`.
 
-# Specifying the name with `.op()`
+## Specifying the name with `.op()`
 
 From the `OpEnvironment`, an `OpBuilder` call is initialized with the method `OpEnvironment.op(String)`, which is used to describe the name of the Op that the `OpBuilder` must return:
 
@@ -12,7 +12,7 @@ From the `OpEnvironment`, an `OpBuilder` call is initialized with the method `Op
 ops.op("filter.gauss")
 ```
 
-# Specifying the number of inputs with `.arityX()`
+## Specifying the number of inputs with `.arityX()`
 
 After providing the name, the `OpBuilder` syntax requires the user to define the **number** of inputs to the Op call; we do this by adding one of the `arityX()` methods to the chain - `arity1()` tells the `OpBuilder` chain to expect one input, `arity2()` expects two inputs, and so on.
 
@@ -22,7 +22,7 @@ In doing a basic gaussian blur, we will pass through the input image `inImage`, 
 ops.op("filter.gauss").arity2()
 ```
 
-# Passing the inputs with `.input()`
+## Passing the inputs with `.input()`
 
 With the arity defined in the `OpBuilder` call, we can then chain the inputs with the `input()` method.
 
@@ -32,7 +32,7 @@ For our gaussian blur, we will pass as inputs our input image `inImage`, and a `
 ops.op("filter.gauss").arity2().input(inImage, 2.0)
 ```
 
-# Passing an output buffer with `.output()`
+## Passing an output buffer with `.output()`
 
 Now that the inputs are specified, we can chain the output buffer using the `output()` method.
 

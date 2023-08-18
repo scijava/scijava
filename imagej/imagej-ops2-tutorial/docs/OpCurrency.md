@@ -7,7 +7,6 @@ SciJava Ops is designed for modularity, extensibility, and granularity - by writ
 Simple pixel-wise operations like addition, inversion, and more can be written on a single pixel (i.e. `RealType`) - therefore, ImageJ Ops2 takes care to automagically adapt pixel-wise Ops across a wide variety of image types. If you would like to write a pixel-wise Op, we recommend the following structure.
 
 ```java
-
 /**
  * A simple pixelwise Op
  * 
@@ -34,7 +33,6 @@ ops.op("my.op").arity2().input(in1, in2).output(out).compute();
 A similar vein of thought works for simple `List`s and `Array`s - if you have an Op that produces a `Double` from another `Double`, there's no need to write a wrapper to work on `Double[]`s - Ops will do that for you!
 
 ```java
-
 /**
  * A simple pixelwise Op
  *

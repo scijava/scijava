@@ -53,7 +53,7 @@ List<Double> inList = ...
 List<Double> outList = ops.op("my.op2").arity1().input(in1).apply();
 ```
 
-## Lifting to Neighborhoods
+## Neighborhood-wise Ops
 
 A slightly more complicated class of algorithms operate on local regions around each input pixel. For this class of algorithms, we recommend writing Ops on an imglib2-algorithm `net.imglib2.algorithm.neighborhood.Neighborhood` object. 
 

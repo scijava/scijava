@@ -33,19 +33,17 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.exceptions.impl.PrivateOpException;
 import org.scijava.ops.engine.struct.FieldInstance;
 import org.scijava.ops.engine.struct.FieldParameterMemberParser;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpField;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Struct;
@@ -102,22 +100,17 @@ public class OpFieldInfo implements OpInfo {
 				// But: we need to have proper case logic for the field being static or not.
 			}
 		}
-		List<ValidityProblem> problems = new ArrayList<>();
 		// Reject all non public fields
 		if (!Modifier.isPublic(field.getModifiers())) {
-			problems.add(new ValidityProblem("Field to parse: " + field + " must be public."));
+			throw new PrivateOpException(field);
 		}
 
 		// NB: Subclassing a collection and inheriting its fields is NOT
 		// ALLOWED!
 		Type structType = Types.fieldType(field, field.getDeclaringClass());
 		FieldInstance fieldInstance = new FieldInstance(field, instance);
-		struct = Structs.from(fieldInstance, structType, problems, new FieldParameterMemberParser());
-		OpUtils.ensureHasSingleOutput(struct, problems);
-
-		if (!problems.isEmpty()) {
-			throw new ValidityException(problems);
-		}
+		struct = Structs.from(fieldInstance, structType, new FieldParameterMemberParser());
+		Ops.ensureHasSingleOutput(implementationName(), struct);
 	}
 
 	// -- OpInfo methods --

@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.spi.Nullable;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
@@ -214,9 +214,9 @@ public class ReductionUtils {
 		StringBuilder sb = new StringBuilder();
 
 		// determine the name of the functional method
-		Class<?> fIface = OpUtils.findFunctionalInterface(Types.raw(info.opType()));
+		Class<?> fIface = Ops.findFunctionalInterface(Types.raw(info.opType()));
 		Method m = InterfaceInference.singularAbstractMethod(fIface);
-		Class<?> srcFIface = OpUtils.findFunctionalInterface(Types.raw(info.srcInfo().opType()));
+		Class<?> srcFIface = Ops.findFunctionalInterface(Types.raw(info.srcInfo().opType()));
 		Method srcM = InterfaceInference.singularAbstractMethod(srcFIface);
 		// determine the name of the output:
 		String opOutput = "out";
@@ -228,7 +228,7 @@ public class ReductionUtils {
 
 		// processing
 		sb.append(" {");
-		if (OpUtils.hasPureOutput(info)) {
+		if (Ops.hasPureOutput(info)) {
 			sb.append("return ");
 		}
 		sb.append("op." + srcM.getName() + "(");

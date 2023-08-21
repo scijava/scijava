@@ -3,22 +3,19 @@ package org.scijava.ops.engine.matcher.adapt;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoTree;
-import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
-import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;
@@ -55,15 +52,11 @@ public class OpAdaptationInfo implements OpInfo {
 
 		// NOTE: since the source Op has already been shown to be valid, there is
 		// not much for us to do here.
-		List<ValidityProblem> problems = new ArrayList<>();
 		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
 		
 		RetypingRequest r = new RetypingRequest(srcInfo.struct(), fmts);
-		struct = Structs.from(r, type, problems, new OpRetypingMemberParser());
-		OpUtils.ensureHasSingleOutput(struct, problems);
-		if (!problems.isEmpty()) {
-			throw new ValidityException(problems);
-		}
+		struct = Structs.from(r, type, new OpRetypingMemberParser());
+		Ops.ensureHasSingleOutput(srcInfo.implementationName(), struct);
 	}
 
 	@Override

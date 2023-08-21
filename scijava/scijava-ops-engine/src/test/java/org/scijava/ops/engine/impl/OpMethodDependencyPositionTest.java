@@ -7,10 +7,10 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.common3.validity.ValidityException;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.exceptions.impl.OpDependencyPositionException;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
@@ -92,17 +92,11 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 	 * Helper method for testing ops with dependencies before other params
 	 */
 	private void createInvalidInfo(Method m, Class<?> arity, String... names) {
-		try {
-			new OpMethodInfo( //
-					m, //
-					arity, //
-					new Hints(), //
-					names
-			);
-		} catch (ValidityException exc) {
-			String expMsg = "java.lang.IllegalArgumentException: Op Dependencies in " +
-					"static methods must come before any other parameters!";
-			Assertions.assertEquals(expMsg, exc.problems().get(0).getMessage());
-		}
+		Assertions.assertThrows(OpDependencyPositionException.class,
+			() -> new OpMethodInfo( //
+				m, //
+				arity, //
+				new Hints(), //
+				names));
 	}
 }

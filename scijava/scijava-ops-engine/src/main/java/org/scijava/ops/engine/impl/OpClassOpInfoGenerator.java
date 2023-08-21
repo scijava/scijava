@@ -4,16 +4,15 @@ package org.scijava.ops.engine.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpInfoGenerator;
-import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;
+import org.scijava.ops.spi.OpHints;
 
 public class OpClassOpInfoGenerator implements OpInfoGenerator
 {
@@ -27,17 +26,12 @@ public class OpClassOpInfoGenerator implements OpInfoGenerator
 		OpClass p = c.getAnnotation(OpClass.class);
 		if (p == null) return Collections.emptyList();
 
-		String[] parsedOpNames = OpUtils.parseOpNames(p.names());
+		String[] parsedOpNames = Ops.parseOpNames(p.names());
 		String version = Versions.getVersion(c);
 		Hints hints = formHints(c.getAnnotation(OpHints.class));
 		double priority = p.priority();
-		try {
-			return Collections.singletonList(
-					new OpClassInfo(c, version, hints, priority, parsedOpNames));
-		} catch (ValidityException e) {
-			// TODO: Log exception
-			return Collections.emptyList();
-		}
+		return Collections.singletonList(new OpClassInfo(c, version, hints,
+			priority, parsedOpNames));
 	}
 
 	@Override public boolean canGenerateFrom(Object o) {

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.engine.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -36,10 +36,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityException;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
+import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.exceptions.impl.MultipleOutputsOpException;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberInstance;
 import org.scijava.struct.Struct;
@@ -52,9 +53,9 @@ import org.scijava.types.Types;
  * @author Curtis Rueden
  * @author David Kolb
  */
-public final class OpUtils {
+public final class Ops {
 
-	private OpUtils() {
+	private Ops() {
 		// NB: prevent instantiation of utility class.
 	}
 
@@ -112,14 +113,12 @@ public final class OpUtils {
 				.collect(Collectors.toList());
 	}
 
-	public static void ensureHasSingleOutput(Struct struct, List<ValidityProblem> problems) throws
-			ValidityException
+	public static void ensureHasSingleOutput(String op, Struct struct)
 	{
 		final long numOutputs = struct.members().stream() //
 			.filter(Member::isOutput).count();
 		if (numOutputs > 1) {
-			problems.add(new ValidityProblem(
-				"Multiple output parameters specified. Only a single output is allowed."));
+			throw new MultipleOutputsOpException(op);
 		}
 	}
 
@@ -136,7 +135,7 @@ public final class OpUtils {
 	}
 
 	public static Class<?> findFirstImplementedFunctionalInterface(final OpRequest opRequest) {
-		final Class<?> functionalInterface = OpUtils
+			final Class<?> functionalInterface = Ops
 			.findFunctionalInterface(Types.raw(opRequest.getType()));
 		if (functionalInterface != null) {
 			return functionalInterface;

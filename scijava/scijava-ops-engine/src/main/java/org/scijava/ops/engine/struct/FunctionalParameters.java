@@ -7,10 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.ops.spi.Nullable;
 import org.scijava.struct.FunctionalMethodType;
@@ -22,29 +21,27 @@ public class FunctionalParameters {
 
 	public static void parseFunctionalParameters(
 		final ArrayList<SynthesizedParameterMember<?>> items,
-		final ArrayList<ValidityProblem> problems, Type type, ParameterData data)
+		Type type, ParameterData data)
 	{
 		// Search for the functional method of 'type' and map its signature to
 		// ItemIO
-		List<FunctionalMethodType> fmts;
-		try {
-			fmts = FunctionalParameters.findFunctionalMethodTypes(type);
-		}
-		catch (IllegalArgumentException e) {
-			problems.add(new ValidityProblem("Could not find functional method of " +
-				type.getTypeName()));
-			return;
-		}
-	
+		List<FunctionalMethodType> fmts = FunctionalParameters.findFunctionalMethodTypes(type);
+
 		// Synthesize members
 		List<SynthesizedParameterMember<?>> fmtMembers = data.synthesizeMembers(fmts);
 	
 		for (SynthesizedParameterMember<?> m : fmtMembers) {
-			final Type itemType = m.getType();
-	
-			final boolean valid = Structs.checkValidity(m, m.getKey(), Types.raw(itemType), false,
-				problems);
-			if (!valid) continue;
+			final Class<?> itemType = Types.raw(m.getType());
+			if ((m.getIOType() == ItemIO.MUTABLE || m
+				.getIOType() == ItemIO.CONTAINER) && Structs.isImmutable(itemType))
+			{
+				// NB: The MUTABLE and CONTAINER types signify that the parameter
+				// will be written to, but immutable parameters cannot be changed in
+				// such a manner, so it makes no sense to label them as such.
+				throw new IllegalArgumentException("Immutable " + m.getIOType() +
+					" parameter: " + m.getKey() + " (" + itemType.getName() +
+					" is immutable)");
+			}
 			items.add(m);
 		}
 	}
@@ -68,7 +65,7 @@ public class FunctionalParameters {
 	public static List<FunctionalMethodType> findFunctionalMethodTypes(
 		Type functionalType)
 	{
-		Method functionalMethod = OpUtils.findFunctionalMethod(Types.raw(functionalType));
+		Method functionalMethod = Ops.findFunctionalMethod(Types.raw(functionalType));
 		if (functionalMethod == null) throw new IllegalArgumentException("Type " +
 			functionalType +
 			" is not a functional type, thus its functional method types cannot be determined");
@@ -114,7 +111,7 @@ public class FunctionalParameters {
 	}
 
 	public static List<Method> fMethodsWithNullable(Class<?> opClass) {
-		Method superFMethod = OpUtils.findFunctionalMethod(opClass);
+		Method superFMethod = Ops.findFunctionalMethod(opClass);
 		return Arrays.stream(opClass.getMethods()) //
 				.filter(m -> m.getName().equals(superFMethod.getName())) //
 				.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //

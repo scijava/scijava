@@ -23,7 +23,7 @@ import org.scijava.function.Mutable;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRequest;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
@@ -63,7 +63,7 @@ public class SimplificationUtils {
 	public static ParameterizedType retypeOpType(Type originalOpType, Type[] newArgs, Type newOutType) {
 			// only retype types that we know how to retype
 			Class<?> opType = Types.raw(originalOpType);
-			Method fMethod = OpUtils.findFunctionalMethod(opType);
+			Method fMethod = Ops.findFunctionalMethod(opType);
 
 			Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
 
@@ -123,7 +123,7 @@ public class SimplificationUtils {
 	 * @return the index of the mutable argument (or -1 iff the output is returned).
 	 */
 	public static int findMutableArgIndex(Class<?> c) {
-		Method fMethod = OpUtils.findFunctionalMethod(c);
+		Method fMethod = Ops.findFunctionalMethod(c);
 		for (int i = 0; i < fMethod.getParameterCount(); i++) {
 			if (AnnotationUtils.getMethodParameterAnnotation(fMethod, i,
 				Mutable.class) != null) return i;

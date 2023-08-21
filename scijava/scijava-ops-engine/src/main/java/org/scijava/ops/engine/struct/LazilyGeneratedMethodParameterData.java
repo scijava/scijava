@@ -3,18 +3,16 @@ package org.scijava.ops.engine.struct;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
-
 
 /**
  * Lazily generates the parameter data for a {@link List} of
@@ -59,7 +57,7 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 		Boolean[] paramNullability = getParameterNullability(m, opType,
-			(int) numOpParams, new ArrayList<>());
+			(int) numOpParams);
 
 		addSynthesizedMethodParamInfo(fmtNames, fmtDescriptions, fmts,
 			fmtNullability, paramNullability);
@@ -74,13 +72,12 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		long numOpParams = m.getParameterCount();
 		long numReturns = m.getReturnType() == void.class ? 0 : 1;
 
-		opType = OpUtils.findFunctionalInterface(opType);
+		opType = Ops.findFunctionalInterface(opType);
 		Boolean[] paramNullability = getParameterNullability(m, opType,
-			(int) numOpParams, new ArrayList<>());
+			(int) numOpParams);
 
 		paramDataMap.put(m, synthesizedMethodParamInfo(fmts, paramNullability));
 	}
-
 
 	private static void addSynthesizedMethodParamInfo(
 		Map<FunctionalMethodType, String> fmtNames,
@@ -142,29 +139,25 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	}
 
 	private static Boolean[] getParameterNullability(Method m, Class<?> opType,
-		int opParams, List<ValidityProblem> problems)
+		int opParams)
 	{
-		boolean opMethodHasNullables = FunctionalParameters.hasNullableAnnotations(m);
-		List<Method> fMethodsWithNullables = FunctionalParameters.fMethodsWithNullable(
-			opType);
-		// the number of parameters we need to determine
+		boolean opMethodHasNullables = FunctionalParameters.hasNullableAnnotations(
+			m);
+		List<Method> fMethodsWithNullables = FunctionalParameters
+			.fMethodsWithNullable(opType);
+		if (opMethodHasNullables) {
+			fMethodsWithNullables.add(m);
+		}
 
 		// Ensure only the Op method OR ONE of its op type's functional methods have
 		// Nullables
-		if (opMethodHasNullables && !fMethodsWithNullables.isEmpty()) {
-			problems.add(new ValidityProblem(
-				"Both the OpMethod and its op type have nullable parameters!"));
-			return FunctionalParameters.generateAllRequiredArray(opParams);
-		}
 		if (fMethodsWithNullables.size() > 1) {
-			problems.add(new ValidityProblem(
-				"Multiple methods from the op type have nullable parameters!"));
-			return FunctionalParameters.generateAllRequiredArray(opParams);
+			throw new NullablesOnMultipleMethodsException(m, fMethodsWithNullables);
 		}
 
 		// return the nullability of each parameter of the Op
 		if (opMethodHasNullables) return getOpMethodNullables(m, opParams);
-		if (fMethodsWithNullables.size() > 0) return FunctionalParameters
+		if (!fMethodsWithNullables.isEmpty()) return FunctionalParameters
 			.findParameterNullability(fMethodsWithNullables.get(0));
 		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}

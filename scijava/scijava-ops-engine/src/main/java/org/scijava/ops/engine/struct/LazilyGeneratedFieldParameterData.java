@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.exceptions.impl.NullablesOnMultipleMethodsException;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.types.inference.InterfaceInference;
 
@@ -35,11 +35,11 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		this.fieldInstance = fieldInstance;
 	}
 
-
 	public static MethodParamInfo getInfo(List<FunctionalMethodType> fmts,
 		FieldInstance fieldInstance)
 	{
-		if (!paramDataMap.containsKey(fieldInstance)) generateFieldParamInfo(fmts, fieldInstance);
+		if (!paramDataMap.containsKey(fieldInstance)) generateFieldParamInfo(fmts,
+			fieldInstance);
 		return paramDataMap.get(fieldInstance);
 	}
 
@@ -48,39 +48,27 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 	{
 		if (paramDataMap.containsKey(fieldInstance)) return;
 
-		Method sam = InterfaceInference.singularAbstractMethod(fieldInstance.field().getType());
+		Method sam = InterfaceInference.singularAbstractMethod(fieldInstance.field()
+			.getType());
+		// There is always one output, but we need the number of inputs
 		long numIns = sam.getParameterCount();
-		long numOuts = 1; // There is always one output
 
 		// determine the Op inputs/outputs
-		Boolean[] paramNullability = getParameterNullability(fieldInstance.instance(),
-				fieldInstance.field(), (int) numIns, new ArrayList<>());
+		Boolean[] paramNullability = getParameterNullability(fieldInstance
+			.instance(), fieldInstance.field(), (int) numIns);
 
-		paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts, paramNullability));
-	}
-
-
-	/**
-	 * Determines if {@code tagType} is one of the tags that we are interested in
-	 * scraping.
-	 *
-	 * @param tagType the tag we might need to scrape
-	 * @return true iff it is interesting to us
-	 */
-	private static boolean validParameterTag(String tagType) {
-		if (tagType.equals("input")) return true;
-		if (tagType.equals("mutable")) return true;
-		if (tagType.equals("container")) return true;
-		if (tagType.equals("output")) return true;
-		return false;
+		paramDataMap.put(fieldInstance, synthesizedMethodParamInfo(fmts,
+			paramNullability));
 	}
 
 	private static MethodParamInfo synthesizedMethodParamInfo(
 		List<FunctionalMethodType> fmts, Boolean[] paramNullability)
 	{
 		Map<FunctionalMethodType, String> fmtNames = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts.size());
-		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts.size());
+		Map<FunctionalMethodType, String> fmtDescriptions = new HashMap<>(fmts
+			.size());
+		Map<FunctionalMethodType, Boolean> fmtNullability = new HashMap<>(fmts
+			.size());
 
 		int ins, outs, containers, mutables;
 		ins = outs = containers = mutables = 1;
@@ -122,7 +110,7 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 
 	// Helper methods
 	private static Boolean[] getParameterNullability(Object instance, Field field,
-			int opParams, List<ValidityProblem> problems)
+		int opParams)
 	{
 
 		Class<?> fieldClass;
@@ -131,29 +119,35 @@ public class LazilyGeneratedFieldParameterData implements ParameterData {
 		}
 		catch (IllegalArgumentException | IllegalAccessException exc) {
 			// TODO Auto-generated catch block
-			problems.add(new ValidityProblem(exc));
-			return FunctionalParameters.generateAllRequiredArray(opParams);
+			throw new IllegalArgumentException(exc);
 		}
-		List<Method> fMethodsWithNullables = FunctionalParameters.fMethodsWithNullable(fieldClass);
-		Class<?> fIface = OpUtils.findFunctionalInterface(fieldClass);
-		List<Method> fIfaceMethodsWithNullables = FunctionalParameters.fMethodsWithNullable(fIface);
+		List<Method> fMethodsWithNullables = FunctionalParameters
+			.fMethodsWithNullable(fieldClass);
+		Class<?> fIface = Ops.findFunctionalInterface(fieldClass);
+		List<Method> fIfaceMethodsWithNullables = FunctionalParameters
+			.fMethodsWithNullable(fIface);
 
-		if (fMethodsWithNullables.isEmpty() && fIfaceMethodsWithNullables.isEmpty()) {
+		if (fMethodsWithNullables.isEmpty() && fIfaceMethodsWithNullables
+			.isEmpty())
+		{
 			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
-		if (!fMethodsWithNullables.isEmpty() && !fIfaceMethodsWithNullables.isEmpty()) {
-			problems.add(new ValidityProblem(
-					"Multiple methods from the op type have nullable parameters!"));
-			return FunctionalParameters.generateAllRequiredArray(opParams);
+		if (!fMethodsWithNullables.isEmpty() && !fIfaceMethodsWithNullables
+			.isEmpty())
+		{
+			List<Method> nullables = new ArrayList<>(fMethodsWithNullables);
+			nullables.addAll(fIfaceMethodsWithNullables);
+			throw new NullablesOnMultipleMethodsException(field, nullables);
 		}
 		if (fMethodsWithNullables.isEmpty()) {
-			return FunctionalParameters.findParameterNullability(fIfaceMethodsWithNullables.get(0));
+			return FunctionalParameters.findParameterNullability(
+				fIfaceMethodsWithNullables.get(0));
 		}
 		if (fIfaceMethodsWithNullables.isEmpty()) {
-			return FunctionalParameters.findParameterNullability(fMethodsWithNullables.get(0));
+			return FunctionalParameters.findParameterNullability(fMethodsWithNullables
+				.get(0));
 		}
 		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}
-
 
 }

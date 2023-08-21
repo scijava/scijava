@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
@@ -38,7 +37,6 @@ public class OpResizingMemberParser implements MemberParser<RetypingRequest, Mem
 	 */
 	@Override
 	public List<Member<?>> parse(RetypingRequest source, Type structType)
-		throws ValidityException
 	{
 		List<FunctionalMethodType> newFmts = source.newFmts();
 		long numInputs = newFmts.stream() //
@@ -58,7 +56,6 @@ public class OpResizingMemberParser implements MemberParser<RetypingRequest, Mem
 	}
 
 	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts, Type structType)
-		throws ValidityException
 	{
 		return parse(new RetypingRequest(s, newFmts), structType);
 	}

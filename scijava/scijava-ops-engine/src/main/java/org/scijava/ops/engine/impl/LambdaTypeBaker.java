@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
-import org.scijava.ops.engine.OpUtils;
+import org.scijava.ops.engine.util.Ops;
 import org.scijava.types.GenericTyped;
 import org.scijava.types.Types;
 import org.scijava.types.inference.InterfaceInference;
@@ -75,8 +75,8 @@ public final class LambdaTypeBaker {
 
 	private static <T> void ensureImplementation(T originalOp, Type reifiedType) {
 		Class<?> opClass = originalOp.getClass();
-		Class<?> opFIFace = OpUtils.findFunctionalInterface(opClass);
-		Class<?> typeFIFace = OpUtils.findFunctionalInterface(Types.raw(reifiedType));
+		Class<?> opFIFace = Ops.findFunctionalInterface(opClass);
+		Class<?> typeFIFace = Ops.findFunctionalInterface(Types.raw(reifiedType));
 		if (!opFIFace.equals(typeFIFace)) {
 			throw new IllegalArgumentException(originalOp + " does not implement " + Types.raw(reifiedType));
 		}

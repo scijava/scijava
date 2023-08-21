@@ -13,7 +13,6 @@ import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 import org.scijava.struct.MemberParser;
 import org.scijava.struct.Struct;
-import org.scijava.common3.validity.ValidityException;
 
 public class OpRetypingMemberParser implements
 	MemberParser<RetypingRequest, Member<?>>
@@ -41,7 +40,6 @@ public class OpRetypingMemberParser implements
 	 */
 	@Override
 	public List<Member<?>> parse(RetypingRequest source, Type structType)
-		throws ValidityException
 	{
 		List<Member<?>> original = source.struct().members();
 		List<FunctionalMethodType> newFmts = source.newFmts();
@@ -112,7 +110,6 @@ public class OpRetypingMemberParser implements
 	}
 
 	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts, Type structType)
-		throws ValidityException
 	{
 		return parse(new RetypingRequest(s, newFmts), structType);
 	}

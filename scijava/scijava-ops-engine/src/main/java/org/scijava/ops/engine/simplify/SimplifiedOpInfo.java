@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.Objects;
 
 import org.scijava.common3.compare.CompareUtils;
-import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.common3.validity.ValidityException;
+import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
-import org.scijava.ops.api.*;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.OpDescription;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.conversionLoss.LossReporter;

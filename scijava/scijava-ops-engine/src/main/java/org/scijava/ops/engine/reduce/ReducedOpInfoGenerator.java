@@ -1,15 +1,19 @@
 
 package org.scijava.ops.engine.reduce;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ServiceLoader;
+import java.util.function.LongFunction;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
+
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.struct.Member;
-
-import java.util.*;
-import java.util.function.LongFunction;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 public class ReducedOpInfoGenerator implements OpInfoGenerator {
 

@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.meta.Versions;
-import org.scijava.ops.api.*;
+import org.scijava.ops.api.Hints;
+import org.scijava.ops.api.OpHints;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;

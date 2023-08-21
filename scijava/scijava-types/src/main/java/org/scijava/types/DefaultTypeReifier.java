@@ -1,7 +1,11 @@
 
 package org.scijava.types;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.scijava.discovery.Discoverer;

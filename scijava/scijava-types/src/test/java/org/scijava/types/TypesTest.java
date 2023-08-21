@@ -32,26 +32,36 @@
 
 package org.scijava.types;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.scijava.testutil.ExampleTypes.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.scijava.testutil.ExampleTypes.CircularThing;
+import static org.scijava.testutil.ExampleTypes.ComplexThing;
+import static org.scijava.testutil.ExampleTypes.IntegerThing;
+import static org.scijava.testutil.ExampleTypes.Loop;
+import static org.scijava.testutil.ExampleTypes.LoopingThing;
+import static org.scijava.testutil.ExampleTypes.NestedThing;
+import static org.scijava.testutil.ExampleTypes.NumberThing;
+import static org.scijava.testutil.ExampleTypes.RecursiveThing;
+import static org.scijava.testutil.ExampleTypes.StrangeThing;
+import static org.scijava.testutil.ExampleTypes.StrangerThing;
+import static org.scijava.testutil.ExampleTypes.Thing;
+import static org.scijava.testutil.ExampleTypes.Words;
 
-import java.io.*;
+import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -7,10 +7,13 @@ import java.util.List;
 
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
-import org.scijava.struct.*;
+import org.scijava.struct.FunctionalMethodType;
+import org.scijava.struct.ItemIO;
+import org.scijava.struct.Member;
+import org.scijava.struct.MemberParser;
+import org.scijava.struct.Struct;
 
-public class OpResizingMemberParser implements
-	MemberParser<RetypingRequest, Member<?>>
+public class OpResizingMemberParser implements MemberParser<RetypingRequest, Member<?>>
 {
 
 	/**

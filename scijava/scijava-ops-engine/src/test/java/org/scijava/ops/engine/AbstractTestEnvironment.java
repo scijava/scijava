@@ -1,7 +1,10 @@
 
 package org.scijava.ops.engine;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -14,7 +17,11 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
-import org.scijava.ops.api.*;
+import org.scijava.ops.api.InfoChainGenerator;
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpHistory;
+import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.types.DefaultTypeReifier;
 import org.scijava.types.TypeReifier;

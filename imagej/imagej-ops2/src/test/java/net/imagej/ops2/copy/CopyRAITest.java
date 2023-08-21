@@ -30,7 +30,11 @@
 package net.imagej.ops2.copy;
 
 import net.imagej.ops2.AbstractOpTest;
-import net.imglib2.*;
+import net.imglib2.Cursor;
+import net.imglib2.FinalDimensions;
+import net.imglib2.FinalInterval;
+import net.imglib2.RandomAccess;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.planar.PlanarImgFactory;
@@ -49,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Test {@link Copiers#copyRAI(Computers.Arity1, RandomAccessibleInterval, RandomAccessibleInterval)}
+ * Test copying {@link net.imglib2.RandomAccessibleInterval}s
  *
  * @author Tim-Oliver Buchholz (University of Konstanz)
  */

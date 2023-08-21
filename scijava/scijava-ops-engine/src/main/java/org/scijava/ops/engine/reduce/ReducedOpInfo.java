@@ -16,7 +16,11 @@ import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.features.BaseOpHints;
 import org.scijava.ops.engine.struct.OpResizingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
-import org.scijava.struct.*;
+import org.scijava.struct.FunctionalMethodType;
+import org.scijava.struct.Member;
+import org.scijava.struct.Struct;
+import org.scijava.struct.StructInstance;
+import org.scijava.struct.Structs;
 
 public class ReducedOpInfo implements OpInfo {
 

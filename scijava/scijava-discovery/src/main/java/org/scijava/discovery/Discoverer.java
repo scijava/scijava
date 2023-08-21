@@ -1,7 +1,13 @@
 package org.scijava.discovery;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

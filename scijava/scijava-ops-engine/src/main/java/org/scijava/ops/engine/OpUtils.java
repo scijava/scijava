@@ -31,7 +31,9 @@ package org.scijava.ops.engine;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.scijava.ops.api.OpCandidate;

@@ -3,12 +3,22 @@ package org.scijava.discovery.therapi;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.scijava.parse2.Parser;
 
-import com.github.therapi.runtimejavadoc.*;
+import com.github.therapi.runtimejavadoc.BaseJavadoc;
+import com.github.therapi.runtimejavadoc.ClassJavadoc;
+import com.github.therapi.runtimejavadoc.FieldJavadoc;
+import com.github.therapi.runtimejavadoc.MethodJavadoc;
+import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 /**
  * Utilities for discovery using Therapi

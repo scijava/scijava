@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.copy.CopyOpCollection;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.reduce.ReducedOpInfo;
 import org.scijava.ops.engine.simplify.Identity;
 import org.scijava.ops.engine.simplify.InfoSimplificationGenerator;
@@ -43,7 +43,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testOpClassDescription() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new DefaultHints(),
+		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
 			"test.classDescription");
 
 		String expected = "test.classDescription(\n\t " //
@@ -62,7 +62,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		Method method = OpDescriptionTest.class.getMethod("methodOp", Double.class,
 			Double.class);
 		OpMethodInfo info = new OpMethodInfo(method, BiFunction.class,
-			new DefaultHints(), "test.methodDescription");
+			new Hints(), "test.methodDescription");
 		String expected = "test.methodDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
 			+ "Outputs:\n\t\tjava.lang.Double output1\n)\n";
@@ -75,7 +75,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 	@Test
 	public void testOpFieldDescription() throws NoSuchFieldException {
 		Field field = OpDescriptionTest.class.getDeclaredField("fieldOp");
-		OpFieldInfo info = new OpFieldInfo(this, field, new DefaultHints(),
+		OpFieldInfo info = new OpFieldInfo(this, field, new Hints(),
 			"test.fieldDescription");
 		String expected = "test.fieldDescription(\n\t " //
 			+ "Inputs:\n\t\tjava.lang.Double input1\n\t\tjava.lang.Double input2\n\t " //
@@ -86,7 +86,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testAdaptedDescription() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new DefaultHints(),
+		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
 			"test.adaptationDescription");
 		Type opType = Types.parameterize(Computers.Arity2.class, new Type[] {
 			Double.class, Double.class, Double.class });
@@ -108,7 +108,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testSimplifiedDescription() {
-		OpClassInfo info = new OpClassInfo(SimpleOp.class, new DefaultHints(),
+		OpClassInfo info = new OpClassInfo(SimpleOp.class, new Hints(),
 			"test.simplifiedDescription");
 		// NB it's a lot easier to let the framework create our SimplifiedOpInfo
 		Type opType = Types.parameterize(BiFunction.class, new Type[] {
@@ -116,7 +116,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 		OpRef simpleRef = new DefaultOpRef("test.adaptationDescription", opType,
 			Integer[].class, new Type[] { Integer.class, Integer.class });
 		SimplifiedOpInfo simplified = new InfoSimplificationGenerator(info, ops)
-			.generateSuitableInfo(ops, simpleRef, new DefaultHints());
+			.generateSuitableInfo(ops, simpleRef, new Hints());
 		String expected = "test.simplifiedDescription(\n\t " //
 			+
 			"Inputs:\n\t\tjava.lang.Integer input1\n\t\tjava.lang.Integer input2\n\t " //
@@ -127,7 +127,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testReducedDescription() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new DefaultHints(),
+		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
 			"test.reductionDescription");
 
 		Type opType = Types.parameterize(Function.class, new Type[] { Double.class,
@@ -142,7 +142,7 @@ public class OpDescriptionTest extends AbstractTestEnvironment {
 
 	@Test
 	public void testMultiNameOp() {
-		OpClassInfo info = new OpClassInfo(ClassOp.class, new DefaultHints(),
+		OpClassInfo info = new OpClassInfo(ClassOp.class, new Hints(),
 			"test.classDescription", "test.otherName");
 
 		String expected = "test.classDescription(\n\t " //

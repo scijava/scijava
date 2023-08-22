@@ -2,22 +2,17 @@
 package org.scijava.ops.engine;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.function.Computers;
-import org.scijava.ops.engine.hint.DefaultHints;
+import org.scijava.ops.api.Hints;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
-import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpMethod;
 
 public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		implements OpCollection {
@@ -43,7 +38,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 		var info = new OpMethodInfo( //
 				m, //
 				Computers.Arity1.class, //
-				new DefaultHints(), //
+				new Hints(), //
 				"test.dependencyBeforeInput" //
 		);
 	}
@@ -100,7 +95,7 @@ public class OpMethodDependencyPositionTest extends AbstractTestEnvironment
 			new OpMethodInfo( //
 					m, //
 					arity, //
-					new DefaultHints(), //
+					new Hints(), //
 					names
 			);
 		} catch (ValidityException exc) {

@@ -12,7 +12,6 @@ import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.impl.IdentityLossReporter;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers;
 import org.scijava.ops.engine.simplify.PrimitiveSimplifiers;
 import org.scijava.ops.spi.OpCollection;
@@ -34,7 +33,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 	@Test
 	public void testSimplification() {
 		// make sure we can find the Op when adaptation is allowed
-		Hints hints = new DefaultHints();
+		Hints hints = new Hints();
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op(
@@ -57,7 +56,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 	@Test
 	public void testSimplificationPerCallHints() {
 		// make sure we can find the Op when adaptation is allowed
-		Hints hints = new DefaultHints();
+		Hints hints = new Hints();
 		@SuppressWarnings("unused")
 		Function<Integer[], Integer[]> adaptable = ops.op(
 			"test.simplification.hints", hints).arity1().inType(Integer[].class).outType(
@@ -83,7 +82,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 	@Test
 	public void testUnsimplifiableOp() {
 		// make sure we can find the Op when adaptation is allowed
-		Hints hints = new DefaultHints();
+		Hints hints = new Hints();
 		ops.setDefaultHints(hints);
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
@@ -106,7 +105,7 @@ public class SimplificationHintTest extends AbstractTestEnvironment implements O
 	@Test
 	public void testUnsimplifiableOpPerCallHints() {
 		// make sure we can find the Op when adaptation is allowed
-		Hints hints = new DefaultHints();
+		Hints hints = new Hints();
 		@SuppressWarnings("unused")
 		Function<Double[], Double[]> adaptable = ops.op(
 			"test.simplification.unsimplifiable", hints).arity1().inType(Double[].class).outType(

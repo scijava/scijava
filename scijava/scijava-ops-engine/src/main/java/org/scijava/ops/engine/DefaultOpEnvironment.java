@@ -74,7 +74,6 @@ import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.impl.DependencyRichOpInfoChain;
 import org.scijava.ops.engine.impl.LambdaTypeBaker;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
@@ -324,7 +323,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public OpInfo opify(final Class<?> opClass, final double priority,
 		final String... names)
 	{
-		return new OpClassInfo(opClass, Versions.getVersion(opClass), new DefaultHints(), priority,
+		return new OpClassInfo(opClass, Versions.getVersion(opClass), new Hints(), priority,
 			names);
 	}
 
@@ -787,12 +786,12 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@Override
 	public Hints getDefaultHints() {
 		if (this.environmentHints != null) return this.environmentHints.copy();
-		return new DefaultHints();
+		return new Hints();
 	}
 
 	@Override
 	public Hints createHints(String... startingHints) {
-		return new DefaultHints(startingHints);
+		return new Hints(startingHints);
 	}
 
 }

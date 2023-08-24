@@ -89,7 +89,7 @@ public class OpBuilderTest extends AbstractTestEnvironment {
 
 	@BeforeAll
 	public static void AddNeededOps() {
-		ops.register(new OpBuilderTestOps());
+		 ops.register(new OpBuilderTestOps());
 	}
 
 	final double[] halves = new double[10];

@@ -36,8 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.OpMatcher;
-import org.scijava.ops.spi.Op;
+import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.types.Types;
 import org.scijava.types.inference.GenericAssignability;
 

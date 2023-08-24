@@ -6,6 +6,7 @@ module org.scijava.ops.engine {
  */
 
 	exports org.scijava.ops.engine;
+	exports org.scijava.ops.engine.matcher;
 	exports org.scijava.ops.engine.conversionLoss;
 	exports org.scijava.ops.engine.util;
 
@@ -34,7 +35,7 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.api.OpEnvironment;
 	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
-	uses org.scijava.ops.api.features.MatchingRoutine;
+	uses org.scijava.ops.engine.matcher.MatchingRoutine;
 	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
 	uses org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 	uses org.scijava.ops.spi.Op;
@@ -233,7 +234,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Inplace16_16OpWrapper,
 		org.scijava.ops.engine.matcher.impl.LossReporterWrapper;
 
-	provides org.scijava.ops.api.features.MatchingRoutine with
+	provides org.scijava.ops.engine.matcher.MatchingRoutine with
 		org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine,
 		org.scijava.ops.engine.matcher.adapt.AdaptationMatchingRoutine,
 		org.scijava.ops.engine.matcher.simplify.SimplificationMatchingRoutine;
@@ -500,8 +501,8 @@ module org.scijava.ops.engine {
         org.scijava.ops.engine.matcher.reduce.FunctionReducer,
         org.scijava.ops.engine.matcher.reduce.ComputerReducer;
 
-    provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with //
-	 			org.scijava.ops.engine.yaml.impl.JavaClassYAMLOpInfoCreator, //
-				org.scijava.ops.engine.yaml.impl.JavaFieldYAMLOpInfoCreator, //
-			  org.scijava.ops.engine.yaml.impl.JavaMethodYAMLInfoCreator;
+    provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with
+        org.scijava.ops.engine.yaml.impl.JavaClassYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.impl.JavaFieldYAMLOpInfoCreator,
+        org.scijava.ops.engine.yaml.impl.JavaMethodYAMLInfoCreator;
 }

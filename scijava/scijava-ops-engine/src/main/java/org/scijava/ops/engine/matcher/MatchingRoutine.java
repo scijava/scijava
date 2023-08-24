@@ -1,8 +1,10 @@
 
-package org.scijava.ops.api.features;
+package org.scijava.ops.engine.matcher;
 
-import org.scijava.ops.api.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.engine.OpCandidate;
 
 /**
  * A plugin type employing a particular strategy to generate an

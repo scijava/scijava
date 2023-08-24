@@ -64,5 +64,4 @@ open module net.imagej.ops2 {
 			net.imagej.ops2.types.OutOfBoundsRandomValueFactoryTypeExtractor,
 			net.imagej.ops2.types.RAITypeExtractor;
 
-	uses org.scijava.ops.api.features.MatchingRoutine;
 }

@@ -1,14 +1,15 @@
-package org.scijava.ops.api.features;
+package org.scijava.ops.engine.matcher;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.scijava.ops.api.OpCandidate;
-import org.scijava.ops.api.OpCandidate.StatusCode;
+import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.features.OpMatchingException;
 
 /**
  * Class representing the result from type matching done by a

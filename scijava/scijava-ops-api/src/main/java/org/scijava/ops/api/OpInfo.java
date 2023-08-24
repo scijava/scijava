@@ -82,10 +82,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 			.collect(Collectors.toList());
 	}
 	
-	default OpCandidate createCandidate(OpEnvironment env, OpRef ref, Map<TypeVariable<?>, Type> typeVarAssigns) {
-		return new OpCandidate(env, ref, this, typeVarAssigns);
-	}
-
 	/** The op's priority. */
 	double priority();
 

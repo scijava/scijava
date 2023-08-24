@@ -34,12 +34,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.scijava.ops.api.OpCandidate;
+import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.api.features.OpMatcher;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
+import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
 
 /**

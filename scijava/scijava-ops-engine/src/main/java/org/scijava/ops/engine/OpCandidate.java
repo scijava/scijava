@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.api;
+package org.scijava.ops.engine;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -36,6 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpRef;
 import org.scijava.struct.Member;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;

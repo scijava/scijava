@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.scijava.ops.api.OpCandidate;
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.ops.api.OpInfo;

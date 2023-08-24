@@ -13,16 +13,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.scijava.ops.api.OpCandidate;
-import org.scijava.ops.api.OpCandidate.StatusCode;
+import org.scijava.ops.engine.OpCandidate;
+import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.MatchingResult;
-import org.scijava.ops.api.features.MatchingRoutine;
-import org.scijava.ops.api.features.OpMatcher;
+import org.scijava.ops.engine.matcher.MatchingResult;
+import org.scijava.ops.engine.matcher.MatchingRoutine;
+import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
@@ -50,7 +50,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 			if (typesMatch(info.opType(), conditions.ref().getType(),
 				typeVarAssigns))
 			{
-				OpCandidate candidate = info.createCandidate(env, conditions.ref(),
+				OpCandidate candidate = new OpCandidate(env, conditions.ref(), info,
 					typeVarAssigns);
 				candidates.add(candidate);
 			}

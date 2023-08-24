@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.YAMLOpInfoCreator;
 import org.scijava.priority.Priority;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
@@ -134,7 +133,7 @@ public abstract class AbstractYAMLOpInfoCreator implements YAMLOpInfoCreator {
         return new RenamedMember<>(member, name, desc);
     }
 
-    abstract OpInfo create(final String identifier, final String[] names, final double priority, final String version, Map<String, Object> yaml) throws Exception;
+    protected abstract OpInfo create(final String identifier, final String[] names, final double priority, final String version, Map<String, Object> yaml) throws Exception;
 
     private static class RenamedMember<T> implements Member<T> {
 

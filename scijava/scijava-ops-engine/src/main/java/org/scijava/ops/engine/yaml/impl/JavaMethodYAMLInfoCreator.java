@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.yaml;
+package org.scijava.ops.engine.yaml.impl;
 
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -10,9 +10,10 @@ import org.scijava.function.Computers;
 import org.scijava.function.Functions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.YAMLOpInfoCreator;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpDependency;
+import org.scijava.ops.engine.yaml.AbstractYAMLOpInfoCreator;
+import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 
 /**
  * A {@link YAMLOpInfoCreator} specialized for Java {@link Method}s.
@@ -27,8 +28,8 @@ public class JavaMethodYAMLInfoCreator extends AbstractYAMLOpInfoCreator {
 	}
 
 	@Override
-	OpInfo create(String identifier, String[] names, double priority,
-				  String version, Map<String, Object> yaml) throws Exception
+	protected OpInfo create(String identifier, String[] names, double priority,
+		String version, Map<String, Object> yaml) throws Exception
 	{
 		// first, remove generics
 		String rawIdentifier = sanitizeGenerics(identifier);

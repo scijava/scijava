@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.yaml.ops;
+package org.scijava.ops.engine.yaml.impl.ops;
 
 import java.util.function.BiFunction;
 

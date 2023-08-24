@@ -74,6 +74,7 @@ import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;
 import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
 import org.scijava.ops.engine.matcher.impl.InfoMatchingOpRef;

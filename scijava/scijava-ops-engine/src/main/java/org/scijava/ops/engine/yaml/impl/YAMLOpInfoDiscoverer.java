@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.yaml;
+package org.scijava.ops.engine.yaml.impl;
 
 import static org.scijava.ops.engine.yaml.YAMLUtils.subMap;
 import static org.scijava.ops.engine.yaml.YAMLUtils.value;
@@ -17,7 +17,7 @@ import java.util.ServiceLoader;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.YAMLOpInfoCreator;
+import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 import org.yaml.snakeyaml.Yaml;
 
 /**

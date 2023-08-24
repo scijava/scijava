@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.yaml;
+package org.scijava.ops.engine.yaml.impl;
 
 import java.net.URI;
 import java.util.Map;
@@ -7,8 +7,9 @@ import java.util.Map;
 import org.scijava.common3.Classes;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.YAMLOpInfoCreator;
 import org.scijava.ops.engine.matcher.impl.OpClassInfo;
+import org.scijava.ops.engine.yaml.AbstractYAMLOpInfoCreator;
+import org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 
 /**
  * A {@link YAMLOpInfoCreator} specialized for Java {@link Class}es.
@@ -23,7 +24,7 @@ public class JavaClassYAMLOpInfoCreator extends AbstractYAMLOpInfoCreator {
 	}
 
 	@Override
-	public OpInfo create(final String identifier, final String[] names,
+	protected OpInfo create(final String identifier, final String[] names,
 						 final double priority, String version,
 						 Map<String, Object> yaml) throws Exception
 	{

@@ -1,5 +1,5 @@
 
-package org.scijava.ops.engine.yaml;
+package org.scijava.ops.engine.yaml.impl;
 
 import java.util.Arrays;
 import java.util.ServiceLoader;
@@ -14,9 +14,10 @@ import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.engine.impl.DefaultOpEnvironment;
+import org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;
 
 /**
- * Tests discovery via YAML metadata.
+ * Tests discovery of YAML discovery implementations
  *
  * @author Gabriel Selzer
  */

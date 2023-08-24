@@ -1,5 +1,5 @@
 
-package org.scijava.ops.api.features;
+package org.scijava.ops.engine.yaml;
 
 import java.net.URI;
 import java.util.Map;

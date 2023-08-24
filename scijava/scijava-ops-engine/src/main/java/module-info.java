@@ -35,14 +35,14 @@ module org.scijava.ops.engine {
 	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
 	uses org.scijava.ops.api.features.MatchingRoutine;
-	uses org.scijava.ops.api.features.YAMLOpInfoCreator;
 	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
+	uses org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
-		org.scijava.ops.engine.yaml.YAMLOpInfoDiscoverer;
+		org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;
 
 	provides org.scijava.ops.api.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
@@ -500,8 +500,8 @@ module org.scijava.ops.engine {
         org.scijava.ops.engine.matcher.reduce.FunctionReducer,
         org.scijava.ops.engine.matcher.reduce.ComputerReducer;
 
-    provides org.scijava.ops.api.features.YAMLOpInfoCreator with
-        org.scijava.ops.engine.yaml.JavaClassYAMLOpInfoCreator,
-        org.scijava.ops.engine.yaml.JavaFieldYAMLOpInfoCreator,
-        org.scijava.ops.engine.yaml.JavaMethodYAMLInfoCreator;
+    provides org.scijava.ops.engine.yaml.YAMLOpInfoCreator with //
+	 			org.scijava.ops.engine.yaml.impl.JavaClassYAMLOpInfoCreator, //
+				org.scijava.ops.engine.yaml.impl.JavaFieldYAMLOpInfoCreator, //
+			  org.scijava.ops.engine.yaml.impl.JavaMethodYAMLInfoCreator;
 }

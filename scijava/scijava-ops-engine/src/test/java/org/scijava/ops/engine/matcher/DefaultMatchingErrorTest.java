@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
-import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;

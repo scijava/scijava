@@ -22,7 +22,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
-import org.scijava.ops.api.features.DependencyMatchingException;
+import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.api.features.MatchingRoutine;
 import org.scijava.ops.api.features.OpMatcher;

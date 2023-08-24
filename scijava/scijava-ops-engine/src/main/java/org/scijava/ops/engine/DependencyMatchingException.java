@@ -1,7 +1,8 @@
 
-package org.scijava.ops.api.features;
+package org.scijava.ops.engine;
 
 import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.features.OpMatchingException;
 
 /**
  * An {@link OpMatchingException} caused by another {@code OpMatchingException}

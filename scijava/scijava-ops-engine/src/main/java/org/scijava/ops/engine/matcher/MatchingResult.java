@@ -8,7 +8,7 @@ import java.util.Objects;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpDescription;
+import org.scijava.ops.engine.OpDescription;
 import org.scijava.ops.api.OpRef;
 
 /**

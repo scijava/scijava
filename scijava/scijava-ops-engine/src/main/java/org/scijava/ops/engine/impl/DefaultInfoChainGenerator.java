@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.InfoChainGenerator;
+import org.scijava.ops.engine.InfoChainGenerator;
 import org.scijava.ops.api.OpInfo;
 
 public class DefaultInfoChainGenerator implements InfoChainGenerator {
@@ -16,8 +16,8 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 	public InfoChain generate(String signature, Map<String, OpInfo> idMap,
 		Collection<InfoChainGenerator> generators)
 	{
-		int dependencyStart = signature.indexOf(DEP_START_DELIM);
-		int dependencyEnd = signature.lastIndexOf(DEP_END_DELIM);
+		int dependencyStart = signature.indexOf(InfoChain.DEP_START_DELIM);
+		int dependencyEnd = signature.lastIndexOf(InfoChain.DEP_END_DELIM);
 		String infoID = signature.substring(0, dependencyStart);
 		OpInfo info = idMap.get(infoID);
 		if (info == null) throw new IllegalArgumentException(
@@ -40,8 +40,8 @@ public class DefaultInfoChainGenerator implements InfoChainGenerator {
 
 		for (int i = 0; i < signature.length(); i++) {
 			char ch = signature.charAt(i);
-			if (ch == DEP_START_DELIM) parenDepth++;
-			else if (ch == DEP_END_DELIM) {
+			if (ch == InfoChain.DEP_START_DELIM) parenDepth++;
+			else if (ch == InfoChain.DEP_END_DELIM) {
 				parenDepth--;
 				if (parenDepth == 0) {
 					splits.add(signature.substring(start, i + 1));

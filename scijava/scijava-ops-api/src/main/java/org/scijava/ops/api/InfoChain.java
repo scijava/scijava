@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
  */
 public class InfoChain {
 
+	public static final Character DEP_START_DELIM = '{';
+	public static final Character DEP_END_DELIM = '}';
+
 	private final List<InfoChain> dependencies;
 	private String id;
 
@@ -98,11 +101,11 @@ public class InfoChain {
 	private synchronized void generateSignature() {
 		if (id != null) return;
 		String s = info().id();
-		s = s.concat(String.valueOf(InfoChainGenerator.DEP_START_DELIM));
+		s = s.concat(String.valueOf(DEP_START_DELIM));
 		for (InfoChain dependency : dependencies()) {
 			s = s.concat(dependency.signature());
 		}
-		id = s.concat(String.valueOf(InfoChainGenerator.DEP_END_DELIM));
+		id = s.concat(String.valueOf(DEP_END_DELIM));
 	}
 
 }

@@ -1,15 +1,16 @@
 
-package org.scijava.ops.api;
+package org.scijava.ops.engine;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.scijava.ops.api.InfoChain;
+import org.scijava.ops.api.OpInfo;
+
 public interface InfoChainGenerator {
 
-	public static final Character DEP_START_DELIM = '{';
-	public static final Character DEP_END_DELIM = '}';
 
 	/**
 	 * Generates an {@link InfoChain}. This {@link InfoChainGenerator} is only
@@ -66,12 +67,12 @@ public interface InfoChainGenerator {
 	 * @return a signature contained withing {@code signature}
 	 */
 	static String subSignatureFrom(String signature, int start) {
-		int depsStart = signature.indexOf(DEP_START_DELIM, start);
+		int depsStart = signature.indexOf(InfoChain.DEP_START_DELIM, start);
 		int depth = 0;
 		for (int i = depsStart; i < signature.length(); i++) {
 			char ch = signature.charAt(i);
-			if (ch == DEP_START_DELIM) depth++;
-			else if (ch == DEP_END_DELIM) {
+			if (ch == InfoChain.DEP_START_DELIM) depth++;
+			else if (ch == InfoChain.DEP_END_DELIM) {
 				depth--;
 				if (depth == 0) {
 					int depsEnd = i;

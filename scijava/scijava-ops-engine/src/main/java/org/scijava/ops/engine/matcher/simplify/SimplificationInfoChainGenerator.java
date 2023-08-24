@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.InfoChainGenerator;
+import org.scijava.ops.engine.InfoChainGenerator;
 import org.scijava.ops.api.OpInfo;
 
 public class SimplificationInfoChainGenerator implements InfoChainGenerator {

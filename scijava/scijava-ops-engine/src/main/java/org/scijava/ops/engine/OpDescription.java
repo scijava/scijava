@@ -1,5 +1,6 @@
-package org.scijava.ops.api;
+package org.scijava.ops.engine;
 
+import org.scijava.ops.api.OpInfo;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;
 

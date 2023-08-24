@@ -15,7 +15,7 @@ import org.scijava.function.Inplaces;
 import org.scijava.function.Producer;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.api.RichOp;
 
 public class OpWrappers {

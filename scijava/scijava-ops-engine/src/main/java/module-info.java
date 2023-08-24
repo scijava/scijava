@@ -1,3 +1,7 @@
+import org.scijava.ops.engine.InfoChainGenerator;
+import org.scijava.ops.engine.OpInfoGenerator;
+import org.scijava.ops.engine.OpWrapper;
+
 module org.scijava.ops.engine {
 
 /*
@@ -31,10 +35,10 @@ module org.scijava.ops.engine {
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
-	uses org.scijava.ops.api.InfoChainGenerator;
+	uses org.scijava.ops.engine.InfoChainGenerator;
 	uses org.scijava.ops.api.OpEnvironment;
-	uses org.scijava.ops.api.OpInfoGenerator;
-	uses org.scijava.ops.api.OpWrapper;
+	uses org.scijava.ops.engine.OpInfoGenerator;
+	uses org.scijava.ops.engine.OpWrapper;
 	uses org.scijava.ops.engine.matcher.MatchingRoutine;
 	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
 	uses org.scijava.ops.engine.yaml.YAMLOpInfoCreator;
@@ -45,7 +49,7 @@ module org.scijava.ops.engine {
 	provides org.scijava.discovery.Discoverer with
 		org.scijava.ops.engine.yaml.impl.YAMLOpInfoDiscoverer;
 
-	provides org.scijava.ops.api.InfoChainGenerator with
+	provides org.scijava.ops.engine.InfoChainGenerator with
 		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
 		org.scijava.ops.engine.impl.DefaultInfoChainGenerator,
 		org.scijava.ops.engine.matcher.simplify.SimplificationInfoChainGenerator;
@@ -56,12 +60,12 @@ module org.scijava.ops.engine {
 	provides org.scijava.ops.api.OpHistory with
 	    org.scijava.ops.engine.impl.DefaultOpHistory;
 
-	provides org.scijava.ops.api.OpInfoGenerator with
+	provides OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
 		org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator;
 
-	provides org.scijava.ops.api.OpWrapper with
+	provides OpWrapper with
 		org.scijava.ops.engine.matcher.impl.OpWrappers.ProducerOpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function1OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Function2OpWrapper,

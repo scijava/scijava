@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.ops.api.InfoChain;
-import org.scijava.ops.api.InfoChainGenerator;
+import org.scijava.ops.engine.InfoChainGenerator;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.types.Types;
 

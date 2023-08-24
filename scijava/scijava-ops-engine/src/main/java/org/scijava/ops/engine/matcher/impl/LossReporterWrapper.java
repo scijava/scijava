@@ -3,7 +3,7 @@ package org.scijava.ops.engine.matcher.impl;
 
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
-import org.scijava.ops.api.OpWrapper;
+import org.scijava.ops.engine.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.matcher.impl.AbstractRichOp;

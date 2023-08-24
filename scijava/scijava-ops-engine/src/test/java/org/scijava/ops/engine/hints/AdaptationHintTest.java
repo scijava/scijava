@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpHints;
+import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.AbstractTestEnvironment;

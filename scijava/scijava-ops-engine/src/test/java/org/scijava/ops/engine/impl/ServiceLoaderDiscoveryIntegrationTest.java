@@ -10,7 +10,7 @@ import org.scijava.discovery.Discoverer;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpCollection;
 

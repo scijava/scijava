@@ -12,7 +12,7 @@ import java.util.stream.LongStream;
 
 import org.scijava.common3.validity.ValidityException;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.OpInfoGenerator;
+import org.scijava.ops.engine.OpInfoGenerator;
 import org.scijava.struct.Member;
 
 public class ReducedOpInfoGenerator implements OpInfoGenerator {

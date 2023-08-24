@@ -1,9 +1,11 @@
-package org.scijava.ops.api;
+package org.scijava.ops.engine;
 
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import org.scijava.ops.api.OpInfo;
 
 public interface OpInfoGenerator {
 

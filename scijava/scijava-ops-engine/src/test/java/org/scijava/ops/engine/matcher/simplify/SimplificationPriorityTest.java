@@ -7,7 +7,7 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.ops.api.OpHints;
+import org.scijava.ops.spi.OpHints;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.LossReporter;

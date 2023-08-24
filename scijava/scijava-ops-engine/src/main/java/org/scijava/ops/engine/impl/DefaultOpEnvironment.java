@@ -63,13 +63,13 @@ import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.OpWrapper;
 import org.scijava.ops.api.RichOp;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.DependencyMatching;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
@@ -248,12 +248,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	public InfoChain infoChain(String opName, Nil<?> specialType,
 		Nil<?>[] inTypes, Nil<?> outType, Hints hints)
 	{
-		try {
-			return findOp(opName, specialType, inTypes, outType, hints).infoChain();
-		}
-		catch (OpMatchingException e) {
-			throw new IllegalArgumentException(e);
-		}
+		return findOp(opName, specialType, inTypes, outType, hints).infoChain();
 	}
 
 	@Override
@@ -385,7 +380,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	@SuppressWarnings("unchecked")
 	private <T> OpInstance<T> findOp(final OpInfo info, final Nil<T> specialType,
-		Hints hints) throws OpMatchingException
+		Hints hints) throws OpRetrievalException
 	{
 		OpRef ref = new InfoMatchingOpRef(info, specialType);
 		MatchingConditions conditions = insertCacheHit(ref, hints, info);
@@ -606,7 +601,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					hintsCopy);
 				dependencyChains.add(wrapViaCache(conditions));
 			}
-			catch (final OpMatchingException e) {
+			catch (final OpRetrievalException e) {
 				String message = DependencyMatchingException.message(info
 					.implementationName(), dependency.getKey(), dependencyRef);
 				if (e instanceof DependencyMatchingException) {
@@ -690,7 +685,7 @@ public class DefaultOpEnvironment implements OpEnvironment {
 					? "no outputs" //
 					: "multiple outputs: " + Arrays.toString(outputs);
 			error += ". This is not supported.";
-			throw new OpMatchingException(error);
+			throw new OpRetrievalException(error);
 		}
 		return new DefaultOpRef(name, type, mappedOutputs[0], mappedInputs);
 	}

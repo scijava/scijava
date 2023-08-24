@@ -15,9 +15,9 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 
@@ -114,9 +114,11 @@ public class SimplifiedOpRef implements OpRef {
 	 * @param hints
 	 * @return an {@code Op} able to copy data between {@link Object}s of
 	 *         {@link Type} {@code copyType}
-	 * @throws OpMatchingException
+	 * @throws OpRetrievalException
 	 */
-	private static InfoChain simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws OpMatchingException{
+	private static InfoChain simplifierCopyOp(OpEnvironment env, Type copyType, Hints hints) throws
+			OpRetrievalException
+	{
 		// prevent further simplification/adaptation
 		Hints hintsCopy = hints.copy() //
 			.plus(Adaptation.FORBIDDEN, Simplification.FORBIDDEN);

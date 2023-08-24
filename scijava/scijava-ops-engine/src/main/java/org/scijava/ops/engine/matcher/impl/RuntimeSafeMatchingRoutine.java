@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpEnvironment;
@@ -23,7 +24,6 @@ import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.priority.Priority;
 import org.scijava.struct.Member;
 import org.scijava.types.Types;
@@ -34,7 +34,7 @@ public class RuntimeSafeMatchingRoutine implements MatchingRoutine {
 
 	@Override
 	public void checkSuitability(MatchingConditions conditions)
-		throws OpMatchingException
+		throws OpRetrievalException
 	{
 		// NB: Runtime-safe matching should always be allowed
 	}

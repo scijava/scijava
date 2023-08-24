@@ -15,8 +15,8 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
@@ -183,7 +183,7 @@ public class SimplifiedOpInfo implements OpInfo {
 				Nil.of(nilFromType), Nil.of(nilToType) }, Nil.of(Double.class));
 			return op.apply(from, to);
 		}
-		catch (OpMatchingException e) {
+		catch (OpRetrievalException e) {
 			return Double.POSITIVE_INFINITY;
 		}
 	}

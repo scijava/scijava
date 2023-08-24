@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
 import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.OpMatchingException;
 
 /**
  * Class representing the result from type matching done by a
@@ -65,7 +65,7 @@ public class MatchingResult {
 
 		// There is no clear matching Op
 		final String analysis = MatchingResult.matchInfo(this);
-		throw new OpMatchingException(analysis);
+		throw new OpRetrievalException(analysis);
 	}
 
 	/**

@@ -34,13 +34,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.features.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
-import org.scijava.ops.api.features.OpMatchingException;
 
 /**
  * Default implementation of {@link OpMatcher}. Used for finding Ops which match
@@ -59,13 +59,13 @@ public class DefaultOpMatcher implements OpMatcher {
 
 	@Override
 	public OpCandidate match(MatchingConditions conditions, OpEnvironment env) {
-		List<OpMatchingException> exceptions = new ArrayList<>(matchers.size());
+		List<OpRetrievalException> exceptions = new ArrayList<>(matchers.size());
 		// in priority order, search for a match
 		for (MatchingRoutine r : matchers) {
 			try {
 				return r.match(conditions, this, env);
 			}
-			catch (OpMatchingException e) {
+			catch (OpRetrievalException e) {
 				exceptions.add(e);
 			}
 		}
@@ -74,10 +74,10 @@ public class DefaultOpMatcher implements OpMatcher {
 		throw agglomeratedException(exceptions);
 	}
 
-	private OpMatchingException agglomeratedException(
-		List<OpMatchingException> list)
+	private OpRetrievalException agglomeratedException(
+		List<OpRetrievalException> list)
 	{
-		OpMatchingException agglomerated = new OpMatchingException(
+		OpRetrievalException agglomerated = new OpRetrievalException(
 			"No MatchingRoutine was able to produce a match!");
 		for (int i = 0; i < list.size(); i++) {
 			agglomerated.addSuppressed(list.get(i));

@@ -2,16 +2,16 @@
 package org.scijava.ops.engine;
 
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.OpMatchingException;
+import org.scijava.ops.api.OpRetrievalException;
 
 /**
- * An {@link OpMatchingException} caused by another {@code OpMatchingException}
+ * An {@link OpRetrievalException} caused by another {@code OpMatchingException}
  * thrown when resolving dependencies. We illustrate the need for
  * {@code DependencyMatchingException} with an example: Suppose Op {@code A} has
  * an dependency on Op {@code B}, which in turn has a dependency on Op
  * {@code C}. Suppose further that {@code A} and {@code B} are found, but no
  * {@code C} is found to satisfy {@code B}. This will result in an
- * {@link OpMatchingException} thrown for Op {@code A}. We would want to know:
+ * {@link OpRetrievalException} thrown for Op {@code A}. We would want to know:
  * <ol>
  * <li>that the request for {@code A} was not fulfilled</li>
  * <li>that no match could be found for {@code C}, which was the cause for (1)</li>
@@ -22,7 +22,7 @@ import org.scijava.ops.api.features.OpMatchingException;
  *
  * @author Gabriel Selzer
  */
-public class DependencyMatchingException extends OpMatchingException {
+public class DependencyMatchingException extends OpRetrievalException {
 
 	public DependencyMatchingException(final String message) {
 		super(message);

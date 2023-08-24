@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.features.BaseOpHints.Adaptation;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.copy.CopyOpCollection;
@@ -43,7 +43,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 			ops.op("test.adaptation.hints").arity1().inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
-		} catch( OpMatchingException e) {
+		} catch( OpRetrievalException e) {
 		}
 	}
 
@@ -61,7 +61,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 			ops.op("test.adaptation.hints", hints).arity1().inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
-		} catch( OpMatchingException e) {
+		} catch( OpRetrievalException e) {
 		}
 	}
 
@@ -84,7 +84,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 			ops.op("test.adaptation.unadaptable").arity1().inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
-		} catch( OpMatchingException e) {
+		} catch( OpRetrievalException e) {
 			// NB: expected behavior.
 		}
 	}
@@ -103,7 +103,7 @@ public class AdaptationHintTest extends AbstractTestEnvironment implements OpCol
 			ops.op("test.adaptation.unadaptable", hints).arity1().inType(Double[].class).outType(
 				Double[].class).computer();
 			throw new IllegalStateException("This op call should not match!");
-		} catch( OpMatchingException e) {
+		} catch( OpRetrievalException e) {
 		}
 	}
 

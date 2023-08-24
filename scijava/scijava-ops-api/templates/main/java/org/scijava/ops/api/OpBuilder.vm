@@ -205,7 +205,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op without specifying its type, creating an Object.">create</a>
 		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
@@ -230,7 +230,7 @@ public class OpBuilder {
 		 *
 		 * @return The {@code Object} created by this op
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#output(O)]]#" title="To specify a concrete output instance. (e.g. pre-allocated for org.scijava.function.Computers)">output</a>
 		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
@@ -261,7 +261,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op, creating an instance of this builder's output type.">create</a>
@@ -283,7 +283,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#create()]]#" title="To match then immediately run a Producer Op, creating an instance of this builder's output type.">create</a>
 		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create objects of this builder's output type without re-matching.">producer</a>
@@ -297,7 +297,7 @@ public class OpBuilder {
 		 *
 		 * @return The {@code O} created by this op
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 * @see <a href="#[[#producer()]]#" title="For a reusable Op to create objects of this builder's output type without re-matching.">producer</a>
@@ -326,7 +326,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#compute()]]#" title="To match then immediately run a Computer Op using this builder's pre-allocated output.">compute</a>
 		 */
@@ -419,7 +419,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 */
@@ -432,7 +432,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 */
@@ -489,7 +489,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
 		 * @see <a href="#outType-org.scijava.types.Nil-" title="To specify the output type, preserving its generic parameters.">outType(Nil)</a>
@@ -505,7 +505,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 * @see <a href="#outType-java.lang.Class-" title="To specify the output type without providing a concrete instance.">outType(Class)</a>
@@ -547,7 +547,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
@@ -561,7 +561,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
@@ -575,7 +575,7 @@ public class OpBuilder {
 		 *
 		 * @return The output of this function
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#computer()]]#" title="For a reusable Op to process pre-allocated outputs without re-matching.">computer</a>
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
@@ -654,7 +654,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
 		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
@@ -673,7 +673,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#apply()]]#" title="To match then immediately run a Function Op using the input values provided to this builder.">apply</a>
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
@@ -693,7 +693,7 @@ public class OpBuilder {
 		 *
 		 * @return The output of this function
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#function()]]#" title="For a reusable Op that generates output instances based on its inputs.">function</a>
 		 * @see <a href="#inplace#if ( $arity > 1 )1#end()" title="For a reusable Op that modifies a provided input parameter in-place.">inplace</a>
@@ -752,7 +752,7 @@ public class OpBuilder {
 		 *
 		 * @return An instance of the matched op, e.g. for reuse.
 		 *
-		 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+		 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 		 *
 		 * @see <a href="#[[#compute()]]#" title="To match then immediately run a Computer Op using this builder's pre-allocated output.">compute</a>
 		 */
@@ -777,7 +777,7 @@ public class OpBuilder {
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
-	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+	 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 	 *
 	 * @see <a href="#[[#matchComputer]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op to process pre-allocated outputs without re-matching.">OpBuilder.matchComputer(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
 #if ( $arity > 0 )	 * @see <a href="#[[#]]#$matchName.call($arity, 1)(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end)" title="For a reusable Op that modifies a provided input parameter in-place.">OpBuilder.$matchName.call($arity, 1)(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end)</a>
@@ -831,7 +831,7 @@ public class OpBuilder {
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
-	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+	 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 	 *
 	 * @see <a href="#[[#matchFunction]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op that generates output instances based on its inputs.">OpBuilder.matchFunction(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
 #if ( $arity > 0 )	 * @see <a href="#[[#]]#$matchName.call($arity, 1)(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end)" title="For a reusable Op that modifies a provided input parameter in-place.">OpBuilder.$matchName.call($arity, 1)(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end)</a>
@@ -890,7 +890,7 @@ public class OpBuilder {
 	 *
 	 * @return An instance of the matched op, e.g. for reuse.
 	 *
-	 * @throws org.scijava.ops.api.features.OpMatchingException if the Op request cannot be satisfied.
+	 * @throws org.scijava.ops.api.OpRetrievalException if the Op request cannot be satisfied.
 	 *
 	 * @see <a href="#[[#matchComputer]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op to process pre-allocated outputs without re-matching.">OpBuilder.matchComputer(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>
 	 * @see <a href="#[[#matchFunction]]#(org.scijava.ops.api.OpEnvironment, java.lang.String#foreach( $i in [1..$arity] ), org.scijava.types.Nil#end, org.scijava.types.Nil)" title="For a reusable Op that generates output instances based on its inputs.">OpBuilder.matchFunction(OpEnvironment, String#foreach( $i in [1..$arity] ), Nil#end, Nil)</a>

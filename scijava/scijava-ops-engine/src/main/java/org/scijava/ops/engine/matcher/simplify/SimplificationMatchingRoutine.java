@@ -4,27 +4,26 @@ package org.scijava.ops.engine.matcher.simplify;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
-import org.scijava.priority.Priority;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.features.BaseOpHints.Simplification;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.OpMatchingException;
-import org.scijava.ops.engine.matcher.simplify.InfoSimplificationGenerator;
+import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
+import org.scijava.priority.Priority;
 import org.scijava.types.Types;
 
 public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 
 	@Override
 	public void checkSuitability(MatchingConditions conditions)
-		throws OpMatchingException
+		throws OpRetrievalException
 	{
 		if (conditions.hints().containsAny(Simplification.IN_PROGRESS,
 			Simplification.FORBIDDEN)) //
-			throw new OpMatchingException(
+			throw new OpRetrievalException(
 				"Simplification is not suitable: Simplification is disabled");
 	}
 

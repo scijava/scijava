@@ -2,8 +2,8 @@
 package org.scijava.ops.engine.matcher;
 
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.api.features.MatchingConditions;
-import org.scijava.ops.api.features.OpMatchingException;
 import org.scijava.ops.engine.OpCandidate;
 
 /**
@@ -17,7 +17,7 @@ public interface MatchingRoutine extends
 {
 
 	void checkSuitability(MatchingConditions conditions)
-		throws OpMatchingException;
+		throws OpRetrievalException;
 
 	@Override
 	default int compareTo(MatchingRoutine o) {
@@ -25,7 +25,7 @@ public interface MatchingRoutine extends
 	}
 
 	OpCandidate findMatch(MatchingConditions conditions, OpMatcher matcher,
-		OpEnvironment env) throws OpMatchingException;
+		OpEnvironment env) throws OpRetrievalException;
 
 	/**
 	 * Generates an {@link OpCandidate} from the Ops in the provided

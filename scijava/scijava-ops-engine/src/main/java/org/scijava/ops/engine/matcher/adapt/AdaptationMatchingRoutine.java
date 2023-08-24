@@ -18,13 +18,14 @@ import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.OpCandidate.StatusCode;
-import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.DependencyMatchingException;
 import org.scijava.ops.engine.MatchingConditions;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpRef;
@@ -90,42 +91,45 @@ public class AdaptationMatchingRoutine implements MatchingRoutine {
 				// resolve adaptor dependencies
 				final Map<TypeVariable<?>, Type> adaptorBounds = new HashMap<>();
 				final Map<TypeVariable<?>, Type> dependencyBounds = new HashMap<>();
-				List<InfoChain> depChains = adaptor.dependencies().stream().map(d -> {
-					OpRef ref = inferOpRef(d, map);
-					Nil<?> type = Nil.of(ref.getType());
-					Nil<?>[] args = Arrays.stream(ref.getArgs()).map(Nil::of).toArray(
-						Nil[]::new);
-					Nil<?> outType = Nil.of(ref.getOutType());
-					InfoChain chain = env.infoChain(ref.getName(), type, args, outType,
-						adaptationHints);
-					// Check if the bounds of the dependency can inform the type of the
-					// adapted Op
-					final Type matchedOpType = chain.info().opType();
-					// Find adaptor type variable bounds fulfilled by matched Op
-					GenericAssignability.inferTypeVariables( //
-						new Type[] { d.getType() }, //
-						new Type[] { matchedOpType }, //
-						dependencyBounds //
-					);
-					for (TypeVariable<?> typeVar : map.keySet()) {
-						// Ignore TypeVariables not present in this particular dependency
-						if (!dependencyBounds.containsKey(typeVar)) continue;
-						Type matchedType = dependencyBounds.get(typeVar);
-						// Resolve any type variables from the dependency ref that we can
+				List<InfoChain> depChains = OpUtils.dependenciesOf(adaptor).stream() //
+					.map(d -> {
+						OpRef ref = inferOpRef(d, map);
+						Nil<?> type = Nil.of(ref.getType());
+						Nil<?>[] args = Arrays.stream(ref.getArgs()).map(Nil::of).toArray(
+							Nil[]::new);
+						Nil<?> outType = Nil.of(ref.getOutType());
+						InfoChain chain = env.infoChain(ref.getName(), type, args, outType,
+							adaptationHints);
+						// Check if the bounds of the dependency can inform the type of the
+						// adapted Op
+						final Type matchedOpType = chain.info().opType();
+						// Find adaptor type variable bounds fulfilled by matched Op
 						GenericAssignability.inferTypeVariables( //
-							new Type[] { ref.getType() }, //
+							new Type[] { d.getType() }, //
 							new Type[] { matchedOpType }, //
-							adaptorBounds //
+							dependencyBounds //
 						);
-						Type mapped = Types.mapVarToTypes(matchedType, adaptorBounds);
-						// If the type variable is more specific now, update it
-						if (mapped != null && Types.isAssignable(mapped, map.get(typeVar))) {
-							map.put(typeVar, mapped);
+						for (TypeVariable<?> typeVar : map.keySet()) {
+							// Ignore TypeVariables not present in this particular dependency
+							if (!dependencyBounds.containsKey(typeVar)) continue;
+							Type matchedType = dependencyBounds.get(typeVar);
+							// Resolve any type variables from the dependency ref that we can
+							GenericAssignability.inferTypeVariables( //
+								new Type[] { ref.getType() }, //
+								new Type[] { matchedOpType }, //
+								adaptorBounds //
+							);
+							Type mapped = Types.mapVarToTypes(matchedType, adaptorBounds);
+							// If the type variable is more specific now, update it
+							if (mapped != null && Types.isAssignable(mapped, map.get(
+								typeVar)))
+					{
+								map.put(typeVar, mapped);
+							}
 						}
-					}
-					dependencyBounds.clear();
-					return chain;
-				}).collect(Collectors.toList());
+						dependencyBounds.clear();
+						return chain;
+					}).collect(Collectors.toList());
 				InfoChain adaptorChain = new InfoChain(adaptor, depChains);
 
 				// grab the first type parameter from the OpInfo and search for

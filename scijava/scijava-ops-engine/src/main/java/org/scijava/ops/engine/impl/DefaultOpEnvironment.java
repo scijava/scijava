@@ -55,7 +55,6 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.InfoChainGenerator;
-import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpHistory;
 import org.scijava.ops.api.OpInfo;
@@ -72,6 +71,8 @@ import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.BaseOpHints.DependencyMatching;
 import org.scijava.ops.engine.BaseOpHints.Simplification;
+import org.scijava.ops.engine.OpDependencyMember;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 import org.scijava.ops.engine.matcher.impl.DefaultOpMatcher;
@@ -584,10 +585,9 @@ public class DefaultOpEnvironment implements OpEnvironment {
 		Map<TypeVariable<?>, Type> typeVarAssigns, Hints hints)
 	{
 
-		final List<OpDependencyMember<?>> dependencies = info.dependencies();
 		final List<RichOp<?>> dependencyChains = new ArrayList<>();
 
-		for (final OpDependencyMember<?> dependency : dependencies) {
+		for (final OpDependencyMember<?> dependency : OpUtils.dependenciesOf(info)) {
 			final OpRef dependencyRef = inferOpRef(dependency, typeVarAssigns);
 			try {
 				// TODO: Consider a new Hint implementation

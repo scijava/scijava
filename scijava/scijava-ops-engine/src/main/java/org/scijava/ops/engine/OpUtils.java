@@ -207,4 +207,12 @@ public final class OpUtils {
 	public static boolean hasPureOutput(final OpInfo info) {
 		return ioArgIndex(info) == -1;
 	}
+
+	/** Gets the op's dependencies on other ops. */
+	public static List<OpDependencyMember<?>> dependenciesOf(OpInfo info) {
+		return info.struct().members().stream() //
+				.filter(m -> m instanceof OpDependencyMember) //
+				.map(m -> (OpDependencyMember<?>) m) //
+				.collect(Collectors.toList());
+	}
 }

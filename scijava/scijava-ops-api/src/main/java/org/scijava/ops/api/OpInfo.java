@@ -74,14 +74,6 @@ public interface OpInfo extends Comparable<OpInfo> {
 		return output().getType();
 	}
 
-	/** Gets the op's dependencies on other ops. */
-	default List<OpDependencyMember<?>> dependencies() {
-		return struct().members().stream() //
-			.filter(m -> m instanceof OpDependencyMember) //
-			.map(m -> (OpDependencyMember<?>) m) //
-			.collect(Collectors.toList());
-	}
-	
 	/** The op's priority. */
 	double priority();
 

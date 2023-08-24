@@ -41,7 +41,7 @@ import org.scijava.common3.validity.ValidityException;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
-import org.scijava.ops.api.OpDependencyMember;
+import org.scijava.ops.engine.OpDependencyMember;
 import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.engine.OpUtils;
@@ -145,7 +145,7 @@ public class OpClassInfo implements OpInfo {
 			throw new IllegalStateException("Unable to instantiate op: '" + opClass
 				.getName() + "' Ensure that the Op has a no-args constructor.", e);
 		}
-		final List<OpDependencyMember<?>> dependencyMembers = dependencies();
+		final var dependencyMembers = OpUtils.dependenciesOf(this);
 		for (int i = 0; i < dependencyMembers.size(); i++) {
 			final OpDependencyMember<?> dependencyMember = dependencyMembers.get(i);
 			try {

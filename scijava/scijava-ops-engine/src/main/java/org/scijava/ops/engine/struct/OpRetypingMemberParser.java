@@ -50,11 +50,19 @@ public class OpRetypingMemberParser implements
 		if (ios.size() == newFmts.size())
 			return strictConversion(original, newFmts);
 		else
-			return synthesizedConversion(newFmts);
+			return synthesizedConversion(newFmts, original);
 	}
 
-	private List<Member<?>> synthesizedConversion(List<FunctionalMethodType> newFmts) {
-		return IntStream.range(0, newFmts.size()).boxed().map(foo -> mapToMember(foo, newFmts.get(foo))).collect(Collectors.toList());
+	private List<Member<?>> synthesizedConversion(List<FunctionalMethodType> newFmts, List<Member<?>> original) {
+		// Create new members for all new I/O members
+		List<Member<?>> newMembers = IntStream.range(0, newFmts.size()).boxed().map(foo -> mapToMember(foo, newFmts.get(foo))).collect(Collectors.toList());
+		// Add any non-I/O members (e.g. dependencies)
+		for (Member<?> m : original) {
+			if (!m.isInput() && !m.isOutput()) {
+				newMembers.add(m);
+			}
+		}
+		return newMembers;
 	}
 
 	private Member<?> mapToMember(int i, FunctionalMethodType fmt) {

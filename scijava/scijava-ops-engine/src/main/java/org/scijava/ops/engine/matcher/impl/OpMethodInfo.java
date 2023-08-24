@@ -46,6 +46,7 @@ import org.scijava.meta.Versions;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpInfo;
+import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.struct.MethodOpDependencyMemberParser;
 import org.scijava.ops.engine.struct.MethodParameterMemberParser;
 import org.scijava.ops.engine.util.Adapt;
@@ -207,7 +208,7 @@ public class OpMethodInfo implements OpInfo {
 			Object op = Adapt.Methods.lambdaize( //
 					Types.raw(opType), //
 					handle, //
-					dependencies().stream().map(Member::getRawType).toArray(Class[]::new),
+					OpUtils.dependenciesOf(this).stream().map(Member::getRawType).toArray(Class[]::new),
 					dependencies.toArray() //
 			);
 			return struct().createInstance(op);

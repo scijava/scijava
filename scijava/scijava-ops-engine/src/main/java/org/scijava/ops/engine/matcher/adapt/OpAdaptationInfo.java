@@ -16,7 +16,7 @@ import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.api.features.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.struct.FunctionalParameters;
 import org.scijava.ops.engine.struct.OpRetypingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;

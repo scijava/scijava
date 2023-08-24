@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.OpHints;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.conversionLoss.LossReporter;
 import org.scijava.ops.engine.matcher.impl.LossReporterWrapper;

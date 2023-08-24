@@ -38,7 +38,7 @@ import org.scijava.ops.api.OpRetrievalException;
 import org.scijava.ops.engine.OpCandidate;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;
 

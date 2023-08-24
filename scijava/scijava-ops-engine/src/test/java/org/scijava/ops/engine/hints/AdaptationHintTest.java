@@ -8,7 +8,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpRetrievalException;
-import org.scijava.ops.api.features.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.FunctionsToComputers;
 import org.scijava.ops.engine.copy.CopyOpCollection;

@@ -40,7 +40,7 @@ import net.imglib2.view.Views;
 import org.scijava.function.Computers;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.api.features.BaseOpHints;
+import org.scijava.ops.engine.BaseOpHints;
 
 /**
  * Evaluates a {@link UnaryComputerOp} for each {@link Neighborhood} on the

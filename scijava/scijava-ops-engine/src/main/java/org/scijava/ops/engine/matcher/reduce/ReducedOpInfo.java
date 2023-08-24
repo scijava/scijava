@@ -13,7 +13,7 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpDependencyMember;
 import org.scijava.ops.api.OpDescription;
 import org.scijava.ops.api.OpInfo;
-import org.scijava.ops.api.features.BaseOpHints;
+import org.scijava.ops.engine.BaseOpHints;
 import org.scijava.ops.engine.struct.OpResizingMemberParser;
 import org.scijava.ops.engine.struct.RetypingRequest;
 import org.scijava.struct.FunctionalMethodType;

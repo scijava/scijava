@@ -9,8 +9,8 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpRetrievalException;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
-import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.engine.BaseOpHints;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine;
 import org.scijava.priority.Priority;
 import org.scijava.types.Types;
@@ -21,8 +21,8 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 	public void checkSuitability(MatchingConditions conditions)
 		throws OpRetrievalException
 	{
-		if (conditions.hints().containsAny(Simplification.IN_PROGRESS,
-			Simplification.FORBIDDEN)) //
+		if (conditions.hints().containsAny(BaseOpHints.Simplification.IN_PROGRESS,
+			BaseOpHints.Simplification.FORBIDDEN)) //
 			throw new OpRetrievalException(
 				"Simplification is not suitable: Simplification is disabled");
 	}
@@ -32,7 +32,7 @@ public class SimplificationMatchingRoutine extends RuntimeSafeMatchingRoutine {
 		MatchingConditions conditions)
 	{
 		OpRef ref = conditions.ref();
-		Hints hints = conditions.hints().plus(Simplification.IN_PROGRESS);
+		Hints hints = conditions.hints().plus(BaseOpHints.Simplification.IN_PROGRESS);
 		Iterable<OpInfo> suitableInfos = env.infos(ref.getName(), hints);
 		Set<OpInfo> simpleInfos = new HashSet<>();
 		for (OpInfo info : suitableInfos) {

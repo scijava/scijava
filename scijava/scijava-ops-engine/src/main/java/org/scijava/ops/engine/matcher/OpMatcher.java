@@ -31,7 +31,7 @@ package org.scijava.ops.engine.matcher;
 
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpRef;
-import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.OpCandidate;
 
 /**

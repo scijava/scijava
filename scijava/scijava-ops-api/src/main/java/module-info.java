@@ -1,6 +1,5 @@
 module org.scijava.ops.api {
 	exports org.scijava.ops.api;
-	exports org.scijava.ops.api.features;
 
 	requires org.scijava.function;
 	requires transitive org.scijava.struct;

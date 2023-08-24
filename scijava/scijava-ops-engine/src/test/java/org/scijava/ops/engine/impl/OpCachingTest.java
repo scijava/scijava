@@ -47,7 +47,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfoGenerator;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpWrapper;
-import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.spi.Op;
 import org.scijava.ops.spi.OpClass;

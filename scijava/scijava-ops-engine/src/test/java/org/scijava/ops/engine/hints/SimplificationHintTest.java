@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpRetrievalException;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.matcher.simplify.IdentityLossReporter;
 import org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers;

@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import org.scijava.ops.api.OpInstance;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.api.features.BaseOpHints.History;
+import org.scijava.ops.engine.BaseOpHints.History;
 import org.scijava.progress.Progress;
 
 /**

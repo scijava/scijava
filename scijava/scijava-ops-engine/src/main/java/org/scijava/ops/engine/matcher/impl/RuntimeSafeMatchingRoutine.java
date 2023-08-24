@@ -20,7 +20,7 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.api.features.MatchingConditions;
+import org.scijava.ops.engine.MatchingConditions;
 import org.scijava.ops.engine.matcher.MatchingResult;
 import org.scijava.ops.engine.matcher.MatchingRoutine;
 import org.scijava.ops.engine.matcher.OpMatcher;

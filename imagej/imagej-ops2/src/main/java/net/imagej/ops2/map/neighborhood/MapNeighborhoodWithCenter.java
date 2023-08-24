@@ -42,7 +42,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.api.features.BaseOpHints;
+import org.scijava.ops.engine.BaseOpHints;
 
 /**
  * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on

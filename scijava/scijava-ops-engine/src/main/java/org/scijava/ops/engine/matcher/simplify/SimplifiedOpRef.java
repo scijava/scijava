@@ -16,8 +16,8 @@ import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpRef;
 import org.scijava.ops.api.OpRetrievalException;
-import org.scijava.ops.api.features.BaseOpHints.Adaptation;
-import org.scijava.ops.api.features.BaseOpHints.Simplification;
+import org.scijava.ops.engine.BaseOpHints.Adaptation;
+import org.scijava.ops.engine.BaseOpHints.Simplification;
 import org.scijava.types.Nil;
 import org.scijava.types.Types;
 

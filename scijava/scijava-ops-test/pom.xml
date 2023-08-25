@@ -114,6 +114,7 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-ops-engine</artifactId>
 			<version>${project.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<!-- Test Scope Dependencies -->
 		<dependency>

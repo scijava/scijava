@@ -1,5 +1,5 @@
 
-package org.scijava.ops.test.test;
+package org.scijava.ops.test;
 
 import java.util.List;
 

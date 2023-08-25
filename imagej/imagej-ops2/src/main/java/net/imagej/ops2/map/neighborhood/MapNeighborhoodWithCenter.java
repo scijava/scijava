@@ -42,7 +42,7 @@ import org.scijava.function.Computers;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.api.OpMetadata;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.engine.BaseOpHints;
+import org.scijava.ops.api.APIHints;
 
 /**
  * Evaluates a {@link CenterAwareComputerOp} for each {@link Neighborhood} on
@@ -124,21 +124,19 @@ class MapNeighborhoodWithCenterAllRAI<I, O> implements
 		boolean restoreRecording = true;
 		if (centerAwareOp instanceof RichOp) {
 			OpMetadata metadata = ((RichOp) centerAwareOp).metadata();
-			if (metadata.hints().contains(BaseOpHints.History.SKIP_RECORDING)) {
+			if (metadata.hints().contains(APIHints.History.SKIP_RECORDING)) {
 				restoreRecording = false;
 			} else {
-				metadata.hints().plus(BaseOpHints.History.SKIP_RECORDING);
+				metadata.hints().plus(APIHints.History.SKIP_RECORDING);
 			}
 		}
 
 		LoopBuilder.setImages(neighborhoodInput, in1, out).multiThreaded()
-			.forEachPixel((neighborhood, inPixel, outPixel) -> {
-				centerAwareOp.compute(neighborhood, inPixel, outPixel);
-			});
+			.forEachPixel(centerAwareOp::compute);
 
 		if (restoreRecording && centerAwareOp instanceof RichOp) {
 			((RichOp)centerAwareOp).metadata().hints().minus(
-					BaseOpHints.History.SKIP_RECORDING);
+					APIHints.History.SKIP_RECORDING);
 		}
 	}
 

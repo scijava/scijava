@@ -27,7 +27,7 @@
  * #L%
  */
 
-package org.scijava.ops.engine;
+package org.scijava.ops.spi;
 
 /**
  * Thrown to indicate that an Op failed in its execution

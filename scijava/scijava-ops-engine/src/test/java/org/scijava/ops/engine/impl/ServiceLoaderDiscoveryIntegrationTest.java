@@ -20,7 +20,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 	public void opDiscoveryRegressionIT() {
 		final Discoverer d = Discoverer.using(ServiceLoader::load);
 		final List<Op> discoveries = d.discover(Op.class);
-		Assertions.assertEquals(235, discoveries.size());
+		Assertions.assertEquals(236, discoveries.size());
 
 		@SuppressWarnings("unused")
 		final Logger l = new StderrLoggerFactory().create();
@@ -28,7 +28,7 @@ public class ServiceLoaderDiscoveryIntegrationTest {
 		final List<OpInfo> infos = discoveries.stream() //
 				.flatMap(c -> g.generateInfosFrom(c).stream()) //
 				.collect(Collectors.toList());
-		Assertions.assertEquals(235, infos.size());
+		Assertions.assertEquals(236, infos.size());
 	}
 
 	@Test

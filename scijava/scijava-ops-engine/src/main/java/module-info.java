@@ -28,6 +28,7 @@ module org.scijava.ops.engine {
 	requires org.javassist;
 	requires org.yaml.snakeyaml;
 
+	requires org.scijava.parsington;
 
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
@@ -493,7 +494,7 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_14ToFunction16,
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_15ToFunction16,
 		org.scijava.ops.engine.adapt.functional.InplacesToFunctions.Inplace16_16ToFunction16,
-
+		org.scijava.ops.engine.eval.DefaultEval,
 		org.scijava.ops.engine.stats.Mean.MeanFunction;
 
     provides org.scijava.ops.engine.matcher.reduce.InfoReducer with //

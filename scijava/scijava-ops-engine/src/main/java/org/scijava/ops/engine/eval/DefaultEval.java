@@ -27,12 +27,14 @@
  * #L%
  */
 
-package net.imagej.ops2.eval;
+package org.scijava.ops.engine.eval;
 
 import java.util.Map;
 
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 
 /**
  * Evaluates an expression.
@@ -44,9 +46,10 @@ import org.scijava.ops.api.OpEnvironment;
  * 
  * @author Curtis Rueden
  * @see OpEvaluator
- *@implNote op names='eval'
  */
-public class DefaultEval implements Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>
+@OpClass(names = "eval")
+public class DefaultEval implements
+	Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>, Op
 {
 
 	/**
@@ -54,11 +57,13 @@ public class DefaultEval implements Functions.Arity3<String, Map<String, Object>
 	 *
 	 * @param input
 	 * @param vars
-	 * @param opService
+	 * @param ops
 	 * @return the output
 	 */
 	@Override
-	public Object apply(final String input, final Map<String, Object> vars, final OpEnvironment ops) {
+	public Object apply(final String input, final Map<String, Object> vars,
+		final OpEnvironment ops)
+	{
 		OpEvaluator e = new OpEvaluator(ops);
 		if (vars != null) e.setAll(vars);
 		return e.evaluate(input);

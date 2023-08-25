@@ -27,26 +27,33 @@
  * #L%
  */
 
-package net.imagej.ops2.eval;
+package org.scijava.ops.engine.eval;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import net.imagej.ops2.AbstractOpTest;
-
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.scijava.function.Functions;
 import org.scijava.ops.api.OpEnvironment;
+import org.scijava.ops.engine.AbstractTestEnvironment;
+import org.scijava.ops.engine.math.MathOpCollection;
 import org.scijava.types.Nil;
 
 /**
- * Tests {@link net.imagej.ops2.Ops.Eval}.
+ * Tests {@link DefaultEval}.
  * 
  * @author Curtis Rueden
  */
-public class EvalTest extends AbstractOpTest {
+public class EvalTest extends AbstractTestEnvironment {
+
+	@BeforeAll
+	public static void addNeededOps() {
+		ops.register(new DefaultEval());
+		ops.register(new MathOpCollection());
+	}
 
 	@Test
 	public void testMath() {
@@ -56,10 +63,14 @@ public class EvalTest extends AbstractOpTest {
 		vars.put("c", 5);
 
 		// TODO: can we use ops.run here?
-		Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object> evaluator = ops.op("eval",
-				new Nil<Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object>>() {},
-				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpEnvironment>() {} },
-				new Nil<Object>() {});
+		Functions.Arity3<String, Map<String, Object>, OpEnvironment, Object> evaluator =
+			ops.op("eval", //
+				new Nil<>()
+				{}, //
+				new Nil[] { new Nil<String>() {}, new Nil<Map<String, Object>>() {}, new Nil<OpEnvironment>() {} }, //
+				new Nil<>()
+				{} //
+			);
 
 		assertEquals(7., evaluator.apply("a+c", vars, ops));
 		assertEquals(3., evaluator.apply("c-a", vars, ops));

@@ -27,7 +27,7 @@
  * #L%
  */
 
-package net.imagej.ops2.eval;
+package org.scijava.ops.engine.eval;
 
 import java.util.Arrays;
 import java.util.Collections;

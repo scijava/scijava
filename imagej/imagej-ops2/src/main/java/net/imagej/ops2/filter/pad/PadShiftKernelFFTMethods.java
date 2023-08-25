@@ -31,13 +31,12 @@ package net.imagej.ops2.filter.pad;
 
 import java.util.function.Function;
 
+import org.scijava.function.Functions;
+import org.scijava.ops.spi.OpDependency;
+
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
-
-import org.scijava.function.Functions;
-import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op used to pad a kernel to a size that is compatible with FFTMethods and
@@ -58,7 +57,7 @@ public class PadShiftKernelFFTMethods<T extends ComplexType<T>, I extends Random
 
 	@Override
 	protected Function<Dimensions, long[][]> getFFTSizeOp(){
-		return Adapt.FunctionAdapt.asFunction(fftSizeOp, true, true);
+		return in -> fftSizeOp.apply(in, true, true);
 	}
 
 }

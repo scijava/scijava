@@ -32,12 +32,11 @@ package net.imagej.ops2.filter.pad;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.scijava.ops.spi.OpDependency;
+
 import net.imglib2.Dimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.ComplexType;
-
-import org.scijava.ops.engine.util.Adapt;
-import org.scijava.ops.spi.OpDependency;
 
 /**
  * Op used to pad the kernel using the default FFT padding scheme and shift the
@@ -57,7 +56,7 @@ public class DefaultPadShiftKernelFFT<T extends ComplexType<T>, I extends Random
 
 	@Override
 	protected Function<Dimensions, long[][]> getFFTSizeOp() {
-		return Adapt.FunctionAdapt.asFunction(fftSizeOp, true);
+		return in -> fftSizeOp.apply(in, true);
 	}
 
 

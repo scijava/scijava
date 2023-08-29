@@ -12,9 +12,9 @@ From the `OpEnvironment`, an `OpBuilder` call is initialized with the method `Op
 ops.op("filter.gauss")
 ```
 
-## Specifying the number of inputs with `.arityX()`
+## Specifying the number of inputs with `.arity*()`
 
-After providing the name, the `OpBuilder` syntax requires the user to define the **number** of inputs to the Op call; we do this by adding one of the `arityX()` methods to the chain - `arity1()` tells the `OpBuilder` chain to expect one input, `arity2()` expects two inputs, and so on.
+After providing the name, the `OpBuilder` syntax requires the user to define the **number** of inputs to the Op call; we do this by adding one of the `arity*()` methods to the chain - `arity1()` tells the `OpBuilder` chain to expect one input, `arity2()` expects two inputs, and so on.
 
 In doing a basic gaussian blur, we will pass through the input image `inImage`, and a sigma parameter - therefore, we will call `arity2()`:
 

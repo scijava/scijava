@@ -43,7 +43,6 @@ import net.imglib2.view.Views;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.scijava.Context;
 import org.scijava.types.Nil;
 
 /**

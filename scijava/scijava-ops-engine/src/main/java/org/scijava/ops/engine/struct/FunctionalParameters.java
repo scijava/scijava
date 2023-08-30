@@ -3,13 +3,16 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Container;
 import org.scijava.function.Mutable;
 import org.scijava.ops.engine.OpUtils;
 import org.scijava.ops.engine.util.internal.AnnotationUtils;
+import org.scijava.ops.spi.Optional;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Structs;
@@ -97,6 +100,32 @@ public class FunctionalParameters {
 		}
 	
 		return out;
+	}
+
+
+	public static Boolean hasOptionalAnnotations(Method m) {
+		return Arrays.stream(m.getParameters()).anyMatch(p -> p.isAnnotationPresent(
+				Optional.class));
+	}
+
+	public static Boolean[] findParameterOptionality(Method m) {
+		return Arrays.stream(m.getParameters()).map(p -> p.isAnnotationPresent(
+				Optional.class)).toArray(Boolean[]::new);
+	}
+
+	public static List<Method> fMethodsWithOptional(Class<?> opClass) {
+		Method superFMethod = OpUtils.findFunctionalMethod(opClass);
+		return Arrays.stream(opClass.getMethods()) //
+				.filter(m -> m.getName().equals(superFMethod.getName())) //
+				.filter(m -> m.getParameterCount() == superFMethod.getParameterCount()) //
+				.filter(m -> hasOptionalAnnotations(m)) //
+				.collect(Collectors.toList());
+	}
+
+	public static Boolean[] generateAllRequiredArray(int num) {
+		Boolean[] arr = new Boolean[num];
+		Arrays.fill(arr, false);
+		return arr;
 	}
 
 }

@@ -38,8 +38,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
 
-import org.scijava.common3.compare.CompareUtils;
-
 /**
  * Useful methods for working with {@link Class} objects and primitive types.
  *
@@ -537,7 +535,7 @@ public final class Classes {
 		if (c1 == c2) return 0;
 		final String name1 = c1 == null ? null : c1.getName();
 		final String name2 = c2 == null ? null : c2.getName();
-		return CompareUtils.compare(name1, name2);
+		return Comparisons.compare(name1, name2);
 	}
 
 	// -- Helper methods --

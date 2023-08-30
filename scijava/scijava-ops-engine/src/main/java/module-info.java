@@ -13,20 +13,20 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.util.internal to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.monitor to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
+	opens org.scijava.ops.engine.matcher.reduce to therapi.runtime.javadoc;
+	opens org.scijava.ops.engine.matcher.adapt to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.create to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.matcher.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.conversionLoss to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.log to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.yaml to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.conversionLoss.impl to therapi.runtime.javadoc, org.scijava;
+	opens org.scijava.ops.engine.matcher.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.complexLift to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.lift to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.functional to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.reduce to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.stats to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;
@@ -55,29 +55,37 @@ module org.scijava.ops.engine {
 	uses javax.annotation.processing.Processor;
 	uses org.scijava.discovery.Discoverer;
 	uses org.scijava.ops.api.InfoChainGenerator;
+	uses org.scijava.ops.api.OpEnvironment;
 	uses org.scijava.ops.api.OpInfoGenerator;
 	uses org.scijava.ops.api.OpWrapper;
 	uses org.scijava.ops.api.features.MatchingRoutine;
 	uses org.scijava.ops.api.features.YAMLOpInfoCreator;
-	uses org.scijava.ops.engine.reduce.InfoReducer;
+	uses org.scijava.ops.engine.matcher.reduce.InfoReducer;
 	uses org.scijava.ops.spi.Op;
 	uses org.scijava.ops.spi.OpCollection;
 	uses org.scijava.parse2.Parser;
+	uses org.scijava.types.TypeReifier;
 	uses org.scijava.types.TypeExtractor;
 
 	provides org.scijava.discovery.Discoverer with
  		org.scijava.ops.engine.impl.TherapiOpInfoDiscoverer;
 
 	provides org.scijava.ops.api.InfoChainGenerator with
-		org.scijava.ops.engine.matcher.impl.AdaptationInfoChainGenerator,
+		org.scijava.ops.engine.matcher.adapt.AdaptationInfoChainGenerator,
 		org.scijava.ops.engine.impl.DefaultInfoChainGenerator,
-		org.scijava.ops.engine.simplify.SimplificationInfoChainGenerator;
+		org.scijava.ops.engine.matcher.simplify.SimplificationInfoChainGenerator;
+
+	provides org.scijava.ops.api.OpEnvironment with
+	    org.scijava.ops.engine.impl.DefaultOpEnvironment;
+
+	provides org.scijava.ops.api.OpHistory with
+	    org.scijava.ops.engine.impl.DefaultOpHistory;
 
 	provides org.scijava.ops.api.OpInfoGenerator with
 	    org.scijava.ops.engine.impl.OpClassOpInfoGenerator,
 	    org.scijava.ops.engine.impl.OpCollectionInfoGenerator,
 		org.scijava.ops.engine.impl.TherapiOpInfoGenerator,
-		org.scijava.ops.engine.reduce.ReducedOpInfoGenerator;
+		org.scijava.ops.engine.matcher.reduce.ReducedOpInfoGenerator;
 
 	provides org.scijava.ops.api.OpWrapper with
 		org.scijava.ops.engine.matcher.impl.OpWrappers.ProducerOpWrapper,
@@ -250,12 +258,12 @@ module org.scijava.ops.engine {
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Inplace16_14OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Inplace16_15OpWrapper,
 		org.scijava.ops.engine.matcher.impl.OpWrappers.Inplace16_16OpWrapper,
-		org.scijava.ops.engine.conversionLoss.impl.LossReporterWrapper;
+		org.scijava.ops.engine.matcher.impl.LossReporterWrapper;
 
 	provides org.scijava.ops.api.features.MatchingRoutine with
 		org.scijava.ops.engine.matcher.impl.RuntimeSafeMatchingRoutine,
-		org.scijava.ops.engine.matcher.impl.AdaptationMatchingRoutine,
-		org.scijava.ops.engine.matcher.impl.SimplificationMatchingRoutine;
+		org.scijava.ops.engine.matcher.adapt.AdaptationMatchingRoutine,
+		org.scijava.ops.engine.matcher.simplify.SimplificationMatchingRoutine;
 
 	provides org.scijava.ops.spi.OpCollection with
 	    org.scijava.ops.engine.adapt.lift.ComputerToArrays,
@@ -263,8 +271,8 @@ module org.scijava.ops.engine {
 	    org.scijava.ops.engine.adapt.lift.FunctionToArrays,
 	    org.scijava.ops.engine.adapt.lift.FunctionToIterables,
 	    org.scijava.ops.engine.adapt.lift.InplaceToArrays,
-	    org.scijava.ops.engine.conversionLoss.impl.PrimitiveArrayLossReporters,
-	    org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters,
+	    org.scijava.ops.engine.matcher.simplify.PrimitiveArrayLossReporters,
+	    org.scijava.ops.engine.matcher.simplify.PrimitiveLossReporters,
 	    org.scijava.ops.engine.copy.CopyOpCollection,
 	    org.scijava.ops.engine.create.CreateOpCollection,
 	    org.scijava.ops.engine.math.Add,
@@ -272,8 +280,8 @@ module org.scijava.ops.engine {
 	    org.scijava.ops.engine.math.Power,
 	    org.scijava.ops.engine.math.Sqrt,
 	    org.scijava.ops.engine.math.Zero,
-	    org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers,
-	    org.scijava.ops.engine.simplify.PrimitiveSimplifiers,
+	    org.scijava.ops.engine.matcher.simplify.PrimitiveArraySimplifiers,
+	    org.scijava.ops.engine.matcher.simplify.PrimitiveSimplifiers,
 		org.scijava.ops.engine.stats.Size;
 
 
@@ -515,9 +523,9 @@ module org.scijava.ops.engine {
 
 		org.scijava.ops.engine.stats.Mean.MeanFunction;
 
-    provides org.scijava.ops.engine.reduce.InfoReducer with //
-        org.scijava.ops.engine.reduce.FunctionReducer,
-        org.scijava.ops.engine.reduce.ComputerReducer;
+    provides org.scijava.ops.engine.matcher.reduce.InfoReducer with //
+        org.scijava.ops.engine.matcher.reduce.FunctionReducer,
+        org.scijava.ops.engine.matcher.reduce.ComputerReducer;
 
     provides org.scijava.ops.api.features.YAMLOpInfoCreator with
         org.scijava.ops.engine.yaml.JavaClassYAMLOpInfoCreator,

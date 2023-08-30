@@ -424,7 +424,55 @@ public final class Types {
 		}
 		return Object.class;
 	}
-	
+
+	/**
+	 * Obtains the type parameters of {@link Type} {@code src} <b>with respect
+	 * to</b> the {@link Class} {@code dest}. When {@code src} has no type
+	 * parameters (or is not a subclass of {@code dest}), an empty array is
+	 * returned.
+	 *
+	 * @param src - the {@code Type} whose type parameters will be returned.
+	 * @param superclass - the {@code Class} against which we want the type
+	 *          parameters of {@code src}
+	 * @return an array of {@code Type}s denoting the type
+	 */
+	public static Type[] typeParamsAgainstClass(Type src, Class<?> superclass) {
+		// only classes and ParameterizedTypes can have type parameters
+		if (!(src instanceof Class || src instanceof ParameterizedType))
+			return new Type[0];
+		try {
+			Type superSrc = Types.getExactSuperType(src, superclass);
+			if (superSrc instanceof ParameterizedType)
+				return ((ParameterizedType) superSrc).getActualTypeArguments();
+			return getParams(Types.raw(src), superclass);
+		} catch (AssertionError e) {
+			return new Type[0];
+		}
+	}
+
+	/**
+	 * Finds the type parameters of the most specific super type of the specified
+	 * subType whose erasure is the specified superErasure. Hence, will return the
+	 * type parameters of superErasure possibly narrowed down by subType. If
+	 * superErasure is not raw or not a super type of subType, an empty array will
+	 * be returned.
+	 *
+	 * @param subType the type to narrow down type parameters
+	 * @param superErasure the erasure of an super type of subType to get the
+	 *          parameters from
+	 * @return type parameters of superErasure possibly narrowed down by subType,
+	 *         or empty type array if no exists or superErasure is not a super
+	 *         type of subtype
+	 */
+	public static Type[] getParams(Class<?> subType, Class<?> superErasure) {
+		Type pt = parameterizeRaw(subType);
+		Type superType = getExactSuperType(pt, superErasure);
+		if (superType != null && superType instanceof ParameterizedType) {
+			return ((ParameterizedType) superType).getActualTypeArguments();
+		}
+		return new Type[0];
+	}
+
 	/**
 	 * Discerns whether it would be legal to assign a group of references of types
 	 * {@code source} to a reference of type {@code target}.

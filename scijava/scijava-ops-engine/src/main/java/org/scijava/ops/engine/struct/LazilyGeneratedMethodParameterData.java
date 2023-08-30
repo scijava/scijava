@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.scijava.common3.validity.ValidityProblem;
 import org.scijava.function.Producer;
 import org.scijava.ops.engine.OpUtils;
-import org.scijava.ops.engine.reduce.ReductionUtils;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
@@ -234,8 +233,8 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 	private static Boolean[] getParameterOptionality(Method m, Class<?> opType,
 		int opParams, List<ValidityProblem> problems)
 	{
-		boolean opMethodHasOptionals = ReductionUtils.hasOptionalAnnotations(m);
-		List<Method> fMethodsWithOptionals = ReductionUtils.fMethodsWithOptional(
+		boolean opMethodHasOptionals = FunctionalParameters.hasOptionalAnnotations(m);
+		List<Method> fMethodsWithOptionals = FunctionalParameters.fMethodsWithOptional(
 			opType);
 		// the number of parameters we need to determine
 
@@ -244,26 +243,26 @@ public class LazilyGeneratedMethodParameterData implements ParameterData {
 		if (opMethodHasOptionals && !fMethodsWithOptionals.isEmpty()) {
 			problems.add(new ValidityProblem(
 				"Both the OpMethod and its op type have optional parameters!"));
-			return ReductionUtils.generateAllRequiredArray(opParams);
+			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
 		if (fMethodsWithOptionals.size() > 1) {
 			problems.add(new ValidityProblem(
 				"Multiple methods from the op type have optional parameters!"));
-			return ReductionUtils.generateAllRequiredArray(opParams);
+			return FunctionalParameters.generateAllRequiredArray(opParams);
 		}
 
 		// return the optionality of each parameter of the Op
 		if (opMethodHasOptionals) return getOpMethodOptionals(m, opParams);
-		if (fMethodsWithOptionals.size() > 0) return ReductionUtils
+		if (fMethodsWithOptionals.size() > 0) return FunctionalParameters
 			.findParameterOptionality(fMethodsWithOptionals.get(0));
-		return ReductionUtils.generateAllRequiredArray(opParams);
+		return FunctionalParameters.generateAllRequiredArray(opParams);
 	}
 
 	private static Boolean[] getOpMethodOptionals(Method m, int opParams) {
 		int[] paramIndex = mapFunctionalParamsToIndices(m.getParameters());
-		Boolean[] arr = ReductionUtils.generateAllRequiredArray(opParams);
+		Boolean[] arr = FunctionalParameters.generateAllRequiredArray(opParams);
 		// check parameters on m
-		Boolean[] mOptionals = ReductionUtils.findParameterOptionality(m);
+		Boolean[] mOptionals = FunctionalParameters.findParameterOptionality(m);
 		for (int i = 0; i < mOptionals.length; i++) {
 			int index = paramIndex[i];
 			if (index == -1) continue;

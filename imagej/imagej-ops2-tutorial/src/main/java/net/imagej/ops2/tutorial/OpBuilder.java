@@ -4,7 +4,6 @@ package net.imagej.ops2.tutorial;
 import java.util.function.BiFunction;
 
 import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
 
 /**
  * The OpBuilder syntax leads to concise, script-like Op execution.
@@ -16,7 +15,7 @@ public class OpBuilder {
 
 	public static void main(String... args) {
 		// All Ops calls start from an OpEnvironment. This environment determines the available Ops.
-		OpEnvironment ops = new DefaultOpEnvironment();
+		OpEnvironment ops = OpEnvironment.getEnvironment();
 
 		/*
 		To run an Op we have to match it. Ops themselves have a name, some number of inputs, and potentially an output

@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.scijava.types.inference.GenericAssignability;
-
 /**
  * Additional functions beyond {@link Types} for working with generic types,
  * fields and methods.
@@ -319,7 +317,7 @@ public final class TypeTools {
 		final Type... superClsTypeVars)
 	{
 		Type t = Types.parameterizeRaw(cls);
-		Type[] typeVars = GenericAssignability.typeParamsAgainstClass(t, superCls);
+		Type[] typeVars = Types.typeParamsAgainstClass(t, superCls);
 		if (typeVars.length != superClsTypeVars.length) {
 			throw new IllegalArgumentException("Type variables " + Arrays.toString(
 				typeVars) + " of class " + cls +

@@ -44,7 +44,7 @@ import org.scijava.priority.Priority;
  *
  * @author Curtis Rueden
  */
-public interface TypeExtractor extends Prioritized {
+public interface TypeExtractor extends Prioritized<TypeExtractor> {
 
 	boolean canReify(final TypeReifier r, final Class<?> object);
 
@@ -54,10 +54,4 @@ public interface TypeExtractor extends Prioritized {
 	default double getPriority() {
 		return Priority.NORMAL;
 	}
-
-	@Override
-	default void setPriority(final double priority) {
-		throw new UnsupportedOperationException("Cannot mutate priority of " + this);
-	}
-
 }

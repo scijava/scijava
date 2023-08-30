@@ -170,4 +170,4 @@ org.scijava.ops.engine.matcher.impl.OpWrappers$Inplace16_13OpWrapper
 org.scijava.ops.engine.matcher.impl.OpWrappers$Inplace16_14OpWrapper
 org.scijava.ops.engine.matcher.impl.OpWrappers$Inplace16_15OpWrapper
 org.scijava.ops.engine.matcher.impl.OpWrappers$Inplace16_16OpWrapper
-org.scijava.ops.engine.conversionLoss.impl.LossReporterWrapper
+org.scijava.ops.engine.matcher.impl.LossReporterWrapper

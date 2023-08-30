@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.scijava.common3.validity.ValidityException;
-import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
+import org.scijava.ops.engine.matcher.simplify.SimplifiedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
 import org.scijava.struct.ItemIO;
 import org.scijava.struct.Member;

@@ -27,7 +27,6 @@ module org.scijava.ops.engine {
 	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.functional to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.reduce to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.hint to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.stats to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.util to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.math to therapi.runtime.javadoc;

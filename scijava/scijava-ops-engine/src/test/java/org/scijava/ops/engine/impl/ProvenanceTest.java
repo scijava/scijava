@@ -10,28 +10,26 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.scijava.function.Computers;
+import org.scijava.function.Producer;
 import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.InfoChain;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.RichOp;
-import org.scijava.ops.spi.Op;
-import org.scijava.ops.spi.OpClass;
-import org.scijava.priority.Priority;
-import org.scijava.function.Computers;
-import org.scijava.function.Producer;
 import org.scijava.ops.engine.AbstractTestEnvironment;
 import org.scijava.ops.engine.adapt.functional.ComputersToFunctionsViaFunction;
 import org.scijava.ops.engine.adapt.lift.FunctionToArrays;
 import org.scijava.ops.engine.conversionLoss.impl.PrimitiveLossReporters;
 import org.scijava.ops.engine.copy.CopyOpCollection;
 import org.scijava.ops.engine.create.CreateOpCollection;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.simplify.PrimitiveArraySimplifiers;
 import org.scijava.ops.engine.simplify.PrimitiveSimplifiers;
+import org.scijava.ops.spi.Op;
+import org.scijava.ops.spi.OpClass;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.OpDependency;
 import org.scijava.ops.spi.OpField;
-import org.scijava.ops.spi.OpMethod;
+import org.scijava.priority.Priority;
 import org.scijava.types.Nil;
 
 public class ProvenanceTest extends AbstractTestEnvironment implements
@@ -210,7 +208,7 @@ public class ProvenanceTest extends AbstractTestEnvironment implements
 	@Test
 	public void testMappingProvenanceAndCaching() {
 		// call (and run) the Op
-		Hints hints = new DefaultHints();
+		Hints hints = new Hints();
 		int length = 200;
 		Double[] array = new Double[length];
 		Arrays.fill(array, 1.);

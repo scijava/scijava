@@ -18,7 +18,6 @@ import org.scijava.ops.api.Hints;
 import org.scijava.ops.api.OpHints;
 import org.scijava.ops.api.OpInfo;
 import org.scijava.ops.api.OpInfoGenerator;
-import org.scijava.ops.engine.hint.DefaultHints;
 import org.scijava.ops.engine.matcher.impl.OpFieldInfo;
 import org.scijava.ops.engine.matcher.impl.OpMethodInfo;
 import org.scijava.ops.spi.OpCollection;
@@ -28,8 +27,8 @@ import org.scijava.ops.spi.OpMethod;
 public class OpCollectionInfoGenerator implements OpInfoGenerator {
 
 	private Hints formHints(OpHints h) {
-		if (h == null) return new DefaultHints();
-		return new DefaultHints(h.hints());
+		if (h == null) return new Hints();
+		return new Hints(h.hints());
 	}
 
 	protected List<OpInfo> processClass(Class<?> cls) {

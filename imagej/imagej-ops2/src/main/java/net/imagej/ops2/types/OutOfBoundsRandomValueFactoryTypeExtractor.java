@@ -39,12 +39,11 @@ import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
 
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsRandomValueFactory;
 
 /**
  * {@link TypeExtractor} plugin which operates on
- * {@link OutOfBoundsConstantValueFactory} objects.
+ * {@link OutOfBoundsRandomValueFactory} objects.
  *
  * @author Gabriel Selzer
  */

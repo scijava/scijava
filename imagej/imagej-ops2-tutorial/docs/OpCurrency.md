@@ -10,7 +10,7 @@ Simple pixel-wise operations like addition, inversion, and more can be written o
 /**
  * A simple pixelwise Op
  * 
- * @implNote op names="my.op"
+ * @implNote op names="pixel.op"
  */
 class <T extends RealType<T>> MyPixelwiseOp implements Computers.Arity2<T, T, T> {
 	@Override
@@ -27,18 +27,18 @@ ArrayImg<UnsignedByteType> in1 = ...
 ArrayImg<UnsignedByteType> in2 = ...
 ArrayImg<UnsignedByteType> out = ...
 
-ops.op("my.op").arity2().input(in1, in2).output(out).compute();
+ops.op("pixel.op").arity2().input(in1, in2).output(out).compute();
 ```
 
 A similar vein of thought works for simple `List`s and `Array`s - if you have an Op that produces a `Double` from another `Double`, there's no need to write a wrapper to work on `Double[]`s - Ops will do that for you!
 
 ```java
 /**
- * A simple pixelwise Op
+ * An element-wise Op
  *
- * @implNote op names="my.op"
+ * @implNote op names="element.op"
  */
-class MyPixelwiseOp implements Function<Double, Double> {
+class MyElementOp implements Function<Double, Double> {
     @Override
     public Double apply(final Double input) {
         ... pixelwise computation here ...
@@ -50,7 +50,7 @@ If you then have SciJava Ops, the following Op call will match on your arrays, `
 
 ```java
 List<Double> inList = ...
-List<Double> outList = ops.op("my.op2").arity1().input(in1).apply();
+List<Double> outList = ops.op("element.op").arity1().input(in1).apply();
 ```
 
 ## Neighborhood-wise Ops
@@ -62,7 +62,7 @@ A slightly more complicated class of algorithms operate on local regions around 
 /**
  * A simple neighborhood-based Op
  *
- * @implNote op names="my.op"
+ * @implNote op names="neighborhood.op"
  */
 class <T extends RealType<T>> MyNeighborhoodOp implements Computers.Arity1<Neighborhood<T>, T> {
 	@Override
@@ -79,7 +79,7 @@ ArrayImg<DoubleType> input = ...
 Shape neighborhoodShape = ...
 ArrayImg<DoubleType> output = ...
 
-ops.op("my.op").arity2().input(input, shape).output(output).compute()
+ops.op("neighborhood.op").arity2().input(input, shape).output(output).compute()
 ```
 
 ## Using dependencies
@@ -95,10 +95,11 @@ import org.scijava.ops.spi.OpDependency;
 /**
  * An Op that needs to run on the whole image
  *
- * @implNote op names="my.op"
+ * @implNote op names="iterating.op"
  */
-class<I, O> ComplicatedOp implements Computers.Arity1<Img<I>,Img<O>>{
-    @OpDependency(name = "my.internalOp")
+class<I, O> MultiPassOp implements Computers.Arity1<Img<I>,Img<O>>{
+	
+    @OpDependency(name = "internal.Op")
     private final Computers.Arity1<Img<I>, Img<O>> iteration;
 
     @Override
@@ -107,16 +108,19 @@ class<I, O> ComplicatedOp implements Computers.Arity1<Img<I>,Img<O>>{
             iteration.compute(input, container);
 		}
     }
+    
 }
 
 /**
  * An Op that executes a single iteration of some iterative process
- * @implNote op names="my.internalOp"
+ * @implNote op names="internal.Op"
  */
-class<I, O> ComplicatedOp implements Computers.Arity1<Img<I>,Img<O>>{
+class<I, O> IterationOp implements Computers.Arity1<Img<I>,Img<O>>{
+	
     @Override
     public void compute(final Img<I> input, final Img<O> container){
         ...perform an iteration...
     }
+    
 }
 ```

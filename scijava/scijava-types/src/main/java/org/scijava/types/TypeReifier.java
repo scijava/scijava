@@ -5,16 +5,20 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.scijava.log2.Logger;
 import org.scijava.types.extractors.IterableTypeExtractor;
 
 public interface TypeReifier {
 
-	/** Gets the type extractor which handles the given class, or null if none. */
-	<T> TypeExtractor<T> getExtractor(Class<T> c);
+	/**
+	 * Gets the type extractor which handles the given class, or null if none.
+	 */
+	Optional<TypeExtractor> getExtractor(Class<?> c);
 
 	Logger log();
 
@@ -156,8 +160,8 @@ public interface TypeReifier {
 	{
 		final Class<?> c = o.getClass();
 
-		final TypeExtractor<T> extractor = getExtractor(superType);
-		if (extractor == null) return null; // No plugin for this specific class.
+		final Optional<TypeExtractor> extractor = getExtractor(superType);
+		if (extractor.isEmpty()) return null; // No plugin for this specific class.
 
 		if (!superType.isInstance(o)) {
 			throw new IllegalStateException("'" + o.getClass() +
@@ -166,10 +170,13 @@ public interface TypeReifier {
 		@SuppressWarnings("unchecked")
 		final T t = (T) o;
 
-		final ParameterizedType extractedType = extractor.reify(this, t);
-
-		// Populate type variables to fully populate the supertype.
-		return Types.args(c, extractedType);
+		final Type extractedType = extractor.get().reify(this, t);
+		if (extractedType instanceof ParameterizedType) {
+			return Types.args(c, (ParameterizedType) extractedType);
+		}
+		else {
+			return Collections.emptyMap();
+		}
 	}
 
 }

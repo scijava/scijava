@@ -31,15 +31,17 @@ package net.imagej.ops2.types;
 
 import java.lang.reflect.Type;
 
-import net.imglib2.outofbounds.OutOfBoundsFactory;
-
 import org.scijava.priority.Priority;
 import org.scijava.types.Any;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 
+import net.imglib2.outofbounds.OutOfBoundsFactory;
+
 /**
- * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory} objects.
+ * {@link TypeExtractor} plugin which operates on {@link OutOfBoundsFactory}
+ * objects.
  * <p>
  * For performance reasons, we examine only the first element of the iteration,
  * which may be a more specific type than later elements. Hence the generic type
@@ -48,26 +50,25 @@ import org.scijava.types.TypeReifier;
  *
  * @author Curtis Rueden
  */
-public class OutOfBoundsFactoryTypeExtractor implements TypeExtractor<OutOfBoundsFactory<?, ?>> {
+public class OutOfBoundsFactoryTypeExtractor extends
+	SubTypeExtractor<OutOfBoundsFactory<?, ?>>
+{
 
 	@Override
-	public Type reify(final TypeReifier t, final OutOfBoundsFactory<?, ?> o, final int n) {
-		if (n < 0 || n > 1) throw new IndexOutOfBoundsException();
-		
-		return new Any();
-
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<OutOfBoundsFactory<?, ?>> getRawType() {
-		return (Class) OutOfBoundsFactory.class;
-	}
-
-	@Override
-	public double priority() {
+	public double getPriority() {
 		return Priority.LOW;
 	}
 
+	@Override
+	protected Class<?> getRawType() {
+		return OutOfBoundsFactory.class;
+	}
+
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r,
+		OutOfBoundsFactory<?, ?> object)
+	{
+		return new Type[] { new Any(), new Any() };
+	}
 
 }

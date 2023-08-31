@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 
 import org.scijava.ops.spi.OpCollection;
+import org.scijava.ops.spi.Optional;
 
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
@@ -42,11 +43,9 @@ import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory;
 import net.imglib2.outofbounds.OutOfBoundsMirrorFactory.Boundary;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
-import org.scijava.ops.spi.Optional;
 
 /**
  * {@link OpCollection} containing various wrappings of Gaussian operations.
@@ -60,26 +59,28 @@ public class Gaussians {
 	 *
 	 * @author Christian Dietz (University of Konstanz)
 	 * @author Stephan Saalfeld
-	 * @param <T> type of input and output
+	 * @param <I> type of input
+	 * @param <O> type of output
 	 * @param input the input image
 	 * @param es the {@link ExecutorService}
 	 * @param sigmas the sigmas for the gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
-	 *          calculation is affected outside the input bounds. (required = false)
+	 *          calculation is affected outside the input bounds. (required =
+	 *          false)
 	 * @param output the output image
 	 * @implNote op names='filter.gauss',
 	 *           type='org.scijava.function.Computers$Arity4'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends NumericType<T> & NativeType<T>> void defaultGaussRAI(
-		final RandomAccessibleInterval<T> input, //
-		final ExecutorService es, //
-		final double[] sigmas, //
-		@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
-		final RandomAccessibleInterval<T> output //
+	public static <I extends NumericType<I>, O extends NumericType<O>> void
+		defaultGaussRAI(final RandomAccessibleInterval<I> input, //
+			final ExecutorService es, //
+			final double[] sigmas, //
+			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
+			final RandomAccessibleInterval<O> output //
 	) {
-		if (outOfBounds == null)
-			 outOfBounds = new OutOfBoundsMirrorFactory<>(Boundary.SINGLE);
+		if (outOfBounds == null) outOfBounds = new OutOfBoundsMirrorFactory<>(
+			Boundary.SINGLE);
 
 		final RandomAccessible<FloatType> eIn = //
 			(RandomAccessible) Views.extend(input, outOfBounds);
@@ -100,23 +101,25 @@ public class Gaussians {
 	 *
 	 * @author Christian Dietz (University of Konstanz)
 	 * @author Stephan Saalfeld
-	 * @param <T> type of input
+	 * @param <I> type of input
+	 * @param <O> type of output
 	 * @param input the input image
 	 * @param es the {@link ExecutorService}
 	 * @param sigma the sigmas for the Gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
-	 *          calculation is affected outside the input bounds. (required = false)
+	 *          calculation is affected outside the input bounds. (required =
+	 *          false)
 	 * @param output the preallocated output image
 	 * @implNote op names='filter.gauss',
 	 *           type='org.scijava.function.Computers$Arity4'
 	 */
-	public static <T extends NumericType<T> & NativeType<T>> void
+	public static <I extends NumericType<I>, O extends NumericType<O>> void
 		gaussRAISingleSigma( //
-			final RandomAccessibleInterval<T> input, //
+			final RandomAccessibleInterval<I> input, //
 			final ExecutorService es, //
 			final double sigma, //
-			@Optional OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds, //
-			final RandomAccessibleInterval<T> output //
+			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
+			final RandomAccessibleInterval<O> output //
 	) {
 		final double[] sigmas = new double[input.numDimensions()];
 		Arrays.fill(sigmas, sigma);

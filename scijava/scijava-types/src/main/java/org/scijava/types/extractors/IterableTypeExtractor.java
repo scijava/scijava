@@ -30,10 +30,11 @@
 package org.scijava.types.extractors;
 
 import java.lang.reflect.Type;
-import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
 import org.scijava.priority.Priority;
+import org.scijava.types.Any;
+import org.scijava.types.SubTypeExtractor;
 import org.scijava.types.TypeExtractor;
 import org.scijava.types.TypeReifier;
 import org.scijava.types.Types;
@@ -48,36 +49,33 @@ import org.scijava.types.Types;
  *
  * @author Curtis Rueden
  */
-public class IterableTypeExtractor implements TypeExtractor<Iterable<?>> {
+public class IterableTypeExtractor extends SubTypeExtractor<Iterable<?>> {
 
 	@Override
-	public Type reify(final TypeReifier t, final Iterable<?> o, final int n) {
-		if (n != 0) throw new IndexOutOfBoundsException();
+	public double getPriority() {
+		return Priority.VERY_LOW;
+	}
 
-		final Iterator<?> iterator = o.iterator();
-		if (!iterator.hasNext()) return null;
+	@Override
+	protected Class<?> getRawType() {
+		return Iterable.class;
+	}
 
+	@Override
+	protected Type[] getTypeParameters(TypeReifier r, Iterable<?> object) {
 		// Obtain the element type using the TypeService.
 		int typesToCheck = 100;
 		// can we make this more efficient (possibly a parallel stream)?
-		Type[] types = StreamSupport.stream(o.spliterator(), false) //
+		Type[] types = StreamSupport.stream(object.spliterator(), false) //
 			.limit(typesToCheck) //
-			.map(t::reify) //
+			.map(r::reify) //
 			.toArray(Type[]::new);
 
-		return Types.greatestCommonSuperType(types, true);
-		// TODO: Avoid infinite recursion when the list references itself.
-	}
-
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Class<Iterable<?>> getRawType() {
-		return (Class) Iterable.class;
-	}
-
-	@Override
-	public double priority() {
-		return Priority.LOW;
+		Type actual = Types.greatestCommonSuperType(types, true);
+		if (actual == null) {
+			actual = new Any();
+		}
+		return new Type[] { actual };
 	}
 
 }

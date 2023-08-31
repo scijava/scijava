@@ -82,6 +82,7 @@ public class GaussTest extends AbstractOpTest {
 			Assertions.assertEquals(c1.next().getRealDouble(), c2.next().getRealDouble(), 0);
 		}
 	}
+
 	//
 	// /** Tests the Gaussian matching. */
 	// @Test

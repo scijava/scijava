@@ -5,6 +5,7 @@ module org.scijava.types {
 
 	opens org.scijava.types.extractors to org.scijava;
 	opens org.scijava.types to org.scijava;
+	exports org.scijava.types.extractors;
 
 	requires transitive com.google.common;
 	requires transitive org.scijava.common3;
@@ -14,8 +15,9 @@ module org.scijava.types {
 
 	uses org.scijava.types.TypeExtractor;
 
-	provides org.scijava.types.TypeExtractor with
-			org.scijava.types.extractors.MapTypeExtractor,
-			org.scijava.types.extractors.IterableTypeExtractor;
+	provides org.scijava.types.TypeExtractor with //
+			org.scijava.types.extractors.ParameterizedTypeExtractor,
+			org.scijava.types.extractors.IterableTypeExtractor,
+			org.scijava.types.extractors.MapTypeExtractor;
 
 }

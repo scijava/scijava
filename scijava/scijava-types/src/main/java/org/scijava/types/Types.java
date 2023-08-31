@@ -2875,18 +2875,17 @@ public final class Types {
 					}
 					else {
 						parameterizedTypeArguments = new HashMap<>(typeArguments);
-						parameterizedTypeArguments.putAll(TypeUtils.getTypeArguments(p));
+//						parameterizedTypeArguments.putAll(TypeUtils.getTypeArguments(p));
 					}
 					final Type[] args = p.getActualTypeArguments();
+					final Type[] resolved = new Type[args.length];
 					for (int i = 0; i < args.length; i++) {
 						final Type unrolled = unrollVariables(parameterizedTypeArguments,
 							args[i], followTypeVars);
-						if (unrolled != null) {
-							args[i] = unrolled;
-						}
+						resolved[i] = unrolled != null ? unrolled : args[i];
 					}
 					return parameterizeWithOwner(p.getOwnerType(), (Class<?>) p
-						.getRawType(), args);
+						.getRawType(), resolved);
 				}
 				if (type instanceof WildcardType) {
 					final WildcardType wild = (WildcardType) type;

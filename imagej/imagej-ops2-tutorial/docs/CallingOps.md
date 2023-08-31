@@ -62,5 +62,5 @@ If, instead of having a single image `inImage` we had Y images `inImage1`, `inIm
 
 ```groovy
 var gaussOp = ops.op("filter.gauss").arity2().input(inImage, 2.0).output(outImage).computer()
-gaussOp.compute(inImage)
+gaussOp.compute(inImage, 2.0, outImage)
 ```

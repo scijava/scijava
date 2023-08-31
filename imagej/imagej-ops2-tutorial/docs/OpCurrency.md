@@ -120,11 +120,3 @@ class<I, O> ComplicatedOp implements Computers.Arity1<Img<I>,Img<O>>{
     }
 }
 ```
-
-
-
-
-
-
-
-

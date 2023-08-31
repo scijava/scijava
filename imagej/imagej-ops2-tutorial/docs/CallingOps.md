@@ -54,6 +54,32 @@ In the call to `compute()`, the `OpEnvironment` will use the components of the `
 * Match an Op based on the name provided, as well as the types of the provided input and output `Object`s
 * Execute the Op on the provided input and output `Object`s.
 
+## Additions: Combining `.op().arity*()`
+
+While the `.op().arity*()` pattern is very repetitive (and thus easy to remember), OpBuilder chains provide convenience methods to combine them, such as:
+* `.op("my.opName").arity1()` can be replaced with `.unary("my.opName")`
+* `.op("my.opName").arity2()` can be replaced with `.binary("my.opName")`
+
+Therefore the following OpBuilder call is identical to the previous call:
+
+```groovy
+var gaussOp = ops.binary("filter.gauss").input(inImage, 2.0).output(outImage).computer()
+gaussOp.compute(inImage, 2.0, outImage)
+```
+
+## Additions: Combining `.op().arity*()`
+
+While the `.op().arity*()` pattern is very repetitive (and thus easy to remember), OpBuilder chains provide convenience methods to combine them, such as:
+* `.op("my.opName").arity1()` can be replaced with `.unary("my.opName")`
+* `.op("my.opName").arity2()` can be replaced with `.binary("my.opName")`
+
+Therefore the following OpBuilder call is identical to the previous call:
+
+```groovy
+var gaussOp = ops.unary("filter.gauss").input(inImage, 2.0).output(outImage).computer()
+gaussOp.compute(inImage, 2.0, outImage)
+```
+
 ## Additions: Repeating execution
 
 When an Op should be executed many times on different inputs, the `OpBuilder` syntax can be modified to return the *Op* instead. Instead of calling the `.compute()` function at the end of our `OpBuilder` call, we can instead call the `.computer()` method to get back the matched Op:
@@ -64,3 +90,23 @@ If, instead of having a single image `inImage` we had Y images `inImage1`, `inIm
 var gaussOp = ops.op("filter.gauss").arity2().input(inImage, 2.0).output(outImage).computer()
 gaussOp.compute(inImage, 2.0, outImage)
 ```
+
+*Note that the default `OpEnvironment` implementations cache Op requests* - this means that repeated `OpBuilder` requests targeting the same action will be faster than the original matching call.
+
+## Common Pitfalls: Wildcards
+
+Using [wildcards](https://docs.oracle.com/javase/tutorial/extra/generics/wildcards.html), such as `Img<?> inImage`, can make Op reuse difficult. For example, the following code segment will not compile in a Java runtime:
+
+```java
+Img<?> inImage = ...;
+var gaussOp = ops.binary("filter.gauss").input(inImage, 2.0).output(outImage).computer();
+gaussOp.compute(inImage, 2.0, outImage);
+```
+
+### Solution 1: Use `compute` instead of `computer`
+
+If you don't need to save the Op to a variable, *just call it directly* as shown [here](#computing-with-compute). Generally speaking, op requests are **cached**, meaning repeated OpBuilder calls that directly execute Ops will **not** significantly increase performance.
+
+### Solution 2: Use Type Parameters on your functions
+
+If you *know* that your `Img` will always contain bytes, define your variable as an `Img<ByteType>`

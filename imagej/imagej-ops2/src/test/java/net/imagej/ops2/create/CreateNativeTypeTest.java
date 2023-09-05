@@ -33,16 +33,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Test;
+import org.scijava.function.Producer;
+import org.scijava.types.Nil;
+
 import net.imagej.ops2.AbstractOpTest;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
 import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.type.numeric.real.FloatType;
-
-import org.junit.jupiter.api.Test;
-import org.scijava.function.Producer;
-import org.scijava.types.Nil;
 
 /**
  * Tests creating different NativeTypes.
@@ -54,14 +54,13 @@ public class CreateNativeTypeTest extends AbstractOpTest {
 	@Test
 	public <T extends NativeType<T>> void testCreateNativeType() {
 
-		Producer<NativeType> typeSource = ops.op("create.nativeType", new Nil<Producer<NativeType>>() {
-		}, new Nil[] {}, new Nil<NativeType>() {
-		});
+		Producer<NativeType> typeSource = ops.nullary("create") //
+				.outType(NativeType.class) //
+				.producer();
 
-		Function<Class<T>, T> typeFunc = ops.op("create.nativeType", new Nil<Function<Class<T>, T>>() {
-		}, new Nil[] { new Nil<Class<T>>() {
-		} }, new Nil<T>() {
-		});
+		Function<Class<T>, T> typeFunc = ops.unary("create") //
+				.inType(new Nil<Class<T>>() {}) //
+				.outType(new Nil<T>() {}).function();
 
 		// default
 		Object type = typeSource.create();

@@ -63,6 +63,7 @@ module net.imagej.ops2.tutorial {
 
 	provides org.scijava.ops.spi.OpCollection with
 			net.imagej.ops2.tutorial.OpAdaptation,
+			net.imagej.ops2.tutorial.OpParallelization,
 			net.imagej.ops2.tutorial.OpReduction,
 			net.imagej.ops2.tutorial.OpSimplification,
 			net.imagej.ops2.tutorial.ReportingProgress,

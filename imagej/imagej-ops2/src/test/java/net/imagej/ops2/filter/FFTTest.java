@@ -30,7 +30,6 @@ package net.imagej.ops2.filter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ExecutorService;
 
 import net.imagej.ops2.AbstractOpTest;
 import net.imagej.testutil.TestImgGeneration;
@@ -65,7 +64,6 @@ public class FFTTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testFFT3DOp() {
-		ExecutorService es = threads.getExecutorService();
 		final int min = expensiveTestsEnabled ? 115 : 9;
 		final int max = expensiveTestsEnabled ? 120 : 11;
 		for (int i = min; i < max; i++) {
@@ -79,9 +77,9 @@ public class FFTTest extends AbstractOpTest {
 			final Img<FloatType> inverse = TestImgGeneration.floatArray(false, dimensions);
 
 			final RandomAccessibleInterval<ComplexFloatType> out = ops.op("filter.fft")
-					.arity5().input(in, null, true, new ComplexFloatType(), es)
+					.arity4().input(in, null, true, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
-			ops.op("filter.ifft").arity2().input(out, es).output(inverse).compute();
+			ops.op("filter.ifft").arity1().input(out).output(inverse).compute();
 
 			assertImagesEqual(in, inverse, .00005f);
 		}
@@ -93,8 +91,6 @@ public class FFTTest extends AbstractOpTest {
 	 */
 	@Test
 	public void testFastFFT3DOp() {
-
-		ExecutorService es = threads.getExecutorService();
 
 		final int min = expensiveTestsEnabled ? 120 : 9;
 		final int max = expensiveTestsEnabled ? 130 : 11;
@@ -128,19 +124,19 @@ public class FFTTest extends AbstractOpTest {
 			// parameter we have to pass null for the
 			// output parameter).
 			final RandomAccessibleInterval<ComplexFloatType> fft1 = ops.op("filter.fft")
-					.arity5().input(inOriginal, null, false, new ComplexFloatType(), es)
+					.arity4().input(inOriginal, null, false, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// call FFT passing true for "fast" The FFT op will pad the input to the
 			// fast
 			// size.
 			final RandomAccessibleInterval<ComplexFloatType> fft2 = ops.op("filter.fft")
-					.arity5().input(inOriginal, null, true, new ComplexFloatType(), es)
+					.arity4().input(inOriginal, null, true, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// call fft using the img that was created with the fast size
 			final RandomAccessibleInterval<ComplexFloatType> fft3 = ops.op("filter.fft")
-					.arity5().input(inFast, null, true, new ComplexFloatType(), es)
+					.arity4().input(inFast, null, true, new ComplexFloatType())
 					.outType(new Nil<RandomAccessibleInterval<ComplexFloatType>>() {}).apply();
 
 			// create an image to be used for the inverse, using the original
@@ -157,18 +153,18 @@ public class FFTTest extends AbstractOpTest {
 			final Img<FloatType> inverseFast = TestImgGeneration.floatArray(false, fastDimensions);
 
 			// invert the "small" FFT
-			ops.op("filter.ifft").arity2().input(fft1, es).output(inverseOriginalSmall).compute();
+			ops.op("filter.ifft").arity1().input(fft1).output(inverseOriginalSmall).compute();
 
 			// invert the "fast" FFT. The inverse will should be the original
 			// size.
-			ops.op("filter.ifft").arity2().input(fft2, es).output(inverseOriginalFast).compute();
+			ops.op("filter.ifft").arity1().input(fft2).output(inverseOriginalFast).compute();
 
 			// invert the "fast" FFT that was acheived by explicitly using an
 			// image
 			// that had "fast" dimensions. The inverse will be the fast size
 			// this
 			// time.
-			ops.op("filter.ifft").arity2().input(fft3, es).output(inverseFast).compute();
+			ops.op("filter.ifft").arity1().input(fft3).output(inverseFast).compute();
 
 			// assert that the inverse images are equal to the original
 			assertImagesEqual(inverseOriginalSmall, inOriginal, .0001f);

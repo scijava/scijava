@@ -4,6 +4,8 @@ package org.scijava.ops.engine.struct;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.scijava.ops.engine.simplify.SimplifiedOpInfo;
 import org.scijava.struct.FunctionalMethodType;
@@ -41,13 +43,54 @@ public class OpRetypingMemberParser implements
 	public List<Member<?>> parse(RetypingRequest source, Type structType)
 		throws ValidityException
 	{
+		List<Member<?>> original = source.struct().members();
 		List<FunctionalMethodType> newFmts = source.newFmts();
+		List<Member<?>> ios = original.stream().filter(m -> m.isInput() || m.isOutput()).collect(
+				Collectors.toList());
+		if (ios.size() == newFmts.size())
+			return strictConversion(original, newFmts);
+		else
+			return synthesizedConversion(newFmts);
+	}
+
+	private List<Member<?>> synthesizedConversion(List<FunctionalMethodType> newFmts) {
+		return IntStream.range(0, newFmts.size()).boxed().map(foo -> mapToMember(foo, newFmts.get(foo))).collect(Collectors.toList());
+	}
+
+	private Member<?> mapToMember(int i, FunctionalMethodType fmt) {
+		return new Member<>() {
+
+			@Override public String getKey() {
+				ItemIO ioType = fmt.itemIO();
+				if (ioType == ItemIO.INPUT)
+					return "in" + i + 1;
+				else if (ioType == ItemIO.CONTAINER)
+					return "container";
+				else if (ioType == ItemIO.MUTABLE)
+					return "mutable";
+				else if (ioType == ItemIO.OUTPUT)
+					return "output";
+				else
+					return "";
+			}
+
+			@Override public Type getType() {
+				return fmt.type();
+			}
+
+			@Override public ItemIO getIOType() {
+				return fmt.itemIO();
+			}
+		};
+	}
+
+	private List<Member<?>> strictConversion(List<Member<?>> originalMembers, List<FunctionalMethodType> newFmts) {
 		FunctionalMethodType outputFmt = newFmts.stream().filter(fmt -> fmt
-			.itemIO() == ItemIO.OUTPUT || fmt.itemIO() == ItemIO.MUTABLE || fmt
+				.itemIO() == ItemIO.OUTPUT || fmt.itemIO() == ItemIO.MUTABLE || fmt
 				.itemIO() == ItemIO.CONTAINER).findFirst().get();
 		List<Member<?>> newMembers = new ArrayList<>();
 		int inputIndex = 0;
-		for (Member<?> m : source.struct().members()) {
+		for (Member<?> m : originalMembers) {
 			if (m.isInput()) {
 				m = ConvertedParameterMember.from(m, newFmts.get(inputIndex++));
 			}
@@ -57,6 +100,7 @@ public class OpRetypingMemberParser implements
 			newMembers.add(m);
 		}
 		return newMembers;
+
 	}
 
 	public List<Member<?>> parse(Struct s, List<FunctionalMethodType> newFmts, Type structType)

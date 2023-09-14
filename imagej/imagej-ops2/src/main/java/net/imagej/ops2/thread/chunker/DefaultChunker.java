@@ -30,10 +30,9 @@
 package net.imagej.ops2.thread.chunker;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.List;
 
+import org.scijava.concurrent.Parallelization;
 import org.scijava.function.Inplaces;
 
 /**
@@ -45,7 +44,7 @@ import org.scijava.function.Inplaces;
  * @author Christian Dietz (University of Konstanz)
  *@implNote op names='thread.chunker'
  */
-public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorService> {
+public class DefaultChunker implements Inplaces.Arity2_1<Chunk, Long> {
 
 	private final int STEP_SIZE = 1;
 
@@ -54,10 +53,9 @@ public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorSe
 	 *
 	 * @param chunk
 	 * @param numberOfElements
-	 * @param executorService
 	 */
 	@Override
-	public void mutate(final Chunk chunk, final Long numberOfElements, final ExecutorService es) {
+	public void mutate(final Chunk chunk, final Long numberOfElements) {
 
 		// TODO: is there a better way to determine the optimal chunk size?
 		
@@ -66,41 +64,17 @@ public class DefaultChunker implements Inplaces.Arity3_1<Chunk, Long, ExecutorSe
 		
 		final int numChunks = (int) (numberOfElements / numSteps);
 
-		final ArrayList<Future<?>> futures = new ArrayList<>(numChunks);
+		List<Runnable> list = new ArrayList<>();
 
 		for (int i = 0; i < numChunks - 1; i++) {
 			final long j = i;
-
-		futures.add(es.submit(new Runnable() {
-
-				@Override
-				public void run() {
-					chunk.execute(j * numSteps, STEP_SIZE, numSteps);
-				}
-			}));
+			list.add(() -> chunk.execute(j * numSteps, STEP_SIZE, numSteps));
 		}
 
 		// last chunk additionally add the rest of elements
-		futures.add(es.submit(new Runnable() {
+		list.add(() -> chunk.execute((numChunks - 1) * numSteps, STEP_SIZE, (int) (numSteps + (numberOfElements % numSteps))));
 
-			@Override
-			public void run() {
-				chunk.execute((numChunks - 1) * numSteps, STEP_SIZE,
-					(int) (numSteps + (numberOfElements % numSteps)));
-			}
-		}));
-
-		for (final Future<?> future : futures) {
-			try {
-				future.get();
-			}
-			catch (final InterruptedException exc) {
-				throw new RuntimeException(exc);
-			}
-			catch (final ExecutionException exc) {
-				throw new RuntimeException(exc);
-			}
-		}
+		Parallelization.getTaskExecutor().runAll(list);
 	}
 
 }

@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.filter.convolve;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
@@ -61,7 +60,7 @@ import org.scijava.ops.spi.Optional;
  */
 public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		/* extends AbstractFFTFilterF<I, O, K, C> */ implements
-		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
+		Functions.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<O>> {
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -77,7 +76,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "filter.convolve")
-	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, Boolean, Boolean, RandomAccessibleInterval<O>> convolveOp;
+	private Computers.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> convolveOp;
 
 	/**
 	 * TODO
@@ -86,7 +85,6 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	 * @param kernel
 	 * @param outType
 	 * @param complexType
-	 * @param executorService
 	 * @param borderSize (required = false)
 	 * @param obfInput (required = false)
 	 * @return the output
@@ -95,7 +93,6 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel,
 			final O outType, final C complexType,
-			final ExecutorService executorService,
 			@Optional final long[] borderSize,
 			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput) {
 
@@ -130,7 +127,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
-		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType, executorService);
+		computeFilter(paddedInput, paddedKernel, output, paddedSize, complexType);
 
 		return output;
 	}
@@ -140,7 +137,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	 * create FFT memory, create FFT filter and run it
 	 */
 	public void computeFilter(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType, final ExecutorService es) {
+			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType) {
 
 		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(paddedSize), complexType, true);
 
@@ -151,7 +148,7 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 		// memory
 		// for the FFTs
 		Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter = createFilterComputer(
-				input, kernel, fftInput, fftKernel, es, output);
+				input, kernel, fftInput, fftKernel, output);
 
 		filter.compute(input, kernel, output);
 	}
@@ -161,9 +158,9 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
 	 */
 	public Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
-			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
+			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
 			RandomAccessibleInterval<O> output) {
-		return (in1, in2, out) -> convolveOp.compute(in1, in2, fftImg, fftKernel, es, true, true, out);
+		return (in1, in2, out) -> convolveOp.compute(in1, in2, fftImg, fftKernel, true, true, out);
 	}
 
 }
@@ -173,24 +170,23 @@ public class ConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealT
  */
 class SimpleConvolveFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
 		implements
-		Functions.Arity3<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<FloatType>> {
+		BiFunction<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<FloatType>> {
 
 		@OpDependency(name = "filter.convolve")
-		Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, FloatType, ComplexFloatType, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<FloatType>> convolveOp;
+		Functions.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, FloatType, ComplexFloatType, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, RandomAccessibleInterval<FloatType>> convolveOp;
 
 		/**
 	 * TODO
 	 *
 	 * @param input
 	 * @param kernel
-	 * @param executorService
 	 * @return the output
 	 */
 	@Override
-		public RandomAccessibleInterval<FloatType> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel, ExecutorService executorService) {
+		public RandomAccessibleInterval<FloatType> apply(RandomAccessibleInterval<I> input, RandomAccessibleInterval<K> kernel) {
 			OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput = new OutOfBoundsConstantValueFactory<>(Util
 					.getTypeFromInterval(input).createVariable());
-			return convolveOp.apply(input, kernel, new FloatType(), new ComplexFloatType(), executorService, null, obfInput);
+			return convolveOp.apply(input, kernel, new FloatType(), new ComplexFloatType(), null, obfInput);
 		}
 
 }

@@ -42,7 +42,7 @@ import org.scijava.function.Computers;
 
 /**
  * Convolves an image naively.
- *@implNote op names='filter.convolve'
+ *@implNote op names='filter.convolve,filter.convolveNaive'
  */
 public class ConvolveNaiveC<I extends RealType<I>, K extends RealType<K>, O extends RealType<O>>
 		implements Computers.Arity2<RandomAccessible<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> {

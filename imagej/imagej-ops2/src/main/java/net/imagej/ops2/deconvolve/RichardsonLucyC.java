@@ -30,7 +30,6 @@
 package net.imagej.ops2.deconvolve;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imglib2.FinalInterval;
@@ -60,10 +59,10 @@ import org.scijava.ops.spi.Optional;
  * @implNote op names='deconvolve.richardsonLucy', priority='100.'
  */
 public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		implements Computers.Arity13<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
+		implements Computers.Arity12<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, //
 			RandomAccessibleInterval<C>, Boolean, Boolean, C, Integer, Inplaces.Arity1<RandomAccessibleInterval<O>>, //
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>>, //
-			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, ExecutorService, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> {
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>>, RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> {
 
 	// /**
 	// * Op that computes Richardson Lucy update, can be overridden to implement
@@ -92,8 +91,8 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	// private BinaryComputerOp<RandomAccessibleInterval<I>,
 	// RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> rlCorrectionOp;
 	@OpDependency(name = "deconvolve.richardsonLucyCorrection")
-	private Computers.Arity5<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, //
-	RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, //
+	private Computers.Arity4<RandomAccessibleInterval<I>, RandomAccessibleInterval<O>, //
+	RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
 	RandomAccessibleInterval<O>> rlCorrectionOp;
 
 	@OpDependency(name = "create.img")
@@ -102,11 +101,11 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	@OpDependency(name = "filter.fft")
 	// private UnaryComputerOp<RandomAccessibleInterval<K>,
 	// RandomAccessibleInterval<C>> fftKernelOp;
-	private Computers.Arity2<RandomAccessibleInterval<K>, ExecutorService, RandomAccessibleInterval<C>> fftKernelOp;
+	private Computers.Arity1<RandomAccessibleInterval<K>, RandomAccessibleInterval<C>> fftKernelOp;
 
 	@OpDependency(name = "filter.convolve")
-	private Computers.Arity7<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, //
-			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, ExecutorService, //
+	private Computers.Arity6<RandomAccessibleInterval<O>, RandomAccessibleInterval<K>, //
+			RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, //
 			Boolean, Boolean,RandomAccessibleInterval<O>> convolverOp;
 
 	@OpDependency(name = "copy.rai")
@@ -129,7 +128,6 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 	 * @param accelerator
 	 * @param updateOp by default, this should be RichardsonLucyUpdate
 	 * @param iterativePostProcessingOps
-	 * @param es
 	 * @param raiExtendedEstimate (required = false)
 	 * @param out
 	 */
@@ -139,7 +137,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			Boolean performKernelFFT, C complexType, Integer maxIterations,
 			Inplaces.Arity1<RandomAccessibleInterval<O>> accelerator,
 			Computers.Arity1<RandomAccessibleInterval<O>, RandomAccessibleInterval<O>> updateOp,
-			List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps, ExecutorService es,
+			List<Inplaces.Arity1<RandomAccessibleInterval<O>>> iterativePostProcessingOps,
 			@Optional RandomAccessibleInterval<O> raiExtendedEstimate,
 			RandomAccessibleInterval<O> out) {
 
@@ -156,7 +154,7 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 		RandomAccessibleInterval<O> raiExtendedReblurred = createOp.apply(in, Util.getTypeFromInterval(out));
 
 		// perform fft of psf
-		fftKernelOp.compute(kernel, es, fftKernel);
+		fftKernelOp.compute(kernel, fftKernel);
 
 		// -- perform iterations --
 
@@ -166,11 +164,11 @@ public class RichardsonLucyC<I extends RealType<I>, O extends RealType<O>, K ext
 			// NOTE: the FFT of the PSF of the kernel has been passed in as a
 			// parameter. when the op was set up, and computed above, so we can use
 			// compute
-			convolverOp.compute(raiExtendedEstimate, null, fftInput, fftKernel, es, true, false,
+			convolverOp.compute(raiExtendedEstimate, null, fftInput, fftKernel, true, false,
 				raiExtendedReblurred);
 
 			// compute correction factor
-			rlCorrectionOp.compute(in, raiExtendedReblurred, fftInput, fftKernel, es, raiExtendedReblurred);
+			rlCorrectionOp.compute(in, raiExtendedReblurred, fftInput, fftKernel, raiExtendedReblurred);
 
 			// perform update to calculate new estimate
 			updateOp.compute(raiExtendedReblurred, raiExtendedEstimate);

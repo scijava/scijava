@@ -30,8 +30,8 @@
 package net.imagej.ops2.filter.gauss;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
 
+import org.scijava.concurrent.Parallelization;
 import org.scijava.ops.spi.OpCollection;
 import org.scijava.ops.spi.Optional;
 
@@ -62,19 +62,17 @@ public class Gaussians {
 	 * @param <I> type of input
 	 * @param <O> type of output
 	 * @param input the input image
-	 * @param es the {@link ExecutorService}
 	 * @param sigmas the sigmas for the gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
 	 *          calculation is affected outside the input bounds. (required =
 	 *          false)
 	 * @param output the output image
 	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity4'
+	 *           type='org.scijava.function.Computers$Arity3'
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <I extends NumericType<I>, O extends NumericType<O>> void
 		defaultGaussRAI(final RandomAccessibleInterval<I> input, //
-			final ExecutorService es, //
 			final double[] sigmas, //
 			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
 			final RandomAccessibleInterval<O> output //
@@ -87,7 +85,7 @@ public class Gaussians {
 
 		try {
 			SeparableSymmetricConvolution.convolve(Gauss3.halfkernels(sigmas), eIn,
-				output, es);
+				output, Parallelization.getExecutorService());
 		}
 		catch (final IncompatibleTypeException e) {
 			throw new RuntimeException(e);
@@ -104,25 +102,23 @@ public class Gaussians {
 	 * @param <I> type of input
 	 * @param <O> type of output
 	 * @param input the input image
-	 * @param es the {@link ExecutorService}
 	 * @param sigma the sigmas for the Gaussian
 	 * @param outOfBounds the {@link OutOfBoundsFactory} that defines how the
 	 *          calculation is affected outside the input bounds. (required =
 	 *          false)
 	 * @param output the preallocated output image
 	 * @implNote op names='filter.gauss',
-	 *           type='org.scijava.function.Computers$Arity4'
+	 *           type='org.scijava.function.Computers$Arity3'
 	 */
 	public static <I extends NumericType<I>, O extends NumericType<O>> void
 		gaussRAISingleSigma( //
 			final RandomAccessibleInterval<I> input, //
-			final ExecutorService es, //
 			final double sigma, //
 			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> outOfBounds, //
 			final RandomAccessibleInterval<O> output //
 	) {
 		final double[] sigmas = new double[input.numDimensions()];
 		Arrays.fill(sigmas, sigma);
-		defaultGaussRAI(input, es, sigmas, outOfBounds, output);
+		defaultGaussRAI(input, sigmas, outOfBounds, output);
 	};
 }

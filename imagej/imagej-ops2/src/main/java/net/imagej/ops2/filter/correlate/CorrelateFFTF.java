@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.filter.correlate;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imglib2.Dimensions;
@@ -59,8 +58,7 @@ import org.scijava.ops.spi.Optional;
  * @implNote op names='filter.correlate', priority='10000.'
  */
 public class CorrelateFFTF<I extends RealType<I> & NativeType<I>, O extends RealType<O> & NativeType<O>, K extends RealType<K> & NativeType<K>, C extends ComplexType<C> & NativeType<C>>
-//	extends AbstractFFTFilterF<I, O, K, C>
-implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, ExecutorService, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
+implements Functions.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, O, C, long[], OutOfBoundsFactory<I, RandomAccessibleInterval<I>>, OutOfBoundsFactory<K, RandomAccessibleInterval<K>>, RandomAccessibleInterval<O>> {
 
 	// TODO: can this go in AbstractFFTFilterF?
 	@OpDependency(name = "create.img")
@@ -76,7 +74,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	private Functions.Arity3<Dimensions, C, Boolean, RandomAccessibleInterval<C>> createOp;
 
 	@OpDependency(name = "filter.correlate")
-	private Computers.Arity7<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, ExecutorService, RandomAccessibleInterval<O>> correlateOp;
+	private Computers.Arity6<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<C>, RandomAccessibleInterval<C>, Boolean, Boolean, RandomAccessibleInterval<O>> correlateOp;
 
 	/**
 	 * TODO
@@ -85,7 +83,6 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 * @param kernel
 	 * @param outType
 	 * @param fftType
-	 * @param es
 	 * @param borderSize (required = false)
 	 * @param obfInput (required = false)
 	 * @param obfKernel (required = false)
@@ -94,7 +91,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	@Override
 	public RandomAccessibleInterval<O> apply(final RandomAccessibleInterval<I> input,
 			final RandomAccessibleInterval<K> kernel, final O outType, final C fftType,
-			final ExecutorService es, @Optional long[] borderSize,
+			@Optional long[] borderSize,
 			@Optional OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput,
 			@Optional OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel ) {
 		
@@ -131,7 +128,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 
 		RandomAccessibleInterval<K> paddedKernel = padKernelOp.apply(kernel, new FinalDimensions(paddedSize));
 
-		computeFilter(paddedInput, paddedKernel, output, paddedSize, fftType, es);
+		computeFilter(paddedInput, paddedKernel, output, paddedSize, fftType);
 
 		return output;
 	}
@@ -141,7 +138,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 * create FFT memory, create FFT filter and run it
 	 */
 	public void computeFilter(final RandomAccessibleInterval<I> input, final RandomAccessibleInterval<K> kernel,
-			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType, final ExecutorService es) {
+			RandomAccessibleInterval<O> output, long[] paddedSize, C complexType) {
 
 		RandomAccessibleInterval<C> fftInput = createOp.apply(new FinalDimensions(paddedSize), complexType, true);
 
@@ -152,7 +149,7 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 		// memory
 		// for the FFTs
 		Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> filter = createFilterComputer(
-				input, kernel, fftInput, fftKernel, es, output);
+				input, kernel, fftInput, fftKernel, output);
 
 		filter.compute(input, kernel, output);
 	}
@@ -163,9 +160,9 @@ implements Functions.Arity8<RandomAccessibleInterval<I>, RandomAccessibleInterva
 	 */
 	public Computers.Arity2<RandomAccessibleInterval<I>, RandomAccessibleInterval<K>, RandomAccessibleInterval<O>> createFilterComputer(
 			RandomAccessibleInterval<I> raiExtendedInput, RandomAccessibleInterval<K> raiExtendedKernel,
-			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel, ExecutorService es,
+			RandomAccessibleInterval<C> fftImg, RandomAccessibleInterval<C> fftKernel,
 			RandomAccessibleInterval<O> output) {
-		return (in1, in2, out) -> correlateOp.compute(in1, in2, fftImg, fftKernel, true, true, es, output);
+		return (in1, in2, out) -> correlateOp.compute(in1, in2, fftImg, fftKernel, true, true, output);
 	}
 
 }

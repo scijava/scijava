@@ -30,7 +30,6 @@ package net.imagej.ops2.coloc.pearsons;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 
 import net.imagej.ops2.AbstractColocalisationTest;
@@ -97,7 +96,6 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 
 	@Test
 	public void testPValue() {
-		ExecutorService es = threads.getExecutorService();
 		final double mean = 0.2;
 		final double spread = 0.1;
 		final double[] sigma = new double[] { 3.0, 3.0 };
@@ -108,7 +106,7 @@ public class DefaultPearsonsTest extends AbstractColocalisationTest {
 		BiFunction<RandomAccessibleInterval<FloatType>, RandomAccessibleInterval<FloatType>, Double> op =
 			OpBuilder.matchFunction(ops, "coloc.pearsons", new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<RandomAccessibleInterval<FloatType>>() {}, new Nil<Double>() {});
 		PValueResult value = new PValueResult();
-		ops.op("coloc.pValue").arity4().input(ch1, ch2, op, es).output(value).compute();
+		ops.op("coloc.pValue").arity3().input(ch1, ch2, op).output(value).compute();
 		assertEquals(0.66, value.getPValue(), 0.0);
 	}
 

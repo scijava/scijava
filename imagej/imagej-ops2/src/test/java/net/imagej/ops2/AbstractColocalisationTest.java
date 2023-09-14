@@ -29,12 +29,14 @@
 
 package net.imagej.ops2;
 
-import io.scif.img.ImgIOException;
-import io.scif.img.ImgOpener;
-
 import java.util.Arrays;
 import java.util.Random;
 
+import org.scijava.io.location.FileLocation;
+import org.scijava.ops.api.OpBuilder;
+
+import io.scif.img.ImgIOException;
+import io.scif.img.ImgOpener;
 import net.imglib2.Interval;
 import net.imglib2.Localizable;
 import net.imglib2.Point;
@@ -50,15 +52,6 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.scijava.io.location.FileLocation;
-import org.scijava.ops.api.OpBuilder;
-import org.scijava.ops.api.OpEnvironment;
-import org.scijava.ops.engine.DefaultOpEnvironment;
-import org.scijava.threads.DefaultThreadManager;
-import org.scijava.threads.ThreadManager;
 
 /** Abstract base class for coloc op unit tests. */
 public abstract class AbstractColocalisationTest extends AbstractOpTest {

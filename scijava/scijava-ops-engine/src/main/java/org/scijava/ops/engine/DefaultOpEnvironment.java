@@ -49,6 +49,7 @@ import java.util.stream.StreamSupport;
 
 import org.scijava.discovery.Discoverer;
 import org.scijava.discovery.ManualDiscoverer;
+import org.scijava.function.Consumers;
 import org.scijava.log2.Logger;
 import org.scijava.log2.StderrLoggerFactory;
 import org.scijava.meta.Versions;
@@ -577,10 +578,11 @@ public class DefaultOpEnvironment implements OpEnvironment {
 	@SuppressWarnings("rawtypes")
 	private synchronized void initWrappers() {
 		if (wrappers != null) return;
-		wrappers = new HashMap<>();
+		HashMap<Class<?>, OpWrapper<?>> tmp = new HashMap<>();
 		for (Discoverer d : discoverers)
 			for (OpWrapper wrapper : d.discover(OpWrapper.class))
-					wrappers.put(wrapper.type(), wrapper);
+					tmp.put(wrapper.type(), wrapper);
+		wrappers = tmp;
 	}
 
 	/**
@@ -705,15 +707,16 @@ public class DefaultOpEnvironment implements OpEnvironment {
 
 	private synchronized void initOpDirectory() {
 		if (opDirectory != null) return;
-		opDirectory = new HashMap<>();
+		Map<String, List<OpInfo>> tmp = new HashMap<>();
 		// add all OpInfos that are directly discoverable
-		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(info, log));
+		discoverers.stream().flatMap(d -> d.discover(OpInfo.class).stream()).forEach(info -> addToOpIndex.accept(tmp, info, log));
 		List<OpInfoGenerator> generators = infoGenerators();
-		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(o, generators));
-		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(o, generators));
-		Set<OpInfo> infos = opDirectory.values().stream().flatMap(Collection::stream).map(info -> opsFromObject(info, generators)).flatMap(Collection::stream).collect(
+		discoverers.stream().flatMap(d -> d.discover(Op.class).stream()).forEach(o -> registerOpsFrom(tmp, o, generators));
+		discoverers.stream().flatMap(d -> d.discover(OpCollection.class).stream()).forEach(o -> registerOpsFrom(tmp, o, generators));
+		Set<OpInfo> infos = tmp.values().stream().flatMap(Collection::stream).map(info -> opsFromObject(info, generators)).flatMap(Collection::stream).collect(
 				Collectors.toSet());
-		infos.forEach(info -> addToOpIndex.accept(info, log));
+		infos.forEach(info -> addToOpIndex.accept(tmp, info, log));
+		opDirectory = tmp;
 	}
 
 	/**
@@ -729,8 +732,8 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				.collect(Collectors.toList());
 	}
 
-	private void registerOpsFrom(Object o, List<OpInfoGenerator> generators) {
-		opsFromObject(o, generators).forEach(info -> addToOpIndex.accept(info, log));
+	private void registerOpsFrom(final Map<String, List<OpInfo>> opDirectory, final Object o, List<OpInfoGenerator> generators) {
+		opsFromObject(o, generators).forEach(info -> addToOpIndex.accept(opDirectory, info, log));
 	}
 	
 	private List<OpInfoGenerator> infoGenerators() {
@@ -749,14 +752,14 @@ public class DefaultOpEnvironment implements OpEnvironment {
 				.forEach(info -> idDirectory.put(info.id(), info));
 	}
 
-	private final BiConsumer<OpInfo, Logger> addToOpIndex = (final OpInfo opInfo, final Logger log) -> {
-		if (opInfo.names() == null || opInfo.names().size() == 0) {
+	private final Consumers.Arity3<Map<String, List<OpInfo>>, OpInfo, Logger> addToOpIndex = (final Map<String, List<OpInfo>> directory, final OpInfo opInfo, final Logger log) -> {
+		if (opInfo.names() == null || opInfo.names().isEmpty()) {
 			log.error("Skipping Op " + opInfo.implementationName() + ":\n" +
 				"Op implementation must provide name.");
 			return;
 		}
 		for (String opName : opInfo.names()) {
-			opDirectory.computeIfAbsent(opName, name -> new ArrayList<>()).add(opInfo);
+			directory.computeIfAbsent(opName, name -> new ArrayList<>()).add(opInfo);
 		}
 	};
 

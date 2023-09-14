@@ -35,8 +35,6 @@ import java.util.stream.StreamSupport;
 import org.scijava.ops.api.OpEnvironment;
 import org.scijava.ops.engine.DefaultOpEnvironment;
 import org.scijava.ops.spi.Op;
-import org.scijava.threads.DefaultThreadManager;
-import org.scijava.threads.ThreadManager;
 
 import io.scif.img.IO;
 import net.imglib2.Cursor;
@@ -65,7 +63,6 @@ import net.imglib2.view.Views;
 public abstract class AbstractOpTest{
 
 	protected static final OpEnvironment ops = new DefaultOpEnvironment();
-	protected static final ThreadManager threads = new DefaultThreadManager();
 
 	private int seed;
 

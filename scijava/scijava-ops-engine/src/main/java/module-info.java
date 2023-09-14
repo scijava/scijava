@@ -11,20 +11,20 @@ module org.scijava.ops.engine {
 	exports org.scijava.ops.engine.util;
 
 	opens org.scijava.ops.engine.util.internal to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.monitor to therapi.runtime.javadoc;
+	opens org.scijava.ops.engine to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.create to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.matcher.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.conversionLoss to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.log to therapi.runtime.javadoc;
+	opens org.scijava.ops.engine.copy to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.simplify to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.impl to therapi.runtime.javadoc, org.scijava;
 	opens org.scijava.ops.engine.yaml to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.conversionLoss.impl to therapi.runtime.javadoc, org.scijava;
+	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.complexLift to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.lift to therapi.runtime.javadoc;
-	opens org.scijava.ops.engine.struct to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.adapt.functional to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.reduce to therapi.runtime.javadoc;
 	opens org.scijava.ops.engine.stats to therapi.runtime.javadoc;

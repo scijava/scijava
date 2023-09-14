@@ -29,7 +29,6 @@
 
 package net.imagej.ops2.filter.ifft;
 
-import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -52,7 +51,7 @@ import org.scijava.ops.spi.OpDependency;
  *@implNote op names='filter.ifft'
  */
 public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
-		implements Computers.Arity2<RandomAccessibleInterval<C>, ExecutorService, RandomAccessibleInterval<T>> {
+		implements Computers.Arity1<RandomAccessibleInterval<C>, RandomAccessibleInterval<T>> {
 
 	@OpDependency(name = "copy.rai")
 	private Function<RandomAccessibleInterval<C>, RandomAccessibleInterval<C>> copyOp;
@@ -64,11 +63,10 @@ public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 	 * TODO
 	 *
 	 * @param input
-	 * @param executorService
 	 * @param output
 	 */
 	@Override
-	public void compute(final RandomAccessibleInterval<C> input, final ExecutorService es,
+	public void compute(final RandomAccessibleInterval<C> input,
 			final RandomAccessibleInterval<T> output) {
 		if (!conforms(input))
 			throw new IllegalArgumentException("The input image dimensions to not conform to a supported FFT size");
@@ -76,9 +74,9 @@ public class IFFTMethodsOpC<C extends ComplexType<C>, T extends RealType<T>>
 		final RandomAccessibleInterval<C> temp = copyOp.apply(input);
 
 		for (int d = input.numDimensions() - 1; d > 0; d--)
-			FFTMethods.complexToComplex(temp, d, false, true, es);
+			FFTMethods.complexToComplex(temp, d, false, true);
 
-		FFTMethods.complexToReal(temp, output, FFTMethods.unpaddingIntervalCentered(temp, output), 0, true, es);
+		FFTMethods.complexToReal(temp, output, FFTMethods.unpaddingIntervalCentered(temp, output), 0, true);
 	}
 
 	/**
